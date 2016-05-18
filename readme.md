@@ -11,8 +11,8 @@ For questions and suggestions do not hestitate to open issues or contact
  * heike.siebert@fu-berlin.de
 
 #### notes for next version (not released yet)
-- added function "input_combinations(Primes)" to module "PrimeImplicants" (Committed revision 185)
-- fixed mistake in documentation of PrimeImplicants.percolate_constants (Committed revision 182)
+- added function "input_combinations(Primes)" to module "PrimeImplicants"
+- fixed mistake in documentation of PrimeImplicants.percolate_constants
 
 
 #### release notes for version 1.0 (Feb. 2016)
