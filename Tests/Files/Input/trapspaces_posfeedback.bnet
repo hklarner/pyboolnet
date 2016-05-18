@@ -1,0 +1,7 @@
+
+# this network has no minimal trap space with 2 fixed variables
+
+v1,   v2
+v2,   v3
+v3,   v1
+v4,   !v4
