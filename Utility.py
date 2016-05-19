@@ -225,7 +225,7 @@ def subgraphs2tree( Subgraphs ):
 
     **example**::
 
-        >>> nodes1 = networkx.subgraphigraph.nodes()[:10]
+        >>> nodes1 = igraph.nodes()[:10]
         >>> nodes2 = igraph.nodes()[3:8]
         >>> sub1 = networkx.DiGraph()
         >>> sub1.add_nodes_from(nodes1)
@@ -350,10 +350,10 @@ def digraph2sccgraph( Digraph ):
 
     **example**::
 
-            sccgraph = digraph2sccgraph( igraph )
-            sccgraph.nodes()
+            >>> sccgraph = digraph2sccgraph( igraph )
+            >>> sccgraph.nodes()
             [('Ash1', 'Cbf1'), ('gal',), ('Gal80',), ('Gal4','Swi5)]
-            sccgraph.edges()
+            >>> sccgraph.edges()
             [(('gal',), ('Ash1', 'Cbf1')), (('gal',), ('Gal80',)),
              (('Gal80',),('Gal4','Swi5))]
     """
@@ -394,10 +394,10 @@ def digraph2condensationgraph( Digraph ):
 
     **example**::
 
-            cgraph = digraph2condensationgraph( igraph )
-            cgraph.nodes()
+            >>> cgraph = digraph2condensationgraph( igraph )
+            >>> cgraph.nodes()
             [('Ash1', 'Cbf1'), ('Gal4',), ('Gal80',), ('Cbf1','Swi5)]
-            cgraph.edges()
+            >>> cgraph.edges()
             [(('Gal4',), ('Ash1', 'Cbf1')), (('Gal4',), ('Gal80',)),
              (('Gal80',),('Cbf1','Swi5))]
     """
