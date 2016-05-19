@@ -4,18 +4,17 @@
 import subprocess
 import os
 import ast
-import ConfigParser
 import datetime
 
 import InteractionGraphs
 import QuineMcCluskey
-
+import Utility
 
 BASE = os.path.join(os.path.dirname(__file__))
-config = ConfigParser.SafeConfigParser()
+config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
-CMD_BNET2PRIMES     = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))
+CMD_BNET2PRIMES = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))
 
 
 
@@ -25,10 +24,10 @@ def _bnet2primes_error(proc, out, err, cmd):
     raises exception for bnet2primes
     """
     if not proc.returncode == 0:
-        print out
-        print err
-        print '\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode
-        print 'Command:', ' '.join(cmd)
+        print(out)
+        print(err)
+        print('\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode)
+        print('Command: %s'%' '.join(cmd))
         raise Exception
 
 def bnet2primes( BNET, FnamePRIMES=None ):
@@ -67,8 +66,9 @@ def bnet2primes( BNET, FnamePRIMES=None ):
             cmd = [CMD_BNET2PRIMES, FnameBNET, FnamePRIMES]
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = proc.communicate()
+            out = out.decode()
             _bnet2primes_error(proc, out, err, cmd)
-            print 'created', FnamePRIMES
+            print('created %s'%FnamePRIMES)
             
             with open(FnamePRIMES) as f:
                 lines = f.read()
@@ -82,6 +82,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
         cmd = [CMD_BNET2PRIMES, FnameBNET]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate()
+        out = out.decode()
         _bnet2primes_error(proc, out, err, cmd)
 
         out = out.replace('\x08','') # remove backspaces
@@ -93,16 +94,18 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     # input via stdin / output to filename
     elif not '.' in BNET and not FnamePRIMES==None:
         
-        print "This is the only combination that is currently not possible."
-        print "Need to specify either a bnet file name or a json file name."
+        print("This is the only combination that is currently not possible.")
+        print("Need to specify either a bnet file name or a json file name.")
         raise Exception
             
         cmd = [CMD_BNET2PRIMES, ">", FnamePRIMES]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate( input=BNET )
+        out, err = proc.communicate( input=BNET.encode() )
+        out = out.decode()
         proc.stdin.close()
+        
         _bnet2primes_error(proc, out, err, cmd)
-        print 'created', FnamePRIMES
+        print('created %s'%FnamePRIMES)
 
         primes = ast.literal_eval(out)
 
@@ -112,10 +115,11 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
         cmd = [CMD_BNET2PRIMES]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate( input=BNET )
+        out, err = proc.communicate( input=BNET.encode() )
         proc.stdin.close()
         _bnet2primes_error(proc, out, err, cmd)
-
+        out = out.decode()
+        
         out = out.replace('\x08','') # remove backspaces
         out = out.replace(' ','') # remove whitespaces
 
@@ -173,7 +177,7 @@ def primes2bnet(Primes, FnameBNET, Minimize=False):
     
     with open(FnameBNET, 'w') as f:
         f.writelines('\n'.join(lines))
-    print 'created', FnameBNET
+    print('created %s'%FnameBNET)
 
 
 def write_primes( Primes, FnamePRIMES ):
@@ -191,7 +195,7 @@ def write_primes( Primes, FnamePRIMES ):
     
     with open(FnamePRIMES, 'w') as f:
         f.write(str(Primes))
-    print 'created', FnamePRIMES
+    print('created %s'%FnamePRIMES)
 
     
 def read_primes( FnamePRIMES ):        
@@ -262,7 +266,7 @@ def primes2genysis(Primes, FnameGENYSIS):
 
     with open(FnameGENYSIS, 'w') as f:
         f.write('\n'.join(lines))
-    print 'created', FnameGENYSIS
+    print('created %s'%FnameGENYSIS)
     
 
 def primes2bns(Primes, FnameBNS):
@@ -313,27 +317,13 @@ def primes2bns(Primes, FnameBNS):
 
     with open(FnameBNS, 'w') as f:
         f.write('\n'.join(lines))
-    print 'created', FnameBNS
+    print('created %s'%FnameBNS)
         
         
         
 
 
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 
 

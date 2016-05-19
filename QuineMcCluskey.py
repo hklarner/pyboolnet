@@ -4,7 +4,8 @@ import os
 import ast
 import inspect
 import itertools
-import ConfigParser
+
+import FileExchange
 
 BASE = os.path.join(os.path.dirname(__file__))
 fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
@@ -12,7 +13,7 @@ with open(fname_nusmvkeywords) as f:
             NUSMVKEYWORDS = f.read()
             NUSMVKEYWORDS = ast.literal_eval(NUSMVKEYWORDS)
 
-import FileExchange
+
 
 
 def primes2mindnf( Primes ):
@@ -115,13 +116,13 @@ def functions2mindnf( BooleanFunctions ):
     
     too_short = [x for x in Names if len(x)==1]
     if too_short:
-        print 'warning: variable names must be at least two characters if you want to you NuSMV.'
-        print 'Names that are too short:', ', '.join(too_short)
+        print('warning: variable names must be at least two characters if you want to you NuSMV.')
+        print('Names that are too short: %s'%', '.join(too_short))
 
     keywords = [x for x in Names if x in fname_nusmvkeywords]
     if keywords:
-        print 'warning: variable names can not be NuSMV keywords.'
-        print 'Names that are keywords:', ', '.join(keywords)
+        print('warning: variable names can not be NuSMV keywords.')
+        print('Names that are keywords:', ', '.join(keywords))
 
     expressions = {}
     for name, func in BooleanFunctions.items():
@@ -135,7 +136,7 @@ def functions2mindnf( BooleanFunctions ):
             continue
 
         if len(inputs)>10:
-            print "warning: computation of prime implicants may take a very long time for %s."%name
+            print("warning: computation of prime implicants may take a very long time for %s."%name)
 
         ones, zeros = [], []
         prod = len(inputs)*[[0,1]]
@@ -270,7 +271,7 @@ class QM:
     """
 
     sigma = []
-    for i in xrange(self.numvars+1):
+    for i in range(self.numvars+1):
       sigma.append(set())
     for i in cubes:
       sigma[bitcount(i)].add((i,0))
@@ -309,7 +310,7 @@ class QM:
     chart = []
     for one in ones:
       column = []
-      for i in xrange(len(primes)):
+      for i in range(len(primes)):
         if (one & (~primes[i][1])) == primes[i][0]:
           column.append(i)
       chart.append(column)
@@ -317,14 +318,14 @@ class QM:
     covers = []
     if len(chart) > 0:
       covers = [set([i]) for i in chart[0]]
-    for i in xrange(1,len(chart)):
+    for i in range(1,len(chart)):
       new_covers = []
       for cover in covers:
         for prime_index in chart[i]:
           x = set(cover)
           x.add(prime_index)
           append = True
-          for j in xrange(len(new_covers)-1,-1,-1):
+          for j in range(len(new_covers)-1,-1,-1):
             if x <= new_covers[j]:
               del new_covers[j]
             elif x > new_covers[j]:
@@ -423,7 +424,7 @@ class QM:
     or_terms = []
     for minterm in minterms:
       and_terms = []
-      for j in xrange(len(self.variables)):
+      for j in range(len(self.variables)):
         if minterm[0] & 1<<j:
           and_terms.append(self.variables[j])
         elif not minterm[1] & 1<<j:
@@ -448,7 +449,7 @@ class QM:
     or_terms = []
     for minterm in minterms:
       and_terms = {}
-      for j in xrange(len(self.variables)):
+      for j in range(len(self.variables)):
         if minterm[0] & 1<<j:
           and_terms[self.variables[j]]=1
         elif not minterm[1] & 1<<j:
@@ -504,7 +505,7 @@ def primedict2primetuple( Primes, Names ):
 if __name__=="__main__":
     primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
     expressions = primes2mindnf(primes)
-    print expressions
+    print(expressions)
 
 
 

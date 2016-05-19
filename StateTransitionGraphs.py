@@ -4,23 +4,22 @@ import random
 import itertools
 import heapq
 import os
-import ConfigParser
 import subprocess
-
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-BASE = os.path.normpath(BASE)
-config = ConfigParser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
-
 import networkx
 
 import ModelChecking
 import TemporalQueries
 import TrapSpaces
-
 import Utility
 dot2image = Utility.dot2image
+
+BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+BASE = os.path.normpath(BASE)
+config = Utility.myconfigparser.SafeConfigParser()
+config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
+CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
+
+
 
 
 
@@ -70,8 +69,8 @@ def primes2stg( Primes, Update, InitialStates=lambda x: True ):
     assert(Update in ['asynchronous','synchronous'])
 
     if len(Primes)>15:
-        print "The state transition graph will consist of up to 2**%i=%i states, depending on the InitialStates."%(len(Primes),2**len(Primes))
-        print "This will take a while and we might run out of memory."
+        print("The state transition graph will consist of up to 2**%i=%i states, depending on the InitialStates."%(len(Primes),2**len(Primes)))
+        print("This will take a while and we might run out of memory.")
 
     stg = networkx.DiGraph()
 
@@ -158,9 +157,9 @@ def stg2dot( STG, FnameDOT=None ):
     """
 
     if STG.order()==0:
-        print "State transition graph has no nodes."
+        print("State transition graph has no nodes.")
         if FnameDOT!=None:
-            print FnameDot, "was not created."
+            print("%s was not created."%FnameDot)
         return
 
     assert( type(STG.nodes()[0])==str )
@@ -174,7 +173,7 @@ def stg2dot( STG, FnameDOT=None ):
     
     with open(FnameDOT, 'w') as f:
         f.writelines('\n'.join(lines))
-    print "created", FnameDOT
+    print("created %s"%FnameDOT)
     
 
 
@@ -192,7 +191,7 @@ def stg2image(STG, FnameIMAGE, Silent=False):
 
           >>> stg2image(stg, "mapk_stg.pdf")
           >>> stg2image(stg, "mapk_stg.jpg")
-          >>> stg2image(stg, "mapk_svg.pdf")
+          >>> stg2image(stg, "mapk_stg.svg")
     """
 
     assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
@@ -203,16 +202,16 @@ def stg2image(STG, FnameIMAGE, Silent=False):
     dotfile = stg2dot( STG, FnameDOT=None)
     
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=dotfile )
+    out, err = proc.communicate( input=dotfile.encode() )
     proc.stdin.close()
 
     if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print out
-        print 'dot did not respond with return code 0'
+        print(out)
+        print('dot did not respond with return code 0')
         raise Exception
     
     if not Silent:
-        print "created", FnameIMAGE
+        print("created %s"%FnameIMAGE)
 
         
 def copy( STG ):
@@ -630,7 +629,7 @@ def random_state( Primes, Subspace={} ):
     else:
         assert( set(Subspace.keys()).issubset(set(Primes.keys())) )
 
-    return dict(Subspace.items() + [(x,random.choice([0,1])) for x in Primes if not x in Subspace])
+    return dict(list(Subspace.items()) + [(x,random.choice([0,1])) for x in Primes if not x in Subspace])
     
     
 def random_walk( Primes, Update, InitialState, Length ):
@@ -710,12 +709,13 @@ def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
     assert( set(InitialSpace.keys()).issubset(set(Primes.keys())) )
     assert( set(GoalSpace.keys()).issubset(set(Primes.keys())) )
 
-    x = random_state(Primes, Subspace=InitialSpace)
+    xdict = random_state(Primes, Subspace=InitialSpace)
+    x = state2str(xdict)
     
     fringe = []
     seen  = set([])
-    heapq.heappush(fringe, (hamming_distance(x,GoalSpace), [x]))
-    seen.add(state2str(x))
+    heapq.heappush(fringe, (hamming_distance(xdict,GoalSpace), [x]))
+    seen.add(x)
 
     while fringe:
         dist, path = heapq.heappop(fringe)
@@ -723,11 +723,11 @@ def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
             return path
 
         x = path[-1]
-        for y in successors_asynchronous(Primes, x):
-            y_hash = state2str(y)
-            if y_hash not in seen:
-                seen.add(y_hash)
-                heapq.heappush(fringe, (hamming_distance(y,GoalSpace), path+[y]))
+        for ydict in successors_asynchronous(Primes, str2state(Primes,x)):
+            y = state2str(ydict)
+            if y not in seen:
+                seen.add(y)
+                heapq.heappush(fringe, (hamming_distance(ydict,GoalSpace), path+[y]))
                 
         if len(seen)>Memory:
             return None
@@ -870,9 +870,9 @@ def subspace_intersection( Subspaces ):
 
     **example**::
 
-        subspaces = [{"v1":0},{"v2":0}]
-        print subspace_intersection(subspaces)
-        >>> {"v1":0,"v2":0}
+        >>> subspaces = [{"v1":0},{"v2":0}]
+        >>> subspace_intersection(subspaces)
+        {"v1":0,"v2":0}
     """
 
     items = set([])
@@ -881,8 +881,8 @@ def subspace_intersection( Subspaces ):
         items_new = set(x.items())
         intersection = items.intersection(items_new)
         if intersection:
-            print intersection
-            print "found inconsistent subspaces."
+            print(intersection)
+            print("found inconsistent subspaces.")
             raise Exception
         items.update(items_new)
 

@@ -1,19 +1,14 @@
 
 
 import unittest
-import ConfigParser
-import os, sys
+import os
+import sys
 import subprocess
 import networkx
 import itertools
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(BASE)
-FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
-FILES_OUT  = os.path.join(BASE, "Tests", "Files")
-config = ConfigParser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-
 
 import FileExchange
 import PrimeImplicants
@@ -24,6 +19,16 @@ import ModelChecking
 import AttractorDetection
 import TemporalQueries
 import QuineMcCluskey
+import Utility
+
+
+FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
+FILES_OUT  = os.path.join(BASE, "Tests", "Files")
+config = Utility.myconfigparser.SafeConfigParser()
+config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
+
+
+
 
 
 def run():
@@ -141,8 +146,8 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
         init = ["000010"]
         stg = StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous", InitialStates=init)
-        answer = stg.nodes()
-        expected = ['000110', '000010']
+        answer = sorted(stg.nodes())
+        expected = ['000010', '000110']
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -150,8 +155,8 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
         init = [{'Cbf1':0, 'Gal4':1, 'Gal80':0, 'gal':1, 'Swi5':0, 'Ash1':1}]
         stg = StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous", InitialStates=init)
-        answer = stg.nodes()
-        expected = ['010011', '100011', '010001', '101001']
+        answer = sorted(stg.nodes())
+        expected = ['010001', '010011', '100011', '101001']
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -546,7 +551,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces( Primes=primes, Type="min" )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -558,7 +563,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces( Primes=primes, Type="min" )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -603,7 +608,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces( Primes=primes, Type="min", FnameASP=fname_out )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -615,7 +620,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces( Primes=primes, Type="max", FnameASP=fname_out )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -627,7 +632,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces( Primes=primes, Type="all", FnameASP=fname_out )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -639,7 +644,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces_bounded( Primes=primes, Type="all", Bounds=(1,2), FnameASP=fname_out )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = []
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -651,7 +656,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.read_primes( FnamePRIMES=fname_in )
 
         tspaces = TrapSpaces.trap_spaces_bounded( Primes=primes, Type="max", Bounds=(0,100), FnameASP=fname_out )
-        tspaces.sort()
+        tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -663,6 +668,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.bnet2primes(fname_in, fname_out)
 
         tspaces_all = TrapSpaces.trap_spaces(primes, "all")
+        tspaces_all.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},
                     {"v3":1},
                     {"v3":0},
@@ -683,58 +689,63 @@ class TestTrapSpaces(unittest.TestCase):
                     {"v1":1,"v2":1,"v3":1,"v4":1},
                     {"v1":0,"v2":0,"v3":0,"v4":0},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_all)
         self.assertTrue( tspaces_all==expected, msg )
         
         tspaces_min = TrapSpaces.trap_spaces(primes, "min")
+        tspaces_min.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":0,"v2":0,"v3":0,"v4":0},
                     {"v1":1,"v2":1,"v3":1,"v4":1},
                     {"v1":0,"v2":0,"v3":1,"v4":1},
                     {"v1":1,"v2":1,"v3":0,"v4":1},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_min)
         self.assertTrue( tspaces_min==expected, msg )
 
         
         tspaces_max = TrapSpaces.trap_spaces(primes, "max")
+        tspaces_max.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
                     {"v1":1},
                     {"v1":0,"v2":0},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_max)
         self.assertTrue( tspaces_max==expected, msg )
 
         tspaces_bounded = TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(1,1))
+        tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
                     {"v1":1},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue( tspaces_bounded==expected, msg )
 
         tspaces_bounded = TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(2,3))
+        tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v1":1,"v2":1},
                     {"v1":0,"v2":0},
                     {"v3":1,"v4":1},
                     {"v1":1,"v3":0},
                     {"v1":1,"v3":1},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue( tspaces_bounded==expected, msg )
 
         tspaces_bounded = TrapSpaces.trap_spaces_bounded(primes, "all", Bounds=(2,3))
+        tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1},
                     {"v1":0,"v2":0},
@@ -748,13 +759,14 @@ class TestTrapSpaces(unittest.TestCase):
                     {"v1":0,"v2":0,"v3":1},
                     {"v1":1,"v2":1,"v4":1},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue( tspaces_bounded==expected, msg )
 
 
         tspaces_bounded = TrapSpaces.trap_spaces_bounded(primes, "min", Bounds=(2,3))
+        tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1,"v3":1},
                     {"v1":1,"v3":1,"v4":1},
@@ -763,7 +775,7 @@ class TestTrapSpaces(unittest.TestCase):
                     {"v1":0,"v2":0,"v3":1},
                     {"v1":1,"v2":1,"v4":1},
                     ]
-        expected.sort()
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue( tspaces_bounded==expected, msg )
@@ -785,6 +797,7 @@ class TestTrapSpaces(unittest.TestCase):
         self.assertTrue( result==expected, msg )
 
         result = TrapSpaces.steady_states_projected(primes, ["y","x"], Aggregate=False)
+        result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"x":0, "y":1}, {"x":1, "y":1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
@@ -818,12 +831,14 @@ class TestTrapSpaces(unittest.TestCase):
         """
 
         result = TrapSpaces.trap_spaces_outsideof(primes, "all", OutsideOf={'y': 0, 'z': 1})
-        expected = [{}, {"y":0}, {"z":1}, {'y': 0, 'z': 1}]
+        result.sort(key=lambda x: tuple(sorted(x.items())))
+        expected = [{}, {'y': 0}, {'y': 0, 'z': 1}, {'z': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue( result==expected, msg )
 
         result = TrapSpaces.trap_spaces_insideof(primes, "all", InsideOf={'y': 1, 'x': 0})
+        result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'y': 1, 'x': 0}, {'y': 1, 'x': 0, 'z': 0}, {'y': 1, 'x': 0, 'z': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
@@ -841,19 +856,22 @@ class TestTrapSpaces(unittest.TestCase):
         primes = FileExchange.bnet2primes(bnet)
 
         result = TrapSpaces.trap_spaces(primes, "all")
-        expected = [{}, {'v1': 1}, {'v1': 0, 'v2': 0}, {'v1': 1, 'v2': 1}]
+        result.sort(key=lambda x: tuple(sorted(x.items())))
+        expected = [{}, {'v1': 0, 'v2': 0}, {'v1': 1}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue( result==expected, msg )
         
         result = TrapSpaces.trap_spaces(primes, "min")
+        result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue( result==expected, msg )
         
         result = TrapSpaces.trap_spaces(primes, "max")
-        expected = [{'v1': 1}, {'v1': 0, 'v2': 0}]
+        result.sort(key=lambda x: tuple(sorted(x.items())))
+        expected = [{'v1': 0, 'v2': 0}, {'v1': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue( result==expected, msg )
@@ -866,8 +884,10 @@ class TestPrimeImplicants(unittest.TestCase):
         bnet = "input1, input1 \n input2, input2 \n"
         primes = FileExchange.bnet2primes(bnet)
 
-        expected = sorted([{"input1":0,"input2":0},{"input1":0,"input2":1},{"input1":1,"input2":0},{"input1":1,"input2":1},])
-        answer   = sorted(PrimeImplicants.input_combinations(primes))
+        expected = [{"input1":0,"input2":0},{"input1":0,"input2":1},{"input1":1,"input2":0},{"input1":1,"input2":1},]
+        expected.sort(key=lambda x: tuple(sorted(x.items())))
+        answer   = list(PrimeImplicants.input_combinations(primes))
+        answer.sort(key=lambda x: tuple(sorted(x.items())))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue( answer==expected, msg )
@@ -908,7 +928,7 @@ class TestPrimeImplicants(unittest.TestCase):
 
     def test_remove_variables(self):
         primes = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=primes.keys())
+        PrimeImplicants.remove_variables(Primes=primes,Names=list(primes.keys()))
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 

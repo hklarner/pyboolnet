@@ -2,14 +2,15 @@
 
 import os, sys
 import subprocess
-import ConfigParser
 import unittest
 import ast
 import datetime
 
+import Utility
+
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = ConfigParser.SafeConfigParser()
+config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_NUSMV = os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") )
 
@@ -79,7 +80,8 @@ def check_primes( Primes, Update, InitialStates, Specification, DisableCounterEx
     smvfile = primes2smv( Primes, Update, InitialStates, Specification, None )
     
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=smvfile )
+    out, err = proc.communicate( input=smvfile.encode() )
+    out = out.decode()
     proc.stdin.close()
 
     return nusmv_handle( cmd, proc, out, err, DisableCounterExamples )
@@ -135,6 +137,7 @@ def check_smv( FnameSMV, DisableCounterExamples=False, DynamicReorder=True, Disa
     
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
+    out = out.decode()
 
     return nusmv_handle( cmd, proc, out, err, DisableCounterExamples )
 
@@ -190,44 +193,44 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
     assert(Specification[:8] in ["CTLSPEC ", "LTLSPEC "])
 
     if not Primes:
-        print 'You are trying to save the empty Boolean network as a SMV file.'
-        print 'Raising an exception to force you to decide what you want to do with empty Boolean networks (e.g. via a try-except block).'
+        print('You are trying to save the empty Boolean network as a SMV file.')
+        print('Raising an exception to force you to decide what you want to do with empty Boolean networks (e.g. via a try-except block).')
         raise Exception
 
     names = [x for x in Primes if len(x)==1]
     if names:
-        print 'NuSMV requires variables names of at least two characters.'
-        print 'The network contains the following single character variables names: %s'%str(names)
+        print('NuSMV requires variables names of at least two characters.')
+        print('The network contains the following single character variables names: %s'%str(names))
         raise Exception
 
     critical = [x for x in Primes if x.lower()=='successors']
     if critical:
-        print 'Variable are not allowed to be called "SUCCESSORS".'
-        print 'Please change the name of the following variable: %s'%str(critical)
+        print('Variable are not allowed to be called "SUCCESSORS".')
+        print('Please change the name of the following variable: %s'%str(critical))
         raise Exception
 
     critical = [x for x in Primes if x.lower()=='steadystate']
     if critical:
-        print 'Variable are not allowed to be called "STEADYSTATE".'
-        print 'Please change the name of the following variable: %s'%str(critical)
+        print('Variable are not allowed to be called "STEADYSTATE".')
+        print('Please change the name of the following variable: %s'%str(critical))
         raise Exception
 
     critical = [x for x in Primes if '_image' in x.lower()]
     if critical:
-        print 'Variable names that include "_IMAGE" are not allowed.'
-        print 'Please change the name of the following variable: %s'%str(critical)
+        print('Variable names that include "_IMAGE" are not allowed.')
+        print('Please change the name of the following variable: %s'%str(critical))
         raise Exception
 
     critical = [x for x in Primes if '_steady' in x.lower()]
     if critical:
-        print 'Variable names that include "_STEADY" are not allowed.'
-        print 'Please change the name of the following variable: %s'%str(critical)
+        print('Variable names that include "_STEADY" are not allowed.')
+        print('Please change the name of the following variable: %s'%str(critical))
         raise Exception
 
     keywords = [x for x in Primes if x in NUSMVKEYWORDS]
     if keywords:
-        print 'NuSMV keywords are not allowed as variable names.'
-        print 'The network contains the following variables names that are also NuSMVkeywords: %s'%str(keywords)
+        print('NuSMV keywords are not allowed as variable names.')
+        print('The network contains the following variables names that are also NuSMVkeywords: %s'%str(keywords))
         raise Exception
               
 
@@ -288,7 +291,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
     
     with open(FnameSMV, 'w') as f:
         f.write('\n'.join(lines))
-    print 'created', FnameSMV
+    print('created %s'%FnameSMV)
 
 
 
@@ -364,7 +367,7 @@ def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples ):
     if Process.returncode == 0:
 
         if Output.count('specification')>1:
-            print 'SMV file contains more than one CTL or LTL specification.'
+            print('SMV file contains more than one CTL or LTL specification.')
             raise Exception
 
         if 'is false' in Output:
@@ -372,16 +375,16 @@ def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples ):
         elif 'is true' in Output:
             answer = True
         else:
-            print Output
-            print Error
-            print 'NuSMV output does not respond with "is false" or "is true".'
+            print(Output)
+            print(Error)
+            print('NuSMV output does not respond with "is false" or "is true".')
             raise Exception
             
     else:
-        print Output
-        print Error
-        print 'NuSMV did not respond with return code 0'
-        print 'command: ',' '.join(Command)
+        print(Output)
+        print(Error)
+        print('NuSMV did not respond with return code 0')
+        print('command: %s'%' '.join(Command))
         raise Exception
 
     if DisableCounterExamples:

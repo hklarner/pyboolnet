@@ -1,19 +1,22 @@
 
 
 import unittest
-import ConfigParser
-import os, sys
+import os
+import sys
 import subprocess
 import networkx
 import itertools
 
+BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(BASE)
+
+import Utility
+
+FNAME_SETTINGS = os.path.join(BASE, "Dependencies", "settings.cfg")
 
 # create settings.cfg if it doesn't exist
-import os
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-FNAME_SETTINGS = os.path.join(BASE, "Dependencies", "settings.cfg")
 if not os.path.exists(FNAME_SETTINGS):
-    print "settings file", FNAME_SETTINGS, "does not exist."
+    print("settings file %s does not exist."%FNAME_SETTINGS)
     s=["[Executables]",
        "nusmv           = ./NuSMV-2.6.0/bin/NuSMV",
        "gringo          = ./gringo-4.4.0-x86-linux/gringo",
@@ -26,11 +29,10 @@ if not os.path.exists(FNAME_SETTINGS):
     with open(FNAME_SETTINGS,"w") as f:
         f.writelines(s)
 
-    print "created",FNAME_SETTINGS
+    print("created %s"%FNAME_SETTINGS)
 
 
-sys.path.append(BASE)
-config = ConfigParser.SafeConfigParser()
+config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 

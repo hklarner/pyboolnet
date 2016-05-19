@@ -1,12 +1,20 @@
 
 
 import os
-import ConfigParser
 import subprocess
 
+try:
+    # Python 2.x
+    import ConfigParser as configparser
+except ImportError:
+    # Python 3.x
+    import configparser
+
+myconfigparser = configparser
+    
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = ConfigParser.SafeConfigParser()
+config = myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
@@ -32,11 +40,11 @@ def digraph2dot( DiGraph, Indent=1 ):
     lines = []
 
     # fix cluster_ids for subgraphs
-    if DiGraph.graph.has_key("subgraphs"):
+    if "subgraphs" in DiGraph.graph:
         for ID, subgraph in enumerate(DiGraph.graph["subgraphs"]):
             subgraph.graph["cluster_id"] = ID
             
-            if not subgraph.graph.has_key("label"):
+            if not "label" in subgraph.graph:
                 subgraph.graph["label"] = ""
                 # bugfix for inherited labels
                 # see: http://www.graphviz.org/content/cluster-and-graph-labels-bug
@@ -44,7 +52,7 @@ def digraph2dot( DiGraph, Indent=1 ):
     hit = False
     # node and edge defaults first
     for key in ["node", "edge"]:
-        if DiGraph.graph.has_key(key):
+        if key in DiGraph.graph:
             value = DiGraph.graph[key]
             attr = ', '.join(['%s="%s"'%(str(x),str(y)) for x,y in value.items()])
             if attr:
@@ -73,7 +81,7 @@ def digraph2dot( DiGraph, Indent=1 ):
     if hit: lines+= ['']
 
     # special handle for subgraphs
-    if DiGraph.graph.has_key("subgraphs"):
+    if "subgraphs" in DiGraph.graph:
         value = DiGraph.graph["subgraphs"]
         if value:
             tree = subgraphs2tree( value )
@@ -128,7 +136,7 @@ def digraph2dot( DiGraph, Indent=1 ):
         lines+= ['']
 
     # condensation graph
-    if DiGraph.graph.has_key("condensation"):
+    if "condensation" in DiGraph.graph:
         lines+= ['']
         condensation_graph = DiGraph.graph["condensation"]
 
@@ -186,12 +194,12 @@ def dot2image( FnameDOT, FnameIMAGE ):
     output, error = proc.communicate()
 
     if not (proc.returncode ==0) or not os.path.exists(FnameIMAGE):
-        print output
-        print error
-        print '"dot" finished with return code %i'%proc.returncode
+        print(output)
+        print(error)
+        print('"dot" finished with return code %i'%proc.returncode)
         raise Exception
     
-    print "created", FnameIMAGE
+    print("created %s"%FnameIMAGE)
 
 
 def subgraphs2tree( Subgraphs ):
@@ -260,24 +268,24 @@ def subgraphs2tree( Subgraphs ):
 
                     else:
                         # source and p have non-empty intersection but neither is included in the other.
-                        print "cannot build inclusion tree"
-                        print " source:", source.nodes()
-                        print " target:", target.nodes()
-                        print " p (predecessor of target):", p.nodes()
-                        print " intersection source and p:", ','.join(set(source.nodes()).intersection(set(p.nodes())))
+                        print("cannot build inclusion tree")
+                        print(" source: %s"%source.nodes())
+                        print(" target: %s"%target.nodes())
+                        print(" p (predecessor of target): %s"%p.nodes())
+                        print(" intersection source and p: %s"%','.join(set(source.nodes()).intersection(set(p.nodes()))))
                         raise Exception
 
 
     for node in tree.nodes():
 
-        if node.graph.has_key("fillcolor") and not node.graph.has_key("style"):
+        if "fillcolor" in node.graph and not "style" in node.graph:
             node.graph["style"] = "filled"
         
-        if not node.graph.has_key("fillcolor") and not node.graph.has_key("style"):
+        if not "fillcolor" in node.graph and not "style" in node.graph:
             node.graph["fillcolor"] = "/prgn10/6"
             node.graph["style"] = "filled"
 
-        if not node.graph.has_key("label"):
+        if not "label" in node.graph:
             node.graph["label"] = ""
         
     return tree
@@ -299,7 +307,7 @@ def tree2dotlines( Tree, Indent=1 ):
     roots = [x for x in Tree.nodes() if not Tree.predecessors(x)]
     assert(len(roots)==1)
     root = roots[0]
-    assert(not root.graph.has_key("subgraphs"))
+    assert(not "subgraphs" in root.graph)
     cluster_id = root.graph["cluster_id"]
     space = Indent*"  "
 

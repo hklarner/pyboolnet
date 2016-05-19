@@ -5,18 +5,20 @@ import itertools
 import subprocess
 import math
 import os
-import ConfigParser
+import networkx
+
+import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = ConfigParser.SafeConfigParser()
+config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
 
-import networkx
 
-import Utility
+
+
 dot2image = Utility.dot2image
 igraph2cgraph = Utility.digraph2condensationgraph
 
@@ -114,9 +116,9 @@ def igraph2dot( IGraph, FnameDOT=None ):
     """
 
     if IGraph.order()==0:
-        print "Interaction Graph has no nodes."
+        print("Interaction Graph has no nodes.")
         if FnameDOT!=None:
-            print FnameDot, "was not created."
+            print("%s was not created."%FnameDot)
         return
 
     assert( type(IGraph.nodes()[0])==str )
@@ -130,7 +132,7 @@ def igraph2dot( IGraph, FnameDOT=None ):
     
     with open(FnameDOT, 'w') as f:
         f.writelines('\n'.join(lines))
-    print "created", FnameDOT
+    print("created %s"%FnameDOT)
 
 
 def igraph2image(IGraph, FnameIMAGE, Silent=False):
@@ -158,16 +160,16 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
     dotfile = igraph2dot( IGraph, FnameDOT=None)
     
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=dotfile )
+    out, err = proc.communicate( input=dotfile.encode() )
     proc.stdin.close()
 
     if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print out
-        print 'dot did not respond with return code 0'
+        print(out)
+        print('dot did not respond with return code 0')
         raise Exception
     
     if not Silent:
-        print "created", FnameIMAGE
+        print("created %s"%FnameIMAGE)
 
     
     
@@ -526,17 +528,17 @@ def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Del
     output, error = proc.communicate()
 
     if not (proc.returncode ==0):
-        print output
-        print error
-        print '"convert" finished with return code %i'%proc.returncode
-        print "cmd:",' '.join(cmd)
+        print(output)
+        print(error)
+        print('"convert" finished with return code %i'%proc.returncode)
+        print("cmd: %s"%' '.join(cmd))
         raise Exception
 
     for i in range(len(Activities)):
         fname = FnameTMP.replace("*",'{i:0{w}d}'.format(i=i,w=width))
         os.remove(fname)
     
-    print "created", FnameGIF
+    print("created %s"%FnameGIF)
 
 
 

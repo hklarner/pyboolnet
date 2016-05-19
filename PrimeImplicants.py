@@ -377,7 +377,7 @@ def input_combinations(Primes):
 
             >>> len(find_inputs(primes))
             >>> for x in input_combinations(primes):
-            ...     print STGs.subspace2str(primes,x)
+            ...     print(STGs.subspace2str(primes,x))
             00
             01
             10

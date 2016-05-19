@@ -83,8 +83,8 @@ def find_attractor_by_randomwalk_and_ctl( Primes, Update, InitialState={}, Lengt
         
         trials+=1
 
-    print "found no attractor after generating %i random walks of length %i."%(Attempts, LengthRandomWalk)
-    print "increase either or both values."
+    print("found no attractor after generating %i random walks of length %i."%(Attempts, LengthRandomWalk))
+    print("increase either or both values.")
     raise Exception
 
 
@@ -114,7 +114,7 @@ def compute_attractors_tarjan( Primes, STG ):
         >>> stg = STGs.primes2stg(primes, "asynchronous")
         >>> attractors = STGs.compute_attractors_tarjan(stg)
         >>> for A in attractors:
-        ...     print A
+        ...     print(A)
         [{'v1': 1, 'v2': 0, 'v3': 1}]
         [{'v1': 0, 'v2': 1, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 0}]
     """
@@ -197,7 +197,7 @@ def univocal( Primes, Update, Trapspace ):
     init = 'INIT TRUE'
     answer, counterex = ModelChecking.check_primes(primes, Update, init, spec, DisableCounterExamples=False)
 
-    attractor_state1 = dict(attractor_state1.items()+constants.items())
+    attractor_state1 = dict(list(attractor_state1.items()) + list(constants.items()))
 
     # success
     if answer:
@@ -206,7 +206,7 @@ def univocal( Primes, Update, Trapspace ):
     # failure
     else:
         attractor_state2 = find_attractor_by_randomwalk_and_ctl( primes, Update, counterex[-1] )
-        attractor_state2 = dict(attractor_state2.items()+constants.items())
+        attractor_state2 = dict(list(attractor_state2.items()) + list(constants.items()))
         return (False, attractor_state1, attractor_state2)
     
     
@@ -249,7 +249,6 @@ def faithful( Primes, Update, Trapspace ):
     """
 
     if type(Trapspace)==str:
-        print Trapspace
         Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
     # percolation
@@ -260,7 +259,7 @@ def faithful( Primes, Update, Trapspace ):
     # trivial case: free variables fix due to percolation
     if len(constants)>len(Trapspace):
         counterex = find_attractor_by_randomwalk_and_ctl( primes, Update )
-        attractor_state = dict(counterex[-1].items()+constants.items())
+        attractor_state = dict(list(counterex[-1].items()) + list(constants.items()))
         return (False, attractor_state)
 
     # faithfulness
@@ -274,7 +273,7 @@ def faithful( Primes, Update, Trapspace ):
 
     # failure
     else:
-        attractor_state = dict(counterex[-1].items()+constants.items())
+        attractor_state = dict(list(counterex[-1].items()) + list(constants.items()))
         return (False, attractor_state)
     
 
@@ -471,11 +470,11 @@ def Intersection( *args ):
     # non-trivial case
     result = []
     if args[0]!=[{}]:
-        print "args", args
+        print("args: %s"%args)
     for product in itertools.product(*args):
         items = []
         if args[0]!=[{}]:
-            print "product", product
+            print("product: %s"%product)
         for subspace in product:
             for item in subspace.items():
                 items+= [item]

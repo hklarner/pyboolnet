@@ -179,9 +179,9 @@ def init_for_bargraph_encoding( Primes ):
 if __name__=="__main__":
     primes = ["v1", "v2", "v3"]
     subspaces = [{}, {}, "--1", {"v2":0, "v1":0}, "1-1", "-0-"]
-    print EF_oneof_subspaces(primes, subspaces)
-    print EF_all_unsteady( primes )    
-    print EF_nested_reachability(primes, subspaces)
+    print(EF_oneof_subspaces(primes, subspaces))
+    print(EF_all_unsteady( primes )    )
+    print(EF_nested_reachability(primes, subspaces))
 
 
 

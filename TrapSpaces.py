@@ -1,12 +1,12 @@
 
 import os
 import subprocess
-import ConfigParser
 import datetime
 
+import Utility
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-config = ConfigParser.SafeConfigParser()
+config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 CMD_GRINGO = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "gringo") ))
@@ -45,7 +45,7 @@ def trap_spaces(Primes, Type, MaxOutput=100, FnameASP=None):
         >>> bnet = "\\n".join(bnet)
         >>> primes = FEX.bnet2primes(bnet)
         >>> tspaces = TS.trap_spaces(primes, "all")
-        >>> print ", ".join(STGs.subspace2str(primes, x) for x in tspaces)
+        >>> ", ".join(STGs.subspace2str(primes, x) for x in tspaces)
         ---, --1, 1-1, -00, 101
     """
 
@@ -73,9 +73,9 @@ def steady_states(Primes, MaxOutput=100, FnameASP=None):
 
     **example**::
 
-        steady = steady_states(primes)
-        print len(steady)
-        >>> 2
+        >>> steady = steady_states(primes)
+        >>> len(steady)
+        2
     """
 
     return potassco_handle(Primes, Type="all", Bounds=("n","n"), Project=[], InsideOf=None, OutsideOf=None, MaxOutput=MaxOutput, Aggregate=False, FnameASP=FnameASP)
@@ -99,12 +99,11 @@ def steady_states_projected(Primes, Project, Aggregate=False, MaxOutput=100, Fna
 
     **example**::
 
-        psteady = steady_states_projected(primes, ["v1","v2"])
-        print len(psteady)
-        >>> 2
-        print psteady
-        >>> [{"v1":1,"v2":0},{"v1":0,"v2":0}]
-        
+        >>> psteady = steady_states_projected(primes, ["v1","v2"])
+        >>> len(psteady)
+        2
+        >>> psteady
+        [{"v1":1,"v2":0},{"v1":0,"v2":0}]
     """
 
     assert( set(Project).issubset(set(Primes.keys())) )
@@ -167,7 +166,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, InsideOf, OutsideOf):
              '% "target" and "source" are triplets that consist of a variable name, an activity and a unique arc-identifier. ','']
 
     ID = 0
-    for name in sorted(Primes):
+    for name in sorted(Primes.keys()):
         for value in [0,1]:
             for p in Primes[name][value]:
                 ID += 1
@@ -227,7 +226,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, InsideOf, OutsideOf):
     
     with open(FnameASP, 'w') as f:
         f.write('\n'.join(lines))
-    print 'created', FnameASP
+    print('created %s'%FnameASP)
 
 
 
@@ -267,10 +266,11 @@ def potassco_handle(Primes, Type, Bounds, Project, InsideOf, OutsideOf, MaxOutpu
             cmd_clasp  = [CMD_CLASP, '--models=%i'%MaxOutput] + params_clasp
             proc_clasp  = subprocess.Popen(cmd_clasp,  stdin=proc_gringo.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            proc_gringo.stdin.write( aspfile )
+            proc_gringo.stdin.write( aspfile.encode() )
             proc_gringo.stdin.close()
 
             output, error = proc_clasp.communicate()
+            output = output.decode()
 
         # read ASP file
         else:
@@ -280,31 +280,33 @@ def potassco_handle(Primes, Type, Bounds, Project, InsideOf, OutsideOf, MaxOutpu
             proc_clasp  = subprocess.Popen(cmd_clasp, stdin=proc_gringo.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             output, error = proc_clasp.communicate()
+            output = output.decode()
 
     except Exception as Ex:
-        print Ex
+        print(Ex)
         msg = "\nCall to gringo and / or clasp failed."
         if FnameASP!=None:
             msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
-        print msg
+        print(msg)
         raise Ex
 
     if error:
-        print error
+        print(error)
         msg = "\nCall to gringo and / or clasp failed."
         if FnameASP!=None:
             msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
-        print msg
+        print(msg)
         raise Exception
 
     if DEBUG:
-        print "cmd_gringo:", ' '.join(cmd_gringo)
-        print "cmd_clasp:", ' '.join(cmd_clasp)
-        print "error", error
-        print "output"
-        print output
-    
-    lines = output.split('\n')
+        print("cmd_gringo: %s"%' '.join(cmd_gringo))
+        print("cmd_clasp:  %s"%' '.join(cmd_clasp))
+        print("error %s"%error)
+        print("output")
+        print(output)
+
+
+    lines = output.split("\n")
     tspaces = []
     
     while lines and len(tspaces)<MaxOutput:
@@ -317,13 +319,13 @@ def potassco_handle(Primes, Type, Bounds, Project, InsideOf, OutsideOf, MaxOutpu
             tspaces.append( dict(d) )
 
     if len(tspaces)==MaxOutput:
-        print "There are possibly more than %i trap space."%MaxOutput
-        print "Increase MaxOutput to find out."
+        print("There are possibly more than %i trap space."%MaxOutput)
+        print("Increase MaxOutput to find out.")
     
     if Aggregate:
         return Count(tspaces)
     else:
-        return sorted(tspaces)
+        return tspaces
 
 
 ################ Not Working at the Moment ################
@@ -346,9 +348,9 @@ def trap_spaces_outsideof(Primes, Type, OutsideOf, MaxOutput=100, FnameASP=None)
 
     **example**::
 
-        subspace = {"v1":1, "v3":0}
-        tspaces = trap_spaces_outsideof(primes, "min", subspace)
-        print tspaces[0]
+        >>> subspace = {"v1":1, "v3":0}
+        >>> tspaces = trap_spaces_outsideof(primes, "min", subspace)
+        >>> tspaces[0]
         {"v1":1}
     """
 
@@ -372,9 +374,9 @@ def trap_spaces_insideof(Primes, Type, InsideOf, MaxOutput=100, FnameASP=None):
 
     **example**::
 
-        subspace = {"v1":1, "v3":0}
-        tspaces = trap_spaces_insideof(primes, "min", subspace)
-        print tspaces[0]
+        >>> subspace = {"v1":1, "v3":0}
+        >>> tspaces = trap_spaces_insideof(primes, "min", subspace)
+        >>> tspaces[0]
         {"v1":1, "v3":0, "v5":0, "v6":0}
     """
 
@@ -415,12 +417,11 @@ def trap_spaces_bounded(Primes, Type, Bounds, MaxOutput=100, FnameASP=None):
 
     **example**::
 
-        tspaces = trap_spaces_bounded(primes, "min", (2,4))
-        print len(tspaces)
-        >>> 12
-        print tspaces[0]
-        >>> {'TGFR':0,'FGFR':0}
-
+        >>> tspaces = trap_spaces_bounded(primes, "min", (2,4))
+        >>> len(tspaces)
+        12
+        >>> tspaces[0]
+        {'TGFR':0,'FGFR':0}
     """
 
     return potassco_handle(Primes, Type, Bounds, Project=None, InsideOf=None, OutsideOf=None, MaxOutput=MaxOutput, Aggregate=False, FnameASP=FnameASP)
@@ -440,7 +441,7 @@ def Count( Spaces ):
     for x in unique:
         result.append((dict(x), dummy.count(x)))
 
-    return sorted(result)
+    return result
 
 
 
