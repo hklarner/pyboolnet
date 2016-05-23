@@ -10,6 +10,7 @@ For questions and suggestions do not hestitate to open issues or contact
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
 
+
 #### notes for next version (not released yet)
 - added support for Python 2.x _and_ 3.x (commit 1a4a8da73dfd580bc08742c76e4e956308afc07c)
 - added function "input_combinations(Primes)" to module "PrimeImplicants"
