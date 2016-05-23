@@ -663,6 +663,7 @@ def random_walk( Primes, Update, InitialState, Length ):
         InitialState = x
     else:
         assert( set(InitialState.keys()).issubset(set(Primes.keys())) )
+        
 
     if Update=='asynchronous':
         transition = lambda current_state: random.choice(successors_asynchronous(Primes,current_state))
