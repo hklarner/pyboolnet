@@ -653,8 +653,16 @@ def random_walk( Primes, Update, InitialState, Length ):
     """
 
     assert( Update in ['asynchronous','synchronous', 'mixed'] )
-    assert( set(InitialState.keys()) == set(Primes.keys()) )
 
+    if type(InitialState)==str:
+        assert(len(InitialState)<=len(Primes))
+        x = {}
+        for name, value in zip(sorted(Primes.keys()), InitialState):
+            if value.isdigit():
+                x[name] = int(value)
+        InitialState = x
+    else:
+        assert( set(InitialState.keys()).issubset(set(Primes.keys())) )
 
     if Update=='asynchronous':
         transition = lambda current_state: random.choice(successors_asynchronous(Primes,current_state))
