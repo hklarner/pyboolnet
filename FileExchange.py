@@ -57,7 +57,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     """
 
     # input and output via filename
-    if '.' in BNET and not FnamePRIMES==None:
+    if not ',' in BNET and not FnamePRIMES==None:
         FnameBNET = BNET
 
         
@@ -76,7 +76,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via filename / output to stdout
-    elif '.' in BNET and FnamePRIMES==None:
+    elif not ',' in BNET and FnamePRIMES==None:
         FnameBNET = BNET
         
         cmd = [CMD_BNET2PRIMES, FnameBNET]
@@ -92,7 +92,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via stdin / output to filename
-    elif not '.' in BNET and not FnamePRIMES==None:
+    elif ',' in BNET and not FnamePRIMES==None:
         
         print("This is the only combination that is currently not possible.")
         print("Need to specify either a bnet file name or a json file name.")
@@ -111,7 +111,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via stdin / output to stdout
-    elif not '.' in BNET and FnamePRIMES==None:
+    elif ',' in BNET and FnamePRIMES==None:
 
         cmd = [CMD_BNET2PRIMES]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
