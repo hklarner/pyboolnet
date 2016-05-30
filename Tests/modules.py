@@ -472,6 +472,35 @@ class TestTemporalQueries(unittest.TestCase):
 
 
 class TestModelChecking(unittest.TestCase):
+    def test_accepting_states(self):
+        bnet = """
+        Erk, Raf&Mek | Mek&Erk
+	Mek, Raf&Mek | Erk
+	Raf, !Raf | !Erk
+        """
+
+        fname_out = os.path.join( FILES_OUT, "modelchecking_acceptingstates.smv" )
+        primes = FileExchange.bnet2primes(bnet)
+        
+        spec = "CTLSPEC EF(!Erk&!Mek&Raf) &  EF(Erk&Mek&Raf)"
+        init = "INIT TRUE"
+        update = "asynchronous"
+
+        ModelChecking.primes2smv(primes, update, init, spec, fname_out)
+        answer, accepting = ModelChecking.check_smv(fname_out, EnableAcceptingStates=True)
+
+        expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(accepting)
+        self.assertTrue( accepting==expected, msg )
+
+        answer, accepting = ModelChecking.check_primes(primes, update, init, spec, EnableAcceptingStates=True)
+        expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(accepting)
+        self.assertTrue( accepting==expected, msg )
+        
+        
     def test_check_smv_true(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_true.smv" )
 

@@ -42,7 +42,7 @@ def run():
 
 
 class TestNetworkX(unittest.TestCase):
-    def test_network_import(self):
+    def test_networkx_import(self):
         try:
             import networkx
         except ImportError:
@@ -90,7 +90,7 @@ class TestNuSMV(unittest.TestCase):
     def test_nusmv_responds(self):
         cmd = config.get("Executables", "nusmv")
         cmd = os.path.join( BASE, "Dependencies", cmd )
-        cmd = [os.path.normpath(cmd)       ]
+        cmd = [os.path.normpath(cmd)]
 
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate( input="MODULE main" )

@@ -12,7 +12,7 @@ BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 config = Utility.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_NUSMV = os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") )
+CMD_NUSMV = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") ))
 
 fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
 with open(fname_nusmvkeywords) as f:
@@ -23,14 +23,14 @@ with open(fname_nusmvkeywords) as f:
 
 
 def check_primes( Primes, Update, InitialStates, Specification, DisableCounterExamples=True,
-                  DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True ):
+                  DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True, EnableAcceptingStates=False ):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
 
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
-
+        
     .. note::
         If *DisableCounterExamples* is *False* then *ConeOfInfluence* is forced to *False* because
         otherwise the counterexample output is incomplete.
@@ -44,6 +44,7 @@ def check_primes( Primes, Update, InitialStates, Specification, DisableCounterEx
         * *DynamicReorderBDDs* (bool): enables dynamic reordering of variables using *-dynamic*
         * *DisableReachableStates* (bool): disables the computation of reachable states using *-df*
         * *ConeOfInfluence* (bool): enables cone of influence reduction using *-coi*
+        * *EnableAcceptingStates* (bool): enables the computation of accepting states (*-a*)
 
     **returns**:
         * *Answer* (bool): result of query, if *DisableCounterExamples==True*
@@ -76,6 +77,11 @@ def check_primes( Primes, Update, InitialStates, Specification, DisableCounterEx
     if ConeOfInfluence and DisableCounterExamples:
         # coi messes with the output for the counterexamples printer of NuSMV
         cmd+= ['-coi']
+    if EnableAcceptingStates:
+        cmd+= ['-a', 'print']
+
+    # needed, since NuSMV 2.6.0 doesn't accept stdin as input
+    cmd+= ["/dev/stdin"]
 
     smvfile = primes2smv( Primes, Update, InitialStates, Specification, None )
     
@@ -84,12 +90,13 @@ def check_primes( Primes, Update, InitialStates, Specification, DisableCounterEx
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples )
+    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples, EnableAcceptingStates )
 
 
 
 
-def check_smv( FnameSMV, DisableCounterExamples=False, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True ):
+def check_smv( FnameSMV, DisableCounterExamples=True, DynamicReorder=True, DisableReachableStates=False,
+               ConeOfInfluence=True, EnableAcceptingStates=False ):
     """
     Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
@@ -110,10 +117,12 @@ def check_smv( FnameSMV, DisableCounterExamples=False, DynamicReorder=True, Disa
         * *DynamicReorderBDDs* (bool): enables dynamic reordering of variables (*-dynamic*)
         * *DisableReachableStates* (bool): disables the computation of reachable states (*-df*)
         * *ConeOfInfluence* (bool): enables cone of influence reduction (*-coi*)
+        * *EnableAcceptingStates* (bool): disables the computation of accepting states (*-a*)
 
     **returns**:
         * *Answer* (bool): result of query, if *DisableCounterExamples==True*
-        * *(Answer, Counterexample)* (bool, tuple/None): result of query and counterexample, if *DisableCounterExamples==False*. If *Answer==True* then *CounterExample* will be assigned *None*.
+        * *Counterexample* (tuple): result of query and counterexample, if *DisableCounterExamples==False*. If *Answer==True* then *CounterExample* will be assigned *None*.
+        * *AcceptingStates* (dict): information about the accepting states, if *DisableAcceptingStates==False*.
         
     **example**::
 
@@ -133,13 +142,16 @@ def check_smv( FnameSMV, DisableCounterExamples=False, DynamicReorder=True, Disa
         cmd+= ['-df']
     if ConeOfInfluence:
         cmd+= ['-coi']
+    if EnableAcceptingStates:
+        cmd+= ['-a', 'print']
+    
     cmd+= [FnameSMV]
     
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
 
-    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples )
+    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples, EnableAcceptingStates )
 
 
 
@@ -348,7 +360,47 @@ def output2counterexample( NuSMVOutput ):
     return tuple(counterexample)
 
 
-def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples ):
+def output2acceptingstates( NuSMVOutput ):
+    """
+    Converts the output of a NuSMV call into an accepting states dictionary that contains information about the initial states,
+    accepting states and accepting and initial.
+
+    **arguments**:
+        * *NuSMVOutput* (str): output of a call to NuSMV
+
+    **returns**:
+        * *AcceptingStates* (dict): information about the accepting states with the following keys:
+            * CTLSPEC: the CTL formula
+            * INIT: the initial states
+            * INIT_SIZE: number of initial states
+            * ACCEPTING: factored formula of the accepting states
+            * ACCEPTING_SIZE: number of accepting states
+            * INITACCEPTING: factored formula of the initial and accepting states
+            * INITACCEPTING_SIZE: number of initial and accepting states
+            * ANSWER: whether the query is true
+    """
+
+    
+    accepting = {}
+    
+    for line in NuSMVOutput.split("\n"):
+        if line.startswith("initial states:"):
+            accepting["INIT"] = str(line.split(":")[1].strip())
+        elif line.startswith("number of initial states:"):
+            accepting["INIT_SIZE"] = int(line.split(":")[1].strip())
+        elif line.startswith("accepting states:"):
+            accepting["ACCEPTING"] = str(line.split(":")[1].strip())
+        elif line.startswith("number of accepting states:"):
+            accepting["ACCEPTING_SIZE"] = int(line.split(":")[1].strip())
+        elif line.startswith("initial and accepting States:"):
+            accepting["INITACCEPTING"] = str(line.split(":")[1].strip())
+        elif line.startswith("number of initial and accepting states:"):
+            accepting["INITACCEPTING_SIZE"] = int(line.split(":")[1].strip())
+    
+    return accepting
+
+
+def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples, EnableAcceptingStates ):
     """
     The part of the code of "check_smv" and "check_primes" that is identical in both functions.
     
@@ -358,10 +410,12 @@ def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples ):
         * *Process* (subprocess.Popen): the object returned by subprocess.Popen
         * *Output* (Popen.communicate): the object returned by Popen.communicate
         * *DisableCounterExamples* (bool): whether a counterexample should be returned if the query is false
+        * *EnableAcceptingStates* (bool): whether information about the accepting states should be returned
 
     **returns**:
         * *Answer* (bool): whether NuSMV returns "is true"
         * *CounterExample* (list): a counterexample if NuSMV returns "is false" and DisableCounterExamples==False.
+        * *AcceptingStates* (dict): information about the accepting states, if *DisableAcceptingStates==False*.
     """
     
     if Process.returncode == 0:
@@ -387,14 +441,20 @@ def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples ):
         print('command: %s'%' '.join(Command))
         raise Exception
 
-    if DisableCounterExamples:
+    if DisableCounterExamples and not EnableAcceptingStates:
         return answer
-    else:
-        counterexample = output2counterexample( NuSMVOutput=Output )
-        return answer, counterexample
 
+    result = [answer]
+    
+    if not DisableCounterExamples:
+        counterex = output2counterexample( NuSMVOutput=Output )
+        result.append(counterex)
 
+    if EnableAcceptingStates:
+        accepting = output2acceptingstates( NuSMVOutput=Output )
+        result.append(accepting)
 
+    return tuple(result)
 
 
 
