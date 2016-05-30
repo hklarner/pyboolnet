@@ -11,6 +11,7 @@ For questions and suggestions do not hestitate to open issues or contact
  * heike.siebert@fu-berlin.de
 
 #### notes for the next version
+- added support for model checking with _accepting states_ via [NuSMV-a](https://github.com/hklarner/NuSMV-a)
 - added `ExampleNetworks.py`, a library of pre-defined networks
 - added support for Python 2.x _and_ 3.x
 - added function "input_combinations(Primes)" to module "PrimeImplicants"
