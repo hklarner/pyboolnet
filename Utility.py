@@ -100,7 +100,7 @@ def digraph2dot( DiGraph, Indent=1 ):
             for k,v in attr.items():
 
                 # html style label attribute
-                if v.startswith("<<"):
+                if v.startswith("<"):
                     values+=['%s=%s'%(k,v)]
 
                 # normal attribute
