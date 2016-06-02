@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 
 randomnet_n15k3 = """
