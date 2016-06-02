@@ -360,6 +360,16 @@ def output2counterexample( NuSMVOutput ):
     return tuple(counterexample)
 
 
+def _read_number(Line):
+    """
+    Helper function for output2acceptingstates( NuSMVOutput )
+    """
+    Line = Line.split(":")[1].strip()
+    if "e" in Line:
+        return float(Line)
+    else:
+        return int(Line)
+
 def output2acceptingstates( NuSMVOutput ):
     """
     Converts the output of a NuSMV call into an accepting states dictionary that contains information about the initial states,
@@ -388,28 +398,19 @@ def output2acceptingstates( NuSMVOutput ):
             accepting["INIT"] = str(line.split(":")[1].strip())
             
         elif line.startswith("number of initial states:"):
-            if "e" in accepting["INIT_SIZE"]:
-                accepting["INIT_SIZE"] = float(line.split(":")[1].strip())
-            else:
-                accepting["INIT_SIZE"] = int(line.split(":")[1].strip())
+            accepting["INIT_SIZE"] = _read_number(line)
                 
         elif line.startswith("accepting states:"):
             accepting["ACCEPTING"] = str(line.split(":")[1].strip())
             
         elif line.startswith("number of accepting states:"):
-            if "e" in accepting["INIT_SIZE"]:
-                accepting["ACCEPTING_SIZE"] = float(line.split(":")[1].strip())
-            else:
-                accepting["ACCEPTING_SIZE"] = int(line.split(":")[1].strip())
+            accepting["ACCEPTING_SIZE"] = _read_number(line)
             
         elif line.startswith("initial and accepting States:"):
             accepting["INITACCEPTING"] = str(line.split(":")[1].strip())
             
         elif line.startswith("number of initial and accepting states:"):
-            if "e" in accepting["INIT_SIZE"]:
-                accepting["INITACCEPTING_SIZE"] = float(line.split(":")[1].strip())
-            else:
-                accepting["INITACCEPTING_SIZE"] = int(line.split(":")[1].strip())
+            accepting["INITACCEPTING_SIZE"] = _read_number(line)
             
     
     return accepting
