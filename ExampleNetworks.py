@@ -1,7 +1,134 @@
+# -*- coding: utf-8 -*-
 
+
+randomnet_n15k3 = """
+# generated with BoolNet
+# Mussel, Christoph, Martin Hopfensitz, and Hans A. Kestler. "BoolNet: an R package for generation, reconstruction and analysis of Boolean networks." Bioinformatics 26.10 (2010): 1378-1380.
+
+Gene1, (!Gene3 & !Gene12) | (Gene8)
+Gene2, (!Gene4 & !Gene14) | (!Gene12 & !Gene4)
+Gene3, (Gene5) | (Gene6 & !Gene3)
+Gene4, (!Gene3 & !Gene4) | (!Gene6 & !Gene4) | (!Gene6 & Gene3)
+Gene5, (!Gene14 & Gene6) | (Gene14 & !Gene6) | (Gene9)
+Gene6, (!Gene8 & Gene10) | (Gene10 & Gene14)
+Gene7, (!Gene12 & !Gene13 & Gene10) | (!Gene12 & Gene13 & !Gene10) | (Gene12 & !Gene13 & !Gene10)
+Gene8, (!Gene13 & !Gene8 & Gene9) | (Gene13 & !Gene8 & !Gene9) | (Gene13 & Gene8 & Gene9)
+Gene9, (Gene12) | (Gene7) | (Gene11)
+Gene10, (!Gene10 & !Gene3) | (!Gene3 & Gene1) | (Gene10 & Gene3 & !Gene1)
+Gene11, (!Gene14) | (Gene12) | (Gene13)
+Gene12, (!Gene4 & Gene3) | (Gene8 & Gene4)
+Gene13, (!Gene6 & !Gene11 & Gene2) | (!Gene6 & Gene11 & !Gene2) | (Gene6 & !Gene11 & !Gene2) | (Gene6 & Gene11 & Gene2)
+Gene14, (!Gene5 & !Gene9) | (Gene8 & Gene9)
+Gene15, (!Gene8 & Gene9) | (Gene8 & !Gene9) | (!Gene2 & Gene9)
+"""
+
+
+dahlhaus_neuroplastoma = """
+# taken from
+# Dahlhaus, Meike, et al. "Boolean modeling identifies Greatwall/MASTL as an important regulator in the AURKA network of neuroblastoma." Cancer letters 371.1 (2016): 79-89.
+
+CentrosomeMat,      CDK1CCNBComplex & ! SpindleAssembly
+SpindleAssembly,    CentrosomeMat & !Cytokinesis
+Cytokinesis,        SpindleAssembly & !CentrosomeMat
+AURKAActive,        AURKAPresent & (( TPX2 | (AJUBA & BORA) | (AJUBA & NEDD9) ) & !(AURKAActive & (PP1)))
+AURKAPresent,       !PP2A
+GSK3B,              GSK3B
+AJUBA,              AJUBA
+MTCanAct,           MTCanAct
+STMNCanAct,         STMNCanAct
+CDK1CCNBComplex,    !Cytokinesis & (!WEE1 | hCPEB | CDC25B)
+CDC25B,             (AURKAActive | PLK1) & !Cytokinesis
+BORA,               GSK3B & Cytokinesis & !PLK1 | !Cytokinesis
+GWL-MASTL,          CDK1CCNBComplex & !PP2A
+HCPEB,              AURKAActive
+MT,                 !STMN
+NEDD9,              AURKAActive
+ENSA,               GWL-MASTL
+PLK1,               AURKAActive | !STMN & STMNCanAct | MT & MTCanAct
+PP1,                !Cytokinesis & !(AURKAActive | CDK1CCNBComplex)
+PP2A,               (PP1 & ( ! ENSA) )
+STMN,               !AURKAActive
+TPX2,               PLK1
+WEE1,               !PLK1
+"""
+
+
+faure_cellcycle = """
+# taken from
+#Faure, Adrien, et al. "Dynamical analysis of a generic Boolean model for the control of the mammalian cell cycle." Bioinformatics 22.14 (2006): e124-e131.
+
+Cdc20,               (CycB)
+CycA,                (!cdh1 & CycA & !Rb & !Cdc20) | (!cdh1 & E2F & !Rb & !Cdc20) | (!UbcH10 & CycA & !Rb & !Cdc20) | (!UbcH10 & E2F & !Rb & !Cdc20)
+CycB,                (!cdh1 & !Cdc20)
+CycD,                (CycD)
+CycE,                (E2F & !Rb)
+E2F,                 (!CycA & !Rb & !CycB) | (p27 & !Rb & !CycB)
+Rb,                  (!CycE & !CycD & !CycA & !CycB) | (!CycD & p27 & !CycB)
+UbcH10,              (UbcH10 & CycA) | (UbcH10 & CycB) | (UbcH10 & Cdc20) | (!cdh1)
+cdh1,                (p27 & !CycB) | (Cdc20) | (!CycA & !CycB)
+p27,                 (!CycD & p27 & !CycA & !CycB) | (!CycE & !CycD & !CycA & !CycB) | (!CycE & !CycD & p27 & !CycB)
+"""
+
+
+irons_yeast = """
+# taken from
+# Irons, D. J. "Logical analysis of the budding yeast cell cycle." Journal of theoretical biology 257.4 (2009): 543-559.
+# the variables B, M and S are replaced by vB, vM and vS because NuSMV requires two-letter names
+
+vB,                  (Cln2 & !CD) | (vB & !CD) | (Clb5 & !CD)
+CD,                  (FEAR & vM & Cdc14 & !CD)
+CKI,                 (Swi5 & !Clb2 & !Cln2 & !Clb5) | (!Clb2 & CKI & !Cln2 & !Clb5) | (Swi5 & Cdc14)
+Cdc14,               (FEAR & MEN)
+Cdc20,               (SFF & Clb2 & vM)
+Cdh1,                (!Clb2 & !Cln2 & !Clb5) | (Cdc14)
+Clb2,                (!Cdh1 & SFF & !CKI & Clb2) | (vB & !CKI & !Cdc20) | (SFF & Clb2 & !CKI & !Cdc20) | (!Cdh1 & vB & !CKI)
+Clb5,                (SMBF & !Cdc20)
+Cln2,                (SMBF)
+Cln3,                (!Yhp1)
+FEAR,                (Cdc20)
+vM,                  (Clb2 & vS & !CD) | (vM & !CD)
+MEN,                 (Clb2 & FEAR)
+vS,                  (Clb5 & !CD) | (vS & !CD) | (Clb2 & !CD)
+SFF,                 (vB & !CKI & !Cdc20) | (!Cdh1 & vB & !CKI) | (SFF & Clb2)
+SMBF,                (!Clb2 & Cln3) | (!Clb2 & Cln2) | (SMBF & !Clb2)
+Swi5,                (SFF & Cdc14) | (SFF & !Clb2)
+Yhp1,                (SMBF)
+"""
+
+
+davidich_yeast = """
+# taken from
+# Davidich, Maria I., and Stefan Bornholdt. "Boolean network model predicts cell cycle sequence of fission yeast." PloS one 3.2 (2008): e1672.
+
+Cdc25,               (Cdc2_Cdc13 & !PP) | (Cdc2_Cdc13 & Cdc25) | (!PP & Cdc25)
+Cdc2_Cdc13,          (!Slp1 & !Rum1 & !Ste9)
+Cdc2_Cdc13_A,        (!Slp1 & !Rum1 & Cdc25 & !Ste9 & !Wee1_Mik1)
+PP,                  (Slp1)
+Rum1,                (!SK & Rum1 & PP & !Cdc2_Cdc13) | (!SK & Rum1 & !Cdc2_Cdc13 & !Cdc2_Cdc13_A) | (Rum1 & PP & !Cdc2_Cdc13 & !Cdc2_Cdc13_A) | (!SK & Rum1 & PP & !Cdc2_Cdc13_A) | (!SK & !Cdc2_Cdc13 & PP & !Cdc2_Cdc13_A)
+SK,                  (Start)
+Slp1,                (Cdc2_Cdc13_A)
+Start,               0
+Ste9,                (!SK & !Cdc2_Cdc13 & PP & Ste9) | (!SK & !Cdc2_Cdc13 & Ste9 & !Cdc2_Cdc13_A) | (!Cdc2_Cdc13 & PP & Ste9 & !Cdc2_Cdc13_A) | (!SK & PP & Ste9 & !Cdc2_Cdc13_A) | (!SK & !Cdc2_Cdc13 & PP & !Cdc2_Cdc13_A)
+Wee1_Mik1,           (!Cdc2_Cdc13 & PP) | (PP & Wee1_Mik1) | (!Cdc2_Cdc13 & Wee1_Mik1)
+"""
+
+arellano_antelope = """
+# taken from
+# Arellano, Gustavo, et al. "Antelope: a hybrid-logic model checker for branching-time Boolean GRN analysis." BMC bioinformatics 12.1 (2011): 1.
+
+PLT,  ARF
+AUXINS,  AUXINS
+IAA,  !AUXINS
+ARF,  !IAA
+SHR,  SHR
+SCR,  SHR & SCR & (JKD | !MGP)
+JKD,  SHR & SCR
+MGP,  SHR & SCR & !WOX
+WOX,  ARF & SHR & SCR & ( !MGP | WOX)
+"""
 
 klamt_tcr = """
-# based on 
+# taken from
 # Klamt S, Saez-Rodriguez J, Lindquist JA, Simeoni L, Gilles ED.  2006.  A methodology for the structural and functional analysis of signaling and regulatory networks. BMC Bioinformatics. 7(1):56.
 
 AP1,                 Jun & Fos
