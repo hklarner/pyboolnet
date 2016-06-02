@@ -487,14 +487,14 @@ class TestModelChecking(unittest.TestCase):
         update = "asynchronous"
 
         ModelChecking.primes2smv(primes, update, init, spec, fname_out)
-        answer, accepting = ModelChecking.check_smv(fname_out, EnableAcceptingStates=True)
+        answer, accepting = ModelChecking.check_smv(fname_out, AcceptingStates=True)
 
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
         self.assertTrue( accepting==expected, msg )
 
-        answer, accepting = ModelChecking.check_primes(primes, update, init, spec, EnableAcceptingStates=True)
+        answer, accepting = ModelChecking.check_primes(primes, update, init, spec, AcceptingStates=True)
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
