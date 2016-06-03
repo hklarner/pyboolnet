@@ -13,6 +13,7 @@ import TemporalQueries
 import TrapSpaces
 import AttractorDetection
 import StateTransitionGraphs
+import InteractionGraphs
 import ExampleNetworks
 import PrimeImplicants
 import Utility
@@ -49,101 +50,170 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
         >>> primes2basins(primes, update, "basins.pdf")
         created basins.pdf
     """
-    
 
+    assert(Update in ["synchronous", "mixed", "asynchronous"])
+    
+    if not Primes:
+        print("what are the basins of an empty Boolean network?")
+        raise Exception
+
+    inputs = PrimeImplicants.find_inputs(subprimes)
+
+    # divide by connected components and input combinations!
+    
+    # divide the problem by input combinations
+    subprimes = PrimeImplicants.copy(Primes)
+    constants = PrimeImplicants.percolate_constants( subprimes, RemoveConstants=True )
+    factor = float(2**len(constants))
+
+    cases = []
+    inputs = PrimeImplicants.find_inputs(subprimes)
+    if inputs:
+        input_combinations = PrimeImplicants.input_combinations(subprimes)
+        
+        for input_combination in input_combinations:
+            newsubprimes = PrimeImplicants.copy(subprimes)
+            PrimeImplicants.create_constants(newsubprimes, input_combination)
+            newconstants = PrimeImplicants.percolate_constants(newsubprimes, RemoveConstants=True)
+            newfactor = factor * 2**(len(newconstants)-len(inputs))
+            newconstants = dict(constants, **newconstants)
+            
+            cases+= [(input_combination, newsubprimes)]
+    else:
+        cases+= [(constants, subprimes, factor),]
+
+    summe = 0.
+    for constants, subprimes, factor in cases:
+        print "constants", constants.keys()
+        print "subprimes", subprimes.keys()
+        print "factor", factor
+        print
+        summe+= factor
+
+    print "2**n=",float(2**len(Primes))
+    print "sum =",summe
+
+    ig = InteractionGraphs.primes2igraph(Primes)
+    InteractionGraphs.igraph2image(ig, "igraph.pdf")
+    stg = StateTransitionGraphs.primes2stg(Primes, "asynchronous")
+    StateTransitionGraphs.stg2image(stg, "stg.pdf")
+
+    mints_primes = TrapSpaces.trap_spaces(Primes, "min")
+    
     graph = networkx.DiGraph()
     graph.graph["node"]  = {"shape":"rect","color":"none","fillcolor":"none"}
     graph.graph["edge"]  = {}
+    
+    nodes = {}
 
+    for constants, subprimes, factor in cases:
 
-    subspaces = [{}]
-    inputs = PrimeImplicants.find_inputs(Primes)
-    if inputs:
-        subspaces = PrimeImplicants.input_combinations(Primes)
-
-    for subspace in subspaces:
-        print "subspace", subspace
-        prefix = StateTransitionGraphs.subspace2str(Primes,subspace)
-        
-        subprimes = PrimeImplicants.copy(Primes)
-        PrimeImplicants.create_constants(subprimes, Activities=subspace)
-        constants = PrimeImplicants.percolate_constants( subprimes, RemoveConstants=True )
-
-        mints = TrapSpaces.trap_spaces(subprimes, "min")
-        
-        props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints]
-        vectors = len(mints)*[[0,1]]
-        vectors = itertools.product(*vectors)
-
-        k = len(constants)-len(inputs)
-        factor = 2**k
-
-        # add nodes
-        nodes = {}
-        for vector in vectors:
-            if sum(vector)==0: continue
+        # if this happens then there are only input components!
+        if not subprimes:
             
-            spec = ["EF(%s)"%p if v else "!EF(%s)"%p for v,p in zip(vector,props)]
-            spec = " & ".join(spec)
-            spec = "CTLSPEC %s"%spec
-            init = "INIT TRUE"
+            node = constants
+            prefix = StateTransitionGraphs.subspace2str(Primes,constants)
 
-            if len(vector)==1:
-                accepting = {"INITACCEPTING_SIZE": 2**(len(Primes)-len(inputs)),
-                             "ACCEPTING": "TRUE"}
+            node = ["1" if node==x else "0" for x in mints_primes]
+            node = "".join(node)
+
+            size = factor
+            label = "<%s<br/>%i>"%(node, size)
+            
+            graph.add_node(node, label=label, style="filled")
+            accepting = TemporalQueries.subspace2proposition(Primes, {k:v for k,v in constants.items() if k in inputs})
+            nodes[node] = {"INITACCEPTING": accepting,
+                           "INITACCEPTING_SIZE": size}
+
+        else:
+            mints_subprimes = TrapSpaces.trap_spaces(subprimes, "min")
+
+            # easy: one attractor
+            if len(mints_subprimes) == 1:
+                
+                node = dict(constants, **mints_subprimes[0])
+                node = ["1" if node==x else "0" for x in mints_primes]
+                node = "".join(node)
+
+                size = factor * 2**len(subprimes)
+                label = "<%s<br/>%i>"%(node, size)
+                
+                graph.add_node(node, label=label, style="filled")
+                accepting = TemporalQueries.subspace2proposition(Primes, {k:v for k,v in constants.items() if k in inputs})
+                nodes[node] = {"INITACCEPTING": accepting,
+                               "INITACCEPTING_SIZE": size}
+
+            # difficult: several attractors
             else:
-                answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
+        
+                props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints_subprimes]
+                vectors = len(mints_subprimes)*[[0,1]]
+                vectors = itertools.product(*vectors)
                 
-
-            if accepting["INITACCEPTING_SIZE"]>0:
-                node = "".join([str(v) for v in vector])
-                size = factor * accepting["INITACCEPTING_SIZE"]
-
-                sub = "%s<br/>"%prefix if subspace else prefix
-                label = "<%s<br>%s<br/>%i>"%(sub, node, size)
-                
-                graph.add_node(prefix+node, label=label, style="filled")
-
-                nodes[node] = accepting
-
-
-        # add edges
-        for source in nodes.keys():
-            
-            subvectors = [[0,1] if x=="1" else [0] for x in source]
-            subvectors = itertools.product(*subvectors)
-
-            for subvector in subvectors:
-                if sum(subvector)==0: continue
-                target = "".join([str(v) for v in subvector])
-
-                if target in nodes.keys():
-                    if source==target: continue
+                for vector in vectors:
+                    if sum(vector)==0: continue
                     
-                    init = "INIT %s"%nodes[source]["ACCEPTING"]
-                    spec = "CTLSPEC  E[%s U %s]"%(nodes[source]["ACCEPTING"],nodes[target]["ACCEPTING"])
+                    spec = ["EF(%s)"%p if v else "!EF(%s)"%p for v,p in zip(vector,props)]
+                    spec = " & ".join(spec)
+                    spec = "CTLSPEC %s"%spec
+                    init = "INIT TRUE"
 
-                    answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
-                    if 0 < accepting["INITACCEPTING_SIZE"] < nodes[source]["INITACCEPTING_SIZE"]:
-                        graph.add_edge(prefix+source, prefix+target, style="dashed")
-                    elif accepting["INITACCEPTING_SIZE"] == nodes[source]["INITACCEPTING_SIZE"]:
-                        graph.add_edge(prefix+source, prefix+target, style="solid")
-                
+                    print "spec", spec
+                    answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
+                    print 'accepting["INITACCEPTING_SIZE"]', accepting["INITACCEPTING_SIZE"]
+
+                    if accepting["INITACCEPTING_SIZE"]>0:
+                        
+                        node = [dict(constants, **x) for v,x in zip(vector,mints_subprimes) if v]
+                        node = ["1" if x in node else "0" for x in mints_primes]
+                        node = "".join(node)
+                        print "node", node
+
+                        size = factor * accepting["INITACCEPTING_SIZE"]
+                        label = "<%s<br/>%i>"%(node, size)
+                        
+                        graph.add_node(node, label=label, style="filled")
+                        nodes[node] = accepting
 
 
-        S = float(2**len(Primes))
-        for source in nodes.keys():
-            accepting = nodes[source]
-            value = 1 - accepting["INITACCEPTING_SIZE"] / S
-            
-            graph.node[prefix+source]["fillcolor"] = "0.0 0.0 %.2f"%value
-            if value<.5:
-                graph.node[prefix+source]["fontcolor"] = "white"
+                # add edges
+                for source in nodes.keys():
+                    
+                    subvectors = [[0,1] if x=="1" else [0] for x in source]
+                    subvectors = itertools.product(*subvectors)
 
-            if graph.out_degree(prefix+source)==0: continue
-            if all(graph.edge[prefix+source][x]["style"]=="solid" for x in graph.successors(prefix+source)):
-                graph.node[prefix+source]["color"] = "cornflowerblue"
-                graph.node[prefix+source]["penwidth"] = "5"
+                    for subvector in subvectors:
+                        if sum(subvector)==0: continue
+                        target = "".join([str(v) for v in subvector])
+
+                        if target in nodes.keys():
+                            if source==target: continue
+                            
+                            init = "INIT %s"%nodes[source]["ACCEPTING"]
+                            spec = "CTLSPEC  E[%s U %s]"%(nodes[source]["ACCEPTING"],nodes[target]["ACCEPTING"])
+
+                            answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
+                            if 0 < accepting["INITACCEPTING_SIZE"] < nodes[source]["INITACCEPTING_SIZE"]:
+                                graph.add_edge(source, target, style="dashed")
+                                
+                            elif accepting["INITACCEPTING_SIZE"] == nodes[source]["INITACCEPTING_SIZE"]:
+                                graph.add_edge(source, target, style="solid")
+                        
+
+
+                S = float(2**len(Primes))
+                for source in nodes.keys():
+                    accepting = nodes[source]
+                    value = 1 - accepting["INITACCEPTING_SIZE"] / S
+                    
+                    graph.node[source]["fillcolor"] = "0.0 0.0 %.2f"%value
+                    if value<.5:
+                        graph.node[source]["fontcolor"] = "white"
+
+                    if graph.out_degree(source)==0: continue
+                    if all(graph.edge[source][x]["style"]=="solid" for x in graph.successors(source)):
+                        graph.node[source]["color"] = "cornflowerblue"
+                        graph.node[source]["penwidth"] = "5"
 
 
     if FnameIMAGE:
@@ -159,10 +229,39 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
 
 if __name__=="__main__":
     import FileExchange
-    bnet = ExampleNetworks.arellano_antelope
+    test = 6
+    
+    if test==1:
+        bnet = ExampleNetworks.arellano_antelope
+    elif test==2:
+        bnet = ExampleNetworks.isolated_circuit(3, "negative")
+    elif test==3:
+        bnet = """
+        v1, 1
+        v2, v2
+        v3, v4
+        v4, !v3 | v2
+        """
+    elif test==4:
+        bnet = """
+        v1, 1
+        v2, 0
+        """
+    elif test==5:
+        bnet = """
+        v1, v1
+        v2, v2
+        """
+    elif test==6:
+        bnet = """
+        v1, v1
+        v2, v1
+        v3, v2 & v3
+        """
+    
     primes = FileExchange.bnet2primes(bnet)
     update = "asynchronous"
-    primes2basins( primes, update, "arellano_antelope_2.pdf" )
+    primes2basins( primes, update, "test%i.pdf"%test )
     
 
 
