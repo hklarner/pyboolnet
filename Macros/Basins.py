@@ -57,10 +57,14 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
+
+    mints_primes = TrapSpaces.trap_spaces(Primes, "min")
+    
     inputs = PrimeImplicants.find_inputs(subprimes)
 
-    # divide by connected components and input combinations!
     
+
+
     # divide the problem by input combinations
     subprimes = PrimeImplicants.copy(Primes)
     constants = PrimeImplicants.percolate_constants( subprimes, RemoveConstants=True )
@@ -229,7 +233,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
 
 if __name__=="__main__":
     import FileExchange
-    test = 6
+    test = 7
     
     if test==1:
         bnet = ExampleNetworks.arellano_antelope
@@ -258,10 +262,18 @@ if __name__=="__main__":
         v2, v1
         v3, v2 & v3
         """
+    elif test==7:
+        bnet = ExampleNetworks.davidich_yeast
+        print bnet
+        primes = FileExchange.bnet2primes(bnet)
+        ig = InteractionGraphs.primes2igraph(primes)
+        InteractionGraphs.igraph2image(ig, "davidich_yeast_ig.pdf")
+
+    else:
     
-    primes = FileExchange.bnet2primes(bnet)
-    update = "asynchronous"
-    primes2basins( primes, update, "test%i.pdf"%test )
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
     
 
 
