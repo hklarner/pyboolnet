@@ -99,13 +99,15 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
         PrimeImplicants.remove_variables(subprimes, toremove)
 
         mints = TrapSpaces.trap_spaces(subprimes, "min")
+        print "len(mints)", len(mints)
         vectors = []
         
         inputs = PrimeImplicants.find_inputs(subprimes)
         
         if inputs:
             for combination in PrimeImplicants.input_combinations(subprimes):
-                mints_projected = [x for key in combination.keys() for x in mints if x[key]==combination[key]]
+                mints_projected = [x for x in mints if all(x[key]==combination[key] for key in combination.keys())]
+
 
                 newvectors = [[0,1] if x in mints_projected else [0] for x in mints]
                 newvectors = itertools.product(*newvectors)
@@ -119,7 +121,10 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
             newvectors = [x for x in newvectors if sum(x)>0]
             vectors+= [(None,x) for x in newvectors]
 
-
+        print "len(subprimes)", len(subprimes)
+        print "len(vectors)", len(vectors)
+        
+        
         props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints]
         graph = networkx.DiGraph()
         accepting_map = {}
@@ -175,7 +180,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
 
 
         graphs.append(graph)
-
+    
     for x in graphs:
         print x.nodes()
     graph = reduce(lambda x,y: networkx.disjoint_union(x,y), graphs)
@@ -367,7 +372,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
 
 if __name__=="__main__":
     import FileExchange
-    test = 5
+    test = 1
     
     if test==1:
         bnet = ExampleNetworks.grieco_mapk
