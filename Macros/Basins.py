@@ -23,7 +23,36 @@ config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
+def remove_out_dags( DiGraph ):
+    """
+    Removes the largest directed acyclic subgraph that is closed under the ancestors operation.
 
+    **arguments**:
+        * *Primes*: primes implicants
+        * *Update* (str): either *"asynchronous"* or *"synchronous"*
+        * *FnameIMAGE* (str): name of output file
+
+    **example**::
+
+        >>> igraph = IGs.primes2igraph(primes)
+        >>> names = remove_out_dags( igraph )
+    """
+
+    cgraph = Utility.digraph2condensationgraph(DiGraph)
+    dummy = DiGraph.to_undirected()
+    for U in cgraph.nodes():
+        dummy.remove_nodes_from(U)
+
+    to_remove = []
+    for component in networkx.connected_components(dummy):
+        if all(y in component for x in component for y in DiGraph.successors(x)):
+            to_remove+= component
+
+    DiGraph.remove_nodes_from(to_remove)
+
+    return to_remove
+    
+    
     
 def primes2basins( Primes, Update, FnameIMAGE=None ):
     """
@@ -57,11 +86,116 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
+    igraph = InteractionGraphs.primes2igraph(Primes)
+    outdags = remove_out_dags(igraph)
+    connected_components = networkx.connected_components(igraph.to_undirected())
 
-    mints_primes = TrapSpaces.trap_spaces(Primes, "min")
+    graphs = []
+
+    for component in connected_components:
+
+        subprimes = PrimeImplicants.copy(Primes)
+        toremove = [x for x in Primes.keys() if not x in component]
+        PrimeImplicants.remove_variables(subprimes, toremove)
+
+        mints = TrapSpaces.trap_spaces(subprimes, "min")
+        vectors = []
+        
+        inputs = PrimeImplicants.find_inputs(subprimes)
+        
+        if inputs:
+            for combination in PrimeImplicants.input_combinations(subprimes):
+                mints_projected = [x for key in combination.keys() for x in mints if x[key]==combination[key]]
+
+                newvectors = [[0,1] if x in mints_projected else [0] for x in mints]
+                newvectors = itertools.product(*newvectors)
+                newvectors = [x for x in newvectors if sum(x)>0]
+                vectors+= [(TemporalQueries.subspace2proposition(subprimes, combination),x) for x in newvectors]
+
+        else:
+
+            newvectors = [[0,1] for x in mints]
+            newvectors = itertools.product(*newvectors)
+            newvectors = [x for x in newvectors if sum(x)>0]
+            vectors+= [(None,x) for x in newvectors]
+
+
+        props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints]
+        graph = networkx.DiGraph()
+        accepting_map = {}
+
+        # nodes
+        for init, vector in vectors:
+            
+            spec = ["EF(%s)"%p if v else "!EF(%s)"%p for v,p in zip(vector,props)]
+            spec = " & ".join(spec)
+            spec = "CTLSPEC %s"%spec
+            if not init: init = "TRUE"
+            init = "INIT %s"%init
+
+            answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
+
+            size = accepting["INITACCEPTING_SIZE"]
+            if size>0:
+
+                node = "".join(str(x) for x in vector)
+                label = "<%s<br/>%i>"%(node, size)
+                graph.add_node(node, label=label, style="filled")
+
+                accepting_map[node] = accepting
+
+        # edges
+        for source in accepting_map.keys():
+                    
+            subvectors = [[0,1] if x=="1" else [0] for x in source]
+            subvectors = itertools.product(*subvectors)
+            subvectors = [x for x in subvectors if sum(x)>0]
+
+            for subvector in subvectors:
+                
+                target = "".join([str(v) for v in subvector])
+
+                if target in accepting_map.keys():
+                    if source==target: continue
+                    
+                    init = "INIT %s"%accepting_map[source]["INITACCEPTING"]
+                    phi1 = accepting_map[source]["INITACCEPTING"]
+                    phi2 = accepting_map[target]["INITACCEPTING"]
+                    spec = "CTLSPEC  E[%s U %s]"%(phi1,phi2)
+
+                    answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
+                    size1 = accepting["INITACCEPTING_SIZE"]
+                    size2 = accepting_map[source]["INITACCEPTING_SIZE"]
+                    
+                    if 0 < size1 < size2:
+                        graph.add_edge(source, target, style="dashed")
+                        
+                    elif size1 == size2:
+                        graph.add_edge(source, target, style="solid")
+
+
+        graphs.append(graph)
+
+    for x in graphs:
+        print x.nodes()
+    graph = reduce(lambda x,y: networkx.disjoint_union(x,y), graphs)
+
+    mapping = {x:str(x) for x in graph.nodes()}
+    networkx.relabel_nodes(graph, mapping, copy=False)
+    print graph.nodes()
+
+    StateTransitionGraphs.stg2dot(graph, FnameIMAGE.replace("pdf","dot"))
+    StateTransitionGraphs.stg2image(graph, FnameIMAGE)
     
-    inputs = PrimeImplicants.find_inputs(subprimes)
 
+    
+
+
+    return
+
+    
+
+    
     
 
 
@@ -233,12 +367,20 @@ def primes2basins( Primes, Update, FnameIMAGE=None ):
 
 if __name__=="__main__":
     import FileExchange
-    test = 7
+    test = 5
     
     if test==1:
-        bnet = ExampleNetworks.arellano_antelope
+        bnet = ExampleNetworks.grieco_mapk
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
     elif test==2:
         bnet = ExampleNetworks.isolated_circuit(3, "negative")
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
     elif test==3:
         bnet = """
         v1, 1
@@ -246,34 +388,55 @@ if __name__=="__main__":
         v3, v4
         v4, !v3 | v2
         """
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
     elif test==4:
         bnet = """
         v1, 1
         v2, 0
         """
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
     elif test==5:
         bnet = """
         v1, v1
         v2, v2
         """
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
     elif test==6:
         bnet = """
         v1, v1
         v2, v1
         v3, v2 & v3
         """
-    elif test==7:
-        bnet = ExampleNetworks.davidich_yeast
-        print bnet
-        primes = FileExchange.bnet2primes(bnet)
-        ig = InteractionGraphs.primes2igraph(primes)
-        InteractionGraphs.igraph2image(ig, "davidich_yeast_ig.pdf")
-
-    else:
-    
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
         primes2basins( primes, update, "test%i.pdf"%test )
+        
+    elif test==7:
+        bnet = ExampleNetworks.davidich_yeast
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+        
+    elif test==8:
+        bnet = """
+        v1, v1
+        v2, v2
+        """
+        primes = FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        primes2basins( primes, update, "test%i.pdf"%test )
+
+    
+        
     
 
 

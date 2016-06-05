@@ -1,5 +1,10 @@
 
 
+
+
+
+                
+
 randomnet_n15k3 = """
 # generated with BoolNet
 # Mussel, Christoph, Martin Hopfensitz, and Hans A. Kestler. "BoolNet: an R package for generation, reconstruction and analysis of Boolean networks." Bioinformatics 26.10 (2010): 1378-1380.
@@ -242,42 +247,6 @@ Raf,  !Erk | !Raf
 """
 
 
-def isolated_circuit(N, Sign, FnameBNET=None):
-    """
-    Creates a *bnet* file of an isolated circuit of length *N* and given *Sign*.
-
-    **arguments**:
-       * *N* (int): number of components
-       * *Sign* (str): either *"positive"* or *"negative"*
-       * *FnameBNET* (str): name of *bnet* file or *None* for the string of the file contents
-
-    **returns**:
-        * *BNET* (str) if *FnameBNET=None* or *None* otherwise
-
-    **example**::
-    
-          >>> isolated_circuit(3, "positive")
-          v1,  v2
-          v2,  v3
-          v3,  v1
-    """
-    Sign = Sign.lower()
-    assert( Sign in ["positive","negative"])
-
-    lines = ["v%i, \t v%i"%(i,i+1) for i in range(1,N)]
-    if Sign=="positive":
-        lines+= ["v%i, \t v1"%N]
-    else:
-        lines+= ["v%i, \t !v1"%N]
-
-    if FnameBNET==None:
-        return "\n".join(lines)
-    else:
-        with open(FnameBNET, "w") as f:
-            f.writelines("\n".join(lines))
-        
-
-
 remy_tumorigenesis = """
 # created from the *revised* PDF supplementary for the paper
 # "A modelling approach to explain mutually exclusive and co-occurring genetic alterations in bladder tumorigenesis"
@@ -333,3 +302,47 @@ Growth_arrest,       p21CIP | RB1 | RBL2
 Apoptosis_medium,    Apoptosis_high   | (! E2F1_high & TP53 )
 Apoptosis_high,      Apoptosis_medium & (  E2F1_high )
 """
+
+
+all_networks = [randomnet_n15k3, dahlhaus_neuroplastoma, faure_cellcycle,
+                irons_yeast, davidich_yeast, arellano_antelope, klamt_tcr,
+                grieco_mapk, raf, remy_tumorigenesis]
+
+
+
+def isolated_circuit(N, Sign, FnameBNET=None):
+    """
+    Creates a *bnet* file of an isolated circuit of length *N* and given *Sign*.
+
+    **arguments**:
+       * *N* (int): number of components
+       * *Sign* (str): either *"positive"* or *"negative"*
+       * *FnameBNET* (str): name of *bnet* file or *None* for the string of the file contents
+
+    **returns**:
+        * *BNET* (str) if *FnameBNET=None* or *None* otherwise
+
+    **example**::
+    
+          >>> isolated_circuit(3, "positive")
+          v1,  v2
+          v2,  v3
+          v3,  v1
+    """
+    Sign = Sign.lower()
+    assert( Sign in ["positive","negative"])
+
+    lines = ["v%i, \t v%i"%(i,i+1) for i in range(1,N)]
+    if Sign=="positive":
+        lines+= ["v%i, \t v1"%N]
+    else:
+        lines+= ["v%i, \t !v1"%N]
+
+    if FnameBNET==None:
+        return "\n".join(lines)
+    else:
+        with open(FnameBNET, "w") as f:
+            f.writelines("\n".join(lines))
+        
+
+
