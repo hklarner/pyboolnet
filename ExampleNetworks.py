@@ -2,8 +2,19 @@
 
 
 
+xiao_wnt5a = """
+# taken from
+# Xiao, Yufei, and Edward R. Dougherty. "The impact of function perturbations in Boolean networks." Bioinformatics 23.10 (2007): 1265-1273.
 
-                
+x1,   !x6
+x2,   !x2&x4&x6 | x2&!x4&x6 | x2&x4&!x6 | x2&x4&x6
+x3,   !x3&!x4&!x7 | !x3&x4&!x7 | x3&!x4&!x7 | x3&x4&!x7
+x4,   x4
+x5,   !x2&!x5&!x7 | !x2&x5&!x7 | x2&!x5&!x7 | x2&!x5&x7 | x2&x5&!x7 | x2&x5&x7
+x6,   !x2&!x3&x4 | !x2&x3&!x4 | !x2&x3&x4 | x2&!x3&x4 | x2&x3&!x4 | x2&x3&x4
+x7,   !x2&!x7 | !x2&x7 | x2&x7
+"""
+
 
 randomnet_n15k3 = """
 # generated with BoolNet
@@ -306,7 +317,7 @@ Apoptosis_high,      Apoptosis_medium & (  E2F1_high )
 
 all_networks = [randomnet_n15k3, dahlhaus_neuroplastoma, faure_cellcycle,
                 irons_yeast, davidich_yeast, arellano_antelope, klamt_tcr,
-                grieco_mapk, raf, remy_tumorigenesis]
+                grieco_mapk, raf, remy_tumorigenesis, xiao_wnt5a]
 
 
 
