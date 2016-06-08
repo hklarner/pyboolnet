@@ -65,7 +65,7 @@ def digraph2dot( DiGraph, Indent=1 ):
         if key.lower() in ["subgraphs","cluster_id","node","edge"]:
             continue
         if key.strip()=="label":
-            if value.strip().startswith("<"):
+            if str(value.strip()).startswith("<"):
                 lines+= [space+'label = %s;'%value]
             elif value=="":
                 lines+= [space+'label = "";']
@@ -100,7 +100,7 @@ def digraph2dot( DiGraph, Indent=1 ):
             for k,v in attr.items():
 
                 # html style label attribute
-                if v.startswith("<"):
+                if str(v).startswith("<"):
                     values+=['%s=%s'%(k,v)]
 
                 # normal attribute
