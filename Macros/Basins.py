@@ -87,6 +87,10 @@ def cartesian_product_all( DiGraphs ):
         graph.add_node(x, data)
 
     # edges
+    edges = []
+    for i,g in enumerate(DiGraphs):
+        for x in g.nodes():
+            edges+= [h.edges_iter(data=True) for j,h in enumerate(DiGraphs)]
     edges = [g.edges_iter(data=True) for g in DiGraphs]
     
     
