@@ -4,6 +4,7 @@ import os
 import sys
 import itertools
 import networkx
+import math
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(BASE)
@@ -76,7 +77,7 @@ def disjoint_union_all( DiGraphs ):
     return graph
     
 
-def tensor_product_all( DiGraphs ):
+def cartesian_product_all( DiGraphs ):
     graph = networkx.DiGraph()
 
     # nodes
@@ -87,12 +88,21 @@ def tensor_product_all( DiGraphs ):
 
     # edges
     edges = [g.edges_iter(data=True) for g in DiGraphs]
+    
+    
+    
     for x in itertools.product(*edges):
+        print "---------------------------------------"
+        print "edges.x",x
+        raise Exception
         source = (y[0] for y in x)
         target = (y[1] for y in x)
         data = [y[2] for y in x]
         data = dict_product(data)
         graph.add_edge(source, target, data)
+
+        print "source", source
+        print "target", target
                        
     # graph
     data = [g.graph for g in DiGraphs]
@@ -102,7 +112,7 @@ def tensor_product_all( DiGraphs ):
     return graph    
 
     
-def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
+def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False, NodeSize=5 ):
     """
     Creates the basins of attraction graph for the STG of the network defined by *Primes* and *Update*.
     *FactoredForm* determines whether the basins of independent sub-networks should be combined.
@@ -119,6 +129,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
         * *Primes*: primes implicants
         * *Update* (str): either *"asynchronous"* or *"synchronous"*
         * *FactoredForm* (bool): whether the basins of independent sub-networks should be combined
+        * *NodeSize* (int): factor for node sizes
         * *FnameIMAGE* (str): name of output file
 
     **example**::
@@ -135,8 +146,6 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
-    mints = TrapSpaces.trap_spaces(Primes, "min")
-
     igraph = InteractionGraphs.primes2igraph(Primes)
     if not networkx.is_directed_acyclic_graph(igraph):
         outdags = remove_outdags(igraph)
@@ -150,29 +159,30 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
         toremove = [x for x in Primes if not x in component]
         PrimeImplicants.remove_variables(subprimes, toremove)
 
-        mints_projected = [dict((key,x[key]) for key in component if key in x) for x in mints]
+        mints_subprimes = TrapSpaces.trap_spaces(subprimes, "min")
+        #mints_projected = [dict((key,x[key]) for key in component if key in x) for x in mints]
         vectors = []
         
         inputs = PrimeImplicants.find_inputs(subprimes)
         
         if inputs:
             for combination in PrimeImplicants.input_combinations(subprimes):
-                mints_selected = [x for x in mints_projected if all(x[key]==combination[key] for key in combination)]
+                mints_selected = [x for x in mints_subprimes if all(x[key]==combination[key] for key in combination)]
 
 
-                newvectors = [[0,1] if x in mints_selected else [0] for x in mints_projected]
+                newvectors = [[0,1] if x in mints_selected else [0] for x in mints_subprimes]
                 newvectors = itertools.product(*newvectors)
                 vectors+= [(combination,x) for x in newvectors]
 
         else:
 
-            newvectors = [[0,1] for x in mints_projected]
+            newvectors = [[0,1] for x in mints_subprimes]
             newvectors = itertools.product(*newvectors)
             vectors+= [(None,x) for x in newvectors]
         
         
-        props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints_projected]
-        graph = networkx.DiGraph(component=component, subprimes=subprimes, mints_projected=mints_projected)
+        props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints_subprimes]
+        graph = networkx.DiGraph(component=component, subprimes=subprimes, mints_subprimes=mints_subprimes)
 
         # nodes
         nodes_data = {}
@@ -220,6 +230,8 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
 
         graphs.append(graph)
 
+
+
     if FactoredForm:
         for graph in graphs:
             subprimes = graph.graph.pop("subprimes")
@@ -227,42 +239,42 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
             print "subprimes", subprimes
             print "len(subprimes)", len(subprimes)
             for x, data in graph.nodes(data=True):
-                vector = data["vector"]
+                vector = data.pop("vector")
                 accepting = data.pop("accepting")
+
                 size = accepting["INITACCEPTING_SIZE"]
                 size_percent = accepting["INITACCEPTING_SIZE"] / size_total
-                print "size_total", size_total
-                print "size", size
-                
                 graph.node[x]["label"] = "<%s<br/>%i>"%(vector, size)    
-                graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-                graph.node[x]["width"] = 100*size_percent
-                if size_percent>.5:
-                    graph.node[x]["fontcolor"] = "white"
+                #graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+                #graph.node[x]["fontcolor"] = "0.0 0.7 %.2f"%size_percent
+                #graph.node[x]["width"] = NodeSize*math.sqrt(size_percent/math.pi)
+
             
-        graph = disjoint_union_all(graphs)
+        graph = networkx.disjoint_union_all(graphs)
         mapping = {x:str(x) for x in graph.nodes()}
         networkx.relabel_nodes(graph, mapping, copy=False)
-
-        
-        
-            
-
 
         # add component names ?
 
     else:
-        graph = tensor_product_all(graphs)
-        mapping = {x:".".join(x) for x in graph.nodes()}
-        networkx.relabel_nodes(graph, mapping, copy=False)
+        mints = TrapSpaces.trap_spaces(Primes, "min")
+        graph = cartesian_product_all(graphs)
+        #mapping = {x:".".join(x) for x in graph.nodes()}
+        #networkx.relabel_nodes(graph, mapping, copy=False)
 
-        for x in graph.nodes():
+        for x, data in graph.nodes(data=True):
+            print "graph.nodes",x
+            print "data",data
+            
             pass#graph.node[x][""] = 2
 
-    graph.graph["node"]  = {"shape":"rect","color":"black","style":"filled", "fixedsize":"true"}
+    graph.graph["node"]  = {"shape":"rect","style":"filled", "fixedsize":"false"}
     graph.graph["edge"]  = {}
 
-    print "graph.graph", graph.graph
+    print "graph.graph"
+    for k,v in graph.graph.items():
+        print k, v
+        
     print "graph.edges(data=True)", graph.edges(data=True)
     print "graph.nodes(data=True)"
     for v, d in graph.nodes(data=True):
@@ -279,14 +291,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
         
     if 0:
         # styles
-        size_total = float(2**len(Primes))
         for node, accepting in accepting_map.items():
-        
-            value = 1 - accepting["INITACCEPTING_SIZE"] / size_total
-                
-            graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%value
-            if value<.5:
-                graph.node[node]["fontcolor"] = "white"
 
             if graph.out_degree(node)==0: continue
             if all(graph.edge[node][x]["style"]=="solid" for x in graph.successors(node)):
@@ -332,7 +337,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False ):
 
 if __name__=="__main__":
     import FileExchange
-    test = 1
+    test = 5
 
     if test==1:
         bnet = ExampleNetworks.raf
@@ -364,16 +369,18 @@ if __name__=="__main__":
         """
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, FactoredForm=False, FnameIMAGE="test%i.pdf"%test )
+        primes2basins( primes, update, FnameIMAGE="test%i.pdf"%test, FactoredForm=False )
         
     elif test==5:
         bnet = """
-        v1, v1
-        v2, v2
+        v1, v2
+        v2, v1
+        v3, v3
+        v4, !v1 | v3
         """
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
+        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=False )
         
     elif test==6:
         bnet = """
