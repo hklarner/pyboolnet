@@ -79,8 +79,8 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
         # edges
         for source, target, data in graph.edges(data=True):
 
-            size1 = data["modelchecking"]["INITACCEPTING_SIZE"]
-            size2 = graph.node[source]["modelchecking"]["INITACCEPTING_SIZE"]
+            size1 = data["size"]
+            size2 = graph.node[source]["size"]
             
             if 0 < size1 < size2:
                 graph.edge[source][target]["style"] = "dashed"
@@ -94,16 +94,16 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
 
             vector = data["vector"]
 
-            size = data["modelchecking"]["INITACCEPTING_SIZE"]
-            size_percent = data["modelchecking"]["INITACCEPTING_SIZE"] / size_total
+            size = data["size"]
+            size_percent = size / size_total
             
             if len(data["mints_reachable"])==1:
                 x = data["mints_reachable"][0]
                 label = TemporalQueries.subspace2proposition(subprimes,x)
-                label = label.replace("|","+") # | = &#124;
-                label = label.replace("&","&bull;") # & = &amp;
+                label = label.replace("&","&bull;")
                 i = mints_subprimes.index(x)
                 graph.node[node]["label"] = "<A%i = %s<br/>%i>"%(i,label,size)
+                
             else:
                 indices = [mints_subprimes.index(x) for x in data["mints_reachable"]]
                 label = ",".join("A%i"%i for i in indices)
@@ -119,9 +119,6 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
                     graph.node[node]["penwidth"] = "5"
 
             
-                
-
-            
         graph = networkx.convert_node_labels_to_integers(graph, first_label=len(union))
         mapping = {x:str(x) for x in graph.nodes()}
         networkx.relabel_nodes(graph, mapping, copy=False)
@@ -132,7 +129,7 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
             subprimes = graph.graph["subprimes"]
             nodes = graph.nodes()
             label = ", ".join(graph.graph["component"])
-            subgraphs.append( (nodes,{"label":"component: %s"%label, "style":"none"}) )
+            subgraphs.append( (nodes,{"label":"component= %s"%label, "style":"none"}) )
 
             input_combinations = {}
             for node, data in graph.nodes(data=True):
@@ -145,7 +142,7 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
 
             for label, nodes in input_combinations.items():
                 
-                subgraphs.append( (nodes, {"label":"input: %s"%label, "style":"none"}) )
+                subgraphs.append( (nodes, {"label":"input= %s"%label, "style":"none"}) )
 
 
         # delete attributes
@@ -154,15 +151,15 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
             graph.node[x].pop("vector")
             graph.node[x].pop("mints_reachable")
             graph.node[x].pop("inputs")
-            graph.node[x].pop("modelchecking")
+            graph.node[x].pop("size")
+            graph.node[x].pop("formula")
         for x,y in graph.edges():
-            graph.edge[x][y].pop("modelchecking")
+            graph.edge[x][y].pop("size")
 
             
         # add to union
         union.add_nodes_from(graph.nodes(data=True))
         union.add_edges_from(graph.edges(data=True))
-        #union = networkx.union(union, graph)
 
 
     # prepare for drawing
@@ -176,14 +173,30 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     
 
 def factored_form2cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
-    product = networkx.DiGraph()
+    graphs = iter(DiGraphs)
+    product = next(graphs)
     subgraphs = []
 
     for graph in graphs:
         newproduct = networkx.DiGraph()
 
-        for node, data in product.nodes(data=True):
-            pass
+        for xnode, xdata in product.nodes(data=True):
+            for ynode, ydata in graph.nodes(data=True):
+
+                node = xnode + ynode,
+                mints_reachable = list(itertools.product(xdata["mints_reachable"],ydata["mints_reachable"]))
+                size = xdata["size"] + ydata["size"]
+                formula = "(%s) & (%s)"%(xdata["formula"],ydata["formula"])
+                inputs = xdata["inputs"].update(ydata["inputs"])
+                
+                data = {"vector": node,
+                        "mints_reachable": mints_reachable,
+                        "size": size,
+                        "formula": formula,
+                        "inputs": inputs
+                        }
+
+                newproduct.add_node()
             
 
         subprimes = graph.graph["subprimes"]
@@ -318,7 +331,7 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
 
             newvectors = [[0,1] for x in mints_subprimes]
             newvectors = itertools.product(*newvectors)
-            vectors+= [(None,x) for x in newvectors]
+            vectors+= [({},x) for x in newvectors]
         
         
         props = [TemporalQueries.subspace2proposition(subprimes,x) for x in mints_subprimes]
@@ -341,10 +354,11 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
 
             
             size = accepting["INITACCEPTING_SIZE"]
+            formula = accepting["INITACCEPTING"]
             if size>0:
                 node = "".join(str(x) for x in vector)
                 mints_reachable = [x for v,x in zip(vector,mints_subprimes) if v]
-                graph.add_node(node, modelchecking=accepting, vector=node, inputs=combination, mints_reachable=mints_reachable)
+                graph.add_node(node, formula=formula, size=size, vector=node, inputs=combination, mints_reachable=mints_reachable)
 
 
         # edges
@@ -360,13 +374,14 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
                 if target in graph.nodes():
                     if source==target: continue
                     
-                    init = "INIT %s"%graph.node[source]["modelchecking"]["INITACCEPTING"]
-                    phi1 = graph.node[source]["modelchecking"]["INITACCEPTING"]
-                    phi2 = graph.node[target]["modelchecking"]["INITACCEPTING"]
+                    phi1 = graph.node[source]["formula"]
+                    phi2 = graph.node[target]["formula"]
+                    init = "INIT %s"%phi1
                     spec = "CTLSPEC  E[%s U %s]"%(phi1,phi2)
 
                     answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
-                    graph.add_edge(source, target, modelchecking=accepting)
+                    size = accepting["INITACCEPTING_SIZE"]
+                    graph.add_edge(source, target, size=size)
 
 
         graphs.append(graph)
@@ -434,7 +449,7 @@ if __name__=="__main__":
         """
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=True, Subgraphs=True, NodeWidth=5 )
+        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=True, Subgraphs=False, NodeWidth=5 )
         
     elif test==6:
         bnet = """
