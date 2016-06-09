@@ -24,6 +24,7 @@ config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
+
 def remove_outdags( DiGraph ):
     """
     Removes the largest directed acyclic subgraph that is closed under the successors operation.
@@ -63,60 +64,196 @@ def dict_product( Dicts ):
     return dict(items)
 
 
-def disjoint_union_all( DiGraphs ):
+def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     graphs = iter(DiGraphs)
-    graph = networkx.convert_node_labels_to_integers(next(graphs))
-    for U in graphs:
-        U = networkx.convert_node_labels_to_integers(U, first_label=len(graph))
-        graph = networkx.union(graph, U)
+    union = networkx.DiGraph()
+    subgraphs = []
+    
+    for graph in graphs:
 
-    data = [g.graph for g in DiGraphs]
-    data = dict_product(data)
-    graph.graph = data
+        subprimes = graph.graph["subprimes"]
+        mints_subprimes = graph.graph["mints_subprimes"]
+        size_total = float(2**len(subprimes))
 
-    return graph
+
+        # edges
+        for source, target, data in graph.edges(data=True):
+
+            size1 = data["modelchecking"]["INITACCEPTING_SIZE"]
+            size2 = graph.node[source]["modelchecking"]["INITACCEPTING_SIZE"]
+            
+            if 0 < size1 < size2:
+                graph.edge[source][target]["style"] = "dashed"
+                
+            elif size1 == size2:
+                graph.edge[source][target]["style"] = "solid"
+
+
+        # nodes
+        for node, data in graph.nodes(data=True):
+
+            vector = data["vector"]
+
+            size = data["modelchecking"]["INITACCEPTING_SIZE"]
+            size_percent = data["modelchecking"]["INITACCEPTING_SIZE"] / size_total
+            
+            if len(data["mints_reachable"])==1:
+                x = data["mints_reachable"][0]
+                label = TemporalQueries.subspace2proposition(subprimes,x)
+                label = label.replace("|","+") # | = &#124;
+                label = label.replace("&","&bull;") # & = &amp;
+                i = mints_subprimes.index(x)
+                graph.node[node]["label"] = "<A%i = %s<br/>%i>"%(i,label,size)
+            else:
+                indices = [mints_subprimes.index(x) for x in data["mints_reachable"]]
+                label = ",".join("A%i"%i for i in indices)
+                graph.node[node]["label"] = "<%s<br/>%i>"%(label, size)
+                
+            graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+            if size_percent>0.5: graph.node[node]["fontcolor"] = "0.0 0.0 0.2"
+            graph.node[node]["width"] = NodeWidth*math.sqrt(size_percent/math.pi)
+
+            if all(d["style"]=="solid" for x,y,d in graph.out_edges(node,data=True)):
+                if graph.out_degree(node)>0:
+                    graph.node[node]["color"] = "cornflowerblue"
+                    graph.node[node]["penwidth"] = "5"
+
+            
+                
+
+            
+        graph = networkx.convert_node_labels_to_integers(graph, first_label=len(union))
+        mapping = {x:str(x) for x in graph.nodes()}
+        networkx.relabel_nodes(graph, mapping, copy=False)
+        
+
+        # subgraphs
+        if Subgraphs:
+            subprimes = graph.graph["subprimes"]
+            nodes = graph.nodes()
+            label = ", ".join(graph.graph["component"])
+            subgraphs.append( (nodes,{"label":"component: %s"%label, "style":"none"}) )
+
+            input_combinations = {}
+            for node, data in graph.nodes(data=True):
+                x = data["inputs"]
+                if not x: continue
+                key = TemporalQueries.subspace2proposition(subprimes, x)
+                if not key in input_combinations:
+                    input_combinations[key] = []
+                input_combinations[key].append(node)
+
+            for label, nodes in input_combinations.items():
+                
+                subgraphs.append( (nodes, {"label":"input: %s"%label, "style":"none"}) )
+
+
+        # delete attributes
+        graph.graph.pop("subprimes")
+        for x in graph.nodes():
+            graph.node[x].pop("vector")
+            graph.node[x].pop("mints_reachable")
+            graph.node[x].pop("inputs")
+            graph.node[x].pop("modelchecking")
+        for x,y in graph.edges():
+            graph.edge[x][y].pop("modelchecking")
+
+            
+        # add to union
+        union.add_nodes_from(graph.nodes(data=True))
+        union.add_edges_from(graph.edges(data=True))
+        #union = networkx.union(union, graph)
+
+
+    # prepare for drawing
+    union.graph["subgraphs"] = []
+    union.graph["node"]  = {"shape":"rect","style":"filled","fixedsize":"false","color":"none"}
+    union.graph["edge"]  = {}
+    if Subgraphs: InteractionGraphs.add_style_subgraphs(union, subgraphs)
+
+
+    return union
     
 
-def cartesian_product_all( DiGraphs ):
-    graph = networkx.DiGraph()
+def factored_form2cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
+    product = networkx.DiGraph()
+    subgraphs = []
+
+    for graph in graphs:
+        newproduct = networkx.DiGraph()
+
+        for node, data in product.nodes(data=True):
+            pass
+            
+
+        subprimes = graph.graph["subprimes"]
+        size_total = float(2**len(subprimes))
+
+
+        # edges
+        for source, target, data in graph.edges(data=True):
+            pass
+
+
+        # nodes
+        for node, data in graph.nodes(data=True):
+            pass
+
+
+        # subgraphs
+        if Subgraphs:
+            subprimes = graph.graph["subprimes"]
+            nodes = graph.nodes()
+            label = ", ".join(graph.graph["component"])
+            subgraphs.append( (nodes,{"label":"component: %s"%label, "style":"none"}) )
+
+            input_combinations = {}
+            for node, data in graph.nodes(data=True):
+                x = data["inputs"]
+                if not x: continue
+                key = TemporalQueries.subspace2proposition(subprimes, x)
+                if not key in input_combinations:
+                    input_combinations[key] = []
+                input_combinations[key].append(node)
+
+            for label, nodes in input_combinations.items():
+                
+                subgraphs.append( (nodes, {"label":"input: %s"%label, "style":"none"}) )
+
+        
+
+
+        
+
+        
 
     # nodes
     for x in itertools.product(*DiGraphs):
         data = [g.node[x[i]] for i,g in enumerate(DiGraphs)]
         data = dict_product(data)    
-        graph.add_node(x, data)
+        product.add_node(x, data)
 
     # edges
     edges = []
-    for i,g in enumerate(DiGraphs):
-        for x in g.nodes():
-            edges+= [h.edges_iter(data=True) for j,h in enumerate(DiGraphs)]
-    edges = [g.edges_iter(data=True) for g in DiGraphs]
-    
-    
-    
-    for x in itertools.product(*edges):
-        print "---------------------------------------"
-        print "edges.x",x
-        raise Exception
-        source = (y[0] for y in x)
-        target = (y[1] for y in x)
-        data = [y[2] for y in x]
-        data = dict_product(data)
-        graph.add_edge(source, target, data)
+    for node in product.nodes():
+        for i,source in enumerate(node):
+            for (u,v), data in graphs[i].out_edges(source, data=True):
+                target = list(source)
+                target[i] = v
+                product.add_edge(source, tuple(target), data)
 
-        print "source", source
-        print "target", target
-                       
     # graph
     data = [g.graph for g in DiGraphs]
     data = dict_product(data)
-    graph.graph = data
+    product.graph = data
 
-    return graph    
+    graph.graph["node"]  = {"shape":"rect","style":"filled", "fixedsize":"false"}
+    graph.graph["edge"]  = {}
+
+    return product
 
     
-def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False, NodeSize=5 ):
+def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredForm=False, NodeWidth=5 ):
     """
     Creates the basins of attraction graph for the STG of the network defined by *Primes* and *Update*.
     *FactoredForm* determines whether the basins of independent sub-networks should be combined.
@@ -164,7 +301,6 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False, NodeSize
         PrimeImplicants.remove_variables(subprimes, toremove)
 
         mints_subprimes = TrapSpaces.trap_spaces(subprimes, "min")
-        #mints_projected = [dict((key,x[key]) for key in component if key in x) for x in mints]
         vectors = []
         
         inputs = PrimeImplicants.find_inputs(subprimes)
@@ -207,7 +343,8 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False, NodeSize
             size = accepting["INITACCEPTING_SIZE"]
             if size>0:
                 node = "".join(str(x) for x in vector)
-                graph.add_node(node, accepting=accepting, vector=node)
+                mints_reachable = [x for v,x in zip(vector,mints_subprimes) if v]
+                graph.add_node(node, modelchecking=accepting, vector=node, inputs=combination, mints_reachable=mints_reachable)
 
 
         # edges
@@ -223,115 +360,28 @@ def primes2basins( Primes, Update, FnameIMAGE=None, FactoredForm=False, NodeSize
                 if target in graph.nodes():
                     if source==target: continue
                     
-                    init = "INIT %s"%graph.node[source]["accepting"]["INITACCEPTING"]
-                    phi1 = graph.node[source]["accepting"]["INITACCEPTING"]
-                    phi2 = graph.node[target]["accepting"]["INITACCEPTING"]
+                    init = "INIT %s"%graph.node[source]["modelchecking"]["INITACCEPTING"]
+                    phi1 = graph.node[source]["modelchecking"]["INITACCEPTING"]
+                    phi2 = graph.node[target]["modelchecking"]["INITACCEPTING"]
                     spec = "CTLSPEC  E[%s U %s]"%(phi1,phi2)
 
                     answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
-                    graph.add_edge(source, target, accepting=accepting)
+                    graph.add_edge(source, target, modelchecking=accepting)
 
 
         graphs.append(graph)
 
 
-
     if FactoredForm:
-        for graph in graphs:
-            subprimes = graph.graph.pop("subprimes")
-            size_total = float(2**len(subprimes))
-            print "subprimes", subprimes
-            print "len(subprimes)", len(subprimes)
-            for x, data in graph.nodes(data=True):
-                vector = data.pop("vector")
-                accepting = data.pop("accepting")
-
-                size = accepting["INITACCEPTING_SIZE"]
-                size_percent = accepting["INITACCEPTING_SIZE"] / size_total
-                graph.node[x]["label"] = "<%s<br/>%i>"%(vector, size)    
-                #graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-                #graph.node[x]["fontcolor"] = "0.0 0.7 %.2f"%size_percent
-                #graph.node[x]["width"] = NodeSize*math.sqrt(size_percent/math.pi)
-
-            
-        graph = networkx.disjoint_union_all(graphs)
-        mapping = {x:str(x) for x in graph.nodes()}
-        networkx.relabel_nodes(graph, mapping, copy=False)
-
-        # add component names ?
-
+        graph = factored_form2disjoint_union(graphs, NodeWidth, Subgraphs)
     else:
-        mints = TrapSpaces.trap_spaces(Primes, "min")
-        graph = cartesian_product_all(graphs)
-        #mapping = {x:".".join(x) for x in graph.nodes()}
-        #networkx.relabel_nodes(graph, mapping, copy=False)
-
-        for x, data in graph.nodes(data=True):
-            print "graph.nodes",x
-            print "data",data
-            
-            pass#graph.node[x][""] = 2
-
-    graph.graph["node"]  = {"shape":"rect","style":"filled", "fixedsize":"false"}
-    graph.graph["edge"]  = {}
-
-    print "graph.graph"
-    for k,v in graph.graph.items():
-        print k, v
-        
-    print "graph.edges(data=True)", graph.edges(data=True)
-    print "graph.nodes(data=True)"
-    for v, d in graph.nodes(data=True):
-        print "   ", repr(v)
-        print "   ", repr(d)
-
-
+        graph = factored_form2cartesian_product(graphs, NodeWidth)
     
 
     StateTransitionGraphs.stg2dot(graph, FnameIMAGE.replace("pdf","dot"))
     StateTransitionGraphs.stg2image(graph, FnameIMAGE)
     
-    return
-        
-    if 0:
-        # styles
-        for node, accepting in accepting_map.items():
-
-            if graph.out_degree(node)==0: continue
-            if all(graph.edge[node][x]["style"]=="solid" for x in graph.successors(node)):
-                graph.node[node]["color"] = "cornflowerblue"
-                graph.node[node]["penwidth"] = "5"
-
-        # node
-        label = "<%s<br/>%i>"%(node, size)
-
-        # edge
-        size1 = accepting["INITACCEPTING_SIZE"]
-        size2 = graph.node[source]["INITACCEPTING_SIZE"]
-        
-        if 0 < size1 < size2:
-            graph.add_edge(source, target, style="dashed")
-            
-        elif size1 == size2:
-            graph.add_edge(source, target, style="solid")
-    
-
-
-    
-
-    if 0:
-        #size_total = 
-        for node, data in graph.nodes(data=True):
-            
-            graph.node[node]["fillcolor"] = 1
-
-    #igraph = InteractionGraphs.primes2igraph(Primes)
-    
-    #if networkx.has_path(igraph, source, target): pass
-    
-    
-
-    
+    return    
     
 
     
@@ -384,7 +434,7 @@ if __name__=="__main__":
         """
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=False )
+        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=True, Subgraphs=True, NodeWidth=5 )
         
     elif test==6:
         bnet = """
