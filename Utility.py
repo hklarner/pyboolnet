@@ -62,9 +62,11 @@ def digraph2dot( DiGraph, Indent=1 ):
     # general graph attributes
     for key, value in sorted(DiGraph.graph.items()):
         # ignore because treated elsewhere
+        key = key.strip()
         if key.lower() in ["subgraphs","cluster_id","node","edge"]:
             continue
-        if key.strip()=="label":
+        if key=="label":
+            value = value.strip()
             if str(value.strip()).startswith("<"):
                 lines+= [space+'label = %s;'%value]
             elif value=="":
@@ -72,8 +74,9 @@ def digraph2dot( DiGraph, Indent=1 ):
                 # bugfix for inherited labels
                 # see: http://www.graphviz.org/content/cluster-and-graph-labels-bug
                 
-            elif value.strip():
-                lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
+            elif value:
+                lines+= [space+'label="%s"'%value.strip()]
+                #lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
         else:
             lines+= [space+'%s = "%s";'%(key,value)]
         hit = True
