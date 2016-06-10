@@ -25,9 +25,9 @@ CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
 
-def remove_outdags( DiGraph ):
+def find_outdags( DiGraph ):
     """
-    Removes the largest directed acyclic subgraph that is closed under the successors operation.
+    Finds the largest directed acyclic subgraph that is closed under the successors operation.
 
     **arguments**:
         * *Primes*: primes implicants
@@ -36,6 +36,7 @@ def remove_outdags( DiGraph ):
 
     **returns**::
         * *Names* (list): names of components that belong to outdags
+
     **example**::
 
         >>> igraph = IGs.primes2igraph(primes)
@@ -52,8 +53,6 @@ def remove_outdags( DiGraph ):
         if all(y in component for x in component for y in DiGraph.successors(x)):
             outdags+= list(component)
 
-    DiGraph.remove_nodes_from(outdags)
-
     return outdags
 
 
@@ -64,6 +63,100 @@ def dict_product( Dicts ):
     return dict(items)
 
 
+def dict_union( *Dicts ):
+    items = [y for x in Dicts for y in x.items()]
+    return dict(items)
+
+
+def add_edge_attributes( DiGraph ):
+    
+    for source, target, data in DiGraph.edges(data=True):
+
+        size1 = data["size"]
+        size2 = DiGraph.node[source]["size"]
+        
+        if 0 < size1 < size2:
+            DiGraph.edge[source][target]["style"] = "dashed"
+            
+        elif size1 == size2:
+            DiGraph.edge[source][target]["style"] = "solid"
+
+
+def add_node_attributes( DiGraph, NodeWidth ):
+
+    subprimes = DiGraph.graph["subprimes"]
+    mints_subprimes = DiGraph.graph["mints_subprimes"]
+    size_total = float(2**len(subprimes))
+
+    for node, data in DiGraph.nodes(data=True):
+
+        vector = data["vector"]
+
+        size = data["size"]
+        size_percent = size / size_total
+        
+        indices = [mints_subprimes.index(x) for x in data["mints_reachable"]]
+        label = ",".join("A%i"%i for i in indices)
+        DiGraph.node[node]["label"] = "<%s<br/>%i>"%(label, size)
+            
+        DiGraph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+        if size_percent>0.5: DiGraph.node[node]["fontcolor"] = "0.0 0.0 0.2"
+        DiGraph.node[node]["width"] = NodeWidth*math.sqrt(size_percent/math.pi)
+
+        if all(d["style"]=="solid" for x,y,d in DiGraph.out_edges(node,data=True)):
+            if DiGraph.out_degree(node)>0:
+                DiGraph.node[node]["color"] = "cornflowerblue"
+                DiGraph.node[node]["penwidth"] = "5"
+
+
+def add_graph_attributes( DiGraph, Subgraphs=None ):
+
+    DiGraph.graph["subgraphs"] = []
+    DiGraph.graph["node"]  = {"shape":"rect","style":"filled","fixedsize":"false","color":"none"}
+    DiGraph.graph["edge"]  = {}
+    if Subgraphs: InteractionGraphs.add_style_subgraphs(DiGraph, Subgraphs)
+
+
+def compute_subgraphs( DiGraph ):
+    
+    nodes = DiGraph.nodes()
+    subprimes = DiGraph.graph["subprimes"]
+    label = ",".join(DiGraph.graph["component"])
+    subgraphs = [ (nodes,{"label":"component= %s"%label, "style":"none"}) ]
+
+    input_combinations = {}
+    for node, data in DiGraph.nodes(data=True):
+        x = data["inputs"]
+        if not x: continue
+        key = TemporalQueries.subspace2proposition(subprimes, x)
+        if not key in input_combinations:
+            input_combinations[key] = []
+        input_combinations[key].append(node)
+
+    for label, nodes in input_combinations.items():
+        
+        subgraphs.append( (nodes, {"label":"input= %s"%label, "style":"none"}) )
+
+    return subgraphs
+
+
+def remove_auxillary_attributes( DiGraph ):
+
+    DiGraph.graph.pop("component", None)
+    DiGraph.graph.pop("subprimes", None)
+    DiGraph.graph.pop("mints_subprimes", None)
+    
+    for x in DiGraph.nodes():
+        DiGraph.node[x].pop("vector")
+        DiGraph.node[x].pop("mints_reachable")
+        DiGraph.node[x].pop("inputs")
+        DiGraph.node[x].pop("size")
+        DiGraph.node[x].pop("formula")
+        
+    for x,y in DiGraph.edges():
+        DiGraph.edge[x][y].pop("size")
+
+    
 def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     graphs = iter(DiGraphs)
     union = networkx.DiGraph()
@@ -71,103 +164,23 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     
     for graph in graphs:
 
-        subprimes = graph.graph["subprimes"]
-        mints_subprimes = graph.graph["mints_subprimes"]
-        size_total = float(2**len(subprimes))
-
-
-        # edges
-        for source, target, data in graph.edges(data=True):
-
-            size1 = data["size"]
-            size2 = graph.node[source]["size"]
-            
-            if 0 < size1 < size2:
-                graph.edge[source][target]["style"] = "dashed"
-                
-            elif size1 == size2:
-                graph.edge[source][target]["style"] = "solid"
-
-
-        # nodes
-        for node, data in graph.nodes(data=True):
-
-            vector = data["vector"]
-
-            size = data["size"]
-            size_percent = size / size_total
-            
-            if len(data["mints_reachable"])==1:
-                x = data["mints_reachable"][0]
-                label = TemporalQueries.subspace2proposition(subprimes,x)
-                label = label.replace("&","&bull;")
-                i = mints_subprimes.index(x)
-                graph.node[node]["label"] = "<A%i = %s<br/>%i>"%(i,label,size)
-                
-            else:
-                indices = [mints_subprimes.index(x) for x in data["mints_reachable"]]
-                label = ",".join("A%i"%i for i in indices)
-                graph.node[node]["label"] = "<%s<br/>%i>"%(label, size)
-                
-            graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-            if size_percent>0.5: graph.node[node]["fontcolor"] = "0.0 0.0 0.2"
-            graph.node[node]["width"] = NodeWidth*math.sqrt(size_percent/math.pi)
-
-            if all(d["style"]=="solid" for x,y,d in graph.out_edges(node,data=True)):
-                if graph.out_degree(node)>0:
-                    graph.node[node]["color"] = "cornflowerblue"
-                    graph.node[node]["penwidth"] = "5"
-
-            
+        # unique ids
         graph = networkx.convert_node_labels_to_integers(graph, first_label=len(union))
         mapping = {x:str(x) for x in graph.nodes()}
         networkx.relabel_nodes(graph, mapping, copy=False)
+
+        # styles
+        add_edge_attributes(graph)
+        add_node_attributes(graph, NodeWidth)
+        if Subgraphs: subgraphs+= compute_subgraphs(graph)
         
-
-        # subgraphs
-        if Subgraphs:
-            subprimes = graph.graph["subprimes"]
-            nodes = graph.nodes()
-            label = ", ".join(graph.graph["component"])
-            subgraphs.append( (nodes,{"label":"component= %s"%label, "style":"none"}) )
-
-            input_combinations = {}
-            for node, data in graph.nodes(data=True):
-                x = data["inputs"]
-                if not x: continue
-                key = TemporalQueries.subspace2proposition(subprimes, x)
-                if not key in input_combinations:
-                    input_combinations[key] = []
-                input_combinations[key].append(node)
-
-            for label, nodes in input_combinations.items():
-                
-                subgraphs.append( (nodes, {"label":"input= %s"%label, "style":"none"}) )
-
-
-        # delete attributes
-        graph.graph.pop("subprimes")
-        for x in graph.nodes():
-            graph.node[x].pop("vector")
-            graph.node[x].pop("mints_reachable")
-            graph.node[x].pop("inputs")
-            graph.node[x].pop("size")
-            graph.node[x].pop("formula")
-        for x,y in graph.edges():
-            graph.edge[x][y].pop("size")
-
-            
         # add to union
         union.add_nodes_from(graph.nodes(data=True))
         union.add_edges_from(graph.edges(data=True))
 
 
-    # prepare for drawing
-    union.graph["subgraphs"] = []
-    union.graph["node"]  = {"shape":"rect","style":"filled","fixedsize":"false","color":"none"}
-    union.graph["edge"]  = {}
-    if Subgraphs: InteractionGraphs.add_style_subgraphs(union, subgraphs)
-
+    add_graph_attributes( union, subgraphs )
+    remove_auxillary_attributes(union)
 
     return union
     
@@ -175,93 +188,66 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
 def factored_form2cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
     graphs = iter(DiGraphs)
     product = next(graphs)
-    subgraphs = []
 
+    # create product graph
     for graph in graphs:
         newproduct = networkx.DiGraph()
 
-        for xnode, xdata in product.nodes(data=True):
-            for ynode, ydata in graph.nodes(data=True):
-
-                node = xnode + ynode,
-                mints_reachable = list(itertools.product(xdata["mints_reachable"],ydata["mints_reachable"]))
-                size = xdata["size"] + ydata["size"]
-                formula = "(%s) & (%s)"%(xdata["formula"],ydata["formula"])
-                inputs = xdata["inputs"].update(ydata["inputs"])
-                
-                data = {"vector": node,
-                        "mints_reachable": mints_reachable,
-                        "size": size,
-                        "formula": formula,
-                        "inputs": inputs
-                        }
-
-                newproduct.add_node()
+        # graph data
+        component = product.graph["component"] + graph.graph["component"]
+        subprimes = dict_union(product.graph["subprimes"],graph.graph["subprimes"])
+        mints_subprimes = itertools.product(product.graph["mints_subprimes"],graph.graph["mints_subprimes"])
+        mints_subprimes = [dict_union(x,y) for x,y in mints_subprimes]
+        
+        newproduct.graph["component"] = component
+        newproduct.graph["subprimes"] = subprimes
+        newproduct.graph["mints_subprimes"] = mints_subprimes
             
-
-        subprimes = graph.graph["subprimes"]
-        size_total = float(2**len(subprimes))
-
-
-        # edges
-        for source, target, data in graph.edges(data=True):
-            pass
-
-
         # nodes
-        for node, data in graph.nodes(data=True):
-            pass
+        for node_current, data_current in product.nodes(data=True):            
+            for node_next, data_next in graph.nodes(data=True):
+
+                node = node_current + node_next
+                mints_reachable = itertools.product(data_current["mints_reachable"],data_next["mints_reachable"])
+                mints_reachable = [dict_union(x,y) for x,y in mints_reachable]
+                size = data_current["size"] * data_next["size"]
+                formula = "(%s) & (%s)"%(data_current["formula"],data_next["formula"])
+                inputs = dict_union(data_current["inputs"],data_next["inputs"])
+
+                newproduct.add_node(node, vector=node, mints_reachable=mints_reachable, size=size, formula=formula, inputs=inputs)
 
 
-        # subgraphs
-        if Subgraphs:
-            subprimes = graph.graph["subprimes"]
-            nodes = graph.nodes()
-            label = ", ".join(graph.graph["component"])
-            subgraphs.append( (nodes,{"label":"component: %s"%label, "style":"none"}) )
-
-            input_combinations = {}
-            for node, data in graph.nodes(data=True):
-                x = data["inputs"]
-                if not x: continue
-                key = TemporalQueries.subspace2proposition(subprimes, x)
-                if not key in input_combinations:
-                    input_combinations[key] = []
-                input_combinations[key].append(node)
-
-            for label, nodes in input_combinations.items():
+        # edges (old)
+        for source_current, target_current, data_current in product.edges(data=True):
+            for node_next, data_next in graph.nodes(data=True):
                 
-                subgraphs.append( (nodes, {"label":"input: %s"%label, "style":"none"}) )
+                source = source_current + node_next
+                target = target_current + node_next
+                size = data_current["size"] * data_next["size"]
 
+                newproduct.add_edge(source, target, size=size)
+
+        # edges (new)
+        for node_current, data_current in product.nodes(data=True):
+            for source_next,target_next, data_next in graph.edges(data=True):
+
+                source = node_current + source_next
+                target = node_current + target_next
+                size = data_current["size"] * data_next["size"]
+
+                newproduct.add_edge(source, target, size=size)
+
+
+
+        product = newproduct
         
-
-
         
-
-        
-
-    # nodes
-    for x in itertools.product(*DiGraphs):
-        data = [g.node[x[i]] for i,g in enumerate(DiGraphs)]
-        data = dict_product(data)    
-        product.add_node(x, data)
-
-    # edges
-    edges = []
-    for node in product.nodes():
-        for i,source in enumerate(node):
-            for (u,v), data in graphs[i].out_edges(source, data=True):
-                target = list(source)
-                target[i] = v
-                product.add_edge(source, tuple(target), data)
-
-    # graph
-    data = [g.graph for g in DiGraphs]
-    data = dict_product(data)
-    product.graph = data
-
-    graph.graph["node"]  = {"shape":"rect","style":"filled", "fixedsize":"false"}
-    graph.graph["edge"]  = {}
+    # styles
+    add_edge_attributes(product)
+    add_node_attributes(product, NodeWidth)
+    subgraphs = compute_subgraphs(product) if Subgraphs else None
+    add_graph_attributes(product, subgraphs)
+    remove_auxillary_attributes(product)
 
     return product
 
@@ -301,10 +287,14 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
         raise Exception
 
     igraph = InteractionGraphs.primes2igraph(Primes)
-    if not networkx.is_directed_acyclic_graph(igraph):
-        outdags = remove_outdags(igraph)
+    if networkx.is_directed_acyclic_graph(igraph):
+        outdags = remove_outdages(igraph)
+        igraph.remove_nodes_from(outdags)
+    else:
+        outdags = None
         
     connected_components = networkx.connected_components(igraph.to_undirected())
+    connected_components = [list(x) for x in connected_components]
     graphs = []
 
     for component in connected_components:
@@ -390,8 +380,19 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
     if FactoredForm:
         graph = factored_form2disjoint_union(graphs, NodeWidth, Subgraphs)
     else:
-        graph = factored_form2cartesian_product(graphs, NodeWidth)
-    
+        graph = factored_form2cartesian_product(graphs, NodeWidth, Subgraphs)
+
+    if outdags and not FactoredForm:
+        for x in graph.nodes():
+            graph.node[x]["size"]*=2**len(outdags)
+
+        if Subgraphs:
+            for names, data in graph.graph["subgraphs"]:
+                if "component" in data["label"]:
+                    graph.graph["subgraphs"].remove((names, data))
+                    graph.graph["subgraphs"].append((",".join(Primes),data))
+        
+        
 
     StateTransitionGraphs.stg2dot(graph, FnameIMAGE.replace("pdf","dot"))
     StateTransitionGraphs.stg2image(graph, FnameIMAGE)
@@ -449,7 +450,7 @@ if __name__=="__main__":
         """
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=True, Subgraphs=False, NodeWidth=5 )
+        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=False, Subgraphs=True, NodeWidth=5 )
         
     elif test==6:
         bnet = """
