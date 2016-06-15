@@ -5,6 +5,7 @@ import sys
 import itertools
 import networkx
 import math
+from operator import mul
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(BASE)
@@ -25,9 +26,24 @@ CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
 
+
+## auxillary functions
+def consistent( X, Y):
+    return all(X[k]==Y[k] for k in set(X).intersection(set(Y)))
+
+
+def project( Subspace, Names ):
+    return {k:v for k,v in Subspace.items() if k in Names}
+
+
+def flatten( ListOfLists ):
+    return [x for sublist in ListOfLists for x in sublist]
+
+
 def find_outdags( DiGraph ):
     """
     Finds the largest directed acyclic subgraph that is closed under the successors operation.
+    => add to InteractionGraphs?
 
     **arguments**:
         * *Primes*: primes implicants
@@ -54,6 +70,180 @@ def find_outdags( DiGraph ):
             outdags+= list(component)
 
     return outdags
+
+
+## main functions
+def basins_diagram_naive( Primes, Update, Attractors ):
+    """
+    computes the basins diagram.
+    performs case by case for inputs.
+    nodes are integers starting from *FirstNode*.
+    
+    node attributes:
+        - size:
+        - formula:
+        - attractors:
+
+    edge attributes:
+        - size:
+        - border:
+
+    **returns**::
+        * *BasinsDiagram* (netowrkx.DiGraph): the basins diagram
+    """
+    
+    assert(Update in ["synchronous", "mixed", "asynchronous"])
+    
+    if not Primes:
+        print("what are the basins of an empty Boolean network?")
+        raise Exception
+
+
+    # case by case for inputs
+    inputs = PrimeImplicants.find_inputs(Primes)
+    if inputs:
+        cases = []
+        for combination in PrimeImplicants.input_combinations(Primes):
+            init = "INIT %s"%TemporalQueries.subspace2proposition(combination)
+            attr = [x for x in Attractors if consistent(x,combination)]
+            cases.append( (init,attr) )
+    else:
+        cases = [("INIT TRUE",Attractors)]
+
+
+    # create nodes
+    node = 0
+    basins = networkx.DiGraph()
+    for init, attr in cases:        
+        specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
+        vectors = len(attr)*[[0,1]]
+        for vector in itertools.product( *vectors ):
+            if sum(vector)==0: continue
+
+            if len(vector)==1:
+                data = {"attractors":   attr,
+                        "size":         2**(len(Primes)-len(inputs)),
+                        "formula":,     ""}
+                
+            else:
+                spec = " & ".join("EF(%s)"%x if flag else "!EF(%s)"%x for flag, x in zip(vector, specs))
+                spec = "CTLSPEC %s"%spec
+
+                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec)
+
+                data = {"attractors":   [x for flag,x in zip(vector,Attractors) if flag],
+                        "size":         accepting["INITACCEPTING_SIZE"],
+                        "formula":,     accepting["INITACCEPTING"]}
+
+            if data["size"]>0:
+                basins.add_node(node, data)
+                node+=1
+
+
+    # find potential edges
+    potential_edges = {}
+    for source, source_data in basins.nodes(data=True):
+        succs = []
+        for target, target_data in basins.nodes(data=True):
+            if source==target: continue
+            if all(x in source_data["attractors"] for x in target_data["attractors"]):
+                succs.append((target,target_data))
+        potential_edges[source] = succs
+
+
+    # create edges
+    for source, source_data in basins.nodes(data=True):
+        phi1 = source_data["formula"]
+        phi2 = target_data["formula"]
+        
+        if len(potential_edges[source])==1:
+            data = {"size": source_data["size"]}
+        else:    
+            init = "INIT %s"%phi1
+            spec = "CTLSPEC E[%s U %s]"%(phi1,phi2)
+            answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec)
+            
+            data = {"size": accepting["INITACCEPTING_SIZE"]}
+
+        init = "INIT %s"phi1
+        spec = "CTLSPEC EX(%s)"%phi2
+        data["border"] = accepting["INITACCEPTING_SIZE"]
+
+        if data["size"]>0:
+            basins.add_edge(source, target, data)
+
+    return basins
+
+
+def basins_diagram( Primes, Update, Attractors ):
+    """
+    copy from basins_diagram_naive.
+    removes out-dags.
+    divides remaining network into connected components.
+
+    **returns**::
+        * *BasinsDiagram* (netowrkx.DiGraph): the basins diagram
+    """
+    
+    assert(Update in ["synchronous", "mixed", "asynchronous"])
+    
+    if not Primes:
+        print("what are the basins of an empty Boolean network?")
+        raise Exception
+
+    igraph = InteractionGraphs.primes2igraph(Primes)
+    outdags = find_outdags(igraph)
+    igraph.remove_nodes_from(outdags)
+    components = networkx.connected_components(igraph.to_undirected())
+    components = [list(x) for x in components]
+
+    diagrams = []
+    for component in components:
+        subprimes = PrimeImplicants.copy(Primes)
+        PrimeImplicants.remove_variables(subprimes, [x for x in Primes if not x in component])
+        attrs = []
+        for x in Attractors:
+            x = project(x,component)
+            if not x in attrs: attrs.append(x)
+
+        diagram = basins_diagram_naive(subprimes,Update,attrs)
+        diagrams.append(diagram)
+
+    factor = 2**len(outdags)
+    
+    return cartesian_product(diagrams, factor)
+
+
+def cartesian_product( Diagrams, Factor ):
+    """
+    creates the cartesian product of 
+    """
+
+    diagram = networkx.DiGraph()
+    nodes = [x.nodes(data=True) for x in Diagrams]
+
+    for product in itertools.product(*nodes):
+
+        node = (x for x,_ in product)
+        data = {}
+        data["size"] = reduce(mul,[x["size"] for _,x in product])
+        data["formula"] = " & ".join("(%s)"%x["formula"] for _,x in product)
+
+        attrs = [x["attractors"].items() for _,x in product]
+        data["attractors"]  = [dict(flatten(x)) for x in itertools.product(*attrs)
+        
+        # continue here
+
+
+        zip(Diagrams,node)
+
+    
+
+def diagram2image(Diagram):
+    pass
+
+
+
 
 
 def dict_product( Dicts ):
@@ -100,7 +290,7 @@ def add_node_attributes( DiGraph, NodeWidth ):
         DiGraph.node[node]["label"] = "<%s<br/>%i>"%(label, size)
             
         DiGraph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-        if size_percent>0.5: DiGraph.node[node]["fontcolor"] = "0.0 0.0 0.2"
+        if size_percent>0.5: DiGraph.node[node]["fontcolor"] = "0.0 0.0 0.8"
         DiGraph.node[node]["width"] = NodeWidth*math.sqrt(size_percent/math.pi)
 
         if all(d["style"]=="solid" for x,y,d in DiGraph.out_edges(node,data=True)):
@@ -157,7 +347,7 @@ def remove_auxillary_attributes( DiGraph ):
         DiGraph.edge[x][y].pop("size")
 
     
-def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
+def disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     graphs = iter(DiGraphs)
     union = networkx.DiGraph()
     subgraphs = []
@@ -185,7 +375,7 @@ def factored_form2disjoint_union( DiGraphs, NodeWidth, Subgraphs ):
     return union
     
 
-def factored_form2cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
+def cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
     graphs = iter(DiGraphs)
     product = next(graphs)
 
@@ -247,6 +437,14 @@ def factored_form2cartesian_product( DiGraphs, NodeWidth, Subgraphs ):
     add_node_attributes(product, NodeWidth)
     subgraphs = compute_subgraphs(product) if Subgraphs else None
     add_graph_attributes(product, subgraphs)
+
+    x = 0
+    for node, data in product.nodes(data=True):
+        print node, data["size"]
+        x+= data["size"]
+    print "total size:", x
+    print "2**13=",2**13
+        
     remove_auxillary_attributes(product)
 
     return product
@@ -371,16 +569,17 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
 
                     answer, accepting = ModelChecking.check_primes(subprimes, Update, init, spec, AcceptingStates=True)
                     size = accepting["INITACCEPTING_SIZE"]
-                    graph.add_edge(source, target, size=size)
+                    if size>0:
+                        graph.add_edge(source, target, size=size)
 
 
         graphs.append(graph)
 
 
     if FactoredForm:
-        graph = factored_form2disjoint_union(graphs, NodeWidth, Subgraphs)
+        graph = disjoint_union(graphs, NodeWidth, Subgraphs)
     else:
-        graph = factored_form2cartesian_product(graphs, NodeWidth, Subgraphs)
+        graph = cartesian_product(graphs, NodeWidth, Subgraphs)
 
     if outdags and not FactoredForm:
         for x in graph.nodes():
@@ -407,105 +606,15 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
 
 if __name__=="__main__":
     import FileExchange
-    test = 5
+    test = 1
 
     if test==1:
         bnet = ExampleNetworks.raf
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=True )
+        specs = [TemporalQueries.subspace2proposition(primes,x) for x in TrapSpaces.trap_spaces(primes, "min")]
         
-    elif test==2:
-        bnet = ExampleNetworks.isolated_circuit(3, "negative")
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-        
-    elif test==3:
-        bnet = """
-        v1, 1
-        v2, v2
-        v3, v4
-        v4, !v3 | v2
-        """
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-        
-    elif test==4:
-        bnet = """
-        v1, 1
-        v2, 0
-        """
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, FnameIMAGE="test%i.pdf"%test, FactoredForm=False )
-        
-    elif test==5:
-        bnet = """
-        v1, v2
-        v2, v1
-        v3, v3
-        v4, !v1 | v3
-        """
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test, FactoredForm=False, Subgraphs=True, NodeWidth=5 )
-        
-    elif test==6:
-        bnet = """
-        v1, v1
-        v2, v1
-        v3, v2 & v3
-        """
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-        
-    elif test==7:
-        bnet = ExampleNetworks.davidich_yeast
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-        
-    elif test==8:
-        bnet = """
-        v1, v1
-        v2, v2
-        """
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-
-    elif test==9:
-        bnet = ExampleNetworks.xiao_wnt5a
-        primes = FileExchange.bnet2primes(bnet)
-        update = "synchronous"
-        primes2basins( primes, update, "test%i.pdf"%test )
-        igraph = InteractionGraphs.primes2igraph(primes)
-        InteractionGraphs.add_style_interactionsigns(igraph)
-        InteractionGraphs.igraph2image(igraph, "igraph.pdf")
-        stg = StateTransitionGraphs.primes2stg(primes, update)
-        StateTransitionGraphs.stg2image(stg, "stg.pdf")
-
-    
-    elif test==10:
-        g1 = networkx.DiGraph()
-        g1.add_edges_from([(1,2),(2,3)])
-        for x in g1.nodes(): g1.node[x]["label"] = str(x)
-
-        g2 = networkx.DiGraph()
-        g2.add_edges_from([(10,20),(20,30)])
-        for x in g2.nodes(): g2.node[x]["label"] = str(x)
-        
-        g3 = networkx.DiGraph()
-        g3.add_edges_from([("a",2),(2,"c")])
-        for x in g3.nodes(): g3.node[x]["label"] = str(x)
-        
-        g = networkx.disjoint_union_all([g1,g2,g3])
-
-        print g.edges(data=True)
-        print g.nodes(data=True)
+        basins_naive(primes, update, specs)
 
 
 
