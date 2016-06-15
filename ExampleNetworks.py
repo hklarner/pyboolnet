@@ -1,5 +1,45 @@
 
 
+dinwoodie_life = """
+# taken from
+# Dinwoodie, Ian H. "Computational methods for asynchronous basins." (2015). 
+
+mci,            !wsq3 & !compuse & (!waso & sleeplivroom | waso)
+numtrans,       numfir
+numfir,         !numtrans & (!sleeplivroom & !wsq3 | sleeplivroom) | numtrans
+oohhours,       !ttib & (!sleeplivroom & (numfir & numwalks | !numfir) | sleeplivroom)
+wsq3,           !meanws & !numwalks & !mci | meanws
+meanws,         wsq3 & (wscv & wssigma | !wscv)
+numwalks,       wssigma & !wscv
+wscv,           wssigma & (!meanws | meanws & mci )
+ttib,           timeasleep
+wssigma,        wscv & meanws
+timeasleep,     ttib
+sleeplivroom,   timeasleep & !ttib
+waso,           sleeplatency & ttib
+compuse,        !mci & wssigma
+sleeplatency,   waso & ttib
+"""
+
+
+saadatpour_guardcell = """
+# taken from
+# Saadatpour, Assieh, Istvan Albert, and Reka Albert. "Attractor analysis of asynchronous Boolean models of signal transduction networks." Journal of theoretical biology 266.4 (2010): 641-656.
+
+NOS,    Ca2
+NO,     NOS
+GC,     NO
+ADPRc,  NO
+cADPR,  ADPRc
+cGMP,   GC
+PLC,    Ca2
+InsP3,  PLC
+CIS,    (cGMP & cADPR) | InsP3
+Ca2ATP, Ca2
+Ca2,    CIS & (!Ca2ATP)
+KAP,    !Ca2
+KEV,    Ca2
+"""
 
 
 xiao_wnt5a = """
@@ -127,6 +167,7 @@ Ste9,                (!SK & !Cdc2_Cdc13 & PP & Ste9) | (!SK & !Cdc2_Cdc13 & Ste9
 Wee1_Mik1,           (!Cdc2_Cdc13 & PP) | (PP & Wee1_Mik1) | (!Cdc2_Cdc13 & Wee1_Mik1)
 """
 
+
 arellano_antelope = """
 # taken from
 # Arellano, Gustavo, et al. "Antelope: a hybrid-logic model checker for branching-time Boolean GRN analysis." BMC bioinformatics 12.1 (2011): 1.
@@ -141,6 +182,7 @@ JKD,  SHR & SCR
 MGP,  SHR & SCR & !WOX
 WOX,  ARF & SHR & SCR & ( !MGP | WOX)
 """
+
 
 klamt_tcr = """
 # taken from
@@ -317,7 +359,8 @@ Apoptosis_high,      Apoptosis_medium & (  E2F1_high )
 
 all_networks = [randomnet_n15k3, dahlhaus_neuroplastoma, faure_cellcycle,
                 irons_yeast, davidich_yeast, arellano_antelope, klamt_tcr,
-                grieco_mapk, raf, remy_tumorigenesis, xiao_wnt5a]
+                grieco_mapk, raf, remy_tumorigenesis, xiao_wnt5a,
+                saadatpour_guardcell, dinwoodie_life]
 
 
 
