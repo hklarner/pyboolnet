@@ -67,7 +67,7 @@ def digraph2dot( DiGraph, Indent=1 ):
             continue
         if key=="label":
             value = value.strip()
-            if str(value.strip()).startswith("<"):
+            if value.startswith("<"):
                 lines+= [space+'label = %s;'%value]
             elif value=="":
                 lines+= [space+'label = "";']
@@ -125,9 +125,18 @@ def digraph2dot( DiGraph, Indent=1 ):
         attr = dict([x for x in attr.items() if not x[0]=="sign"])
 
         if attr:
-            
-            # for edges with attributes
-            values = ', '.join(['%s="%s"'%(str(x),str(y)) for x,y in sorted(attr.items())])
+            values = []
+            for k,v in attr.items():
+
+                # html style label attribute
+                if str(v).startswith("<"):
+                    values+=['%s=%s'%(k,v)]
+
+                # normal attribute
+                else:
+                    values+=['%s="%s"'%(k,v)]
+
+            values = ', '.join(values)
             lines += [space+'"%s" -> "%s" [%s];'%(source,target,values)]
 
         else:
