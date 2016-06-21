@@ -104,7 +104,7 @@ def basins_diagram_naive( Primes, Update, Attractors ):
     if inputs:
         cases = []
         for combination in PrimeImplicants.input_combinations(Primes):
-            init = "INIT %s"%TemporalQueries.subspace2proposition(combination)
+            init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
             attr = [x for x in Attractors if consistent(x,combination)]
             cases.append( (init,attr) )
     else:
@@ -113,7 +113,7 @@ def basins_diagram_naive( Primes, Update, Attractors ):
 
     # create nodes
     node = 0
-    basins = networkx.DiGraph()
+    diagram = networkx.DiGraph()
     for init, attr in cases:        
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
@@ -123,56 +123,63 @@ def basins_diagram_naive( Primes, Update, Attractors ):
             if len(vector)==1:
                 data = {"attractors":   attr,
                         "size":         2**(len(Primes)-len(inputs)),
-                        "formula":,     ""}
+                        "formula":      ""}
                 
             else:
                 spec = " & ".join("EF(%s)"%x if flag else "!EF(%s)"%x for flag, x in zip(vector, specs))
                 spec = "CTLSPEC %s"%spec
 
-                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec)
+                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
 
                 data = {"attractors":   [x for flag,x in zip(vector,Attractors) if flag],
                         "size":         accepting["INITACCEPTING_SIZE"],
-                        "formula":,     accepting["INITACCEPTING"]}
+                        "formula":      accepting["INITACCEPTING"]}
 
             if data["size"]>0:
-                basins.add_node(node, data)
+                diagram.add_node(node, data)
                 node+=1
 
 
-    # find potential edges
+    # list potential edges
     potential_edges = {}
-    for source, source_data in basins.nodes(data=True):
+    for source, source_data in diagram.nodes(data=True):
         succs = []
-        for target, target_data in basins.nodes(data=True):
+        for target, target_data in diagram.nodes(data=True):
             if source==target: continue
             if all(x in source_data["attractors"] for x in target_data["attractors"]):
                 succs.append((target,target_data))
+                
         potential_edges[source] = succs
 
 
     # create edges
-    for source, source_data in basins.nodes(data=True):
-        phi1 = source_data["formula"]
-        phi2 = target_data["formula"]
-        
-        if len(potential_edges[source])==1:
-            data = {"size": source_data["size"]}
-        else:    
-            init = "INIT %s"%phi1
-            spec = "CTLSPEC E[%s U %s]"%(phi1,phi2)
-            answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec)
+    for source, source_data in diagram.nodes(data=True):
+        for target, target_data in potential_edges[source]:
+
+            init = "INIT %s"%source_data["formula"]
+            spec = "CTLSPEC EX(%s)"%target_data["formula"]
+            answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
             
-            data = {"size": accepting["INITACCEPTING_SIZE"]}
+            data = {}
+            data["border_formula"] = accepting["INITACCEPTING"]
+            data["border_size"] = accepting["INITACCEPTING_SIZE"]
+            
+            if data["border_size"]>0:
 
-        init = "INIT %s"phi1
-        spec = "CTLSPEC EX(%s)"%phi2
-        data["border"] = accepting["INITACCEPTING_SIZE"]
+                if len(potential_edges[source])==1:
+                    data["finally_size"] = source_data["size"]
+                    data["finally_formula"] = source_data["formula"]
 
-        if data["size"]>0:
-            basins.add_edge(source, target, data)
+                else:                
+                    spec = "CTLSPEC EF(%s)"%data["border_formula"]
+                    answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
+                    
+                    data["finally_size"] = accepting["INITACCEPTING_SIZE"]
+                    data["finally_formula"] = accepting["INITACCEPTING_SIZE"]
+                
+                diagram.add_edge(source, target, data)
 
-    return basins
+    return diagram
 
 
 def basins_diagram( Primes, Update, Attractors ):
@@ -200,21 +207,25 @@ def basins_diagram( Primes, Update, Attractors ):
     diagrams = []
     for component in components:
         subprimes = PrimeImplicants.copy(Primes)
-        PrimeImplicants.remove_variables(subprimes, [x for x in Primes if not x in component])
-        attrs = []
+        remove = [x for x in Primes if not x in component]
+        PrimeImplicants.remove_variables(subprimes, remove)
+        
+        attrs_projected = []
         for x in Attractors:
             x = project(x,component)
-            if not x in attrs: attrs.append(x)
+            if not x in attrs_projected:
+                attrs_projected.append(x)
 
-        diagram = basins_diagram_naive(subprimes,Update,attrs)
+        diagram = basins_diagram_naive(subprimes,Update,attrs_projected)
         diagrams.append(diagram)
+        
 
     factor = 2**len(outdags)
     
-    return cartesian_product(diagrams, factor)
+    return cartesian_product_new(diagrams, factor)
 
 
-def cartesian_product( Diagrams, Factor ):
+def cartesian_product_new( Diagrams, Factor ):
     """
     creates the cartesian product of 
     """
@@ -229,20 +240,50 @@ def cartesian_product( Diagrams, Factor ):
         data["size"] = reduce(mul,[x["size"] for _,x in product])
         data["formula"] = " & ".join("(%s)"%x["formula"] for _,x in product)
 
-        attrs = [x["attractors"].items() for _,x in product]
-        data["attractors"]  = [dict(flatten(x)) for x in itertools.product(*attrs)
+        attrs = [x.items() for _,a in product for x in a["attractors"]]
+
+        print [dict(flatten(x)) for x in itertools.product(*attrs)]
+        raise Exception
+    
+
+
+        # xxx
+        data["attractors"]  = [dict(flatten(x)) for x in itertools.product(*attrs)]
         
         # continue here
+                               
 
 
         zip(Diagrams,node)
 
     
 
-def diagram2image(Diagram):
-    pass
+def diagram2image(Diagram, FnameIMAGE):
+    """
+    creates an image of diagram
+    """
+    
+    graph = networkx.DiGraph()
 
+    for node, data in Diagram.nodes(data=True):
+        label = ["formula=%s"%data["formula"],
+                 "size=%s"%data["size"],
+                 "attractors=%s"%data["attractors"]]
+        label = "<br/>".join(label)
+        label = "<%s>"%label
+        graph.add_node(str(node), label=label)
 
+    for source, target, data in Diagram.edges(data=True):
+        label = ["finally_size=%s"%data["finally_size"],
+                 "finally_formula=%s"%data["finally_formula"],
+                 "border_formula=%s"%data["border_formula"],
+                 "border_size=%s"%data["border_size"]]
+        label = "<br/>".join(label)
+        label = "<%s>"%label
+        graph.add_edge(str(source), str(target), label=label)
+
+    print InteractionGraphs.igraph2dot(graph)
+    InteractionGraphs.igraph2image(graph, FnameIMAGE)
 
 
 
@@ -599,8 +640,19 @@ def primes2basins( Primes, Update, FnameIMAGE=None, Subgraphs=False, FactoredFor
     return    
     
 
+
+
+
+tnet1 = """
+raf, mek
+mek, raf
+v1, v1 | raf
+v2, v2 & mek
+v3, v2
+"""
     
-    
+
+TestNetworks = [tnet1]    
 
          
 
@@ -610,11 +662,20 @@ if __name__=="__main__":
 
     if test==1:
         bnet = ExampleNetworks.raf
+        bnet = tnet1
         primes = FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        specs = [TemporalQueries.subspace2proposition(primes,x) for x in TrapSpaces.trap_spaces(primes, "min")]
+
+        attractors = TrapSpaces.trap_spaces(primes, "min")
+        diagram = basins_diagram_naive( primes, update, attractors )
+        diagram2image(diagram, FnameIMAGE="diagram_naive.pdf")
         
-        basins_naive(primes, update, specs)
+        diagram = basins_diagram( primes, update, attractors )
+        diagram2image(diagram, FnameIMAGE="diagram.pdf")
+                               
+
+
+                            
 
 
 
