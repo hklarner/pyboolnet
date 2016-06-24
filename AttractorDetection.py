@@ -478,9 +478,13 @@ def create_attractor_report(Primes, FnameTXT=None):
     lines+= [""]
 
     lines+= ["### Steady States"]
-    if not steady: lines+= [" * there are no steady states"]
+    if not steady:
+        lines+= [" * there are no steady states"]
+    else:
+        w = max([12,len(Primes)])
+        lines+=["| "+"steady state".ljust(w)+" |"]
     for x in steady:
-        lines+= [StateTransitionGraphs.subspace2str(Primes, x)]
+        lines+= ["| "+StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
     lines+= [""]
 
     width = max([len(Primes), 14])
@@ -524,8 +528,18 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= [line]
     lines+=[""]
 
+    
+    bnet = []
+    for row in FileExchange.primes2bnet(Primes).split("\n"):
+        t, f = row.split(",")
+        bnet.append((t.strip(),f.strip()))
+
+    t_width = max([7]+[len(x) for x,_ in bnet])    
+    f_width = max([7]+[len(x) for _,x in bnet])
     lines+= ["### Network"]
-    lines+= FileExchange.primes2bnet(Primes).split("\n")
+    for t,f in bnet:
+        lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
+             
     lines+=["",""]
 
     if FnameTXT:
