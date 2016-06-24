@@ -128,7 +128,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     return primes
 
 
-def primes2bnet(Primes, FnameBNET, Minimize=False):
+def primes2bnet(Primes, FnameBNET=None, Minimize=False):
     """
     Saves *Primes* as a *bnet* file, including the header *"targets, factors"* for compatibility with :ref:`installation_boolnet`.
     Without minimization, the resuting formulas are disjunctions of all prime implicants and may therefore be very long.
