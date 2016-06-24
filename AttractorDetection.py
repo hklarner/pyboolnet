@@ -1,5 +1,6 @@
 
 
+import datetime
 import itertools
 import random
 
@@ -451,6 +452,56 @@ def completeness_iterative( Primes, Update ):
     return (True, None)
 
 
+def create_attractor_report(Primes, FnameTXT=None):
+    """
+    creates a report for the attractors of the synchronous and asynchronous STGs of the network defined by *Primes*.
+    """
+    
+    mints = TrapSpaces.trap_spaces(primes, "min")
+    steady = [x for x in mints if len(x)==len(primes)]
+    cyclic = [x for x in mints if len(x)<len(primes)]
+
+    lines = ["",""]
+    lines+= ["this attractor report was created on %s using PyBoolNet"%datetime.date.today().strftime('%d. %b. %Y')]
+    lines+= [""]
+    lines+= ["Steady States"]
+    if not steady: lines+= ["None"]
+    for x in steady:
+        lines+= [StateTransitionGraphs.subspace2str(primes, x)]
+    lines+= [""]
+
+    lines+= ["completeness in"]
+    answer, counterex = AttractorDetection.completeness_iterative( primes, "asynchronous" )
+    lines+= [" asynchronous STG: %s"%answer]
+    answer, counterex = AttractorDetection.completeness_iterative( primes, "synchronous" )
+    lines+= [" synchronous STG: %s"%answer]
+    lines+= [""]
+
+    width = max([len(primes), 20])
+    spacer1 = lambda x: x.ljust(width)
+    spacer2 = lambda x: x.ljust(18)
+    line = spacer1("minimal_trap_space,")
+    line+= "".join(map(spacer2,["univocal_async,", "faithful_async,", "univocal_sync,", "faithful_sync"]))
+    lines+= [line]
+    
+    if not cyclic: lines+= ["None"]
+    for x in cyclic:
+        line = spacer1(StateTransitionGraphs.subspace2str(primes,x))
+        line+= spacer2("%s"%AttractorDetection.univocal(primes, "asynchronous", x)[0])
+        line+= spacer2("%s"%AttractorDetection.faithful(primes, "asynchronous", x)[0])
+        line+= spacer2("%s"%AttractorDetection.univocal(primes, "synchronous", x)[0])
+        line+= spacer2("%s"%AttractorDetection.faithful(primes, "synchronous", x)[0])
+        lines+= [line]
+
+    if FnameTXT:
+        with open(FnameTXT, "w") as f:
+            f.writelines("\n".join(lines))
+            print("created %s"%fname_attr)
+    else:
+        return "\n".join(lines)
+
+
+# auxillary functions
 def Intersection( *args ):
     """
     each argument must be a list of subspaces (dicts)::
