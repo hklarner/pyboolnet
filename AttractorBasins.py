@@ -21,7 +21,7 @@ import ExampleNetworks
 import PrimeImplicants
 import Utility
 
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 

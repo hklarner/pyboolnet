@@ -11,7 +11,7 @@ import QuineMcCluskey
 import Utility
 
 BASE = os.path.join(os.path.dirname(__file__))
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 CMD_BNET2PRIMES = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))

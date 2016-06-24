@@ -6,7 +6,7 @@ import datetime
 import Utility
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 CMD_GRINGO = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "gringo") ))

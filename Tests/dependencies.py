@@ -32,7 +32,7 @@ if not os.path.exists(FNAME_SETTINGS):
     print("created %s"%FNAME_SETTINGS)
 
 
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 
@@ -95,13 +95,10 @@ class TestNuSMV(unittest.TestCase):
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate( input="MODULE main" )
 
-        msg = "\nCall to NuSMV resulted in return code %i."%proc.returncode
+        msg = "\n%s"%out
+        msg+= "\nCall to NuSMV failed."
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( proc.returncode, 0, msg )
-        
-        msg = '\nNuSMV did not respond with "This is NuSMV 2.5.4"'
-        msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "This is NuSMV 2.5.4" in out, msg )
+        self.assertEqual( True, "NuSMV" in out, msg )
 
 class TestBNetToPrime(unittest.TestCase):
     def test_bnet2primes_responds(self):

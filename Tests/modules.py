@@ -21,18 +21,15 @@ import TemporalQueries
 import QuineMcCluskey
 import Utility
 
-
 FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
 FILES_OUT  = os.path.join(BASE, "Tests", "Files")
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-
-
-
 
 
 def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
+
 
 def update_input_files():
     return
@@ -48,7 +45,6 @@ def update_input_files():
         fname_in  = os.path.join( FILES_IN, name+".bnet" )
         fname_out_primes = os.path.join( FILES_IN, name+".primes" )
         primes = FileExchange.bnet2primes( BNET=fname_in, FnamePRIMES=fname_out_primes )
-
 
 
 class TestQuineMcCluskey(unittest.TestCase):

@@ -2,19 +2,11 @@
 
 import os
 import subprocess
-
-try:
-    # Python 2.x
-    import ConfigParser as configparser
-except ImportError:
-    # Python 3.x
-    import configparser
-
-myconfigparser = configparser
+import Miscellaneous
     
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
-config = myconfigparser.SafeConfigParser()
+config = Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
