@@ -11,18 +11,14 @@ import ModelChecking
 import TemporalQueries
 import TrapSpaces
 import Utility
-dot2image = Utility.dot2image
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
-
-
-
-
+dot2image = Utility.DiGraphs.dot2image
 
 
 def primes2stg( Primes, Update, InitialStates=lambda x: True ):
@@ -165,7 +161,7 @@ def stg2dot( STG, FnameDOT=None ):
     assert( type(STG.nodes()[0])==str )
     
     lines = ['digraph "State Transition Graph" {','']
-    lines += Utility.digraph2dot(STG)
+    lines += Utility.DiGraphs.digraph2dot(STG)
     lines += ['}']
 
     if FnameDOT==None:
@@ -277,7 +273,7 @@ def add_style_sccs( STG ):
           >>> add_style_sccs(stg)
     """
     
-    condensation_graph = Utility.digraph2condensationgraph(STG)
+    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
 
     for i,scc in enumerate(condensation_graph.nodes()):
         name = "cluster_%i"%i
@@ -434,7 +430,7 @@ def add_style_condensation( STG ):
           >>> add_style_condensation(stg)
     """
 
-    condensation_graph = Utility.digraph2condensationgraph(STG)
+    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
     STG.graph["condensation"] = condensation_graph    
         
 
@@ -863,39 +859,6 @@ def subspace2states( Primes, Subspace ):
         states.append(state)
 
     return states
-
-
-def subspace_intersection( Subspaces ):
-    # not in the manual
-    """
-    Returns the intersection of the *Subspaces*.
-    Raises an exception if there are two subspaces that are not consistent.
-
-    **arguments**:
-        * *Subspaces*: a list of subspaces
-
-    **returns**:
-        * *Subspace*: the intersection
-
-    **example**::
-
-        >>> subspaces = [{"v1":0},{"v2":0}]
-        >>> subspace_intersection(subspaces)
-        {"v1":0,"v2":0}
-    """
-
-    items = set([])
-
-    for x in Subspaces:
-        items_new = set(x.items())
-        intersection = items.intersection(items_new)
-        if intersection:
-            print(intersection)
-            print("found inconsistent subspaces.")
-            raise Exception
-        items.update(items_new)
-
-    return dict(items)
 
 
 def bounding_box(Primes, Subspaces):

@@ -11,6 +11,7 @@ import TrapSpaces
 import QuineMcCluskey
 import Tests
 import ExampleNetworks
+import Utility
 
 
 

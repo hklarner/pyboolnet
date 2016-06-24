@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 
 import itertools
 import subprocess
@@ -7,22 +6,17 @@ import math
 import os
 import networkx
 
+import StateTransitionGraphs
 import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.myconfigparser.SafeConfigParser()
+config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
 
-
-
-
-dot2image = Utility.dot2image
-igraph2cgraph = Utility.digraph2condensationgraph
-
-import StateTransitionGraphs as STGs
+dot2image = Utility.DiGraphs.dot2image
 
 
 def primes2igraph( Primes ):
@@ -124,7 +118,7 @@ def igraph2dot( IGraph, FnameDOT=None ):
     assert( type(IGraph.nodes()[0])==str )
     
     lines = ['digraph "Interaction Graph" {']
-    lines+= Utility.digraph2dot( IGraph )
+    lines+= Utility.DiGraphs.digraph2dot( IGraph )
     lines += ['}']
 
     if FnameDOT==None:
@@ -221,7 +215,7 @@ def add_style_activities( IGraph, Activities ):
 
     names = sorted(IGraph.nodes())
     if type(Activities)==str:
-        Activities = STGs.str2subspace(names, Activities)
+        Activities = StateTransitionGraphs.str2subspace(names, Activities)
 
     for name in IGraph.nodes():
 
@@ -338,7 +332,7 @@ def add_style_sccs( IGraph ):
     """
     
     subgraphs = networkx.DiGraph()
-    condensation_graph = Utility.digraph2condensationgraph(IGraph)
+    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(IGraph)
 
     for scc in condensation_graph.nodes():
         depth = condensation_graph.node[scc]["depth"]
@@ -367,7 +361,7 @@ def add_style_condensation( IGraph ):
           >>> add_style_condensation(igraph)
     """
 
-    condensation_graph = Utility.digraph2condensationgraph(IGraph)
+    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(IGraph)
     IGraph.graph["condensation"] = condensation_graph
 
 

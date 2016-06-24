@@ -4,14 +4,12 @@ import itertools
 import random
 
 import PrimeImplicants
-import Utility
 import StateTransitionGraphs
 import TrapSpaces
 import InteractionGraphs
 import ModelChecking
 import TemporalQueries
-
-
+import Utility
 
 
 def find_attractor_by_randomwalk_and_ctl( Primes, Update, InitialState={}, Length=0, Attempts=10 ):
@@ -119,7 +117,7 @@ def compute_attractors_tarjan( Primes, STG ):
         [{'v1': 0, 'v2': 1, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 0}]
     """
 
-    condensation_graph = Utility.digraph2condensationgraph(STG)
+    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
 
     attractors = []
     for scc in condensation_graph.nodes():
@@ -385,7 +383,7 @@ def completeness_iterative( Primes, Update ):
 
         ## line 8: cgraph = CondensationGraph(V_p,F_p)
         igraph = InteractionGraphs.primes2igraph(primes_reduced)
-        cgraph = InteractionGraphs.igraph2cgraph(igraph)
+        cgraph = Utility.DiGraphs.digraph2condensationgraph(igraph)
 
         ## line 9: cgraph_dash = RemoveComponents(Z,->,W)
         cgraph_dash = cgraph.copy()

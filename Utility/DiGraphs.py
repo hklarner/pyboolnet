@@ -2,19 +2,11 @@
 
 import os
 import subprocess
-
-try:
-    # Python 2.x
-    import ConfigParser as configparser
-except ImportError:
-    # Python 3.x
-    import configparser
-
-myconfigparser = configparser
+import Miscellaneous
     
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
-config = myconfigparser.SafeConfigParser()
+config = Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
@@ -62,18 +54,21 @@ def digraph2dot( DiGraph, Indent=1 ):
     # general graph attributes
     for key, value in sorted(DiGraph.graph.items()):
         # ignore because treated elsewhere
+        key = key.strip()
         if key.lower() in ["subgraphs","cluster_id","node","edge"]:
             continue
-        if key.strip()=="label":
-            if value.strip().startswith("<"):
+        if key=="label":
+            value = value.strip()
+            if value.startswith("<"):
                 lines+= [space+'label = %s;'%value]
             elif value=="":
                 lines+= [space+'label = "";']
                 # bugfix for inherited labels
                 # see: http://www.graphviz.org/content/cluster-and-graph-labels-bug
                 
-            elif value.strip():
-                lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
+            elif value:
+                lines+= [space+'label="%s"'%value.strip()]
+                #lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
         else:
             lines+= [space+'%s = "%s";'%(key,value)]
         hit = True
@@ -100,7 +95,7 @@ def digraph2dot( DiGraph, Indent=1 ):
             for k,v in attr.items():
 
                 # html style label attribute
-                if v.startswith("<"):
+                if str(v).startswith("<"):
                     values+=['%s=%s'%(k,v)]
 
                 # normal attribute
@@ -122,9 +117,18 @@ def digraph2dot( DiGraph, Indent=1 ):
         attr = dict([x for x in attr.items() if not x[0]=="sign"])
 
         if attr:
-            
-            # for edges with attributes
-            values = ', '.join(['%s="%s"'%(str(x),str(y)) for x,y in sorted(attr.items())])
+            values = []
+            for k,v in attr.items():
+
+                # html style label attribute
+                if str(v).startswith("<"):
+                    values+=['%s=%s'%(k,v)]
+
+                # normal attribute
+                else:
+                    values+=['%s="%s"'%(k,v)]
+
+            values = ', '.join(values)
             lines += [space+'"%s" -> "%s" [%s];'%(source,target,values)]
 
         else:
