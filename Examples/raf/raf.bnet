@@ -1,0 +1,10 @@
+
+
+targets, factors
+
+# made up to illustrate model checking
+
+Erk,  Erk & Mek | Mek & Raf
+Mek,  Erk | Mek & Raf
+Raf,  !Erk | !Raf
+

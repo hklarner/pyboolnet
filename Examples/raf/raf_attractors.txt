@@ -1,0 +1,9 @@
+Steady States
+001
+
+completeness in
+ asynchronous STG: True
+ synchronous STG: True
+
+minimal_trap_space, univocal_async,   faithful_async,   univocal_sync,    faithful_sync     
+11-                 True              True              True              True              

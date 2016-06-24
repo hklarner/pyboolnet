@@ -1,0 +1,63 @@
+Steady States
+100100000000000011100010
+100100000100000011100010
+100100000000010011100010
+100100000100010011100010
+100100000000010011110010
+100100000000000011110010
+100100000100010011110010
+100100000100000011110010
+000100000100010011110010
+000100000100010011100010
+000100000000010011110010
+000100000000010011100010
+000100000000000011110010
+000100000000000011100010
+000100000100000011110010
+000100000100000011100010
+
+completeness in
+ asynchronous STG: True
+ synchronous STG: False
+
+minimal_trap_space,     univocal_async,   faithful_async,   univocal_sync,    faithful_sync     
+011------1-110110001-101True              True              True              True              
+111------1-110110001-101True              True              True              True              
+011------1-111110001-101True              True              True              True              
+111------1-111110001-101True              True              True              True              
+011------1-111110000-101True              True              True              True              
+111------1-111110000-101True              True              True              True              
+011------1-110110000-101True              True              True              True              
+111------1-110110000-101True              True              True              True              
+011------0-110110000-101True              True              True              True              
+011------0-110110001-101True              True              True              True              
+111------0-110110000-101True              True              True              True              
+111------0-110110001-101True              True              True              True              
+011------0-111110000-101True              True              True              True              
+111------0-111110000-101True              True              True              True              
+011------0-111110001-101True              True              True              True              
+111------0-111110001-101True              True              True              True              
+011------0-111110001-100True              True              True              True              
+011------1-111110001-100True              True              True              True              
+011------0-110110001-100True              True              True              True              
+011------1-110110001-100True              True              True              True              
+111------0-110110001-100True              True              True              True              
+111------1-110110001-100True              True              True              True              
+111------0-111110001-100True              True              True              True              
+111------1-111110001-100True              True              True              True              
+111------0-111110000-100True              True              True              True              
+011------0-111110000-100True              True              True              True              
+111------0-110110000-100True              True              True              True              
+011------0-110110000-100True              True              True              True              
+111------1-110110000-100True              True              True              True              
+111------1-111110000-100True              True              True              True              
+011------1-110110000-100True              True              True              True              
+011------1-111110000-100True              True              True              True              
+00-10----1-00000--10-011True              True              False             False             
+00-10----1-00000--11-011True              True              False             False             
+00--0----0-00000--10-011True              True              False             False             
+00--0----0-00000--11-011True              True              False             False             
+00--0----0-00100--10-011True              True              False             False             
+00-10----1-00100--10-011True              True              False             False             
+00-10----1-00100--11-011True              True              False             False             
+00--0----0-00100--11-011True              True              False             False             

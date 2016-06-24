@@ -1,0 +1,61 @@
+
+
+targets, factors
+
+# taken from "Integrative Modelling of the Influence of MAPK Network on Cancer Cell Fate Decision"
+# by L. Grieco et. al, PLOS Computational Biology 2013
+
+AKT,                 PDK1 & !PTEN
+AP1,                 JUN & ATF2 | JUN & FOS
+ATF2,                JNK | p38
+ATM,                 DNA_damage
+Apoptosis,           FOXO3 & p53 & !ERK & !BCL2
+BCL2,                CREB & AKT
+CREB,                MSK
+DNA_damage,          DNA_damage
+DUSP1,               CREB
+EGFR,                !PKC & !GRB2 & EGFR_stimulus | !PKC & !GRB2 & SPRY
+EGFR_stimulus,       EGFR_stimulus
+ELK1,                p38 | JNK | ERK
+ERK,                 MEK1_2
+FGFR3,               !PKC & !GRB2 & FGFR3_stimulus
+FGFR3_stimulus,      FGFR3_stimulus
+FOS,                 CREB & ERK & RSK | ELK1 & ERK & RSK
+FOXO3,               JNK & !AKT
+FRS2,                !GRB2 & FGFR3 & !SPRY
+GAB1,                PI3K | GRB2
+GADD45,              SMAD | p53
+GRB2,                EGFR | FRS2 | TGFBR
+Growth_Arrest,       p21
+JNK,                 TAK1 & TAOK | MAP3K1_3 & !DUSP1 | MTK1 & !DUSP1 | TAK1 & !DUSP1 | MTK1 & TAOK | TAK1 & MTK1 | MAP3K1_3 & MTK1 | TAK1 & MAP3K1_3 | MAP3K1_3 & TAOK | !DUSP1 & TAOK
+JUN,                 JNK
+MAP3K1_3,            RAS
+MAX1,                p38
+MDM2,                !p14 & p53 | !p14 & AKT
+MEK1_2,              !PPP2CA & !AP1 & MAP3K1_3 | RAF & !PPP2CA & !AP1
+MSK,                 p38 | ERK
+MTK1,                GADD45
+MYC,                 MSK & AKT | MAX1 & MSK
+PDK1,                PI3K
+PI3K,                SOS & RAS | GAB1
+PKC,                 PLCG
+PLCG,                FGFR3 | EGFR
+PPP2CA,              p38
+PTEN,                p53
+Proliferation,       MYC & !p21 & p70
+RAF,                 !ERK & RAS & !AKT | PKC & !ERK & !AKT
+RAS,                 SOS | PLCG
+RSK,                 ERK
+SMAD,                TGFBR
+SOS,                 GRB2 & !RSK
+SPRY,                ERK
+TAK1,                TGFBR
+TAOK,                ATM
+TGFBR,               TGFBR_stimulus
+TGFBR_stimulus,      TGFBR_stimulus
+p14,                 MYC
+p21,                 p53 & !AKT
+p38,                 TAK1 & TAOK | MAP3K1_3 & !DUSP1 | MTK1 & !DUSP1 | TAK1 & !DUSP1 | MTK1 & TAOK | TAK1 & MTK1 | MAP3K1_3 & MTK1 | TAK1 & MAP3K1_3 | MAP3K1_3 & TAOK | !DUSP1 & TAOK
+p53,                 !MDM2 & p38 | p38 & ATM | !MDM2 & ATM
+p70,                 PDK1 & ERK
+

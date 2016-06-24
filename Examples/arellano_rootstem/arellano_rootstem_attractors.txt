@@ -1,0 +1,15 @@
+Steady States
+110111110
+001110110
+110001000
+001000000
+110001010
+001000010
+110101111
+
+completeness in
+ asynchronous STG: True
+ synchronous STG: True
+
+minimal_trap_space, univocal_async,   faithful_async,   univocal_sync,    faithful_sync     
+None

@@ -1,0 +1,26 @@
+
+
+targets, factors
+
+# taken from
+# Irons, D. J. "Logical analysis of the budding yeast cell cycle." Journal of theoretical biology 257.4 2009: 543-559.
+# the variables B, M and S are replaced by vB, vM and vS because NuSMV requires two-letter names
+
+vB,                  Cln2 & !CD | vB & !CD | Clb5 & !CD
+CD,                  FEAR & vM & Cdc14 & !CD
+CKI,                 Swi5 & !Clb2 & !Cln2 & !Clb5 | !Clb2 & CKI & !Cln2 & !Clb5 | Swi5 & Cdc14
+Cdc14,               FEAR & MEN
+Cdc20,               SFF & Clb2 & vM
+Cdh1,                !Clb2 & !Cln2 & !Clb5 | Cdc14
+Clb2,                !Cdh1 & SFF & !CKI & Clb2 | vB & !CKI & !Cdc20 | SFF & Clb2 & !CKI & !Cdc20 | !Cdh1 & vB & !CKI
+Clb5,                SMBF & !Cdc20
+Cln2,                SMBF
+Cln3,                !Yhp1
+FEAR,                Cdc20
+vM,                  Clb2 & vS & !CD | vM & !CD
+MEN,                 Clb2 & FEAR
+vS,                  Clb5 & !CD | vS & !CD | Clb2 & !CD
+SFF,                 vB & !CKI & !Cdc20 | !Cdh1 & vB & !CKI | SFF & Clb2
+SMBF,                !Clb2 & Cln3 | !Clb2 & Cln2 | SMBF & !Clb2
+Swi5,                SFF & Cdc14 | SFF & !Clb2
+Yhp1,                SMBF
