@@ -1,9 +1,28 @@
-Steady States
+
+
+### Attractor Report
+ * created on 24. Jun. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+
+### Steady States
 001
 
-completeness in
- asynchronous STG: True
- synchronous STG: True
+### Asynchronous STG
+ * completeness: True
 
-minimal_trap_space, univocal_async,   faithful_async,   univocal_sync,    faithful_sync     
-11-                 True              True              True              True              
+| trapspace      | univocal  | faithful  |
+| -------------- | --------- | --------- |
+| 11-            | True      | True      |
+
+### Synchronous STG
+ * completeness: True
+
+| trapspace      | univocal  | faithful  |
+| -------------- | --------- | --------- |
+| 11-            | True      | True      |
+
+### Network
+targets, factors
+Erk,    Raf & Mek | Mek & Erk
+Mek,    Raf & Mek | Erk
+Raf,    !Raf | !Erk
+

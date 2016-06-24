@@ -4,13 +4,10 @@
  * created on 24. Jun. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
-001000000
-001000010
-001110110
-110001000
-110001010
-110101111
-110111110
+0101111
+0110110
+0111110
+1000001
 
 ### Asynchronous STG
  * completeness: True
@@ -22,13 +19,11 @@
 
 ### Network
 targets, factors
-ARF,       !IAA
-AUXINS,    AUXINS
-IAA,       !AUXINS
-JKD,       SHR & SCR
-MGP,       SHR & !WOX & SCR
-PLT,       ARF
-SCR,       SHR & !MGP & SCR | JKD & SHR & SCR
-SHR,       SHR
-WOX,       SHR & WOX & ARF & SCR | SHR & !MGP & ARF & SCR
+x1,    !x6
+x2,    x6 & x4 | x2 & x6 | x2 & x4
+x3,    !x7
+x4,    x4
+x5,    !x7 | x2
+x6,    x4 | x3
+x7,    x7 | !x2
 
