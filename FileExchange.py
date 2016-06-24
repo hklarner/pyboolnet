@@ -168,7 +168,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False):
             elif Primes[name][1]==[]:
                 expression = '0'
             else:
-                expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
+                expression = ' | '.join([' & '.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
 
             lines+= [(name+',').ljust(width)+expression]
 

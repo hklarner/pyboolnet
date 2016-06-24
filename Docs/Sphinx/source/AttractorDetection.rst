@@ -45,11 +45,28 @@ univocal
 
 .. autofunction:: PyBoolNet.AttractorDetection.univocal
 
+
 .. _faithful:
 
 faithful
 --------
 
 .. autofunction:: PyBoolNet.AttractorDetection.faithful
+
+
+.. _create_attractor_report:
+
+create_attractor_report
+-----------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.create_attractor_report
+
+
+
+
+
+
+
+
 
 
