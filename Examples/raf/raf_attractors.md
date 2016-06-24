@@ -4,7 +4,8 @@
  * created on 24. Jun. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
-001
+| steady state |
+| 001          |
 
 ### Asynchronous STG
  * completeness: True
@@ -21,8 +22,8 @@
 | 11-            | True      | True      |
 
 ### Network
-targets, factors
-Erk,    Raf & Mek | Mek & Erk
-Mek,    Raf & Mek | Erk
-Raf,    !Raf | !Erk
+| targets | factors               |
+| Erk     | Raf & Mek | Mek & Erk |
+| Mek     | Raf & Mek | Erk       |
+| Raf     | !Raf | !Erk           |
 
