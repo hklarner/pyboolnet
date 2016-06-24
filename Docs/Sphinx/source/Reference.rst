@@ -13,6 +13,7 @@ Reference
    ModelChecking
    TrapSpaces
    AttractorDetection
+   AttractorBasins
    TemporalQueries
    QuineMcCluskey
 
