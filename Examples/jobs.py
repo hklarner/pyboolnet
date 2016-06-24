@@ -32,7 +32,7 @@ if __name__=="__main__":
                 if fname in ["remy_tumorigenesis.bnet", "klamt_tcr.bnet", "grieco_mapk.bnet"]:
                     continue
 
-                fname_attr = os.path.join(subdir,fname.split(".")[0]+"_attractors.txt")
+                fname_attr = os.path.join(subdir,fname.split(".")[0]+"_attractors.md")
                 AttractorDetection.create_attractor_report(primes, fname_attr)
 
                 attractors = TrapSpaces.trap_spaces(primes, "min")
