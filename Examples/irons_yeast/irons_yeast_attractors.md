@@ -22,6 +22,7 @@
 
 ### Network
 | targets | factors                                                                                         |
+| ------- | ----------------------------------------------------------------------------------------------- |
 | CD      | FEAR & vM & Cdc14 & !CD                                                                         |
 | CKI     | Swi5 & !Clb2 & !Cln2 & !Clb5 | !Clb2 & CKI & !Cln2 & !Clb5 | Swi5 & Cdc14                       |
 | Cdc14   | FEAR & MEN                                                                                      |

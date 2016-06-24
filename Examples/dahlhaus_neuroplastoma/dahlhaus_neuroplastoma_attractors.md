@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state             |
+| ------------------------ | 
 | 000100000000000011100010 |
 | 000100000000000011110010 |
 | 000100000000010011100010 |
@@ -116,6 +117,7 @@
 
 ### Network
 | targets         | factors                                                                                                                                                                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AJUBA           | AJUBA                                                                                                                                                                                                                                 |
 | AURKAActive     | NEDD9 & !PP1 & AJUBA & AURKAPresent | !PP1 & AJUBA & AURKAPresent & BORA | NEDD9 & AJUBA & !AURKAActive & AURKAPresent | AJUBA & !AURKAActive & BORA & AURKAPresent | !PP1 & TPX2 & AURKAPresent | TPX2 & !AURKAActive & AURKAPresent |
 | AURKAPresent    | !PP2A                                                                                                                                                                                                                                 |

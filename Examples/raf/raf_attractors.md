@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state |
+| ------------ | 
 | 001          |
 
 ### Asynchronous STG
@@ -23,6 +24,7 @@
 
 ### Network
 | targets | factors               |
+| ------- | --------------------- |
 | Erk     | Raf & Mek | Mek & Erk |
 | Mek     | Raf & Mek | Erk       |
 | Raf     | !Raf | !Erk           |

@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state |
+| ------------ | 
 | 001000000    |
 | 001000010    |
 | 001110110    |
@@ -23,6 +24,7 @@
 
 ### Network
 | targets | factors                                        |
+| ------- | ---------------------------------------------- |
 | ARF     | !IAA                                           |
 | AUXINS  | AUXINS                                         |
 | IAA     | !AUXINS                                        |

@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state |
+| ------------ | 
 | 0000001011   |
 
 ### Asynchronous STG
@@ -23,6 +24,7 @@
 
 ### Network
 | targets | factors                                                                                                                 |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Cdc20   | CycB                                                                                                                    |
 | CycA    | !cdh1 & E2F & !Rb & !Cdc20 | !UbcH10 & E2F & !Rb & !Cdc20 | !cdh1 & CycA & !Rb & !Cdc20 | !UbcH10 & CycA & !Rb & !Cdc20 |
 | CycB    | !cdh1 & !Cdc20                                                                                                          |

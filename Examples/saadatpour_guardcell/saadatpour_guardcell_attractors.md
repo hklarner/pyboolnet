@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state  |
+| ------------- | 
 | 0000001000000 |
 
 ### Asynchronous STG
@@ -17,6 +18,7 @@
 
 ### Network
 | targets | factors              |
+| ------- | -------------------- |
 | ADPRc   | NO                   |
 | CIS     | cGMP & cADPR | InsP3 |
 | Ca2     | CIS & !Ca2ATP        |

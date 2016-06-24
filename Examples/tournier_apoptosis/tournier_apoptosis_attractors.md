@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state |
+| ------------ | 
 | 000101010000 |
 | 011000010000 |
 
@@ -24,6 +25,7 @@
 
 ### Network
 | targets | factors                                         |
+| ------- | ----------------------------------------------- |
 | A20a    | NFkBnuc & TNF                                   |
 | C3a     | C8a & !IAP                                      |
 | C8a     | !CARP & T2 | !CARP & C3a                        |

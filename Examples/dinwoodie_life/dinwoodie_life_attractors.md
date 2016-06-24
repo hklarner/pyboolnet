@@ -5,6 +5,7 @@
 
 ### Steady States
 | steady state    |
+| --------------- | 
 | 001000000110010 |
 | 001000010111010 |
 | 001000100000010 |
@@ -23,6 +24,7 @@
 
 ### Network
 | targets      | factors                                                   |
+| ------------ | --------------------------------------------------------- |
 | compuse      | wssigma & !mci                                            |
 | mci          | !wsq3 & !compuse & waso | sleeplivroom & !compuse & !wsq3 |
 | meanws       | wssigma & wsq3 | !wscv & wsq3                             |
