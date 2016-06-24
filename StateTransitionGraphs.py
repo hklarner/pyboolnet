@@ -865,39 +865,6 @@ def subspace2states( Primes, Subspace ):
     return states
 
 
-def subspace_intersection( Subspaces ):
-    # not in the manual
-    """
-    Returns the intersection of the *Subspaces*.
-    Raises an exception if there are two subspaces that are not consistent.
-
-    **arguments**:
-        * *Subspaces*: a list of subspaces
-
-    **returns**:
-        * *Subspace*: the intersection
-
-    **example**::
-
-        >>> subspaces = [{"v1":0},{"v2":0}]
-        >>> subspace_intersection(subspaces)
-        {"v1":0,"v2":0}
-    """
-
-    items = set([])
-
-    for x in Subspaces:
-        items_new = set(x.items())
-        intersection = items.intersection(items_new)
-        if intersection:
-            print(intersection)
-            print("found inconsistent subspaces.")
-            raise Exception
-        items.update(items_new)
-
-    return dict(items)
-
-
 def bounding_box(Primes, Subspaces):
     # not in the manual
     """
