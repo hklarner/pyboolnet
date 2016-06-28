@@ -1,8 +1,10 @@
 
 
+import datetime
 import itertools
 import random
 
+import FileExchange
 import PrimeImplicants
 import StateTransitionGraphs
 import TrapSpaces
@@ -451,6 +453,109 @@ def completeness_iterative( Primes, Update ):
     return (True, None)
 
 
+def create_attractor_report(Primes, FnameTXT=None):
+    """
+    Creates an attractor report for the network defined by *Primes*.
+    
+    **arguments**:
+        * *Primes*: prime implicants
+        * *FnameTXT* (str): the name of the report file or *None*
+    
+    **returns**:
+        * *FnameTXT* (str): *FnameTXT=None* or *None* if *FnameTXT* is given
+
+    **example**::
+         >>> create_attractor_report(primes, "report.txt")
+    """
+    
+    mints = TrapSpaces.trap_spaces(Primes, "min")
+    steady = sorted([x for x in mints if len(x)==len(Primes)])
+    cyclic = sorted([x for x in mints if len(x)<len(Primes)])
+
+    lines = ["",""]
+    lines+= ["### Attractor Report"]
+    lines+= [" * created on %s using PyBoolNet, see https://github.com/hklarner/PyBoolNet"%datetime.date.today().strftime('%d. %b. %Y')]
+    lines+= [""]
+
+    lines+= ["### Steady States"]
+    if not steady:
+        lines+= [" * there are no steady states"]
+    else:
+        w = max([12,len(Primes)])
+        lines+= ["| "+"steady state".ljust(w)+" |"]
+        lines+= ["| "+ w*"-" +" | "]
+        
+    for x in steady:
+        lines+= ["| "+StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
+    lines+= [""]
+
+    width = max([len(Primes), 14])
+    spacer1 = lambda x: x.ljust(width)
+    
+    lines+= ["### Asynchronous STG"]
+    answer, counterex = completeness_iterative( Primes, "asynchronous" )
+    lines+= [" * completeness: %s"%answer]
+
+    if not cyclic:
+        lines+= [" * there are only steady states"]
+    else:
+        lines+= [""]
+        line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
+        lines+= [line]
+        lines+= ["| "+ width*"-" +" | --------- | --------- |"]
+    
+    for x in cyclic:
+        line =  "| "+ ("%s"%StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line+= " | "+ ("%s"%univocal(Primes, "asynchronous", x)[0]).ljust(9)
+        line+= " | "+ ("%s"%faithful(Primes, "asynchronous", x)[0]).ljust(9)+" |"
+        lines+= [line]
+    lines+=[""]
+
+    lines+= ["### Synchronous STG"]
+    answer, counterex = completeness_iterative( Primes, "synchronous" )
+    lines+= [" * completeness: %s"%answer]
+
+    if not cyclic:
+        lines+= [" * there are only steady states"]
+    else:
+        lines+= [""]
+        line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
+        lines+= [line]
+        lines+= ["| "+ width*"-" +" | --------- | --------- |"]
+    
+    for x in cyclic:
+        line =  "| "+ ("%s"%StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line+= " | "+ ("%s"%univocal(Primes, "synchronous", x)[0]).ljust(9)
+        line+= " | "+ ("%s"%faithful(Primes, "synchronous", x)[0]).ljust(9)+" |"
+        lines+= [line]
+    lines+=[""]
+
+    
+    bnet = []
+    for row in FileExchange.primes2bnet(Primes).split("\n"):
+        t, f = row.split(",")
+        bnet.append((t.strip(),f.strip()))
+
+    t_width = max([7]+[len(x) for x,_ in bnet])    
+    f_width = max([7]+[len(x) for _,x in bnet])
+    lines+= ["### Network"]
+    t,f = bnet.pop(0)
+    lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
+    lines+= ["| "+t_width*"-"+" | "+f_width*"-"+" |"]
+    for t,f in bnet:
+        lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
+             
+    lines+=["",""]
+
+    if FnameTXT:
+        with open(FnameTXT, "w") as f:
+            f.writelines("\n".join(lines))
+            print("created %s"%FnameTXT)
+    else:
+        return "\n".join(lines)
+
+
+# auxillary functions
 def Intersection( *args ):
     """
     each argument must be a list of subspaces (dicts)::

@@ -1,0 +1,23 @@
+
+
+targets, factors
+
+# generated with BoolNet
+# Mussel, Christoph, Martin Hopfensitz, and Hans A. Kestler. "BoolNet: an R package for generation, reconstruction and analysis of Boolean networks." Bioinformatics 26.10 (2010): 1378-1380.
+
+Gene1, (!Gene3 & !Gene12) | (Gene8)
+Gene2, (!Gene4 & !Gene14) | (!Gene12 & !Gene4)
+Gene3, (Gene5) | (Gene6 & !Gene3)
+Gene4, (!Gene3 & !Gene4) | (!Gene6 & !Gene4) | (!Gene6 & Gene3)
+Gene5, (!Gene14 & Gene6) | (Gene14 & !Gene6) | (Gene9)
+Gene6, (!Gene8 & Gene10) | (Gene10 & Gene14)
+Gene7, (!Gene12 & !Gene13 & Gene10) | (!Gene12 & Gene13 & !Gene10) | (Gene12 & !Gene13 & !Gene10)
+Gene8, (!Gene13 & !Gene8 & Gene9) | (Gene13 & !Gene8 & !Gene9) | (Gene13 & Gene8 & Gene9)
+Gene9, (Gene12) | (Gene7) | (Gene11)
+Gene10, (!Gene10 & !Gene3) | (!Gene3 & Gene1) | (Gene10 & Gene3 & !Gene1)
+Gene11, (!Gene14) | (Gene12) | (Gene13)
+Gene12, (!Gene4 & Gene3) | (Gene8 & Gene4)
+Gene13, (!Gene6 & !Gene11 & Gene2) | (!Gene6 & Gene11 & !Gene2) | (Gene6 & !Gene11 & !Gene2) | (Gene6 & Gene11 & Gene2)
+Gene14, (!Gene5 & !Gene9) | (Gene8 & Gene9)
+Gene15, (!Gene8 & Gene9) | (Gene8 & !Gene9) | (!Gene2 & Gene9)
+

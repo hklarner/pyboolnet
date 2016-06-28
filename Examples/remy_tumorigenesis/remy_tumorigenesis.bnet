@@ -1,0 +1,58 @@
+
+
+targets, factors
+
+# created from the *revised* PDF supplementary for the paper
+# "A modelling approach to explain mutually exclusive and co-occurring genetic alterations in bladder tumorigenesis"
+# E. Remy et al., Cancer Research, 2015
+#
+# Network originally contains 30 components, 5 of which are ternary
+# hence, there are 35 components in this, booleanized, model
+# Booleanization is done by the "bar graph encoding":
+#    x_medium := x_high   | (condition for x_medium)
+#    x_high   := x_medium & (condition for x_high)
+# admissiable states satisfy "x_high -> x_medium"
+#
+# all expressions that involve "x" or "x:1" (for ternary x) are replaced by "x_medium"
+
+# inputs
+EGFR_stimulus,       EGFR_stimulus
+FGFR3_stimulus,      FGFR3_stimulus
+DNA_damage,          DNA_damage
+Growth_inhibitors,   Growth_inhibitors
+
+# intermediate
+E2F1_medium,         E2F1_high   | (!RBL2 & !RB1  & ATM_high & CHEK1_2_high & (RAS | E2F3_high))
+E2F1_high,           E2F1_medium & (!RB1  & !RBL2 & ((!(CHEK1_2_high & ATM_high) & (RAS | E2F3_medium)) | (CHEK1_2_high & ATM_high & !RAS & E2F3_medium)))
+E2F3_medium,         E2F3_high   | (! RB1 & ! CHEK1_2_high & RAS )
+E2F3_high,           E2F3_medium & (! RB1 &   CHEK1_2_high & RAS )
+ATM_medium,          ATM_high   | ( DNA_damage & ! E2F1_medium )
+ATM_high,            ATM_medium & ( DNA_damage &   E2F1_medium )
+CHEK1_2_medium,      CHEK1_2_high   | ( ATM_medium & ! E2F1_medium )
+CHEK1_2_high,        CHEK1_2_medium & ( ATM_medium &   E2F1_medium )
+EGFR,                ( EGFR_stimulus | SPRY ) & ! FGFR3 & ! GRB2 
+FGFR3,               ! EGFR & FGFR3_stimulus & ! GRB2 
+RAS,                 EGFR | FGFR3 | GRB2 
+PTEN,                TP53 
+PI3K,                GRB2 & RAS & ! PTEN 
+AKT,                 PI3K 
+GRB2,                ( FGFR3 & ! GRB2 & ! SPRY ) | EGFR 
+SPRY,                RAS 
+CyclinD1,            ( RAS | AKT ) & ! p16INK4a & ! p21CIP 
+CyclinE1,            ! RBL2 & ! p21CIP & CDC25A & ( E2F1_medium | E2F3_medium )
+CyclinA,             ! RBL2 & ! p21CIP & CDC25A & ( E2F1_medium | E2F3_medium )
+CDC25A,              ! CHEK1_2_medium & ! RBL2 &  ( E2F1_medium | E2F3_medium )
+p16INK4a,            Growth_inhibitors & ! RB1 
+p14ARF,              E2F1_medium 
+RB1,                 ! CyclinD1 & ! CyclinE1 & ! p16INK4a & ! CyclinA 
+RBL2,                ! CyclinD1 & ! CyclinE1 
+p21CIP,              ! CyclinE1 & ( Growth_inhibitors | TP53 ) & ! AKT 
+MDM2,                ( TP53 | AKT ) & ! p14ARF & ! ATM_medium & ! RB1 
+TP53,                ! MDM2 & (( ATM_medium & CHEK1_2_medium ) | E2F1_high )
+
+# outputs
+Proliferation,       CyclinE1 | CyclinA 
+Growth_arrest,       p21CIP | RB1 | RBL2
+Apoptosis_medium,    Apoptosis_high   | (! E2F1_high & TP53 )
+Apoptosis_high,      Apoptosis_medium & (  E2F1_high )
+

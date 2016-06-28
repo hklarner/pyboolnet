@@ -285,7 +285,29 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     networkx.relabel_nodes(graph,mapping,copy=False)
         
     InteractionGraphs.igraph2image(graph, FnameIMAGE)
-    
+
+
+def diagram2abstract_image( Diagram, FnameIMAGE ):
+    graph = networkx.DiGraph()
+
+    for node, data in Diagram.nodes(data=True):
+        x = len(data["attractors"])
+        if not x in Diagram:
+            graph.add_nodes(x, size=data["size"])
+        else:
+            graph.node[x]["size"]+= data["size"]
+
+    for source, target in Diagram.edges():
+        x = len(Diagram.node[source]["attractors"])
+        y = len(Diagram.node[source]["attractors"])
+        graph.add_edge(x,y)
+
+        
+    mapping = {x:str(x) for x in graph.nodes()}
+    networkx.relabel_nodes(graph,mapping,copy=False)
+        
+    InteractionGraphs.igraph2image(graph, FnameIMAGE)
+
 
 ## auxillary functions
 def consistent( X, Y):
@@ -416,7 +438,7 @@ def tests():
     import json
     from networkx.readwrite import json_graph
 
-    if 1:
+    if 0:
         # raf 
         primes = Examples.get_primes("raf")
         update = "asynchronous"
@@ -426,7 +448,7 @@ def tests():
         expected = json_graph.node_link_graph(data)
         print diagrams_are_equal(diagram, expected)
     
-    if 1:
+    if 0:
         # positive feedback
         bnet = """
         v1,v2
@@ -441,7 +463,7 @@ def tests():
         print diagrams_are_equal(diagram, expected)
         diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
 
-    if 1:
+    if 0:
         # negative feedback
         bnet = """
         v1,!v2
@@ -457,7 +479,7 @@ def tests():
         print diagrams_are_equal(diagram, expected)
         diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
 
-    if 1:
+    if 0:
         # arellano_antelope
         primes = Examples.get_primes("arellano_rootstem")
         update = "asynchronous"
@@ -487,6 +509,8 @@ def tests():
 
         igraph = InteractionGraphs.primes2igraph(primes)
         InteractionGraphs.igraph2image(igraph,"Junk/igraph.pdf")
+
+        diagram2abstract_image(diagram, "Junk/abstraction.pdf")
     
     # print json_graph.node_link_data(diagram)
     

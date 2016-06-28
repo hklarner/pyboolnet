@@ -1,0 +1,19 @@
+
+
+targets, factors
+
+# taken from
+# Tournier, Laurent, and Madalena Chaves. "Uncovering operational interactions in genetic networks using asynchronous Boolean dynamics." Journal of Theoretical Biology 260.2 (2009): 196-209.
+
+TNF,        TNF
+T2,         TNF & !FLIP
+IKKa,       TNF & !A20a & !C3a
+NFkB,       !IkB
+NFkBnuc,    NFkB & !IkB
+IkB,        (TNF & NFkBnuc & !IKKa) | (!TNF & (NFkBnuc | !IKKa))
+A20a,       TNF & NFkBnuc
+IAP,        (TNF & NFkBnuc & !C3a) | (!TNF & (NFkBnuc | !C3a))
+FLIP,       NFkBnuc
+C3a,        !IAP & C8a
+C8a,        !CARP & (C3a | T2)
+CARP,       (TNF & NFkBnuc & !C3a) | (!TNF & (NFkB | !C3a))

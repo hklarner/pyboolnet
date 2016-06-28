@@ -1,0 +1,23 @@
+
+
+targets, factors
+
+# taken from
+# Dinwoodie, Ian H. "Computational methods for asynchronous basins." (2015). 
+
+mci,            !wsq3 & !compuse & (!waso & sleeplivroom | waso)
+numtrans,       numfir
+numfir,         !numtrans & (!sleeplivroom & !wsq3 | sleeplivroom) | numtrans
+oohhours,       !ttib & (!sleeplivroom & (numfir & numwalks | !numfir) | sleeplivroom)
+wsq3,           !meanws & !numwalks & !mci | meanws
+meanws,         wsq3 & (wscv & wssigma | !wscv)
+numwalks,       wssigma & !wscv
+wscv,           wssigma & (!meanws | meanws & mci )
+ttib,           timeasleep
+wssigma,        wscv & meanws
+timeasleep,     ttib
+sleeplivroom,   timeasleep & !ttib
+waso,           sleeplatency & ttib
+compuse,        !mci & wssigma
+sleeplatency,   waso & ttib
+
