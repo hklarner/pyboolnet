@@ -20,8 +20,7 @@ if __name__=="__main__":
 
     for subdir, _, files in os.walk(rootdir):
         for fname in files:
-            #"remy_tumorigenesis.bnet", , "grieco_mapk.bnet"
-            if fname not in ["klamt_tcr.bnet"]:
+            if fname in ["remy_tumorigenesis.bnet", "grieco_mapk.bnet", "klamt_tcr.bnet"]:
                 continue
             
             if fname.split(".")[1]=="bnet":
@@ -40,5 +39,7 @@ if __name__=="__main__":
                 fname_basins = os.path.join(subdir,fname.split(".")[0]+"_basins.pdf")
                 diagram = AttractorBasins.basins_diagram( primes, "asynchronous", attractors, ComputeBorders=False, Silent=False )
                 AttractorBasins.diagram2image(diagram, primes, fname_basins, StyleInputs=True, StyleDetails=False)
+                fname_abstract = os.path.join(subdir,fname.split(".")[0]+"_basins_abstract.pdf")
+                AttractorBasins.diagram2abstract_image(diagram, primes, fname_abstract)
 
                 
