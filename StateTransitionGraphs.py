@@ -144,12 +144,12 @@ def stg2dot( STG, FnameDOT=None ):
     **example**::
 
           >>> stg = primes2stg(primes, update, init)
-          >>> igraph.graph["label"] = "IRMA Network - State Transition Graph"
-          >>> igraph.graph["node"] = {"style":"filled", "color":"red"}
-          >>> igraph.graph["edge"] = {"arrowsize": 2.0}      
-          >>> igraph.node["001000"]["fontsize"] = 20
-          >>> igraph.edge["001110"]["001010"]["style"] = "dotted"
-          >>> stg2image( igraph, "irma_stg.pdf")
+          >>> stg.graph["label"] = "IRMA Network - State Transition Graph"
+          >>> stg.graph["node"] = {"style":"filled", "color":"red"}
+          >>> stg.graph["edge"] = {"arrowsize": 2.0}      
+          >>> stg.node["001000"]["fontsize"] = 20
+          >>> stg.edge["001110"]["001010"]["style"] = "dotted"
+          >>> stg2image( stg, "irma_stg.pdf")
     """
 
     if STG.order()==0:
