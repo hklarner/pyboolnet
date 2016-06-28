@@ -1587,9 +1587,6 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
 
 
 
-Basins of Attraction
-********************
-to do
 
 .. include:: Substitutions.rst
 
