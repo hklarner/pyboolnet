@@ -287,19 +287,28 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     InteractionGraphs.igraph2image(graph, FnameIMAGE)
 
 
-def diagram2abstract_image( Diagram, FnameIMAGE ):
+def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
     graph = networkx.DiGraph()
+    graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
 
     for node, data in Diagram.nodes(data=True):
         x = len(data["attractors"])
-        if not x in Diagram:
-            graph.add_nodes(x, size=data["size"])
+        if not x in graph:
+            graph.add_node(x, size=data["size"])
         else:
             graph.node[x]["size"]+= data["size"]
 
+    size_total = float(2**len(Primes))
+    for x, data in graph.nodes(data=True):
+        size_percent = data["size"] / size_total
+        graph.node[x]["label"] = "<%s<br/>states: %s>"%(x,data["size"])
+        graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+        if size_percent>0.5: graph.node[x]["fontcolor"] = "0.0 0.0 0.8"
+
     for source, target in Diagram.edges():
         x = len(Diagram.node[source]["attractors"])
-        y = len(Diagram.node[source]["attractors"])
+        y = len(Diagram.node[target]["attractors"])
+        print x,y
         graph.add_edge(x,y)
 
         
@@ -510,7 +519,7 @@ def tests():
         igraph = InteractionGraphs.primes2igraph(primes)
         InteractionGraphs.igraph2image(igraph,"Junk/igraph.pdf")
 
-        diagram2abstract_image(diagram, "Junk/abstraction.pdf")
+        diagram2abstract_image(diagram, primes, "Junk/abstraction.pdf")
     
     # print json_graph.node_link_data(diagram)
     
