@@ -20,6 +20,9 @@ if __name__=="__main__":
 
     for subdir, _, files in os.walk(rootdir):
         for fname in files:
+            #"remy_tumorigenesis.bnet", , "grieco_mapk.bnet"
+            if fname not in ["klamt_tcr.bnet"]:
+                continue
             
             if fname.split(".")[1]=="bnet":
                 primes = FileExchange.bnet2primes(os.path.join(subdir,fname))
@@ -28,16 +31,14 @@ if __name__=="__main__":
                 InteractionGraphs.add_style_interactionsigns(igraph)
                 fname_igraph = os.path.join(subdir,fname.split(".")[0]+"_igraph.pdf")
                 InteractionGraphs.igraph2image(igraph,fname_igraph)
-
-                if fname in ["remy_tumorigenesis.bnet", "klamt_tcr.bnet", "grieco_mapk.bnet"]:
-                    continue
+                
 
                 fname_attr = os.path.join(subdir,fname.split(".")[0]+"_attractors.md")
-                AttractorDetection.create_attractor_report(primes, fname_attr)
+                #AttractorDetection.create_attractor_report(primes, fname_attr)
 
                 attractors = TrapSpaces.trap_spaces(primes, "min")
                 fname_basins = os.path.join(subdir,fname.split(".")[0]+"_basins.pdf")
-                diagram = AttractorBasins.basins_diagram( primes, "asynchronous", attractors, ComputeBorders=False, Silent=True )
+                diagram = AttractorBasins.basins_diagram( primes, "asynchronous", attractors, ComputeBorders=False, Silent=False )
                 AttractorBasins.diagram2image(diagram, primes, fname_basins, StyleInputs=True, StyleDetails=False)
 
                 
