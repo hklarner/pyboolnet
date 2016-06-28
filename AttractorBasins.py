@@ -44,7 +44,7 @@ def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=Tru
         raise Exception
 
     igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = find_outdags(igraph)
+    outdags = InteractionGraphs.find_outdags(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
         print("excluding the out-dag %s"%outdags)
@@ -346,28 +346,6 @@ def project_attractors( Attractors, Names ):
 
 def lift_attractors( Attractors, Projection ):
     return [x for x in Attractors for y in Projection if consistent(x,y)]
-
-
-def find_outdags( DiGraph ):
-    """
-    finds the largest directed acyclic subgraph that is closed under the successors operation.
-    """
-
-    graph = DiGraph.copy()
-    
-    sccs = networkx.strongly_connected_components(graph)
-    sccs = [list(x) for x in sccs]
-    candidates = [scc[0] for scc in sccs if len(scc)==1]
-    candidates = [x for x in candidates if not graph.has_edge(x,x)]
-    sccs = [scc for scc in sccs if len(scc)>1]
-
-    graph.add_node("!")
-    for scc in sccs:
-        graph.add_edge(scc[0],"!")
-
-    outdags = [x for x in candidates if not networkx.has_path(graph,x,"!")]
-
-    return outdags
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):

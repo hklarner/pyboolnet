@@ -488,7 +488,7 @@ def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Del
     The *Delay* parameter sets the frame rate and *Loop* the number of repititions,
     both are parameters that are directly passed to *convert*.
 
-    **arguments**.
+    **arguments**:
         * *IGraph*: interaction graph
         * *Activities* (list): sequence of activities
         * *Delay* (int): number of 1/100s between each frame
@@ -535,13 +535,38 @@ def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Del
     print("created %s"%FnameGIF)
 
 
+def find_outdag( IGraph ):
+    """
+    Finds the maximal directed acyclic subgraph that is closed under the successors operation.
+    Essentially, these components are the "output cascades" which are irrelevant for various algorithms, e.g.
+    the computation of basins of attraction.
 
+    **arguments**:
+        * *IGraph*: interaction graph
 
+    **returns**:
+        * *Names* (list): the outdag
 
+    **example**::
 
+        >>> find_outdag(igraph)
+        ['v7', 'v8', 'v9']
+    """
 
+    graph = IGraph.copy()
+    
+    sccs = networkx.strongly_connected_components(graph)
+    sccs = [list(x) for x in sccs]
+    candidates = [scc[0] for scc in sccs if len(scc)==1]
+    candidates = [x for x in candidates if not graph.has_edge(x,x)]
+    sccs = [scc for scc in sccs if len(scc)>1 or graph.has_edge(scc[0],scc[0])]
 
+    graph.add_node("!")
+    for scc in sccs:
+        graph.add_edge(scc[0],"!")
 
+    outdags = [x for x in candidates if not networkx.has_path(graph,x,"!")]
 
+    return outdags
 
 

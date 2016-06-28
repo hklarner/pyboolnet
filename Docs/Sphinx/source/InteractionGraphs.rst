@@ -124,10 +124,12 @@ activities2animation
 .. autofunction:: PyBoolNet.InteractionGraphs.activities2animation
 
 
+.. _find_outdag:
 
+find_outdag
+-----------
 
-
-
+.. autofunction:: PyBoolNet.InteractionGraphs.find_outdag
 
 
 
