@@ -1155,6 +1155,15 @@ class TestFileExchange(unittest.TestCase):
 
 class TestInteractionGraphs(unittest.TestCase):
 
+    def test_outdag(self):
+        igraph = networkx.DiGraph()
+        igraph.add_edges_from([(1,1),(2,1),(2,3),(3,2),(2,4),(4,1),(4,5),(5,6),(6,6),(5,7)])
+        outdag = InteractionGraphs.find_outdag(igraph)
+        msg = "\nexpected: "+str([7])
+        msg+= "\ngot:      "+str(outdag)
+        self.assertTrue( outdag == [7], msg )
+                              
+
     def test_activities2animation(self):
         fname_in  = os.path.join( FILES_IN,  "irma.primes" )
         fname_out1 = os.path.join( FILES_OUT, "irma*.png" )
@@ -1336,7 +1345,7 @@ if __name__=="__main__":
     if 0:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestAttractorDetection("test_completeness_naive"))
+        suite.addTest(TestInteractionGraphs("test_outdag"))
         
         runner = unittest.TextTestRunner()
         runner.run(suite)
