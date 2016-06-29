@@ -19,6 +19,7 @@ import ModelChecking
 import AttractorDetection
 import TemporalQueries
 import QuineMcCluskey
+import Examples
 import Utility
 
 FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
@@ -156,11 +157,6 @@ class TestStateTransitionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-
-
-
-        
-
     def test_stg2dot(self):
         fname_in  = os.path.join( FILES_IN,  "irma.primes" )
         fname_out = os.path.join( FILES_OUT, "irma_stg.dot" )
@@ -168,7 +164,6 @@ class TestStateTransitionGraphs(unittest.TestCase):
         primes = FileExchange.read_primes(FnamePRIMES=fname_in)
         stg = StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous")
         StateTransitionGraphs.stg2dot(stg, fname_out)
-        
         # no assertion
 
     def test_stg2image(self):
@@ -176,10 +171,13 @@ class TestStateTransitionGraphs(unittest.TestCase):
         fname_out1 = os.path.join( FILES_OUT, "irma_stg_async.pdf" )
         fname_out2 = os.path.join( FILES_OUT, "irma_stg_tendencies_async.pdf" )
         fname_out3 = os.path.join( FILES_OUT, "irma_stg_sccs_async.pdf" )
+        fname_out4 = os.path.join( FILES_OUT, "irma_stg_sccs_async2.pdf" )
 
         primes = FileExchange.read_primes(FnamePRIMES=fname_in)
         stg = StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous")
         StateTransitionGraphs.stg2image(stg, fname_out1)
+
+        StateTransitionGraphs.primes2image(primes, "synchronous", fname_out4)
 
         StateTransitionGraphs.add_style_tendencies(stg)
         StateTransitionGraphs.stg2image(stg, fname_out2)
@@ -223,6 +221,15 @@ class TestStateTransitionGraphs(unittest.TestCase):
         StateTransitionGraphs.random_state( Primes=primes )
         StateTransitionGraphs.random_state( Primes=primes, Subspace="111-0-" )
         # no assertion
+
+    def test_stg2sccgraph(self):
+        fname_out = os.path.join( FILES_OUT, "raf_sccgraph.pdf" )
+        primes = Examples.get_primes("raf")
+        stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
+        sccg = StateTransitionGraphs.stg2sccgraph(stg)
+        StateTransitionGraphs.sccgraph2image(sccg, fname_out)
+        # no assertion
+        
 
 
 
@@ -1337,15 +1344,15 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
         update_input_files()
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestInteractionGraphs("test_outdag"))
+        suite.addTest(TestStateTransitionGraphs("test_stg2sccgraph"))
         
         runner = unittest.TextTestRunner()
         runner.run(suite)

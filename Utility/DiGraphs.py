@@ -383,14 +383,6 @@ def tree2dotlines( Tree, Indent=1 ):
 
 
     return lines
-                        
-
-
-
-
-
-
-
 
 
 def digraph2sccgraph( Digraph ):
@@ -528,6 +520,18 @@ def ancestors( DiGraph, Nodes ):
 
 
 
+def convert_nodes_to_anonymous_strings( DiGraph ):
+    """
+    used to convert meaningful nodes into anonymous stringified integers for drawing.
+    """
+
+    mapping = {x:str(i) for i,x in enumerate(DiGraph.nodes())}
+    networkx.relabel_nodes(DiGraph, mapping, copy=False)
 
 
+
+
+
+
+                           
     

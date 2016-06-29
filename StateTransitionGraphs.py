@@ -1,5 +1,6 @@
 
 
+import math
 import random
 import itertools
 import heapq
@@ -173,15 +174,6 @@ def stg2image(STG, FnameIMAGE, Silent=False):
     """
 
     Utility.DiGraphs.digraph2image(STG, FnameIMAGE, Silent)
-
-
-def primes2image( Primes, Update, FnameIMAGE, InitialStates=lambda x: True ):
-    """
-    a shortcut for converting primes -> stg -> image
-    """
-
-    stg = primes2stg( Primes, Update, InitialStates)
-    stg2image(stg, FnameIMAGE)
     
         
 def copy( STG ):
@@ -587,8 +579,6 @@ def random_state( Primes, Subspace={} ):
         {'v1':0, 'v2':0, 'v3':1}
     """
 
-    
-    
     if type(Subspace)==str:
         assert(len(Subspace)==len(Primes))
         x = {}
@@ -887,7 +877,90 @@ def hamming_distance(Subspace1, Subspace2):
 
 
 
+def stg2sccgraph( STG ):
+    """
+    Converts the *STG* into the *SCC* graph.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *SCCGraph* (networkx.DiGraph): the SCC graph of *STG*
+
+    **example**:
+
+        >>> sccgraph = stg2sccgraph(stg)
+    """
+
+    sccg = Utility.DiGraphs.digraph2sccgraph(STG)
+    sccg.graph["node"] = {"color":"none"}
+
+    for x in sccg.nodes():
+        width = sum(len(y) for y in x)
+        width = math.sqrt(width)
+
+        stack = list(x)
+        lines = []
+        remaining = sum(map(len,stack))
+        while remaining>width:
+            new  = stack.pop()
+            size = len(new)
+            line = [new]
+            while size<width:
+                new = stack.pop()
+                size+=len(new)
+                line+=[new]
+            lines.append(",".join(line))
+            remaining = sum(map(len,stack))
+        if stack:
+            lines.append(",".join(stack))
+            
+        sccg.node[x]["label"]="<%s>"%"<br/>".join(lines)
+
+    return sccg
+    
+
+def sccgraph2dot( SCCGraph, FnameDOT=None ):
+    """
+    Creates a *dot* file from a SCC graph.
+    Graph, node and edge attributes are passed to the *dot* file by adding the respective key and value pairs to the graph, node or edge data.
+    Node and edge defaults are set by the specials graph keys *"node"* and *"edge"* and must have attribute dictionaries as values.
+    For a list of attributes see http://www.graphviz.org/doc/info/attrs.html.
+
+    **arguments**:
+        * *SCCGraph*: state transition graph
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
 
 
+    **example**::
 
+          >>> sccgraph2dot(sccg, "sccgraph.dot")
+    """
+
+    graph = SCCGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
+    """
+    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
+    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    
+    **arguments**:
+        * *SCCGraph*: SCC graph
+        * *FnameIMAGE* (str): name of output file
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> stg2image(sccgraph, "mapk_sccgraph.pdf")
+    """
+
+    graph = SCCGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
 
