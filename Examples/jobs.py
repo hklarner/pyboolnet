@@ -20,7 +20,7 @@ if __name__=="__main__":
 
     for subdir, _, files in os.walk(rootdir):
         for fname in files:
-            if fname in ["remy_tumorigenesis.bnet", "grieco_mapk.bnet", "klamt_tcr.bnet"]:
+            if fname in ["remy_tumorigenesis.bnet", "grieco_mapk.bnet"]:
                 continue
             
             if fname.split(".")[1]=="bnet":

@@ -44,7 +44,7 @@ def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=Tru
         raise Exception
 
     igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = InteractionGraphs.find_outdags(igraph)
+    outdags = InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
         print("excluding the out-dag %s"%outdags)
@@ -118,7 +118,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         cases = []
         for combination in PrimeImplicants.input_combinations(Primes):
             init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if consistent(x,combination)]
+            attr = [x for x in Attractors if are_consistent(x,combination)]
             cases.append( (init,attr) )
     else:
         cases = [("INIT TRUE",Attractors)]
@@ -271,7 +271,7 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     if StyleInputs:
         subgraphs = []
         for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if consistent(inputs,Diagram.node[x]["attractors"][0])]
+            nodes = [x for x in Diagram.nodes() if are_consistent(inputs,Diagram.node[x]["attractors"][0])]
             label = StateTransitionGraphs.subspace2str(Primes,inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
             
@@ -308,7 +308,6 @@ def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
     for source, target in Diagram.edges():
         x = len(Diagram.node[source]["attractors"])
         y = len(Diagram.node[target]["attractors"])
-        print x,y
         graph.add_edge(x,y)
 
         
@@ -319,7 +318,7 @@ def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
 
 
 ## auxillary functions
-def consistent( X, Y):
+def are_consistent( X, Y):
     return all(X[k]==Y[k] for k in set(X).intersection(set(Y)))
 
 def merge_dicts(Dicts):
@@ -345,7 +344,7 @@ def project_attractors( Attractors, Names ):
 
 
 def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if consistent(x,y)]
+    return [x for x in Attractors for y in Projection if are_consistent(x,y)]
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):
