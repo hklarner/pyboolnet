@@ -109,24 +109,7 @@ def igraph2dot( IGraph, FnameDOT=None ):
           >>> dotfile = igraph2dot(igraph)
     """
 
-    if IGraph.order()==0:
-        print("Interaction Graph has no nodes.")
-        if FnameDOT!=None:
-            print("%s was not created."%FnameDot)
-        return
-
-    assert( type(IGraph.nodes()[0])==str )
-    
-    lines = ['digraph "Interaction Graph" {']
-    lines+= Utility.DiGraphs.digraph2dot( IGraph )
-    lines += ['}']
-
-    if FnameDOT==None:
-        return '\n'.join(lines)
-    
-    with open(FnameDOT, 'w') as f:
-        f.writelines('\n'.join(lines))
-    print("created %s"%FnameDOT)
+    return Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
 def igraph2image(IGraph, FnameIMAGE, Silent=False):
@@ -146,24 +129,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image( igraph, "mapk_igraph.svg" )
     """
 
-    assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
-
-    filetype = FnameIMAGE.split('.')[-1]
-
-    cmd = [CMD_DOT, "-T"+filetype, "-o", FnameIMAGE]
-    dotfile = igraph2dot( IGraph, FnameDOT=None)
-    
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=dotfile.encode() )
-    proc.stdin.close()
-
-    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print(out)
-        print('dot did not respond with return code 0')
-        raise Exception
-    
-    if not Silent:
-        print("created %s"%FnameIMAGE)
+    Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, Silent)
 
     
     

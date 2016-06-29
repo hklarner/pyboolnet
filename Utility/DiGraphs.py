@@ -17,7 +17,7 @@ import itertools
 
 
 
-def digraph2dot( DiGraph, Indent=1 ):
+def digraph2dotlines( DiGraph, Indent=1 ):
     """
     Basic function to create *dot* lines from a *networkx.DiGraph*.
 
@@ -170,6 +170,43 @@ def digraph2dot( DiGraph, Indent=1 ):
     return lines
 
 
+def digraph2dot(DiGraph, FnameDOT=None ):
+    """
+    Generates a *dot* file from *DiGraph* and saves it as *FnameDOT* or returns dot file as a string.
+    
+    **arguments**:
+        * *DiGraph*: networkx.DiGraph
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+    **example**::
+
+          >>> digraph2dot(digraph, "digraph.dot")
+          >>> digraph2dot(digraph)
+    """
+    
+    if DiGraph.order()==0:
+        print("Interaction Graph has no nodes.")
+        if FnameDOT!=None:
+            print("%s was not created."%FnameDot)
+        return
+
+    assert( type(DiGraph.nodes()[0])==str )
+    
+    lines = ['digraph {']
+    lines+= digraph2dotlines( DiGraph )
+    lines += ['}']
+
+    if FnameDOT==None:
+        return '\n'.join(lines)
+    
+    with open(FnameDOT, 'w') as f:
+        f.writelines('\n'.join(lines))
+    print("created %s"%FnameDOT)
+    
+
 def dot2image( FnameDOT, FnameIMAGE ):
     """
     Creates an image file from a *dot* file using ``dot -T? FnameDOT -o FnamePDF`` where ``?`` is one of the output formats supported by *dot*.
@@ -188,8 +225,6 @@ def dot2image( FnameDOT, FnameIMAGE ):
           dot2image( "mapk.dot", "mapk.pdf" )
     """
 
-    assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
-
     filetype = FnameIMAGE.split('.')[-1]
     
     
@@ -205,6 +240,26 @@ def dot2image( FnameDOT, FnameIMAGE ):
     
     print("created %s"%FnameIMAGE)
 
+
+def digraph2image( DiGraph, FnameIMAGE, Silent=False ):
+
+    filetype = FnameIMAGE.split('.')[-1]
+
+    cmd = [CMD_DOT, "-T"+filetype, "-o", FnameIMAGE]
+    dotfile = digraph2dot( DiGraph, FnameDOT=None)
+    
+    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate( input=dotfile.encode() )
+    proc.stdin.close()
+
+    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
+        print(out)
+        print('dot did not respond with return code 0')
+        raise Exception
+    
+    if not Silent:
+        print("created %s"%FnameIMAGE)
+    
 
 def subgraphs2tree( Subgraphs ):
     """
@@ -317,7 +372,7 @@ def tree2dotlines( Tree, Indent=1 ):
 
     lines = []
     lines+= [space+"subgraph cluster_%i {"%cluster_id]
-    lines+= [x for x in digraph2dot( DiGraph=root, Indent=Indent+1 )]
+    lines+= [x for x in digraph2dotlines( DiGraph=root, Indent=Indent+1 )]
     
     for successor in Tree.successors(root):
         subnodes = list(networkx.descendants(Tree,successor))+[successor]
