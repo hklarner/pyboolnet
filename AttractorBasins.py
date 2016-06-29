@@ -44,7 +44,7 @@ def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=Tru
         raise Exception
 
     igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = find_outdags(igraph)
+    outdags = InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
         print("excluding the out-dag %s"%outdags)
@@ -118,7 +118,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         cases = []
         for combination in PrimeImplicants.input_combinations(Primes):
             init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if consistent(x,combination)]
+            attr = [x for x in Attractors if are_consistent(x,combination)]
             cases.append( (init,attr) )
     else:
         cases = [("INIT TRUE",Attractors)]
@@ -271,7 +271,7 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     if StyleInputs:
         subgraphs = []
         for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if consistent(inputs,Diagram.node[x]["attractors"][0])]
+            nodes = [x for x in Diagram.nodes() if are_consistent(inputs,Diagram.node[x]["attractors"][0])]
             label = StateTransitionGraphs.subspace2str(Primes,inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
             
@@ -285,10 +285,40 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     networkx.relabel_nodes(graph,mapping,copy=False)
         
     InteractionGraphs.igraph2image(graph, FnameIMAGE)
-    
+
+
+def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
+    graph = networkx.DiGraph()
+    graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
+
+    for node, data in Diagram.nodes(data=True):
+        x = len(data["attractors"])
+        if not x in graph:
+            graph.add_node(x, size=data["size"])
+        else:
+            graph.node[x]["size"]+= data["size"]
+
+    size_total = float(2**len(Primes))
+    for x, data in graph.nodes(data=True):
+        size_percent = data["size"] / size_total
+        graph.node[x]["label"] = "<%s<br/>states: %s>"%(x,data["size"])
+        graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+        if size_percent>0.5: graph.node[x]["fontcolor"] = "0.0 0.0 0.8"
+
+    for source, target in Diagram.edges():
+        x = len(Diagram.node[source]["attractors"])
+        y = len(Diagram.node[target]["attractors"])
+        graph.add_edge(x,y)
+
+        
+    mapping = {x:str(x) for x in graph.nodes()}
+    networkx.relabel_nodes(graph,mapping,copy=False)
+        
+    InteractionGraphs.igraph2image(graph, FnameIMAGE)
+
 
 ## auxillary functions
-def consistent( X, Y):
+def are_consistent( X, Y):
     return all(X[k]==Y[k] for k in set(X).intersection(set(Y)))
 
 def merge_dicts(Dicts):
@@ -314,29 +344,7 @@ def project_attractors( Attractors, Names ):
 
 
 def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if consistent(x,y)]
-
-
-def find_outdags( DiGraph ):
-    """
-    finds the largest directed acyclic subgraph that is closed under the successors operation.
-    """
-
-    graph = DiGraph.copy()
-    
-    sccs = networkx.strongly_connected_components(graph)
-    sccs = [list(x) for x in sccs]
-    candidates = [scc[0] for scc in sccs if len(scc)==1]
-    candidates = [x for x in candidates if not graph.has_edge(x,x)]
-    sccs = [scc for scc in sccs if len(scc)>1]
-
-    graph.add_node("!")
-    for scc in sccs:
-        graph.add_edge(scc[0],"!")
-
-    outdags = [x for x in candidates if not networkx.has_path(graph,x,"!")]
-
-    return outdags
+    return [x for x in Attractors for y in Projection if are_consistent(x,y)]
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):
@@ -416,7 +424,7 @@ def tests():
     import json
     from networkx.readwrite import json_graph
 
-    if 1:
+    if 0:
         # raf 
         primes = Examples.get_primes("raf")
         update = "asynchronous"
@@ -426,7 +434,7 @@ def tests():
         expected = json_graph.node_link_graph(data)
         print diagrams_are_equal(diagram, expected)
     
-    if 1:
+    if 0:
         # positive feedback
         bnet = """
         v1,v2
@@ -441,7 +449,7 @@ def tests():
         print diagrams_are_equal(diagram, expected)
         diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
 
-    if 1:
+    if 0:
         # negative feedback
         bnet = """
         v1,!v2
@@ -457,7 +465,7 @@ def tests():
         print diagrams_are_equal(diagram, expected)
         diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
 
-    if 1:
+    if 0:
         # arellano_antelope
         primes = Examples.get_primes("arellano_rootstem")
         update = "asynchronous"
@@ -487,6 +495,8 @@ def tests():
 
         igraph = InteractionGraphs.primes2igraph(primes)
         InteractionGraphs.igraph2image(igraph,"Junk/igraph.pdf")
+
+        diagram2abstract_image(diagram, primes, "Junk/abstraction.pdf")
     
     # print json_graph.node_link_data(diagram)
     
