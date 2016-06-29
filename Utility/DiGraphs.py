@@ -188,7 +188,7 @@ def digraph2dot(DiGraph, FnameDOT=None ):
     """
     
     if DiGraph.order()==0:
-        print("Interaction Graph has no nodes.")
+        print("DiGrap has no nodes.")
         if FnameDOT!=None:
             print("%s was not created."%FnameDot)
         return
@@ -501,25 +501,6 @@ def digraph2condensationgraph( Digraph ):
     return cgraph
 
 
-def ancestors( DiGraph, Nodes ):
-    """
-    returns all ancestors of *Nodes*.
-    """
-
-    # single node
-    if type(Nodes)==str:
-        return networkx.ancestors(DiGraph, Nodes)
-
-    # several nodes
-    else:
-        result = set([])
-        for x in Nodes:
-            result.update( networkx.ancestors(DiGraph,x) )
-            
-        return sorted(result)
-
-
-
 def convert_nodes_to_anonymous_strings( DiGraph ):
     """
     used to convert meaningful nodes into anonymous stringified integers for drawing.
@@ -529,9 +510,65 @@ def convert_nodes_to_anonymous_strings( DiGraph ):
     networkx.relabel_nodes(DiGraph, mapping, copy=False)
 
 
+def successors( DiGraph, X ):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.successors(X)
+    else:
+        return list(set.union(*map(set,[DiGraph.successors(x) for x in X])))
 
 
+def predecessors( DiGraph, X ):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.predecessors(X)
+    else:
+        return list(set.union(*map(set,[DiGraph.predecessors(x) for x in X])))    
 
 
-                           
+def has_path( DiGraph, X, Y ):
+    assert("!s" not in DiGraph)
+    assert("!t" not in DiGraph)
+    
+    if X in DiGraph:
+        source = X
+    else:
+        source = "!s"
+        DiGraph.add_node("!s")
+        DiGraph.add_edges_from([("!s",x) for x in X])
+
+    if Y in DiGraph:
+        target = Y
+    else:
+        target = "!t"
+        DiGraph.add_node("!t")
+        DiGraph.add_edges_from([(y,"!t") for y in Y])
+
+    answer = networkx.has_path(DiGraph, source, target)
+    for x in ["!s","!t"]:
+        if x in DiGraph: DiGraph.remove_node(x)
+
+    return answer
+
+
+def has_edge( DiGraph, X, Y ):
+    
+    if X in DiGraph: source = [X]
+    if Y in DiGraph: target = [Y]
+
+    for x in X:
+        for y in Y:
+            if DiGraph.has_edge(x,y):
+                return True
+
+    return False
+    
+
+        
     

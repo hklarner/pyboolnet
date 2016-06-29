@@ -80,14 +80,12 @@ Bibliography
    C. Müssel, M. Hopfensitz and H. Kestler.
    Bioinformatics, 2010, volume 26, number 10, pages 1378-1380.
 
-
 .. _Prekas2012:
 
    *Prekas2012*:
    Quine-McCluskey algorithm.
    G. Prekas.
    https://github.com/prekageo/optistate/blob/master/qm.py
-  
      
 .. _Tarjan1972:
 
@@ -95,11 +93,22 @@ Bibliography
    Depth-first search and linear graph algorithms
    R. Tarjan.
    SIAM Journal of Computing, 1972, 1(2):146-160.
- 
 
+.. _Berenguier2013:
 
+   *Berenguier2013*:
+   Dynamical modeling and analysis of large cellular regulatory networks
+   D. Berenguier, C. Chaouiya, P. Monteiro, A. Naldi, E. Remy, D. Thieffry and L. Tichit
+   Chaos: An Interdisciplinary Journal of Nonlinear Science, 2013.
    
+.. _Tournier2009:
+
+   *Tournier2009*:
+   Uncovering operational interactions in genetic networks using asynchronous Boolean dynamics
+   L. Tournier and M. Chaves.
+   Theoretical Biology, 2009
    
+      
    
 .. include:: Substitutions.rst
 

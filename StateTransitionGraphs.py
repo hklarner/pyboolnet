@@ -904,9 +904,11 @@ def _divide_list_into_similar_length_lists(List):
     return lists
 
 
+# The SCC Graph
+
 def stg2sccgraph( STG ):
     """
-    Converts the *STG* into the SCC graph.
+    Computes the SCC graph of the *STG*. For a definition see Sec. 3.1 of :ref:`Tournier2009 <Tournier2009>`.
 
     **arguments**:
         * *STG*: state transition graph
@@ -920,21 +922,20 @@ def stg2sccgraph( STG ):
     """
 
     graph = Utility.DiGraphs.digraph2sccgraph(STG)
-    graph.graph["node"] = {"color":"none"}
+    graph.graph["node"] = {"color":"none","style":"filled"}
 
     for node in graph.nodes():
         lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+        if len(node)>1 or STG.has_edge(node[0],node[0]):
+            graph.node[node]["fillcolor"] = "lightgray"
 
     return graph
-    
+   
 
 def sccgraph2dot( SCCGraph, FnameDOT=None ):
     """
     Creates a *dot* file from a SCC graph.
-    Graph, node and edge attributes are passed to the *dot* file by adding the respective key and value pairs to the graph, node or edge data.
-    Node and edge defaults are set by the specials graph keys *"node"* and *"edge"* and must have attribute dictionaries as values.
-    For a list of attributes see http://www.graphviz.org/doc/info/attrs.html.
 
     **arguments**:
         * *SCCGraph*: state transition graph
@@ -956,8 +957,7 @@ def sccgraph2dot( SCCGraph, FnameDOT=None ):
 
 def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
     """
-    Creates an image file from a SCC graph using :ref:`installation_graphviz` and the layout engine *dot*.
-    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    Creates an image file from a SCC graph.
     
     **arguments**:
         * *SCCGraph*: SCC graph
@@ -974,9 +974,12 @@ def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
     Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
 
 
+
+# The Condensation Graph
+
 def stg2condensationgraph( STG ):
     """
-    Converts the *STG* into the condensation graph.
+    Converts the *STG* into the condensation graph, for a definition see :ref:`Klarner2015(b) <klarner2015approx>`.
 
     **arguments**:
         * *STG*: state transition graph
@@ -990,7 +993,7 @@ def stg2condensationgraph( STG ):
     """
 
     graph = Utility.DiGraphs.digraph2condensationgraph(STG)
-    graph.graph["node"] = {"color":"none"}
+    graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray"}
 
     for node in graph.nodes():
         lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
@@ -1002,9 +1005,6 @@ def stg2condensationgraph( STG ):
 def condensationgraph2dot( CGraph, FnameDOT=None ):
     """
     Creates a *dot* file from a condensation graph.
-    Graph, node and edge attributes are passed to the *dot* file by adding the respective key and value pairs to the graph, node or edge data.
-    Node and edge defaults are set by the specials graph keys *"node"* and *"edge"* and must have attribute dictionaries as values.
-    For a list of attributes see http://www.graphviz.org/doc/info/attrs.html.
 
     **arguments**:
         * *CGraph*: state transition graph
@@ -1012,7 +1012,6 @@ def condensationgraph2dot( CGraph, FnameDOT=None ):
 
     **returns**:
         * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
-
 
     **example**::
 
@@ -1026,8 +1025,7 @@ def condensationgraph2dot( CGraph, FnameDOT=None ):
 
 def condensationgraph2image(CGraph, FnameIMAGE, Silent=False):
     """
-    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
-    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    Creates an image file from the condensation graph.
     
     **arguments**:
         * *CGraph*: condensation graph
@@ -1043,3 +1041,105 @@ def condensationgraph2image(CGraph, FnameIMAGE, Silent=False):
     Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
     Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)    
 
+
+# The HTG
+
+def stg2htg( STG ):
+    """
+    Computes the HTG of the *STG*. For a definition see :ref:`Berenguier2013 <Berenguier2013>`.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *HTG* (networkx.DiGraph): the HTG of *STG*
+
+    **example**:
+
+        >>> htg = stg2htg(stg)
+    """
+
+    graph = networkx.DiGraph()
+    graph.graph["node"] = {"color":"none"}
+
+    sccs = []
+    cascades = []
+    attractors = []
+    for x in networkx.strongly_connected_components(STG):
+        x=tuple(x)
+        if len(x)>1 or STG.has_edge(x[0],x[0]):
+            sccs.append(x)
+            suc = Utility.DiGraphs.successors(STG,x)
+            if set(suc)==set(x):
+                attractors.append(x)
+        else:
+            cascades+= x
+
+    graph.add_nodes_from(sccs, style="filled", fillcolor="lightgray")
+    
+    sigma = {}
+    for x in cascades:
+        pattern = []
+        for i, A in enumerate(attractors):
+            if Utility.DiGraphs.has_path(STG,x,A):
+                pattern.append(i)
+        pattern = tuple(pattern)
+
+        if not pattern in sigma:
+            sigma[pattern] = []
+        sigma[pattern].append(x)
+
+    I = [tuple(x) for x in sigma.values()]
+    graph.add_nodes_from(I)
+
+    for X in graph.nodes():
+        for Y in graph.nodes():
+            if X==Y: continue
+            if Utility.DiGraphs.has_edge(STG,X,Y):
+                graph.add_edge(X,Y)
+
+    for node in graph.nodes():
+        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+
+    return graph
+    
+
+def htg2dot( HTG, FnameDOT=None ):
+    """
+    Creates a *dot* file of the *HTG*.
+
+    **arguments**:
+        * *HTG*: HTG
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+    **example**::
+
+          >>> htg2dot(cgraph, "mapk_htg.dot")
+    """
+
+    graph = HTG.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def htg2image(HTG, FnameIMAGE, Silent=False):
+    """
+    Creates an image file from the *HTG*.
+    
+    **arguments**:
+        * *HTG*: HTG
+        * *FnameIMAGE* (str): name of output file
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> htg2image(cgraph, "mapk_htg.pdf")
+    """
+
+    graph = HTG.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
