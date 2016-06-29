@@ -229,6 +229,14 @@ class TestStateTransitionGraphs(unittest.TestCase):
         sccg = StateTransitionGraphs.stg2sccgraph(stg)
         StateTransitionGraphs.sccgraph2image(sccg, fname_out)
         # no assertion
+
+    def test_stg2condensationgraph(self):
+        fname_out = os.path.join( FILES_OUT, "raf_cgraph.pdf" )
+        primes = Examples.get_primes("raf")
+        stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
+        cgraph = StateTransitionGraphs.stg2condensationgraph(stg)
+        StateTransitionGraphs.condensationgraph2image(cgraph, fname_out)
+        # no assertion
         
 
 
@@ -1352,7 +1360,7 @@ if __name__=="__main__":
     if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestStateTransitionGraphs("test_stg2sccgraph"))
+        suite.addTest(TestStateTransitionGraphs("test_stg2condensationgraph"))
         
         runner = unittest.TextTestRunner()
         runner.run(suite)

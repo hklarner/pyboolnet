@@ -876,10 +876,37 @@ def hamming_distance(Subspace1, Subspace2):
     return len([k for k,v in Subspace1.items() if k in Subspace2 and Subspace2[k]!=v])
 
 
+# auxillary for stg2sccgraph / stg2condensationgraph
+def _divide_list_into_similar_length_lists(List):
+    """
+    used for drawing pretty labels.
+    """
+    
+    width = sum(len(x) for x in List)
+    width = math.sqrt(width)
+
+    stack = list(List)
+    lists = []
+    remaining = sum(map(len,stack))
+    while remaining>width:
+        new  = stack.pop()
+        size = len(new)
+        line = [new]
+        while size<width:
+            new = stack.pop()
+            size+=len(new)
+            line+=[new]
+        lists.append(line)
+        remaining = sum(map(len,stack))
+    if stack:
+        lists.append(stack)
+
+    return lists
+
 
 def stg2sccgraph( STG ):
     """
-    Converts the *STG* into the *SCC* graph.
+    Converts the *STG* into the SCC graph.
 
     **arguments**:
         * *STG*: state transition graph
@@ -892,32 +919,14 @@ def stg2sccgraph( STG ):
         >>> sccgraph = stg2sccgraph(stg)
     """
 
-    sccg = Utility.DiGraphs.digraph2sccgraph(STG)
-    sccg.graph["node"] = {"color":"none"}
+    graph = Utility.DiGraphs.digraph2sccgraph(STG)
+    graph.graph["node"] = {"color":"none"}
 
-    for x in sccg.nodes():
-        width = sum(len(y) for y in x)
-        width = math.sqrt(width)
+    for node in graph.nodes():
+        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
 
-        stack = list(x)
-        lines = []
-        remaining = sum(map(len,stack))
-        while remaining>width:
-            new  = stack.pop()
-            size = len(new)
-            line = [new]
-            while size<width:
-                new = stack.pop()
-                size+=len(new)
-                line+=[new]
-            lines.append(",".join(line))
-            remaining = sum(map(len,stack))
-        if stack:
-            lines.append(",".join(stack))
-            
-        sccg.node[x]["label"]="<%s>"%"<br/>".join(lines)
-
-    return sccg
+    return graph
     
 
 def sccgraph2dot( SCCGraph, FnameDOT=None ):
@@ -947,7 +956,7 @@ def sccgraph2dot( SCCGraph, FnameDOT=None ):
 
 def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
     """
-    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
+    Creates an image file from a SCC graph using :ref:`installation_graphviz` and the layout engine *dot*.
     Use ``dot -T?`` to find out which output formats are supported on your installation.
     
     **arguments**:
@@ -957,10 +966,80 @@ def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
         
     **example**::
 
-          >>> stg2image(sccgraph, "mapk_sccgraph.pdf")
+          >>> sccgraph2image(sccgraph, "mapk_sccgraph.pdf")
     """
 
     graph = SCCGraph.copy()
     Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
     Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
+
+
+def stg2condensationgraph( STG ):
+    """
+    Converts the *STG* into the condensation graph.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *CGraph* (networkx.DiGraph): the condensation graph of *STG*
+
+    **example**:
+
+        >>> cgraph = stg2condensationgraph(stg)
+    """
+
+    graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    graph.graph["node"] = {"color":"none"}
+
+    for node in graph.nodes():
+        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+
+    return graph
+    
+
+def condensationgraph2dot( CGraph, FnameDOT=None ):
+    """
+    Creates a *dot* file from a condensation graph.
+    Graph, node and edge attributes are passed to the *dot* file by adding the respective key and value pairs to the graph, node or edge data.
+    Node and edge defaults are set by the specials graph keys *"node"* and *"edge"* and must have attribute dictionaries as values.
+    For a list of attributes see http://www.graphviz.org/doc/info/attrs.html.
+
+    **arguments**:
+        * *CGraph*: state transition graph
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+
+    **example**::
+
+          >>> condensationgraph2dot(cgraph, "mapk_cgraph.dot")
+    """
+
+    graph = CGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def condensationgraph2image(CGraph, FnameIMAGE, Silent=False):
+    """
+    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
+    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    
+    **arguments**:
+        * *CGraph*: condensation graph
+        * *FnameIMAGE* (str): name of output file
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> condensationgraph2image(cgraph, "mapk_cgraph.pdf")
+    """
+
+    graph = CGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)    
 
