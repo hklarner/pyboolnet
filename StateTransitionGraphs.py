@@ -209,6 +209,15 @@ def stg2image(STG, FnameIMAGE, Silent=False):
     if not Silent:
         print("created %s"%FnameIMAGE)
 
+
+def primes2image( Primes, Update, FnameIMAGE, InitialStates=lambda x: True ):
+    """
+    a shortcut for converting primes into images of stgs
+    """
+
+    stg = primes2stg( Primes, Update, InitialStates)
+    stg2image(stg, FnameIMAGE)
+    
         
 def copy( STG ):
     """
