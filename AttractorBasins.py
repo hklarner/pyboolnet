@@ -50,12 +50,13 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     outdags = InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
-        print("excluding the out-dag %s"%outdags)
+        print("basin_diagram(..)")
+        print(" excluding the out-dag %s"%outdags)
 
     components = networkx.connected_components(igraph.to_undirected())
     components = [list(x) for x in components]
     if not Silent:
-        print("working on %i connected component(s)"%len(components))
+        print(" working on %i connected component(s)"%len(components))
         
     counter = 0
     diagrams = []
@@ -127,6 +128,11 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         cases = [("INIT TRUE",Attractors)]
 
     counter = 0
+
+    if not Silent:
+        print(" basins_diagram_naive(..)")
+        print("  inputs: %i"%len(inputs))
+        print("  cases:  %i"%len(cases))
 
     # create nodes
     node = 0
