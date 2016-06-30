@@ -8,13 +8,10 @@ BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
 config = Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
+LAYOUT_ENGINES = {name:os.path.join(BASE, "Dependencies", config.get("Executables", name)) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 
 import networkx
 import itertools
-
-
-
 
 
 def digraph2dotlines( DiGraph, Indent=1 ):
@@ -207,28 +204,29 @@ def digraph2dot(DiGraph, FnameDOT=None ):
     print("created %s"%FnameDOT)
     
 
-def dot2image( FnameDOT, FnameIMAGE ):
+def dot2image( FnameDOT, FnameIMAGE, LayoutEngine ):
     """
-    Creates an image file from a *dot* file using ``dot -T? FnameDOT -o FnamePDF`` where ``?`` is one of the output formats supported by *dot*.
-    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    Creates an image file from a *dot* file using the Graphviz layout *LayoutEngine*.
+    The output format is detected automatically.
+    Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
     
     **arguments**:
-    
         * *FnameDOT*: name of input *dot* file
-        
         * *FnameIMAGE*: name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
 
-    **returns**: *None*
+    **returns**:
+        * *None*
         
     **example**::
 
-          dot2image( "mapk.dot", "mapk.pdf" )
+          >>> dot2image( "mapk.dot", "mapk.pdf" )
     """
 
     filetype = FnameIMAGE.split('.')[-1]
     
     
-    cmd = [CMD_DOT, "-T"+filetype, FnameDOT, "-o", FnameIMAGE]
+    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, FnameDOT, "-o", FnameIMAGE]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = proc.communicate()
 
@@ -241,11 +239,28 @@ def dot2image( FnameDOT, FnameIMAGE ):
     print("created %s"%FnameIMAGE)
 
 
-def digraph2image( DiGraph, FnameIMAGE, Silent=False ):
+def digraph2image( DiGraph, FnameIMAGE, LayoutEngine, Silent=False ):
+    """
+    Creates an image file from a *DiGraph* file using the Graphviz layout *LayoutEngine*.
+    The output format is detected automatically.
+    Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
+    
+    **arguments**:
+        * *FnameDOT*: name of input *dot* file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *FnameIMAGE*: name of output file
 
+    **returns**:
+        * *None*
+        
+    **example**::
+
+          >>> dot2image( "mapk.dot", "mapk.pdf" )
+    """
+    
     filetype = FnameIMAGE.split('.')[-1]
 
-    cmd = [CMD_DOT, "-T"+filetype, "-o", FnameIMAGE]
+    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, "-o", FnameIMAGE]
     dotfile = digraph2dot( DiGraph, FnameDOT=None)
     
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -1,6 +1,5 @@
 
 
-import math
 import random
 import itertools
 import heapq
@@ -19,7 +18,9 @@ config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
-dot2image = Utility.DiGraphs.dot2image
+
+def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
+    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
 
 
 def primes2stg( Primes, Update, InitialStates=lambda x: True ):
@@ -141,39 +142,39 @@ def stg2dot( STG, FnameDOT=None ):
     **returns**:
         * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
 
-
     **example**::
 
           >>> stg = primes2stg(primes, update, init)
-          >>> igraph.graph["label"] = "IRMA Network - State Transition Graph"
-          >>> igraph.graph["node"] = {"style":"filled", "color":"red"}
-          >>> igraph.graph["edge"] = {"arrowsize": 2.0}      
-          >>> igraph.node["001000"]["fontsize"] = 20
-          >>> igraph.edge["001110"]["001010"]["style"] = "dotted"
-          >>> stg2image( igraph, "irma_stg.pdf")
+          >>> stg.graph["label"] = "IRMA Network - State Transition Graph"
+          >>> stg.graph["node"] = {"style":"filled", "color":"red"}
+          >>> stg.graph["edge"] = {"arrowsize": 2.0}      
+          >>> stg.node["001000"]["fontsize"] = 20
+          >>> stg.edge["001110"]["001010"]["style"] = "dotted"
+          >>> stg2image(stg, "irma_stg.pdf")
     """
 
     return Utility.DiGraphs.digraph2dot(STG, FnameDOT)
 
 
-def stg2image(STG, FnameIMAGE, Silent=False):
+def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
     """
-    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
+    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the *LayoutEngine*.
     Use ``dot -T?`` to find out which output formats are supported on your installation.
     
     **arguments**:
         * *STG*: state transition graph
         * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
 
           >>> stg2image(stg, "mapk_stg.pdf")
-          >>> stg2image(stg, "mapk_stg.jpg")
-          >>> stg2image(stg, "mapk_stg.svg")
+          >>> stg2image(stg, "mapk_stg.jpg", "neato")
+          >>> stg2image(stg, "mapk_stg.svg", "dot")
     """
 
-    Utility.DiGraphs.digraph2image(STG, FnameIMAGE, Silent)
+    Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
     
         
 def copy( STG ):
@@ -876,34 +877,6 @@ def hamming_distance(Subspace1, Subspace2):
     return len([k for k,v in Subspace1.items() if k in Subspace2 and Subspace2[k]!=v])
 
 
-# auxillary for stg2sccgraph / stg2condensationgraph
-def _divide_list_into_similar_length_lists(List):
-    """
-    used for drawing pretty labels.
-    """
-    
-    width = sum(len(x) for x in List)
-    width = math.sqrt(width)
-
-    stack = list(List)
-    lists = []
-    remaining = sum(map(len,stack))
-    while remaining>width:
-        new  = stack.pop()
-        size = len(new)
-        line = [new]
-        while size<width:
-            new = stack.pop()
-            size+=len(new)
-            line+=[new]
-        lists.append(line)
-        remaining = sum(map(len,stack))
-    if stack:
-        lists.append(stack)
-
-    return lists
-
-
 # The SCC Graph
 
 def stg2sccgraph( STG ):
@@ -925,7 +898,7 @@ def stg2sccgraph( STG ):
     graph.graph["node"] = {"color":"none","style":"filled"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
         if len(node)>1 or STG.has_edge(node[0],node[0]):
             graph.node[node]["fillcolor"] = "lightgray"
@@ -955,13 +928,14 @@ def sccgraph2dot( SCCGraph, FnameDOT=None ):
     return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
-def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
+def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
     Creates an image file from a SCC graph.
     
     **arguments**:
         * *SCCGraph*: SCC graph
         * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
@@ -971,7 +945,7 @@ def sccgraph2image(SCCGraph, FnameIMAGE, Silent=False):
 
     graph = SCCGraph.copy()
     Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
 
 
@@ -987,7 +961,7 @@ def stg2condensationgraph( STG ):
     **returns**:
         * *CGraph* (networkx.DiGraph): the condensation graph of *STG*
 
-    **example**:
+    **example**::
 
         >>> cgraph = stg2condensationgraph(stg)
     """
@@ -996,7 +970,7 @@ def stg2condensationgraph( STG ):
     graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
 
     return graph
@@ -1023,23 +997,24 @@ def condensationgraph2dot( CGraph, FnameDOT=None ):
     return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
-def condensationgraph2image(CGraph, FnameIMAGE, Silent=False):
+def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
     Creates an image file from the condensation graph.
     
     **arguments**:
         * *CGraph*: condensation graph
         * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
 
-          >>> condensationgraph2image(cgraph, "mapk_cgraph.pdf")
+          >>> condensationgraph2image(cgraph, "dot", "mapk_cgraph.pdf")
     """
 
     graph = CGraph.copy()
     Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)    
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
 
 
 # The HTG
@@ -1054,7 +1029,7 @@ def stg2htg( STG ):
     **returns**:
         * *HTG* (networkx.DiGraph): the HTG of *STG*
 
-    **example**:
+    **example**::
 
         >>> htg = stg2htg(stg)
     """
@@ -1099,7 +1074,7 @@ def stg2htg( STG ):
                 graph.add_edge(X,Y)
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in _divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
 
     return graph
@@ -1126,13 +1101,14 @@ def htg2dot( HTG, FnameDOT=None ):
     return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
-def htg2image(HTG, FnameIMAGE, Silent=False):
+def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
     Creates an image file from the *HTG*.
     
     **arguments**:
         * *HTG*: HTG
         * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
@@ -1142,4 +1118,4 @@ def htg2image(HTG, FnameIMAGE, Silent=False):
 
     graph = HTG.copy()
     Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, Silent)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
