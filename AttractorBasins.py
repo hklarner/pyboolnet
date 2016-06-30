@@ -27,7 +27,7 @@ CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
 
-def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=True ):
+def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silent=True ):
     """
     copy from basins_diagram_naive.
     removes out-dags.
@@ -38,6 +38,9 @@ def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=Tru
     """
     
     assert(Update in ["synchronous", "mixed", "asynchronous"])
+
+    if not Attractors:
+        Attractors = TrapSpaces.trap_spaces(Primes, "min")
     
     if not Primes:
         print("what are the basins of an empty Boolean network?")
@@ -235,12 +238,20 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
     graph.graph["edge"]  = {}
     #graph.graph["splines"] = "ortho"
-    
+
+    attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
+    attractors = [x for x in attractors if len(x)==1]
+    attractors = set(StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
+    attractors = sorted(attractors)
+
+    label = ["attractors:"]+["A%i = %s"%x for x in enumerate(attractors)]
+    label = "<%s>"%"<br/>".join(label)
+    graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
-        attr = data["attractors"]
-        attr = sorted(StateTransitionGraphs.subspace2str(Primes,x) for x in attr)
-        
+        attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
+        attr = Utility.Miscellaneous.divide_list_into_similar_length_lists(attr)
+        attr = [",".join(x) for x in attr]
         label = attr+["states: %s"%data["size"]]
         label = "<br/>".join(label)
         label = "<%s>"%label
@@ -301,7 +312,7 @@ def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
     size_total = float(2**len(Primes))
     for x, data in graph.nodes(data=True):
         size_percent = data["size"] / size_total
-        graph.node[x]["label"] = "<%s<br/>states: %s>"%(x,data["size"])
+        graph.node[x]["label"] = "<attractors: %s<br/>states: %s>"%(x,data["size"])
         graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
         if size_percent>0.5: graph.node[x]["fontcolor"] = "0.0 0.0 0.8"
 
