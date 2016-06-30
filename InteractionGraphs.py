@@ -16,7 +16,9 @@ config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
 
-dot2image = Utility.DiGraphs.dot2image
+
+def dot2image(FnameDOT, FnameIMAGE):
+    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
 def primes2igraph( Primes ):
@@ -129,7 +131,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image( igraph, "mapk_igraph.svg" )
     """
 
-    Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, Silent)
+    Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
 
     
     
