@@ -83,7 +83,7 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
         
 
     if not Silent:
-        print("basin diagram required %i executions of NuSMV"%counter)
+        print(" total executions of NuSMV: %i"%counter)
     
     return diagram
 
@@ -140,6 +140,11 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
     for init, attr in cases:        
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
+
+        if not Silent:
+            print("  vectors: %s"%vectors)
+            print("  potential nodes: %i-1"%2**len(attr))
+        
         for vector in itertools.product( *vectors ):
             if sum(vector)==0: continue
 
@@ -159,13 +164,12 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                         "size":         accepting["INITACCEPTING_SIZE"],
                         "formula":      accepting["INITACCEPTING"]}
 
-                
-                
-
             if data["size"]>0:
                 diagram.add_node(node, data)
                 node+=1
 
+    if not Silent:
+        print("  actual nodes: %i"%diagram.order())
 
     # list potential targets
     potential_targets = {}
@@ -178,7 +182,9 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 
         potential_targets[source] = succs
 
-
+    if not Silent:
+        print("  potential edges: %i"%sum(len(x) for x in potential_targets.values()))
+        
     # create edges
     for source, source_data in diagram.nodes(data=True):
         for target, target_data in potential_targets[source]:
@@ -227,7 +233,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     diagram.add_edge(source, target, data)
                     
     if not Silent:
-        print("basin diagram (naive) required %i executions of NuSMV"%counter)
+        print("  actual edges: %i"%diagram.size())
+        print(" total executions of NuSMV: %i"%counter)
 
     return diagram, counter
 
