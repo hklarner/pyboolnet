@@ -264,7 +264,7 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
 
         graph.add_node(node, label=label)
 
-        if len(attr)==1:
+        if len(data["attractors"])==1:
             graph.node[node]["color"] = "cornflowerblue"
             graph.node[node]["penwidth"] = "4"
 
