@@ -392,28 +392,7 @@ def add_style_subgraphs( IGraph, Subgraphs ):
         >>> add_style_subgraphs(igraph, subgraphs)
     """
 
-    for x in Subgraphs:
-
-        attr = None
-        if len(x)>=2 and type(x[1])==dict:
-            nodes, attr = x
-        else:
-            nodes = x
-
-        if not nodes: continue
-
-        subgraph = networkx.DiGraph()
-        subgraph.graph["color"] = "black"
-        subgraph.add_nodes_from(nodes)
-        if attr:
-            subgraph.graph.update(attr)
-
-        # overwrite existing subgraphs
-        for x in list(IGraph.graph["subgraphs"]):
-            if sorted(x.nodes()) == sorted(subgraph.nodes()):
-                IGraph.graph["subgraphs"].remove(x)
-                
-        IGraph.graph["subgraphs"].append(subgraph)
+    Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
 
 
 def add_style_default( IGraph ):

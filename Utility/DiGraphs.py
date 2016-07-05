@@ -583,6 +583,63 @@ def has_edge( DiGraph, X, Y ):
                 return True
 
     return False
+
+
+def add_style_subgraphs( DiGraph, Subgraphs ):
+    """
+    Adds the subgraphs given in *Subgraphs* to *DiGraph* - or overwrites them if they already exist.
+    Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
+    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
+    list of nodes and a dictionary of subgraph attributes.
+
+    .. note::
+    
+        *Subgraphs* must satisfy the following property:
+        Any two subgraphs have either empty intersection or one is a subset of the other.
+        The reason for this requirement is that *dot* can not draw intersecting subgraphs.
+
+    **arguments**:
+        * *DiGraph*: directed graph
+        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+
+    **example**:
+
+        >>> sub1 = ["v1","v2"]
+        >>> sub2 = ["v3","v4"]
+        >>> subgraphs = [sub1,sub2]
+        >>> add_style_subgraphs(graph, subgraphs)
+
+        >>> sub1 = (["v1","v2"], {"label":"Genes"})
+        >>> sub2 = ["v3","v4"]
+        >>> subgraphs = [(sub1,sub2]
+        >>> add_style_subgraphs(graph, subgraphs)
+    """
+
+    if not "subgraphs" in DiGraph.graph:
+        DiGraph.graph["subgraphs"] = []
+
+    for x in Subgraphs:
+
+        attr = None
+        if len(x)>=2 and type(x[1])==dict:
+            nodes, attr = x
+        else:
+            nodes = x
+
+        if not nodes: continue
+
+        subgraph = networkx.DiGraph()
+        subgraph.graph["color"] = "black"
+        subgraph.add_nodes_from(nodes)
+        if attr:
+            subgraph.graph.update(attr)
+
+        # overwrite existing subgraphs
+        for x in list(DiGraph.graph["subgraphs"]):
+            if sorted(x.nodes()) == sorted(subgraph.nodes()):
+                DiGraph.graph["subgraphs"].remove(x)
+                
+        DiGraph.graph["subgraphs"].append(subgraph)
     
 
         
