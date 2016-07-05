@@ -61,6 +61,14 @@ add_style_subspaces
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subspaces
 
 
+.. _add_style_subgraphs:
+
+add_style_subgraphs
+-------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subgraphs
+
+
 .. _add_style_mintrapspaces:
 
 add_style_mintrapspaces

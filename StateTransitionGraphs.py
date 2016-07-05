@@ -340,6 +340,39 @@ def add_style_subspaces( Primes, STG, Subspaces ):
         STG.graph["subgraphs"].append(subgraph)
 
 
+def add_style_subgraphs( STG, Subgraphs ):
+    """
+    Adds the subgraphs given in *Subgraphs* to *STG* - or overwrites them if they already exist.
+    Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
+    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
+    list of nodes and a dictionary of subgraph attributes.
+
+    .. note::
+    
+        *Subgraphs* must satisfy the following property:
+        Any two subgraphs have either empty intersection or one is a subset of the other.
+        The reason for this requirement is that *dot* can not draw intersecting subgraphs.
+
+    **arguments**:
+        * *STG*: state transition graph
+        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+
+    **example**:
+
+        >>> sub1 = ["001","010"]
+        >>> sub2 = ["111","011"]
+        >>> subgraphs = [sub1,sub2]
+        >>> add_style_subgraphs(stg, subgraphs)
+
+        >>> sub1 = (["001","010"], {"label":"critical states"})
+        >>> sub2 = ["111","011"]
+        >>> subgraphs = [(sub1,sub2]
+        >>> add_style_subgraphs(stg, subgraphs)
+    """
+
+    Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
+
+
 def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
     """
     A convenience function that combines :ref:`add_style_subspaces` and :ref:`TrapSpaces.trap_spaces <trap_spaces>`.
