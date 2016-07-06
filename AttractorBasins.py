@@ -123,7 +123,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         for combination in PrimeImplicants.input_combinations(Primes):
             init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
             attr = [x for x in Attractors if are_consistent(x,combination)]
-            cases.append( (init,attr) )
+            cases.append((init,attr))
     else:
         cases = [("INIT TRUE",Attractors)]
 
@@ -136,8 +136,10 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
 
     # create nodes
     node = 0
+    states_per_case = 2**(len(Primes)-len(inputs))
     diagram = networkx.DiGraph()
-    for init, attr in cases:        
+    for init, attr in cases:
+        states_covered = 0
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
 
@@ -147,6 +149,10 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         
         for vector in itertools.product( *vectors ):
             if sum(vector)==0: continue
+            if states_covered==states_per_case:
+                if not Silent:
+                    print("  avoided executions of NuSMV due to counting covered states.")
+                break
 
             if len(vector)==1:
                 data = {"attractors":   attr,
@@ -167,6 +173,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
             if data["size"]>0:
                 diagram.add_node(node, data)
                 node+=1
+                states_covered+= data["size"]
 
     if not Silent:
         print("  actual nodes: %i"%diagram.order())
@@ -234,12 +241,12 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     
     if not Silent:
         print("  actual edges: %i"%diagram.size())
-        print(" total executions of NuSMV: %i"%counter)
+        print("  total executions of NuSMV: %i"%counter)
 
     return diagram, counter
 
 
-def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=False):
+def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleAdvanced=False):
     """
     creates an image of diagram
     """
@@ -280,14 +287,14 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
         graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
         if size_percent>0.5: graph.node[node]["fontcolor"] = "0.0 0.0 0.8"            
 
-        if StyleDetails:
+        if StyleAdvanced:
             if all(d["finally_size"]==data["size"] for _,_,d in Diagram.out_edges(node,data=True)):
                 graph.node[node]["fontcolor"] = "cornflowerblue"
         
 
     for source, target, data in Diagram.edges(data=True):
         graph.add_edge(source, target)
-        if StyleDetails:
+        if StyleAdvanced:
             if data["finally_size"] < Diagram.node[source]["size"]:
                 graph.edge[source][target]["style"]="dashed"
         
