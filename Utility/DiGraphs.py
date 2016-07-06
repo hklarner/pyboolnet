@@ -475,34 +475,20 @@ def digraph2condensationgraph( Digraph ):
     cgraph = networkx.DiGraph()
     cgraph.add_nodes_from( noncascades )
     
-    # rgraph is a copy of IGraph with edges leaving noncascade components removed.
-    # will use rgraph to decide if their is a cascade path between U and W (i.e. edge in cgraph)
+    # rgraph is a copy of Digraph with edges leaving noncascade components removed.
+    # will use rgraph to decide if there is a cascade path between U and W (i.e. edge in cgraph)
     rgraph = networkx.DiGraph(Digraph.edges())
-    
-    for scc in noncascades:
-        for s in scc:
-            for t in rgraph.successors(s):
-                if not tuple([t]) in cascades:
-                    rgraph.remove_edge(s,t)
 
     for U,W in itertools.product(noncascades,noncascades):
         if U==W: continue
 
-        # special case: direct edge between U and W
-        for u,w in itertools.product(U,W):
-            if Digraph.has_edge(u,w):
-                cgraph.add_edge(U,W)
-                break
-        if cgraph.has_edge(U,W): continue
+        rgraph = Digraph.copy()
+        for X in noncascades:
+            if not X==U and not X==W:
+                rgraph.remove_nodes_from(X)
                 
-        # general case: cascade path from U to W
-        rgraph.add_nodes_from(['x','y'])
-        rgraph.add_edges_from([('x',u) for u in U]+[(w,'y') for w in W])
-
-        if networkx.has_path(rgraph, 'x','y'):
+        if has_path(rgraph, U, W):
             cgraph.add_edge(U,W)
-
-        rgraph.remove_nodes_from(['x','y'])
 
     # annotate each node with its depth in the hierarchy and an integer ID
     for ID, target in enumerate(cgraph.nodes()):
@@ -574,8 +560,8 @@ def has_path( DiGraph, X, Y ):
 
 def has_edge( DiGraph, X, Y ):
     
-    if X in DiGraph: source = [X]
-    if Y in DiGraph: target = [Y]
+    if X in DiGraph: X = [X]
+    if Y in DiGraph: Y = [Y]
 
     for x in X:
         for y in Y:
