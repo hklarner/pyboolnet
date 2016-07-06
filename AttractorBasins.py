@@ -4,6 +4,7 @@ import os
 import sys
 import itertools
 import math
+import random
 from operator import mul
 import networkx
 
@@ -142,16 +143,17 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         states_covered = 0
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
+        vectors = list(itertools.product(*vectors))
+        random.shuffle(vectors)
 
         if not Silent:
-            print("  vectors: %s"%vectors)
             print("  potential nodes: %i-1"%2**len(attr))
         
-        for vector in itertools.product( *vectors ):
+        for vector in vectors:
             if sum(vector)==0: continue
             if states_covered==states_per_case:
                 if not Silent:
-                    print("  avoided executions of NuSMV due to counting covered states.")
+                    print("  avoided executions of NuSMV due to state counting")
                 break
 
             if len(vector)==1:
