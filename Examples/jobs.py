@@ -20,8 +20,6 @@ if __name__=="__main__":
 
     for subdir, _, files in os.walk(rootdir):
         for fname in files:
-            if fname in ["remy_tumorigenesis.bnet", "grieco_mapk.bnet"]:
-                continue
             
             if fname.split(".")[1]=="bnet":
                 primes = FileExchange.bnet2primes(os.path.join(subdir,fname))
@@ -33,12 +31,12 @@ if __name__=="__main__":
                 
 
                 fname_attr = os.path.join(subdir,fname.split(".")[0]+"_attractors.md")
-                #AttractorDetection.create_attractor_report(primes, fname_attr)
+                AttractorDetection.create_attractor_report(primes, fname_attr)
 
                 attractors = TrapSpaces.trap_spaces(primes, "min")
                 fname_basins = os.path.join(subdir,fname.split(".")[0]+"_basins.pdf")
                 diagram = AttractorBasins.basins_diagram( primes, "asynchronous", attractors, ComputeBorders=False, Silent=False )
-                AttractorBasins.diagram2image(diagram, primes, fname_basins, StyleInputs=True, StyleDetails=False)
+                AttractorBasins.diagram2image(diagram, primes, fname_basins, StyleInputs=True, StyleAdvanced=False)
                 fname_abstract = os.path.join(subdir,fname.split(".")[0]+"_basins_abstract.pdf")
                 AttractorBasins.diagram2abstract_image(diagram, primes, fname_abstract)
 
