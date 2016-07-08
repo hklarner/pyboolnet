@@ -10,7 +10,7 @@ ModelChecking
 check_primes
 ------------
 
-.. autofunction:: PyBoolNet.ModelChecking.check_primes
+.. autofunction:: ModelChecking.check_primes
 
    
 .. _check_smv:  
@@ -18,7 +18,7 @@ check_primes
 check_smv
 ---------
 
-.. autofunction:: PyBoolNet.ModelChecking.check_smv
+.. autofunction:: ModelChecking.check_smv
 
 
 .. _primes2smv:
@@ -26,7 +26,7 @@ check_smv
 primes2smv
 ----------
 
-.. autofunction:: PyBoolNet.ModelChecking.primes2smv
+.. autofunction:: ModelChecking.primes2smv
 
 
 

@@ -10,7 +10,7 @@ AttractorBasins
 basins_diagram
 --------------
 
-.. autofunction:: PyBoolNet.AttractorBasins.basins_diagram
+.. autofunction:: AttractorBasins.basins_diagram
 
 
 .. _diagram2image:
@@ -18,6 +18,6 @@ basins_diagram
 diagram2image
 -------------
 
-.. autofunction:: PyBoolNet.AttractorBasins.diagram2image
+.. autofunction:: AttractorBasins.diagram2image
 
 

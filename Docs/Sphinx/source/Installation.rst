@@ -101,6 +101,7 @@ you might have to change the mode of the files to make sure that they are execut
 Locate the directory that contains |Software| (see :ref:`Installation of PyBoolNet <installation_software>` above) and run::
 
    ../PyBoolNet$ chmod -R 744 Dependencies/
+   ../PyBoolNet$ chmod -R +x Dependencies/
    ../PyBoolNet$
    
 If you get *No such file or directory* errors you are likely on a 64 bit Linux distribution that does not have 32-bit support. Follow the instructions here:
