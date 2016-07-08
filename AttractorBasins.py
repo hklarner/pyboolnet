@@ -18,7 +18,7 @@ import TrapSpaces
 import AttractorDetection
 import StateTransitionGraphs
 import InteractionGraphs
-import Examples
+import Repository
 import PrimeImplicants
 import Utility
 
@@ -137,9 +137,11 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
 
     # create nodes
     node = 0
+    total_potential_nodes = 0
     states_per_case = 2**(len(Primes)-len(inputs))
     diagram = networkx.DiGraph()
-    for init, attr in cases:
+    for i, (init, attr) in enumerate(cases):
+        total_potential_nodes+= 2**len(attr)-1
         states_covered = 0
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
@@ -147,7 +149,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         random.shuffle(vectors)
 
         if not Silent:
-            print("  potential nodes: %i-1"%2**len(attr))
+            print("  case %i, potential nodes: %i"%(i,2**len(attr)-1))
         
         for vector in vectors:
             if sum(vector)==0: continue
@@ -178,7 +180,9 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 states_covered+= data["size"]
 
     if not Silent:
-        print("  actual nodes: %i"%diagram.order())
+        perc = "= %.2f%%"%(100.*diagram.order()/total_potential_nodes) if total_potential_nodes else ""
+        print("  total potential nodes: %i"%total_potential_nodes)
+        print("  actual nodes: %i %s"%(diagram.order(),perc))
 
     # list potential targets
     potential_targets = {}
@@ -192,7 +196,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         potential_targets[source] = succs
 
     if not Silent:
-        print("  potential edges: %i"%sum(len(x) for x in potential_targets.values()))
+        total_potential_edges = sum(len(x) for x in potential_targets.values())
+        print("  potential edges: %i"%total_potential_edges)
         
     # create edges
     for source, source_data in diagram.nodes(data=True):
@@ -242,13 +247,14 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     diagram.add_edge(source, target, data)
                     
     if not Silent:
-        print("  actual edges: %i"%diagram.size())
+        perc = "= %.2f%%"%(100.*diagram.size()/total_potential_edges) if total_potential_edges else ""
+        print("  actual edges: %i %s"%(diagram.size(),perc))
         print("  total executions of NuSMV: %i"%counter)
 
     return diagram, counter
 
 
-def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleAdvanced=False):
+def diagram2image(Diagram, Primes, FnameIMAGE, FnameKEY=None, StyleInputs=True, StyleAdvanced=False):
     """
     creates an image of diagram
     """
@@ -268,7 +274,14 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleAdvanced=F
 
     label = ["attractors:"]+["A%i = %s"%x for x in enumerate(attractors)]
     label = "<%s>"%"<br/>".join(label)
-    graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
+
+    if FnameKEY:
+        key = networkx.DiGraph()
+        key.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue", shape="rect")
+        Utility.DiGraphs.digraph2image(key, FnameKEY, "dot")
+        
+    else:
+        graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
         attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
@@ -311,13 +324,13 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleAdvanced=F
         if subgraphs:
             graph.graph["subgraphs"] = []
 
-        InteractionGraphs.add_style_subgraphs(graph, subgraphs)
+        Utility.DiGraphs.add_style_subgraphs(graph, subgraphs)
 
 
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
         
-    InteractionGraphs.igraph2image(graph, FnameIMAGE)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
 
 
 def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
@@ -347,7 +360,7 @@ def diagram2abstract_image( Diagram, Primes, FnameIMAGE ):
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
         
-    InteractionGraphs.igraph2image(graph, FnameIMAGE)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
 
 
 ## auxillary functions
@@ -459,7 +472,7 @@ def tests():
 
     if 0:
         # raf 
-        primes = Examples.get_primes("raf")
+        primes = Repository.get_primes("raf")
         update = "asynchronous"
         attractors = TrapSpaces.trap_spaces(primes, "min")
         diagram = basins_diagram( primes, update, attractors, Silent=True )
@@ -500,7 +513,7 @@ def tests():
 
     if 0:
         # arellano_antelope
-        primes = Examples.get_primes("arellano_rootstem")
+        primes = Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
         attractors = TrapSpaces.trap_spaces(primes, "min")
         diagram = basins_diagram( primes, update, attractors, Silent=False )
@@ -516,7 +529,7 @@ def tests():
 
     if 1:
         # 
-        primes = Examples.get_primes("tournier_apoptosis")
+        primes = Repository.get_primes("tournier_apoptosis")
         update = "asynchronous"
         attractors = TrapSpaces.trap_spaces(primes, "min")
         diagram = basins_diagram( primes, update, attractors )
