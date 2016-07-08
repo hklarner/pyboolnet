@@ -11,6 +11,7 @@ For questions and suggestions do not hestitate to open issues or contact
  * heike.siebert@fu-berlin.de
 
 #### release notes for version 1.1 (July 2016)
+- bugfix for the computation of the condensation graph
 - added the parameter `LayoutEngine` to functions drawing STG type graphs. Possible engines: `dot,neato,fdp,sfdp,circo` and `twopi`
 - added functions for the `sccgraph`, the `condensationgraph` and the `HTG`
 - now following the git model described in [nvie.com](http://nvie.com/posts/a-successful-git-branching-model/)
