@@ -72,7 +72,7 @@ def check_primes( Primes, Update, InitialStates, Specification, DisableCounterEx
         cmd+= ['-dcx']
     if DynamicReorder:
         cmd+= ['-dynamic']
-    if DisableReachableStates:
+    if DisableReachableStates or AcceptingStates:
         cmd+= ['-df']
     if ConeOfInfluence and DisableCounterExamples:
         # coi messes with the output for the counterexamples printer of NuSMV
@@ -369,6 +369,7 @@ def _read_number(Line):
         return float(Line)
     else:
         return int(Line)
+
 
 def output2acceptingstates( NuSMVOutput ):
     """
