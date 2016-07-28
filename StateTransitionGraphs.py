@@ -370,7 +370,7 @@ def add_style_subgraphs( STG, Subgraphs ):
         >>> add_style_subgraphs(stg, subgraphs)
     """
 
-    Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
+    Utility.DiGraphs.add_style_subgraphs( STG, Subgraphs )
 
 
 def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
@@ -414,26 +414,8 @@ def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
                 STG.graph["subgraphs"].remove(x)
 
         STG.graph["subgraphs"].append( subgraph )
-
-
-def add_style_condensation( STG ):
-    """
-    Adds a separate graph to *STG* that depicts the *condensation graph*, a map of how the SCCs regulate each other.
-    A node in the condensation graph indicates how many states are contained in the respective SCC.
-    If the SCC contains a single state then its name is displayed.
-    
-    **arguments**:
-        * *STG*: state transition graph
+   
         
-    **example**::
-
-          >>> add_style_condensation(stg)
-    """
-
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
-    STG.graph["condensation"] = condensation_graph    
-        
-
 def add_style_path( STG, Path, Color, Penwidth=3 ):
     """
     Sets the color of all nodes and edges involved in the given *Path* to *Color*.
@@ -928,11 +910,11 @@ def stg2sccgraph( STG ):
     """
 
     graph = Utility.DiGraphs.digraph2sccgraph(STG)
-    graph.graph["node"] = {"color":"none","style":"filled"}
+    graph.graph["node"] = {"color":"none","style":"filled","shape":"rect"}
 
     for node in graph.nodes():
         lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
-        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
         if len(node)>1 or STG.has_edge(node[0],node[0]):
             graph.node[node]["fillcolor"] = "lightgray"
 
@@ -1000,11 +982,11 @@ def stg2condensationgraph( STG ):
     """
 
     graph = Utility.DiGraphs.digraph2condensationgraph(STG)
-    graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray"}
+    graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray","shape":"rect"}
 
     for node in graph.nodes():
         lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
-        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
     
@@ -1074,7 +1056,7 @@ def stg2htg( STG ):
     cascades = []
     attractors = []
     for x in networkx.strongly_connected_components(STG):
-        x=tuple(x)
+        x=tuple(sorted(x))
         if len(x)>1 or STG.has_edge(x[0],x[0]):
             sccs.append(x)
             suc = Utility.DiGraphs.successors(STG,x)
@@ -1083,12 +1065,12 @@ def stg2htg( STG ):
         else:
             cascades+= x
 
-    graph.add_nodes_from(sccs, style="filled", fillcolor="lightgray")
+    graph.add_nodes_from(sccs, style="filled", fillcolor="lightgray", shape="rect")
     
     sigma = {}
     for x in cascades:
         pattern = []
-        for i, A in enumerate(attractors):
+        for i, A in enumerate(sccs):
             if Utility.DiGraphs.has_path(STG,x,A):
                 pattern.append(i)
         pattern = tuple(pattern)
@@ -1097,18 +1079,19 @@ def stg2htg( STG ):
             sigma[pattern] = []
         sigma[pattern].append(x)
 
-    I = [tuple(x) for x in sigma.values()]
+    I = [tuple(sorted(x)) for x in sigma.values()]
     graph.add_nodes_from(I)
 
     for X in graph.nodes():
         for Y in graph.nodes():
             if X==Y: continue
+            
             if Utility.DiGraphs.has_edge(STG,X,Y):
                 graph.add_edge(X,Y)
 
     for node in graph.nodes():
         lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
-        graph.node[node]["label"]="<%s>"%"<br/>".join(lines)
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
     
