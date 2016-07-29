@@ -8,16 +8,17 @@ import sys
 
 import networkx
 
-sys.path = ['..'] + sys.path
+sys.path = ['../..'] + sys.path
 
-import PyBoolNet
-from PyBoolNet import FileExchange as FEX
-from PyBoolNet import StateTransitionGraphs as STGs
-from PyBoolNet import InteractionGraphs as IGs
-from PyBoolNet import QuineMcCluskey as QMC
-from PyBoolNet import ModelChecking as MC
-from PyBoolNet import TrapSpaces as TS
-from PyBoolNet import AttractorDetection as AD
+import FileExchange as FEX
+import StateTransitionGraphs as STGs
+import InteractionGraphs as IGs
+import QuineMcCluskey as QMC
+import ModelChecking as MC
+import TrapSpaces as TS
+import AttractorDetection as AD
+import AttractorBasins as AB
+import Repository as repo
 
 
 
@@ -41,7 +42,69 @@ def pairs(List):
 def run():
 
 
-    RUN_ALL = 1
+    RUN_ALL = 0
+
+
+    if 1 or RUN_ALL:
+        print "creates basin diagrams"
+        primes = repo.get_primes("xiao_wnt5a")
+        diagram = AB.basins_diagram(primes, "asynchronous")
+        print diagram.order()
+        print diagram.node[4]["formula"]
+        print diagram.node[4]["size"]
+
+
+        primes = repo.get_primes("arellano_rootstem")
+        diagram = AB.basins_diagram(primes, "asynchronous")
+        AB.diagram2image(primes, diagram, "source/figure26.pdf")
+
+        AB.diagram2aggregate_image(primes, diagram, "source/figure27.pdf")
+
+    if 0 or RUN_ALL:
+        print "creates interaction graphs for all repository networks:"
+        s = []
+        for x in repo.get_all_names():
+            primes = repo.get_primes(x)
+            igraph = IGs.create_image(primes, "source/%s_igraph.pdf"%x)
+
+            s+= [x]
+            s+= ["-"*len(x)]
+            s+= [".. figure:: %s_igraph.pdf"%x]
+            s+= ["   :scale: 60%"]
+            s+= ["   :align: center"]
+            s+= [""]
+            s+= ["   Interaction graph of %s."%x]
+            s+= [""]
+            s+= [""]
+
+        print "\n".join(s)
+
+   
+
+   
+   
+
+    if 0 or RUN_ALL:
+        print "model checking with accepting states"
+
+        bnet = ["x0,   !x0&x1 | x2",
+                "x1,   !x0 | x1 | x2",
+                "x2,   x0&!x1 | x2"]
+        bnet = "\n".join(bnet)
+        primes = FEX.bnet2primes(bnet)
+        update = "asynchronous"
+        init = "INIT !x1"
+        spec = "CTLSPEC EF(AG(x0_STEADY))"
+
+        answer, accepting = MC.check_primes_with_acceptingstates(primes, update, init, spec)
+        for x in accepting.items():
+            print x
+
+        init = "INIT %s"%accepting["INITACCEPTING"]
+        spec = "CTLSPEC EF(STEADYSTATE)"
+        print MC.check_primes(primes, update, init, spec)
+
+        
 
     if 0 or RUN_ALL:
         print "primes from Python functions"
@@ -123,7 +186,7 @@ def run():
         IGs.igraph2image(igraph, "source/figure04.pdf")
 
     if 0 or RUN_ALL:
-        print "the SCC and condensation style"
+        print "the SCC style"
 
         bnet = ["v1, v1", "v2, v3 & v5", "v3, v1", "v4, v1", "v5, 1",
                 "v6, v7", "v7, v6 | v4", "v8, v6", "v9, v8", "v10, v7 & v11",
@@ -135,8 +198,7 @@ def run():
         igraph.graph["label"] = "Example 6: Interaction graph with SCC style"
         IGs.igraph2image(igraph, "source/figure05.pdf")
 
-        IGs.add_style_condensation(igraph)
-        igraph.graph["label"] = "Example 7: Interaction graph with SCC and condensation style"
+        igraph.graph["label"] = "Example 7: Interaction graph with SCC style"
         IGs.igraph2image(igraph, "source/figure06.pdf")
 
     if 0 or RUN_ALL:
@@ -362,7 +424,7 @@ def run():
         init = "INIT TRUE"
         spec = "LTLSPEC F(Raf & F(STEADYSTATE))"
         update = "asynchronous"
-        answer, counterex = MC.check_primes(primes, update, init, spec, False)
+        answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
         print answer
         if counterex:
             print " -> ".join(STGs.state2str(x) for x in counterex)
@@ -379,7 +441,7 @@ def run():
         
         init = "INIT TRUE"
         spec = "LTLSPEC F(Raf & F(STEADYSTATE))"
-        answer, counterex = MC.check_primes(primes, update, init, spec, False)
+        answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
         if counterex:
             " -> ".join(STGs.state2str(x) for x in counterex)
         
@@ -416,7 +478,7 @@ def run():
 
         init = "INIT GrowthFactor"
         spec = "LTLSPEC F(Proliferation)"
-        answer, counterex = MC.check_primes(primes, update, init, spec, False)
+        answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
         print init, spec, "is", answer
         STGs.add_style_path(stg, counterex, "red")
         stg.graph["label"] = "Example 21: Counterexample"
@@ -456,7 +518,7 @@ def run():
 
         init = "INIT Proliferation"
         spec = "CTLSPEC EX(Proliferation)"
-        answer, counterex = MC.check_primes(primes, update, init, spec, False)
+        answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
         print init, spec, "is", answer
         print counterex
         for x in counterex:
@@ -492,7 +554,7 @@ def run():
         Q2 = not MC.check_primes(primes, update, init, specQ2)
         print Q2
 
-        notQ2, counterex = MC.check_primes(primes, update, init, specQ2, False)
+        notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
         state = counterex[0]
         print STGs.state2str(state)
 
@@ -537,7 +599,7 @@ def run():
         STGs.stg2image(stg, "source/figure24.pdf")
 
 
-    if 1 or RUN_ALL:
+    if 0 or RUN_ALL:
         bnet = ["v1, !v1 | v3",
                 "v2, !v1 | v2&!v3",
                 "v3, !v2"]

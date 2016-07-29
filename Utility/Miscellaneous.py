@@ -30,11 +30,11 @@ def divide_list_into_similar_length_lists(List):
     lists = []
     remaining = sum(map(len,stack))
     while remaining>width:
-        new  = stack.pop()
+        new  = stack.pop(0)
         size = len(new)
         line = [new]
         while size<width:
-            new = stack.pop()
+            new = stack.pop(0)
             size+=len(new)
             line+=[new]
         lists.append(line)

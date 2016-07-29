@@ -17,4 +17,3 @@ Reference
    TemporalQueries
    TrapSpaces
    QuineMcCluskey
-   Repository

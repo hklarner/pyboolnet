@@ -17,9 +17,10 @@ import StateTransitionGraphs
 import TrapSpaces
 import ModelChecking
 import AttractorDetection
+import AttractorBasins
 import TemporalQueries
 import QuineMcCluskey
-import Examples
+import Repository
 import Utility
 
 FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
@@ -32,20 +33,36 @@ def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
 
 
-def update_input_files():
-    return
-    fname_in  = os.path.join( FILES_IN, "interactiongraphs_topology.bnet" )
-    fname_out_primes = os.path.join( FILES_IN, "interactiongraphs_topology.primes" )
-    fname_out_dot = os.path.join( FILES_IN, "interactiongraphs_topology.dot" )
-    primes = FileExchange.bnet2primes( BNET=fname_in, FnamePRIMES=fname_out_primes )
-    igraph = InteractionGraphs.primes2igraph( Primes=primes )
-    InteractionGraphs.igraph2dot( IGraph=igraph, FnameDOT=fname_out_dot )
+# for TestAttractorBasins
+import json
+from networkx.readwrite import json_graph
 
-    # convert .bnet files to .primes files
-    for name in ['trapspaces_tsfree','trapspaces_posfeedback']:
-        fname_in  = os.path.join( FILES_IN, name+".bnet" )
-        fname_out_primes = os.path.join( FILES_IN, name+".primes" )
-        primes = FileExchange.bnet2primes( BNET=fname_in, FnamePRIMES=fname_out_primes )
+class TestAttractorBasins(unittest.TestCase):
+    def test_basin_diagram(self):
+        primes = Repository.get_primes("arellano_rootstem")
+        update = "asynchronous"
+        attractors = TrapSpaces.trap_spaces(primes, "min")
+        diagram = AttractorBasins.basins_diagram( primes, update, attractors, Silent=False )
+        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 0, 'size': 128}, {'formula': '(!(AUXINS | (SCR | !(SHR))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 1, 'size': 64}, {'formula': '(!(AUXINS | !(JKD & (SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}], 'id': 2, 'size': 32}, {'formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 3, 'size': 8}, {'formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 4, 'size': 32}, {'formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 5, 'size': 20}, {'formula': '(AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 6, 'size': 128}, {'formula': '(!((SCR | !(SHR)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 7, 'size': 64}, {'formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 8, 'size': 2}, {'formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 9, 'size': 20}, {'formula': '(!(((IAA | !(JKD & (SCR & (SHR & (WOX))) | !JKD & !(MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 10, 'size': 6}, {'formula': '(!((((((WOX) | !SHR) | !SCR) | !MGP) | !JKD) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 11, 'size': 8}], 'links': [{'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 11, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 7, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 1, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 2, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 8, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 9, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 10, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 3, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 7, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 10, 'source': 8, 'finally_size': 2}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 7, 'source': 8, 'finally_size': 2}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 10, 'source': 9, 'finally_size': 20}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 11, 'source': 9, 'finally_size': 20}], 'multigraph': False}
+        expected = json_graph.node_link_graph(data)
+                
+        self.assertTrue(AttractorBasins.diagrams_are_equal(diagram, expected))
+                
+        fname_out = os.path.join( FILES_OUT, "basin_diagram.pdf" )
+                
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
+        AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
+        
+        
+        
+
+class TestRepository(unittest.TestCase):
+    def test_calls(self):
+        Repository.get_all_names()
+        Repository.get_primes("raf")
+        Repository.get_bnet("raf")
 
 
 class TestQuineMcCluskey(unittest.TestCase):
@@ -222,7 +239,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
     def test_stg2sccgraph(self):
         fname_out = os.path.join( FILES_OUT, "raf_sccgraph.pdf" )
-        primes = Examples.get_primes("raf")
+        primes = Repository.get_primes("raf")
         stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
         sccg = StateTransitionGraphs.stg2sccgraph(stg)
         StateTransitionGraphs.sccgraph2image(sccg, fname_out)
@@ -230,7 +247,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
     def test_stg2condensationgraph(self):
         fname_out = os.path.join( FILES_OUT, "raf_cgraph.pdf" )
-        primes = Examples.get_primes("raf")
+        primes = Repository.get_primes("raf")
         stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
         cgraph = StateTransitionGraphs.stg2condensationgraph(stg)
         StateTransitionGraphs.condensationgraph2image(cgraph, fname_out)
@@ -238,7 +255,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
     def test_stg2htg(self):
         fname_out = os.path.join( FILES_OUT, "raf_htg.pdf" )
-        primes = Examples.get_primes("raf")
+        primes = Repository.get_primes("raf")
         stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
         htg = StateTransitionGraphs.stg2htg(stg)
         StateTransitionGraphs.htg2image(htg, fname_out)
@@ -504,14 +521,14 @@ class TestModelChecking(unittest.TestCase):
         update = "asynchronous"
 
         ModelChecking.primes2smv(primes, update, init, spec, fname_out)
-        answer, accepting = ModelChecking.check_smv(fname_out, AcceptingStates=True)
+        answer, accepting = ModelChecking.check_smv_with_acceptingstates(fname_out)
 
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
         self.assertTrue( accepting==expected, msg )
 
-        answer, accepting = ModelChecking.check_primes(primes, update, init, spec, AcceptingStates=True)
+        answer, accepting = ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
@@ -521,21 +538,18 @@ class TestModelChecking(unittest.TestCase):
     def test_check_smv_true(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_true.smv" )
 
-        self.assertTrue(ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=True,
-                                                DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
+        self.assertTrue(ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
         
     def test_check_smv_false(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_false.smv" )
 
-        self.assertFalse(ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=True,
-                                                DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
+        self.assertFalse(ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
         
 
     def test_check_smv_counterexample(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_counterexample.smv" )
 
-        answer, counterex = ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=False, DynamicReorder=True,
-                                                    DisableReachableStates=True, ConeOfInfluence=True)
+        answer, counterex = ModelChecking.check_smv_with_counterexample(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True)
 
 
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
@@ -551,9 +565,7 @@ class TestModelChecking(unittest.TestCase):
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
                     {'v1':1,'v2':1,'v3':0},{'v1':1,'v2':1,'v3':1},{'v1':1,'v2':0,'v3':1})
 
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="asynchronous", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="asynchronous", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -566,9 +578,7 @@ class TestModelChecking(unittest.TestCase):
 
         expected = None
         
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="synchronous", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="synchronous", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -582,9 +592,7 @@ class TestModelChecking(unittest.TestCase):
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
                     {'v1':1,'v2':1,'v3':0},{'v1':1,'v2':1,'v3':1},{'v1':1,'v2':0,'v3':1})
 
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="mixed", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )        
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="mixed", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -1176,6 +1184,11 @@ class TestFileExchange(unittest.TestCase):
 
 class TestInteractionGraphs(unittest.TestCase):
 
+    def test_create_image(self):
+        fname = os.path.join( FILES_OUT, "interactiongraphs_create_image.pdf" )
+        primes = Repository.get_primes("raf")
+        InteractionGraphs.create_image(primes, fname)
+
     def test_outdag(self):
         igraph = networkx.DiGraph()
         igraph.add_edges_from([(1,1),(2,1),(2,3),(3,2),(2,4),(4,1),(4,5),(5,6),(6,6),(5,7)])
@@ -1358,12 +1371,11 @@ if __name__=="__main__":
 
 
     
-    if 0:
+    if 1:
         # run all tests
-        update_input_files()
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
         suite.addTest(TestStateTransitionGraphs("test_stg2sccgraph"))

@@ -175,7 +175,7 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
     """
 
     Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
-    
+        
         
 def copy( STG ):
     """
@@ -448,7 +448,7 @@ def add_style_path( STG, Path, Color, Penwidth=3 ):
             
 def add_style_default( Primes, STG ):
     """
-    A convenience function that adds styles for tendencies, SCCs, minimal trap spaces and the condensation graph.
+    A convenience function that adds styles for tendencies, SCCs and minimal trap spaces.
 
     **arguments**:
         * *Primes*: primes implicants
@@ -461,7 +461,6 @@ def add_style_default( Primes, STG ):
 
     add_style_sccs(STG)
     add_style_tendencies(STG)
-    add_style_condensation(STG)
     add_style_mintrapspaces(Primes, STG)
 
 

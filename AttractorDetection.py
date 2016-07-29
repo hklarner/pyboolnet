@@ -170,7 +170,7 @@ def univocal( Primes, Update, Trapspace ):
 
     **example**::
 
-        >>> mintspaces = TrapSpaces.trap_spaces(primes, 'min', None, None, 1000, None)
+        >>> mintspaces = TrapSpaces.trap_spaces(primes, "min")
         >>> trapspace = mintrapspaces[0]
         >>> answer, state, counterex = univocal(primes, trapspace, "asynchronous")
         >>> answer
@@ -195,7 +195,7 @@ def univocal( Primes, Update, Trapspace ):
     # univocality
     spec = 'CTLSPEC ' + TemporalQueries.EF_oneof_subspaces(primes, [attractor_state1])
     init = 'INIT TRUE'
-    answer, counterex = ModelChecking.check_primes(primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
     attractor_state1 = dict(list(attractor_state1.items()) + list(constants.items()))
 
@@ -251,6 +251,10 @@ def faithful( Primes, Update, Trapspace ):
     if type(Trapspace)==str:
         Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
+    # trivial case: steady state
+    if len(Trapspace)==len(Primes):
+        return True, None
+    
     # percolation
     primes = PrimeImplicants.copy(Primes)
     PrimeImplicants.create_constants(primes, Activities=Trapspace)
@@ -265,16 +269,16 @@ def faithful( Primes, Update, Trapspace ):
     # faithfulness
     spec = 'CTLSPEC AG(%s)'%TemporalQueries.EF_unsteady_states(primes)
     init = 'INIT TRUE'
-    answer, counterex = ModelChecking.check_primes(primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
     # success
     if answer:
-        return (True, None)
+        return True, None
 
     # failure
     else:
         attractor_state = dict(list(counterex[-1].items()) + list(constants.items()))
-        return (False, attractor_state)
+        return False, attractor_state
     
 
 def completeness_naive( Primes, Update, Trapspaces ):
@@ -316,7 +320,7 @@ def completeness_naive( Primes, Update, Trapspaces ):
     
     spec = "CTLSPEC " + TemporalQueries.EF_oneof_subspaces( Primes, Trapspaces )
     init = "INIT TRUE"
-    answer, counterex = ModelChecking.check_primes(Primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(Primes, Update, init, spec)
 
     if counterex:
         counterex = counterex[-1]
@@ -427,7 +431,7 @@ def completeness_iterative( Primes, Update ):
             ## lines 17,18: answer = ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
             spec = "CTLSPEC " + phi
-            answer, counterex = ModelChecking.check_primes(primes_restricted, Update, init, spec, DisableCounterExamples=False)
+            answer, counterex = ModelChecking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
             if not answer:
                 return (False, counterex[-1])
 

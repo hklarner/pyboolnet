@@ -123,7 +123,6 @@ def find_constants(Primes):
 
     return activities
 
-
             
 def copy(Primes):
     """
@@ -149,7 +148,6 @@ def copy(Primes):
                 primes_new[name][value].append(dict(prime))
 
     return primes_new
-
 
 
 def create_constants(Primes, Activities):
@@ -215,8 +213,6 @@ def create_blinkers(Primes, Names):
             Primes[name][1]=[{name:0}]
 
 
-
-
 def create_inputs(Primes, Names):
     """
     Overwrite *Primes* such that each name in *Names* becomes an input.
@@ -255,12 +251,11 @@ def create_inputs(Primes, Names):
 def remove_variables(Primes, Names):
     """
     Removes all variables contained in *Names* from *Primes*.
-    For safety it is required that the names of *Activities* exist in *Primes*.
+    For safety it is required that the names of *Names* exist in *Primes*.
 
     **arguments**:
         * *Primes*: prime implicants
         * *Names* (list): the names of variables to remove
-
 
     **example**::
 
@@ -271,8 +266,29 @@ def remove_variables(Primes, Names):
     assert(set(Names).issubset(set(Primes.keys())))
     
     for name in Names:
-        Primes.pop( name )
-        
+        Primes.pop(name)
+
+
+def remove_all_variables_except(Primes, Names):
+    """
+    Removes all variables except those in *Names* from *Primes*.
+    For safety it is required that the names of *Names* exist in *Primes*.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Names* (list): the names of variables to keep
+
+    **example**::
+
+            >>> names = ["PKC","GADD45","ELK1","FOS"]
+            >>> remove_all_variables_except(primes, names)
+    """
+
+    assert(set(Names).issubset(set(Primes.keys())))
+    
+    for name in Primes:
+        if not name in Names:
+            Primes.pop(name)
             
 
 def percolate_constants( Primes, RemoveConstants=False ):

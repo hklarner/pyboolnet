@@ -5,6 +5,14 @@
 PrimeImplicants
 ===============
 
+.. _primes_copy:
+
+copy
+----
+
+.. autofunction:: PrimeImplicants.copy
+
+
 .. _are_equal:
 
 are_equal
@@ -34,14 +42,6 @@ find_constants
 --------------
 
 .. autofunction:: PrimeImplicants.find_constants
-
-
-.. _primes_copy:
-
-copy
-----
-
-.. autofunction:: PrimeImplicants.copy
 
 
 .. _create_constants:
@@ -74,6 +74,14 @@ remove_variables
 ----------------
 
 .. autofunction:: PrimeImplicants.remove_variables
+
+
+.. _remove_all_variables_except:
+
+remove_all_variables_except
+---------------------------
+
+.. autofunction:: PrimeImplicants.remove_all_variables_except
 
 
 percolate_constants

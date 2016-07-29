@@ -135,34 +135,6 @@ def digraph2dotlines( DiGraph, Indent=1 ):
 
     if DiGraph.size()>0:
         lines+= ['']
-
-    # condensation graph
-    if "condensation" in DiGraph.graph:
-        lines+= ['']
-        condensation_graph = DiGraph.graph["condensation"]
-
-        if condensation_graph.order()>0:
-
-            lines+= [space+"subgraph cluster_condensation {"]
-            lines+= [space+"\t"+'label=<<B>Condensation Graph</B>>;']
-            lines+= [space+"\t"+'color="none";']
-            scc_ids = {}
-            for i, scc in enumerate(condensation_graph.nodes()):
-                scc_ids[scc] = "$scc%i"%i
-                
-            for scc in condensation_graph.nodes():
-                if len(scc)==1:
-                    line = '"%s" [label="%s"];'%(scc_ids[scc], scc[0])
-                else:    
-                    line = '"%s" [shape="circle", color="black", label="%i"];'%(scc_ids[scc], len(scc))
-                line = line
-                lines+= [space+"\t"+line]
-            lines+= ['']
-            
-            for scc1, scc2 in condensation_graph.edges():
-                line = '"%s" -> "%s"'%(scc_ids[scc1], scc_ids[scc2])
-                lines+= [space+"\t"+line]
-            lines+= [space+"}"]
             
     return lines
 
@@ -233,7 +205,7 @@ def dot2image( FnameDOT, FnameIMAGE, LayoutEngine ):
     if not (proc.returncode ==0) or not os.path.exists(FnameIMAGE):
         print(output)
         print(error)
-        print('"dot" finished with return code %i'%proc.returncode)
+        print('"%s" finished with return code %i'%(LayoutEngine,proc.returncode))
         raise Exception
     
     print("created %s"%FnameIMAGE)
@@ -356,6 +328,7 @@ def subgraphs2tree( Subgraphs ):
             node.graph["style"] = "filled"
         
         if not "fillcolor" in node.graph and not "style" in node.graph:
+            node.graph["color"] = "black"
             node.graph["fillcolor"] = "/prgn10/6"
             node.graph["style"] = "filled"
 

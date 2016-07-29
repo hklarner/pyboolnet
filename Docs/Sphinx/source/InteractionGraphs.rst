@@ -37,12 +37,21 @@ igraph2dot
 
 .. autofunction:: InteractionGraphs.igraph2dot
 
+
 .. _igraph2image: 
 
 igraph2image
 ------------
 
 .. autofunction:: InteractionGraphs.igraph2image
+
+
+.. _create_image: 
+
+create_image
+------------
+
+.. autofunction:: InteractionGraphs.create_image
 
 
 .. _add_style_interactionsigns:

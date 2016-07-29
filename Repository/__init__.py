@@ -6,6 +6,13 @@ BASE = os.path.normpath(BASE)
 import FileExchange
 import generator
 
+def names_with_fast_basin_computation():
+    result = ["arellano_rootstem","dahlhaus_neuroplastoma",
+              "davidich_yeast", "dinwoodie_life", "faure_cellcycle",
+              "irons_yeast", "randomnet_n7k3", "randomnet_n15k3",
+              "saadatpour_guardcell", "tournier_apoptosis", "xiao_wnt5a"]
+    
+    return result
 
 def get_all_names():
     """

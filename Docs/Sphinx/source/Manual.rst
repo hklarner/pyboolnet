@@ -122,7 +122,11 @@ To generate its prime implicants use the function :ref:`bnet2primes` of the modu
    
 Instead of a file name the functions also takes string contents of a *bnet* file::
 
-   >>> primes = FEX.bnet2primes("v1,v2 \n v2,v1")
+   >>> bnet = """
+   ...        v1,  v2
+   ...        v2,  v1
+   ...        """
+   >>> primes = FEX.bnet2primes(bnet)
    
 and a second argument can be used for saving the prime implicants as a *json* file::
 
@@ -280,7 +284,9 @@ Attributes are just dictionaries that are attached to nodes, edges and the graph
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
 or change their default appearance using graph attributes.
-For a list of all available attributes see http://www.graphviz.org/doc/info/attrs.html.
+For a list of all available attributes see
+
+   * http://www.graphviz.org/doc/info/attrs.html.
 
 Some node attributes are:
 
@@ -297,7 +303,9 @@ Some node attributes are:
 Colors can be set by names like *"red"*, *"green"* or *"blue"*,
 or by space-separated HSV values, e.g. *"0.1 0.2 1.0"*,
 or by a RGB value, e.g *"#40e0d0"*.
-For a list of predefined color names see for example http://www.graphviz.org/doc/info/colors.html.
+For a list of predefined color names see for example
+
+   * http://www.graphviz.org/doc/info/colors.html.
 
 The basic edge attributes are:
 
@@ -421,7 +429,7 @@ The result is shown in :ref:`the figure below <figure04>`.
    
    The interaction graph "*example05.pdf*" with styles added by :ref:`add_style_inputs`, :ref:`add_style_outputs` and :ref:`add_style_constants`.
 
-the SCCs and condensation style
+the SCCs style
 *******************************
 
 The function :ref:`add_style_sccs` defines a *dot* subgraph for every non-trivial *strongly connected component* (SCC) of the interaction graph.
@@ -444,17 +452,6 @@ Consider the network::
 
 The result is shown in :ref:`the figure below <figure05>`.
 
-In addition you may use :ref:`add_style_condensation` to add a small "map" of the SCC graph, which we call the condensation graph.
-Each SCC is replaced by a single node and there is an edge between two SCCs iff there is a "cascade path" between them,
-see :ref:`Klarner2015(b) <klarner2015approx>` for a formal definition.
-Since styles are additive we generate example 7 by the following lines::
-
-   >>> IGs.add_style_condensation(igraph)
-   >>> igraph.graph["label"] = "Example 7: Interaction graph with SCC and condensation style"
-   >>> IGs.igraph2image(igraph, "example07_igraph.pdf")   
- 
-The result is shown in :ref:`the figure below <figure06>`.
-
 .. _figure05:
 
 .. figure:: figure05.pdf
@@ -463,15 +460,6 @@ The result is shown in :ref:`the figure below <figure06>`.
    
    The interaction graph "*example06_igraph.pdf*" with attributes added by :ref:`add_style_sccs`.
 
-.. _figure06:
-
-.. figure:: figure06.pdf
-   :scale: 80%
-   :align: center
-   
-   The interaction graph "*example07_igraph.pdf*" with attributes added by :ref:`add_style_sccs` and :ref:`add_style_condensation`.
-
-         
 
 the subgraphs style
 *******************
@@ -634,7 +622,7 @@ By default, the full STG is constructed.
 If you want to draw the part of a STG that is reachable from an initial state or a set of initial states
 pass a third argument to :ref:`primes2stg`.
 For convenience you may choose one of several ways of specifying initial states.
-Either a list of states in *dict* or *str* format (see :ref:`states_subspaces_paths`)::
+Either a list of states in *dict* or *str* format, see :ref:`states_subspaces_paths`::
 
    >>> init = ["000", "111"]
    >>> init = ["000", {"v1":1,"v2":1,"v3":1}]
@@ -1022,8 +1010,8 @@ If a LTL query is false then :ref:`installation_nusmv` can return a finite path 
    possibly ending in a cycle.
    For a justification, see for example :ref:`Baier2008 <Baier2008>` Sec. 5.2.
 
-To return a counterexample pass the argument *DisableCounterExamples=False* to the function :ref:`check_primes`.
-The function will then always return a tuple that consists of the answer and a counterexample.
+To return a counterexample use the function :ref:`check_primes_with_counterexample`.
+The function returns the answer and a counterexample.
 Reconsider the following query, which we know is false, from above::
 
    >>> init = "INIT TRUE"
@@ -1031,17 +1019,18 @@ Reconsider the following query, which we know is false, from above::
    
 To retrieve the answer and a counterexample call::
 
-   >>> answer, counterex = MC.check_primes(primes, update, init, spec, False)
+   >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
 
-The counterexample will be a Python tuple of state dictionaries (recall :ref:`states_subspaces_paths`) if the query is false
-and *None* in case it is true and no counterexample exists.
-Hence, a typical way to inspect a counterexample involve a Python if-statement::
+The counterexample is a tuple of state dictionaries (recall :ref:`states_subspaces_paths`) if the query is false
+and *None* in case it is true (in which case no counterexample exists).
+Hence, a typical way to inspect a counterexample involves a Python if-statement::
 
    >>> if counterex:
    ...     print " -> ".join(STGs.state2str(x) for x in counterex)
    100 -> 101 -> 100
    
-Here, :ref:`state2str` is a function of the module :ref:`StateTransitionGraphs` that generates a state string from a state dictionary.
+Here, :ref:`state2str` is a "pretty print" function contained in the module :ref:`StateTransitionGraphs`.
+It generates a state string from a state dictionary.
 An alternative way of inspecting counterexample is by :ref:`STGs.add_style_path <add_style_path>`::
 
    >>> stg = STGs.primes2stg(primes, update)
@@ -1116,7 +1105,7 @@ In fact, the property *F(Proliferation)* is false, as :ref:`the figure below <fi
 
    >>> init = "INIT GrowthFactor"
    >>> spec = "LTLSPEC F(Proliferation)"
-   >>> answer, counterex = MC.check_primes(primes, update, init, spec, False)
+   >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
    >>> answer
    False
    >>> STGs.add_style_path(stg, counterex, "red")
@@ -1207,14 +1196,13 @@ To define this property we use the CTL operator *EX*::
    >>> spec "CTLSPEC EX(Proliferation)"
    >>> answer = MC.check_primes(primes, update, init, spec)
    False
-   >>> answer, counterex = MC.check_primes(primes, update, init, spec, False)
+   >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
    >>> counterex
    ({'DNAdamage': 1, 'Proliferation': 1, 'GrowthFactor': 0},)
    >>> STGs.state2str(counterex[0])
    101
-         
-The counterexample returns a paths that consists of a single state, namely 101, that does not satisfy *EX(Proliferation)*,
-i.e., that does not have a successor that is a proliferation state.
+
+The function :ref:`check_primes_with_counterexample` returns a counterexample, an initial state, namely 101, that does not satisfy the given CTL spec, i.e., *EX(Proliferation)*.
 The correctness of this answer can be confirmed by enumerating all successors of 101 (in this case a single successor)
 by using :ref:`STGs.successors_asynchronous <successors_asynchronous>`::
 
@@ -1229,7 +1217,7 @@ and checking that *Proliferation=0* for all of them.
    but the length of the path and which sub-formula is not satisfied by the state it leads to depend on the given formula.
    It is often easier to just return the initial state that does not satisfy the whole formula, using::
    
-      >>> answer, counterex = MC.check_primes(primes, update, init, spec, False)
+      >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
       >>> state = counterex[0]
 
 Existential Queries
@@ -1315,11 +1303,77 @@ Note also that since *specQ2* is false we can ask :ref:`installation_nusmv` to g
 an initial state that does not satisfy *specQ2*, i.e., a state that satisfies Q2.
 Counterexamples of existential queries are therefore often also called *witnesses*.
 
-   >>> notQ2, counterex = MC.check_primes(primes, update, init, specQ2, False)
+   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
    >>> state = counterex[0]
    >>> STGs.state2str(state)
    100
    
+
+Accepting States of CTL queries
+*******************************
+
+Since Version 2.0 PyBoolnet supports model checking with so-called accepting states.
+That is, PyBoolNet uses NuSMV-a_ to return a Boolean expression that represents all states that satisfy the CTL spec and another Boolean
+expression that represents all initial states that satisfy the CTL spec.
+The functionality of returning accepting states was implemented in NuSMV-a_, an extension of NuSMV_.
+To return the accepting states use the function :ref:`check_primes_with_acceptingstates` or :ref:`check_smv_with_acceptingstates`.
+It returns a tuple consisting of the answer and a dictionary with the following keys and values:
+
+   * ``"INIT"``: *str*, a factored formula representing the initial states
+   * ``"INIT_SIZE"``: *int*, the cardinality of the initial states
+   * ``"ACCEPTING"``: *str*, a factored formula representing the accepting states
+   * ``"ACCEPTING_SIZE"``: *int*, the cardinality of the accepting states
+   * ``"INITACCEPTING"``: *str*, a factored formula representing the initial and accepting states
+   * ``"INITACCEPTING_SIZE"``: *int*, the cardinality of the initial and accepting states
+
+Consider the previous network as an example::
+
+   >>> bnet = ["x0,   !x0&x1 | x2",
+   ...         "x1,   !x0 | x1 | x2",
+   ...         "x2,   x0&!x1 | x2"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FEX.bnet2primes(bnet)
+   
+We already know that the query with initial states ``!x1`` and the CTL spec ``EF(AG(x0_STEADY))`` is false.
+Using the function :ref:`check_primes_with_counterexample` we found an initial state that does not satisfy the specification, i.e., 000.
+The function :ref:`check_primes_with_counterexample` can be used to get a complete picture of the intial states that satisfy the spec::
+
+   >>> update = "asynchronous"
+   >>> init = "INIT !x1"
+   >>> spec = "CTLSPEC EF(AG(x0_STEADY))"
+   >>> answer, accepting = MC.check_primes_with_acceptingstates(primes, update, init, spec)
+   >>> accepting["INITACCEPTING"]
+   '!(x0 & (x1) | !x0 & (x1 | !(x2)))'
+   
+The result is a *factored formula* that represents the exact set of states that satisfy the spec in NuSMV syntax so that it can be re-used for subsequent queries.
+The number of initial and accepting states can be obtained by::
+
+   >>> accepting["INITACCEPTING_SIZE"]
+   3
+   
+which explains why the query is false, since there are four initial states, i.e., one that does not satisfy the spec::
+
+   >>> accepting["INIT_SIZE"]
+   4
+   
+It is also possible to obtain the complete set of states that satisfy the spec, i.e., including states that are not initial::
+
+   >>> accepting["ACCEPTING"]
+   'x0 & ((x2) | !x1) | !x0 & (x2)'
+   
+The size of this set tells us that there are two states outside of the initial one that also satisfy the spec::
+
+   >>> accepting["ACCEPTING_SIZE"]
+   5
+   
+Note that |software| does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+For example, we may query whether all initial states that satisfy the original spec also satisfy the property ``EF(STEADYSTATE)``::
+
+   >>> init = "INIT %s"%accepting["INITACCEPTING"]
+   >>> spec = "CTLSPEC EF(STEADYSTATE)"
+   >>> MC.check_primes(primes, update, init, spec)
+   True
+
    
 Computing Trap Spaces
 ---------------------
@@ -1403,12 +1457,6 @@ The result is shown in :ref:`the figure below <figure24>` in which ``-00`` is mi
    Minimal trap spaces on the other hand, can not intersect and can always be drawn in the same STG.
 
 
-
-
-
-
-
-
 Attractors
 ----------
 
@@ -1419,8 +1467,7 @@ Two different types of attractors are possible: either all activities stabilize 
 Formally, attractors are defined as the inclusion-wise minimal trap sets of a given STG which is equivalent to the so-called terminal SCCs of the state transition graph.
 One approach to computing the attractors is to use Tarjan's algorithm for computing the SCCs of a directed graph, see :ref:`Tarjan1972 <Tarjan1972>` and then to select those SCCs that are terminal, i.e., those for which there is no path to another SCC.
 This approach is implemented in the function :ref:`compute_attractors_tarjan`.
-As an example for computing attractors with this algorithm
-consider the following network and its asynchronous STG which is given in :ref:`the figure below <figure25>`::
+As an example for computing attractors with this algorithm consider the following network and its asynchronous STG which is given in :ref:`the figure below <figure25>`::
 
    >>> import AttractorDetection as AD
    >>> bnet = ["v1, !v1 | v3",
@@ -1487,6 +1534,79 @@ Hence, :ref:`find_attractor_by_randomwalk_and_ctl` should always be encapsulated
    ... except:
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
 
+
+Attractor Basins
+****************
+
+The module :ref:`AttractorBasins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
+In non-deterministic STGs there are usually states from which more than one attractor is reachable.
+But, not every combination of attractors has states that can reach exactly that subset of attractors.
+The function :ref:`basins_diagram` checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
+If there are states a basin node is created.
+An edge between basin nodes indicates the existence of a transition between two states of the respective sets of states.
+The nodes of a basin diagram have the following attributes:
+
+   * ``"formula"`` (str), the factored formula representing the states in that basin
+   * ``"size"`` (int), the number of states in that basin
+   * ``"attractors"`` (list), the list of attractors that define that basin (represented by individual states or subspaces)
+   
+The edges of a basin diagram have the following attributes:
+
+   * ``"finally_formula"`` (str), the factored formula that represents the states that can reach a state that can make the transition
+   * ``"finally_size"`` (int), the number of such states
+   
+Basin diagrams can be visualized with the function :ref:`diagram2image`.
+The function takes the primes, diagram and file name of the image as parameters.
+In addition you may specify *FnameATTRACTORS* if you want a separate file for the specification of the attractors.
+Otherwise they are included in the diagram image.
+Two parameters for styling the diagram are provided.
+*StyleInputs* highlight the basin nodes that belong to the same input combination and *StyleAdvanced* modifies the node and edge styles to
+highlight nodes and transition that are *homogeneous*. For details see the upcoming publication :ref:`Klarner2016 <klarner2016basins>`.
+
+Consider the following example::
+
+   >>> primes = REPO.get_primes("arellano_rootstem")
+   >>> diagram = AB.basins_diagram(primes, "asynchronous")
+   >>> AB.diagram2image(primes, diagram, "diagram.pdf")
+
+The output is given in :ref:`the figure below <figure26>`.
+It uses the following convention: basin nodes that belong to the same input combination are grouped as light green subgraphs.
+The fillcolor of a basin node reflects the proportion of states that belong to it: the darker the more states.
+Nodes are labeled by the attractors they can reach which are enumerated by A0, A1, etc.
+Cyclic attractros are represented by minimal trap spaces.
+
+Note that the function :ref:`basins_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
+or it will compute the minimal trap spaces and *assume* that they are complete and univocal.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness_iterative` and :ref:`univocal`.
+
+.. _figure26:
+
+.. figure:: figure26.pdf
+   :scale: 100%
+   :align: center
+   
+   The basin diagram of the network *arellano_rootstem* from the repository.
+   
+If you want to create a separate image for the basin and the states representing the attractors use the parameter *FnameATTRACTORS* of the
+function :ref:`diagram2image`::
+
+   >>> AB.diagram2image(primes, diagram, "diagram.pdf", "attractors.pdf")
+   
+Finally, in particular for diagrams with many nodes you may want to generate the so-called aggregate diagram in which nodes
+with the same number of reachable attractors are combined.
+That is, all nodes that can reach, for example, exactly two attractors (irrespective of which two attractors) are represented by a single node.
+An example is given in :ref:`the figure below <figure27>`:
+
+   >>> AB.diagram2aggregate_image(diagram, "aggregate.pdf")
+   
+.. _figure27:
+
+.. figure:: figure27.pdf
+   :scale: 100%
+   :align: center
+   
+   The aggregated basin diagram of the network *arellano_rootstem* from the repository.
+
 Approximations
 **************
 
@@ -1544,15 +1664,10 @@ See :ref:`completeness_naive` for details.
    >>> "min trap spaces are complete:", answer_complete
    min trap spaces are complete: True
 
-
-
 As an illustration, consider network (A) given in Figure 1 of :ref:`Klarner2015(a) <klarner2015trap>`.
 It is defined by the following functions::
 
-
-
 The resulting STG is shown in :ref:`the figure below <figure25>`.
-
 
 Its STG contains two cyclic attractors and its minimal trap space ``---`` contains two cyclic attractors and it therefore not univocal.
 
@@ -1578,7 +1693,6 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
    
    The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
    
-
    >>> mintspaces = TS.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
    ['---']

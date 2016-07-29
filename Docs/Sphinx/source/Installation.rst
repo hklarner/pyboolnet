@@ -3,21 +3,23 @@
 
 .. _installation_software:
 
+Installation
+============
 
 Installation
-------------
-
-Installation
-------------
+============
 
 Linux
-.....
+-----
 
-Download ``PyBoolNet-1.0_linux.tar.gz`` from https://sourceforge.net/projects/boolnetfixpoints.
+Download the latest release from
+
+   * https://github.com/hklarner/PyBoolNet/releases
+   
 |software| is written in Python 2.7 and packaged using *Distutils*.
 We recommend to install the package using *pip*::
 
-   $ sudo pip install PyBoolNet-1.0_linux.tar.gz
+   $ sudo pip install PyBoolNet-2.0_linux.tar.gz
    
 which should place the package here::
 
@@ -26,13 +28,13 @@ which should place the package here::
 where ``<user>`` is the name you are logged in with (to find out, type ``whoami``).   
 Use the option ``--user`` (this time literally, do not replace it with you actual user name) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-1.0.tar.gz --user
+   $ pip install PyBoolNet-2.0.tar.gz --user
    
 The package is likely going to be placed here::
 
    /usr/local/lib/python2.7.x/dist-packages/PyBoolNet
 
-To install |software| using *Distutils* unpack *PyBoolNet-1.0.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.0.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -55,12 +57,16 @@ You should now be able to import |software|::
    
    If you do not have *pip*, all files must be removed manually.   
 
+.. note::
+
+   |software| should also run with Python 3.
+   
 Windows
-.......
+-------
 Not available yet.
 
 Mac
-...
+---
 Not available yet.
 
 
@@ -78,11 +84,17 @@ The default location is::
 The file is a standard configuration file of ``name = value`` pairs. The default is::
 
    [Executables]
-   nusmv           = ./NuSMV-2.5.4/bin/NuSMV
-   gringo          = ./gringo-4.4.0-x86-linux/gringo
-   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86-linux
-   bnet2prime      = ./BNetToPrime/BNetToPrime
+   nusmv           = ./linux/NuSMV-a/NuSMVa
+   gringo          = ./linux/gringo-4.4.0/gringo
+   clasp           = ./linux/clasp-3.1.1/clasp-3.1.1-x86-linux
+   bnet2prime      = ./linux/BNetToPrime/BNetToPrime
    dot             = /usr/bin/dot
+   neato           = /usr/bin/neato
+   fdp             = /usr/bin/fdp
+   sfdp            = /usr/bin/sfdp
+   circo           = /usr/bin/circo
+   twopi           = /usr/bin/twopi
+   convert         = /usr/bin/convert
    
 Simply replace the default paths with the paths to your own installations.
 Note that ``./`` indicates a relative path while ``/`` is an absolute path.
@@ -93,24 +105,9 @@ To test whether the dependencies are correctly installed, run::
    >>> import PyBoolNet
    >>> PyBoolNet.Tests.dependencies.run()
    
-If you get *permission denied* erros like::
-
-   OSError: [Errno 13] Permission denied
-
-you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains |Software| (see :ref:`Installation of PyBoolNet <installation_software>` above) and run::
-
-   ../PyBoolNet$ chmod -R 744 Dependencies/
-   ../PyBoolNet$ chmod -R +x Dependencies/
-   ../PyBoolNet$
+For information on what to do when not all tests are OK see :ref:`Troubleshooting <installation_troubleshooting>`.
    
-If you get *No such file or directory* errors you are likely on a 64 bit Linux distribution that does not have 32-bit support. Follow the instructions here:
-
-   http://askubuntu.com/questions/231479/no-such-file-when-running-a-32-bit-program-on-a-64-bit-system
-
-You can also recompile BNetToPrime_, see its github repository for instructions, and download the 64 bit binaries of NuSMV_, gringo_ and clasp_. Make sure to update the paths in ``settings.cfg``.
-
-
+   
 .. _installation_bnettoprime:
 
 BNetToPrime
@@ -119,7 +116,10 @@ BNetToPrime
 BNetToPrime_ stands for "Boolean network to prime implicants".
 It is necessary to compute the prime implicants of a Boolean network. The binaries and source are available at:
 
-   https://github.com/xstreck1/BNetToPrime
+   * https://github.com/xstreck1/BNetToPrime
+
+You can also compile BNetToPrime_ from source, see the tool's homepage on github for instructions.
+Make sure to update the paths in ``settings.cfg``.
 
    
 .. _installation_potassco:
@@ -136,9 +136,11 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 The binaries and source are available at:
 
-   https://sourceforge.net/projects/potassco/files/clasp/3.1.1
-   
-   https://sourceforge.net/projects/potassco/files/gringo/4.4.0
+   * https://sourceforge.net/projects/potassco/files/clasp/3.1.1
+   * https://sourceforge.net/projects/potassco/files/gringo/4.4.0
+
+You can also compile gringo_ and clasp_ from source or download 64bit binaries, see the tool's homepage on sourceforge for instructions.
+Make sure to update the paths in ``settings.cfg``.
 
 
 .. _installation_nusmv:
@@ -147,13 +149,17 @@ NuSMV
 .....
 
 NuSMV_ is a symbolic model checker that we use to decide LTL and CTL queries.
+|software| requires the extension NuSMV-a_ for model checking with accepting states.
 
 .. note:: 
-   |software| is tested with NuSMV-2.5.4_.
+   |software| is tested with NuSMV-a_.
    
 Binaries and source available at:
 
-   http://nusmv.fbk.eu
+   * https://github.com/hklarner/NuSMV-a
+   
+You can also compile NuSMV-a_ from source, see the tool's homepage on github for instructions.
+Make sure to update the paths in ``settings.cfg``.
    
 
 .. _installation_graphviz:   
@@ -163,9 +169,9 @@ Graphviz
 
 The program *dot* is part of the graph visualization software Graphviz_ and available at
 
-   http://www.graphviz.org/
+   * http://www.graphviz.org/
    
-It is required to generate drawings of interaction graphs and state transition graph.
+It is required to generate drawings of interaction graphs and state transition graphs.
 To install it on Linux run::
 
    $ sudo apt-get install graphviz
@@ -184,7 +190,7 @@ To install it on linux run::
    
 ImageMagick_ is available at
 
-   http://www.imagemagick.org/
+   * http://www.imagemagick.org/
    
 
 .. _installation_networkx:
@@ -196,7 +202,7 @@ NetworkX_ is a Python package and required for standard operations on directed g
 deciding if a path between two nodes exists.
 The package is available at:
 
-   https://networkx.github.io
+   * https://networkx.github.io
    
 To install it using *pip* run::
 
@@ -226,7 +232,8 @@ To install it run::
 select a CRAN mirror and wait for the download and installation to finish.
 BoolNet_ is available at
 
-   https://cran.r-project.org/web/packages/BoolNet/index.html
+   * https://cran.r-project.org/web/packages/BoolNet/index.html
+
 
 .. _installation_ginsim:
 
@@ -241,8 +248,34 @@ No installation required, just download the latest version (tested with version 
    
 GINsim_ is available at
 
-   http://www.ginsim.org/
+   * http://www.ginsim.org/
    
+
+.. _installation_troubleshooting:   
+   
+Troubleshooting
+---------------
+permission denied
+.................
+If you get *permission denied* erros like::
+
+   OSError: [Errno 13] Permission denied
+
+you might have to change the mode of the files to make sure that they are executable.
+Locate the directory that contains |Software| (see :ref:`Installation of PyBoolNet <installation_software>` above) and run::
+
+   ../PyBoolNet$ chmod -R 744 Dependencies/
+   ../PyBoolNet$ chmod -R +x Dependencies/
+   ../PyBoolNet$
+   
+no such file or directory
+.........................   
+   
+If you get *No such file or directory* errors you are likely on a 64 bit Linux distribution that does not have 32-bit support. Follow the instructions here:
+
+   * http://askubuntu.com/questions/231479/no-such-file-when-running-a-32-bit-program-on-a-64-bit-system
+
+
    
 
 .. include:: Substitutions.rst
