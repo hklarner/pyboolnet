@@ -7,10 +7,12 @@ import ast
 import datetime
 
 import Utility
+import PrimeImplicants
+import TemporalQueries
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_NUSMV = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") ))
 
@@ -372,10 +374,10 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
         print('Raising an exception to force you to decide what you want to do with empty Boolean networks (e.g. via a try-except block).')
         raise Exception
 
-    names = [x for x in Primes if len(x)==1]
-    if names:
+    critical = [x for x in Primes if len(x)==1]
+    if critical:
         print('NuSMV requires variables names of at least two characters.')
-        print('The network contains the following single character variables names: %s'%str(names))
+        print('The network contains the following single character variables names: %s'%str(critical))
         raise Exception
 
     critical = [x for x in Primes if x.lower()=='successors']
@@ -409,7 +411,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
         raise Exception
               
 
-    names_sorted = sorted(Primes)
+    names = sorted(Primes)
     lines = ['-- created on %s using PyBoolNet'%datetime.date.today().strftime('%d. %b. %Y'),
              '-- available at "sourceforge.net/projects/boolnetfixpoints".',
              '',
@@ -417,42 +419,42 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
              'MODULE main']
 
     lines+= ['','VAR']
-    lines+= ['\t%s: boolean;'%name for name in names_sorted]
+    lines+= ['\t%s: boolean;'%name for name in names]
 
     lines+= ['']
     lines+= ['DEFINE']   
-    for name in names_sorted:
+    for name in names:
         
-        if Primes[name][1]==[{}]:
+        if Primes[name] == PrimeImplicants.CONSTANT_ON:
             expression = 'TRUE'
             
-        elif Primes[name][1]==[]:
+        elif Primes[name] == PrimeImplicants.CONSTANT_OFF:
             expression = 'FALSE'
             
         else:
-            expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
+            expression = ' | '.join(TemporalQueries.subspace2proposition(Primes, x) for x in Primes[name][1])
             
         lines+= ['\t%s_IMAGE := %s;'%(name, expression)]
 
     lines+= ['']
-    lines+= ['\t{n}_STEADY := ({n}_IMAGE = {n});'.format(n=name) for name in names_sorted]
+    lines+= ['\t{n}_STEADY := ({n}_IMAGE = {n});'.format(n=name) for name in names]
     lines+= ['']
-    x = ', '.join(['(!{n}_STEADY)'.format(n=name) for name in names_sorted])
+    x = ', '.join(['(!{n}_STEADY)'.format(n=name) for name in names])
     lines+= ['\tSUCCESSORS := count(%s);'%x]
     lines+= ['\tSTEADYSTATE := (SUCCESSORS = 0);']
         
     lines+= ['']
     lines+= ['ASSIGN']
     if Update=='synchronous':
-        lines+= ['\tnext({n}) := {n}_IMAGE;'.format(n=name) for name in names_sorted]
+        lines+= ['\tnext({n}) := {n}_IMAGE;'.format(n=name) for name in names]
 
     elif Update=='asynchronous':
-        lines+= ['\tnext({n}) := {{{n}, {n}_IMAGE}};'.format(n=name) for name in names_sorted]
-        lines+= ['','TRANS STEADYSTATE | count('+', '.join(['(next({n})!={n})'.format(n=name) for name in names_sorted])+')=1;']
+        lines+= ['\tnext({n}) := {{{n}, {n}_IMAGE}};'.format(n=name) for name in names]
+        lines+= ['','TRANS STEADYSTATE | count('+', '.join(['(next({n})!={n})'.format(n=name) for name in names])+')=1;']
 
     elif Update=='mixed':
-        lines+= ['\tnext({n}) := {{{n}, {n}_IMAGE}};'.format(n=name) for name in names_sorted]
-        lines+= ['','TRANS '+ ' | '.join(['STEADYSTATE']+['(next({n})!={n})'.format(n=name) for name in names_sorted])+';']
+        lines+= ['\tnext({n}) := {{{n}, {n}_IMAGE}};'.format(n=name) for name in names]
+        lines+= ['','TRANS '+ ' | '.join(['STEADYSTATE']+['(next({n})!={n})'.format(n=name) for name in names])+';']
 
     
         

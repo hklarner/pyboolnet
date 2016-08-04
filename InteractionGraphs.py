@@ -11,7 +11,7 @@ import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )

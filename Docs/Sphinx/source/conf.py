@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyBoolNet'
-copyright = '2015, Hannes Klarner'
+copyright = '2016, Hannes Klarner'
 author = 'Hannes Klarner'
 
 # The version info for the project you're documenting, acts as replacement for

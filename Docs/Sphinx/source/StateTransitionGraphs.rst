@@ -175,14 +175,6 @@ add_style_mintrapspaces
 .. autofunction:: StateTransitionGraphs.add_style_mintrapspaces
 
 
-.. _add_style_condensation:
-
-add_style_condensation
------------------------
-
-.. autofunction:: StateTransitionGraphs.add_style_condensation
-
-
 .. _add_style_path:
 
 add_style_path

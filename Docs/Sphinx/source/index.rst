@@ -23,7 +23,6 @@ The project home page is https://github.com/hklarner/PyBoolNet.
    
    Installation
    Manual
-   Repository
    Reference
    Bibliography
 

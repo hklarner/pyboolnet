@@ -182,8 +182,8 @@ def univocal( Primes, Update, Trapspace ):
 
     # percolation
     primes = PrimeImplicants.copy(Primes)
-    PrimeImplicants.create_constants(primes, Activities=Trapspace)
-    constants  = PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+    PrimeImplicants.create_constants(primes, Constants=Trapspace)
+    constants  = PrimeImplicants.percolate_and_remove_constants(primes)
         
     # trivial case: constants = unique steady state
     if primes == {}:
@@ -257,8 +257,8 @@ def faithful( Primes, Update, Trapspace ):
     
     # percolation
     primes = PrimeImplicants.copy(Primes)
-    PrimeImplicants.create_constants(primes, Activities=Trapspace)
-    constants  = PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+    PrimeImplicants.create_constants(primes, Constants=Trapspace)
+    constants  = PrimeImplicants.percolate_and_remove_constants(primes)
 
     # trivial case: free variables fix due to percolation
     if len(constants)>len(Trapspace):
@@ -370,7 +370,7 @@ def completeness_iterative( Primes, Update ):
     primes = PrimeImplicants.copy(Primes)
     
     if PrimeImplicants.find_constants(primes):
-        PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
 
 
 
@@ -381,11 +381,10 @@ def completeness_iterative( Primes, Update ):
     while currentset:                                       # line  5
         p, W        = currentset.pop()                      # line  6
 
-
         ## line 7: primes_reduced = ReducedNetwork(V,F,p)
         primes_reduced = PrimeImplicants.copy(primes)
-        PrimeImplicants.create_constants(primes_reduced, p)
-        PrimeImplicants.percolate_constants(primes_reduced, RemoveConstants=True)
+        PrimeImplicants.create_constants(primes_reduced, Constants=p)
+        PrimeImplicants.percolate_and_remove_constants(primes_reduced)
 
         ## line 8: cgraph = CondensationGraph(V_p,F_p)
         igraph = InteractionGraphs.primes2igraph(primes_reduced)
@@ -419,8 +418,7 @@ def completeness_iterative( Primes, Update ):
 
             ## line 14: primes_restricted = Restriction(V_p,F_p,U_dash)
             primes_restricted = PrimeImplicants.copy(primes_reduced)
-            remove = [x for x in primes_restricted if x not in U_dash]
-            PrimeImplicants.remove_variables(primes_restricted, remove)
+            PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
             
             ## line 15: Q = MinTrapSpaces(U',F|U')
             Q = TrapSpaces.trap_spaces(primes_restricted, "min")
@@ -430,10 +428,11 @@ def completeness_iterative( Primes, Update ):
 
             ## lines 17,18: answer = ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
-            spec = "CTLSPEC " + phi
+            spec = "CTLSPEC %s"%phi
+            
             answer, counterex = ModelChecking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
             if not answer:
-                return (False, counterex[-1])
+                return (False, counterex)
 
             ## line 19: Refinement.append(Intersection(p,Q))
             ## Intersection(*args) is defined below
@@ -442,13 +441,13 @@ def completeness_iterative( Primes, Update ):
             ## line 20: W_dash = SetUnion(W',U')
             W_dash.update(U_dash)
 
-        
         ## line 21
         for q in Intersection(refinement):
 
             ## line 22: q_tilde = Percolation(V,F,q)
             dummy = PrimeImplicants.copy(primes)
-            q_tilde = PrimeImplicants.percolate_constants(dummy, q)
+            PrimeImplicants.create_constants(dummy, Constants=q)
+            q_tilde = PrimeImplicants.percolate_and_keep_constants(dummy)
 
             ## lines 23, 24
             if q_tilde not in mintrapspaces:
@@ -576,12 +575,8 @@ def Intersection( *args ):
 
     # non-trivial case
     result = []
-    if args[0]!=[{}]:
-        print("args: %s"%args)
     for product in itertools.product(*args):
         items = []
-        if args[0]!=[{}]:
-            print("product: %s"%product)
         for subspace in product:
             for item in subspace.items():
                 items+= [item]

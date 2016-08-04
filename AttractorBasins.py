@@ -22,7 +22,7 @@ import Repository
 import PrimeImplicants
 import Utility
 
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
@@ -136,7 +136,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         cases = []
         for combination in PrimeImplicants.input_combinations(Primes):
             init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if are_consistent(x,combination)]
+            attr = [x for x in Attractors if Utility.Misc.dicts_are_consistent(x,combination)]
             cases.append((init,attr))
     else:
         cases = [("INIT TRUE",Attractors)]
@@ -318,7 +318,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     for node, data in Diagram.nodes(data=True):
         attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
-        attr = Utility.Miscellaneous.divide_list_into_similar_length_lists(attr)
+        attr = Utility.Misc.divide_list_into_similar_length_lists(attr)
         attr = [",".join(x) for x in attr]
         label = attr+["states: %s"%data["size"]]
         label = "<br/>".join(label)
@@ -350,7 +350,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
     if StyleInputs:
         subgraphs = []
         for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if are_consistent(inputs,Diagram.node[x]["attractors"][0])]
+            nodes = [x for x in Diagram.nodes() if Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
             label = StateTransitionGraphs.subspace2str(Primes,inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
             
@@ -415,19 +415,6 @@ def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
 
 
 ## auxillary functions
-def are_consistent( X, Y):
-    return all(X[k]==Y[k] for k in set(X).intersection(set(Y)))
-
-def merge_dicts(Dicts):
-    '''
-    merges any number of dicts (shallow copies),
-    precedence goes to key value pairs in latter dicts.
-    '''
-    
-    result = {}
-    for dictionary in Dicts:
-        result.update(dictionary)
-    return result
 
 def project_attractors( Attractors, Names ):
     result = set()
@@ -441,7 +428,7 @@ def project_attractors( Attractors, Names ):
 
 
 def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if are_consistent(x,y)]
+    return [x for x in Attractors for y in Projection if Utility.Misc.dicts_are_consistent(x,y)]
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):
@@ -460,7 +447,7 @@ def cartesian_product( Diagrams, Factor, ComputeBorders ):
             
         attrs = [x["attractors"] for _,x in product]
         attrs = list(itertools.product(*attrs))
-        attrs = [merge_dicts(x) for x in attrs]
+        attrs = [Utility.Misc.merge_dicts(x) for x in attrs]
         data["attractors"] = attrs
 
         node = tuple(x for x,_ in product)
@@ -523,18 +510,6 @@ def diagrams_are_equal(Diagram1, Diagram2):
 if __name__=="__main__":
     print("nothing to do")
 
-if 0:    
-    bnet = ExampleNetworks.grieco_mapk
-    bnet = tnet2
-    primes = FileExchange.bnet2primes(bnet)
-    update = "asynchronous"
-
-    attractors = TrapSpaces.trap_spaces(primes, "min")
-    #diagram1, count = basins_diagram_naive( primes, update, attractors, Silent=False )
-    #diagram2image(diagram1, primes, FnameIMAGE="diagram_naive.pdf", StyleInputs=False)
-    
-    diagram2 = basins_diagram(primes, update, attractors)
-    diagram2image(primes, diagram2, FnameIMAGE="junk.pdf")
 
 
                             

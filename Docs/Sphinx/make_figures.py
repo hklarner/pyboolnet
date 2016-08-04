@@ -10,6 +10,7 @@ import networkx
 
 sys.path = ['../..'] + sys.path
 
+import PrimeImplicants as PIs
 import FileExchange as FEX
 import StateTransitionGraphs as STGs
 import InteractionGraphs as IGs
@@ -44,8 +45,24 @@ def run():
 
     RUN_ALL = 0
 
+    if 0 or RUN_ALL:
+        print "modifications of networks"
 
-    if 1 or RUN_ALL:
+        
+        bnet = """
+        v1, 0
+        v2, 1
+        v3, v1&v2&v3&v4
+        v4, v3 & (v1|v2)
+        """
+        primes = FEX.bnet2primes(bnet)
+        
+        constants = PIs.find_constants(primes)
+        PIs.create_blinkers(primes, constants)
+        
+        print FEX.primes2bnet(primes)
+
+    if 0 or RUN_ALL:
         print "creates basin diagrams"
         primes = repo.get_primes("xiao_wnt5a")
         diagram = AB.basins_diagram(primes, "asynchronous")

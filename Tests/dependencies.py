@@ -32,7 +32,7 @@ if not os.path.exists(FNAME_SETTINGS):
     print("created %s"%FNAME_SETTINGS)
 
 
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 

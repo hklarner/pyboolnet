@@ -25,7 +25,7 @@ import Utility
 
 FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
 FILES_OUT  = os.path.join(BASE, "Tests", "Files")
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 
@@ -344,9 +344,7 @@ class TestAttractorDetection(unittest.TestCase):
         
 
     def test_faithful(self):
-        pass
-
-
+        
         bnet = ["v1, !v1&!v2 | !v2&!v3",
                 "v2, !v1&!v2&v3 | v1&!v3",
                 "v3, !v1&v3 | !v2"]
@@ -934,6 +932,59 @@ class TestTrapSpaces(unittest.TestCase):
         
 
 class TestPrimeImplicants(unittest.TestCase):
+    def test_create_disjoint_union(self):
+        primes1 = FileExchange.bnet2primes("A, B \n B, !A")
+        primes2 = FileExchange.bnet2primes("C, D \n D, C")
+        primes = FileExchange.bnet2primes("A, B \n B, !A \n C, D \n D, C")
+        result = PrimeImplicants.create_disjoint_union(primes1, primes2)
+        msg = "\nexpected: "+str(primes)
+        msg+= "\ngot:      "+str(result)
+        self.assertTrue( result==primes, msg )
+
+        primes1 = FileExchange.bnet2primes("A, B \n B, !A")
+        primes2 = FileExchange.bnet2primes("C, B \n D, C")
+        self.assertRaises(Exception, PrimeImplicants.create_disjoint_union, primes1, primes2)
+
+        
+    def test_remove_variables(self):
+        primes = FileExchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_variables(newprimes,["A","B","C"])
+        expected = {}
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_variables(Primes=primes,Names=[])
+        expected = primes
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_all_variables_except(Primes=newprimes,Names=["B","C"])
+        expected = FileExchange.bnet2primes("B, 0 \n C, 1")
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+        
+        newprimes = PrimeImplicants.copy(primes)
+        self.assertRaises(Exception, PrimeImplicants.remove_variables, newprimes, ["B"])
+        
+    def test_create_variables(self):
+        primes = FileExchange.bnet2primes("v1,v1\nv2,v1")
+
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v1":"v2"})
+        expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]} 
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue( answer==expected, msg )
+        
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v1":lambda v2: not v2})
+
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v3":"v2", "v4":lambda v3: v3})
+
+        newprimes = PrimeImplicants.copy(primes)
+        self.assertRaises(Exception, PrimeImplicants.create_variables, newprimes, {"v3":"v4"})
+    
     def test_input_combinations(self):
         bnet = "input1, input1 \n input2, input2 \n"
         primes = FileExchange.bnet2primes(bnet)
@@ -980,74 +1031,63 @@ class TestPrimeImplicants(unittest.TestCase):
         p2 = {"v1":[[{"v2":0}],[{"v2":1}]],"v2":[[{"v1":1},{"v2":0}],[{"v1":0,"v2":1}]]}
         self.assertTrue( PrimeImplicants.are_equal(p1,p2) )
 
-    def test_remove_variables(self):
-        primes = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=list(primes.keys()))
-        expected = {}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
-        primes   = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=[])
-        expected = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
-        primes = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=['B','C'])
-        expected = {'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
     def test_percolation(self):
         bnet = "A, 0\nB, A"
         primes = FileExchange.bnet2primes(bnet)
-        const = PrimeImplicants.percolate_constants(primes)
+        const = PrimeImplicants.percolate_and_keep_constants(primes)
+        self.assertTrue( const=={"A":0,"B":0} )
+
+        bnet = "A, 0\nB, A"
+        primes = FileExchange.bnet2primes(bnet)
+        const = PrimeImplicants.percolate_and_remove_constants(primes)
         self.assertTrue( const=={"A":0,"B":0} )
         
     def test_percolation1A(self):
         primes = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation1B(self):
         primes = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{}], []]} # 000
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation2A(self):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation2B(self):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[], [{}]]} # 001
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation3A(self):
         primes = {'A': [[{}], []], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation3B(self):
         primes = {'A': [[{}], []], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[], [{}]]}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation4A(self):
         primes = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation4B(self):
         primes = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
         expected = PrimeImplicants.copy(primes)
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_create_blinkers(self):
@@ -1371,18 +1411,18 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestStateTransitionGraphs("test_stg2sccgraph"))
-        suite.addTest(TestStateTransitionGraphs("test_stg2condensationgraph"))
-        suite.addTest(TestStateTransitionGraphs("test_stg2htg"))
+        suite.addTest(TestPrimeImplicants("test_create_variables"))
+        suite.addTest(TestPrimeImplicants("test_remove_variables"))
+        suite.addTest(TestPrimeImplicants("test_create_disjoint_union"))
         
-        runner = unittest.TextTestRunner()
+        runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
     if 0:
@@ -1390,7 +1430,7 @@ if __name__=="__main__":
 
         import inspect
 
-        class_name = TestModelChecking
+        class_name = TestPrimeImplicants
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):

@@ -97,10 +97,6 @@ A path that consists of two states is for example::
    >>> path = [x,y]
    
 
-
-
-
-
 .. _primes_from_bnet_files:
 
 primes from BNet files
@@ -149,6 +145,7 @@ To do so use :ref:`primes2bnet`::
    
 The module :ref:`FileExchange` can also export primes to *bns* and *genysis* files to use as inputs for the tools BNS_ of :ref:`Dubrova2011 <Dubrova2011>` and GenYsis_ of :ref:`Garg2008 <Garg2008>`, namely :ref:`primes2bns` and :ref:`primes2genysis`.
 
+
 .. _primes_from_ginsim_files:
 
 primes from GINsim files
@@ -168,6 +165,7 @@ Generate a *bnet* file from *mapk.sbml* with :ref:`BoolNet <installation_boolnet
 .. note::
 
    In general, GINsim files define multi-valued networks. If you generate primes from a GINsim file be sure that the underlying network is Boolean.
+
 
 .. _primes_from_python_functions:
 
@@ -709,8 +707,6 @@ The result is shown in :ref:`the figure below <figure12>`.
    
    The state transition graph "*example13_stg.pdf*" with attributes added by :ref:`add_style_path`.
    
-   
-   
 
 the SCCs style
 **************
@@ -819,9 +815,184 @@ The result is shown in :ref:`the figure below <figure16>`.
    :align: center
    
    The state transition graph *"example17_stg.pdf"* with attributes added by :ref:`add_style_default`.
+ 
+ 
+ 
+ 
+.. _sec:modifying_networks:
+
+Modifying Networks
+------------------
+Constant, inputs and blinkers
+*****************************
+
+There are various reasons why it may be required to modify an imported Boolean network, i.e., a primes dictionary.
+A typical example is when the goal is to enumerate a number of variations of a given network structure in order to collect those that satisfy a given specification, i.e., a model checking query.
+Functions for the modification of networks are contained in the module :ref:`PrimeImplicants`.
+Typically, these functions either find something, e.g. :ref:`find_inputs`,
+or create something, e.g. :ref:`create_constants` or remove something, e.g. :ref:`remove_variables`.
+But there are also functions that percolate values, enumerate input combinations and replace update functions.
+
+As an example consider the task of replacing all constant nodes by so-called *blinkers*, i.e.,
+variables that are negatively auto-regulated and are therefore repetatively changing their activity from *On* to *Off* back to *On*, and so on.
+A node v1 is constant if in the *bnet* file it is defined by either 0 or 1, e.g.::
+
+   v1,   0
+
+Note that such a node is not an input. A node v2 is an input iff::
+
+   v2,   v2
+   
+The difference is also visible in the interaction graph where constants have in-degree 0 and input are only regulated by themselves and the regulation is positive.
+Finally, a blinker is like an input but with negative auto-regulation, e.g. v3 is a blinker iff::
+
+   v3,   !v3
+   
+To replace all constants by blinker first we first need the names of the constants.
+If they are not known beforehand they may be computed using the function :ref:`find_constants`.
+To create the blinkers use the function :ref:`create_blinkers`::
+
+   >>> from PyBoolNet import PrimeImplicants as PIs
+   >>> bnet = """
+   ... v1,   0
+   ... v2,   1
+   ... v3,   v1&v2&v3&v4
+   ... v4,   v3 & (v1|v2)"""
+
+   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> names = PIs.find_constants(primes)
+   >>> names
+   ['v1','v2']
+   >>> PIs.create_blinkers(primes, names)
+   >>> FEX.primes2bnet(primes)
+   v1,   !v1
+   v2,   !v2
+   v3,   v1 & v2 & v3 & v4
+   v4,   v2 & v3 | v1 & v3
   
+Note that |software| modifies the primes object in place rather than creating and returning a modified copy.
+If you want to keep the original primes and modify a copy you have to create the copy explicitly::
+
+   >>> newprimes = PIs.copy(primes)
+   >>> PIs.create_inputs(newprimes, names)
+   
+   
+Percolating constants
+*********************
+A frequently used step in model analysis and model reduction is to compute the set of variables *that will become constant* due the constants already in the model.
+We call the network obtained by replacing the update functions of the new constants be the respective constant values the *percolated network*
+because we imagine the values to "trickle through" along cascades in the interaction graph where the original constants are at the top.
+Consider this example::
+
+   >>> bnet = """
+   ... v1,   0
+   ... v2,   v2
+   ... v3,   !v1 | v2"""
+   
+Although v3 is not a constant its update function will be constant at 1 once v1 has attained its constant value of 0.
+We say that the value of v1 percolates to v3, that is, determines the value of v3 in the long term.
+Networks with a lot of constants are easier to analyse and understand as these nodes can, for example, be discarded for many model checking queries.
+There are two functions for computing percolated networks:
+:ref:`percolate_and_keep_constants` and :ref:`percolate_and_remove_constants`.
+The second one removes all variables from the primes dict that became constant during the percolation while the second one keeps them.
+Both functions return a dictionary of constants.
+Keeping the constants results in::
+
+   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> constants = PIs.percolate_and_keep_constants(primes)
+   >>> constants
+   {'v1':0,'v3':1}
+   >>> FEX.primes2bnet(primes)
+   v1,   0
+   v2,   v2
+   v3,   1
+
+Here, v1 and v3 are kept in the model.   
+Removing the constants results in::
+
+   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> constants = PIs.percolate_and_remove_constants(primes)
+   >>> constants
+   {'v1':0,'v3':1}
+   >>> FEX.primes2bnet(primes)
+   v2,   v2
+
+Here, the constants v1 and v3 are removed.
 
 
+Removing, adding and creating variables
+***************************************
+You can not, in general, remove variables from a model because other variables may depend on the one you want to remove.
+In the example network below, how would you define the network obtained by removing v1 from it?::
+
+   v1,   !v1 | v2
+   v2,   v2 & v1
+   v3,   v1 & v2 & v3
+
+Clearly, you can not simply remove the definition of v1 because::
+
+   v2,   v2 & v1
+   v3,   v1 & v2 & v3
+
+is not well-defined, since v3 depends on a variable that is not specified.
+But, you may remove v3 and the result is a well-defined network::
+
+   v1,   !v1 | v2
+   v2,   v2 & v1
+   
+In general, you may remove variables that are *closed under the successor relation* in the interaction graph.
+That is, any set of variables that contains all its successors may be safely removed.
+There are two functions for removing variables depending on whether you specify the names of variables to keep or to remove:
+:ref:`remove_variables` and :ref:`remove_all_variables_except`.
+Both functions raise an exception if you try to remove a set of variables that is not closed under the successor relation.
+Example::
+
+   >>> bnet = """
+   ... v1,   !v1 | v2
+   ... v2,   v2 & v1
+   ... v3,   v1 & v2 & v3"""
+   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> PIs.remove_variables(primes, ["v3"])
+   >>> FEX.primes2bnet(primes)
+   v1,   !v1 | v2
+   v2,   v2 & v1
+   
+   
+To add a variable use the function :ref:`create_variables`.
+The update functions of new variables may either be specified as *bnet* strings or as Python function with correctly named parameters,
+see :ref:`primes_from_python_functions` for details on using Python functions to define variables.
+This function can also be used to modify existing variables as it replaces update functions if they already exist.
+The function raises an exception if the resulting network contains variables whose update functions are undefined.
+Example of correct use::
+
+   >>> primes = FEX.bnet2primes("v1, v2 \n v2, v1")
+   >>> create_variables(primes, {"v3": "!v4 | v1", "v4": lambda v1,v2: v1+v2==1})
+   >>> primes FEX.primes2bnet(primes)
+   v1, v2
+   v2, v1
+   v3, !v4
+   v4, v1&!v2 | !v1&v2
+   
+An example of violating the condition that all variables must be defined is::
+
+   >>> primes = FEX.bnet2primes("v1, v1")
+   >>> create_variables(primes, {"v2":"v3 | v4", "v3":"!v1"})
+   error: can not add variables that are dependent on undefined variables.
+   
+
+Input combinations
+******************
+To enumerate all possible input combinations of a given network use the function :ref:`input_combinations`::
+
+   >>> primes = FEX.bnet2primes("input1, input1 \n input2, input2")
+   >>> create_variables(primes, {"v1": "input1 & input2"})
+   >>> create_variables(primes, {"v2": "input1 | input2"})
+   >>> for x in input_combintations:
+   ...     print x
+   {'input1':0,'input2':0}
+   {'input1':1,'input2':0}
+   {'input1':0,'input2':1}
+   {'input1':1,'input2':1}
 
 
 .. _sec:model_checking:

@@ -11,6 +11,8 @@ For questions and suggestions do not hestitate to open issues or contact
  * heike.siebert@fu-berlin.de
 
 #### release notes for version 2.0 (August 2016)
+- added functions `create_variables`, `create_disjoin_union` to module PIs
+- split function `percolate_constants` from module PIs into `percolate_and_keep_constants` and `percolate_and_remove_constants` for clarity 
 - moved function `compute_attractors_tarjan` from module STGs to module AttractorDetection
 - split functions `check_primes` and `check_smv` into three functions each for _counterexamples_ and _acceptingstates_ to force control over return values
 - removed feature `add_style_condensationgraph` from module STGs
@@ -18,7 +20,7 @@ For questions and suggestions do not hestitate to open issues or contact
 - added the parameter `LayoutEngine` for drawing graphs. Possible engines: `dot,neato,fdp,sfdp,circo` and `twopi`
 - added functions for the `sccgraph`, the `condensationgraph` and the `HTG`
 - now following the git model described in [nvie.com](http://nvie.com/posts/a-successful-git-branching-model/)
-- refactored `Utility.py` in `Utility\DiGraphs.py` and `Utility\Miscellaneous.py`
+- refactored `Utility.py` in `Utility\DiGraphs.py` and `Utility\Misc.py`
 - added documentation source to `Docs\Sphinx`
 - added `AttractorBasins.py`, a library for visualizing basins of attraction
 - added support for model checking with _accepting states_ via [NuSMV-a](https://github.com/hklarner/NuSMV-a)

@@ -14,7 +14,7 @@ import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
@@ -912,7 +912,7 @@ def stg2sccgraph( STG ):
     graph.graph["node"] = {"color":"none","style":"filled","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
         if len(node)>1 or STG.has_edge(node[0],node[0]):
             graph.node[node]["fillcolor"] = "lightgray"
@@ -984,7 +984,7 @@ def stg2condensationgraph( STG ):
     graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
@@ -1089,7 +1089,7 @@ def stg2htg( STG ):
                 graph.add_edge(X,Y)
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Miscellaneous.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph

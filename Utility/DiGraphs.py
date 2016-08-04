@@ -2,16 +2,17 @@
 
 import os
 import subprocess
-import Miscellaneous
+import networkx
+import itertools
+
+import Misc
     
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
-config = Miscellaneous.myconfigparser.SafeConfigParser()
+config = Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 LAYOUT_ENGINES = {name:os.path.join(BASE, "Dependencies", config.get("Executables", name)) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 
-import networkx
-import itertools
 
 
 def digraph2dotlines( DiGraph, Indent=1 ):
@@ -492,7 +493,9 @@ def successors( DiGraph, X ):
     if X in DiGraph:
         return DiGraph.successors(X)
     else:
-        return list(set.union(*map(set,[DiGraph.successors(x) for x in X])))
+        sucs = set([])
+        for x in X: sucs.update(set(DiGraph.successors(x)))
+        return sorted(sucs)
 
 
 def predecessors( DiGraph, X ):
@@ -503,7 +506,9 @@ def predecessors( DiGraph, X ):
     if X in DiGraph:
         return DiGraph.predecessors(X)
     else:
-        return list(set.union(*map(set,[DiGraph.predecessors(x) for x in X])))    
+        preds = set([])
+        for x in X: preds.update(set(DiGraph.predecessors(x)))
+        return sorted(preds)
 
 
 def has_path( DiGraph, X, Y ):

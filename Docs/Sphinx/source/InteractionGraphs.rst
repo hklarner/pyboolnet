@@ -102,14 +102,6 @@ add_style_sccs
 .. autofunction:: InteractionGraphs.add_style_sccs
 
 
-.. _add_style_condensation:
-
-add_style_condensation
-----------------------
-
-.. autofunction:: InteractionGraphs.add_style_condensation
-
-
 .. _add_style_path:
 
 add_style_path
