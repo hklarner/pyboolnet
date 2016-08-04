@@ -10,7 +10,7 @@ import TemporalQueries
 import TrapSpaces
 import QuineMcCluskey
 import Tests
-import ExampleNetworks
+import Repository
 import Utility
 
 
