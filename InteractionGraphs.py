@@ -11,12 +11,13 @@ import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
 
-dot2image = Utility.DiGraphs.dot2image
+def dot2image(FnameDOT, FnameIMAGE):
+    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
 def primes2igraph( Primes ):
@@ -109,24 +110,7 @@ def igraph2dot( IGraph, FnameDOT=None ):
           >>> dotfile = igraph2dot(igraph)
     """
 
-    if IGraph.order()==0:
-        print("Interaction Graph has no nodes.")
-        if FnameDOT!=None:
-            print("%s was not created."%FnameDot)
-        return
-
-    assert( type(IGraph.nodes()[0])==str )
-    
-    lines = ['digraph "Interaction Graph" {']
-    lines+= Utility.DiGraphs.digraph2dot( IGraph )
-    lines += ['}']
-
-    if FnameDOT==None:
-        return '\n'.join(lines)
-    
-    with open(FnameDOT, 'w') as f:
-        f.writelines('\n'.join(lines))
-    print("created %s"%FnameDOT)
+    return Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
 def igraph2image(IGraph, FnameIMAGE, Silent=False):
@@ -146,26 +130,77 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image( igraph, "mapk_igraph.svg" )
     """
 
-    assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
+    Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
 
-    filetype = FnameIMAGE.split('.')[-1]
 
-    cmd = [CMD_DOT, "-T"+filetype, "-o", FnameIMAGE]
-    dotfile = igraph2dot( IGraph, FnameDOT=None)
+def create_image(Primes, FnameIMAGE, Styles=["interactionsigns", "sccs"]):
+    """
+    A convenience function for drawing interaction graphs directly from the prime implicants.
     
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=dotfile.encode() )
-    proc.stdin.close()
+    **arguments**:
+        * *Primes*: prime implicants
+        * *FnameIMAGE* (str): name of image
+        * *Styles* (list): the styles to be applied, a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs"]
+        
+    **example**::
 
-    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print(out)
-        print('dot did not respond with return code 0')
-        raise Exception
-    
-    if not Silent:
-        print("created %s"%FnameIMAGE)
+          >>> create_image(igraph, "mapk_igraph.pdf")
+    """
 
+    assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs"])))
+
+    igraph = primes2igraph(Primes)
     
+    if "interactionsigns" in Styles:
+        add_style_interactionsigns(igraph)
+    if "inputs" in Styles:
+        add_style_inputs(igraph)
+    if "outputs" in Styles:
+        add_style_outputs(igraph)
+    if "constants" in Styles:
+        add_style_constants(igraph)
+    if "sccs" in Styles:
+        add_style_sccs(igraph)
+
+    igraph2image(igraph, FnameIMAGE)
+        
+        
+
+
+def find_outdag( IGraph ):
+    """
+    Finds the maximal directed acyclic subgraph that is closed under the successors operation.
+    Essentially, these components are the "output cascades" which can be exploited by various algorithms, e.g.
+    the computation of basins of attraction.
+
+    **arguments**:
+        * *IGraph*: interaction graph
+
+    **returns**:
+        * *Names* (list): the outdag
+
+    **example**::
+
+        >>> find_outdag(igraph)
+        ['v7', 'v8', 'v9']
+    """
+
+    graph = IGraph.copy()
+    
+    sccs = networkx.strongly_connected_components(graph)
+    sccs = [list(x) for x in sccs]
+    candidates = [scc[0] for scc in sccs if len(scc)==1]
+    candidates = [x for x in candidates if not graph.has_edge(x,x)]
+    sccs = [scc for scc in sccs if len(scc)>1 or graph.has_edge(scc[0],scc[0])]
+
+    graph.add_node("!")
+    for scc in sccs:
+        graph.add_edge(scc[0],"!")
+
+    outdags = [x for x in candidates if not networkx.has_path(graph,x,"!")]
+
+    return outdags
+
     
 def add_style_interactionsigns( IGraph ):
     """
@@ -257,8 +292,7 @@ def add_style_inputs( IGraph ):
     if inputs:
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from(inputs)
-        subgraph.graph["label"] = "<<B>Inputs</B>>"
-        subgraph.graph["fontsize"] = "20"
+        subgraph.graph["label"] = "Inputs"
         
         # remove subgraphs for inputs added by add_style_sccs 
         for x in list(IGraph.graph["subgraphs"]):
@@ -288,8 +322,7 @@ def add_style_outputs( IGraph ):
     if outputs:
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from(outputs)
-        subgraph.graph["label"] = "<<B>Outputs</B>>"
-        subgraph.graph["fontsize"] = "20"
+        subgraph.graph["label"] = "Outputs"
         IGraph.graph["subgraphs"].append( subgraph )
         
 
@@ -341,28 +374,10 @@ def add_style_sccs( IGraph ):
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from(scc)
         subgraph.graph["style"] = "filled"
+        subgraph.graph["color"] = "none"
         subgraph.graph["fillcolor"] = "/greys9/%i"%col
         
         IGraph.graph["subgraphs"].append( subgraph )
-        
-
-
-def add_style_condensation( IGraph ):
-    """
-    Adds a separate graph to *IGraph* that depicts the *condensation graph*, a map of how the SCCs regulate each other.
-    A node in the condensation graph indicates how many variables are contained in the respective SCC.
-    If the SCC contains a single variable then its name is displayed.
-    
-    **arguments**:
-        * *IGraph*: interaction graph
-        
-    **example**::
-
-          >>> add_style_condensation(igraph)
-    """
-
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(IGraph)
-    IGraph.graph["condensation"] = condensation_graph
 
 
 def add_style_path( IGraph, Path, Color ):
@@ -424,33 +439,12 @@ def add_style_subgraphs( IGraph, Subgraphs ):
         >>> add_style_subgraphs(igraph, subgraphs)
     """
 
-    for x in Subgraphs:
-
-        attr = None
-        if len(x)>=2 and type(x[1])==dict:
-            nodes, attr = x
-        else:
-            nodes = x
-
-        if not nodes: continue
-
-        subgraph = networkx.DiGraph()
-        subgraph.graph["color"] = "black"
-        subgraph.add_nodes_from(nodes)
-        if attr:
-            subgraph.graph.update(attr)
-
-        # overwrite existing subgraphs
-        for x in list(IGraph.graph["subgraphs"]):
-            if sorted(x.nodes()) == sorted(subgraph.nodes()):
-                IGraph.graph["subgraphs"].remove(x)
-                
-        IGraph.graph["subgraphs"].append(subgraph)
+    Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
 
 
 def add_style_default( IGraph ):
     """
-    A convenience function that adds styles for interaction signs, SCCs, inputs, outputs, constants and also the condensation graph.
+    A convenience function that adds styles for interaction signs, SCCs, inputs, outputs and constants.
 
     **arguments**:
         * *IGraph*: interaction graph
@@ -467,9 +461,6 @@ def add_style_default( IGraph ):
     add_style_inputs(IGraph)
     add_style_outputs(IGraph)
     add_style_constants(IGraph)
-    add_style_condensation(IGraph)
-
-
 
 
 def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Delay=50, Loop=0 ):
@@ -488,7 +479,7 @@ def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Del
     The *Delay* parameter sets the frame rate and *Loop* the number of repititions,
     both are parameters that are directly passed to *convert*.
 
-    **arguments**.
+    **arguments**:
         * *IGraph*: interaction graph
         * *Activities* (list): sequence of activities
         * *Delay* (int): number of 1/100s between each frame
@@ -533,14 +524,6 @@ def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Del
         os.remove(fname)
     
     print("created %s"%FnameGIF)
-
-
-
-
-
-
-
-
 
 
 

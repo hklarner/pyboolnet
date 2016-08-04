@@ -1,0 +1,18 @@
+
+
+targets, factors
+
+# taken from
+#Faure, Adrien, et al. "Dynamical analysis of a generic Boolean model for the control of the mammalian cell cycle." Bioinformatics 22.14 (2006): e124-e131.
+
+Cdc20,               CycB
+CycA,                !cdh1 & CycA & !Rb & !Cdc20 | !cdh1 & E2F & !Rb & !Cdc20 | !UbcH10 & CycA & !Rb & !Cdc20 | !UbcH10 & E2F & !Rb & !Cdc20
+CycB,                !cdh1 & !Cdc20
+CycD,                CycD
+CycE,                E2F & !Rb
+E2F,                 !CycA & !Rb & !CycB | p27 & !Rb & !CycB
+Rb,                  !CycE & !CycD & !CycA & !CycB | !CycD & p27 & !CycB
+UbcH10,              UbcH10 & CycA | UbcH10 & CycB | UbcH10 & Cdc20 | !cdh1
+cdh1,                p27 & !CycB | Cdc20 | !CycA & !CycB
+p27,                 !CycD & p27 & !CycA & !CycB | !CycE & !CycD & !CycA & !CycB | !CycE & !CycD & p27 & !CycB
+

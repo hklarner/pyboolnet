@@ -33,10 +33,6 @@ def EF_nested_reachability(Primes, Subspaces):
     return result.replace("  &$","")
 
     
-    
-
-        
-    
 def AGEF_oneof_subspaces( Primes, Subspaces ):
     """
     Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given *Subspaces*.

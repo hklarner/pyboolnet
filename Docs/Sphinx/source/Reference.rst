@@ -10,9 +10,10 @@ Reference
    PrimeImplicants
    InteractionGraphs
    StateTransitionGraphs
-   ModelChecking
-   TrapSpaces
    AttractorDetection
+   AttractorBasins
+   
+   ModelChecking
    TemporalQueries
+   TrapSpaces
    QuineMcCluskey
-

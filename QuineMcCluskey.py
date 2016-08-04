@@ -66,6 +66,7 @@ def primes2mindnf( Primes ):
         expressions[name] = quine.get_function(minterms)
 
     return expressions
+
     
 def functions2primes( BooleanFunctions ):
     """

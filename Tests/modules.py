@@ -17,13 +17,15 @@ import StateTransitionGraphs
 import TrapSpaces
 import ModelChecking
 import AttractorDetection
+import AttractorBasins
 import TemporalQueries
 import QuineMcCluskey
+import Repository
 import Utility
 
 FILES_IN   = os.path.join(BASE, "Tests", "Files", "Input")
 FILES_OUT  = os.path.join(BASE, "Tests", "Files")
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 
@@ -31,20 +33,36 @@ def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
 
 
-def update_input_files():
-    return
-    fname_in  = os.path.join( FILES_IN, "interactiongraphs_topology.bnet" )
-    fname_out_primes = os.path.join( FILES_IN, "interactiongraphs_topology.primes" )
-    fname_out_dot = os.path.join( FILES_IN, "interactiongraphs_topology.dot" )
-    primes = FileExchange.bnet2primes( BNET=fname_in, FnamePRIMES=fname_out_primes )
-    igraph = InteractionGraphs.primes2igraph( Primes=primes )
-    InteractionGraphs.igraph2dot( IGraph=igraph, FnameDOT=fname_out_dot )
+# for TestAttractorBasins
+import json
+from networkx.readwrite import json_graph
 
-    # convert .bnet files to .primes files
-    for name in ['trapspaces_tsfree','trapspaces_posfeedback']:
-        fname_in  = os.path.join( FILES_IN, name+".bnet" )
-        fname_out_primes = os.path.join( FILES_IN, name+".primes" )
-        primes = FileExchange.bnet2primes( BNET=fname_in, FnamePRIMES=fname_out_primes )
+class TestAttractorBasins(unittest.TestCase):
+    def test_basin_diagram(self):
+        primes = Repository.get_primes("arellano_rootstem")
+        update = "asynchronous"
+        attractors = TrapSpaces.trap_spaces(primes, "min")
+        diagram = AttractorBasins.basins_diagram( primes, update, attractors, Silent=False )
+        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 0, 'size': 128}, {'formula': '(!(AUXINS | (SCR | !(SHR))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 1, 'size': 64}, {'formula': '(!(AUXINS | !(JKD & (SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}], 'id': 2, 'size': 32}, {'formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 3, 'size': 8}, {'formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 4, 'size': 32}, {'formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 5, 'size': 20}, {'formula': '(AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 6, 'size': 128}, {'formula': '(!((SCR | !(SHR)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 7, 'size': 64}, {'formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 8, 'size': 2}, {'formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 9, 'size': 20}, {'formula': '(!(((IAA | !(JKD & (SCR & (SHR & (WOX))) | !JKD & !(MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 10, 'size': 6}, {'formula': '(!((((((WOX) | !SHR) | !SCR) | !MGP) | !JKD) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 11, 'size': 8}], 'links': [{'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 11, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 7, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 1, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 2, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 8, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 9, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 10, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 3, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 7, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 10, 'source': 8, 'finally_size': 2}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 7, 'source': 8, 'finally_size': 2}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 10, 'source': 9, 'finally_size': 20}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 11, 'source': 9, 'finally_size': 20}], 'multigraph': False}
+        expected = json_graph.node_link_graph(data)
+                
+        self.assertTrue(AttractorBasins.diagrams_are_equal(diagram, expected))
+                
+        fname_out = os.path.join( FILES_OUT, "basin_diagram.pdf" )
+                
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
+        AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
+        AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
+        
+        
+        
+
+class TestRepository(unittest.TestCase):
+    def test_calls(self):
+        Repository.get_all_names()
+        Repository.get_primes("raf")
+        Repository.get_bnet("raf")
 
 
 class TestQuineMcCluskey(unittest.TestCase):
@@ -156,11 +174,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-
-
-
         
-
     def test_stg2dot(self):
         fname_in  = os.path.join( FILES_IN,  "irma.primes" )
         fname_out = os.path.join( FILES_OUT, "irma_stg.dot" )
@@ -168,7 +182,6 @@ class TestStateTransitionGraphs(unittest.TestCase):
         primes = FileExchange.read_primes(FnamePRIMES=fname_in)
         stg = StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous")
         StateTransitionGraphs.stg2dot(stg, fname_out)
-        
         # no assertion
 
     def test_stg2image(self):
@@ -223,6 +236,31 @@ class TestStateTransitionGraphs(unittest.TestCase):
         StateTransitionGraphs.random_state( Primes=primes )
         StateTransitionGraphs.random_state( Primes=primes, Subspace="111-0-" )
         # no assertion
+
+    def test_stg2sccgraph(self):
+        fname_out = os.path.join( FILES_OUT, "raf_sccgraph.pdf" )
+        primes = Repository.get_primes("raf")
+        stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
+        sccg = StateTransitionGraphs.stg2sccgraph(stg)
+        StateTransitionGraphs.sccgraph2image(sccg, fname_out)
+        # no assertion
+
+    def test_stg2condensationgraph(self):
+        fname_out = os.path.join( FILES_OUT, "raf_cgraph.pdf" )
+        primes = Repository.get_primes("raf")
+        stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
+        cgraph = StateTransitionGraphs.stg2condensationgraph(stg)
+        StateTransitionGraphs.condensationgraph2image(cgraph, fname_out)
+        # no assertion
+
+    def test_stg2htg(self):
+        fname_out = os.path.join( FILES_OUT, "raf_htg.pdf" )
+        primes = Repository.get_primes("raf")
+        stg = StateTransitionGraphs.primes2stg(primes, "asynchronous")
+        htg = StateTransitionGraphs.stg2htg(stg)
+        StateTransitionGraphs.htg2image(htg, fname_out)
+        # no assertion
+        
 
 
 
@@ -306,9 +344,7 @@ class TestAttractorDetection(unittest.TestCase):
         
 
     def test_faithful(self):
-        pass
-
-
+        
         bnet = ["v1, !v1&!v2 | !v2&!v3",
                 "v2, !v1&!v2&v3 | v1&!v3",
                 "v3, !v1&v3 | !v2"]
@@ -483,14 +519,14 @@ class TestModelChecking(unittest.TestCase):
         update = "asynchronous"
 
         ModelChecking.primes2smv(primes, update, init, spec, fname_out)
-        answer, accepting = ModelChecking.check_smv(fname_out, AcceptingStates=True)
+        answer, accepting = ModelChecking.check_smv_with_acceptingstates(fname_out)
 
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
         self.assertTrue( accepting==expected, msg )
 
-        answer, accepting = ModelChecking.check_primes(primes, update, init, spec, AcceptingStates=True)
+        answer, accepting = ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
         expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
@@ -500,21 +536,18 @@ class TestModelChecking(unittest.TestCase):
     def test_check_smv_true(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_true.smv" )
 
-        self.assertTrue(ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=True,
-                                                DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
+        self.assertTrue(ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
         
     def test_check_smv_false(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_false.smv" )
 
-        self.assertFalse(ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=True,
-                                                DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
+        self.assertFalse(ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
         
 
     def test_check_smv_counterexample(self):
         fname_in  = os.path.join( FILES_IN,  "modelchecking_check_smv_counterexample.smv" )
 
-        answer, counterex = ModelChecking.check_smv(FnameSMV=fname_in, DisableCounterExamples=False, DynamicReorder=True,
-                                                    DisableReachableStates=True, ConeOfInfluence=True)
+        answer, counterex = ModelChecking.check_smv_with_counterexample(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True)
 
 
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
@@ -530,9 +563,7 @@ class TestModelChecking(unittest.TestCase):
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
                     {'v1':1,'v2':1,'v3':0},{'v1':1,'v2':1,'v3':1},{'v1':1,'v2':0,'v3':1})
 
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="asynchronous", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="asynchronous", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -545,9 +576,7 @@ class TestModelChecking(unittest.TestCase):
 
         expected = None
         
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="synchronous", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="synchronous", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -561,9 +590,7 @@ class TestModelChecking(unittest.TestCase):
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
                     {'v1':1,'v2':1,'v3':0},{'v1':1,'v2':1,'v3':1},{'v1':1,'v2':0,'v3':1})
 
-        answer, counterex = ModelChecking.check_primes( Primes=primes, Update="mixed", InitialStates="INIT !v1&v2&!v3",
-                                                        Specification="CTLSPEC AF(!v1&!v2&v3)", DisableCounterExamples=False,
-                                                        DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True )        
+        answer, counterex = ModelChecking.check_primes_with_counterexample( Primes=primes, Update="mixed", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
@@ -905,6 +932,59 @@ class TestTrapSpaces(unittest.TestCase):
         
 
 class TestPrimeImplicants(unittest.TestCase):
+    def test_create_disjoint_union(self):
+        primes1 = FileExchange.bnet2primes("A, B \n B, !A")
+        primes2 = FileExchange.bnet2primes("C, D \n D, C")
+        primes = FileExchange.bnet2primes("A, B \n B, !A \n C, D \n D, C")
+        result = PrimeImplicants.create_disjoint_union(primes1, primes2)
+        msg = "\nexpected: "+str(primes)
+        msg+= "\ngot:      "+str(result)
+        self.assertTrue( result==primes, msg )
+
+        primes1 = FileExchange.bnet2primes("A, B \n B, !A")
+        primes2 = FileExchange.bnet2primes("C, B \n D, C")
+        self.assertRaises(Exception, PrimeImplicants.create_disjoint_union, primes1, primes2)
+
+        
+    def test_remove_variables(self):
+        primes = FileExchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_variables(newprimes,["A","B","C"])
+        expected = {}
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_variables(Primes=primes,Names=[])
+        expected = primes
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+
+        newprimes = PrimeImplicants.copy(primes)
+        PrimeImplicants.remove_all_variables_except(Primes=newprimes,Names=["B","C"])
+        expected = FileExchange.bnet2primes("B, 0 \n C, 1")
+        self.assertTrue( PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+        
+        newprimes = PrimeImplicants.copy(primes)
+        self.assertRaises(Exception, PrimeImplicants.remove_variables, newprimes, ["B"])
+        
+    def test_create_variables(self):
+        primes = FileExchange.bnet2primes("v1,v1\nv2,v1")
+
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v1":"v2"})
+        expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]} 
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue( answer==expected, msg )
+        
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v1":lambda v2: not v2})
+
+        answer = PrimeImplicants.copy(primes)
+        PrimeImplicants.create_variables(answer, {"v3":"v2", "v4":lambda v3: v3})
+
+        newprimes = PrimeImplicants.copy(primes)
+        self.assertRaises(Exception, PrimeImplicants.create_variables, newprimes, {"v3":"v4"})
+    
     def test_input_combinations(self):
         bnet = "input1, input1 \n input2, input2 \n"
         primes = FileExchange.bnet2primes(bnet)
@@ -951,74 +1031,63 @@ class TestPrimeImplicants(unittest.TestCase):
         p2 = {"v1":[[{"v2":0}],[{"v2":1}]],"v2":[[{"v1":1},{"v2":0}],[{"v1":0,"v2":1}]]}
         self.assertTrue( PrimeImplicants.are_equal(p1,p2) )
 
-    def test_remove_variables(self):
-        primes = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=list(primes.keys()))
-        expected = {}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
-        primes   = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=[])
-        expected = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
-        primes = {'B': [[{}], []], 'C': [[], [{}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        PrimeImplicants.remove_variables(Primes=primes,Names=['B','C'])
-        expected = {'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
-
     def test_percolation(self):
         bnet = "A, 0\nB, A"
         primes = FileExchange.bnet2primes(bnet)
-        const = PrimeImplicants.percolate_constants(primes)
+        const = PrimeImplicants.percolate_and_keep_constants(primes)
+        self.assertTrue( const=={"A":0,"B":0} )
+
+        bnet = "A, 0\nB, A"
+        primes = FileExchange.bnet2primes(bnet)
+        const = PrimeImplicants.percolate_and_remove_constants(primes)
         self.assertTrue( const=={"A":0,"B":0} )
         
     def test_percolation1A(self):
         primes = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation1B(self):
         primes = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{}], []]} # 000
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation2A(self):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation2B(self):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[], [{}]]} # 001
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation3A(self):
         primes = {'A': [[{}], []], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation3B(self):
         primes = {'A': [[{}], []], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         expected = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[], [{}]]}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation4A(self):
         primes = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
         expected = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_percolation4B(self):
         primes = {'A': [[{'A': 0}], [{'A': 1}]], 'B': [[{'A': 1}], [{'A': 0}]], 'C':[[{'B': 0}], [{'B': 1}]]}
         expected = PrimeImplicants.copy(primes)
-        PrimeImplicants.percolate_constants(Primes=primes,RemoveConstants=False)
+        PrimeImplicants.percolate_and_keep_constants(primes)
         self.assertTrue( PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
     def test_create_blinkers(self):
@@ -1154,6 +1223,20 @@ class TestFileExchange(unittest.TestCase):
 
 
 class TestInteractionGraphs(unittest.TestCase):
+
+    def test_create_image(self):
+        fname = os.path.join( FILES_OUT, "interactiongraphs_create_image.pdf" )
+        primes = Repository.get_primes("raf")
+        InteractionGraphs.create_image(primes, fname)
+
+    def test_outdag(self):
+        igraph = networkx.DiGraph()
+        igraph.add_edges_from([(1,1),(2,1),(2,3),(3,2),(2,4),(4,1),(4,5),(5,6),(6,6),(5,7)])
+        outdag = InteractionGraphs.find_outdag(igraph)
+        msg = "\nexpected: "+str([7])
+        msg+= "\ngot:      "+str(outdag)
+        self.assertTrue( outdag == [7], msg )
+                              
 
     def test_activities2animation(self):
         fname_in  = os.path.join( FILES_IN,  "irma.primes" )
@@ -1328,17 +1411,18 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
-        update_input_files()
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestAttractorDetection("test_completeness_naive"))
+        suite.addTest(TestPrimeImplicants("test_create_variables"))
+        suite.addTest(TestPrimeImplicants("test_remove_variables"))
+        suite.addTest(TestPrimeImplicants("test_create_disjoint_union"))
         
-        runner = unittest.TextTestRunner()
+        runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
     if 0:
@@ -1346,7 +1430,7 @@ if __name__=="__main__":
 
         import inspect
 
-        class_name = TestModelChecking
+        class_name = TestPrimeImplicants
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):

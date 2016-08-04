@@ -3,13 +3,14 @@
 
 
 
-.. |software| replace:: *PyBoolNet*
+.. |software| replace:: *PyBoolNet 2.0*
 
 .. _BNetToPrime:  https://github.com/xstreck1/BNetToPrime
 .. _clasp-3.1.1:  https://sourceforge.net/projects/potassco/files/clasp/3.1.1
 .. _gringo-4.4.0: https://sourceforge.net/projects/potassco/files/gringo/4.4.0
 .. _NuSMV-2.5.4:  http://nusmv.fbk.eu
 .. _NuSMV:        http://nusmv.fbk.eu
+.. _NuSMV-a:      https://github.com/hklarner/NuSMV-a
 .. _GINsim:       http://ginsim.org/home
 .. _R:            https://www.r-project.org/
 .. _BoolNet:      https://cran.r-project.org/web/packages/BoolNet/index.html

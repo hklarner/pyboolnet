@@ -14,11 +14,13 @@ import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
-dot2image = Utility.DiGraphs.dot2image
+
+def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
+    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
 
 
 def primes2stg( Primes, Update, InitialStates=lambda x: True ):
@@ -140,7 +142,6 @@ def stg2dot( STG, FnameDOT=None ):
     **returns**:
         * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
 
-
     **example**::
 
           >>> stg = primes2stg(primes, update, init)
@@ -152,63 +153,29 @@ def stg2dot( STG, FnameDOT=None ):
           >>> stg2image( stg, "irma_stg.pdf")
     """
 
-    if STG.order()==0:
-        print("State transition graph has no nodes.")
-        if FnameDOT!=None:
-            print("%s was not created."%FnameDot)
-        return
-
-    assert( type(STG.nodes()[0])==str )
-    
-    lines = ['digraph "State Transition Graph" {','']
-    lines += Utility.DiGraphs.digraph2dot(STG)
-    lines += ['}']
-
-    if FnameDOT==None:
-        return '\n'.join(lines)
-    
-    with open(FnameDOT, 'w') as f:
-        f.writelines('\n'.join(lines))
-    print("created %s"%FnameDOT)
-    
+    return Utility.DiGraphs.digraph2dot(STG, FnameDOT)
 
 
-def stg2image(STG, FnameIMAGE, Silent=False):
+def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
     """
-    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the layout engine *dot*.
+    Creates an image file from a state transition graph using :ref:`installation_graphviz` and the *LayoutEngine*.
     Use ``dot -T?`` to find out which output formats are supported on your installation.
     
     **arguments**:
         * *STG*: state transition graph
         * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
 
           >>> stg2image(stg, "mapk_stg.pdf")
-          >>> stg2image(stg, "mapk_stg.jpg")
-          >>> stg2image(stg, "mapk_stg.svg")
+          >>> stg2image(stg, "mapk_stg.jpg", "neato")
+          >>> stg2image(stg, "mapk_stg.svg", "dot")
     """
 
-    assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
-
-    filetype = FnameIMAGE.split('.')[-1]
-
-    cmd = [CMD_DOT, "-T"+filetype, "-o", FnameIMAGE]
-    dotfile = stg2dot( STG, FnameDOT=None)
-    
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate( input=dotfile.encode() )
-    proc.stdin.close()
-
-    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print(out)
-        print('dot did not respond with return code 0')
-        raise Exception
-    
-    if not Silent:
-        print("created %s"%FnameIMAGE)
-
+    Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
+        
         
 def copy( STG ):
     """
@@ -373,6 +340,39 @@ def add_style_subspaces( Primes, STG, Subspaces ):
         STG.graph["subgraphs"].append(subgraph)
 
 
+def add_style_subgraphs( STG, Subgraphs ):
+    """
+    Adds the subgraphs given in *Subgraphs* to *STG* - or overwrites them if they already exist.
+    Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
+    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
+    list of nodes and a dictionary of subgraph attributes.
+
+    .. note::
+    
+        *Subgraphs* must satisfy the following property:
+        Any two subgraphs have either empty intersection or one is a subset of the other.
+        The reason for this requirement is that *dot* can not draw intersecting subgraphs.
+
+    **arguments**:
+        * *STG*: state transition graph
+        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+
+    **example**:
+
+        >>> sub1 = ["001","010"]
+        >>> sub2 = ["111","011"]
+        >>> subgraphs = [sub1,sub2]
+        >>> add_style_subgraphs(stg, subgraphs)
+
+        >>> sub1 = (["001","010"], {"label":"critical states"})
+        >>> sub2 = ["111","011"]
+        >>> subgraphs = [(sub1,sub2]
+        >>> add_style_subgraphs(stg, subgraphs)
+    """
+
+    Utility.DiGraphs.add_style_subgraphs( STG, Subgraphs )
+
+
 def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
     """
     A convenience function that combines :ref:`add_style_subspaces` and :ref:`TrapSpaces.trap_spaces <trap_spaces>`.
@@ -414,26 +414,8 @@ def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
                 STG.graph["subgraphs"].remove(x)
 
         STG.graph["subgraphs"].append( subgraph )
-
-
-def add_style_condensation( STG ):
-    """
-    Adds a separate graph to *STG* that depicts the *condensation graph*, a map of how the SCCs regulate each other.
-    A node in the condensation graph indicates how many states are contained in the respective SCC.
-    If the SCC contains a single state then its name is displayed.
-    
-    **arguments**:
-        * *STG*: state transition graph
+   
         
-    **example**::
-
-          >>> add_style_condensation(stg)
-    """
-
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
-    STG.graph["condensation"] = condensation_graph    
-        
-
 def add_style_path( STG, Path, Color, Penwidth=3 ):
     """
     Sets the color of all nodes and edges involved in the given *Path* to *Color*.
@@ -466,7 +448,7 @@ def add_style_path( STG, Path, Color, Penwidth=3 ):
             
 def add_style_default( Primes, STG ):
     """
-    A convenience function that adds styles for tendencies, SCCs, minimal trap spaces and the condensation graph.
+    A convenience function that adds styles for tendencies, SCCs and minimal trap spaces.
 
     **arguments**:
         * *Primes*: primes implicants
@@ -479,7 +461,6 @@ def add_style_default( Primes, STG ):
 
     add_style_sccs(STG)
     add_style_tendencies(STG)
-    add_style_condensation(STG)
     add_style_mintrapspaces(Primes, STG)
 
 
@@ -613,8 +594,6 @@ def random_state( Primes, Subspace={} ):
         {'v1':0, 'v2':0, 'v3':1}
     """
 
-    
-    
     if type(Subspace)==str:
         assert(len(Subspace)==len(Primes))
         x = {}
@@ -912,8 +891,246 @@ def hamming_distance(Subspace1, Subspace2):
     return len([k for k,v in Subspace1.items() if k in Subspace2 and Subspace2[k]!=v])
 
 
+# The SCC Graph
+
+def stg2sccgraph( STG ):
+    """
+    Computes the SCC graph of the *STG*. For a definition see Sec. 3.1 of :ref:`Tournier2009 <Tournier2009>`.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *SCCGraph* (networkx.DiGraph): the SCC graph of *STG*
+
+    **example**:
+
+        >>> sccgraph = stg2sccgraph(stg)
+    """
+
+    graph = Utility.DiGraphs.digraph2sccgraph(STG)
+    graph.graph["node"] = {"color":"none","style":"filled","shape":"rect"}
+
+    for node in graph.nodes():
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+        if len(node)>1 or STG.has_edge(node[0],node[0]):
+            graph.node[node]["fillcolor"] = "lightgray"
+
+    return graph
+   
+
+def sccgraph2dot( SCCGraph, FnameDOT=None ):
+    """
+    Creates a *dot* file from a SCC graph.
+
+    **arguments**:
+        * *SCCGraph*: state transition graph
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+
+    **example**::
+
+          >>> sccgraph2dot(sccg, "sccgraph.dot")
+    """
+
+    graph = SCCGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
+    """
+    Creates an image file from a SCC graph.
+    
+    **arguments**:
+        * *SCCGraph*: SCC graph
+        * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> sccgraph2image(sccgraph, "mapk_sccgraph.pdf")
+    """
+
+    graph = SCCGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
 
 
+# The Condensation Graph
+
+def stg2condensationgraph( STG ):
+    """
+    Converts the *STG* into the condensation graph, for a definition see :ref:`Klarner2015(b) <klarner2015approx>`.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *CGraph* (networkx.DiGraph): the condensation graph of *STG*
+
+    **example**::
+
+        >>> cgraph = stg2condensationgraph(stg)
+    """
+
+    graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray","shape":"rect"}
+
+    for node in graph.nodes():
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+
+    return graph
+    
+
+def condensationgraph2dot( CGraph, FnameDOT=None ):
+    """
+    Creates a *dot* file from a condensation graph.
+
+    **arguments**:
+        * *CGraph*: state transition graph
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+    **example**::
+
+          >>> condensationgraph2dot(cgraph, "mapk_cgraph.dot")
+    """
+
+    graph = CGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
+    """
+    Creates an image file from the condensation graph.
+    
+    **arguments**:
+        * *CGraph*: condensation graph
+        * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> condensationgraph2image(cgraph, "dot", "mapk_cgraph.pdf")
+    """
+
+    graph = CGraph.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
 
 
+# The HTG
+
+def stg2htg( STG ):
+    """
+    Computes the HTG of the *STG*. For a definition see :ref:`Berenguier2013 <Berenguier2013>`.
+
+    **arguments**:
+        * *STG*: state transition graph
+
+    **returns**:
+        * *HTG* (networkx.DiGraph): the HTG of *STG*
+
+    **example**::
+
+        >>> htg = stg2htg(stg)
+    """
+
+    graph = networkx.DiGraph()
+    graph.graph["node"] = {"color":"none"}
+
+    sccs = []
+    cascades = []
+    attractors = []
+    for x in networkx.strongly_connected_components(STG):
+        x=tuple(sorted(x))
+        if len(x)>1 or STG.has_edge(x[0],x[0]):
+            sccs.append(x)
+            suc = Utility.DiGraphs.successors(STG,x)
+            if set(suc)==set(x):
+                attractors.append(x)
+        else:
+            cascades+= x
+
+    graph.add_nodes_from(sccs, style="filled", fillcolor="lightgray", shape="rect")
+    
+    sigma = {}
+    for x in cascades:
+        pattern = []
+        for i, A in enumerate(sccs):
+            if Utility.DiGraphs.has_path(STG,x,A):
+                pattern.append(i)
+        pattern = tuple(pattern)
+
+        if not pattern in sigma:
+            sigma[pattern] = []
+        sigma[pattern].append(x)
+
+    I = [tuple(sorted(x)) for x in sigma.values()]
+    graph.add_nodes_from(I)
+
+    for X in graph.nodes():
+        for Y in graph.nodes():
+            if X==Y: continue
+            
+            if Utility.DiGraphs.has_edge(STG,X,Y):
+                graph.add_edge(X,Y)
+
+    for node in graph.nodes():
+        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+
+    return graph
+    
+
+def htg2dot( HTG, FnameDOT=None ):
+    """
+    Creates a *dot* file of the *HTG*.
+
+    **arguments**:
+        * *HTG*: HTG
+        * *FnameDOT* (str): name of *dot* file or *None*
+
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+    **example**::
+
+          >>> htg2dot(cgraph, "mapk_htg.dot")
+    """
+
+    graph = HTG.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    
+
+def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
+    """
+    Creates an image file from the *HTG*.
+    
+    **arguments**:
+        * *HTG*: HTG
+        * *FnameIMAGE* (str): name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *Silent* (bool): disables print statements
+        
+    **example**::
+
+          >>> htg2image(cgraph, "mapk_htg.pdf")
+    """
+
+    graph = HTG.copy()
+    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)

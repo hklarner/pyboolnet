@@ -2,22 +2,20 @@
 
 import os
 import subprocess
-import Miscellaneous
-    
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
-BASE = os.path.normpath(BASE)
-config = Miscellaneous.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
-
 import networkx
 import itertools
 
+import Misc
+    
+BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+BASE = os.path.normpath(BASE)
+config = Misc.myconfigparser.SafeConfigParser()
+config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
+LAYOUT_ENGINES = {name:os.path.join(BASE, "Dependencies", config.get("Executables", name)) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 
 
 
-
-def digraph2dot( DiGraph, Indent=1 ):
+def digraph2dotlines( DiGraph, Indent=1 ):
     """
     Basic function to create *dot* lines from a *networkx.DiGraph*.
 
@@ -138,73 +136,118 @@ def digraph2dot( DiGraph, Indent=1 ):
 
     if DiGraph.size()>0:
         lines+= ['']
-
-    # condensation graph
-    if "condensation" in DiGraph.graph:
-        lines+= ['']
-        condensation_graph = DiGraph.graph["condensation"]
-
-        if condensation_graph.order()>0:
-
-            lines+= [space+"subgraph cluster_condensation {"]
-            lines+= [space+"\t"+'label=<<B>Condensation Graph</B>>;']
-            lines+= [space+"\t"+'color="none";']
-            scc_ids = {}
-            for i, scc in enumerate(condensation_graph.nodes()):
-                scc_ids[scc] = "$scc%i"%i
-                
-            for scc in condensation_graph.nodes():
-                if len(scc)==1:
-                    line = '"%s" [label="%s"];'%(scc_ids[scc], scc[0])
-                else:    
-                    line = '"%s" [shape="circle", color="black", label="%i"];'%(scc_ids[scc], len(scc))
-                line = line
-                lines+= [space+"\t"+line]
-            lines+= ['']
-            
-            for scc1, scc2 in condensation_graph.edges():
-                line = '"%s" -> "%s"'%(scc_ids[scc1], scc_ids[scc2])
-                lines+= [space+"\t"+line]
-            lines+= [space+"}"]
             
     return lines
 
 
-def dot2image( FnameDOT, FnameIMAGE ):
+def digraph2dot(DiGraph, FnameDOT=None ):
     """
-    Creates an image file from a *dot* file using ``dot -T? FnameDOT -o FnamePDF`` where ``?`` is one of the output formats supported by *dot*.
-    Use ``dot -T?`` to find out which output formats are supported on your installation.
+    Generates a *dot* file from *DiGraph* and saves it as *FnameDOT* or returns dot file as a string.
     
     **arguments**:
-    
-        * *FnameDOT*: name of input *dot* file
-        
-        * *FnameIMAGE*: name of output file
+        * *DiGraph*: networkx.DiGraph
+        * *FnameDOT* (str): name of *dot* file or *None*
 
-    **returns**: *None*
+    **returns**:
+        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+
+    **example**::
+
+          >>> digraph2dot(digraph, "digraph.dot")
+          >>> digraph2dot(digraph)
+    """
+    
+    if DiGraph.order()==0:
+        print("DiGrap has no nodes.")
+        if FnameDOT!=None:
+            print("%s was not created."%FnameDot)
+        return
+
+    assert( type(DiGraph.nodes()[0])==str )
+    
+    lines = ['digraph {']
+    lines+= digraph2dotlines( DiGraph )
+    lines += ['}']
+
+    if FnameDOT==None:
+        return '\n'.join(lines)
+    
+    with open(FnameDOT, 'w') as f:
+        f.writelines('\n'.join(lines))
+    print("created %s"%FnameDOT)
+    
+
+def dot2image( FnameDOT, FnameIMAGE, LayoutEngine ):
+    """
+    Creates an image file from a *dot* file using the Graphviz layout *LayoutEngine*.
+    The output format is detected automatically.
+    Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
+    
+    **arguments**:
+        * *FnameDOT*: name of input *dot* file
+        * *FnameIMAGE*: name of output file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+
+    **returns**:
+        * *None*
         
     **example**::
 
-          dot2image( "mapk.dot", "mapk.pdf" )
+          >>> dot2image( "mapk.dot", "mapk.pdf" )
     """
-
-    assert( FnameIMAGE.count('.')>=1 and FnameIMAGE.split('.')[-1].isalnum() )
 
     filetype = FnameIMAGE.split('.')[-1]
     
     
-    cmd = [CMD_DOT, "-T"+filetype, FnameDOT, "-o", FnameIMAGE]
+    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, FnameDOT, "-o", FnameIMAGE]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = proc.communicate()
 
     if not (proc.returncode ==0) or not os.path.exists(FnameIMAGE):
         print(output)
         print(error)
-        print('"dot" finished with return code %i'%proc.returncode)
+        print('"%s" finished with return code %i'%(LayoutEngine,proc.returncode))
         raise Exception
     
     print("created %s"%FnameIMAGE)
 
+
+def digraph2image( DiGraph, FnameIMAGE, LayoutEngine, Silent=False ):
+    """
+    Creates an image file from a *DiGraph* file using the Graphviz layout *LayoutEngine*.
+    The output format is detected automatically.
+    Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
+    
+    **arguments**:
+        * *FnameDOT*: name of input *dot* file
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *FnameIMAGE*: name of output file
+
+    **returns**:
+        * *None*
+        
+    **example**::
+
+          >>> dot2image( "mapk.dot", "mapk.pdf" )
+    """
+    
+    filetype = FnameIMAGE.split('.')[-1]
+
+    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, "-o", FnameIMAGE]
+    dotfile = digraph2dot( DiGraph, FnameDOT=None)
+    
+    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate( input=dotfile.encode() )
+    proc.stdin.close()
+
+    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
+        print(out)
+        print('dot did not respond with return code 0')
+        raise Exception
+    
+    if not Silent:
+        print("created %s"%FnameIMAGE)
+    
 
 def subgraphs2tree( Subgraphs ):
     """
@@ -286,6 +329,7 @@ def subgraphs2tree( Subgraphs ):
             node.graph["style"] = "filled"
         
         if not "fillcolor" in node.graph and not "style" in node.graph:
+            node.graph["color"] = "black"
             node.graph["fillcolor"] = "/prgn10/6"
             node.graph["style"] = "filled"
 
@@ -317,7 +361,7 @@ def tree2dotlines( Tree, Indent=1 ):
 
     lines = []
     lines+= [space+"subgraph cluster_%i {"%cluster_id]
-    lines+= [x for x in digraph2dot( DiGraph=root, Indent=Indent+1 )]
+    lines+= [x for x in digraph2dotlines( DiGraph=root, Indent=Indent+1 )]
     
     for successor in Tree.successors(root):
         subnodes = list(networkx.descendants(Tree,successor))+[successor]
@@ -328,14 +372,6 @@ def tree2dotlines( Tree, Indent=1 ):
 
 
     return lines
-                        
-
-
-
-
-
-
-
 
 
 def digraph2sccgraph( Digraph ):
@@ -413,34 +449,20 @@ def digraph2condensationgraph( Digraph ):
     cgraph = networkx.DiGraph()
     cgraph.add_nodes_from( noncascades )
     
-    # rgraph is a copy of IGraph with edges leaving noncascade components removed.
-    # will use rgraph to decide if their is a cascade path between U and W (i.e. edge in cgraph)
+    # rgraph is a copy of Digraph with edges leaving noncascade components removed.
+    # will use rgraph to decide if there is a cascade path between U and W (i.e. edge in cgraph)
     rgraph = networkx.DiGraph(Digraph.edges())
-    
-    for scc in noncascades:
-        for s in scc:
-            for t in rgraph.successors(s):
-                if not tuple([t]) in cascades:
-                    rgraph.remove_edge(s,t)
 
     for U,W in itertools.product(noncascades,noncascades):
         if U==W: continue
 
-        # special case: direct edge between U and W
-        for u,w in itertools.product(U,W):
-            if Digraph.has_edge(u,w):
-                cgraph.add_edge(U,W)
-                break
-        if cgraph.has_edge(U,W): continue
+        rgraph = Digraph.copy()
+        for X in noncascades:
+            if not X==U and not X==W:
+                rgraph.remove_nodes_from(X)
                 
-        # general case: cascade path from U to W
-        rgraph.add_nodes_from(['x','y'])
-        rgraph.add_edges_from([('x',u) for u in U]+[(w,'y') for w in W])
-
-        if networkx.has_path(rgraph, 'x','y'):
+        if has_path(rgraph, U, W):
             cgraph.add_edge(U,W)
-
-        rgraph.remove_nodes_from(['x','y'])
 
     # annotate each node with its depth in the hierarchy and an integer ID
     for ID, target in enumerate(cgraph.nodes()):
@@ -454,25 +476,135 @@ def digraph2condensationgraph( Digraph ):
     return cgraph
 
 
-def ancestors( DiGraph, Nodes ):
+def convert_nodes_to_anonymous_strings( DiGraph ):
     """
-    returns all ancestors of *Nodes*.
+    used to convert meaningful nodes into anonymous stringified integers for drawing.
     """
 
-    # single node
-    if type(Nodes)==str:
-        return networkx.ancestors(DiGraph, Nodes)
+    mapping = {x:str(i) for i,x in enumerate(DiGraph.nodes())}
+    networkx.relabel_nodes(DiGraph, mapping, copy=False)
 
-    # several nodes
+
+def successors( DiGraph, X ):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.successors(X)
     else:
-        result = set([])
-        for x in Nodes:
-            result.update( networkx.ancestors(DiGraph,x) )
-            
-        return sorted(result)
+        sucs = set([])
+        for x in X: sucs.update(set(DiGraph.successors(x)))
+        return sorted(sucs)
 
 
+def predecessors( DiGraph, X ):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.predecessors(X)
+    else:
+        preds = set([])
+        for x in X: preds.update(set(DiGraph.predecessors(x)))
+        return sorted(preds)
 
 
+def has_path( DiGraph, X, Y ):
+    assert("!s" not in DiGraph)
+    assert("!t" not in DiGraph)
+    
+    if X in DiGraph:
+        source = X
+    else:
+        source = "!s"
+        DiGraph.add_node("!s")
+        DiGraph.add_edges_from([("!s",x) for x in X])
 
+    if Y in DiGraph:
+        target = Y
+    else:
+        target = "!t"
+        DiGraph.add_node("!t")
+        DiGraph.add_edges_from([(y,"!t") for y in Y])
+
+    answer = networkx.has_path(DiGraph, source, target)
+    for x in ["!s","!t"]:
+        if x in DiGraph: DiGraph.remove_node(x)
+
+    return answer
+
+
+def has_edge( DiGraph, X, Y ):
+    
+    if X in DiGraph: X = [X]
+    if Y in DiGraph: Y = [Y]
+
+    for x in X:
+        for y in Y:
+            if DiGraph.has_edge(x,y):
+                return True
+
+    return False
+
+
+def add_style_subgraphs( DiGraph, Subgraphs ):
+    """
+    Adds the subgraphs given in *Subgraphs* to *DiGraph* - or overwrites them if they already exist.
+    Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
+    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
+    list of nodes and a dictionary of subgraph attributes.
+
+    .. note::
+    
+        *Subgraphs* must satisfy the following property:
+        Any two subgraphs have either empty intersection or one is a subset of the other.
+        The reason for this requirement is that *dot* can not draw intersecting subgraphs.
+
+    **arguments**:
+        * *DiGraph*: directed graph
+        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+
+    **example**:
+
+        >>> sub1 = ["v1","v2"]
+        >>> sub2 = ["v3","v4"]
+        >>> subgraphs = [sub1,sub2]
+        >>> add_style_subgraphs(graph, subgraphs)
+
+        >>> sub1 = (["v1","v2"], {"label":"Genes"})
+        >>> sub2 = ["v3","v4"]
+        >>> subgraphs = [(sub1,sub2]
+        >>> add_style_subgraphs(graph, subgraphs)
+    """
+
+    if not "subgraphs" in DiGraph.graph:
+        DiGraph.graph["subgraphs"] = []
+
+    for x in Subgraphs:
+
+        attr = None
+        if len(x)>=2 and type(x[1])==dict:
+            nodes, attr = x
+        else:
+            nodes = x
+
+        if not nodes: continue
+
+        subgraph = networkx.DiGraph()
+        subgraph.graph["color"] = "black"
+        subgraph.add_nodes_from(nodes)
+        if attr:
+            subgraph.graph.update(attr)
+
+        # overwrite existing subgraphs
+        for x in list(DiGraph.graph["subgraphs"]):
+            if sorted(x.nodes()) == sorted(subgraph.nodes()):
+                DiGraph.graph["subgraphs"].remove(x)
+                
+        DiGraph.graph["subgraphs"].append(subgraph)
+    
+
+        
     

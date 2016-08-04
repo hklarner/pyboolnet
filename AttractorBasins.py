@@ -4,6 +4,7 @@ import os
 import sys
 import itertools
 import math
+import random
 from operator import mul
 import networkx
 
@@ -17,42 +18,72 @@ import TrapSpaces
 import AttractorDetection
 import StateTransitionGraphs
 import InteractionGraphs
-import ExampleNetworks
+import Repository
 import PrimeImplicants
 import Utility
 
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
 
-def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=True ):
+def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silent=True, ReturnCounter=False ):
     """
-    copy from basins_diagram_naive.
-    removes out-dags.
-    divides remaining network into connected component(s).
+    Creates the basin diagram, a networkx.DiGraph, of the STG defined by *Primes* and *Update*.
+    The nodes of the diagram represent states that can reach the exact same subset of *Attractors*.
+    Nodes are labeled by the index of the attractor in the order given in *Attractors* and the number of states
+    that are represented. Edges indicate the existence of a transition between two states in the respective sets.
+
+    The algorithm requires model checking with accepting states, i.e., NuSMV-a.
+    Basic steps towards increased efficiency are implemented:
+    out-DAGs (aka output cascades) are discarded during model checking, and
+    disconnected components are considered separately (and recombined using a cartesian product of diagrams).
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
+        * *ComputeBorders* (bool): whether the computation of the so-called border states should be included in the diagram
+        * *Silent* (bool): whether information regarding the execution of the algorithm should be printed
+        * *ReturnCounter* (bool): whether the number of performed model checks should be returned
 
     **returns**::
         * *BasinsDiagram* (netowrkx.DiGraph): the basins diagram
+        * *Counter* (int): number of model checks performed, if *ReturnCounter=True*
+
+    **example**::
+
+        >>> primes = REPO.get_primes("xiao_wnt5a")
+        >>> diagram = basins_diagram(primes, "asynchronous")
+        >>> diagram.order()
+        6
+        >>> diagram.node[4]["formula"]
+        '(x4 & (x7))'
+        >>> diagram.node[4]["size"]
+        32
     """
     
     assert(Update in ["synchronous", "mixed", "asynchronous"])
+
+    if not Attractors:
+        Attractors = TrapSpaces.trap_spaces(Primes, "min")
     
     if not Primes:
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
     igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = find_outdags(igraph)
+    outdags = InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
-        print("excluding the out-dag %s"%outdags)
+        print("basin_diagram(..)")
+        print(" excluding the out-dag %s"%outdags)
 
     components = networkx.connected_components(igraph.to_undirected())
     components = [list(x) for x in components]
     if not Silent:
-        print("working on %i connected components"%len(components))
+        print(" working on %i connected component(s)"%len(components))
         
     counter = 0
     diagrams = []
@@ -79,30 +110,18 @@ def basins_diagram( Primes, Update, Attractors, ComputeBorders=False, Silent=Tru
         
 
     if not Silent:
-        print("basin diagram required %i executions of NuSMV"%counter)
-    
-    return diagram
+        print(" total executions of NuSMV: %i"%counter)
+
+    if ReturnCounter:
+        return diagram, counter
+    else:
+        return diagram
 
 
 def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
     """
-    computes the basins diagram.
-    performs case by case for inputs.
-    nodes are integers starting from *FirstNode*.
-    
-    node attributes:
-        - size:
-        - formula:
-        - attractors:
-
-    edge attributes:
-        - border_size:
-        - border_formula:
-        - finally_size:
-        - finally_formula:
-
-    **returns**::
-        * *BasinsDiagram* (netowrkx.DiGraph): the basins diagram
+    Also computes the basin diagram but without removing out-DAGs or considering connected components separately.
+    Not meant for general use. Use basins_diagram(..) instead.
     """
     
     assert(Update in ["synchronous", "mixed", "asynchronous"])
@@ -117,21 +136,40 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         cases = []
         for combination in PrimeImplicants.input_combinations(Primes):
             init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if consistent(x,combination)]
-            cases.append( (init,attr) )
+            attr = [x for x in Attractors if Utility.Misc.dicts_are_consistent(x,combination)]
+            cases.append((init,attr))
     else:
         cases = [("INIT TRUE",Attractors)]
 
     counter = 0
 
+    if not Silent:
+        print(" basins_diagram_naive(..)")
+        print("  inputs: %i"%len(inputs))
+        print("  cases:  %i"%len(cases))
+
     # create nodes
     node = 0
+    total_potential_nodes = 0
+    states_per_case = 2**(len(Primes)-len(inputs))
     diagram = networkx.DiGraph()
-    for init, attr in cases:        
+    for i, (init, attr) in enumerate(cases):
+        total_potential_nodes+= 2**len(attr)-1
+        states_covered = 0
         specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
-        for vector in itertools.product( *vectors ):
+        vectors = list(itertools.product(*vectors))
+        random.shuffle(vectors)
+
+        if not Silent:
+            print("  case %i, potential nodes: %i"%(i,2**len(attr)-1))
+        
+        for vector in vectors:
             if sum(vector)==0: continue
+            if states_covered==states_per_case:
+                if not Silent:
+                    print("  avoided executions of NuSMV due to state counting")
+                break
 
             if len(vector)==1:
                 data = {"attractors":   attr,
@@ -142,20 +180,22 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 spec = " & ".join("EF(%s)"%x if flag else "!EF(%s)"%x for flag, x in zip(vector, specs))
                 spec = "CTLSPEC %s"%spec
 
-                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
+                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
                 
                 data = {"attractors":   [x for flag,x in zip(vector,attr) if flag],
                         "size":         accepting["INITACCEPTING_SIZE"],
                         "formula":      accepting["INITACCEPTING"]}
 
-                
-                
-
             if data["size"]>0:
                 diagram.add_node(node, data)
                 node+=1
+                states_covered+= data["size"]
 
+    if not Silent:
+        perc = "= %.2f%%"%(100.*diagram.order()/total_potential_nodes) if total_potential_nodes else ""
+        print("  total potential nodes: %i"%total_potential_nodes)
+        print("  actual nodes: %i %s"%(diagram.order(),perc))
 
     # list potential targets
     potential_targets = {}
@@ -168,7 +208,10 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 
         potential_targets[source] = succs
 
-
+    if not Silent:
+        total_potential_edges = sum(len(x) for x in potential_targets.values())
+        print("  potential edges: %i"%total_potential_edges)
+        
     # create edges
     for source, source_data in diagram.nodes(data=True):
         for target, target_data in potential_targets[source]:
@@ -177,7 +220,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
             if ComputeBorders:
                 init = "INIT %s"%source_data["formula"]
                 spec = "CTLSPEC EX(%s)"%target_data["formula"]
-                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
+                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
                 
                 data = {}
@@ -192,7 +235,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
 
                     else:
                         spec = "CTLSPEC EF(%s)"%data["border_formula"]
-                        answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
+                        answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                         counter+=1
                         
                         data["finally_size"] = accepting["INITACCEPTING_SIZE"]
@@ -206,7 +249,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 phi2 = target_data["formula"]
                 init = "INIT %s"%phi1
                 spec = "CTLSPEC E[%s U %s]"%(phi1,phi2)
-                answer, accepting = ModelChecking.check_primes(Primes, Update, init, spec, AcceptingStates=True)
+                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
 
                 data = {}
@@ -217,14 +260,36 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     diagram.add_edge(source, target, data)
                     
     if not Silent:
-        print("basin diagram (naive) required %i executions of NuSMV"%counter)
+        perc = "= %.2f%%"%(100.*diagram.size()/total_potential_edges) if total_potential_edges else ""
+        print("  actual edges: %i %s"%(diagram.size(),perc))
+        print("  total executions of NuSMV: %i"%counter)
 
     return diagram, counter
 
 
-def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=False):
+def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs=True, StyleAdvanced=False):
     """
-    creates an image of diagram
+    Creates the image file *FnameIMAGE* for the basin diagram given by *Diagram*.
+    Use *FnameATTRACTORS* to create a separate image in which the indices of the diagram are mapped to the given attractors.
+    The flag *StyleInputs* can be used to highlight which basins belong to which input combination.
+    *StyleAdvanced* draws edges and nodes slightly differently to indicates whether transitions are reachable from all source
+    states and whether all successor basins are reachable from all source states.
+
+    **arguments**:
+        * *Primes*: prime implicants, needed for pretty printing of the attractors.
+        * *Diagram* (networkx.DiGrap): a basin diagram
+        * *FnameIMAGE* (str): name of the diagram image
+        * *FnameATTRACTORS* (str): name of the attractor key file, if wanted
+        * *StyleInputs* (bool): whether basins should be grouped by input combinations
+        * *StyleAdvanced* (bool): modifies edges and nodes according to "homogeneity"
+        
+    **returns**::
+        * *None*
+
+    **example**::
+
+        >>> diagram2image(primes, diagram, "basins.pdf")
+        >>> diagram2image(primes, diagram, "basins.pdf", "attractors.pdf")
     """
     
 
@@ -233,33 +298,51 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     graph = networkx.DiGraph()
     graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
     graph.graph["edge"]  = {}
-    graph.graph["splines"] = "ortho"
-    
+    #graph.graph["splines"] = "ortho"
+
+    attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
+    attractors = [x for x in attractors if len(x)==1]
+    attractors = set(StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
+    attractors = sorted(attractors)
+
+    label = ["attractors:"]+["A%i = %s"%x for x in enumerate(attractors)]
+    label = "<%s>"%"<br/>".join(label)
+
+    if FnameATTRACTORS:
+        key = networkx.DiGraph()
+        key.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue", shape="rect")
+        Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
+        
+    else:
+        graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
-        attr = data["attractors"]
-        attr = sorted(StateTransitionGraphs.subspace2str(Primes,x) for x in attr)
-        
+        attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
+        attr = Utility.Misc.divide_list_into_similar_length_lists(attr)
+        attr = [",".join(x) for x in attr]
         label = attr+["states: %s"%data["size"]]
         label = "<br/>".join(label)
         label = "<%s>"%label
 
         graph.add_node(node, label=label)
 
+        if len(data["attractors"])==1:
+            graph.node[node]["color"] = "cornflowerblue"
+            graph.node[node]["penwidth"] = "4"
+
         size_percent = data["size"] / size_total
         
         graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
         if size_percent>0.5: graph.node[node]["fontcolor"] = "0.0 0.0 0.8"            
 
-        if StyleDetails:
+        if StyleAdvanced:
             if all(d["finally_size"]==data["size"] for _,_,d in Diagram.out_edges(node,data=True)):
-                graph.node[node]["color"] = "cornflowerblue"
-                graph.node[node]["penwidth"] = "4"
+                graph.node[node]["fontcolor"] = "cornflowerblue"
         
 
     for source, target, data in Diagram.edges(data=True):
         graph.add_edge(source, target)
-        if StyleDetails:
+        if StyleAdvanced:
             if data["finally_size"] < Diagram.node[source]["size"]:
                 graph.edge[source][target]["style"]="dashed"
         
@@ -267,36 +350,71 @@ def diagram2image(Diagram, Primes, FnameIMAGE, StyleInputs=True, StyleDetails=Fa
     if StyleInputs:
         subgraphs = []
         for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if consistent(inputs,Diagram.node[x]["attractors"][0])]
+            nodes = [x for x in Diagram.nodes() if Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
             label = StateTransitionGraphs.subspace2str(Primes,inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
             
         if subgraphs:
             graph.graph["subgraphs"] = []
 
-        InteractionGraphs.add_style_subgraphs(graph, subgraphs)
+        Utility.DiGraphs.add_style_subgraphs(graph, subgraphs)
 
 
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
         
-    InteractionGraphs.igraph2image(graph, FnameIMAGE)
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+
+
+def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
+    """
+    Creates the image file *FnameIMAGE* for the aggregated basin diagram given by *Diagram*.
+    The aggregated basin diagram takes the union of all basins from which the same number of attractors
+    can be reached even if they are not the exact same set.
     
+    **arguments**:
+        * *Primes*: prime implicants, needed for pretty printing of the attractors.
+        * *Diagram* (networkx.DiGrap): a basin diagram
+        * *FnameIMAGE* (str): name of the aggragated diagram image
+        
+    **returns**::
+        * *None*
+
+    **example**::
+
+        >>> diagram2aggregate_image(diagram, "aggregated.pdf")
+    """
+    
+    graph = networkx.DiGraph()
+    graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
+
+    for node, data in Diagram.nodes(data=True):
+        x = len(data["attractors"])
+        if not x in graph:
+            graph.add_node(x, size=data["size"])
+        else:
+            graph.node[x]["size"]+= data["size"]
+
+    size_total = float(2**len(Primes))
+    for x, data in graph.nodes(data=True):
+        size_percent = data["size"] / size_total
+        graph.node[x]["label"] = "<attractors: %s<br/>states: %s>"%(x,data["size"])
+        graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+        if size_percent>0.5: graph.node[x]["fontcolor"] = "0.0 0.0 0.8"
+
+    for source, target in Diagram.edges():
+        x = len(Diagram.node[source]["attractors"])
+        y = len(Diagram.node[target]["attractors"])
+        graph.add_edge(x,y)
+
+        
+    mapping = {x:str(x) for x in graph.nodes()}
+    networkx.relabel_nodes(graph,mapping,copy=False)
+        
+    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+
 
 ## auxillary functions
-def consistent( X, Y):
-    return all(X[k]==Y[k] for k in set(X).intersection(set(Y)))
-
-def merge_dicts(Dicts):
-    '''
-    merges any number of dicts (shallow copies),
-    precedence goes to key value pairs in latter dicts.
-    '''
-    
-    result = {}
-    for dictionary in Dicts:
-        result.update(dictionary)
-    return result
 
 def project_attractors( Attractors, Names ):
     result = set()
@@ -310,29 +428,7 @@ def project_attractors( Attractors, Names ):
 
 
 def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if consistent(x,y)]
-
-
-def find_outdags( DiGraph ):
-    """
-    finds the largest directed acyclic subgraph that is closed under the successors operation.
-    """
-
-    graph = DiGraph.copy()
-    
-    sccs = networkx.strongly_connected_components(graph)
-    sccs = [list(x) for x in sccs]
-    candidates = [scc[0] for scc in sccs if len(scc)==1]
-    candidates = [x for x in candidates if not graph.has_edge(x,x)]
-    sccs = [scc for scc in sccs if len(scc)>1]
-
-    graph.add_node("!")
-    for scc in sccs:
-        graph.add_edge(scc[0],"!")
-
-    outdags = [x for x in candidates if not networkx.has_path(graph,x,"!")]
-
-    return outdags
+    return [x for x in Attractors for y in Projection if Utility.Misc.dicts_are_consistent(x,y)]
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):
@@ -351,7 +447,7 @@ def cartesian_product( Diagrams, Factor, ComputeBorders ):
             
         attrs = [x["attractors"] for _,x in product]
         attrs = list(itertools.product(*attrs))
-        attrs = [merge_dicts(x) for x in attrs]
+        attrs = [Utility.Misc.merge_dicts(x) for x in attrs]
         data["attractors"] = attrs
 
         node = tuple(x for x,_ in product)
@@ -407,108 +503,13 @@ def diagrams_are_equal(Diagram1, Diagram2):
     
     return networkx.is_isomorphic(g1,g2,edge_match=em)
 
-         
-def tests():
-    import json
-    from networkx.readwrite import json_graph
 
-    if 0:
-        # raf 
-        bnet = ExampleNetworks.raf
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        attractors = TrapSpaces.trap_spaces(primes, "min")
-        diagram = basins_diagram( primes, update, attractors, Silent=True )
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!(Erk & (Mek) | !Erk & ((Raf) | !Mek)))', 'attractors': [{u'Raf': 1, u'Mek': 0, u'Erk': 0}, {u'Mek': 1, u'Erk': 1}], 'id': 0, 'size': 3}, {'formula': '(Erk & (Mek) | !Erk & (Mek & (Raf)))', 'attractors': [{u'Mek': 1, u'Erk': 1}], 'id': 1, 'size': 3}, {'formula': '(!(Erk | (Mek)))', 'attractors': [{u'Raf': 1, u'Mek': 0, u'Erk': 0}], 'id': 2, 'size': 2}], 'links': [{'target': 1, 'finally_formula': '(!(Erk & (Mek) | !Erk & ((Raf) | !Mek)))', 'border_size': 3, 'source': 0, 'finally_size': 3, 'border_formula': '(!(Erk & (Mek) | !Erk & ((Raf) | !Mek)))'}, {'target': 2, 'finally_formula': '(!(Erk & (Mek) | !Erk & ((Raf) | !Mek)))', 'border_size': 3, 'source': 0, 'finally_size': 3, 'border_formula': '(!(Erk & (Mek) | !Erk & ((Raf) | !Mek)))'}], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-        print equal_diagrams(diagram, expected)
-    
-    if 0:
-        # positive feedback
-        bnet = """
-        v1,v2
-        v2,v3
-        v3,v1"""
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        attractors = TrapSpaces.trap_spaces(primes, "min")
-        diagram = basins_diagram( primes, update, attractors, Silent=False )
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!(v1 & (v2 & (v3)) | !v1 & !(v2 | (v3))))', 'attractors': [{u'v1': 0, u'v2': 0, u'v3': 0}, {u'v1': 1, u'v2': 1, u'v3': 1}], 'id': 0, 'size': 6}, {'formula': '(v1 & (v2 & (v3)))', 'attractors': [{u'v1': 1, u'v2': 1, u'v3': 1}], 'id': 1, 'size': 1}, {'formula': '(!(v1 | (v2 | (v3))))', 'attractors': [{u'v1': 0, u'v2': 0, u'v3': 0}], 'id': 2, 'size': 1}], 'links': [{'target': 1, 'finally_formula': '(!(v1 & (v2 & (v3)) | !v1 & !(v2 | (v3))))', 'border_size': 3, 'source': 0, 'finally_size': 6, 'border_formula': '(!(v1 & (v2 & (v3) | !v2 & !(v3)) | !v1 & !(v2 & (v3))))'}, {'target': 2, 'finally_formula': '(!(v1 & (v2 & (v3)) | !v1 & !(v2 | (v3))))', 'border_size': 3, 'source': 0, 'finally_size': 6, 'border_formula': '(!(v1 & (v2 | (v3)) | !v1 & (v2 & (v3) | !v2 & !(v3))))'}], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-        print equal_diagrams(diagram, expected)
-        diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
-
-    if 0:
-        # negative feedback
-        bnet = """
-        v1,!v2
-        v2,v3
-        v3,v1"""
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        attractors = TrapSpaces.trap_spaces(primes, "min")
-        diagram = basins_diagram( primes, update, attractors, Silent=False )
-        print json_graph.node_link_data(diagram)
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(TRUE)', 'attractors': [{}], 'id': 0, 'size': 8}], 'links': [], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-        print equal_diagrams(diagram, expected)
-        diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
-
-    if 0:
-        # arellano_antelope
-        bnet = ExampleNetworks.arellano_antelope
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        attractors = TrapSpaces.trap_spaces(primes, "min")
-        diagram = basins_diagram( primes, update, attractors, Silent=False )
-        #print json_graph.node_link_data(diagram)
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 0, 'size': 128}, {'formula': '(!(AUXINS | (SCR | !(SHR))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 1, 'size': 64}, {'formula': '(!(AUXINS | !(JKD & (SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}], 'id': 2, 'size': 32}, {'formula': '(!((SCR | !(SHR)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 3, 'size': 64}, {'formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 4, 'size': 32}, {'formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 5, 'size': 2}, {'formula': '(AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 6, 'size': 128}, {'formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 7, 'size': 8}, {'formula': '(!(((IAA | !(JKD & (SCR & (SHR & (WOX))) | !JKD & !(MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 8, 'size': 6}, {'formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 9, 'size': 20}, {'formula': '(!((((((WOX) | !SHR) | !SCR) | !MGP) | !JKD) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 10, 'size': 8}, {'formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 11, 'size': 20}], 'links': [{'target': 1, 'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'border_size': 16, 'source': 4, 'finally_size': 32, 'border_formula': '(!(AUXINS | (JKD | !(MGP & (SCR & (SHR))))))'}, {'target': 2, 'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'border_size': 32, 'source': 4, 'finally_size': 32, 'border_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))'}, {'target': 8, 'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'border_size': 2, 'source': 5, 'finally_size': 2, 'border_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))'}, {'target': 3, 'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'border_size': 2, 'source': 5, 'finally_size': 2, 'border_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))'}, {'target': 10, 'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'border_size': 8, 'source': 7, 'finally_size': 8, 'border_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))'}, {'target': 3, 'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'border_size': 8, 'source': 7, 'finally_size': 8, 'border_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))'}, {'target': 8, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 6, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((IAA & (JKD | (MGP | !(SCR & (SHR & (WOX))))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((IAA | (JKD | (MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS)))'}, {'target': 3, 'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'border_size': 6, 'source': 9, 'finally_size': 6, 'border_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))'}, {'target': 11, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 20, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))'}, {'target': 5, 'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'border_size': 4, 'source': 9, 'finally_size': 6, 'border_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS)))'}, {'target': 7, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 12, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((JKD | (MGP | (((WOX) | !SHR) | !SCR))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & !(((WOX) | !SHR) | !SCR))) | !AUXINS)))'}, {'target': 8, 'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'border_size': 10, 'source': 11, 'finally_size': 20, 'border_formula': '(ARF & (AUXINS & (IAA & (JKD & (SCR & (SHR & (WOX)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & !((IAA | !(JKD & (SCR & (SHR & (WOX))))) | !AUXINS))'}, {'target': 10, 'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'border_size': 12, 'source': 11, 'finally_size': 20, 'border_formula': '(!(ARF & (((MGP | (((WOX) | !SHR) | !SCR)) | !JKD) | !AUXINS) | !ARF & !(AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & !(((WOX) | !SHR) | !SCR))))))'}], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-        print equal_diagrams(diagram, expected)
-        diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=True)
-
-        igraph = InteractionGraphs.primes2igraph(primes)
-        InteractionGraphs.igraph2image(igraph,"Junk/igraph.pdf")
-    
-
-    if 1:
-        # 
-        bnet = ExampleNetworks.tournier_apoptosis
-        primes = FileExchange.bnet2primes(bnet)
-        update = "asynchronous"
-        attractors = TrapSpaces.trap_spaces(primes, "min")
-        diagram = basins_diagram( primes, update, attractors )
-        #print json_graph.node_link_data(diagram)
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 0, 'size': 128}, {'formula': '(!(AUXINS | (SCR | !(SHR))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 1, 'size': 64}, {'formula': '(!(AUXINS | !(JKD & (SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}], 'id': 2, 'size': 32}, {'formula': '(!((SCR | !(SHR)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 3, 'size': 64}, {'formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 4, 'size': 32}, {'formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 5, 'size': 2}, {'formula': '(AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 6, 'size': 128}, {'formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 7, 'size': 8}, {'formula': '(!(((IAA | !(JKD & (SCR & (SHR & (WOX))) | !JKD & !(MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 8, 'size': 6}, {'formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 9, 'size': 20}, {'formula': '(!((((((WOX) | !SHR) | !SCR) | !MGP) | !JKD) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 10, 'size': 8}, {'formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 11, 'size': 20}], 'links': [{'target': 1, 'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'border_size': 16, 'source': 4, 'finally_size': 32, 'border_formula': '(!(AUXINS | (JKD | !(MGP & (SCR & (SHR))))))'}, {'target': 2, 'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'border_size': 32, 'source': 4, 'finally_size': 32, 'border_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))'}, {'target': 8, 'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'border_size': 2, 'source': 5, 'finally_size': 2, 'border_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))'}, {'target': 3, 'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'border_size': 2, 'source': 5, 'finally_size': 2, 'border_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))'}, {'target': 10, 'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'border_size': 8, 'source': 7, 'finally_size': 8, 'border_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))'}, {'target': 3, 'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'border_size': 8, 'source': 7, 'finally_size': 8, 'border_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))'}, {'target': 8, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 6, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((IAA & (JKD | (MGP | !(SCR & (SHR & (WOX))))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((IAA | (JKD | (MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS)))'}, {'target': 3, 'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'border_size': 6, 'source': 9, 'finally_size': 6, 'border_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))'}, {'target': 11, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 20, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))'}, {'target': 5, 'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'border_size': 4, 'source': 9, 'finally_size': 6, 'border_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS)))'}, {'target': 7, 'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'border_size': 12, 'source': 9, 'finally_size': 20, 'border_formula': '(!(ARF & ((JKD | (MGP | (((WOX) | !SHR) | !SCR))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & !(((WOX) | !SHR) | !SCR))) | !AUXINS)))'}, {'target': 8, 'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'border_size': 10, 'source': 11, 'finally_size': 20, 'border_formula': '(ARF & (AUXINS & (IAA & (JKD & (SCR & (SHR & (WOX)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & !((IAA | !(JKD & (SCR & (SHR & (WOX))))) | !AUXINS))'}, {'target': 10, 'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'border_size': 12, 'source': 11, 'finally_size': 20, 'border_formula': '(!(ARF & (((MGP | (((WOX) | !SHR) | !SCR)) | !JKD) | !AUXINS) | !ARF & !(AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & !(((WOX) | !SHR) | !SCR))))))'}], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-        print equal_diagrams(diagram, expected)
-        diagram2image(diagram, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=True)
-
-        igraph = InteractionGraphs.primes2igraph(primes)
-        InteractionGraphs.igraph2image(igraph,"Junk/igraph.pdf")
-    
-    # print json_graph.node_link_data(diagram)
-    
 
 
     
 if __name__=="__main__":
+    print("nothing to do")
 
-    if 1:
-        tests()
-
-if 0:    
-    bnet = ExampleNetworks.grieco_mapk
-    bnet = tnet2
-    primes = FileExchange.bnet2primes(bnet)
-    update = "asynchronous"
-
-    attractors = TrapSpaces.trap_spaces(primes, "min")
-    #diagram1, count = basins_diagram_naive( primes, update, attractors, Silent=False )
-    #diagram2image(diagram1, primes, FnameIMAGE="diagram_naive.pdf", StyleInputs=False)
-    
-    diagram2 = basins_diagram( primes, update, attractors )
-    diagram2image(diagram2, primes, FnameIMAGE="Junk/diagram.pdf", StyleInputs=False)
 
 
                             

@@ -170,7 +170,7 @@ def univocal( Primes, Update, Trapspace ):
 
     **example**::
 
-        >>> mintspaces = TrapSpaces.trap_spaces(primes, 'min', None, None, 1000, None)
+        >>> mintspaces = TrapSpaces.trap_spaces(primes, "min")
         >>> trapspace = mintrapspaces[0]
         >>> answer, state, counterex = univocal(primes, trapspace, "asynchronous")
         >>> answer
@@ -182,8 +182,8 @@ def univocal( Primes, Update, Trapspace ):
 
     # percolation
     primes = PrimeImplicants.copy(Primes)
-    PrimeImplicants.create_constants(primes, Activities=Trapspace)
-    constants  = PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+    PrimeImplicants.create_constants(primes, Constants=Trapspace)
+    constants  = PrimeImplicants.percolate_and_remove_constants(primes)
         
     # trivial case: constants = unique steady state
     if primes == {}:
@@ -195,7 +195,7 @@ def univocal( Primes, Update, Trapspace ):
     # univocality
     spec = 'CTLSPEC ' + TemporalQueries.EF_oneof_subspaces(primes, [attractor_state1])
     init = 'INIT TRUE'
-    answer, counterex = ModelChecking.check_primes(primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
     attractor_state1 = dict(list(attractor_state1.items()) + list(constants.items()))
 
@@ -251,10 +251,14 @@ def faithful( Primes, Update, Trapspace ):
     if type(Trapspace)==str:
         Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
+    # trivial case: steady state
+    if len(Trapspace)==len(Primes):
+        return True, None
+    
     # percolation
     primes = PrimeImplicants.copy(Primes)
-    PrimeImplicants.create_constants(primes, Activities=Trapspace)
-    constants  = PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+    PrimeImplicants.create_constants(primes, Constants=Trapspace)
+    constants  = PrimeImplicants.percolate_and_remove_constants(primes)
 
     # trivial case: free variables fix due to percolation
     if len(constants)>len(Trapspace):
@@ -265,16 +269,16 @@ def faithful( Primes, Update, Trapspace ):
     # faithfulness
     spec = 'CTLSPEC AG(%s)'%TemporalQueries.EF_unsteady_states(primes)
     init = 'INIT TRUE'
-    answer, counterex = ModelChecking.check_primes(primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
     # success
     if answer:
-        return (True, None)
+        return True, None
 
     # failure
     else:
         attractor_state = dict(list(counterex[-1].items()) + list(constants.items()))
-        return (False, attractor_state)
+        return False, attractor_state
     
 
 def completeness_naive( Primes, Update, Trapspaces ):
@@ -316,7 +320,7 @@ def completeness_naive( Primes, Update, Trapspaces ):
     
     spec = "CTLSPEC " + TemporalQueries.EF_oneof_subspaces( Primes, Trapspaces )
     init = "INIT TRUE"
-    answer, counterex = ModelChecking.check_primes(Primes, Update, init, spec, DisableCounterExamples=False)
+    answer, counterex = ModelChecking.check_primes_with_counterexample(Primes, Update, init, spec)
 
     if counterex:
         counterex = counterex[-1]
@@ -366,7 +370,7 @@ def completeness_iterative( Primes, Update ):
     primes = PrimeImplicants.copy(Primes)
     
     if PrimeImplicants.find_constants(primes):
-        PrimeImplicants.percolate_constants(primes, RemoveConstants=True)
+        PrimeImplicants.percolate_and_remove_constants(primes)
 
 
 
@@ -377,11 +381,10 @@ def completeness_iterative( Primes, Update ):
     while currentset:                                       # line  5
         p, W        = currentset.pop()                      # line  6
 
-
         ## line 7: primes_reduced = ReducedNetwork(V,F,p)
         primes_reduced = PrimeImplicants.copy(primes)
-        PrimeImplicants.create_constants(primes_reduced, p)
-        PrimeImplicants.percolate_constants(primes_reduced, RemoveConstants=True)
+        PrimeImplicants.create_constants(primes_reduced, Constants=p)
+        PrimeImplicants.percolate_and_remove_constants(primes_reduced)
 
         ## line 8: cgraph = CondensationGraph(V_p,F_p)
         igraph = InteractionGraphs.primes2igraph(primes_reduced)
@@ -415,8 +418,7 @@ def completeness_iterative( Primes, Update ):
 
             ## line 14: primes_restricted = Restriction(V_p,F_p,U_dash)
             primes_restricted = PrimeImplicants.copy(primes_reduced)
-            remove = [x for x in primes_restricted if x not in U_dash]
-            PrimeImplicants.remove_variables(primes_restricted, remove)
+            PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
             
             ## line 15: Q = MinTrapSpaces(U',F|U')
             Q = TrapSpaces.trap_spaces(primes_restricted, "min")
@@ -426,10 +428,11 @@ def completeness_iterative( Primes, Update ):
 
             ## lines 17,18: answer = ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
-            spec = "CTLSPEC " + phi
-            answer, counterex = ModelChecking.check_primes(primes_restricted, Update, init, spec, DisableCounterExamples=False)
+            spec = "CTLSPEC %s"%phi
+            
+            answer, counterex = ModelChecking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
             if not answer:
-                return (False, counterex[-1])
+                return (False, counterex)
 
             ## line 19: Refinement.append(Intersection(p,Q))
             ## Intersection(*args) is defined below
@@ -438,13 +441,13 @@ def completeness_iterative( Primes, Update ):
             ## line 20: W_dash = SetUnion(W',U')
             W_dash.update(U_dash)
 
-        
         ## line 21
         for q in Intersection(refinement):
 
             ## line 22: q_tilde = Percolation(V,F,q)
             dummy = PrimeImplicants.copy(primes)
-            q_tilde = PrimeImplicants.percolate_constants(dummy, q)
+            PrimeImplicants.create_constants(dummy, Constants=q)
+            q_tilde = PrimeImplicants.percolate_and_keep_constants(dummy)
 
             ## lines 23, 24
             if q_tilde not in mintrapspaces:
@@ -482,7 +485,9 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= [" * there are no steady states"]
     else:
         w = max([12,len(Primes)])
-        lines+=["| "+"steady state".ljust(w)+" |"]
+        lines+= ["| "+"steady state".ljust(w)+" |"]
+        lines+= ["| "+ w*"-" +" | "]
+        
     for x in steady:
         lines+= ["| "+StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
     lines+= [""]
@@ -537,6 +542,9 @@ def create_attractor_report(Primes, FnameTXT=None):
     t_width = max([7]+[len(x) for x,_ in bnet])    
     f_width = max([7]+[len(x) for _,x in bnet])
     lines+= ["### Network"]
+    t,f = bnet.pop(0)
+    lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
+    lines+= ["| "+t_width*"-"+" | "+f_width*"-"+" |"]
     for t,f in bnet:
         lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
              
@@ -567,12 +575,8 @@ def Intersection( *args ):
 
     # non-trivial case
     result = []
-    if args[0]!=[{}]:
-        print("args: %s"%args)
     for product in itertools.product(*args):
         items = []
-        if args[0]!=[{}]:
-            print("product: %s"%product)
         for subspace in product:
             for item in subspace.items():
                 items+= [item]

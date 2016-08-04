@@ -32,7 +32,7 @@ if not os.path.exists(FNAME_SETTINGS):
     print("created %s"%FNAME_SETTINGS)
 
 
-config = Utility.Miscellaneous.myconfigparser.SafeConfigParser()
+config = Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 
@@ -119,27 +119,27 @@ class TestBNetToPrime(unittest.TestCase):
         msg+= '\ncommand: "%s"'%' '.join(cmd)
         self.assertTrue( "BNetToPrime 1.0" in out, msg )
 
-class TestDot(unittest.TestCase):
-    def test_dot_responds(self):
-        cmd = config.get("Executables", "dot")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
-        cmd = os.path.normpath(cmd)
-        cmd = [cmd, "-V"]
-        
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate()
-        err = err.decode() # for some reason "dot" reports on stderr
 
-        msg = "\nCall to dot resulted in return code %i."%proc.returncode
-        msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( proc.returncode, 0, msg )
+class TestGraphviz(unittest.TestCase):
+    def test_layout_engines(self):
+        for name in ["dot","neato","fdp","sfdp","circo","twopi"]:
+            cmd = os.path.join(BASE, "Dependencies", config.get("Executables", name))
         
-        msg = '\ndot did not respond with "dot - graphviz version"'
-        msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "dot - graphviz version" in err, msg )
+            proc = subprocess.Popen([cmd, "-V"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = proc.communicate()
+            err = err.decode() # for some reason graphviz" reports on stderr
 
-class TestConvert(unittest.TestCase):
-    def test_convert_responds(self):
+            msg = "\nCall to dot resulted in return code %i."%proc.returncode
+            msg+= '\ncommand: "%s"'%' '.join(cmd)
+            self.assertEqual( proc.returncode, 0, msg )
+
+            msg = '\ndot did not respond with "%s - graphviz version"'%name
+            msg+= '\ncommand: "%s"'%' '.join(cmd)
+            self.assertTrue( "%s - graphviz version"%name in err, msg )
+
+
+class TestImageMagick(unittest.TestCase):
+    def test_imagemagick_responds(self):
         cmd = config.get("Executables", "convert")
         cmd = os.path.join( BASE, "Dependencies", cmd )
         cmd = os.path.normpath(cmd)

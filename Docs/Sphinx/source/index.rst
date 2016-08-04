@@ -5,22 +5,16 @@
 
 
 |software| is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
-The project home page is https://sourceforge.net/projects/boolnetfixpoints.
+The project home page is https://github.com/hklarner/PyBoolNet.
    
 .. note::
 
-   For compatibility reasons the sourceforge project is still called *boolnetfixpoints* instead of *pyboolnet*.
+   |Software| does not yet have any user friendly error messages.
+   Please post questions, report bugs or suggest features in the issues section of the project's homepage:
    
-.. note::
-
-   |Software| does not yet have any user friendly error messages. Please post questions in the discussion section of the sourceforge project page
-   
-   * https://sourceforge.net/p/boolnetfixpoints/discussion
-   
-   and report bugs or suggest features at
-
-   * https://sourceforge.net/p/boolnetfixpoints/tickets
-
+   * https://github.com/hklarner/PyBoolNet/issues
+  
+   or contact hannes.klarner@fu-berlin.de
 
 
 .. toctree::

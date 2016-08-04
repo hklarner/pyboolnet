@@ -1,7 +1,7 @@
 
 
 import DiGraphs
-import Miscellaneous
+import Misc
 
 
 
