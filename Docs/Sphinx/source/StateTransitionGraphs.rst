@@ -5,6 +5,7 @@
 StateTransitionGraphs
 =====================
 
+
 .. _primes2stg:
 
 primes2stg

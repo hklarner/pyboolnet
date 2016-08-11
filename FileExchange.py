@@ -8,7 +8,7 @@ import datetime
 
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.QuineMcCluskey
-import PyBoolNet.Utility
+import PyBoolNet.Utility.Misc
 
 BASE = os.path.join(os.path.dirname(__file__))
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()

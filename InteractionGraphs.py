@@ -7,7 +7,8 @@ import os
 import networkx
 
 import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.Utility
+import PyBoolNet.Utility.Misc
+import PyBoolNet.Utility.DiGraphs
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
