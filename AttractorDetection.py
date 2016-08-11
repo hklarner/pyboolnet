@@ -4,14 +4,14 @@ import datetime
 import itertools
 import random
 
-import FileExchange
-import PrimeImplicants
-import StateTransitionGraphs
-import TrapSpaces
-import InteractionGraphs
-import ModelChecking
-import TemporalQueries
-import Utility
+from . import FileExchange
+from . import PrimeImplicants
+from . import StateTransitionGraphs
+from . import TrapSpaces
+from . import InteractionGraphs
+from . import ModelChecking
+from . import TemporalQueries
+from . import Utility
 
 
 def find_attractor_by_randomwalk_and_ctl( Primes, Update, InitialState={}, Length=0, Attempts=10 ):

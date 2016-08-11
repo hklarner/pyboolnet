@@ -7,10 +7,10 @@ import os
 import subprocess
 import networkx
 
-import ModelChecking
-import TemporalQueries
-import TrapSpaces
-import Utility
+from . import ModelChecking
+from . import TemporalQueries
+from . import TrapSpaces
+from . import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)

@@ -6,9 +6,9 @@ import os
 import ast
 import datetime
 
-import InteractionGraphs
-import QuineMcCluskey
-import Utility
+from . import InteractionGraphs
+from . import QuineMcCluskey
+from . import Utility
 
 BASE = os.path.join(os.path.dirname(__file__))
 config = Utility.Misc.myconfigparser.SafeConfigParser()

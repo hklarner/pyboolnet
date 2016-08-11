@@ -6,8 +6,8 @@ import math
 import os
 import networkx
 
-import StateTransitionGraphs
-import Utility
+from . import StateTransitionGraphs
+from . import Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)

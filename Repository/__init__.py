@@ -3,8 +3,8 @@ import os
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 
-import FileExchange
-import generator
+from .. import FileExchange
+from .  import Generator
 
 def names_with_fast_basin_computation():
     result = ["arellano_rootstem","dahlhaus_neuroplastoma",

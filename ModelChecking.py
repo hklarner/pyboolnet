@@ -6,9 +6,9 @@ import unittest
 import ast
 import datetime
 
-import PyBoolNet.Utility
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.TemporalQueries
+from . import Utility
+from . import PrimeImplicants
+from . import TemporalQueries
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -124,7 +124,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle(smvfile, cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
 
 
 def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True):
@@ -182,7 +182,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle(smvfile, cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
 
 
 def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):

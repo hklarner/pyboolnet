@@ -5,7 +5,7 @@ import subprocess
 import networkx
 import itertools
 
-import Misc
+from . import Misc
     
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
