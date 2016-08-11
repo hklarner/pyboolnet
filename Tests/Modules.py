@@ -8,7 +8,7 @@ import networkx
 import itertools
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-sys.path.append(BASE)
+sys.path.insert(0,BASE)
 
 import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
@@ -88,6 +88,29 @@ class TestQuineMcCluskey(unittest.TestCase):
         
 
 class TestStateTransitionGraphs(unittest.TestCase):
+    def test_proposition2states(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+        prop = "!Erk | (Raf & Mek)"
+        expected = set(["010","011","001","000","111"])
+        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        prop = "0"
+        expected = set([])
+        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        prop = "TRUE"
+        expected = set(["010","011","001","000","111","110","101","100"])
+        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
     def test_random_mixed_transition(self):
         fname_in  = os.path.join( FILES_IN,  "randomnet.bnet" )
         fname_out = os.path.join( FILES_OUT, "randomnet.primes" )
@@ -1411,16 +1434,14 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestPyBoolNet.PrimeImplicants("test_create_variables"))
-        suite.addTest(TestPyBoolNet.PrimeImplicants("test_remove_variables"))
-        suite.addTest(TestPyBoolNet.PrimeImplicants("test_create_disjoint_union"))
+        suite.addTest(TestStateTransitionGraphs("test_proposition2states"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
