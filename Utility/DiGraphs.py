@@ -580,6 +580,12 @@ def add_style_subgraphs( DiGraph, Subgraphs ):
 
     for nodes, attr in Subgraphs:
         if not nodes: continue
+        for x in nodes:
+            if not x in DiGraph:
+                print(" error: subgraph nodes must belong to the digraph")
+                print(" this node does not exist: %s"%x)
+                raise Exception
+            
         subgraph = networkx.DiGraph()
         subgraph.graph["color"] = "black"
         subgraph.add_nodes_from(nodes)
