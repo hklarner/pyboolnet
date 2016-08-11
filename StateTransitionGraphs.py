@@ -837,23 +837,19 @@ def proposition2states(Primes, Proposition):
     """
     Generates all states that are referenced by *Proposition* in the context of the variables given by *Primes*.
     The syntax of *Proposition* should be as in bnet files and TRUE and FALSE in will be treated as 1 and 0.
-
-    .. note:
-        This function is a Python generator, i.e., it yields the referenced states one by one rather than returning a list of all states at once.
-
         
     **arguments**:
         * *Primes*: prime implicants
         * *Proposition* (str): a propositional formula
 
-    **yields**:
-        * *State* (dict): the referenced states
+    **returns**:
+        * *States* (list): the referenced states in str format
 
     **example**:
 
         >>> prop = "!Erk | (Raf & Mek)"
-        >>> proposition2states(primes,prop).next()
-        {'Raf': 0, 'Mek': 1, 'Erk': 0}
+        >>> proposition2states(primes,prop)[0]
+        '010'
     """
     
     assert("?" not in Primes)
@@ -868,8 +864,7 @@ def proposition2states(Primes, Proposition):
         for x in subspace2states(Primes, p):
             states.add(state2str(x))
 
-    for x in states:
-        yield str2state(Primes,x)
+    return list(states)
 
 
 def bounding_box(Primes, Subspaces):

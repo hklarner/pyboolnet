@@ -1549,9 +1549,9 @@ For example, we may query whether all initial states that satisfy the original s
 You can use the function :ref:`proposition2states` to enumerate all states that are referenced by a propositional formula::
 
    >>> for x in STGs.proposition2states(primes, prop): print x
-   {'x2': 1, 'x0': 0, 'x1': 0}
-   {'x2': 1, 'x0': 1, 'x1': 0}
-   {'x2': 0, 'x0': 1, 'x1': 0}
+   001
+   101
+   100
    
    
 computing trap spaces
