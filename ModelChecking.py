@@ -6,9 +6,9 @@ import unittest
 import ast
 import datetime
 
-import Utility
-import PrimeImplicants
-import TemporalQueries
+import PyBoolNet.Utility
+import PyBoolNet.PrimeImplicants
+import PyBoolNet.TemporalQueries
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -73,7 +73,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False, SMVstr=smvfile)
 
 
 def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False):
@@ -124,7 +124,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
+    return nusmv_handle(smvfile, cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
 
 
 def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True):
@@ -182,7 +182,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     out = out.decode()
     proc.stdin.close()
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
+    return nusmv_handle(smvfile, cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
 
 
 def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):
@@ -227,7 +227,7 @@ def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeO
     out, err = proc.communicate()
     out = out.decode()
 
-    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False )
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
 def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachableStates=False):
@@ -271,7 +271,7 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
     out, err = proc.communicate()
     out = out.decode()
 
-    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False )
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
 def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluence=True):
@@ -319,7 +319,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     out, err = proc.communicate()
     out = out.decode()
 
-    return nusmv_handle( cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True )
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
 
 def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
@@ -582,7 +582,7 @@ def output2acceptingstates( NuSMVOutput ):
     return accepting
 
 
-def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples, AcceptingStates ):
+def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, AcceptingStates, SMVstr=None):
     """
     The part of the code of "check_smv" and "check_primes" that is identical in both functions.
     
@@ -611,12 +611,16 @@ def nusmv_handle( Command, Process, Output, Error, DisableCounterExamples, Accep
         elif 'is true' in Output:
             answer = True
         else:
+            if SMVstr:
+                print(SMVstr)
             print(Output)
             print(Error)
             print('NuSMV output does not respond with "is false" or "is true".')
             raise Exception
             
     else:
+        if SMVstr:
+            print(SMVstr)
         print(Output)
         print(Error)
         print('NuSMV did not respond with return code 0')
