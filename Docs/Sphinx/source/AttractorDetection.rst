@@ -11,7 +11,7 @@ AttractorDetection
 compute_attractors_tarjan
 -------------------------
 
-.. autofunction:: AttractorDetection.compute_attractors_tarjan
+.. autofunction:: PyBoolNet.AttractorDetection.compute_attractors_tarjan
 
 
 .. _find_attractor_by_randomwalk_and_ctl:
@@ -19,7 +19,7 @@ compute_attractors_tarjan
 find_attractor_by_randomwalk_and_ctl
 ------------------------------------
 
-.. autofunction:: AttractorDetection.find_attractor_by_randomwalk_and_ctl
+.. autofunction:: PyBoolNet.AttractorDetection.find_attractor_by_randomwalk_and_ctl
 
 
 .. _completeness_naive:
@@ -27,7 +27,7 @@ find_attractor_by_randomwalk_and_ctl
 completeness_naive
 ------------------
 
-.. autofunction:: AttractorDetection.completeness_naive
+.. autofunction:: PyBoolNet.AttractorDetection.completeness_naive
 
 
 .. _completeness_iterative:
@@ -35,7 +35,7 @@ completeness_naive
 completeness_iterative
 ----------------------
 
-.. autofunction:: AttractorDetection.completeness_iterative
+.. autofunction:: PyBoolNet.AttractorDetection.completeness_iterative
 
 
 .. _univocal:
@@ -43,7 +43,7 @@ completeness_iterative
 univocal
 --------
 
-.. autofunction:: AttractorDetection.univocal
+.. autofunction:: PyBoolNet.AttractorDetection.univocal
 
 
 .. _faithful:
@@ -51,7 +51,7 @@ univocal
 faithful
 --------
 
-.. autofunction:: AttractorDetection.faithful
+.. autofunction:: PyBoolNet.AttractorDetection.faithful
 
 
 .. _create_attractor_report:
@@ -59,7 +59,7 @@ faithful
 create_attractor_report
 -----------------------
 
-.. autofunction:: AttractorDetection.create_attractor_report
+.. autofunction:: PyBoolNet.AttractorDetection.create_attractor_report
 
 
 

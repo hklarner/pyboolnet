@@ -10,7 +10,7 @@ ModelChecking
 check_primes
 ------------
 
-.. autofunction:: ModelChecking.check_primes
+.. autofunction:: PyBoolNet.ModelChecking.check_primes
 
 
 .. _check_primes_with_counterexample:
@@ -18,7 +18,7 @@ check_primes
 check_primes_with_counterexample
 --------------------------------
 
-.. autofunction:: ModelChecking.check_primes_with_counterexample
+.. autofunction:: PyBoolNet.ModelChecking.check_primes_with_counterexample
 
 
 .. _check_primes_with_accepting_states:
@@ -26,7 +26,7 @@ check_primes_with_counterexample
 check_primes_with_acceptingstates
 ---------------------------------
 
-.. autofunction:: ModelChecking.check_primes_with_acceptingstates
+.. autofunction:: PyBoolNet.ModelChecking.check_primes_with_acceptingstates
 
    
 .. _check_smv:  
@@ -34,7 +34,7 @@ check_primes_with_acceptingstates
 check_smv
 ---------
 
-.. autofunction:: ModelChecking.check_smv
+.. autofunction:: PyBoolNet.ModelChecking.check_smv
 
 
 .. _check_smv_with_counterexample:  
@@ -42,7 +42,7 @@ check_smv
 check_smv_with_counterexample
 -----------------------------
 
-.. autofunction:: ModelChecking.check_smv_with_counterexample
+.. autofunction:: PyBoolNet.ModelChecking.check_smv_with_counterexample
 
 
 .. _check_smv_with_acceptingstates:  
@@ -50,7 +50,7 @@ check_smv_with_counterexample
 check_smv_with_acceptingstates
 ------------------------------
 
-.. autofunction:: ModelChecking.check_smv_with_acceptingstates
+.. autofunction:: PyBoolNet.ModelChecking.check_smv_with_acceptingstates
 
 
 .. _primes2smv:
@@ -58,7 +58,7 @@ check_smv_with_acceptingstates
 primes2smv
 ----------
 
-.. autofunction:: ModelChecking.primes2smv
+.. autofunction:: PyBoolNet.ModelChecking.primes2smv
 
 
 

@@ -10,7 +10,7 @@ StateTransitionGraphs
 primes2stg
 ----------
 
-.. autofunction:: StateTransitionGraphs.primes2stg
+.. autofunction:: PyBoolNet.StateTransitionGraphs.primes2stg
 
 
 .. _stg_copy:
@@ -18,7 +18,7 @@ primes2stg
 copy
 ----
 
-.. autofunction:: StateTransitionGraphs.copy
+.. autofunction:: PyBoolNet.StateTransitionGraphs.copy
 
 
 .. _successor_synchronous:
@@ -26,7 +26,7 @@ copy
 successor_synchronous
 ---------------------
 
-.. autofunction:: StateTransitionGraphs.successor_synchronous
+.. autofunction:: PyBoolNet.StateTransitionGraphs.successor_synchronous
 
 
 .. _successors_asynchronous:
@@ -34,7 +34,7 @@ successor_synchronous
 successors_asynchronous
 -----------------------
 
-.. autofunction:: StateTransitionGraphs.successors_asynchronous
+.. autofunction:: PyBoolNet.StateTransitionGraphs.successors_asynchronous
 
 
 .. _successor_random_mixed:
@@ -42,7 +42,7 @@ successors_asynchronous
 random_successor_mixed
 ----------------------
 
-.. autofunction:: StateTransitionGraphs.random_successor_mixed
+.. autofunction:: PyBoolNet.StateTransitionGraphs.random_successor_mixed
 
 
 .. _random_state:
@@ -50,7 +50,7 @@ random_successor_mixed
 random_state
 ------------
 
-.. autofunction:: StateTransitionGraphs.random_state
+.. autofunction:: PyBoolNet.StateTransitionGraphs.random_state
 
 
 .. _random_walk:
@@ -58,7 +58,7 @@ random_state
 random_walk
 -----------
 
-.. autofunction:: StateTransitionGraphs.random_walk
+.. autofunction:: PyBoolNet.StateTransitionGraphs.random_walk
 
 
 .. _best_first_reachability:
@@ -66,7 +66,7 @@ random_walk
 best_first_reachability
 -----------------------
 
-.. autofunction:: StateTransitionGraphs.best_first_reachability
+.. autofunction:: PyBoolNet.StateTransitionGraphs.best_first_reachability
 
 
 .. _state2str:
@@ -74,7 +74,7 @@ best_first_reachability
 state2str
 ---------
 
-.. autofunction:: StateTransitionGraphs.state2str
+.. autofunction:: PyBoolNet.StateTransitionGraphs.state2str
 
 
 .. _str2state:
@@ -82,7 +82,7 @@ state2str
 str2state
 ---------
 
-.. autofunction:: StateTransitionGraphs.str2state
+.. autofunction:: PyBoolNet.StateTransitionGraphs.str2state
    
    
 .. _subspace2str:
@@ -90,7 +90,7 @@ str2state
 subspace2str
 ------------
 
-.. autofunction:: StateTransitionGraphs.subspace2str
+.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2str
 
 
 .. _str2subspace:
@@ -98,7 +98,7 @@ subspace2str
 str2subspace
 ------------
 
-.. autofunction:: StateTransitionGraphs.str2subspace
+.. autofunction:: PyBoolNet.StateTransitionGraphs.str2subspace
 
 
 .. _subspace2states:
@@ -106,7 +106,15 @@ str2subspace
 subspace2states
 ---------------
 
-.. autofunction:: StateTransitionGraphs.subspace2states
+.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2states
+
+
+.. _proposition2states:
+
+proposition2states
+------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.proposition2states
 
 
 .. _hamming_distance:
@@ -114,7 +122,7 @@ subspace2states
 hamming_distance
 ----------------
 
-.. autofunction:: StateTransitionGraphs.hamming_distance
+.. autofunction:: PyBoolNet.StateTransitionGraphs.hamming_distance
 
 .. include:: Substitutions.rst
 
@@ -124,7 +132,7 @@ hamming_distance
 stg2dot
 -------
 
-.. autofunction:: StateTransitionGraphs.stg2dot
+.. autofunction:: PyBoolNet.StateTransitionGraphs.stg2dot
 
 
 .. _stg2image:
@@ -132,7 +140,7 @@ stg2dot
 stg2image
 ---------
 
-.. autofunction:: StateTransitionGraphs.stg2image
+.. autofunction:: PyBoolNet.StateTransitionGraphs.stg2image
 
 
 .. _add_style_tendencies:
@@ -140,7 +148,7 @@ stg2image
 add_style_tendencies
 --------------------
 
-.. autofunction:: StateTransitionGraphs.add_style_tendencies
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_tendencies
 
 
 .. _add_style_sccs:
@@ -148,7 +156,7 @@ add_style_tendencies
 add_style_sccs
 --------------
 
-.. autofunction:: StateTransitionGraphs.add_style_sccs
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_sccs
 
 
 .. _add_style_subspaces:
@@ -156,7 +164,7 @@ add_style_sccs
 add_style_subspaces
 -------------------
 
-.. autofunction:: StateTransitionGraphs.add_style_subspaces
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subspaces
 
 
 .. _add_style_subgraphs:
@@ -164,7 +172,7 @@ add_style_subspaces
 add_style_subgraphs
 -------------------
 
-.. autofunction:: StateTransitionGraphs.add_style_subgraphs
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subgraphs
 
 
 .. _add_style_mintrapspaces:
@@ -172,7 +180,7 @@ add_style_subgraphs
 add_style_mintrapspaces
 -----------------------
 
-.. autofunction:: StateTransitionGraphs.add_style_mintrapspaces
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces
 
 
 .. _add_style_path:
@@ -180,7 +188,7 @@ add_style_mintrapspaces
 add_style_path
 --------------
 
-.. autofunction:: StateTransitionGraphs.add_style_path
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_path
 
 
 .. _add_style_default:
@@ -188,5 +196,5 @@ add_style_path
 add_style_default
 --------------
 
-.. autofunction:: StateTransitionGraphs.add_style_default
+.. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_default
 

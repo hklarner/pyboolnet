@@ -10,7 +10,7 @@ PrimeImplicants
 copy
 ----
 
-.. autofunction:: PrimeImplicants.copy
+.. autofunction:: PyBoolNet.PrimeImplicants.copy
 
 
 .. _are_equal:
@@ -18,14 +18,14 @@ copy
 are_equal
 --------
 
-.. autofunction:: PrimeImplicants.are_equal
+.. autofunction:: PyBoolNet.PrimeImplicants.are_equal
 
 .. _find_inputs:
 
 find_inputs
 -----------
 
-.. autofunction:: PrimeImplicants.find_inputs
+.. autofunction:: PyBoolNet.PrimeImplicants.find_inputs
 
 
 .. _find_outputs:
@@ -33,7 +33,7 @@ find_inputs
 find_outputs
 -----------
 
-.. autofunction:: PrimeImplicants.find_outputs
+.. autofunction:: PyBoolNet.PrimeImplicants.find_outputs
 
 
 .. _find_constants:
@@ -41,7 +41,7 @@ find_outputs
 find_constants
 --------------
 
-.. autofunction:: PrimeImplicants.find_constants
+.. autofunction:: PyBoolNet.PrimeImplicants.find_constants
 
 
 .. _create_constants:
@@ -49,7 +49,7 @@ find_constants
 create_constants
 ----------------
 
-.. autofunction:: PrimeImplicants.create_constants
+.. autofunction:: PyBoolNet.PrimeImplicants.create_constants
 
 
 .. _create_inputs:
@@ -57,7 +57,7 @@ create_constants
 create_inputs
 -------------
 
-.. autofunction:: PrimeImplicants.create_inputs
+.. autofunction:: PyBoolNet.PrimeImplicants.create_inputs
 
 
 .. _create_blinkers:
@@ -65,7 +65,7 @@ create_inputs
 create_blinkers
 ---------------
 
-.. autofunction:: PrimeImplicants.create_blinkers
+.. autofunction:: PyBoolNet.PrimeImplicants.create_blinkers
 
 
 .. _create_variables:
@@ -73,7 +73,7 @@ create_blinkers
 create_variables
 ----------------
 
-.. autofunction:: PrimeImplicants.create_variables
+.. autofunction:: PyBoolNet.PrimeImplicants.create_variables
 
 
 .. _create_disjoint_union:
@@ -81,7 +81,7 @@ create_variables
 create_disjoint_union
 ---------------------
 
-.. autofunction:: PrimeImplicants.create_disjoint_union
+.. autofunction:: PyBoolNet.PrimeImplicants.create_disjoint_union
 
 
 .. _remove_variables:
@@ -89,7 +89,7 @@ create_disjoint_union
 remove_variables
 ----------------
 
-.. autofunction:: PrimeImplicants.remove_variables
+.. autofunction:: PyBoolNet.PrimeImplicants.remove_variables
 
 
 .. _remove_all_variables_except:
@@ -97,7 +97,7 @@ remove_variables
 remove_all_variables_except
 ---------------------------
 
-.. autofunction:: PrimeImplicants.remove_all_variables_except
+.. autofunction:: PyBoolNet.PrimeImplicants.remove_all_variables_except
 
 
 .. _percolate_and_keep_constants:
@@ -105,7 +105,7 @@ remove_all_variables_except
 percolate_and_keep_constants
 ----------------------------
 
-.. autofunction:: PrimeImplicants.percolate_and_keep_constants
+.. autofunction:: PyBoolNet.PrimeImplicants.percolate_and_keep_constants
 
 
 .. _percolate_and_remove_constants:
@@ -113,7 +113,7 @@ percolate_and_keep_constants
 percolate_and_remove_constants
 ------------------------------
 
-.. autofunction:: PrimeImplicants.percolate_and_remove_constants
+.. autofunction:: PyBoolNet.PrimeImplicants.percolate_and_remove_constants
 
 
 .. _input_combinations:
@@ -121,7 +121,7 @@ percolate_and_remove_constants
 input_combinations
 ------------------
 
-.. autofunction:: PrimeImplicants.input_combinations
+.. autofunction:: PyBoolNet.PrimeImplicants.input_combinations
 
 
 

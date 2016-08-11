@@ -8,18 +8,18 @@ import sys
 
 import networkx
 
-sys.path = ['../..'] + sys.path
+sys.path = ['../../..'] + sys.path
 
-import PrimeImplicants as PIs
-import FileExchange as FEX
-import StateTransitionGraphs as STGs
-import InteractionGraphs as IGs
-import QuineMcCluskey as QMC
-import ModelChecking as MC
-import TrapSpaces as TS
-import AttractorDetection as AD
-import AttractorBasins as AB
-import Repository as repo
+from PyBoolNet import PrimeImplicants as PIs
+from PyBoolNet import FileExchange as FEX
+from PyBoolNet import StateTransitionGraphs as STGs
+from PyBoolNet import InteractionGraphs as IGs
+from PyBoolNet import QuineMcCluskey as QMC
+from PyBoolNet import ModelChecking as MC
+from PyBoolNet import TrapSpaces as TS
+from PyBoolNet import AttractorDetection as AD
+from PyBoolNet import AttractorBasins as AB
+from PyBoolNet import Repository as repo
 
 
 
@@ -96,10 +96,6 @@ def run():
 
         print "\n".join(s)
 
-   
-
-   
-   
 
     if 0 or RUN_ALL:
         print "model checking with accepting states"
@@ -117,10 +113,14 @@ def run():
         for x in accepting.items():
             print x
 
-        init = "INIT %s"%accepting["INITACCEPTING"]
+        prop = accepting["INITACCEPTING"]
+        init = "INIT %s"%prop
         spec = "CTLSPEC EF(STEADYSTATE)"
         print MC.check_primes(primes, update, init, spec)
 
+        for x in STGs.proposition2states(primes, prop): print x
+        
+        
         
 
     if 0 or RUN_ALL:

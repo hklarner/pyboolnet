@@ -1,31 +1,34 @@
 
-
-.. sec:TemporalQueries:
+.. _TemporalQueries:
 
 TemporalQueries
 ===============
 
+EF_nested_reachability
+----------------------
+
+.. autofunction:: PyBoolNet.TemporalQueries.EF_nested_reachability
+
 
 AGEF_oneof_subspaces
---------------
+--------------------
 
-.. autofunction:: TemporalQueries.AGEF_oneof_subspaces
+.. autofunction:: PyBoolNet.TemporalQueries.AGEF_oneof_subspaces
 
 
 EF_oneof_subspaces
-------------
+------------------
 
-.. autofunction:: TemporalQueries.EF_oneof_subspaces
+.. autofunction:: PyBoolNet.TemporalQueries.EF_oneof_subspaces
 
 
 EF_unsteady_states
 ------------------
 
-.. autofunction:: TemporalQueries.EF_unsteady_states
+.. autofunction:: PyBoolNet.TemporalQueries.EF_unsteady_states
 
 
 subspace2proposition
 --------------------
 
-.. autofunction:: TemporalQueries.subspace2proposition
-
+.. autofunction:: PyBoolNet.TemporalQueries.subspace2proposition

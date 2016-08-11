@@ -9,7 +9,7 @@ QuineMcCluskey
 functions2mindnf
 ----------------
 
-.. autofunction:: QuineMcCluskey.functions2mindnf
+.. autofunction:: PyBoolNet.QuineMcCluskey.functions2mindnf
 
 
 .. _functions2primes:
@@ -17,7 +17,7 @@ functions2mindnf
 functions2primes
 ----------------
 
-.. autofunction:: QuineMcCluskey.functions2primes
+.. autofunction:: PyBoolNet.QuineMcCluskey.functions2primes
 
 
 .. _primes2mindnf:
@@ -25,4 +25,4 @@ functions2primes
 primes2mindnf
 -------------
 
-.. autofunction:: QuineMcCluskey.primes2mindnf
+.. autofunction:: PyBoolNet.QuineMcCluskey.primes2mindnf

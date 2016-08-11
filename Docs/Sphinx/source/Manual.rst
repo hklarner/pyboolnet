@@ -823,7 +823,7 @@ The result is shown in :ref:`the figure below <figure16>`.
 
 Modifying Networks
 ------------------
-Constant, inputs and blinkers
+constant, inputs and blinkers
 *****************************
 
 There are various reasons why it may be required to modify an imported Boolean network, i.e., a primes dictionary.
@@ -877,7 +877,7 @@ If you want to keep the original primes and modify a copy you have to create the
    >>> PIs.create_inputs(newprimes, names)
    
    
-Percolating constants
+percolating constants
 *********************
 A frequently used step in model analysis and model reduction is to compute the set of variables *that will become constant* due the constants already in the model.
 We call the network obtained by replacing the update functions of the new constants be the respective constant values the *percolated network*
@@ -920,7 +920,7 @@ Removing the constants results in::
 Here, the constants v1 and v3 are removed.
 
 
-Removing, adding and creating variables
+removing, adding and creating variables
 ***************************************
 You can not, in general, remove variables from a model because other variables may depend on the one you want to remove.
 In the example network below, how would you define the network obtained by removing v1 from it?::
@@ -980,7 +980,7 @@ An example of violating the condition that all variables must be defined is::
    error: can not add variables that are dependent on undefined variables.
    
 
-Input combinations
+input combinations
 ******************
 To enumerate all possible input combinations of a given network use the function :ref:`input_combinations`::
 
@@ -1003,7 +1003,7 @@ Model Checking
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example :ref:`Baier2008 <Baier2008>`.
 
-Transition Systems
+transition systems
 ******************
 Transition systems are very similar to state transition graphs but in addition to states and transitions there are *atomic propositions*
 which are the statements that are available for specifying states.
@@ -1057,7 +1057,7 @@ The transition system with the extended set of atomic propositions is shown in :
    
    The extended transition system for the Erk-Mek-Raf network.
 
-LTL Model Checking
+LTL model checking
 ******************
 Apart from a transition system, a model checking problem requires a *temporal specification*.
 Since |Software| uses :ref:`installation_nusmv` for solving model checking problems, two specification languages are available:
@@ -1172,7 +1172,7 @@ The existence of so-called *counterexamples* is essential to LTL model checking
 and :ref:`installation_nusmv` can be asked to return one if it finds one.
 
 
-LTL Counterexamples
+LTL counterexamples
 *******************
 If a LTL query is false then :ref:`installation_nusmv` can return a finite path that proves that the formula is false.
 
@@ -1226,7 +1226,7 @@ and using :ref:`IGs.activities2animation <activities2animation>`::
    >>> IGs.activities2animation(igraph, counterex, "counterexample.gif")
 
 
-CTL Model Checking
+CTL model checking
 ******************
 :ref:`installation_nusmv` can also solve model checking problems that involve *computation tree logic* (CTL).
 CTL formulas are constructed like LTL formulas but the temporal operators *F*, *G*, *X* and *U* must be quantified by *E* which means *for some path*
@@ -1350,7 +1350,7 @@ or disjunctions and conjunctions of basic propositions::
    To query whether *there is* an attractor of a certain type reachable from every initial state,
    rather than whether *all* attractors are of a certain type, use the query pattern *EF(AG(...))* instead of *AG(EF(AG(...)))*.
 
-CTL Counterexamples
+CTL counterexamples
 *******************
 If a CTL formula is false then :ref:`installation_nusmv` can return a finite path that starts with an initial state that does not satisfy the formula.
 
@@ -1391,7 +1391,7 @@ and checking that *Proliferation=0* for all of them.
       >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
       >>> state = counterex[0]
 
-Existential Queries
+existential queries
 *******************
 By definition, a LTL query is true iff *all paths* that are rooted in an initial state satisfy the LTL formula.
 Likewise, a CTL query is true iff *all initial states* satisfy the CTL formula.
@@ -1480,7 +1480,7 @@ Counterexamples of existential queries are therefore often also called *witnesse
    100
    
 
-Accepting States of CTL queries
+accepting states of CTL queries
 *******************************
 
 Since Version 2.0 PyBoolnet supports model checking with so-called accepting states.
@@ -1540,13 +1540,21 @@ The size of this set tells us that there are two states outside of the initial o
 Note that |software| does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property ``EF(STEADYSTATE)``::
 
-   >>> init = "INIT %s"%accepting["INITACCEPTING"]
+   >>> prop = accepting["INITACCEPTING"]
+   >>> init = "INIT %s"%prop
    >>> spec = "CTLSPEC EF(STEADYSTATE)"
    >>> MC.check_primes(primes, update, init, spec)
    True
 
+You can use the function :ref:`proposition2states` to enumerate all states that are referenced by a propositional formula::
+
+   >>> for x in STGs.proposition2states(primes, prop): print x
+   {'x2': 1, 'x0': 0, 'x1': 0}
+   {'x2': 1, 'x0': 1, 'x1': 0}
+   {'x2': 0, 'x0': 1, 'x1': 0}
    
-Computing Trap Spaces
+   
+computing trap spaces
 ---------------------
 Maximal, Minimal and All Trap Spaces 
 The term *trap space* merges the notions "subspace" and "trap set".
@@ -1631,7 +1639,7 @@ The result is shown in :ref:`the figure below <figure24>` in which ``-00`` is mi
 Attractors
 ----------
 
-Attractor Detection
+attractor detection
 *******************
 Attractors capture the long-term activities of the components of Boolean networks.
 Two different types of attractors are possible: either all activities stabilize at some values and the network enters a steady state or at least one component shows sustained oscillations and the network enters a cyclic attractor.
@@ -1706,7 +1714,7 @@ Hence, :ref:`find_attractor_by_randomwalk_and_ctl` should always be encapsulated
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
 
 
-Attractor Basins
+attractor basins
 ****************
 
 The module :ref:`AttractorBasins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
@@ -1778,8 +1786,8 @@ An example is given in :ref:`the figure below <figure27>`:
    
    The aggregated basin diagram of the network *arellano_rootstem* from the repository.
 
-Approximations
-**************
+subspace approximations
+***********************
 
 This section is based on the results published in :ref:`Klarner2015(a) <klarner2015trap>`.
 The overall goal is to efficiently compute all attractors of an asynchronous STG.
