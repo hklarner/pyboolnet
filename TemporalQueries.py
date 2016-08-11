@@ -104,7 +104,6 @@ def EF_unsteady_states( Names ):
         * *Names* (list): a list of names of variables
 
     **returns**:
-
         * *Formula* (str): the CTL formula
 
     **example**::
