@@ -85,8 +85,7 @@ def find_inputs(Primes):
 
     **example**::
 
-            >>> inputs = find_inputs(primes)
-            >>> print(inputs)
+            >>> find_inputs(primes)
             ['DNA_damage','EGFR','FGFR3']
     """
 
@@ -110,8 +109,7 @@ def find_outputs(Primes):
 
     **example**::
 
-            >>> inputs = find_inputs(primes)
-            >>> print(inputs)
+            >>> find_inputs(primes)
             ['Proliferation','Apoptosis','GrowthArrest']
     """
 
@@ -300,8 +298,8 @@ def create_disjoint_union(Primes1, Primes2):
 
     **example**::
 
-            >>> primes1 = bnet2primes("A, B \n B, A")
-            >>> primes1 = bnet2primes("C, D \n D, E")
+            >>> primes1 = bnet2primes("A, B \\n B, A")
+            >>> primes1 = bnet2primes("C, D \\n D, E")
             >>> newprimes = create_disjoint_union(primes1, primes2)
             >>> FileExchange.primes2bnet(newprimes)
             A, B
