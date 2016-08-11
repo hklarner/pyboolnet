@@ -7,6 +7,7 @@ import os
 import subprocess
 import networkx
 
+import PyBoolNet.FileExchange
 import PyBoolNet.TrapSpaces
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
@@ -808,8 +809,6 @@ def str2subspace( Primes, Str ):
     return dict([(name, int(value)) for name, value in zip(sorted(Primes), Str) if not value=="-"])
 
 
-
-
 def subspace2states( Primes, Subspace ):
     """
     Generates all states contained in *Subspace*.
@@ -837,6 +836,45 @@ def subspace2states( Primes, Subspace ):
         states.append(state)
 
     return states
+
+
+def proposition2states(Primes, Proposition):
+    """
+    Generates all states that are referenced by *Proposition* in the context of the variables given by *Primes*.
+    The syntax of *Proposition* should be as in bnet files and TRUE and FALSE in will be treated as 1 and 0.
+
+    .. note:
+        This function is a Python generator, i.e., it yields the referenced states one by one rather than returning a list of all states at once.
+
+        
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Proposition* (str): a propositional formula
+
+    **yields**:
+        * *State* (dict): the referenced states
+
+    **example**:
+
+        >>> prop = "!Erk | (Raf & Mek)"
+        >>> proposition2states(primes,prop).next()
+        {'Raf': 0, 'Mek': 1, 'Erk': 0}
+    """
+    
+    assert("?" not in Primes)
+    Proposition = Proposition.replace("TRUE","1")
+    Proposition = Proposition.replace("FALSE","0")
+    
+    bnet = "?, %s"%Proposition
+    newprimes = PyBoolNet.FileExchange.bnet2primes(bnet)
+    
+    states = set([])
+    for p in newprimes["?"][1]:
+        for x in subspace2states(Primes, p):
+            states.add(state2str(x))
+
+    for x in states:
+        yield str2state(Primes,x)
 
 
 def bounding_box(Primes, Subspaces):
