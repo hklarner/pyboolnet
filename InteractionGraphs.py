@@ -414,8 +414,8 @@ def add_style_subgraphs( IGraph, Subgraphs ):
     """
     Adds the subgraphs given in *Subgraphs* to *IGraph* - or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
-    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
-    list of nodes and a dictionary of subgraph attributes.
+    *Subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
+    is a dictionary of subgraph attributes in *dot* format.
 
     .. note::
     
@@ -425,18 +425,13 @@ def add_style_subgraphs( IGraph, Subgraphs ):
 
     **arguments**:
         * *IGraph*: interaction graph
-        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+        * *Subgraphs* (list): pairs of lists and subgraph attributes
 
     **example**:
 
-        >>> sub1 = ["v1","v2"]
-        >>> sub2 = ["v3","v4"]
-        >>> subgraphs = [sub1,sub2]
-        >>> add_style_subgraphs(igraph, subgraphs)
-
         >>> sub1 = (["v1","v2"], {"label":"Genes"})
-        >>> sub2 = ["v3","v4"]
-        >>> subgraphs = [(sub1,sub2]
+        >>> sub2 = (["v3","v4"], {})
+        >>> subgraphs = [sub1,sub2]
         >>> add_style_subgraphs(igraph, subgraphs)
     """
 

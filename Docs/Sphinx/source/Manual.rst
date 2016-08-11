@@ -463,7 +463,7 @@ the subgraphs style
 *******************
 
 The function :ref:`add_style_subgraphs` allows you to specify subsets of nodes that will be added to a *dot* subgraph.
-The subgraphs may be specified either as a list of names of variables or as a tuple that consists of a list of names and a dictionary
+The subgraphs may be specified as a list of pairs that consist of a list of names and a dictionary
 of *dot* attributes for that subgraph, e.g., a label or background color.
 
 .. note::
@@ -478,7 +478,7 @@ Consider the network::
    >>> bnet = "\n".join(bnet)
    >>> primes = FEX.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
-   >>> subgraphs = [["v2","v6"],
+   >>> subgraphs = [(["v2","v6"],{}),
    ...              (["v1","v4"],{"label":"Genes", "fillcolor":"lightblue"})]
    >>> IGs.add_style_subgraphs(igraph, subgraphs)
    >>> igraph.graph["label"] = "Example 8: Interaction graph with a subgraph style"
