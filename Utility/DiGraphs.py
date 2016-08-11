@@ -5,11 +5,11 @@ import subprocess
 import networkx
 import itertools
 
-from . import Misc
+import PyBoolNet.Utility
     
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
-config = Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 LAYOUT_ENGINES = {name:os.path.join(BASE, "Dependencies", config.get("Executables", name)) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 

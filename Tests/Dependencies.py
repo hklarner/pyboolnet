@@ -10,7 +10,7 @@ import itertools
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(BASE)
 
-import Utility
+import PyBoolNet.Utility
 
 FNAME_SETTINGS = os.path.join(BASE, "Dependencies", "settings.cfg")
 
@@ -32,7 +32,7 @@ if not os.path.exists(FNAME_SETTINGS):
     print("created %s"%FNAME_SETTINGS)
 
 
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 

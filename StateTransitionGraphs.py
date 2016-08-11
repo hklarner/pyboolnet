@@ -7,20 +7,19 @@ import os
 import subprocess
 import networkx
 
-from . import ModelChecking
-from . import TemporalQueries
-from . import TrapSpaces
-from . import Utility
+import PyBoolNet.TrapSpaces
+import PyBoolNet.Utility.Misc
+import PyBoolNet.Utility.DiGraphs
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
 
 def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
-    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
+    PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
 
 
 def primes2stg( Primes, Update, InitialStates=lambda x: True ):
@@ -153,7 +152,7 @@ def stg2dot( STG, FnameDOT=None ):
           >>> stg2image( stg, "irma_stg.pdf")
     """
 
-    return Utility.DiGraphs.digraph2dot(STG, FnameDOT)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(STG, FnameDOT)
 
 
 def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
@@ -174,7 +173,7 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
           >>> stg2image(stg, "mapk_stg.svg", "dot")
     """
 
-    Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
         
         
 def copy( STG ):
@@ -240,7 +239,7 @@ def add_style_sccs( STG ):
           >>> add_style_sccs(stg)
     """
     
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
 
     for i,scc in enumerate(condensation_graph.nodes()):
         name = "cluster_%i"%i
@@ -370,7 +369,7 @@ def add_style_subgraphs( STG, Subgraphs ):
         >>> add_style_subgraphs(stg, subgraphs)
     """
 
-    Utility.DiGraphs.add_style_subgraphs( STG, Subgraphs )
+    PyBoolNet.Utility.DiGraphs.add_style_subgraphs( STG, Subgraphs )
 
 
 def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
@@ -392,7 +391,7 @@ def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
     states = STG.nodes()
     smallest_subspace = bounding_box(Primes,states)
     
-    for tspace in TrapSpaces.trap_spaces_insideof(Primes, "min", smallest_subspace, MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.TrapSpaces.trap_spaces_insideof(Primes, "min", smallest_subspace, MaxOutput=MaxOutput):
 
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([state2str(x) for x in subspace2states(Primes,tspace) if state2str(x) in states])
@@ -908,11 +907,11 @@ def stg2sccgraph( STG ):
         >>> sccgraph = stg2sccgraph(stg)
     """
 
-    graph = Utility.DiGraphs.digraph2sccgraph(STG)
+    graph = PyBoolNet.Utility.DiGraphs.digraph2sccgraph(STG)
     graph.graph["node"] = {"color":"none","style":"filled","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
         if len(node)>1 or STG.has_edge(node[0],node[0]):
             graph.node[node]["fillcolor"] = "lightgray"
@@ -938,8 +937,8 @@ def sccgraph2dot( SCCGraph, FnameDOT=None ):
     """
 
     graph = SCCGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -958,8 +957,8 @@ def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
 
     graph = SCCGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
 
 
@@ -980,11 +979,11 @@ def stg2condensationgraph( STG ):
         >>> cgraph = stg2condensationgraph(stg)
     """
 
-    graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
     graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
@@ -1007,8 +1006,8 @@ def condensationgraph2dot( CGraph, FnameDOT=None ):
     """
 
     graph = CGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -1027,8 +1026,8 @@ def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False
     """
 
     graph = CGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
 
 
 # The HTG
@@ -1058,7 +1057,7 @@ def stg2htg( STG ):
         x=tuple(sorted(x))
         if len(x)>1 or STG.has_edge(x[0],x[0]):
             sccs.append(x)
-            suc = Utility.DiGraphs.successors(STG,x)
+            suc = PyBoolNet.Utility.DiGraphs.successors(STG,x)
             if set(suc)==set(x):
                 attractors.append(x)
         else:
@@ -1070,7 +1069,7 @@ def stg2htg( STG ):
     for x in cascades:
         pattern = []
         for i, A in enumerate(sccs):
-            if Utility.DiGraphs.has_path(STG,x,A):
+            if PyBoolNet.Utility.DiGraphs.has_path(STG,x,A):
                 pattern.append(i)
         pattern = tuple(pattern)
 
@@ -1085,11 +1084,11 @@ def stg2htg( STG ):
         for Y in graph.nodes():
             if X==Y: continue
             
-            if Utility.DiGraphs.has_edge(STG,X,Y):
+            if PyBoolNet.Utility.DiGraphs.has_edge(STG,X,Y):
                 graph.add_edge(X,Y)
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
@@ -1112,8 +1111,8 @@ def htg2dot( HTG, FnameDOT=None ):
     """
 
     graph = HTG.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -1132,5 +1131,5 @@ def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
 
     graph = HTG.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)

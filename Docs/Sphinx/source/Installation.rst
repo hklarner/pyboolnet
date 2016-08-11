@@ -103,7 +103,7 @@ To test whether the dependencies are correctly installed, run::
 
    $ python
    >>> import PyBoolNet
-   >>> PyBoolNet.Tests.dependencies.run()
+   >>> PyBoolNet.Tests.Dependencies.run()
    
 For information on what to do when not all tests are OK see :ref:`Troubleshooting <installation_troubleshooting>`.
    

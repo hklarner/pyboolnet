@@ -6,18 +6,18 @@ import math
 import os
 import networkx
 
-from . import StateTransitionGraphs
-from . import Utility
+import PyBoolNet.StateTransitionGraphs
+import PyBoolNet.Utility
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
 
 def dot2image(FnameDOT, FnameIMAGE):
-    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
+    PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
 def primes2igraph( Primes ):
@@ -110,7 +110,7 @@ def igraph2dot( IGraph, FnameDOT=None ):
           >>> dotfile = igraph2dot(igraph)
     """
 
-    return Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
 def igraph2image(IGraph, FnameIMAGE, Silent=False):
@@ -130,7 +130,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image( igraph, "mapk_igraph.svg" )
     """
 
-    Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
+    PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
 
 
 def create_image(Primes, FnameIMAGE, Styles=["interactionsigns", "sccs"]):
@@ -250,7 +250,7 @@ def add_style_activities( IGraph, Activities ):
 
     names = sorted(IGraph.nodes())
     if type(Activities)==str:
-        Activities = StateTransitionGraphs.str2subspace(names, Activities)
+        Activities = PyBoolNet.StateTransitionGraphs.str2subspace(names, Activities)
 
     for name in IGraph.nodes():
 
@@ -365,7 +365,7 @@ def add_style_sccs( IGraph ):
     """
     
     subgraphs = networkx.DiGraph()
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(IGraph)
+    condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(IGraph)
 
     for scc in condensation_graph.nodes():
         depth = condensation_graph.node[scc]["depth"]
@@ -439,7 +439,7 @@ def add_style_subgraphs( IGraph, Subgraphs ):
         >>> add_style_subgraphs(igraph, subgraphs)
     """
 
-    Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
+    PyBoolNet.Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
 
 
 def add_style_default( IGraph ):

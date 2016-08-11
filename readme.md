@@ -9,6 +9,9 @@ For questions and suggestions do not hestitate to open issues or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
+ 
+#### release note for next version
+- bugfix absolute import for Python 3.x
 
 #### release notes for version 2.0 (August 2016)
 - added functions `create_variables`, `create_disjoin_union` to module PIs

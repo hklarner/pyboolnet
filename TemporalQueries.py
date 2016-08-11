@@ -1,6 +1,6 @@
 
 
-import StateTransitionGraphs as STGs
+import PyBoolNet.StateTransitionGraphs
 
 
 def EF_nested_reachability(Primes, Subspaces):
@@ -23,7 +23,7 @@ def EF_nested_reachability(Primes, Subspaces):
     if Subspaces==[]:
         return 'TRUE'
 
-    Subspaces = [STGs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
+    Subspaces = [PyBoolNet.StateTransitionGraphs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
 
     x = Subspaces.pop(0)
     result = "EF("+ subspace2proposition(Primes, x) +"  &$)"
@@ -62,7 +62,7 @@ def AGEF_oneof_subspaces( Primes, Subspaces ):
     if Subspaces==[]:
         return 'TRUE'
 
-    Subspaces = [STGs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
+    Subspaces = [PyBoolNet.StateTransitionGraphs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
 
     return 'AG('+ EF_oneof_subspaces(Primes, Subspaces) +')'
 
@@ -87,7 +87,7 @@ def EF_oneof_subspaces( Primes, Subspaces ):
     if not Subspaces:
         return 'TRUE'
     
-    Subspaces = [STGs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
+    Subspaces = [PyBoolNet.StateTransitionGraphs.str2subspace(Primes, x) if type(x)==str else x for x in Subspaces]
     
     return 'EF('+ ' | '.join(subspace2proposition(Primes, x) for x in Subspaces) +')'
 
@@ -149,7 +149,7 @@ def subspace2proposition( Primes, Subspace ):
         return "TRUE"
 
     if type(Subspace)==str:
-        Subspace = STGs.str2subspace(Primes, Subspace)
+        Subspace = PyBoolNet.StateTransitionGraphs.str2subspace(Primes, Subspace)
     
     return '&'.join([name if value==1 else '!'+name for name,value in sorted(Subspace.items())])
 

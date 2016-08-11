@@ -6,12 +6,12 @@ import os
 import ast
 import datetime
 
-from . import InteractionGraphs
-from . import QuineMcCluskey
-from . import Utility
+import PyBoolNet.InteractionGraphs
+import PyBoolNet.QuineMcCluskey
+import PyBoolNet.Utility
 
 BASE = os.path.join(os.path.dirname(__file__))
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 CMD_BNET2PRIMES = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))
@@ -157,7 +157,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False):
 
     lines = ['targets, factors']
     if Minimize:
-        expressions = QuineMcCluskey.primes2mindnf(Primes)
+        expressions = PyBoolNet.QuineMcCluskey.primes2mindnf(Primes)
         for name in names:
             lines+= [(name+',').ljust(width)+expressions[name]]
 
@@ -288,7 +288,7 @@ def primes2bns(Primes, FnameBNS):
     lines = ['# '+', '.join(names_sorted),'']
     lines+= ['.v %i'%len(names_sorted),'']
     
-    ig = InteractionGraphs.primes2igraph(Primes)
+    ig = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     for i, name in enumerate(names_sorted):
         i=i+1
         lines+= ['# %s'%name]

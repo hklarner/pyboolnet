@@ -5,24 +5,24 @@ import sys
 import itertools
 import math
 import random
-from operator import mul
+import operator
+import functools
 import networkx
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 sys.path.append(BASE)
 
-import FileExchange
-import ModelChecking
-import TemporalQueries
-import TrapSpaces
-import AttractorDetection
-import StateTransitionGraphs
-import InteractionGraphs
-import Repository
-import PrimeImplicants
-import Utility
+import PyBoolNet.FileExchange
+import PyBoolNet.ModelChecking
+import PyBoolNet.TemporalQueries
+import PyBoolNet.TrapSpaces
+import PyBoolNet.AttractorDetection
+import PyBoolNet.StateTransitionGraphs
+import PyBoolNet.InteractionGraphs
+import PyBoolNet.PrimeImplicants
+import PyBoolNet.Utility
 
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
 
@@ -67,14 +67,14 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     assert(Update in ["synchronous", "mixed", "asynchronous"])
 
     if not Attractors:
-        Attractors = TrapSpaces.trap_spaces(Primes, "min")
+        Attractors = PyBoolNet.TrapSpaces.trap_spaces(Primes, "min")
     
     if not Primes:
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
-    igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = InteractionGraphs.find_outdag(igraph)
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    outdags = PyBoolNet.InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
         print("basin_diagram(..)")
@@ -88,9 +88,9 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     counter = 0
     diagrams = []
     for component in components:
-        subprimes = PrimeImplicants.copy(Primes)
+        subprimes = PyBoolNet.PrimeImplicants.copy(Primes)
         remove = [x for x in Primes if not x in component]
-        PrimeImplicants.remove_variables(subprimes, remove)
+        PyBoolNet.PrimeImplicants.remove_variables(subprimes, remove)
         
         attrs_projected = project_attractors(Attractors, component)
 
@@ -131,12 +131,12 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         raise Exception
 
     # case by case for inputs
-    inputs = PrimeImplicants.find_inputs(Primes)
+    inputs = PyBoolNet.PrimeImplicants.find_inputs(Primes)
     if inputs:
         cases = []
-        for combination in PrimeImplicants.input_combinations(Primes):
-            init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if Utility.Misc.dicts_are_consistent(x,combination)]
+        for combination in PyBoolNet.PrimeImplicants.input_combinations(Primes):
+            init = "INIT %s"%PyBoolNet.TemporalQueries.subspace2proposition(Primes,combination)
+            attr = [x for x in Attractors if PyBoolNet.Utility.Misc.dicts_are_consistent(x,combination)]
             cases.append((init,attr))
     else:
         cases = [("INIT TRUE",Attractors)]
@@ -156,7 +156,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
     for i, (init, attr) in enumerate(cases):
         total_potential_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
+        specs = [PyBoolNet.TemporalQueries.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
@@ -180,7 +180,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 spec = " & ".join("EF(%s)"%x if flag else "!EF(%s)"%x for flag, x in zip(vector, specs))
                 spec = "CTLSPEC %s"%spec
 
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
                 
                 data = {"attractors":   [x for flag,x in zip(vector,attr) if flag],
@@ -220,7 +220,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
             if ComputeBorders:
                 init = "INIT %s"%source_data["formula"]
                 spec = "CTLSPEC EX(%s)"%target_data["formula"]
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
                 
                 data = {}
@@ -235,7 +235,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
 
                     else:
                         spec = "CTLSPEC EF(%s)"%data["border_formula"]
-                        answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                         counter+=1
                         
                         data["finally_size"] = accepting["INITACCEPTING_SIZE"]
@@ -249,7 +249,7 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 phi2 = target_data["formula"]
                 init = "INIT %s"%phi1
                 spec = "CTLSPEC E[%s U %s]"%(phi1,phi2)
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter+=1
 
                 data = {}
@@ -302,7 +302,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
-    attractors = set(StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
+    attractors = set(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
     attractors = sorted(attractors)
 
     label = ["attractors:"]+["A%i = %s"%x for x in enumerate(attractors)]
@@ -311,14 +311,14 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
     if FnameATTRACTORS:
         key = networkx.DiGraph()
         key.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue", shape="rect")
-        Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
+        PyBoolNet.Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
         
     else:
         graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
-        attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
-        attr = Utility.Misc.divide_list_into_similar_length_lists(attr)
+        attr = sorted("A%i"%attractors.index(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
+        attr = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(attr)
         attr = [",".join(x) for x in attr]
         label = attr+["states: %s"%data["size"]]
         label = "<br/>".join(label)
@@ -349,21 +349,21 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     if StyleInputs:
         subgraphs = []
-        for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
-            label = StateTransitionGraphs.subspace2str(Primes,inputs)
+        for inputs in PyBoolNet.PrimeImplicants.input_combinations(Primes):
+            nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
+            label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
             
         if subgraphs:
             graph.graph["subgraphs"] = []
 
-        Utility.DiGraphs.add_style_subgraphs(graph, subgraphs)
+        PyBoolNet.Utility.DiGraphs.add_style_subgraphs(graph, subgraphs)
 
 
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
         
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
 
 
 def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
@@ -411,7 +411,7 @@ def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
         
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
 
 
 ## auxillary functions
@@ -428,7 +428,7 @@ def project_attractors( Attractors, Names ):
 
 
 def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if Utility.Misc.dicts_are_consistent(x,y)]
+    return [x for x in Attractors for y in Projection if PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)]
 
 
 def cartesian_product( Diagrams, Factor, ComputeBorders ):
@@ -442,12 +442,12 @@ def cartesian_product( Diagrams, Factor, ComputeBorders ):
     nodes = [x.nodes(data=True) for x in Diagrams]
     for product in itertools.product(*nodes):
         data = {}
-        data["size"] = reduce(mul,[x["size"] for _,x in product]) * Factor
+        data["size"] = functools.reduce(operator.mul,[x["size"] for _,x in product]) * Factor
         data["formula"] = " & ".join("(%s)"%x["formula"] for _,x in product)
             
         attrs = [x["attractors"] for _,x in product]
         attrs = list(itertools.product(*attrs))
-        attrs = [Utility.Misc.merge_dicts(x) for x in attrs]
+        attrs = [PyBoolNet.Utility.Misc.merge_dicts(x) for x in attrs]
         data["attractors"] = attrs
 
         node = tuple(x for x,_ in product)

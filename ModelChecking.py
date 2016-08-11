@@ -6,13 +6,13 @@ import unittest
 import ast
 import datetime
 
-from . import Utility
-from . import PrimeImplicants
-from . import TemporalQueries
+import PyBoolNet.Utility
+import PyBoolNet.PrimeImplicants
+import PyBoolNet.TemporalQueries
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Misc.myconfigparser.SafeConfigParser()
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 CMD_NUSMV = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") ))
 
@@ -425,14 +425,14 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
     lines+= ['DEFINE']   
     for name in names:
         
-        if Primes[name] == PrimeImplicants.CONSTANT_ON:
+        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
             expression = 'TRUE'
             
-        elif Primes[name] == PrimeImplicants.CONSTANT_OFF:
+        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
             expression = 'FALSE'
             
         else:
-            expression = ' | '.join(TemporalQueries.subspace2proposition(Primes, x) for x in Primes[name][1])
+            expression = ' | '.join(PyBoolNet.TemporalQueries.subspace2proposition(Primes, x) for x in Primes[name][1])
             
         lines+= ['\t%s_IMAGE := %s;'%(name, expression)]
 
