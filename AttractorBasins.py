@@ -34,6 +34,8 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     The nodes of the diagram represent states that can reach the exact same subset of *Attractors*.
     Nodes are labeled by the index of the attractor in the order given in *Attractors* and the number of states
     that are represented. Edges indicate the existence of a transition between two states in the respective sets.
+    Edges are labeled by the number of states of the source basin that can reach the target basin and,
+    if *ComputeBorders* is true, additionally by the size of the border.
 
     The algorithm requires model checking with accepting states, i.e., NuSMV-a.
     Basic steps towards increased efficiency are implemented:
@@ -277,7 +279,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     **arguments**:
         * *Primes*: prime implicants, needed for pretty printing of the attractors.
-        * *Diagram* (networkx.DiGrap): a basin diagram
+        * *Diagram* (networkx.DiGraph): a basin diagram
         * *FnameIMAGE* (str): name of the diagram image
         * *FnameATTRACTORS* (str): name of the attractor key file, if wanted
         * *StyleInputs* (bool): whether basins should be grouped by input combinations
@@ -341,7 +343,13 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
         
 
     for source, target, data in Diagram.edges(data=True):
-        graph.add_edge(source, target)
+        if "border_size" in data:
+            label = "%i/%i"%(data["border_size"],data["finally_size"])
+        else:
+            label = data["finally_size"]
+            
+        graph.add_edge(source, target, label=label)
+            
         if StyleAdvanced:
             if data["finally_size"] < Diagram.node[source]["size"]:
                 graph.edge[source][target]["style"]="dashed"
@@ -362,7 +370,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     mapping = {x:str(x) for x in graph.nodes()}
     networkx.relabel_nodes(graph,mapping,copy=False)
-        
+
     PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
 
 
