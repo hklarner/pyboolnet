@@ -100,6 +100,14 @@ remove_all_variables_except
 .. autofunction:: PyBoolNet.PrimeImplicants.remove_all_variables_except
 
 
+.. _rename_variable:
+
+rename_variable
+---------------
+
+.. autofunction:: PyBoolNet.PrimeImplicants.rename_variable
+
+
 .. _percolate_and_keep_constants:
 
 percolate_and_keep_constants

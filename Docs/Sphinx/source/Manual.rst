@@ -531,12 +531,6 @@ using the function :ref:`activities2animation`::
    >>> activities = ["-100", "-110", "-010"]
    >>> IGs.activities2animation(igraph, activities, "animation.gif")
    
-   
-
-   
-
-
-   
 
 the default style
 *****************
@@ -569,7 +563,6 @@ The result is shown in :ref:`the figure below <figure09>`.
        
        
        
-
 Drawing the State Transition Graph
 ----------------------------------
 
@@ -638,8 +631,6 @@ To construct the STG starting from initial states call::
 
    >>> stg = STGs.primes2stg(primes, update, init)
        
-
-   
 
 .. warning::
    You should not draw asynchronous STGs with more than 2^7=128 states as *dot* will take very long to compute the layout.
@@ -757,8 +748,6 @@ The result is shown in :ref:`the figure below <figure14>`.
    The state transition graph "*example15_stg.pdf*" with attributes added by :ref:`add_style_mintrapspaces`.
      
 
-
-
 the subspaces style
 *******************
 
@@ -875,6 +864,15 @@ If you want to keep the original primes and modify a copy you have to create the
 
    >>> newprimes = PIs.copy(primes)
    >>> PIs.create_inputs(newprimes, names)
+   
+Components may be renamed using the function :ref:`rename_variable`, e.g.
+
+   >>> PIs.rename_variable(primes, "v1", "x")
+   >>> FEX.primes2bnet(primes)
+   x,    !x
+   v2,   !v2
+   v3,   x & v2 & v3 & v4
+   v4,   v2 & v3 | x & v3
    
    
 percolating constants

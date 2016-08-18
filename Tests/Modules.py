@@ -955,6 +955,16 @@ class TestTrapSpaces(unittest.TestCase):
         
 
 class TestPrimeImplicants(unittest.TestCase):
+    def test_rename(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+        PyBoolNet.PrimeImplicants.rename_variable(primes, "Raf", "Raf23")
+        expected = {'Raf23': [[{'Raf23': 1, 'Erk': 1}], [{'Raf23': 0}, {'Erk': 0}]], 'Mek': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0, 'Erk': 0}], [{'Mek': 1, 'Raf23': 1}, {'Erk': 1}]], 'Erk': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0}], [{'Mek': 1, 'Raf23': 1}, {'Mek': 1, 'Erk': 1}]]}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(primes)
+        self.assertTrue( primes==expected, msg )
+        self.assertRaises(Exception, PyBoolNet.PrimeImplicants.rename_variable, primes, "GADD", "GADD12")
+
+        
     def test_create_disjoint_union(self):
         primes1 = PyBoolNet.FileExchange.bnet2primes("A, B \n B, !A")
         primes2 = PyBoolNet.FileExchange.bnet2primes("C, D \n D, C")
@@ -1419,7 +1429,7 @@ class TestInteractionGraphs(unittest.TestCase):
         primes = PyBoolNet.FileExchange.read_primes( FnamePRIMES=fname_in )
         
         igraph = PyBoolNet.InteractionGraphs.primes2igraph( Primes=primes )
-        subgraphs = [["v1","v2"],(["v3","v4"],{"label":"jo"})]
+        subgraphs = [(["v1","v2"],{}),(["v3","v4"],{"label":"jo"})]
         PyBoolNet.InteractionGraphs.add_style_subgraphs( IGraph=igraph, Subgraphs=subgraphs )
         PyBoolNet.InteractionGraphs.igraph2dot( IGraph=igraph, FnameDOT=fname_out_dot )
         PyBoolNet.InteractionGraphs.dot2image( FnameDOT=fname_out_dot, FnameIMAGE=fname_out_pdf )
@@ -1441,7 +1451,7 @@ if __name__=="__main__":
     if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestStateTransitionGraphs("test_proposition2states"))
+        suite.addTest(TestPrimeImplicants("test_rename"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)

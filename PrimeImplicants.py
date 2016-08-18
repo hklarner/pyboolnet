@@ -26,7 +26,7 @@ def copy(Primes):
 
     **example**::
 
-            >>> primes_new = copy(primes)
+        >>> primes_new = copy(primes)
     """
     
     primes_new = {}
@@ -53,8 +53,8 @@ def are_equal(Primes1, Primes2):
 
     **example**::
 
-            >>> are_equal(primes1, primes2)
-            True
+        >>> are_equal(primes1, primes2)
+        True
     """
     
     if len(Primes1)!=len(Primes2):
@@ -85,8 +85,8 @@ def find_inputs(Primes):
 
     **example**::
 
-            >>> find_inputs(primes)
-            ['DNA_damage','EGFR','FGFR3']
+        >>> find_inputs(primes)
+        ['DNA_damage','EGFR','FGFR3']
     """
 
     inputs = []
@@ -109,8 +109,8 @@ def find_outputs(Primes):
 
     **example**::
 
-            >>> find_inputs(primes)
-            ['Proliferation','Apoptosis','GrowthArrest']
+        >>> find_inputs(primes)
+        ['Proliferation','Apoptosis','GrowthArrest']
     """
 
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
@@ -131,8 +131,8 @@ def find_constants(Primes):
 
     **example**::
 
-            >>> find_constants(primes)
-            {'CGC':1,'IFNAR1':1,'IFNAR2':0,'IL4RA':1}
+        >>> find_constants(primes)
+        {'CGC':1,'IFNAR1':1,'IFNAR2':0,'IL4RA':1}
     """
 
     constants = {}
@@ -156,7 +156,7 @@ def create_constants(Primes, Constants):
 
     **example**::
 
-            >>> create_constants(primes, {"p53":1, "p21":0})
+        >>> create_constants(primes, {"p53":1, "p21":0})
     """
 
     for name, value in Constants.items():
@@ -188,8 +188,8 @@ def create_inputs(Primes, Names):
 
     **example**::
 
-            >>> names = ["p21", "p53"]
-            >>> create_inputs(primes, names)
+        >>> names = ["p21", "p53"]
+        >>> create_inputs(primes, names)
     """
 
     for name in Names:
@@ -226,8 +226,8 @@ def create_blinkers(Primes, Names):
 
     **example**::
 
-            >>> names = ["p21", "p53"]
-            >>> create_blinkers(primes, names)
+        >>> names = ["p21", "p53"]
+        >>> create_blinkers(primes, names)
     """
 
     for name in Names:
@@ -298,14 +298,14 @@ def create_disjoint_union(Primes1, Primes2):
 
     **example**::
 
-            >>> primes1 = bnet2primes("A, B \\n B, A")
-            >>> primes1 = bnet2primes("C, D \\n D, E")
-            >>> newprimes = create_disjoint_union(primes1, primes2)
-            >>> FileExchange.primes2bnet(newprimes)
-            A, B
-            B, A
-            C, D
-            D, E
+        >>> primes1 = bnet2primes("A, B \\n B, A")
+        >>> primes1 = bnet2primes("C, D \\n D, E")
+        >>> newprimes = create_disjoint_union(primes1, primes2)
+        >>> FileExchange.primes2bnet(newprimes)
+        A, B
+        B, A
+        C, D
+        D, E
     """
 
     assert(not set(Primes1).intersection(set(Primes2)))
@@ -330,8 +330,8 @@ def remove_variables(Primes, Names):
 
     **example**::
 
-            >>> names = ["PKC","GADD45","ELK1","FOS"]
-            >>> remove_variables(primes, names)
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_variables(primes, names)
     """
 
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
@@ -358,8 +358,8 @@ def remove_all_variables_except(Primes, Names):
 
     **example**::
 
-            >>> names = ["PKC","GADD45","ELK1","FOS"]
-            >>> remove_all_variables_except(primes, names)
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_all_variables_except(primes, names)
     """
 
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
@@ -373,7 +373,41 @@ def remove_all_variables_except(Primes, Names):
         for name in list(Primes):
             if not name in Names:
                 Primes.pop(name)
+
+
+def rename_variable(Primes, OldName, NewName):
+    """
+    Renames a single component, i.e., replace every occurence of *OldName* with *NewName*.
+    Throws an exception if *NewName* is already contained in *Primes*.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *OldName* (str): the old name of the component
+        * *NewName* (str): the new name of the component
+
+    **example**::
+
         
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_all_variables_except(primes, names)
+    """
+
+    if OldName==NewName:
+        return
+
+    if NewName in Primes:
+        print(" error: can not rename because %s already exists in primes."%NewName)
+        raise Exception
+
+    else:
+        Primes[NewName] = Primes.pop(OldName)
+        for name in Primes:
+            for value in [0,1]:
+                for prime in Primes[name][value]:
+                    if OldName in prime:
+                        prime[NewName] = prime.pop(OldName)
+                
+
 
 def _substitute( Primes, Name, Constants ):
     """
@@ -408,10 +442,10 @@ def _percolation( Primes, RemoveConstants ):
 
     **example**::
 
-            >>> percolate_constants(primes)
-            >>> constants = percolate_constants(primes, True)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> percolate_constants(primes)
+        >>> constants = percolate_constants(primes, True)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
     
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
@@ -447,9 +481,9 @@ def percolate_and_keep_constants( Primes ):
 
     **example**::
 
-            >>> constants = percolate_and_keep_constants(primes)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> constants = percolate_and_keep_constants(primes)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
     return _percolation( Primes, RemoveConstants=False )
@@ -468,9 +502,9 @@ def percolate_and_remove_constants( Primes ):
 
     **example**::
 
-            >>> constants = percolate_and_remove_constants(primes)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> constants = percolate_and_remove_constants(primes)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
     return _percolation( Primes, RemoveConstants=True )
@@ -488,13 +522,13 @@ def input_combinations(Primes):
 
     **example**::
 
-            >>> len(find_inputs(primes))
-            >>> for x in input_combinations(primes):
-            ...     print(STGs.subspace2str(primes,x))
-            00
-            01
-            10
-            11
+        >>> len(find_inputs(primes))
+        >>> for x in input_combinations(primes):
+        ...     print(STGs.subspace2str(primes,x))
+        00
+        01
+        10
+        11
     """
     
     inputs = find_inputs(Primes)
