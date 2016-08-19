@@ -6,6 +6,7 @@ import os
 import ast
 import datetime
 
+import PyBoolNet.PrimeImplicants
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Utility.Misc
@@ -15,8 +16,6 @@ config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 
 CMD_BNET2PRIMES = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))
-
-
 
 
 def _bnet2primes_error(proc, out, err, cmd):
@@ -29,6 +28,7 @@ def _bnet2primes_error(proc, out, err, cmd):
         print('\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode)
         print('Command: %s'%' '.join(cmd))
         raise Exception
+
 
 def bnet2primes( BNET, FnamePRIMES=None ):
     """    
@@ -163,9 +163,9 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False):
 
     else:
         for name in names:
-            if Primes[name][1]==[{}]:
+            if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
                 expression = '1'
-            elif Primes[name][1]==[]:
+            elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
                 expression = '0'
             else:
                 expression = ' | '.join([' & '.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
@@ -219,7 +219,6 @@ def read_primes( FnamePRIMES ):
     return ast.literal_eval(lines)
 
 
-
 def primes2genysis(Primes, FnameGENYSIS):
     """
     Generates a GenYsis_ file from *Primes* for the computation of all attractors of the synchronous or asynchronous transition system.
@@ -236,22 +235,17 @@ def primes2genysis(Primes, FnameGENYSIS):
           >>> primes2genysis(primes, "mapk.genysis")
     """
 
-    
     lines = []
-
     for name in sorted(Primes):
 
-        # constant 1
-        if Primes[name][1] == [{}]:  
+        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:  
             lines+= [name+' -> '+name]
             lines+= ['^'+name+' -> '+name]
 
-        # constant 0
-        elif Primes[name][0] == [{}]:
+        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
             lines+= [name+' -| '+name]
             lines+= ['^'+name+' -| '+name]
 
-        # not constant
         else: 
             for prime in Primes[name][1]:
                 
@@ -266,6 +260,7 @@ def primes2genysis(Primes, FnameGENYSIS):
 
     with open(FnameGENYSIS, 'w') as f:
         f.write('\n'.join(lines))
+
     print('created %s'%FnameGENYSIS)
     
 
@@ -319,10 +314,49 @@ def primes2bns(Primes, FnameBNS):
         f.write('\n'.join(lines))
     print('created %s'%FnameBNS)
         
-        
-        
 
+def primes2eqn(Primes, FnameEQN):
+    """
+    Generates a *eqn* file as specified in the manual for the model checking software Antelope_ from *Primes*.
+    Antelope_ was introduced in :ref:`Arellano2011 <Arellano2011>`.
 
+    **arguments**:
+       * *Primes*: prime implicants
+       * *FnameEQN* (str): name of *eqn* file
+
+    **example**::
+    
+          >>> primes2eqn(primes, "mapk.eqn")
+    """
+
+    lines = []
+    for name in sorted(Primes):
+
+        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:  
+            lines+= [name+' := true;']
+
+        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+            lines+= [name+' := false;']
+
+        else:
+            disj = []
+            for prime in Primes[name][1]:
+                
+                conj = []
+                for n,v in sorted(prime.items()):
+                    if v==1:
+                        conj.append(n)
+                    else:
+                        conj.append('~'+n)
+                        
+                disj+= ['&'.join(conj)]
+
+            lines+=[name+' := '+' | '.join(disj)+';']
+
+    with open(FnameEQN, 'w') as f:
+        f.write('\n'.join(lines))
+        
+    print('created %s'%FnameEQN)
 
 
 

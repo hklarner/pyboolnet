@@ -3,6 +3,15 @@
 Bibliography
 ============
 
+
+.. _Arellano2011:
+
+   *Arellano2011*:
+   Antelope: a hybrid-logic model checker for branching-time Boolean GRN analysis.
+   G. Arellano, et al.
+   BMC bioinformatics, 2011.
+   
+   
 .. _Baier2008:
 
    *Baier2008*:

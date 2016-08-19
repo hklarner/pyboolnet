@@ -41,12 +41,21 @@ primes2genysis
 
 .. autofunction:: PyBoolNet.FileExchange.primes2genysis
 
+
 .. _primes2bns:
 
 primes2bns
 ----------
 
 .. autofunction:: PyBoolNet.FileExchange.primes2bns
+
+
+.. _primes2eqn:
+
+primes2eqn
+----------
+
+.. autofunction:: PyBoolNet.FileExchange.primes2eqn
 
 
 

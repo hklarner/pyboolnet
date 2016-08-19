@@ -1130,6 +1130,11 @@ class TestPrimeImplicants(unittest.TestCase):
         self.assertTrue( PyBoolNet.PrimeImplicants.are_equal(expected, primes), str(primes)+' vs '+str(expected) )
 
 class TestFileExchange(unittest.TestCase):
+    def test_primes2eqn(self):
+        fname_out = os.path.join( FILES_OUT, "fileexchange_primes2eqn.eqn" )
+        primes = PyBoolNet.Repository.get_primes("raf")
+        PyBoolNet.FileExchange.primes2eqn(primes, fname_out)
+    
     def test_bnet2primes_operatorbinding(self):
         fname_in  = os.path.join( FILES_IN,  "fileexchange_operatorbinding.bnet" )
         fname_out = os.path.join( FILES_OUT, "fileexchange_operatorbinding.primes" )
@@ -1451,7 +1456,7 @@ if __name__=="__main__":
     if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestPrimeImplicants("test_rename"))
+        suite.addTest(TestFileExchange("test_primes2eqn"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)

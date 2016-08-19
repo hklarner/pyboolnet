@@ -12,6 +12,7 @@
 .. _NuSMV:        http://nusmv.fbk.eu
 .. _NuSMV-a:      https://github.com/hklarner/NuSMV-a
 .. _GINsim:       http://ginsim.org/home
+.. _Antelope:     http://turing.iimas.unam.mx:8080/AntelopeWEB/content/about.jsp
 .. _R:            https://www.r-project.org/
 .. _BoolNet:      https://cran.r-project.org/web/packages/BoolNet/index.html
 .. _NetworkX:     https://networkx.github.io/
