@@ -513,6 +513,7 @@ def percolate_and_remove_constants( Primes ):
 def input_combinations(Primes):
     """
     A generator for all possible input combinations of *Primes*.
+    Returns the empty dictionary if there are no inputs.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -535,6 +536,8 @@ def input_combinations(Primes):
     if inputs:
         for x in itertools.product(*len(inputs)*[[0,1]]):
             yield dict(zip(inputs,x))
+    else:
+        yield {}
 
 
 
