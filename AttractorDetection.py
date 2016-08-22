@@ -93,8 +93,8 @@ def compute_attractors_tarjan( Primes, STG ):
     Uses `networkx.strongly_connected_components <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly_connected.strongly_connected_components.html>`_
     , i.e., Tarjan's algorithm with Nuutila's modifications, to compute the SCCs of *STG* and
     `networkx.has_path <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html>`_
-    to decide whther a SCC is reachable from another.
-    Returns the attractors, i.e., those SCCs from which no other SCC is reachable.
+    to decide whether a SCC is reachable from another.
+    Returns the attractors as lists of states.
     
 
     **arguments**:

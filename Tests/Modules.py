@@ -37,6 +37,34 @@ def run():
 import json
 from networkx.readwrite import json_graph
 
+
+class TestUtility(unittest.TestCase):
+    def test_dicts_are_consistent(self):
+        x = {1:2}
+        y = {}
+        expected = True
+        answer = PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        x = {1:2,2:3}
+        y = {2:3,3:4}
+        expected = True
+        answer = PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        x = {1:2}
+        y = {1:3}
+        expected = False
+        answer = PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
+    
 class TestAttractorBasins(unittest.TestCase):
     def test_basin_diagram(self):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
@@ -92,21 +120,21 @@ class TestStateTransitionGraphs(unittest.TestCase):
         primes = PyBoolNet.Repository.get_primes("raf")
         prop = "!Erk | (Raf & Mek)"
         expected = set(["010","011","001","000","111"])
-        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        answer = set(PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         prop = "0"
         expected = set([])
-        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        answer = set(PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         prop = "TRUE"
         expected = set(["010","011","001","000","111","110","101","100"])
-        answer = set(PyBoolNet.StateTransitionGraphs.state2str(x) for x in PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
+        answer = set(PyBoolNet.StateTransitionGraphs.proposition2states(primes, prop))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -1031,10 +1059,10 @@ class TestPrimeImplicants(unittest.TestCase):
         self.assertTrue( answer==expected, msg )
 
 
-        bnet = "input1, input2 \n input2, input1 \n"
+        bnet = "v1, v2 \n v2, v1 \n"
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
-        expected = []
+        expected = [{}]
         answer   = sorted(PyBoolNet.PrimeImplicants.input_combinations(primes))
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -1449,11 +1477,11 @@ if __name__=="__main__":
 
 
     
-    if 0:
+    if 1:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
         suite.addTest(TestFileExchange("test_primes2eqn"))

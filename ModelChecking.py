@@ -18,8 +18,8 @@ CMD_NUSMV = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Exe
 
 fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
 with open(fname_nusmvkeywords) as f:
-            NUSMVKEYWORDS = f.read()
-            NUSMVKEYWORDS = ast.literal_eval(NUSMVKEYWORDS)
+    NUSMVKEYWORDS = f.read()
+    NUSMVKEYWORDS = ast.literal_eval(NUSMVKEYWORDS)
 
 
 
@@ -135,7 +135,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
 
     .. note::
-        _DisableReachableStates_ is enforced as the accepting states are otherwise over-approximated.
+        *DisableReachableStates* is enforced as the accepting states are otherwise over-approximated.
         
     **arguments**:
         * *Primes*: prime implicants

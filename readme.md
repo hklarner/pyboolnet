@@ -5,7 +5,7 @@ PyBoolNet is a Python package for the generation, modification and analysis of B
 The current version is available at [PyBoolNet/releases](http://github.com/hklarner/PyBoolNet/releases).
 
 For the manual, a reference and tutorials see the [PyBoolNet manual](http://github.com/hklarner/PyBoolNet/releases).
-For questions and suggestions do not hestitate to open issues or contact
+For questions and suggestions do not hesitate to open issues or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
