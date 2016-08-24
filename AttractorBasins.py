@@ -296,14 +296,14 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     size_total = float(2**len(Primes))
     
-    diagram = networkx.DiGraph()
-    diagram.graph["node"]  = {"shape":"rect","style":"filled"}
-    diagram.graph["edge"]  = {}
+    result = networkx.DiGraph()
+    result.graph["node"]  = {"shape":"rect","style":"filled"}
+    result.graph["edge"]  = {}
     
     if StyleFillColor:
-        diagram.graph["node"]["color"] = "none"
+        result.graph["node"]["color"] = "none"
     else:
-        diagram.graph["node"]["color"] = "black"
+        result.graph["node"]["color"] = "black"
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
@@ -319,7 +319,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
         PyBoolNet.Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
         
     else:
-        diagram.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
+        result.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
         attr = sorted("A%i"%(attractors.index(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x))+FirstIndex) for x in data["attractors"])
@@ -329,32 +329,32 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
         label = "<br/>".join(label)
         label = "<%s>"%label
 
-        diagram.add_node(node, label=label)
+        result.add_node(node, label=label)
 
 
         if StyleFillColor:
             if len(data["attractors"])==1:
-                diagram.node[node]["color"] = "cornflowerblue"
-                diagram.node[node]["penwidth"] = "4"
+                result.node[node]["color"] = "cornflowerblue"
+                result.node[node]["penwidth"] = "4"
 
             size_percent = data["size"] / size_total        
-            diagram.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-            if size_percent>0.5: diagram.node[node]["fontcolor"] = "0.0 0.0 0.8"
+            result.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+            if size_percent>0.5: result.node[node]["fontcolor"] = "0.0 0.0 0.8"
         else:
             if len(data["attractors"])==1:
-                diagram.node[node]["fillcolor"] = "cornflowerblue"
+                result.node[node]["fillcolor"] = "cornflowerblue"
             else:
-                diagram.node[node]["fillcolor"] = "none"
+                result.node[node]["fillcolor"] = "none"
                 
             
 
         if StyleRefinement:
             if all(d["finally_size"]==data["size"] for _,_,d in Diagram.out_edges(node,data=True)):
-                diagram.node[node]["fontcolor"] = "cornflowerblue"
+                result.node[node]["fontcolor"] = "cornflowerblue"
         
 
     for source, target, data in Diagram.edges(data=True):
-        diagram.add_edge(source, target)
+        result.add_edge(source, target)
 
         if StyleEdges:
             if "border_size" in data:
@@ -362,45 +362,54 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
             else:
                 label = data["finally_size"]
             
-            diagram.edge[source][target]["label"] = label
+            result.edge[source][target]["label"] = label
             
         if StyleRefinement:
             if data["finally_size"] < Diagram.node[source]["size"]:
-                diagram.edge[source][target]["style"]="dashed"
+                result.edge[source][target]["style"]="dashed"
         
 
+    subgraphs = []
     if StyleInputs:
-        subgraphs = []
         for inputs in PyBoolNet.PrimeImplicants.input_combinations(Primes):
             if not inputs: continue
             nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
             label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,inputs)
-            subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
+            subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
             
         if subgraphs:
-            diagram.graph["subgraphs"] = []
+            result.graph["subgraphs"] = []
 
-        PyBoolNet.Utility.DiGraphs.add_style_subgraphs(diagram, subgraphs)
+        PyBoolNet.Utility.DiGraphs.add_style_subgraphs(result, subgraphs)
 
     if StyleRanks:
-        ranks = {}
-        for node, data in Diagram.nodes(data=True):
-            size = len(data["attractors"])
-            if not size in ranks:
-                ranks[size]=[]
-            ranks[size].append(node)
-        ranks=list(ranks.items())
-        ranks.sort(key=lambda x: x[0])
+        if subgraphs:
+            to_rank = result.graph["subgraphs"]
+        else:
+            to_rank = [result]
 
-        for _,names in ranks:
-            names = "; ".join(map(str,names))
-            diagram.graph["{rank = same; %s;}"%names]=""
+        for graph in to_rank:
+            ranks = {}
+            for node, data in Diagram.nodes(data=True):
+                if not node in graph:continue
+                
+                size = len(data["attractors"])
+                if not size in ranks:
+                    ranks[size]=[]
+                ranks[size].append(node)
+            ranks=list(ranks.items())
+            ranks.sort(key=lambda x: x[0])
 
-    mapping = {x:str(x) for x in diagram.nodes()}
-    networkx.relabel_nodes(diagram,mapping,copy=False)
+            for _,names in ranks:
+                names = ['"%s"'%x for x in names]
+                names = "; ".join(names)
+                graph.graph["{rank = same; %s;}"%names]=""
 
-    PyBoolNet.Utility.DiGraphs.digraph2image(diagram, FnameIMAGE, "dot")
-
+    mapping = {x:str(x) for x in result.nodes()}
+    networkx.relabel_nodes(result,mapping,copy=False)
+    
+    PyBoolNet.Utility.DiGraphs.digraph2image(result, FnameIMAGE, "dot")
+    
 
 def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
     """

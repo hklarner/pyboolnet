@@ -72,7 +72,7 @@ def digraph2dotlines( DiGraph, Indent=1 ):
                 # see: http://www.graphviz.org/content/cluster-and-graph-labels-bug
                 
             elif value:
-                lines+= [space+'label="%s"'%value.strip()]
+                lines+= [space+'label = "%s"'%value.strip()]
                 #lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
 
         # everything else is just passed on:
