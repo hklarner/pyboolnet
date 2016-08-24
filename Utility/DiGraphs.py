@@ -55,7 +55,14 @@ def digraph2dotlines( DiGraph, Indent=1 ):
         key = key.strip()
         if key.lower() in ["subgraphs","cluster_id","node","edge"]:
             continue
-        if key=="label":
+
+        # handle for keys that contain "{"
+        # used for graph attributes of the from {rank = same; B; D; Y;}
+        if "{" in key:
+            lines+= [space+key]
+
+        # handle for labels, i.e., the quotation mark problem
+        elif key=="label":
             value = value.strip()
             if value.startswith("<"):
                 lines+= [space+'label = %s;'%value]
@@ -67,13 +74,16 @@ def digraph2dotlines( DiGraph, Indent=1 ):
             elif value:
                 lines+= [space+'label="%s"'%value.strip()]
                 #lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
+
+        # everything else is just passed on:
         else:
             lines+= [space+'%s = "%s";'%(key,value)]
+            
         hit = True
         
     if hit: lines+= ['']
 
-    # special handle for subgraphs
+    # handle for subgraphs
     if "subgraphs" in DiGraph.graph:
         value = DiGraph.graph["subgraphs"]
         if value:

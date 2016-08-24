@@ -81,6 +81,12 @@ class TestAttractorBasins(unittest.TestCase):
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleFillColor=True)
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRefinement=True)
+        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
         PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
         
         
@@ -1477,14 +1483,14 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestFileExchange("test_primes2eqn"))
+        suite.addTest(TestAttractorBasins("test_basin_diagram"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
