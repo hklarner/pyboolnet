@@ -538,6 +538,8 @@ def predecessors(DiGraph, X):
 
 
 def has_path(DiGraph, X, Y):
+    print "X",X
+    print "Y",Y
     assert("!s" not in DiGraph)
     assert("!t" not in DiGraph)
     

@@ -382,7 +382,7 @@ def run():
         ts_auxillary = STGs.copy(stg)
         ts_auxillary.graph["label"] = "Example 20: Transition system of Erk-Mek-Raf with auxillary variables"
         for x in stg.nodes():
-            x_dict = STGs.str2state(primes, x)
+            x_dict = STGs.state2dict(primes, x)
             ap_basic = [name for name in sorted(x_dict) if x_dict[name]]
             ap_auxillary = list(ap_basic)
             outdegree = len(list(y for y in stg.successors(x) if y!=x))
@@ -482,7 +482,7 @@ def run():
 
         stg = STGs.primes2stg(primes, update)
         for x in stg.nodes():
-            x_dict = STGs.str2state(primes, x)
+            x_dict = STGs.state2dict(primes, x)
             if x_dict["GrowthFactor"]:
                 stg.node[x]["style"] = "filled"
                 stg.node[x]["fillcolor"] = "gray"

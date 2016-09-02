@@ -134,7 +134,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
     PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
 
 
-def create_image(Primes, FnameIMAGE, Styles=["interactionsigns", "sccs"]):
+def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
     """
     A convenience function for drawing interaction graphs directly from the prime implicants.
     
@@ -145,7 +145,7 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns", "sccs"]):
         
     **example**::
 
-          >>> create_image(igraph, "mapk_igraph.pdf")
+          >>> create_image(primes, "mapk_igraph.pdf")
     """
 
     assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs"])))
@@ -251,7 +251,7 @@ def add_style_activities( IGraph, Activities ):
 
     names = sorted(IGraph.nodes())
     if type(Activities)==str:
-        Activities = PyBoolNet.StateTransitionGraphs.str2subspace(names, Activities)
+        Activities = PyBoolNet.StateTransitionGraphs.subspace2dict(names, Activities)
 
     for name in IGraph.nodes():
 

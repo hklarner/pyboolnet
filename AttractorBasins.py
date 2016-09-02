@@ -14,7 +14,7 @@ sys.path.append(BASE)
 
 import PyBoolNet.FileExchange
 import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalQueries
+import PyBoolNet.TemporalLogicPatterns
 import PyBoolNet.TrapSpaces
 import PyBoolNet.AttractorDetection
 import PyBoolNet.StateTransitionGraphs
@@ -148,7 +148,7 @@ def basins_diagram_component( Primes, Update, Attractors, ComputeBorders, Silent
         attr = [x for x in Attractors if PyBoolNet.Utility.Misc.dicts_are_consistent(x,combination)]
         worst_case_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [PyBoolNet.TemporalQueries.subspace2proposition(Primes,x) for x in attr]
+        specs = [PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
@@ -163,7 +163,7 @@ def basins_diagram_component( Primes, Update, Attractors, ComputeBorders, Silent
                     print("  avoided executions of NuSMV due to state counting")
                 break
 
-            combination_formula = PyBoolNet.TemporalQueries.subspace2proposition(Primes,combination)
+            combination_formula = PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes,combination)
             if len(vector)==1:
                 data = {"attractors":   attr,
                         "size":         2**(len(Primes)-len(inputs)),
@@ -344,7 +344,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
             if len(data["attractors"])==1:
                 result.node[node]["fillcolor"] = "cornflowerblue"
             else:
-                result.node[node]["fillcolor"] = "none"
+                result.node[node]["fillcolor"] = "white"
                 
             
 

@@ -78,12 +78,12 @@ state2str
 .. autofunction:: PyBoolNet.StateTransitionGraphs.state2str
 
 
-.. _str2state:
+.. _state2dict:
 
-str2state
----------
+state2dict
+----------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.str2state
+.. autofunction:: PyBoolNet.StateTransitionGraphs.state2dict
    
    
 .. _subspace2str:
@@ -94,28 +94,28 @@ subspace2str
 .. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2str
 
 
-.. _str2subspace:
+.. _subspace2dict:
 
-str2subspace
-------------
+subspace2dict
+-------------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.str2subspace
-
-
-.. _subspace2states:
-
-subspace2states
----------------
-
-.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2states
+.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2dict
 
 
-.. _proposition2states:
+.. _list_states_in_subspace:
 
-proposition2states
-------------------
+list_states_in_subspace
+-----------------------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.proposition2states
+.. autofunction:: PyBoolNet.StateTransitionGraphs.list_states_in_subspace
+
+
+.. _list_states_referenced_by_proposition:
+
+list_states_referenced_by_proposition
+-------------------------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition
 
 
 .. _hamming_distance:

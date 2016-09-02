@@ -95,6 +95,14 @@ Bibliography
    C. Müssel, M. Hopfensitz and H. Kestler.
    Bioinformatics, 2010, volume 26, number 10, pages 1378-1380.
 
+-- _Naldi2007:
+
+   *Naldi2007*:
+   Decision diagrams for the representation and analysis of logical models of genetic networks.
+   A. Naldi, D. Thieffry and C. Chaouiya.
+   Computational Methods in Systems Biology, 2007, Springer, pages 233-247.
+
+
 .. _Prekas2012:
 
    *Prekas2012*:

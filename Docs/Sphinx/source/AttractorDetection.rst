@@ -6,52 +6,61 @@
 AttractorDetection
 ==================
 
-.. _compute_attractors_tarjan:
 
-compute_attractors_tarjan
--------------------------
+.. _find_attractor_state_by_randomwalk_and_ctl:
 
-.. autofunction:: PyBoolNet.AttractorDetection.compute_attractors_tarjan
+find_attractor_state_by_randomwalk_and_ctl
+------------------------------------------
 
-
-.. _find_attractor_by_randomwalk_and_ctl:
-
-find_attractor_by_randomwalk_and_ctl
-------------------------------------
-
-.. autofunction:: PyBoolNet.AttractorDetection.find_attractor_by_randomwalk_and_ctl
+.. autofunction:: PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl
 
 
-.. _completeness_naive:
-   
-completeness_naive
-------------------
+.. _univocality:
 
-.. autofunction:: PyBoolNet.AttractorDetection.completeness_naive
+univocality
+-----------
 
-
-.. _completeness_iterative:
-
-completeness_iterative
-----------------------
-
-.. autofunction:: PyBoolNet.AttractorDetection.completeness_iterative
+.. autofunction:: PyBoolNet.AttractorDetection.univocality
 
 
-.. _univocal:
+.. _faithfulness:
 
-univocal
---------
+faithfulness
+------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.univocal
+.. autofunction:: PyBoolNet.AttractorDetection.faithfulness
 
 
-.. _faithful:
+.. _completeness:
 
-faithful
---------
+completeness
+------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.faithful
+.. autofunction:: PyBoolNet.AttractorDetection.completeness
+
+
+.. _univocality_with_counterexample:
+
+univocality_with_counterexample
+-------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.univocality_with_counterexample
+
+
+.. _faithfulness_with_counterexample:
+
+faithfulness_with_counterexample
+--------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.faithfulness_with_counterexample
+
+
+.. _completeness_with_counterexample:
+
+completeness_with_counterexample
+--------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.completeness_with_counterexample
 
 
 .. _create_attractor_report:
@@ -60,7 +69,6 @@ create_attractor_report
 -----------------------
 
 .. autofunction:: PyBoolNet.AttractorDetection.create_attractor_report
-
 
 
 

@@ -87,9 +87,8 @@ States and subspaces may also be defined using string representations, i.e., str
    >>> subspace = "0--"
    
 String and dictionary representations may be converted into each other using the functions
-:ref:`state2str`, :ref:`str2state` and :ref:`subspace2str`, :ref:`str2subspace`.
+:ref:`state2str`, :ref:`state2dict` and :ref:`subspace2str`, :ref:`subspace2dict`.
 
-   
 A path that consists of two states is for example::
 
    >>> x = {"v1":0,"v2":1,"v3":0}
@@ -1252,7 +1251,7 @@ the initial states and the proliferation states highlighted by filled rectangles
 
    >>> stg = STGs.primes2stg(primes, update)
    >>> for x in stg.nodes():
-   ...     x_dict = STGs.str2state(primes, x)
+   ...     x_dict = STGs.state2dict(primes, x)
    ...     if x_dict["GrowthFactor"]:
    ...         stg.node[x]["style"] = "filled"
    ...         stg.node[x]["fillcolor"] = "gray"
@@ -1544,9 +1543,9 @@ For example, we may query whether all initial states that satisfy the original s
    >>> MC.check_primes(primes, update, init, spec)
    True
 
-You can use the function :ref:`proposition2states` to enumerate all states that are referenced by a propositional formula::
+You can use the function :ref:`list_states_referenced_by_proposition` to enumerate all states that are referenced by a propositional formula::
 
-   >>> for x in STGs.proposition2states(primes, prop): print x
+   >>> for x in STGs.list_states_referenced_by_proposition(primes, prop): print x
    001
    101
    100
@@ -1693,9 +1692,9 @@ A fairly efficient approach to detecting at least some attractors or larger netw
 and based on the idea of generating a random walk in the STG, starting from some initial state,
 and then testing with CTL model checking whether the final state is indeed part of an attractor.
 This approach is based on the observation that, in practice, a random walk will quickly reach states that belong to an attractor.
-It is implemented in the function :ref:`find_attractor_by_randomwalk_and_ctl`::
+It is implemented in the function :ref:`find_attractor_state_by_randomwalk_and_ctl`::
 
-   >>> state = AD.find_attractor_by_randomwalk_and_ctl(primes, "asynchronous")
+   >>> state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    >>> STGs.state2str(state)
    110
    
@@ -1703,10 +1702,10 @@ The function takes three optional parameters: *InitialState* which allows to spe
 *Length* which is an integer that specifies the number of transitions for the generation of the random walk,
 and *Attempts* which is the maximal number of random walks that are generated if each time the last state does not belong to an attractor.
 Though unlikely, it is possible that the function will not find an attractor in which case it will raise an exception.
-Hence, :ref:`find_attractor_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
+Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
 
    >>> try:
-   ...     state = AD.find_attractor_by_randomwalk_and_ctl(primes, "asynchronous")
+   ...     state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    ...     print STGs.state2str(state)
    ... except:
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
@@ -1754,7 +1753,7 @@ Cyclic attractros are represented by minimal trap spaces.
 
 Note that the function :ref:`basins_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
 or it will compute the minimal trap spaces and *assume* that they are complete and univocal.
-You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness_iterative` and :ref:`univocal`.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness` and :ref:`univocal`.
 
 .. _figure26:
 
@@ -1784,44 +1783,38 @@ An example is given in :ref:`the figure below <figure27>`:
    
    The aggregated basin diagram of the network *arellano_rootstem* from the repository.
 
-subspace approximations
-***********************
+attractor approximations
+************************
 
-This section is based on the results published in :ref:`Klarner2015(a) <klarner2015trap>`.
-The overall goal is to efficiently compute all attractors of an asynchronous STG.
-In particular we are interested in the cyclic attractors of an asynchronous STG
-because its steady states are identical to the steady states of synchronous STGs which can already be computed efficiently using SAT solvers,
-e.g., the approach suggested in :ref:`Dubrova2011 <Dubrova2011>`.
+Minimal trap spaces approximate attractors because every trap space contains an attractor.
+But, there can be attractors outside of minimal trap spaces.
+And there may be several attractors inside a single minmal trap space.
+And an attractor inside a minimal trap space may be much smaller than the minimal trap space that contains it.
+Hence there are three criteria for the quality of minimal trap spaces as approximations for attractors:
 
-The idea is based on the observation that the efficiency of computing minimal trap spaces is about as efficient as computing steady states
-and using similar techniques, i.e., solvers for 0-1 problems.
-Also, trap spaces always contain at least some attractors.
-It is therefore try to quanity what "some" means.
-This section asks whether
+#. **completeness**: whether every attractor is contained in one of the network's minimal trap spaces
+#. **univocality**: whether each minimal trap spaces contains exactly one attractor
+#. **faithfulness**: whether the number of free variables of the minimal trap space is equal to the number of oscillating variables of the attractors contained in it
 
-#. the minimal trap spaces are **complete**, i.e., whether every attractor of the given STG is contained in one of its minimal trap spaces
-#. each minimal trap space is **univocal**, i.e., whether each minimal trap spaces contains exactly one attractor
-#. each minimal trap space is **faithful**, i.e., the number of its free variables is equal to the number of oscillating variables in each of its attractors
+If the minimal trap spaces of a network are complete, univocal and faithful then we say that the approximation is perfect.
+So far, the minimal trap spaces of every published network we are aware of are a perfect approximation of its attractors.
+Hence, although computing the attractors of asynchronous STGs is in general a hard problem,
+in practice we may get away with computing their minimal trap spaces which can efficiently be done for networks with hundreds of components.
+Note that for limit cycles of synchronous STGs and steady states other algorithms, e.g. :ref:`Dubrova2011 <Dubrova2011>` and :ref:`Naldi2007 <Naldi2007>` are more suitable.
 
 In :ref:`Klarner2015(a) <klarner2015trap>` we demonstrate that completeness, univocality and faithfulness can all be decided using CTL model checking.
-The functions :ref:`completeness_naive`, :ref:`univocal` and :ref:`faithful` automatically generate and test the respective queries,
+The functions :ref:`completeness`, :ref:`univocal` and :ref:`faithful` automatically generate and test the respective queries,
 which are defined in Sections 4.1, 4.2 and 4.3 of :ref:`Klarner2015(a) <klarner2015trap>`.
 
 As an example of a network whose minimal trap spaces are complete, univocal and faithful
 consider again the network defined in :ref:`the figure above <figure25>`.
-The functions :ref:`univocal` and :ref:`faithful` each require the primes, update strategy and a trap space.
-Since :ref:`univocal` is based on detecting at least one attractor (via the random walk algorithm explained above),
-and since a counterexample to the univocality query contains information about additional attractors,
-the function returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
-see :ref:`univocal` for details.
-The function :ref:`faithful` returns a tuple that consists of the answer and a counterexample (if it exists), again see :ref:`faithful` for details.
-For now we are only interested in printing the answer of each property for each trap space::
+The functions :ref:`univocal` and :ref:`faithful` each require the primes, update strategy and a trap space::
 
    >>> update = "asynchronous"
    >>> mintspaces = TS.trap_spaces(primes, "min")
    >>> for x in mintspaces:
-   ...     answer_univocal, _, _ = AD.univocal( primes, update, x )
-   ...     answer_faithful, _    = AD.faithful( primes, update, x )
+   ...     answer_univocal = AD.univocal(primes, update, x)
+   ...     answer_faithful = AD.faithful(primes, update, x)
    ...     print "min trap space:", STGs.subspace2str(primes, x)
    ...     print "  is univocal:", answer_univocal
    ...     print "  is faithful:", answer_faithful
@@ -1832,14 +1825,18 @@ For now we are only interested in printing the answer of each property for each 
      is univocal: True
      is faithful: True
 
-The naive function for deciding whether a set of trap spaces if complete requires also three arguments, the primes,
-the update strategy and a list of trap spaces.
-It returns a tuple consisting of the answer and a counterexample, if it exists.
-See :ref:`completeness_naive` for details.
+The function for deciding whether the minimal trap spaces are complete requires only two arguments, the primes and the update strategy,
+because it is implied that the trap spaces must be all minimal ones.
+See :ref:`completeness` for details.
      
-   >>> answer_complete, _ = AD.completeness_naive( primes, update, mintspaces )
-   >>> "min trap spaces are complete:", answer_complete
-   min trap spaces are complete: True
+   >>> AD.completeness(primes, update)
+   True
+   
+Since :ref:`univocality` is based on detecting at least one attractor, via the random walk algorithm explained above,
+and since a counterexample to the univocality query contains information about additional attractors,
+there is a second function, called :ref:`univocality_with_counterexample`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
+see :ref:`univocality` for details.
+The function :ref:`faithfulness_with_counterexample` returns a tuple that consists of the answer and a counterexample if it exists.
 
 As an illustration, consider network (A) given in Figure 1 of :ref:`Klarner2015(a) <klarner2015trap>`.
 It is defined by the following functions::
