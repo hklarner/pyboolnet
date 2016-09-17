@@ -16,7 +16,7 @@ For questions and suggestions do not hesitate to open issues or contact
 - added functions `univocality_with_counterexample`, `faithfulness_with_counterexample` and `completeness_with_counterexample`
 - refactored the functions `univocal`, `faithful` and `completeness_iterative` to two `univocality`, `faithfulness` and `completeness`
 - removed function `completeness_naive` from AD since it is always less efficient than `completeness_iterative`
-- renamed module `TemporalQueries` to `TemporalLogicPatterns` for clarity
+- renamed module `TemporalQueries` to `QueryPatterns` for clarity
 - bugfix absolute import for Python 3.x
 
 #### release notes for version 2.0 (August 2016)

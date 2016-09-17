@@ -18,7 +18,7 @@ import PyBoolNet.TrapSpaces
 import PyBoolNet.ModelChecking
 import PyBoolNet.AttractorDetection
 import PyBoolNet.AttractorBasins
-import PyBoolNet.TemporalLogicPatterns
+import PyBoolNet.QueryPatterns
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Repository
 import PyBoolNet.Utility
@@ -322,6 +322,69 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
 
 class TestAttractorDetection(unittest.TestCase):
+
+    def dummy(self):
+        bnet = """
+        v1, !v1&v2&v3 | v1&!v2 | v1&!v3
+        v2, !v1&!v2 | v1&v2&v3
+        v3, !v1&v3 | v2&v3
+        """
+
+        # [steadystates,cyclic]
+        # identical for sync/async updates
+        steadystates_expected = ["100"]
+        cyclic_attractors = [["010","000"],["001","011","111"]]
+        
+        primes = PyBoolNet.FileExchange.bnet2primes(bnet)
+
+        for update in ["asynchronous","synchronous"]:
+            steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+            
+            for x in steadystates:
+                msg = "\nexpected one of: "+str(steadystates_expected)
+                msg+= "\ngot:             "+str(x)
+                self.assertTrue(x in steadystates_expected, msg)
+
+            for x in cyclic:
+                msg = "\nexpected one of: "+str(cyclic_attractors)
+                msg+= "\ngot:             "+str(x)
+                self.assertTrue( sum(x in Y for Y in cyclic_attractors)==1, msg)
+
+    def test_attractor_representatives(self):
+        # positive cycle with output cascade
+        bnet = "v1, v2 \n v2, v1 \n v3, v2"
+        primes = PyBoolNet.FileExchange.bnet2primes(bnet)
+        update = "asynchronous"
+        steadystates_expected = ["111","000"]
+        cyclic_attractors = []
+        steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+
+        for x in steadystates:
+            msg = "\nexpected one of: "+str(steadystates_expected)
+            msg+= "\ngot:             "+str(x)
+            self.assertTrue(x in steadystates_expected, msg)
+
+        for x in cyclic:
+            msg = "\nexpected one of: "+str(cyclic_attractors)
+            msg+= "\ngot:             "+str(x)
+            self.assertTrue( sum(x in Y for Y in cyclic_attractors)==1, msg)
+
+    
+    def test_attractor_representatives1(self):            
+        update = "asynchronous"
+        for name in PyBoolNet.Repository.get_all_names():
+            print name
+            primes = PyBoolNet.Repository.get_primes(name)
+            steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+            expected = len(PyBoolNet.TrapSpaces.trap_spaces(primes,"min"))
+            got = len(steadystates)+len(cyclic)
+            msg = "\nname:      "+name
+            msg+= "\nexpected : "+str(expected)
+            msg+= "\ngot:       "+str(got)
+            self.assertTrue(expected==got, msg)
+            
+        
+    
     def test_compute_attractors_tarjan(self):
         bnet = ["x, !x&y | z",
                 "y, !x | !z",
@@ -486,8 +549,6 @@ class TestAttractorDetection(unittest.TestCase):
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
-
-
     def test_completeness(self):
 
         bnet = ["v0,   v0",
@@ -515,7 +576,7 @@ class TestAttractorDetection(unittest.TestCase):
         answer, counterex = PyBoolNet.AttractorDetection.completeness_with_counterexample(primes, "synchronous")
         counterex = PyBoolNet.StateTransitionGraphs.state2str(counterex)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "synchronous")
-        PyBoolNet.StateTransitionGraphs.stg2image(stg, "junk.pdf", LayoutEngine="dot")
+        
         for x in PyBoolNet.TrapSpaces.trap_spaces(primes, "min"):
             x = PyBoolNet.StateTransitionGraphs.subspace2str(primes,x)
             msg = "\n%s is a completeness counterexample but it can reach"%counterex
@@ -528,7 +589,9 @@ class TestAttractorDetection(unittest.TestCase):
             
         bnet= ["v1, !v1&v2&v3 | v1&!v2&!v3",
                "v2, !v1&!v2 | v1&v3",
-               "v3, !v1&v3 | v1&v2"]
+               "v3, !v1&v3 | v1&v2",
+               "v4, 1",
+               "v5, v4"]
         bnet = "\n".join(bnet)
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
@@ -596,7 +659,7 @@ class TestTemporalQueries(unittest.TestCase):
         subspaces = [{'v1':0,'v2':0}, {'v1':1,'v2':1}]
         names = ["v1","v2"]
         expected  = 'EF(!v1&!v2 | v1&v2)'
-        query = PyBoolNet.TemporalLogicPatterns.EF_oneof_subspaces(names, subspaces)
+        query = PyBoolNet.QueryPatterns.EF_oneof_subspaces(names, subspaces)
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(query)
         self.assertTrue(query==expected, msg)
@@ -604,7 +667,7 @@ class TestTemporalQueries(unittest.TestCase):
     def EF_unsteady(self):
         names = ['v1','v2','v3']
         expected  = 'EF(v1_unsteady) & EF(v2_unsteady) & EF(v3_unsteady)'
-        query = PyBoolNet.TemporalLogicPatterns.EF_unsteady_states(names)
+        query = PyBoolNet.QueryPatterns.EF_unsteady_states(names)
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(query)
         self.assertTrue(query==expected, msg)
@@ -613,7 +676,7 @@ class TestTemporalQueries(unittest.TestCase):
         subspaces = [{'v1':0,'v2':0},{'v2':1}]
         names = ["v1","v2"]
         expected  = 'AG(EF(!v1&!v2 | v2))'
-        query = PyBoolNet.TemporalLogicPatterns.AGEF_oneof_subspaces(names, subspaces)
+        query = PyBoolNet.QueryPatterns.AGEF_oneof_subspaces(names, subspaces)
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(query)
         self.assertTrue(query==expected, msg)
@@ -1355,6 +1418,15 @@ class TestFileExchange(unittest.TestCase):
 
 class TestInteractionGraphs(unittest.TestCase):
 
+    def test_find_minimal_autonomous_nodes(self):
+        primes = PyBoolNet.Repository.get_primes("randomnet_n15k3")
+        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
+        nodes = PyBoolNet.InteractionGraphs.find_minimal_autonomous_nodes(igraph)
+        expected = [set(['Gene8', 'Gene9', 'Gene1', 'Gene2', 'Gene3', 'Gene4', 'Gene5', 'Gene6', 'Gene7', 'Gene12', 'Gene13', 'Gene10', 'Gene11', 'Gene14'])]
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(nodes)
+        self.assertTrue( expected==nodes , msg)
+        
     def test_create_image(self):
         fname = os.path.join(FILES_OUT, "interactiongraphs_create_image.pdf")
         primes = PyBoolNet.Repository.get_primes("raf")
@@ -1549,7 +1621,7 @@ if __name__=="__main__":
     if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestAttractorDetection("test_completeness"))
+        suite.addTest(TestAttractorDetection("test_attractor_representatives"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)

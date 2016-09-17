@@ -29,6 +29,15 @@ find_outdag
 .. autofunction:: PyBoolNet.InteractionGraphs.find_outdag
 
 
+.. _find_minimal_autonomous_nodes:
+
+find_minimal_autonomous_nodes
+-----------------------------
+
+.. autofunction:: PyBoolNet.InteractionGraphs.find_minimal_autonomous_nodes
+
+
+
 
 .. _igraph2dot: 
 

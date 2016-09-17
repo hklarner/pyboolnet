@@ -219,6 +219,7 @@ def add_style_tendencies(STG):
         
         if dec:
             STG.edge[source][target]["color"] = "red"
+
             
 def add_style_sccs(STG):
     """

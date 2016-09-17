@@ -13,15 +13,16 @@ import PyBoolNet.Utility.DiGraphs
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
-CMD_CONVERT = os.path.join( BASE, "Dependencies", config.get("Executables", "convert") )
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
+CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
+CMD_CONVERT = os.path.join(BASE, "Dependencies", config.get("Executables", "convert"))
+
 
 def dot2image(FnameDOT, FnameIMAGE):
     PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
-def primes2igraph( Primes ):
+def primes2igraph(Primes):
     """
     Creates the interaction graph from the prime implicants of a network.
     Interaction graphs are implemented as :ref:`installation_networkx` digraph objects.
@@ -50,7 +51,7 @@ def primes2igraph( Primes ):
     igraph = networkx.DiGraph()
     edges = {}
     for name in Primes:
-        igraph.add_node( name )
+        igraph.add_node(name)
         for term in Primes[name][1]:
             for k,v in term.items():
                 if v==0:
@@ -62,7 +63,7 @@ def primes2igraph( Primes ):
                 edges[(k,name)].add(sign)
                 
     for k,name in edges:
-        igraph.add_edge( k, name, sign=edges[(k,name)])
+        igraph.add_edge(k, name, sign=edges[(k,name)])
 
     # defaults
     igraph.graph["node"]  = {"style":"filled","shape":"rect","color":"none","fillcolor":"gray95"}
@@ -72,7 +73,7 @@ def primes2igraph( Primes ):
     return igraph
 
 
-def copy( IGraph ):
+def copy(IGraph):
     """
     Creates a copy of *IGraph* including all *dot* attributes.
 
@@ -94,7 +95,7 @@ def copy( IGraph ):
     return newgraph
 
     
-def igraph2dot( IGraph, FnameDOT=None ):
+def igraph2dot(IGraph, FnameDOT=None):
     """
     Generates a *dot* file from *IGraph* and saves it as *FnameDOT* or returns it as a string.
     
@@ -126,9 +127,9 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
         
     **example**::
 
-          >>> igraph2image( igraph, "mapk_igraph.pdf" )
-          >>> igraph2image( igraph, "mapk_igraph.jpg" )
-          >>> igraph2image( igraph, "mapk_igraph.svg" )
+          >>> igraph2image(igraph, "mapk_igraph.pdf")
+          >>> igraph2image(igraph, "mapk_igraph.jpg")
+          >>> igraph2image(igraph, "mapk_igraph.svg")
     """
 
     PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
@@ -165,10 +166,8 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
 
     igraph2image(igraph, FnameIMAGE)
         
-        
 
-
-def find_outdag( IGraph ):
+def find_outdag(IGraph):
     """
     Finds the maximal directed acyclic subgraph that is closed under the successors operation.
     Essentially, these components are the "output cascades" which can be exploited by various algorithms, e.g.
@@ -202,8 +201,36 @@ def find_outdag( IGraph ):
 
     return outdags
 
+
+def find_minimal_autonomous_nodes(IGraph, Superset=None):
+    """
+    Returns the minimal autonomous node sets of *IGraph*.
+    See :ref:`Klarner2015(b) <klarner2015approx>` Sec. 5.2 for a formal definition and details.
+    Minimal autonomous sets generalize inputs, which are autonomous sets of size 1.
+    If *Superset* is specified then all autonomous sets that are not supersets of it are ignored.
+
+    **arguments**:
+        * *IGraph*: interaction graph
+        * *Superset* (set): all autonomous sets must be supersets of this is
+
+    **returns**:
+        * *Nodes* (list of sets): the minimal autonomous node sets of *IGraph*
+        
+    **example**::
+
+          >>> find_minimal_autonomous_nodes(IGraph)
+          [set(['raf']), set(['v1','v8','v9'])]
+    """
+
+    cgraph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(IGraph)
+    for x in cgraph.nodes():
+        if  set(x).issubset(Superset):
+            cgraph.remove_node(x)
     
-def add_style_interactionsigns( IGraph ):
+    return [set(x) for x in cgraph.nodes() if cgraph.in_degree(x)==0]
+
+    
+def add_style_interactionsigns(IGraph):
     """
     Sets attributes for the arrow head and edge color of interactions to indicate the interaction sign.
     Activating interactions get the attributes *"arrowhead"="normal"* and *"color"="black"*,
@@ -229,9 +256,8 @@ def add_style_interactionsigns( IGraph ):
             IGraph.edge[source][target]["arrowhead"] = "normal"
             IGraph.edge[source][target]["color"] = "black"
 
-
     
-def add_style_activities( IGraph, Activities ):
+def add_style_activities(IGraph, Activities):
     """
     Sets attributes for the color and fillcolor of nodes to indicate which variables are activated and which are inhibited in *Activities*.
     All activated or inhibited components get the attribute *"color"="black"*.
@@ -274,7 +300,7 @@ def add_style_activities( IGraph, Activities ):
             IGraph.edge[x][y]["color"] = "gray"
             
 
-def add_style_inputs( IGraph ):
+def add_style_inputs(IGraph):
     """
     Adds a subgraph to the *dot* representation of *IGraph* that contains all inputs.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -301,10 +327,10 @@ def add_style_inputs( IGraph ):
             if len(y)==1 and y[0] in inputs:
                 IGraph.graph["subgraphs"].remove(x)
 
-        IGraph.graph["subgraphs"].append( subgraph )
+        IGraph.graph["subgraphs"].append(subgraph)
 
 
-def add_style_outputs( IGraph ):
+def add_style_outputs(IGraph):
     """
     Adds a subgraph to the *dot* representation of *IGraph* that contains all outputs.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -324,10 +350,10 @@ def add_style_outputs( IGraph ):
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from(outputs)
         subgraph.graph["label"] = "Outputs"
-        IGraph.graph["subgraphs"].append( subgraph )
+        IGraph.graph["subgraphs"].append(subgraph)
         
 
-def add_style_constants( IGraph ):
+def add_style_constants(IGraph):
     """
     Sets the attribute *"style"="plaintext"* with *"fillcolor"="none"* and *"fontname"="Times-Italic"* for all constants.
     
@@ -350,7 +376,7 @@ def add_style_constants( IGraph ):
                 
 
 
-def add_style_sccs( IGraph ):
+def add_style_sccs(IGraph):
     """
     Adds a subgraph for every non-trivial strongly connected component (SCC) to the *dot* representation of *IGraph*.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -378,10 +404,10 @@ def add_style_sccs( IGraph ):
         subgraph.graph["color"] = "none"
         subgraph.graph["fillcolor"] = "/greys9/%i"%col
         
-        IGraph.graph["subgraphs"].append( subgraph )
+        IGraph.graph["subgraphs"].append(subgraph)
 
 
-def add_style_path( IGraph, Path, Color ):
+def add_style_path(IGraph, Path, Color):
     """
     Sets the color of all nodes and edges involved in the given *Path* to *Color*.
 
@@ -399,7 +425,7 @@ def add_style_path( IGraph, Path, Color ):
     if not Path: return
 
     names = IGraph.nodes()
-    assert( all([x in names for x in Path]) )
+    assert(all([x in names for x in Path]))
 
     for x in Path:
         IGraph.node[x]["color"] = Color
@@ -410,7 +436,7 @@ def add_style_path( IGraph, Path, Color ):
             IGraph.edge[x][y]["penwidth"]  = "2"
     
 
-def add_style_subgraphs( IGraph, Subgraphs ):
+def add_style_subgraphs(IGraph, Subgraphs):
     """
     Adds the subgraphs given in *Subgraphs* to *IGraph* - or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -435,10 +461,10 @@ def add_style_subgraphs( IGraph, Subgraphs ):
         >>> add_style_subgraphs(igraph, subgraphs)
     """
 
-    PyBoolNet.Utility.DiGraphs.add_style_subgraphs( IGraph, Subgraphs )
+    PyBoolNet.Utility.DiGraphs.add_style_subgraphs(IGraph, Subgraphs)
 
 
-def add_style_default( IGraph ):
+def add_style_default(IGraph):
     """
     A convenience function that adds styles for interaction signs, SCCs, inputs, outputs and constants.
 
@@ -459,7 +485,7 @@ def add_style_default( IGraph ):
     add_style_constants(IGraph)
 
 
-def activities2animation( IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Delay=50, Loop=0 ):
+def activities2animation(IGraph, Activities, FnameGIF, FnameTMP="tmp*.jpg", Delay=50, Loop=0):
     """
     Generates an animated *gif* from the sequence of *Activities* by mapping the activities on
     the respective components of the interaction graph using :ref:`add_style_activities`.

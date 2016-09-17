@@ -33,7 +33,7 @@ def EF_nested_reachability(Primes, Subspaces):
     return result.replace("  &$","")
 
     
-def AGEF_oneof_subspaces( Primes, Subspaces ):
+def AGEF_oneof_subspaces(Primes, Subspaces):
     """
     Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given *Subspaces*.
 
@@ -67,7 +67,7 @@ def AGEF_oneof_subspaces( Primes, Subspaces ):
     return 'AG('+ EF_oneof_subspaces(Primes, Subspaces) +')'
 
 
-def EF_oneof_subspaces( Primes, Subspaces ):
+def EF_oneof_subspaces(Primes, Subspaces):
     """
     Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
 
@@ -92,7 +92,7 @@ def EF_oneof_subspaces( Primes, Subspaces ):
     return 'EF('+ ' | '.join(subspace2proposition(Primes, x) for x in Subspaces) +')'
 
 
-def EF_unsteady_states( Names ):
+def EF_unsteady_states(Names):
     """
     Constructs a CTL formula that queries whether for every variables v specified in *Names* there is a path to a state x in which v is unsteady.
 
@@ -121,7 +121,7 @@ def EF_unsteady_states( Names ):
     return ' & '.join(['EF(!%s_STEADY)'%x for x in Names])
 
 
-def subspace2proposition( Primes, Subspace ):
+def subspace2proposition(Primes, Subspace):
     """
     Constructs a CTL formula that is true in a state x if and only if x belongs to the given Subspace.
 
@@ -153,7 +153,7 @@ def subspace2proposition( Primes, Subspace ):
     return '&'.join([name if value==1 else '!'+name for name,value in sorted(Subspace.items())])
 
 
-def init_for_bargraph_encoding( Primes ):
+def init_for_bargraph_encoding(Primes):
     """
     creates an initial condition for components that were booleanized by the "bargraph" encoding.
     enforces for each pair of components whose name differs only by the postfix "_medium" or "_high"
@@ -163,7 +163,7 @@ def init_for_bargraph_encoding( Primes ):
     names = []
     for x in Primes:
         if x.endswith("_medium") and (x[:-7]+'_high' in Primes):
-            names.append( x[:-7] )
+            names.append(x[:-7])
 
     init = ' & '.join('('+x+'_high -> '+x+'_medium'+')' for x in names)
     
@@ -175,7 +175,7 @@ if __name__=="__main__":
     primes = ["v1", "v2", "v3"]
     subspaces = [{}, {}, "--1", {"v2":0, "v1":0}, "1-1", "-0-"]
     print(EF_oneof_subspaces(primes, subspaces))
-    print(EF_all_unsteady( primes )    )
+    print(EF_all_unsteady(primes))
     print(EF_nested_reachability(primes, subspaces))
 
 

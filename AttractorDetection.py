@@ -3,6 +3,7 @@
 import datetime
 import itertools
 import random
+import networkx
 
 import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
@@ -10,23 +11,30 @@ import PyBoolNet.StateTransitionGraphs
 import PyBoolNet.TrapSpaces
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalLogicPatterns
+import PyBoolNet.QueryPatterns
 import PyBoolNet.Utility
 
 
 def attractor_representatives(Primes, Update):
     """
-    Computes a representative state for every attractor of the network defined by *Primes* and *Update*.
-    The function computes minimal trap spaces and CTL model checking.
-    It is a variation of the iterative completeness algorithm, for details see the docstring of :ref:`completeness`.
-    The function returns a list of states, each belonging to an attractor.
+    Computes a representative state for every attractor of the network defined by *Primes* and *Update* if the network's attractors can be approximated
+    by its minimal trap spaces, see :ref:`Klarner2015(b) <klarner2015approx>` for details.
+    The function first computes all minimal trap spaces.
+    If they are complete, univocal and faithful it returns a list of states, each belonging to a different attractor.
+    Otherwise it raises an exception.
+
+    .. note::
+        If *Update* is *"synchronous"* then it is very likely that the minimal trap spaces are not a perfect approximation and the
+        function will hence raise an exception.
+        If you want to compute attractors of synchronous STGs we suggest to use other tools,
+        for example *bns* which was introduced in :ref:`Dubrova2011 <Dubrova2011>`.
     
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
     
     **returns**:
-        * *AttractorStates* (list of str): each state belongs to a different attractor
+        * *Representatives* (list of str): each state belongs to a different attractor
 
     **example**::
 
@@ -34,92 +42,104 @@ def attractor_representatives(Primes, Update):
             ['100','101','111']
     """
 
+    assert(Update in ["asynchronous", "synchronous", "mixed"])
+
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
+    constants = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    oscillating = {}
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
+    outdag = PyBoolNet.InteractionGraphs.find_outdag(igraph)
+    PyBoolNet.PrimeImplicants.remove_variables(primes, outdag)
     
-    PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    steadystates = []
+    cyclic = []
+    stack = []
+
+    stack.append((primes, constants, oscillating))
+
+    while stack:
+        primes, constants, oscillating = stack.pop()
         
-    mintrapspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")   # line  1
-    if mintrapspaces==[{}]:             # line  2
-        return (True, None)             # line  3
-    
-    currentset = [({}, set([]))]        # line  4
-    while currentset:                   # line  5
-        p, W = currentset.pop()         # line  6
-    
-        ## line 7: primes_reduced = ReducedNetwork(V,F,p)
-        primes_reduced = PyBoolNet.PrimeImplicants.copy(primes)
-        PyBoolNet.PrimeImplicants.create_constants(primes_reduced, Constants=p)
-        PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_reduced)
+        assert(set(oscillating).issubset(set(primes)))
+        assert(not set(constants).intersection(set(primes)))
 
-        ## line 8: cgraph = CondensationGraph(V_p,F_p)
-        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes_reduced)
-        cgraph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(igraph)
+        # stopping criterion
+        if len(oscillating)==len(primes):
+            p = PyBoolNet.PrimeImplicants.copy(Primes)
         
+            if oscillating=={}:
+                PyBoolNet.PrimeImplicants.create_constants(p, constants)
+                x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(p)
+                assert(len(x)==len(Primes))
+                steadystates.append(PyBoolNet.StateTransitionGraphs.state2str(x))
 
-        ## line 9: cgraph_dash = RemoveComponents(Z,->,W)
-        cgraph_dash = cgraph.copy()
-        for U in cgraph.nodes():
-            if set(U).issubset(set(W)):
-                cgraph_dash.remove_node(U)
-
-        ## line 10: W_dash = Copy(W)
-        W_dash = W.copy()
-
-        ## line 11
-        refinement  = []                            
-
-        ## line 12: toplayer = TopLayer(Z',->)
-        toplayer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U)==0]
-
-        for U in toplayer: 
-
-            ## line 13: U_dash = Above(V_p,F_p,U)
-            U_dash = PyBoolNet.Utility.DiGraphs.ancestors(igraph, U)
-
-            ## line 14: primes_restricted = Restriction(V_p,F_p,U_dash)
-            primes_restricted = PyBoolNet.PrimeImplicants.copy(primes_reduced)
-            PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
-            
-            ## line 15: Q = MinTrapSpaces(U',F|U')
-            if not primes_restricted: print "CHACKKKA"
-            Q = PyBoolNet.TrapSpaces.trap_spaces(primes_restricted, "min")
-
-            ## line 16: phi = CompletenessQuery(Q)
-            phi = PyBoolNet.TemporalLogicPatterns.EF_oneof_subspaces(primes_restricted, Q)
-
-            ## lines 17,18: answer = PyBoolNet.ModelChecking(S'_U, Update, phi)
-            init = "INIT TRUE"
-            spec = "CTLSPEC %s"%phi
-            
-            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
-            if not answer:
-                downstream = [x for x in igraph if not x in U]
-                arbitrary_state = PyBoolNet.StateTransitionGraphs.random_state(downstream)
-                toplayer_state = counterex[-1]
-                counterex = PyBoolNet.Utility.Misc.merge_dicts([p,toplayer_state,arbitrary_state])
+            else:
+                x = PyBoolNet.Utility.Misc.merge_dicts([constants, oscillating])
                 
-                return False, counterex
-            
-            ## line 19: Refinement.append(Intersection(p,Q))
-            ## Intersection(*args) is defined below
-            refinement+= Intersection([p], Q)
+                if Update=="synchronous":
+                    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+                    igraph.remove_nodes_from(list(constants)+list(oscillating))
+                    k = len(networkx.dag_longest_path(igraph))
+                    x = PyBoolNet.StateTransitionGraphs.random_state(Primes,x)
+                    for i in range(k): x = PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes,x)
 
-            ## line 20: W_dash = SetUnion(W',U')
-            W_dash.update(U_dash)
+                else:
+                    PyBoolNet.PrimeImplicants.create_constants(p, x)
+                    x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(p)
 
-        ## line 21
-        for q in Intersection(refinement):
+                cyclic.append(PyBoolNet.StateTransitionGraphs.state2str(x))
+                
+            continue
 
-            ## line 22: q_tilde = Percolation(V,F,q)
-            dummy = PyBoolNet.PrimeImplicants.copy(primes)
-            PyBoolNet.PrimeImplicants.create_constants(dummy, Constants=q)
-            q_tilde = PyBoolNet.PrimeImplicants.percolate_and_keep_constants(dummy)
+        # find autonomous set
+        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)        
+        autoset = PyBoolNet.InteractionGraphs.find_minimal_autonomous_nodes(igraph, oscillating).pop()
+        autoset_above = PyBoolNet.Utility.DiGraphs.ancestors(igraph, autoset)
+        primes_auto = PyBoolNet.PrimeImplicants.copy(primes)
+        PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_auto, autoset_above)
 
-            ## lines 23, 24
-            if q_tilde not in mintrapspaces:
-                currentset.append((q_tilde, W_dash))
+        # find trapspaces inside autonomous set
+        trapspaces = [x for x in PyBoolNet.TrapSpaces.trap_spaces(primes_auto,"min") if x and set(x).issubset(autoset)]
 
-    return True, None
+        # find all new oscillating states
+        initial_state = dict((x,y) for x,y in oscillating.items() if x in primes_auto)
+
+        if not trapspaces:
+            x = find_attractor_state_by_randomwalk_and_ctl(primes_auto, Update, initial_state)
+            oscillating_states_new = [x]
+        else:
+            oscillating_states_new = []
+
+        finished = False
+        while not finished:
+            init = "INIT %s"%PyBoolNet.QueryPatterns.subspace2proposition(primes_auto, initial_state)
+            spec = "CTLSPEC %s"%PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes_auto, oscillating_states_new + trapspaces)
+            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_auto, Update, init, spec)
+            if answer:
+                finished = True
+            else:
+                x = find_attractor_state_by_randomwalk_and_ctl(primes_auto, Update, counterex[-1])
+                oscillating_states_new.append(x)
+
+        # add new oscillating states to stack
+        for x in oscillating_states_new:
+            stack.append((primes, constants, x))
+
+        # add new constant states to stack
+        for trapspace in trapspaces:
+            constants_new = PyBoolNet.Utility.Misc.merge_dicts([constants, trapspace])
+            primes_new = PyBoolNet.PrimeImplicants.copy(primes)
+            PyBoolNet.PrimeImplicants.create_constants(primes_new, constants_new)
+            constants_new = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_new)
+
+            igraph_new = PyBoolNet.InteractionGraphs.primes2igraph(primes_new)
+            outdag = PyBoolNet.InteractionGraphs.find_outdag(igraph_new)
+            PyBoolNet.PrimeImplicants.remove_variables(primes_new, outdag)
+
+            stack.append((primes_new, constants_new, oscillating))
+
+    
+    return steadystates, cyclic
 
 
 def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, Length=0, Attempts=10):
@@ -158,7 +178,7 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
     """
 
     assert(Update in ['asynchronous','synchronous', 'mixed'])
-    assert(set(InitialState.keys()).issubset(set(Primes.keys())))
+    assert(set(InitialState).issubset(set(Primes)))
 
     # length heuristic
     if Length==0:
@@ -184,8 +204,8 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
             current_state = transition(current_state)
             transitions+=1
 
-        spec = 'CTLSPEC ' + PyBoolNet.TemporalLogicPatterns.AGEF_oneof_subspaces(Primes, [current_state])
-        init = 'INIT ' + PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes, current_state)
+        spec = 'CTLSPEC ' + PyBoolNet.QueryPatterns.AGEF_oneof_subspaces(Primes, [current_state])
+        init = 'INIT ' + PyBoolNet.QueryPatterns.subspace2proposition(Primes, current_state)
         if PyBoolNet.ModelChecking.check_primes(Primes, Update, init, spec):
             return current_state
         
@@ -363,7 +383,7 @@ def univocality_with_counterexample(Primes, Update, Trapspace):
     attractor_state1 = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
     
     # univocality
-    spec = 'CTLSPEC ' + PyBoolNet.TemporalLogicPatterns.EF_oneof_subspaces(primes, [attractor_state1])
+    spec = 'CTLSPEC ' + PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes, [attractor_state1])
     init = 'INIT TRUE'
     answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
@@ -425,7 +445,7 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
         return False, attractor_state
 
     # faithfulness
-    spec = 'CTLSPEC AG(%s)'%PyBoolNet.TemporalLogicPatterns.EF_unsteady_states(primes)
+    spec = 'CTLSPEC AG(%s)'%PyBoolNet.QueryPatterns.EF_unsteady_states(primes)
     init = 'INIT TRUE'
     answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
 
@@ -463,6 +483,9 @@ def completeness_with_counterexample(Primes, Update):
             10010111101010100001100001011011111111
     """
 
+    # the function is implemented by line-by-line following of the pseudo code algorithm given in
+    # "Approximating attractors of Boolean networks by iterative CTL model checking", Klarner and Siebert 2015.
+
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
     
     constants_global = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
@@ -478,7 +501,6 @@ def completeness_with_counterexample(Primes, Update):
         ## line 7: primes_reduced = ReducedNetwork(V,F,p)
         primes_reduced = PyBoolNet.PrimeImplicants.copy(primes)
         PyBoolNet.PrimeImplicants.create_constants(primes_reduced, Constants=p)
-        PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_reduced)
 
         ## line 8: cgraph = CondensationGraph(V_p,F_p)
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes_reduced)
@@ -510,11 +532,10 @@ def completeness_with_counterexample(Primes, Update):
             PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
             
             ## line 15: Q = MinTrapSpaces(U',F|U')
-            if not primes_restricted: print "CHACKKKA"
             Q = PyBoolNet.TrapSpaces.trap_spaces(primes_restricted, "min")
 
             ## line 16: phi = CompletenessQuery(Q)
-            phi = PyBoolNet.TemporalLogicPatterns.EF_oneof_subspaces(primes_restricted, Q)
+            phi = PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes_restricted, Q)
 
             ## lines 17,18: answer = PyBoolNet.ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
@@ -530,7 +551,7 @@ def completeness_with_counterexample(Primes, Update):
                 return False, counterex
             
             ## line 19: Refinement.append(Intersection(p,Q))
-            ## Intersection(*args) is defined below
+            ## Intersection(..) is defined below
             refinement+= Intersection([p], Q)
 
             ## line 20: W_dash = SetUnion(W',U')
@@ -733,7 +754,7 @@ def completeness_naive(Primes, Update, TrapSpaces):
         True
     """
     
-    spec = "CTLSPEC " + PyBoolNet.TemporalLogicPatterns.EF_oneof_subspaces(Primes, TrapSpaces)
+    spec = "CTLSPEC " + PyBoolNet.QueryPatterns.EF_oneof_subspaces(Primes, TrapSpaces)
     init = "INIT TRUE"
     answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes, Update, init, spec)
 
@@ -744,31 +765,14 @@ def completeness_naive(Primes, Update, TrapSpaces):
 
 
 ### auxillary functions
-def Intersection(*args):
+def Intersection(*ListOfDicts):
     """
     each argument must be a list of subspaces (dicts)::
 
         >>> Intersection([{"v1":1}], [{"v1":0}, {"v2":1, "v3":0}])
     """
 
-    # trivial case
-    if len(args)==1:
-        if args[0]==[]:
-            return []
-        else:
-            return args[0]
-
-    # non-trivial case
-    result = []
-    for product in itertools.product(*args):
-        items = []
-        for subspace in product:
-            for item in subspace.items():
-                items+= [item]
-        subspace_new = dict(items)
-        result+= [subspace_new]
-
-    return result
+    return [PyBoolNet.Utility.Misc.merge_dicts(x) for x in itertools.product(*ListOfDicts)]
     
 
 

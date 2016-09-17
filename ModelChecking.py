@@ -8,7 +8,7 @@ import datetime
 
 import PyBoolNet.Utility
 import PyBoolNet.PrimeImplicants
-import PyBoolNet.TemporalLogicPatterns
+import PyBoolNet.QueryPatterns
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -432,7 +432,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
             expression = 'FALSE'
             
         else:
-            expression = ' | '.join(PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes, x) for x in Primes[name][1])
+            expression = ' | '.join(PyBoolNet.QueryPatterns.subspace2proposition(Primes, x) for x in Primes[name][1])
             
         lines+= ['\t%s_IMAGE := %s;'%(name, expression)]
 

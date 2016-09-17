@@ -14,7 +14,7 @@ sys.path.append(BASE)
 
 import PyBoolNet.FileExchange
 import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalLogicPatterns
+import PyBoolNet.QueryPatterns
 import PyBoolNet.TrapSpaces
 import PyBoolNet.AttractorDetection
 import PyBoolNet.StateTransitionGraphs
@@ -23,12 +23,12 @@ import PyBoolNet.PrimeImplicants
 import PyBoolNet.Utility
 
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
+CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 
 
-def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silent=True, ReturnCounter=False ):
+def basins_diagram(Primes, Update, Attractors=None, ComputeBorders=False, Silent=True, ReturnCounter=False):
     """
     Creates the basin diagram, a networkx.DiGraph, of the STG defined by *Primes* and *Update*.
     The nodes of the diagram represent states that can reach the exact same subset of *Attractors*.
@@ -119,7 +119,7 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
         return diagram
 
 
-def basins_diagram_component( Primes, Update, Attractors, ComputeBorders, Silent ):
+def basins_diagram_component(Primes, Update, Attractors, ComputeBorders, Silent):
     """
     Also computes the basin diagram but without removing out-DAGs or considering connected components separately.
     Not meant for general use. Use basins_diagram(..) instead.
@@ -148,7 +148,7 @@ def basins_diagram_component( Primes, Update, Attractors, ComputeBorders, Silent
         attr = [x for x in Attractors if PyBoolNet.Utility.Misc.dicts_are_consistent(x,combination)]
         worst_case_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes,x) for x in attr]
+        specs = [PyBoolNet.QueryPatterns.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
@@ -163,7 +163,7 @@ def basins_diagram_component( Primes, Update, Attractors, ComputeBorders, Silent
                     print("  avoided executions of NuSMV due to state counting")
                 break
 
-            combination_formula = PyBoolNet.TemporalLogicPatterns.subspace2proposition(Primes,combination)
+            combination_formula = PyBoolNet.QueryPatterns.subspace2proposition(Primes,combination)
             if len(vector)==1:
                 data = {"attractors":   attr,
                         "size":         2**(len(Primes)-len(inputs)),
@@ -411,7 +411,7 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
     PyBoolNet.Utility.DiGraphs.digraph2image(result, FnameIMAGE, "dot")
     
 
-def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
+def diagram2aggregate_image(Primes, Diagram, FnameIMAGE):
     """
     Creates the image file *FnameIMAGE* for the aggregated basin diagram given by *Diagram*.
     The aggregated basin diagram takes the union of all basins from which the same number of attractors
@@ -462,7 +462,7 @@ def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
 #######################
 ## auxillary functions 
 
-def project_attractors( Attractors, Names ):
+def project_attractors(Attractors, Names):
     result = set()
     for space in Attractors:
         projection = tuple((k,v) for k,v in sorted(space.items()) if k in Names)
@@ -473,11 +473,11 @@ def project_attractors( Attractors, Names ):
     return result
 
 
-def lift_attractors( Attractors, Projection ):
+def lift_attractors(Attractors, Projection):
     return [x for x in Attractors for y in Projection if PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)]
 
 
-def cartesian_product( Diagrams, Factor, ComputeBorders ):
+def cartesian_product(Diagrams, Factor, ComputeBorders):
     """
     creates the cartesian product of *Diagrams*.
     """

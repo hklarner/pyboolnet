@@ -424,7 +424,6 @@ def digraph2sccgraph(Digraph):
     return sccgraph
 
 
-
 def digraph2condensationgraph(Digraph):
     """
     Creates the condensation graph from *Digraph*.
@@ -486,97 +485,6 @@ def digraph2condensationgraph(Digraph):
     return cgraph
 
 
-def convert_nodes_to_anonymous_strings(DiGraph):
-    """
-    used to convert meaningful nodes into anonymous stringified integers for drawing.
-    """
-
-    mapping = {x:str(i) for i,x in enumerate(DiGraph.nodes())}
-    networkx.relabel_nodes(DiGraph, mapping, copy=False)
-
-
-def ancestors(DiGraph, X):
-    """
-    Return all nodes having a path to one of the nodes in X.
-    """
-    
-    if X in DiGraph:
-        return networkx.ancestors(DiGraph,X)
-    else:
-        # bugfix for networkx.ancestors (it doesn't recognize self-loops)
-        ancs = set([x for x in X if x in DiGraph.nodes_with_selfloops()])
-        for x in X:
-            ancs.add(x)
-            ancs.update(networkx.ancestors(DiGraph,x))
-        return ancs
-                                
-
-def successors(DiGraph, X):
-    """
-    returns successors of a node or the union of several nodes
-    """
-    
-    if X in DiGraph:
-        return DiGraph.successors(X)
-    else:
-        sucs = set([])
-        for x in X: sucs.update(set(DiGraph.successors(x)))
-        return sorted(sucs)
-
-
-def predecessors(DiGraph, X):
-    """
-    returns successors of a node or the union of several nodes
-    """
-    
-    if X in DiGraph:
-        return DiGraph.predecessors(X)
-    else:
-        preds = set([])
-        for x in X: preds.update(set(DiGraph.predecessors(x)))
-        return sorted(preds)
-
-
-def has_path(DiGraph, X, Y):
-    print "X",X
-    print "Y",Y
-    assert("!s" not in DiGraph)
-    assert("!t" not in DiGraph)
-    
-    if X in DiGraph:
-        source = X
-    else:
-        source = "!s"
-        DiGraph.add_node("!s")
-        DiGraph.add_edges_from([("!s",x) for x in X])
-
-    if Y in DiGraph:
-        target = Y
-    else:
-        target = "!t"
-        DiGraph.add_node("!t")
-        DiGraph.add_edges_from([(y,"!t") for y in Y])
-
-    answer = networkx.has_path(DiGraph, source, target)
-    for x in ["!s","!t"]:
-        if x in DiGraph: DiGraph.remove_node(x)
-
-    return answer
-
-
-def has_edge(DiGraph, X, Y):
-    
-    if X in DiGraph: X = [X]
-    if Y in DiGraph: Y = [Y]
-
-    for x in X:
-        for y in Y:
-            if DiGraph.has_edge(x,y):
-                return True
-
-    return False
-
-
 def add_style_subgraphs(DiGraph, Subgraphs):
     """
     Adds the subgraphs given in *Subgraphs* to *DiGraph* or overwrites them if they already exist.
@@ -627,6 +535,98 @@ def add_style_subgraphs(DiGraph, Subgraphs):
                 
         DiGraph.graph["subgraphs"].append(subgraph)
     
+
+def convert_nodes_to_anonymous_strings(DiGraph):
+    """
+    used to convert meaningful nodes into anonymous stringified integers for drawing.
+    """
+
+    mapping = {x:str(i) for i,x in enumerate(DiGraph.nodes())}
+    networkx.relabel_nodes(DiGraph, mapping, copy=False)
+
+
+## graph traversal and analysis ##
+
+def ancestors(DiGraph, X):
+    """
+    Return all nodes having a path to one of the nodes in X.
+    """
+    
+    if X in DiGraph:
+        return networkx.ancestors(DiGraph,X)
+    else:
+        # bugfix for networkx.ancestors (it doesn't recognize self-loops)
+        ancs = set([x for x in X if x in DiGraph.nodes_with_selfloops()])
+        for x in X:
+            ancs.add(x)
+            ancs.update(networkx.ancestors(DiGraph,x))
+        return ancs
+                                
+
+def successors(DiGraph, X):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.successors(X)
+    else:
+        sucs = set([])
+        for x in X: sucs.update(set(DiGraph.successors(x)))
+        return sorted(sucs)
+
+
+def predecessors(DiGraph, X):
+    """
+    returns successors of a node or the union of several nodes
+    """
+    
+    if X in DiGraph:
+        return DiGraph.predecessors(X)
+    else:
+        preds = set([])
+        for x in X: preds.update(set(DiGraph.predecessors(x)))
+        return sorted(preds)
+
+
+def has_path(DiGraph, X, Y):
+    assert("!s" not in DiGraph)
+    assert("!t" not in DiGraph)
+    
+    if X in DiGraph:
+        source = X
+    else:
+        source = "!s"
+        DiGraph.add_node("!s")
+        DiGraph.add_edges_from([("!s",x) for x in X])
+
+    if Y in DiGraph:
+        target = Y
+    else:
+        target = "!t"
+        DiGraph.add_node("!t")
+        DiGraph.add_edges_from([(y,"!t") for y in Y])
+
+    answer = networkx.has_path(DiGraph, source, target)
+    for x in ["!s","!t"]:
+        if x in DiGraph: DiGraph.remove_node(x)
+
+    return answer
+
+
+def has_edge(DiGraph, X, Y):
+    
+    if X in DiGraph: X = [X]
+    if Y in DiGraph: Y = [Y]
+
+    for x in X:
+        for y in Y:
+            if DiGraph.has_edge(x,y):
+                return True
+
+    return False
+
+
 
         
     
