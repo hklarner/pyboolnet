@@ -409,11 +409,11 @@ def rename_variable(Primes, OldName, NewName):
                 
 
 
-def _substitute( Primes, Name, Constants ):
+def _substitute(Primes, Name, Constants):
     """
     replaces the primes of *Name* by the ones obtained from substituting *Constants*.
     """
-
+        
     for value in [0,1]:
         newprimes = []
         for x in Primes[Name][value]:
@@ -425,8 +425,10 @@ def _substitute( Primes, Name, Constants ):
                 elif x not in newprimes:
                     newprimes.append(x)
                     
+            elif x not in newprimes:
+                newprimes.append(x)
+                    
         Primes[Name][value] = newprimes
-
 
 def _percolation( Primes, RemoveConstants ):
     """
