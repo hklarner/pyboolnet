@@ -9,6 +9,17 @@ Installation
 Installation
 ============
 
+Python
+------
+|software| was written in Python 2.7 but should be compatible with Python 3.
+If you experience problems with your version of Python and |software| please contact `hannes.klarner@fu-berlin.de` or
+post an issue on the project homepage at
+
+   * https://github.com/hklarner/PyBoolNet/issues
+
+   
+
+
 Linux
 -----
 
@@ -22,7 +33,7 @@ We recommend to install the package using *pip*. If it is not already installed 
    
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.0_linux.tar.gz
+   $ sudo pip install PyBoolNet-2.1_linux32.tar.gz
    
 which should place the package here::
 
@@ -63,7 +74,44 @@ You should now be able to import |software|::
    
 Windows
 -------
-Not available yet.
+Download the latest release from
+
+   * https://github.com/hklarner/PyBoolNet/releases
+
+We recommend to install the package using *pip*. If it is not already shipped with your Python version (>=2.7.9) follow the instructions
+on
+
+   * https://pip.pypa.io/en/latest/installing
+   
+To install |software| with *pip*::
+
+   C:\> pip.exe install PyBoolNet-2.1_win64.tar.gz
+   
+which should place the package here::
+
+   C:\Python<version>\Lib\site-packages
+   
+where ``<version>`` is the Python version you are using.
+
+To install |software| using *Distutils* unpack *PyBoolNet-2.1_win64.tar.gz* into a temporary folder, e.g., C:\Downloads\tmp and run::
+
+   C:\Downloads\tmp\> python setup.py install
+   
+The locations should be the same as when installing with *pip*.
+
+You should now be able to import |software|::
+
+   C:\> python
+   >>> import PyBoolNet
+   >>>
+
+
+.. note:: To remove |software| using *pip* run::
+
+      C:\> pip.exe uninstall PyBoolNet
+   
+   If you do not have *pip*, all files must be removed manually.
+   
 
 Mac
 ---
@@ -81,7 +129,7 @@ or if you do not have super user rights
    
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.0_linux.tar.gz
+   $ sudo pip install PyBoolNet-2.1_mac64.tar.gz
    
 which should place the package here::
 
@@ -90,13 +138,13 @@ which should place the package here::
 where ``<user>`` is the name you are logged in with, to find out call ``whoami``, and ``<version>`` is the Python version you are using.
 Use the option ``--user``, this time literally, do not replace it with you actual user name, if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.0.tar.gz --user
+   $ pip install PyBoolNet-2.1_mac64.tar.gz --user
    
 The package is likely going to be placed here::
 
    /usr/local/lib/python<version>/dist-packages/PyBoolNet
 
-To install |software| using *Distutils* unpack *PyBoolNet-2.0.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.1_mac64.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -310,7 +358,7 @@ GINsim_ is available at
 Troubleshooting
 ---------------
 
-For questions that are not listed here contact `hannes.klarner@fu-berlin.de` or post an issue on the project homepage at
+For questions that are not listed here please contact `hannes.klarner@fu-berlin.de` or post an issue on the project homepage at
 
    * https://github.com/hklarner/PyBoolNet/issues
 

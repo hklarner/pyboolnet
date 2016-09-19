@@ -6,6 +6,13 @@
 AttractorDetection
 ==================
 
+.. _compute_attractors_tarjan:
+
+compute_attractors_tarjan
+-------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.compute_attractors_tarjan
+
 
 .. _find_attractor_state_by_randomwalk_and_ctl:
 
