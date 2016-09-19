@@ -416,19 +416,27 @@ def _substitute(Primes, Name, Constants):
         
     for value in [0,1]:
         newprimes = []
-        for x in Primes[Name][value]:
-            if PyBoolNet.Utility.Misc.dicts_are_consistent(x, Constants):
-                PyBoolNet.Utility.Misc.remove_d1_from_d2(d1=Constants, d2=x)
-                if x == {}:
+        for prime in Primes[Name][value]:
+            consistent, inconsistent = [], []
+            for k in Constants:
+                if k in prime:
+                    if prime[k]==Constants[k]:
+                        consistent.append(k)
+                    else:
+                        inconsistent.append(k)
+                    
+            if inconsistent:
+                continue
+            else:
+                for k in consistent: prime.pop(k)
+                if prime=={}:
                     newprimes = [{}]
                     break
-                elif x not in newprimes:
-                    newprimes.append(x)
-                    
-            elif x not in newprimes:
-                newprimes.append(x)
+                elif prime not in newprimes:
+                    newprimes.append(prime)
                     
         Primes[Name][value] = newprimes
+      
 
 def _percolation( Primes, RemoveConstants ):
     """
