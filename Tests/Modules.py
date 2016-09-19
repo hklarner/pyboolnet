@@ -323,7 +323,10 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
 class TestAttractorDetection(unittest.TestCase):
 
-    def dummy(self):
+    def test_attractor_representatives(self):
+        # not finished
+        return
+    
         bnet = """
         v1, !v1&v2&v3 | v1&!v2 | v1&!v3
         v2, !v1&!v2 | v1&v2&v3
@@ -338,7 +341,7 @@ class TestAttractorDetection(unittest.TestCase):
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
         for update in ["asynchronous","synchronous"]:
-            steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+            steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
             
             for x in steadystates:
                 msg = "\nexpected one of: "+str(steadystates_expected)
@@ -350,14 +353,13 @@ class TestAttractorDetection(unittest.TestCase):
                 msg+= "\ngot:             "+str(x)
                 self.assertTrue( sum(x in Y for Y in cyclic_attractors)==1, msg)
 
-    def test_attractor_representatives(self):
-        # positive cycle with output cascade
+        # positive cycle with output component
         bnet = "v1, v2 \n v2, v1 \n v3, v2"
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         update = "asynchronous"
         steadystates_expected = ["111","000"]
         cyclic_attractors = []
-        steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+        steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
 
         for x in steadystates:
             msg = "\nexpected one of: "+str(steadystates_expected)
@@ -369,13 +371,30 @@ class TestAttractorDetection(unittest.TestCase):
             msg+= "\ngot:             "+str(x)
             self.assertTrue( sum(x in Y for Y in cyclic_attractors)==1, msg)
 
-    
-    def test_attractor_representatives1(self):            
+
+        for name in PyBoolNet.Repository.get_all_names():
+            primes = PyBoolNet.Repository.get_primes(name)
+            if len(primes)>10: continue
+            
+            for update in ["asynchronous", "synchronous", "mixed"]:
+                stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, update)
+                steady_tarjan, cyclic_tarjan = PyBoolNet.AttractorDetection.compute_attractors_tarjan(primes, stg)
+                steady_rep, cyclic_rep = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
+
+                k1 = len(steady_tarjan)+len(cyclic_tarjan)
+                k2 = len(steady_rep)+len(cyclic_rep)
+                msg = "\ntarjan finds %i attractors."%k1
+                msg+= "\nreps finds %i attractors."%k2
+                self.assertTrue(k1==k2, msg)
+
+                
+        
         update = "asynchronous"
         for name in PyBoolNet.Repository.get_all_names():
             print name
             primes = PyBoolNet.Repository.get_primes(name)
-            steadystates, cyclic = PyBoolNet.AttractorDetection.attractor_representatives(primes, update)
+            if len(primes)>10: continue
+            steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
             expected = len(PyBoolNet.TrapSpaces.trap_spaces(primes,"min"))
             got = len(steadystates)+len(cyclic)
             msg = "\nname:      "+name
@@ -383,8 +402,6 @@ class TestAttractorDetection(unittest.TestCase):
             msg+= "\ngot:       "+str(got)
             self.assertTrue(expected==got, msg)
             
-        
-    
     def test_compute_attractors_tarjan(self):
         bnet = ["x, !x&y | z",
                 "y, !x | !z",
@@ -392,18 +409,18 @@ class TestAttractorDetection(unittest.TestCase):
         bnet = "\n".join(bnet)
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-        attractors = PyBoolNet.AttractorDetection.compute_attractors_tarjan(primes, stg)
+        steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractors_tarjan(primes, stg)
 
-    
-        answer = []
-        for A in attractors:
-            answer.append([PyBoolNet.StateTransitionGraphs.state2str(x) for x in A])
-        answer   = sorted(answer)
-        expected = sorted([["101"], ["010","110"]])
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
-        
-        self.assertTrue(answer==expected, msg)
+        steady_expected = ["101"]
+        cyclic_expected = [set(["010","110"])]
+
+        msg = "\nexpected: "+str(steady_expected)
+        msg+= "\ngot:      "+str(steadystates)
+        self.assertTrue(steadystates==steady_expected, msg)
+
+        msg = "\nexpected: "+str(cyclic_expected)
+        msg+= "\ngot:      "+str(cyclic)
+        self.assertTrue(cyclic==cyclic_expected, msg)
         
     def test_find_attractor_state_by_randomwalk_and_ctl(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")
@@ -1614,11 +1631,11 @@ if __name__=="__main__":
 
 
     
-    if 0:
+    if 1:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
         suite.addTest(TestAttractorDetection("test_attractor_representatives"))
