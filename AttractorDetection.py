@@ -15,7 +15,7 @@ import PyBoolNet.QueryPatterns
 import PyBoolNet.Utility
 
 
-def attractor_representatives(Primes, Update):
+def compute_attractor_representatives(Primes, Update):
     """
     Computes a representative state for every attractor of the network defined by *Primes* and *Update* if the network's attractors can be approximated
     by its minimal trap spaces, see :ref:`Klarner2015(b) <klarner2015approx>` for details.
@@ -42,8 +42,11 @@ def attractor_representatives(Primes, Update):
             ['100','101','111']
     """
 
-    assert(Update in ["asynchronous", "synchronous", "mixed"])
+    print("function compute_attractor_representatives(..) is not ready yet")
+    raise Exception
 
+    assert(Update in ["asynchronous", "synchronous", "mixed"])
+    
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
     constants = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
     oscillating = {}
@@ -59,17 +62,17 @@ def attractor_representatives(Primes, Update):
 
     while stack:
         primes, constants, oscillating = stack.pop()
-        
+
         assert(set(oscillating).issubset(set(primes)))
         assert(not set(constants).intersection(set(primes)))
 
         # stopping criterion
         if len(oscillating)==len(primes):
-            p = PyBoolNet.PrimeImplicants.copy(Primes)
+            primes_global = PyBoolNet.PrimeImplicants.copy(Primes)
         
             if oscillating=={}:
-                PyBoolNet.PrimeImplicants.create_constants(p, constants)
-                x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(p)
+                PyBoolNet.PrimeImplicants.create_constants(primes_global, constants)
+                x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_global)
                 assert(len(x)==len(Primes))
                 steadystates.append(PyBoolNet.StateTransitionGraphs.state2str(x))
 
@@ -77,25 +80,27 @@ def attractor_representatives(Primes, Update):
                 x = PyBoolNet.Utility.Misc.merge_dicts([constants, oscillating])
                 
                 if Update=="synchronous":
-                    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
-                    igraph.remove_nodes_from(list(constants)+list(oscillating))
-                    k = len(networkx.dag_longest_path(igraph))
-                    x = PyBoolNet.StateTransitionGraphs.random_state(Primes,x)
-                    for i in range(k): x = PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes,x)
+                    igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes_global)
+                    igraph.remove_nodes_from(x)
+                    if igraph:
+                        k = len(networkx.dag_longest_path(igraph))+1
+                        x = PyBoolNet.StateTransitionGraphs.random_state(primes_global,x)
+                        for j in range(k): x = PyBoolNet.StateTransitionGraphs.successor_synchronous(primes_global,x)
 
                 else:
-                    PyBoolNet.PrimeImplicants.create_constants(p, x)
-                    x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(p)
+                    PyBoolNet.PrimeImplicants.create_constants(primes_global, x)
+                    x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_global)
 
                 cyclic.append(PyBoolNet.StateTransitionGraphs.state2str(x))
                 
             continue
-
+            
         # find autonomous set
-        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)        
+        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)    
         autoset = PyBoolNet.InteractionGraphs.find_minimal_autonomous_nodes(igraph, oscillating).pop()
         autoset_above = PyBoolNet.Utility.DiGraphs.ancestors(igraph, autoset)
         primes_auto = PyBoolNet.PrimeImplicants.copy(primes)
+
         PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_auto, autoset_above)
 
         # find trapspaces inside autonomous set
@@ -112,13 +117,15 @@ def attractor_representatives(Primes, Update):
 
         finished = False
         while not finished:
+            
             init = "INIT %s"%PyBoolNet.QueryPatterns.subspace2proposition(primes_auto, initial_state)
             spec = "CTLSPEC %s"%PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes_auto, oscillating_states_new + trapspaces)
-            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_auto, Update, init, spec)
+            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_auto, Update, init, spec)            
             if answer:
                 finished = True
             else:
-                x = find_attractor_state_by_randomwalk_and_ctl(primes_auto, Update, counterex[-1])
+                counterex = counterex[-1]
+                x = find_attractor_state_by_randomwalk_and_ctl(primes_auto, Update, counterex)
                 oscillating_states_new.append(x)
 
         # add new oscillating states to stack
@@ -130,10 +137,19 @@ def attractor_representatives(Primes, Update):
             constants_new = PyBoolNet.Utility.Misc.merge_dicts([constants, trapspace])
             primes_new = PyBoolNet.PrimeImplicants.copy(primes)
             PyBoolNet.PrimeImplicants.create_constants(primes_new, constants_new)
+
+            a,b = wtf(primes_auto)
             constants_new = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_new)
+            c,d = wtf(primes_auto)
+            if (a and b) and (c and not d):
+                print "gotcha 2"
+                print b
+                print d
+            
 
             igraph_new = PyBoolNet.InteractionGraphs.primes2igraph(primes_new)
             outdag = PyBoolNet.InteractionGraphs.find_outdag(igraph_new)
+              
             PyBoolNet.PrimeImplicants.remove_variables(primes_new, outdag)
 
             stack.append((primes_new, constants_new, oscillating))
@@ -674,7 +690,6 @@ def create_attractor_report(Primes, FnameTXT=None):
         return "\n".join(lines)
 
 
-### hidden from maunal
 def compute_attractors_tarjan(Primes, STG):
     """
     Uses `networkx.strongly_connected_components <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly_connected.strongly_connected_components.html>`_
@@ -689,7 +704,8 @@ def compute_attractors_tarjan(Primes, STG):
         * *STG*: state transition graph
 
     **returns**:
-        * *Attractors* (list of tuples of states): the attractors
+        * *SteadyStates* (list of str): the steady states
+        * *Cyclic* (list of sets of strs): the cyclic attractors
 
     **example**:
 
@@ -699,22 +715,25 @@ def compute_attractors_tarjan(Primes, STG):
         >>> bnet = "\\n".join(bnet)
         >>> primes = FEX.bnet2primes(bnet)
         >>> stg = STGs.primes2stg(primes, "asynchronous")
-        >>> attractors = STGs.compute_attractors_tarjan(stg)
-        >>> for A in attractors:
-        ...     print(A)
-        [{'v1': 1, 'v2': 0, 'v3': 1}]
-        [{'v1': 0, 'v2': 1, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 0}]
+        >>> steadystates, cyclic = STGs.compute_attractors_tarjan(stg)
+        >>> steadystates
+        ['101','000']
+        >>> cyclic
+        [set(['111','110']), set(['001','011'])]
     """
 
     condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
 
-    attractors = []
+    steadystates = []
+    cyclic = []
     for scc in condensation_graph.nodes():
         if not condensation_graph.successors(scc):
-            scc = [PyBoolNet.StateTransitionGraphs.state2dict(Primes, x) for x in scc]
-            attractors+= [scc]
+            if len(scc)==1:
+                steadystates.append(scc[0])
+            else:
+                cyclic.append(set(scc))
 
-    return attractors
+    return steadystates, cyclic
 
 
 def completeness_naive(Primes, Update, TrapSpaces):
