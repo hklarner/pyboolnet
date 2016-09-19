@@ -5,12 +5,13 @@ PyBoolNet is a Python package for the generation, modification and analysis of B
 The current version is available at [PyBoolNet/releases](http://github.com/hklarner/PyBoolNet/releases).
 
 For the manual, a reference and tutorials see the [PyBoolNet manual](http://github.com/hklarner/PyBoolNet/releases).
-For questions and suggestions do not hesitate to open issues or contact
+For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
  
-#### release note for version 2.1 (August 2016)
+#### release notes for version 2.1 (September 2016)
+- support for windows and macos
 - refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `list_states_referenced_by_proposition`
 - refactored function for state and subspace conversions to `state2str`, `state2dict`, `subspace2str`, `subspace2dict` and added basic asserts 
 - added functions `univocality_with_counterexample`, `faithfulness_with_counterexample` and `completeness_with_counterexample`
