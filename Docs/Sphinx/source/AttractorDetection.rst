@@ -11,47 +11,63 @@ AttractorDetection
 compute_attractors_tarjan
 -------------------------
 
-.. autofunction:: AttractorDetection.compute_attractors_tarjan
+.. autofunction:: PyBoolNet.AttractorDetection.compute_attractors_tarjan
 
 
-.. _find_attractor_by_randomwalk_and_ctl:
+.. _find_attractor_state_by_randomwalk_and_ctl:
 
-find_attractor_by_randomwalk_and_ctl
-------------------------------------
+find_attractor_state_by_randomwalk_and_ctl
+------------------------------------------
 
-.. autofunction:: AttractorDetection.find_attractor_by_randomwalk_and_ctl
-
-
-.. _completeness_naive:
-   
-completeness_naive
-------------------
-
-.. autofunction:: AttractorDetection.completeness_naive
+.. autofunction:: PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl
 
 
-.. _completeness_iterative:
+.. _univocality:
 
-completeness_iterative
-----------------------
+univocality
+-----------
 
-.. autofunction:: AttractorDetection.completeness_iterative
-
-
-.. _univocal:
-
-univocal
---------
-
-.. autofunction:: AttractorDetection.univocal
+.. autofunction:: PyBoolNet.AttractorDetection.univocality
 
 
-.. _faithful:
+.. _faithfulness:
 
-faithful
---------
+faithfulness
+------------
 
-.. autofunction:: AttractorDetection.faithful
+.. autofunction:: PyBoolNet.AttractorDetection.faithfulness
+
+
+.. _completeness:
+
+completeness
+------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.completeness
+
+
+.. _univocality_with_counterexample:
+
+univocality_with_counterexample
+-------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.univocality_with_counterexample
+
+
+.. _faithfulness_with_counterexample:
+
+faithfulness_with_counterexample
+--------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.faithfulness_with_counterexample
+
+
+.. _completeness_with_counterexample:
+
+completeness_with_counterexample
+--------------------------------
+
+.. autofunction:: PyBoolNet.AttractorDetection.completeness_with_counterexample
 
 
 .. _create_attractor_report:
@@ -59,8 +75,7 @@ faithful
 create_attractor_report
 -----------------------
 
-.. autofunction:: AttractorDetection.create_attractor_report
-
+.. autofunction:: PyBoolNet.AttractorDetection.create_attractor_report
 
 
 

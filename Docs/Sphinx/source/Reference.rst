@@ -14,6 +14,6 @@ Reference
    AttractorBasins
    
    ModelChecking
-   TemporalQueries
+   QueryPatterns
    TrapSpaces
    QuineMcCluskey

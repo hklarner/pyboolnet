@@ -7,28 +7,30 @@ import os
 import subprocess
 import networkx
 
-import ModelChecking
-import TemporalQueries
-import TrapSpaces
-import Utility
+import PyBoolNet.FileExchange
+import PyBoolNet.TrapSpaces
+import PyBoolNet.Utility.Misc
+import PyBoolNet.Utility.DiGraphs
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
+CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 
 def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
-    Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
+    PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
 
 
-def primes2stg( Primes, Update, InitialStates=lambda x: True ):
+def primes2stg(Primes, Update, InitialStates=lambda x: True):
     """
     Creates the state transition graph (STG) of a network defined by *Primes* and *Update*.
     The *InitialStates* are either a list of states (in *dict* or *str* representation),
     a function that flags states that belong to the initial states, or
     a subspace (in *dict* or *str* representation).
+    If *InitialStates* is a function then it must take a single parameter *State* in dict representation
+    and return a Boolean value that indicates whether it belongs to the initial states or not.
         
     The STG is constructed by a depth first search (DFS) starting from the given initial states.
     The default for *InitialStates* is ``lambda x: True``, i.e., every state is initial.
@@ -77,41 +79,33 @@ def primes2stg( Primes, Update, InitialStates=lambda x: True ):
     if Update=="synchronous":
         successors = lambda x: [successor_synchronous(Primes, x)]
 
-    names =  sorted(Primes.keys())
+    names =  sorted(Primes)
     space = len(names)*[[0,1]]
 
+    # function
     if hasattr(InitialStates, '__call__'):
         fringe = [dict(zip(names, values)) for values in itertools.product(*space)]
-        fringe = [state for state in fringe if InitialStates(state)]
+        fringe = [state2str(x) for x in fringe if InitialStates(x)]
 
-    elif type(InitialStates)==str:
-        assert(len(InitialStates)==len(names))
-        fringe = subspace2states(names, InitialStates)
+    # subspace
+    elif type(InitialStates) in [str,dict]:
+        fringe = list_states_in_subspace(names, InitialStates)
 
-    elif type(InitialStates)==dict:
-        fringe = subspace2states(names, InitialStates)
-        
+    # some iterable
     else:
-        assert(all(len(x)==len(names) for x in InitialStates))
-        fringe = [x if type(x)==dict else dict(zip(names,map(int,x))) for x in InitialStates]
-        
+        fringe = [state2str(x) for x in InitialStates]
     
     seen = set([])
-    
     while fringe:
-        state = fringe.pop()
-        source = ''.join([str(state[x]) for x in names])
-
-        if source in seen:
-            continue
+        source = fringe.pop()
+        if source in seen: continue
         
-        for suc in successors(state):
-            target = ''.join([str(suc[x]) for x in names])
+        for target in successors(source):
+            target = state2str(target)
             stg.add_edge(source, target)
 
             if target not in seen:
-                if suc not in fringe:
-                    fringe.append( suc )
+                fringe.append(target)
 
         seen.add(source)
 
@@ -125,10 +119,11 @@ def primes2stg( Primes, Update, InitialStates=lambda x: True ):
         stg.graph["overlap"] = "compress"
     else:
         stg.graph["overlap"] = "scale"
+        
     return stg
 
 
-def stg2dot( STG, FnameDOT=None ):
+def stg2dot(STG, FnameDOT=None):
     """
     Creates a *dot* file from a state transition graph.
     Graph, node and edge attributes are passed to the *dot* file by adding the respective key and value pairs to the graph, node or edge data.
@@ -150,10 +145,10 @@ def stg2dot( STG, FnameDOT=None ):
           >>> stg.graph["edge"] = {"arrowsize": 2.0}      
           >>> stg.node["001000"]["fontsize"] = 20
           >>> stg.edge["001110"]["001010"]["style"] = "dotted"
-          >>> stg2image( stg, "irma_stg.pdf")
+          >>> stg2image(stg, "irma_stg.pdf")
     """
 
-    return Utility.DiGraphs.digraph2dot(STG, FnameDOT)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(STG, FnameDOT)
 
 
 def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
@@ -174,10 +169,10 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
           >>> stg2image(stg, "mapk_stg.svg", "dot")
     """
 
-    Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
         
         
-def copy( STG ):
+def copy(STG):
     """
     Creates a copy of *STG* including all *dot* attributes.
 
@@ -199,7 +194,7 @@ def copy( STG ):
     return newgraph
 
 
-def add_style_tendencies( STG ):
+def add_style_tendencies(STG):
     """
     Sets or overwrites the edge colors to reflect whether a transition increases values (*black*),
     decreases values (*red*), or both (*blue*) which is only possible for non-asynchronous transitions.
@@ -224,8 +219,9 @@ def add_style_tendencies( STG ):
         
         if dec:
             STG.edge[source][target]["color"] = "red"
+
             
-def add_style_sccs( STG ):
+def add_style_sccs(STG):
     """
     Adds a subgraph for every non-trivial strongly connected component (SCC) to the *dot* representation of *STG*.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -240,7 +236,7 @@ def add_style_sccs( STG ):
           >>> add_style_sccs(stg)
     """
     
-    condensation_graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
 
     for i,scc in enumerate(condensation_graph.nodes()):
         name = "cluster_%i"%i
@@ -267,10 +263,10 @@ def add_style_sccs( STG ):
             if sorted(x.nodes()) == sorted(subgraph.nodes()):
                 STG.graph["subgraphs"].remove(x)
                 
-        STG.graph["subgraphs"].append( subgraph )
+        STG.graph["subgraphs"].append(subgraph)
         
 
-def add_style_subspaces( Primes, STG, Subspaces ):
+def add_style_subspaces(Primes, STG, Subspaces):
     """
     Adds a *dot* subgraph for every subspace in *Subspace* to *STG* - or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
@@ -296,7 +292,7 @@ def add_style_subspaces( Primes, STG, Subspaces ):
         >>> add_style_subspaces(primes, stg, subspaces)
     """
 
-    names = sorted(Primes.keys())
+    names = sorted(Primes)
     
     if not STG.graph["subgraphs"]:
         STG.graph["subgraphs"] = []
@@ -311,14 +307,14 @@ def add_style_subspaces( Primes, STG, Subspaces ):
             
             # subspace = "11--1-"
             if type(subspace)==str:
-                subspace = str2subspace(Primes, subspace)
+                subspace = subspace2dict(Primes, subspace)
             elif not type(subspace)==dict:
                 raise Exception("Invalid Argument 'Subspaces'")
             
         else:
             # subspace = "11--1-"
             if type(x)==str:
-                subspace = str2subspace(Primes, x)
+                subspace = subspace2dict(Primes, x)
             # subspace = {"v1":0,"v5":1}
             elif type(x)==dict:
                 subspace = x
@@ -326,7 +322,7 @@ def add_style_subspaces( Primes, STG, Subspaces ):
                 raise Exception("Invalid Argument 'Subspaces'")
 
         subgraph = networkx.DiGraph()
-        subgraph.add_nodes_from([state2str(x) for x in subspace2states(Primes,subspace)])
+        subgraph.add_nodes_from(list_states_in_subspace(Primes,subspace))
         subgraph.graph["color"] = "black"
         subgraph.graph["label"] = "subspace %s"%subspace2str(Primes, subspace)
         if attr:
@@ -340,12 +336,12 @@ def add_style_subspaces( Primes, STG, Subspaces ):
         STG.graph["subgraphs"].append(subgraph)
 
 
-def add_style_subgraphs( STG, Subgraphs ):
+def add_style_subgraphs(STG, Subgraphs):
     """
     Adds the subgraphs given in *Subgraphs* to *STG* - or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
-    To add custom labels or fillcolors to a subgraph supply a tuple consisting of the
-    list of nodes and a dictionary of subgraph attributes.
+    *Subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
+    is a dictionary of subgraph attributes in *dot* format.
 
     .. note::
     
@@ -355,25 +351,20 @@ def add_style_subgraphs( STG, Subgraphs ):
 
     **arguments**:
         * *STG*: state transition graph
-        * *Subgraphs* (list): lists of nodes *or* pairs of lists and subgraph attributes
+        * *Subgraphs* (list): pairs of lists and subgraph attributes
 
     **example**:
 
-        >>> sub1 = ["001","010"]
-        >>> sub2 = ["111","011"]
-        >>> subgraphs = [sub1,sub2]
-        >>> add_style_subgraphs(stg, subgraphs)
-
         >>> sub1 = (["001","010"], {"label":"critical states"})
-        >>> sub2 = ["111","011"]
-        >>> subgraphs = [(sub1,sub2]
+        >>> sub2 = (["111","011"], {})
+        >>> subgraphs = [sub1,sub2]
         >>> add_style_subgraphs(stg, subgraphs)
     """
 
-    Utility.DiGraphs.add_style_subgraphs( STG, Subgraphs )
+    PyBoolNet.Utility.DiGraphs.add_style_subgraphs(STG, Subgraphs)
 
 
-def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
+def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     """
     A convenience function that combines :ref:`add_style_subspaces` and :ref:`TrapSpaces.trap_spaces <trap_spaces>`.
     It adds a *dot* subgraphs for every minimal trap space to *STG* - subgraphs that already exist are overwritten.
@@ -388,14 +379,14 @@ def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
         >>> add_style_mintrapspaces(primes, stg)
     """
     
-    names = sorted(Primes.keys())
+    names = sorted(Primes)
     states = STG.nodes()
     smallest_subspace = bounding_box(Primes,states)
     
-    for tspace in TrapSpaces.trap_spaces_insideof(Primes, "min", smallest_subspace, MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.TrapSpaces.trap_spaces_insideof(Primes, "min", smallest_subspace, MaxOutput=MaxOutput):
 
         subgraph = networkx.DiGraph()
-        subgraph.add_nodes_from([state2str(x) for x in subspace2states(Primes,tspace) if state2str(x) in states])
+        subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes,tspace) if x in states])
         if not subgraph.nodes():
             continue
 
@@ -413,10 +404,10 @@ def add_style_mintrapspaces( Primes, STG, MaxOutput=100):
             if sorted(x.nodes()) == sorted(subgraph.nodes()):
                 STG.graph["subgraphs"].remove(x)
 
-        STG.graph["subgraphs"].append( subgraph )
+        STG.graph["subgraphs"].append(subgraph)
    
         
-def add_style_path( STG, Path, Color, Penwidth=3 ):
+def add_style_path(STG, Path, Color, Penwidth=3):
     """
     Sets the color of all nodes and edges involved in the given *Path* to *Color*.
 
@@ -432,7 +423,7 @@ def add_style_path( STG, Path, Color, Penwidth=3 ):
         >>> add_style_path(stg, path, "red")
     """
 
-    assert( Path != None )
+    assert(Path != None)
 
     Path = [state2str(x) if type(x)==dict else x for x in Path]
 
@@ -446,7 +437,7 @@ def add_style_path( STG, Path, Color, Penwidth=3 ):
             STG.edge[x][y]["penwidth"]  = "%i"%Penwidth
                     
             
-def add_style_default( Primes, STG ):
+def add_style_default(Primes, STG):
     """
     A convenience function that adds styles for tendencies, SCCs and minimal trap spaces.
 
@@ -464,7 +455,7 @@ def add_style_default( Primes, STG ):
     add_style_mintrapspaces(Primes, STG)
 
 
-def successor_synchronous( Primes, State ):
+def successor_synchronous(Primes, State):
     """
     Returns the successor of *State* in the fully synchronous transition system defined by *Primes*.
     See :ref:`Klarner2015(b) <klarner2015approx>` Sec. 2.2 for a formal definition.
@@ -482,8 +473,9 @@ def successor_synchronous( Primes, State ):
             >>> successor_synchronous(primes, state)
             {'v1':0, 'v2':1, 'v3':1}
     """
+    
     if type(State)==str:
-        State = str2state(Primes, State)
+        State = state2dict(Primes, State)
         
     successor = {}
     for name in Primes:
@@ -499,7 +491,7 @@ def successor_synchronous( Primes, State ):
     return successor
 
 
-def successors_asynchronous( Primes, State ):
+def successors_asynchronous(Primes, State):
     """
     Returns the successors of *State* in the fully asynchronous transition system defined by *Primes*.
     See :ref:`Klarner2015(b) <klarner2015approx>` Sec. 2.2 for a formal definition.
@@ -519,7 +511,7 @@ def successors_asynchronous( Primes, State ):
     """
 
     if type(State)==str:
-        State = str2state(Primes, State)
+        State = state2dict(Primes, State)
         
     target = successor_synchronous(Primes,State)
     if target == State:
@@ -530,12 +522,12 @@ def successors_asynchronous( Primes, State ):
         if State[name] != target[name]:
             successor = State.copy()
             successor[name] = target[name]
-            successors.append( successor )
+            successors.append(successor)
     
     return successors
 
 
-def random_successor_mixed( Primes, State ):
+def random_successor_mixed(Primes, State):
     """
     Returns a random successor of *State* in the mixed transition system defined by *Primes*.
     The mixed update contains the synchronous and asynchronous STGs
@@ -572,7 +564,7 @@ def random_successor_mixed( Primes, State ):
     return State
 
 
-def random_state( Primes, Subspace={} ):
+def random_state(Primes, Subspace={}):
     """
     Generates a random state of the transition system defined by *Primes*.
     If *Subspace* is given then the state will be drawn from that subspace.
@@ -597,17 +589,19 @@ def random_state( Primes, Subspace={} ):
     if type(Subspace)==str:
         assert(len(Subspace)==len(Primes))
         x = {}
-        for name, value in zip(sorted(Primes.keys()), Subspace):
+        for name, value in zip(sorted(Primes), Subspace):
             if value.isdigit():
                 x[name] = int(value)
         Subspace = x
     else:
-        assert( set(Subspace.keys()).issubset(set(Primes.keys())) )
+        assert(set(Subspace).issubset(set(Primes)))
 
-    return dict(list(Subspace.items()) + [(x,random.choice([0,1])) for x in Primes if not x in Subspace])
+    items = list(Subspace.items()) + [(x,random.choice([0,1])) for x in Primes if not x in Subspace]
+    
+    return dict(items)
     
     
-def random_walk( Primes, Update, InitialState, Length ):
+def random_walk(Primes, Update, InitialState, Length):
     """
     Returns a random walk of *Length* many states in the transition system defined by *Primes* and *Update*
     starting from a state defined by *InitialState*.
@@ -627,17 +621,17 @@ def random_walk( Primes, Update, InitialState, Length ):
         >>> path = random_walk(primes, "asynchronous", "11---0", 4)
     """
 
-    assert( Update in ['asynchronous','synchronous', 'mixed'] )
+    assert(Update in ['asynchronous','synchronous', 'mixed'])
 
     if type(InitialState)==str:
         assert(len(InitialState)<=len(Primes))
         x = {}
-        for name, value in zip(sorted(Primes.keys()), InitialState):
+        for name, value in zip(sorted(Primes), InitialState):
             if value.isdigit():
                 x[name] = int(value)
         InitialState = x
     else:
-        assert( set(InitialState.keys()).issubset(set(Primes.keys())) )
+        assert(set(InitialState).issubset(set(Primes)))
         
 
     if Update=='asynchronous':
@@ -653,13 +647,12 @@ def random_walk( Primes, Update, InitialState, Length ):
 
     Path = [dict(InitialState)]
     while len(Path)<Length:
-        Path.append( transition(Path[-1]) )
+        Path.append(transition(Path[-1]))
 
     return Path
     
-    
 
-def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
+def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
     """
     Performs a best-first search in the asynchronous transition system defined by *Primes* to answer the question whether there
     is a path from a random state in *InitalSpace* to a state in *GoalSpace*.
@@ -689,9 +682,9 @@ def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
             >>> if path: print(len(path))
             4
     """
-    
-    assert( set(InitialSpace.keys()).issubset(set(Primes.keys())) )
-    assert( set(GoalSpace.keys()).issubset(set(Primes.keys())) )
+
+    if type(InitialSpace) == str: InitialSpace = subspace2dict(Primes,InitialSpace)
+    if type(GoalSpace) == str: GoalSpace = subspace2dict(Primes,GoalSpace)
 
     xdict = random_state(Primes, Subspace=InitialSpace)
     x = state2str(xdict)
@@ -707,7 +700,7 @@ def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
             return path
 
         x = path[-1]
-        for ydict in successors_asynchronous(Primes, str2state(Primes,x)):
+        for ydict in successors_asynchronous(Primes, state2dict(Primes,x)):
             y = state2str(ydict)
             if y not in seen:
                 seen.add(y)
@@ -719,9 +712,10 @@ def best_first_reachability( Primes, InitialSpace, GoalSpace, Memory=1000 ):
     return None
 
 
-def state2str( State ):
+def state2str(State):
     """
     Converts the dictionary representation of a state into the string representation of a state.
+    If *State* is already of type string it is simply returned.
 
     **arguments**
         * *State* (dict): dictionary representation of state
@@ -735,14 +729,18 @@ def state2str( State ):
         >>> state2str(primes, state)
         '101'
     """
+
+    if type(State)==str:
+        return State
     
     return ''.join([str(State[x]) for x in sorted(State)])
 
 
-def str2state( Primes, State ):
+def state2dict(Primes, State):
     """
     Converts the string representation of a state into the dictionary representation of a state.
-
+    If *State* is already of type *dict* it is simply returned.
+        
     **arguments**
         * *Primes*: prime implicants or a list of names
         * *State* (str): string representation of state
@@ -753,20 +751,25 @@ def str2state( Primes, State ):
     **example**::
 
         >>> state = "101"
-        >>> str2state(primes, state)
+        >>> state2dict(primes, state)
         {'v2':0, 'v1':1, 'v3':1}
     
     """
-    
+
+    if type(State)==dict:
+        assert(set(State)==set(Primes))
+        return State
+        
     assert(len(State)==len(Primes))
 
-    return dict((k,int(v)) for k,v in zip(sorted(Primes.keys()), State))
+    return dict((k,int(v)) for k,v in zip(sorted(Primes), State))
 
 
-def subspace2str( Primes, Subspace ):
+def subspace2str(Primes, Subspace):
     """
     Converts the dictionary representation of a subspace into the string representation of a subspace.
     Uses "-" to indicate free variables.
+    If *Subspace* is already of type *str* it is simply returned.
     
     **arguments**
         * *Primes*: prime implicants or a list of names
@@ -781,16 +784,22 @@ def subspace2str( Primes, Subspace ):
         >>> subspace2str(primes, sub)
         '-01'
     """
+
+    if type(Subspace)==str:
+        assert(len(Subspace)==len(Primes))
+        return Subspace
     
-    assert(set(Subspace.keys()).issubset(set(Primes)))
+    assert(type(Subspace)==dict)
+    assert(set(Subspace).issubset(set(Primes)))
     
     return ''.join([str(Subspace[x]) if x in Subspace else "-" for x in sorted(Primes)])
 
 
-def str2subspace( Primes, Str ):
+def subspace2dict(Primes, Subspace):
     """
     Converts the string representation of a subspace into the dictionary representation of a subspace.
     Use "-" to indicate free variables.
+    If *Subspace* is already of type *dict* it is simply returned.
     
     **arguments**
         * *Primes*: prime implicants or a list of names
@@ -802,16 +811,21 @@ def str2subspace( Primes, Str ):
     **example**::
 
         >>> sub = "-01"
-        >>> str2subspace(primes, sub)
+        >>> subspace2dict(primes, sub)
         {'v2':0, 'v3':1}
     """
+
+    if type(Subspace)==dict:
+        assert(set(Subspace).issubset(set(Primes)))
+        return Subspace
     
-    return dict([(name, int(value)) for name, value in zip(sorted(Primes), Str) if not value=="-"])
+    assert(type(Subspace)==str)
+    assert(len(Subspace)==len(Primes))
+    
+    return dict([(name, int(value)) for name, value in zip(sorted(Primes), Subspace) if not value=="-"])
 
 
-
-
-def subspace2states( Primes, Subspace ):
+def list_states_in_subspace(Primes, Subspace):
     """
     Generates all states contained in *Subspace*.
 
@@ -820,24 +834,67 @@ def subspace2states( Primes, Subspace ):
         * *Subspace* (str or dict): a subspace
 
     **returns**:
-        * *States* (list): the states contained in *Subspace*
+        * *States* (list of str): the states contained in *Subspace*
 
     **example**:
 
         >>> subspace = "1-1"
-        >>> subspace2states(primes,subspace)
-        [{'v1':1,'v2':0,'v3':1},{'v1':1,'v2':1,'v3':1}]
+        >>> list_states_in_subspace(primes,subspace)
+        ['101','111']
     """
 
-    names = sorted(Primes)
-    ranges = [[Subspace[x]] if x in Subspace else [0,1] for x in names]
+    if type(Subspace)==str:
+        Subspace = subspace2dict(Primes, Subspace)
+    else:
+        assert(type(Subspace)==dict)
+        assert(set(Subspace).issubset(set(Primes)))
+
+    ranges = [[Subspace[x]] if x in Subspace else [0,1] for x in sorted(Primes)]
 
     states = []
     for values in itertools.product(*ranges):
-        state = dict(zip(names,values))
-        states.append(state)
+        states.append("".join(map(str,values)))
 
     return states
+
+
+def list_states_referenced_by_proposition(Primes, Proposition):
+    """
+    Generates all states that are referenced by *Proposition* in the context of the variables given by *Primes*.
+    The syntax of *Proposition* should be as in bnet files and TRUE and FALSE in will be treated as 1 and 0.
+
+    .. note::
+        This function uses :ref:`bnet2primes <bnet2primes>` and :ref:`list_states_in_subspace <list_states_in_subspace>` to enumerate
+        the states referenced by an expression. The efficiency of this approach can decreases a lot starting from around 15 variables
+        that appear in *Proposition*.
+        
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Proposition* (str): a propositional formula
+
+    **returns**:
+        * *States* (list of str): the referenced states in str format
+
+    **example**:
+
+        >>> prop = "!Erk | (Raf & Mek)"
+        >>> list_states_referenced_by_proposition(primes,prop)[0]
+        '010'
+    """
+    
+    assert("?" not in Primes)
+    
+    Proposition = Proposition.replace("TRUE","1")
+    Proposition = Proposition.replace("FALSE","0")
+    
+    bnet = "?, %s"%Proposition
+    newprimes = PyBoolNet.FileExchange.bnet2primes(bnet)
+    
+    states = set([])
+    for p in newprimes["?"][1]:
+        states.update(set(list_states_in_subspace(Primes,p)))
+
+    return list(states)
 
 
 def bounding_box(Primes, Subspaces):
@@ -846,7 +903,7 @@ def bounding_box(Primes, Subspaces):
     returns the smallest subspaces that contains all *Subspaces*
     """
 
-    names   = sorted(Primes.keys())
+    names   = sorted(Primes)
     seen    = set([])
     result  = {}
     
@@ -893,7 +950,7 @@ def hamming_distance(Subspace1, Subspace2):
 
 # The SCC Graph
 
-def stg2sccgraph( STG ):
+def stg2sccgraph(STG):
     """
     Computes the SCC graph of the *STG*. For a definition see Sec. 3.1 of :ref:`Tournier2009 <Tournier2009>`.
 
@@ -908,11 +965,11 @@ def stg2sccgraph( STG ):
         >>> sccgraph = stg2sccgraph(stg)
     """
 
-    graph = Utility.DiGraphs.digraph2sccgraph(STG)
+    graph = PyBoolNet.Utility.DiGraphs.digraph2sccgraph(STG)
     graph.graph["node"] = {"color":"none","style":"filled","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
         if len(node)>1 or STG.has_edge(node[0],node[0]):
             graph.node[node]["fillcolor"] = "lightgray"
@@ -920,7 +977,7 @@ def stg2sccgraph( STG ):
     return graph
    
 
-def sccgraph2dot( SCCGraph, FnameDOT=None ):
+def sccgraph2dot(SCCGraph, FnameDOT=None):
     """
     Creates a *dot* file from a SCC graph.
 
@@ -938,8 +995,8 @@ def sccgraph2dot( SCCGraph, FnameDOT=None ):
     """
 
     graph = SCCGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -958,14 +1015,14 @@ def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
 
     graph = SCCGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
 
 
 # The Condensation Graph
 
-def stg2condensationgraph( STG ):
+def stg2condensationgraph(STG):
     """
     Converts the *STG* into the condensation graph, for a definition see :ref:`Klarner2015(b) <klarner2015approx>`.
 
@@ -980,17 +1037,17 @@ def stg2condensationgraph( STG ):
         >>> cgraph = stg2condensationgraph(stg)
     """
 
-    graph = Utility.DiGraphs.digraph2condensationgraph(STG)
+    graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
     graph.graph["node"] = {"color":"none","style":"filled","fillcolor":"lightgray","shape":"rect"}
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
     
 
-def condensationgraph2dot( CGraph, FnameDOT=None ):
+def condensationgraph2dot(CGraph, FnameDOT=None):
     """
     Creates a *dot* file from a condensation graph.
 
@@ -1007,8 +1064,8 @@ def condensationgraph2dot( CGraph, FnameDOT=None ):
     """
 
     graph = CGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -1027,13 +1084,13 @@ def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False
     """
 
     graph = CGraph.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)    
 
 
 # The HTG
 
-def stg2htg( STG ):
+def stg2htg(STG):
     """
     Computes the HTG of the *STG*. For a definition see :ref:`Berenguier2013 <Berenguier2013>`.
 
@@ -1058,7 +1115,7 @@ def stg2htg( STG ):
         x=tuple(sorted(x))
         if len(x)>1 or STG.has_edge(x[0],x[0]):
             sccs.append(x)
-            suc = Utility.DiGraphs.successors(STG,x)
+            suc = PyBoolNet.Utility.DiGraphs.successors(STG,x)
             if set(suc)==set(x):
                 attractors.append(x)
         else:
@@ -1070,7 +1127,7 @@ def stg2htg( STG ):
     for x in cascades:
         pattern = []
         for i, A in enumerate(sccs):
-            if Utility.DiGraphs.has_path(STG,x,A):
+            if PyBoolNet.Utility.DiGraphs.has_path(STG,x,A):
                 pattern.append(i)
         pattern = tuple(pattern)
 
@@ -1085,17 +1142,17 @@ def stg2htg( STG ):
         for Y in graph.nodes():
             if X==Y: continue
             
-            if Utility.DiGraphs.has_edge(STG,X,Y):
+            if PyBoolNet.Utility.DiGraphs.has_edge(STG,X,Y):
                 graph.add_edge(X,Y)
 
     for node in graph.nodes():
-        lines = [",".join(x) for x in Utility.Misc.divide_list_into_similar_length_lists(node)]
+        lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
         graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
 
     return graph
     
 
-def htg2dot( HTG, FnameDOT=None ):
+def htg2dot(HTG, FnameDOT=None):
     """
     Creates a *dot* file of the *HTG*.
 
@@ -1112,8 +1169,8 @@ def htg2dot( HTG, FnameDOT=None ):
     """
 
     graph = HTG.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    return Utility.DiGraphs.digraph2dot(graph, FnameDOT)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    return PyBoolNet.Utility.DiGraphs.digraph2dot(graph, FnameDOT)
     
 
 def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
@@ -1132,5 +1189,5 @@ def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
 
     graph = HTG.copy()
-    Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
+    PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
+    PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)

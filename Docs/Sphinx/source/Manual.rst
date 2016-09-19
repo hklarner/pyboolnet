@@ -87,9 +87,8 @@ States and subspaces may also be defined using string representations, i.e., str
    >>> subspace = "0--"
    
 String and dictionary representations may be converted into each other using the functions
-:ref:`state2str`, :ref:`str2state` and :ref:`subspace2str`, :ref:`str2subspace`.
+:ref:`state2str`, :ref:`state2dict` and :ref:`subspace2str`, :ref:`subspace2dict`.
 
-   
 A path that consists of two states is for example::
 
    >>> x = {"v1":0,"v2":1,"v3":0}
@@ -463,7 +462,7 @@ the subgraphs style
 *******************
 
 The function :ref:`add_style_subgraphs` allows you to specify subsets of nodes that will be added to a *dot* subgraph.
-The subgraphs may be specified either as a list of names of variables or as a tuple that consists of a list of names and a dictionary
+The subgraphs may be specified as a list of pairs that consist of a list of names and a dictionary
 of *dot* attributes for that subgraph, e.g., a label or background color.
 
 .. note::
@@ -478,7 +477,7 @@ Consider the network::
    >>> bnet = "\n".join(bnet)
    >>> primes = FEX.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
-   >>> subgraphs = [["v2","v6"],
+   >>> subgraphs = [(["v2","v6"],{}),
    ...              (["v1","v4"],{"label":"Genes", "fillcolor":"lightblue"})]
    >>> IGs.add_style_subgraphs(igraph, subgraphs)
    >>> igraph.graph["label"] = "Example 8: Interaction graph with a subgraph style"
@@ -531,12 +530,6 @@ using the function :ref:`activities2animation`::
    >>> activities = ["-100", "-110", "-010"]
    >>> IGs.activities2animation(igraph, activities, "animation.gif")
    
-   
-
-   
-
-
-   
 
 the default style
 *****************
@@ -569,7 +562,6 @@ The result is shown in :ref:`the figure below <figure09>`.
        
        
        
-
 Drawing the State Transition Graph
 ----------------------------------
 
@@ -638,8 +630,6 @@ To construct the STG starting from initial states call::
 
    >>> stg = STGs.primes2stg(primes, update, init)
        
-
-   
 
 .. warning::
    You should not draw asynchronous STGs with more than 2^7=128 states as *dot* will take very long to compute the layout.
@@ -757,8 +747,6 @@ The result is shown in :ref:`the figure below <figure14>`.
    The state transition graph "*example15_stg.pdf*" with attributes added by :ref:`add_style_mintrapspaces`.
      
 
-
-
 the subspaces style
 *******************
 
@@ -823,7 +811,7 @@ The result is shown in :ref:`the figure below <figure16>`.
 
 Modifying Networks
 ------------------
-Constant, inputs and blinkers
+constant, inputs and blinkers
 *****************************
 
 There are various reasons why it may be required to modify an imported Boolean network, i.e., a primes dictionary.
@@ -876,8 +864,17 @@ If you want to keep the original primes and modify a copy you have to create the
    >>> newprimes = PIs.copy(primes)
    >>> PIs.create_inputs(newprimes, names)
    
+Components may be renamed using the function :ref:`rename_variable`, e.g.
+
+   >>> PIs.rename_variable(primes, "v1", "x")
+   >>> FEX.primes2bnet(primes)
+   x,    !x
+   v2,   !v2
+   v3,   x & v2 & v3 & v4
+   v4,   v2 & v3 | x & v3
    
-Percolating constants
+   
+percolating constants
 *********************
 A frequently used step in model analysis and model reduction is to compute the set of variables *that will become constant* due the constants already in the model.
 We call the network obtained by replacing the update functions of the new constants be the respective constant values the *percolated network*
@@ -920,7 +917,7 @@ Removing the constants results in::
 Here, the constants v1 and v3 are removed.
 
 
-Removing, adding and creating variables
+removing, adding and creating variables
 ***************************************
 You can not, in general, remove variables from a model because other variables may depend on the one you want to remove.
 In the example network below, how would you define the network obtained by removing v1 from it?::
@@ -980,7 +977,7 @@ An example of violating the condition that all variables must be defined is::
    error: can not add variables that are dependent on undefined variables.
    
 
-Input combinations
+input combinations
 ******************
 To enumerate all possible input combinations of a given network use the function :ref:`input_combinations`::
 
@@ -1003,7 +1000,7 @@ Model Checking
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example :ref:`Baier2008 <Baier2008>`.
 
-Transition Systems
+transition systems
 ******************
 Transition systems are very similar to state transition graphs but in addition to states and transitions there are *atomic propositions*
 which are the statements that are available for specifying states.
@@ -1057,7 +1054,7 @@ The transition system with the extended set of atomic propositions is shown in :
    
    The extended transition system for the Erk-Mek-Raf network.
 
-LTL Model Checking
+LTL model checking
 ******************
 Apart from a transition system, a model checking problem requires a *temporal specification*.
 Since |Software| uses :ref:`installation_nusmv` for solving model checking problems, two specification languages are available:
@@ -1172,7 +1169,7 @@ The existence of so-called *counterexamples* is essential to LTL model checking
 and :ref:`installation_nusmv` can be asked to return one if it finds one.
 
 
-LTL Counterexamples
+LTL counterexamples
 *******************
 If a LTL query is false then :ref:`installation_nusmv` can return a finite path that proves that the formula is false.
 
@@ -1226,7 +1223,7 @@ and using :ref:`IGs.activities2animation <activities2animation>`::
    >>> IGs.activities2animation(igraph, counterex, "counterexample.gif")
 
 
-CTL Model Checking
+CTL model checking
 ******************
 :ref:`installation_nusmv` can also solve model checking problems that involve *computation tree logic* (CTL).
 CTL formulas are constructed like LTL formulas but the temporal operators *F*, *G*, *X* and *U* must be quantified by *E* which means *for some path*
@@ -1254,7 +1251,7 @@ the initial states and the proliferation states highlighted by filled rectangles
 
    >>> stg = STGs.primes2stg(primes, update)
    >>> for x in stg.nodes():
-   ...     x_dict = STGs.str2state(primes, x)
+   ...     x_dict = STGs.state2dict(primes, x)
    ...     if x_dict["GrowthFactor"]:
    ...         stg.node[x]["style"] = "filled"
    ...         stg.node[x]["fillcolor"] = "gray"
@@ -1350,7 +1347,7 @@ or disjunctions and conjunctions of basic propositions::
    To query whether *there is* an attractor of a certain type reachable from every initial state,
    rather than whether *all* attractors are of a certain type, use the query pattern *EF(AG(...))* instead of *AG(EF(AG(...)))*.
 
-CTL Counterexamples
+CTL counterexamples
 *******************
 If a CTL formula is false then :ref:`installation_nusmv` can return a finite path that starts with an initial state that does not satisfy the formula.
 
@@ -1391,7 +1388,7 @@ and checking that *Proliferation=0* for all of them.
       >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
       >>> state = counterex[0]
 
-Existential Queries
+existential queries
 *******************
 By definition, a LTL query is true iff *all paths* that are rooted in an initial state satisfy the LTL formula.
 Likewise, a CTL query is true iff *all initial states* satisfy the CTL formula.
@@ -1480,7 +1477,7 @@ Counterexamples of existential queries are therefore often also called *witnesse
    100
    
 
-Accepting States of CTL queries
+accepting states of CTL queries
 *******************************
 
 Since Version 2.0 PyBoolnet supports model checking with so-called accepting states.
@@ -1540,13 +1537,21 @@ The size of this set tells us that there are two states outside of the initial o
 Note that |software| does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property ``EF(STEADYSTATE)``::
 
-   >>> init = "INIT %s"%accepting["INITACCEPTING"]
+   >>> prop = accepting["INITACCEPTING"]
+   >>> init = "INIT %s"%prop
    >>> spec = "CTLSPEC EF(STEADYSTATE)"
    >>> MC.check_primes(primes, update, init, spec)
    True
 
+You can use the function :ref:`list_states_referenced_by_proposition` to enumerate all states that are referenced by a propositional formula::
+
+   >>> for x in STGs.list_states_referenced_by_proposition(primes, prop): print x
+   001
+   101
+   100
    
-Computing Trap Spaces
+   
+computing trap spaces
 ---------------------
 Maximal, Minimal and All Trap Spaces 
 The term *trap space* merges the notions "subspace" and "trap set".
@@ -1631,7 +1636,7 @@ The result is shown in :ref:`the figure below <figure24>` in which ``-00`` is mi
 Attractors
 ----------
 
-Attractor Detection
+attractor detection
 *******************
 Attractors capture the long-term activities of the components of Boolean networks.
 Two different types of attractors are possible: either all activities stabilize at some values and the network enters a steady state or at least one component shows sustained oscillations and the network enters a cyclic attractor.
@@ -1687,9 +1692,9 @@ A fairly efficient approach to detecting at least some attractors or larger netw
 and based on the idea of generating a random walk in the STG, starting from some initial state,
 and then testing with CTL model checking whether the final state is indeed part of an attractor.
 This approach is based on the observation that, in practice, a random walk will quickly reach states that belong to an attractor.
-It is implemented in the function :ref:`find_attractor_by_randomwalk_and_ctl`::
+It is implemented in the function :ref:`find_attractor_state_by_randomwalk_and_ctl`::
 
-   >>> state = AD.find_attractor_by_randomwalk_and_ctl(primes, "asynchronous")
+   >>> state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    >>> STGs.state2str(state)
    110
    
@@ -1697,16 +1702,16 @@ The function takes three optional parameters: *InitialState* which allows to spe
 *Length* which is an integer that specifies the number of transitions for the generation of the random walk,
 and *Attempts* which is the maximal number of random walks that are generated if each time the last state does not belong to an attractor.
 Though unlikely, it is possible that the function will not find an attractor in which case it will raise an exception.
-Hence, :ref:`find_attractor_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
+Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
 
    >>> try:
-   ...     state = AD.find_attractor_by_randomwalk_and_ctl(primes, "asynchronous")
+   ...     state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    ...     print STGs.state2str(state)
    ... except:
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
 
 
-Attractor Basins
+attractor basins
 ****************
 
 The module :ref:`AttractorBasins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
@@ -1748,7 +1753,7 @@ Cyclic attractros are represented by minimal trap spaces.
 
 Note that the function :ref:`basins_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
 or it will compute the minimal trap spaces and *assume* that they are complete and univocal.
-You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness_iterative` and :ref:`univocal`.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness` and :ref:`univocal`.
 
 .. _figure26:
 
@@ -1778,44 +1783,38 @@ An example is given in :ref:`the figure below <figure27>`:
    
    The aggregated basin diagram of the network *arellano_rootstem* from the repository.
 
-Approximations
-**************
+attractor approximations
+************************
 
-This section is based on the results published in :ref:`Klarner2015(a) <klarner2015trap>`.
-The overall goal is to efficiently compute all attractors of an asynchronous STG.
-In particular we are interested in the cyclic attractors of an asynchronous STG
-because its steady states are identical to the steady states of synchronous STGs which can already be computed efficiently using SAT solvers,
-e.g., the approach suggested in :ref:`Dubrova2011 <Dubrova2011>`.
+Minimal trap spaces approximate attractors because every trap space contains an attractor.
+But, there can be attractors outside of minimal trap spaces.
+And there may be several attractors inside a single minmal trap space.
+And an attractor inside a minimal trap space may be much smaller than the minimal trap space that contains it.
+Hence there are three criteria for the quality of minimal trap spaces as approximations for attractors:
 
-The idea is based on the observation that the efficiency of computing minimal trap spaces is about as efficient as computing steady states
-and using similar techniques, i.e., solvers for 0-1 problems.
-Also, trap spaces always contain at least some attractors.
-It is therefore try to quanity what "some" means.
-This section asks whether
+#. **completeness**: whether every attractor is contained in one of the network's minimal trap spaces
+#. **univocality**: whether each minimal trap spaces contains exactly one attractor
+#. **faithfulness**: whether the number of free variables of the minimal trap space is equal to the number of oscillating variables of the attractors contained in it
 
-#. the minimal trap spaces are **complete**, i.e., whether every attractor of the given STG is contained in one of its minimal trap spaces
-#. each minimal trap space is **univocal**, i.e., whether each minimal trap spaces contains exactly one attractor
-#. each minimal trap space is **faithful**, i.e., the number of its free variables is equal to the number of oscillating variables in each of its attractors
+If the minimal trap spaces of a network are complete, univocal and faithful then we say that the approximation is perfect.
+So far, the minimal trap spaces of every published network we are aware of are a perfect approximation of its attractors.
+Hence, although computing the attractors of asynchronous STGs is in general a hard problem,
+in practice we may get away with computing their minimal trap spaces which can efficiently be done for networks with hundreds of components.
+Note that for limit cycles of synchronous STGs and steady states other algorithms, e.g. :ref:`Dubrova2011 <Dubrova2011>` and :ref:`Naldi2007 <Naldi2007>` are more suitable.
 
 In :ref:`Klarner2015(a) <klarner2015trap>` we demonstrate that completeness, univocality and faithfulness can all be decided using CTL model checking.
-The functions :ref:`completeness_naive`, :ref:`univocal` and :ref:`faithful` automatically generate and test the respective queries,
+The functions :ref:`completeness`, :ref:`univocal` and :ref:`faithful` automatically generate and test the respective queries,
 which are defined in Sections 4.1, 4.2 and 4.3 of :ref:`Klarner2015(a) <klarner2015trap>`.
 
 As an example of a network whose minimal trap spaces are complete, univocal and faithful
 consider again the network defined in :ref:`the figure above <figure25>`.
-The functions :ref:`univocal` and :ref:`faithful` each require the primes, update strategy and a trap space.
-Since :ref:`univocal` is based on detecting at least one attractor (via the random walk algorithm explained above),
-and since a counterexample to the univocality query contains information about additional attractors,
-the function returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
-see :ref:`univocal` for details.
-The function :ref:`faithful` returns a tuple that consists of the answer and a counterexample (if it exists), again see :ref:`faithful` for details.
-For now we are only interested in printing the answer of each property for each trap space::
+The functions :ref:`univocal` and :ref:`faithful` each require the primes, update strategy and a trap space::
 
    >>> update = "asynchronous"
    >>> mintspaces = TS.trap_spaces(primes, "min")
    >>> for x in mintspaces:
-   ...     answer_univocal, _, _ = AD.univocal( primes, update, x )
-   ...     answer_faithful, _    = AD.faithful( primes, update, x )
+   ...     answer_univocal = AD.univocal(primes, update, x)
+   ...     answer_faithful = AD.faithful(primes, update, x)
    ...     print "min trap space:", STGs.subspace2str(primes, x)
    ...     print "  is univocal:", answer_univocal
    ...     print "  is faithful:", answer_faithful
@@ -1826,14 +1825,18 @@ For now we are only interested in printing the answer of each property for each 
      is univocal: True
      is faithful: True
 
-The naive function for deciding whether a set of trap spaces if complete requires also three arguments, the primes,
-the update strategy and a list of trap spaces.
-It returns a tuple consisting of the answer and a counterexample, if it exists.
-See :ref:`completeness_naive` for details.
+The function for deciding whether the minimal trap spaces are complete requires only two arguments, the primes and the update strategy,
+because it is implied that the trap spaces must be all minimal ones.
+See :ref:`completeness` for details.
      
-   >>> answer_complete, _ = AD.completeness_naive( primes, update, mintspaces )
-   >>> "min trap spaces are complete:", answer_complete
-   min trap spaces are complete: True
+   >>> AD.completeness(primes, update)
+   True
+   
+Since :ref:`univocality` is based on detecting at least one attractor, via the random walk algorithm explained above,
+and since a counterexample to the univocality query contains information about additional attractors,
+there is a second function, called :ref:`univocality_with_counterexample`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
+see :ref:`univocality` for details.
+The function :ref:`faithfulness_with_counterexample` returns a tuple that consists of the answer and a counterexample if it exists.
 
 As an illustration, consider network (A) given in Figure 1 of :ref:`Klarner2015(a) <klarner2015trap>`.
 It is defined by the following functions::

@@ -3,8 +3,8 @@ import os
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 
-import FileExchange
-import generator
+import PyBoolNet.FileExchange
+
 
 def names_with_fast_basin_computation():
     result = ["arellano_rootstem","dahlhaus_neuroplastoma",
@@ -13,6 +13,7 @@ def names_with_fast_basin_computation():
               "saadatpour_guardcell", "tournier_apoptosis", "xiao_wnt5a"]
     
     return result
+
 
 def get_all_names():
     """
@@ -49,7 +50,7 @@ def get_primes(Fname):
     
     path = os.path.join(BASE,Fname,Fname+".bnet")
 
-    return FileExchange.bnet2primes(path)
+    return PyBoolNet.FileExchange.bnet2primes(path)
 
 
 def get_bnet(Fname):

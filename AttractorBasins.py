@@ -5,39 +5,41 @@ import sys
 import itertools
 import math
 import random
-from operator import mul
+import operator
+import functools
 import networkx
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 sys.path.append(BASE)
 
-import FileExchange
-import ModelChecking
-import TemporalQueries
-import TrapSpaces
-import AttractorDetection
-import StateTransitionGraphs
-import InteractionGraphs
-import Repository
-import PrimeImplicants
-import Utility
+import PyBoolNet.FileExchange
+import PyBoolNet.ModelChecking
+import PyBoolNet.QueryPatterns
+import PyBoolNet.TrapSpaces
+import PyBoolNet.AttractorDetection
+import PyBoolNet.StateTransitionGraphs
+import PyBoolNet.InteractionGraphs
+import PyBoolNet.PrimeImplicants
+import PyBoolNet.Utility
 
-config = Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_DOT = os.path.join( BASE, "Dependencies", config.get("Executables", "dot") )
-
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
+CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 
-def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silent=True, ReturnCounter=False ):
+
+def basins_diagram(Primes, Update, Attractors=None, ComputeBorders=False, Silent=True, ReturnCounter=False):
     """
     Creates the basin diagram, a networkx.DiGraph, of the STG defined by *Primes* and *Update*.
     The nodes of the diagram represent states that can reach the exact same subset of *Attractors*.
     Nodes are labeled by the index of the attractor in the order given in *Attractors* and the number of states
     that are represented. Edges indicate the existence of a transition between two states in the respective sets.
+    Edges are labeled by the number of states of the source basin that can reach the target basin and,
+    if *ComputeBorders* is true, additionally by the size of the border.
 
     The algorithm requires model checking with accepting states, i.e., NuSMV-a.
     Basic steps towards increased efficiency are implemented:
-    out-DAGs (aka output cascades) are discarded during model checking, and
+    out-DAGs (a.k.a. output cascades) are discarded during model checking, and
     disconnected components are considered separately (and recombined using a cartesian product of diagrams).
 
     **arguments**:
@@ -67,14 +69,14 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     assert(Update in ["synchronous", "mixed", "asynchronous"])
 
     if not Attractors:
-        Attractors = TrapSpaces.trap_spaces(Primes, "min")
+        Attractors = PyBoolNet.TrapSpaces.trap_spaces(Primes, "min")
     
     if not Primes:
-        print("what are the basins of an empty Boolean network?")
+        print(" error: what are the basins of an empty Boolean network?")
         raise Exception
 
-    igraph = InteractionGraphs.primes2igraph(Primes)
-    outdags = InteractionGraphs.find_outdag(igraph)
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    outdags = PyBoolNet.InteractionGraphs.find_outdag(igraph)
     igraph.remove_nodes_from(outdags)
     if not Silent:
         print("basin_diagram(..)")
@@ -85,17 +87,16 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
     if not Silent:
         print(" working on %i connected component(s)"%len(components))
         
-    counter = 0
+    counter_mc = 0
     diagrams = []
     for component in components:
-        subprimes = PrimeImplicants.copy(Primes)
-        remove = [x for x in Primes if not x in component]
-        PrimeImplicants.remove_variables(subprimes, remove)
+        subprimes = PyBoolNet.PrimeImplicants.copy(Primes)
+        PyBoolNet.PrimeImplicants.remove_all_variables_except(subprimes, component)
         
         attrs_projected = project_attractors(Attractors, component)
 
-        diagram, count = basins_diagram_naive(subprimes, Update, attrs_projected, ComputeBorders, Silent)
-        counter+=count
+        diagram, count = basins_diagram_component(subprimes, Update, attrs_projected, ComputeBorders, Silent)
+        counter_mc+=count
         
         diagrams.append(diagram)
         
@@ -110,15 +111,15 @@ def basins_diagram( Primes, Update, Attractors=None, ComputeBorders=False, Silen
         
 
     if not Silent:
-        print(" total executions of NuSMV: %i"%counter)
+        print(" total executions of NuSMV: %i"%counter_mc)
 
     if ReturnCounter:
-        return diagram, counter
+        return diagram, counter_mc
     else:
         return diagram
 
 
-def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
+def basins_diagram_component(Primes, Update, Attractors, ComputeBorders, Silent):
     """
     Also computes the basin diagram but without removing out-DAGs or considering connected components separately.
     Not meant for general use. Use basins_diagram(..) instead.
@@ -130,39 +131,30 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         print("what are the basins of an empty Boolean network?")
         raise Exception
 
-    # case by case for inputs
-    inputs = PrimeImplicants.find_inputs(Primes)
-    if inputs:
-        cases = []
-        for combination in PrimeImplicants.input_combinations(Primes):
-            init = "INIT %s"%TemporalQueries.subspace2proposition(Primes,combination)
-            attr = [x for x in Attractors if Utility.Misc.dicts_are_consistent(x,combination)]
-            cases.append((init,attr))
-    else:
-        cases = [("INIT TRUE",Attractors)]
-
-    counter = 0
-
-    if not Silent:
-        print(" basins_diagram_naive(..)")
-        print("  inputs: %i"%len(inputs))
-        print("  cases:  %i"%len(cases))
-
     # create nodes
-    node = 0
-    total_potential_nodes = 0
+    counter_mc = 0
+    node_id = 0
+    worst_case_nodes = 0
+    inputs = PyBoolNet.PrimeImplicants.find_inputs(Primes)
     states_per_case = 2**(len(Primes)-len(inputs))
     diagram = networkx.DiGraph()
-    for i, (init, attr) in enumerate(cases):
-        total_potential_nodes+= 2**len(attr)-1
+
+    if not Silent:
+        print(" basins_diagram_component(..)")
+        print("  inputs: %i"%len(inputs))
+        print("  combinations:  %i"%2**len(inputs))
+
+    for i, combination in enumerate(PyBoolNet.PrimeImplicants.input_combinations(Primes)):
+        attr = [x for x in Attractors if PyBoolNet.Utility.Misc.dicts_are_consistent(x,combination)]
+        worst_case_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [TemporalQueries.subspace2proposition(Primes,x) for x in attr]
+        specs = [PyBoolNet.QueryPatterns.subspace2proposition(Primes,x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
 
         if not Silent:
-            print("  case %i, potential nodes: %i"%(i,2**len(attr)-1))
+            print("  input combination %i, worst case #nodes: %i"%(i,2**len(attr)-1))
         
         for vector in vectors:
             if sum(vector)==0: continue
@@ -171,30 +163,32 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     print("  avoided executions of NuSMV due to state counting")
                 break
 
+            combination_formula = PyBoolNet.QueryPatterns.subspace2proposition(Primes,combination)
             if len(vector)==1:
                 data = {"attractors":   attr,
                         "size":         2**(len(Primes)-len(inputs)),
-                        "formula":      init.split()[1]}
+                        "formula":      combination_formula}
                 
             else:
+                init = "INIT %s"%combination_formula
                 spec = " & ".join("EF(%s)"%x if flag else "!EF(%s)"%x for flag, x in zip(vector, specs))
                 spec = "CTLSPEC %s"%spec
 
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-                counter+=1
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                counter_mc+=1
                 
                 data = {"attractors":   [x for flag,x in zip(vector,attr) if flag],
                         "size":         accepting["INITACCEPTING_SIZE"],
                         "formula":      accepting["INITACCEPTING"]}
 
             if data["size"]>0:
-                diagram.add_node(node, data)
-                node+=1
+                diagram.add_node(node_id, data)
+                node_id+=1
                 states_covered+= data["size"]
 
     if not Silent:
-        perc = "= %.2f%%"%(100.*diagram.order()/total_potential_nodes) if total_potential_nodes else ""
-        print("  total potential nodes: %i"%total_potential_nodes)
+        perc = "= %.2f%%"%(100.*diagram.order()/worst_case_nodes) if worst_case_nodes else ""
+        print("  worst case #nodes: %i"%worst_case_nodes)
         print("  actual nodes: %i %s"%(diagram.order(),perc))
 
     # list potential targets
@@ -209,8 +203,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
         potential_targets[source] = succs
 
     if not Silent:
-        total_potential_edges = sum(len(x) for x in potential_targets.values())
-        print("  potential edges: %i"%total_potential_edges)
+        worst_case_edges = sum(len(x) for x in potential_targets.values())
+        print("  worst case #edges: %i"%worst_case_edges)
         
     # create edges
     for source, source_data in diagram.nodes(data=True):
@@ -220,8 +214,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
             if ComputeBorders:
                 init = "INIT %s"%source_data["formula"]
                 spec = "CTLSPEC EX(%s)"%target_data["formula"]
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-                counter+=1
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                counter_mc+=1
                 
                 data = {}
                 data["border_size"] = accepting["INITACCEPTING_SIZE"]
@@ -235,8 +229,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
 
                     else:
                         spec = "CTLSPEC EF(%s)"%data["border_formula"]
-                        answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-                        counter+=1
+                        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                        counter_mc+=1
                         
                         data["finally_size"] = accepting["INITACCEPTING_SIZE"]
                         data["finally_formula"] = accepting["INITACCEPTING"]
@@ -249,8 +243,8 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                 phi2 = target_data["formula"]
                 init = "INIT %s"%phi1
                 spec = "CTLSPEC E[%s U %s]"%(phi1,phi2)
-                answer, accepting = ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-                counter+=1
+                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                counter_mc+=1
 
                 data = {}
                 data["finally_size"] = accepting["INITACCEPTING_SIZE"]
@@ -260,28 +254,35 @@ def basins_diagram_naive( Primes, Update, Attractors, ComputeBorders, Silent ):
                     diagram.add_edge(source, target, data)
                     
     if not Silent:
-        perc = "= %.2f%%"%(100.*diagram.size()/total_potential_edges) if total_potential_edges else ""
+        perc = "= %.2f%%"%(100.*diagram.size()/worst_case_edges) if worst_case_edges else ""
         print("  actual edges: %i %s"%(diagram.size(),perc))
-        print("  total executions of NuSMV: %i"%counter)
+        print("  total executions of NuSMV: %i"%counter_mc)
 
-    return diagram, counter
+    return diagram, counter_mc
 
 
-def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs=True, StyleAdvanced=False):
+def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs=True, StyleFillColor=False,
+                  StyleSplines="curved", StyleEdges=False, StyleRefinement=False, StyleRanks=True, FirstIndex=0):
     """
     Creates the image file *FnameIMAGE* for the basin diagram given by *Diagram*.
     Use *FnameATTRACTORS* to create a separate image in which the indices of the diagram are mapped to the given attractors.
     The flag *StyleInputs* can be used to highlight which basins belong to which input combination.
-    *StyleAdvanced* draws edges and nodes slightly differently to indicates whether transitions are reachable from all source
-    states and whether all successor basins are reachable from all source states.
+    *StyleEdges* adds edge labels that indicate the size of the "border" (if *ComputeBorder* was enabled in :ref:`basins_diagram`)
+    and the size of the states of the source basin that can reach the target basin.
+    *StyleRefinement* draws dashed edges and nodes to indicate that not all source basin states can reach a target basin.
 
     **arguments**:
         * *Primes*: prime implicants, needed for pretty printing of the attractors.
-        * *Diagram* (networkx.DiGrap): a basin diagram
+        * *Diagram* (networkx.DiGraph): a basin diagram
         * *FnameIMAGE* (str): name of the diagram image
         * *FnameATTRACTORS* (str): name of the attractor key file, if wanted
         * *StyleInputs* (bool): whether basins should be grouped by input combinations
-        * *StyleAdvanced* (bool): modifies edges and nodes according to "homogeneity"
+        * *StyleFillColor* (bool): whether nodes should be given a shade of gray that represents the percentage of state spaces contained in the respective basin
+        * *StyleSplines* (str): dot style for edges, e.g. "curved", "line" or "ortho" for orthogonal edges
+        * *StyleEdges* (bool): whether edges should be size of border / reachable states
+        * *StyleRefinement* (bool): experimental style that modifies edges and nodes according to "homogeneity"
+        * *StyleRanks* (bool): style that places nodes with the same number of reachable attractors on the same rank (level)
+        * *FirstIndex* (int): first index of attractor names
         
     **returns**::
         * *None*
@@ -295,78 +296,122 @@ def diagram2image(Primes, Diagram, FnameIMAGE, FnameATTRACTORS=None, StyleInputs
 
     size_total = float(2**len(Primes))
     
-    graph = networkx.DiGraph()
-    graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
-    graph.graph["edge"]  = {}
-    #graph.graph["splines"] = "ortho"
+    result = networkx.DiGraph()
+    result.graph["node"]  = {"shape":"rect","style":"filled"}
+    result.graph["edge"]  = {}
+    
+    if StyleFillColor:
+        result.graph["node"]["color"] = "none"
+    else:
+        result.graph["node"]["color"] = "black"
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
-    attractors = set(StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
+    attractors = set(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
     attractors = sorted(attractors)
 
-    label = ["attractors:"]+["A%i = %s"%x for x in enumerate(attractors)]
+    label = ["attractors:"]+["A%i = %s"%(i+FirstIndex,A) for i,A in enumerate(attractors)]
     label = "<%s>"%"<br/>".join(label)
 
     if FnameATTRACTORS:
         key = networkx.DiGraph()
         key.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue", shape="rect")
-        Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
+        PyBoolNet.Utility.DiGraphs.digraph2image(key, FnameATTRACTORS, "dot")
         
     else:
-        graph.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
+        result.add_node("Attractors",label=label,style="filled",fillcolor="cornflowerblue")
 
     for node, data in Diagram.nodes(data=True):
-        attr = sorted("A%i"%attractors.index(StateTransitionGraphs.subspace2str(Primes,x)) for x in data["attractors"])
-        attr = Utility.Misc.divide_list_into_similar_length_lists(attr)
+        attr = sorted("A%i"%(attractors.index(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x))+FirstIndex) for x in data["attractors"])
+        attr = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(attr)
         attr = [",".join(x) for x in attr]
         label = attr+["states: %s"%data["size"]]
         label = "<br/>".join(label)
         label = "<%s>"%label
 
-        graph.add_node(node, label=label)
+        result.add_node(node, label=label)
 
-        if len(data["attractors"])==1:
-            graph.node[node]["color"] = "cornflowerblue"
-            graph.node[node]["penwidth"] = "4"
 
-        size_percent = data["size"] / size_total
-        
-        graph.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-        if size_percent>0.5: graph.node[node]["fontcolor"] = "0.0 0.0 0.8"            
+        if StyleFillColor:
+            if len(data["attractors"])==1:
+                result.node[node]["color"] = "cornflowerblue"
+                result.node[node]["penwidth"] = "4"
 
-        if StyleAdvanced:
+            size_percent = data["size"] / size_total        
+            result.node[node]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+            if size_percent>0.5: result.node[node]["fontcolor"] = "0.0 0.0 0.8"
+        else:
+            if len(data["attractors"])==1:
+                result.node[node]["fillcolor"] = "cornflowerblue"
+            else:
+                result.node[node]["fillcolor"] = "white"
+                
+            
+
+        if StyleRefinement:
             if all(d["finally_size"]==data["size"] for _,_,d in Diagram.out_edges(node,data=True)):
-                graph.node[node]["fontcolor"] = "cornflowerblue"
+                result.node[node]["fontcolor"] = "cornflowerblue"
         
 
     for source, target, data in Diagram.edges(data=True):
-        graph.add_edge(source, target)
-        if StyleAdvanced:
+        result.add_edge(source, target)
+
+        if StyleEdges:
+            if "border_size" in data:
+                label = "%i/%i"%(data["border_size"],data["finally_size"])
+            else:
+                label = data["finally_size"]
+            
+            result.edge[source][target]["label"] = label
+            
+        if StyleRefinement:
             if data["finally_size"] < Diagram.node[source]["size"]:
-                graph.edge[source][target]["style"]="dashed"
+                result.edge[source][target]["style"]="dashed"
         
 
+    subgraphs = []
     if StyleInputs:
-        subgraphs = []
-        for inputs in PrimeImplicants.input_combinations(Primes):
-            nodes = [x for x in Diagram.nodes() if Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
-            label = StateTransitionGraphs.subspace2str(Primes,inputs)
-            subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none"}))
+        for inputs in PyBoolNet.PrimeImplicants.input_combinations(Primes):
+            if not inputs: continue
+            nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
+            label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,inputs)
+            subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
             
         if subgraphs:
-            graph.graph["subgraphs"] = []
+            result.graph["subgraphs"] = []
 
-        Utility.DiGraphs.add_style_subgraphs(graph, subgraphs)
+        PyBoolNet.Utility.DiGraphs.add_style_subgraphs(result, subgraphs)
 
+    if StyleRanks:
+        if subgraphs:
+            to_rank = result.graph["subgraphs"]
+        else:
+            to_rank = [result]
 
-    mapping = {x:str(x) for x in graph.nodes()}
-    networkx.relabel_nodes(graph,mapping,copy=False)
-        
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+        for graph in to_rank:
+            ranks = {}
+            for node, data in Diagram.nodes(data=True):
+                if not node in graph:continue
+                
+                size = len(data["attractors"])
+                if not size in ranks:
+                    ranks[size]=[]
+                ranks[size].append(node)
+            ranks=list(ranks.items())
+            ranks.sort(key=lambda x: x[0])
 
+            for _,names in ranks:
+                names = ['"%s"'%x for x in names]
+                names = "; ".join(names)
+                graph.graph["{rank = same; %s;}"%names]=""
 
-def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
+    mapping = {x:str(x) for x in result.nodes()}
+    networkx.relabel_nodes(result,mapping,copy=False)
+    
+    PyBoolNet.Utility.DiGraphs.digraph2image(result, FnameIMAGE, "dot")
+    
+
+def diagram2aggregate_image(Primes, Diagram, FnameIMAGE):
     """
     Creates the image file *FnameIMAGE* for the aggregated basin diagram given by *Diagram*.
     The aggregated basin diagram takes the union of all basins from which the same number of attractors
@@ -385,38 +430,39 @@ def diagram2aggregate_image(Primes, Diagram, FnameIMAGE ):
         >>> diagram2aggregate_image(diagram, "aggregated.pdf")
     """
     
-    graph = networkx.DiGraph()
-    graph.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
+    diagram = networkx.DiGraph()
+    diagram.graph["node"]  = {"shape":"rect","style":"filled","color":"none"}
 
     for node, data in Diagram.nodes(data=True):
         x = len(data["attractors"])
-        if not x in graph:
-            graph.add_node(x, size=data["size"])
+        if not x in diagram:
+            diagram.add_node(x, size=data["size"])
         else:
-            graph.node[x]["size"]+= data["size"]
+            diagram.node[x]["size"]+= data["size"]
 
     size_total = float(2**len(Primes))
-    for x, data in graph.nodes(data=True):
+    for x, data in diagram.nodes(data=True):
         size_percent = data["size"] / size_total
-        graph.node[x]["label"] = "<attractors: %s<br/>states: %s>"%(x,data["size"])
-        graph.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
-        if size_percent>0.5: graph.node[x]["fontcolor"] = "0.0 0.0 0.8"
+        diagram.node[x]["label"] = "<attractors: %s<br/>states: %s>"%(x,data["size"])
+        diagram.node[x]["fillcolor"] = "0.0 0.0 %.2f"%(1-size_percent)
+        if size_percent>0.5: diagram.node[x]["fontcolor"] = "0.0 0.0 0.8"
 
     for source, target in Diagram.edges():
         x = len(Diagram.node[source]["attractors"])
         y = len(Diagram.node[target]["attractors"])
-        graph.add_edge(x,y)
+        diagram.add_edge(x,y)
 
         
-    mapping = {x:str(x) for x in graph.nodes()}
-    networkx.relabel_nodes(graph,mapping,copy=False)
+    mapping = {x:str(x) for x in diagram.nodes()}
+    networkx.relabel_nodes(diagram,mapping,copy=False)
         
-    Utility.DiGraphs.digraph2image(graph, FnameIMAGE, "dot")
+    PyBoolNet.Utility.DiGraphs.digraph2image(diagram, FnameIMAGE, "dot")
 
 
-## auxillary functions
+#######################
+## auxillary functions 
 
-def project_attractors( Attractors, Names ):
+def project_attractors(Attractors, Names):
     result = set()
     for space in Attractors:
         projection = tuple((k,v) for k,v in sorted(space.items()) if k in Names)
@@ -427,61 +473,58 @@ def project_attractors( Attractors, Names ):
     return result
 
 
-def lift_attractors( Attractors, Projection ):
-    return [x for x in Attractors for y in Projection if Utility.Misc.dicts_are_consistent(x,y)]
+def lift_attractors(Attractors, Projection):
+    return [x for x in Attractors for y in Projection if PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)]
 
 
-def cartesian_product( Diagrams, Factor, ComputeBorders ):
+def cartesian_product(Diagrams, Factor, ComputeBorders):
     """
     creates the cartesian product of *Diagrams*.
     """
 
-    diagram = networkx.DiGraph()
+    result = networkx.DiGraph()
 
     # create nodes
     nodes = [x.nodes(data=True) for x in Diagrams]
     for product in itertools.product(*nodes):
         data = {}
-        data["size"] = reduce(mul,[x["size"] for _,x in product]) * Factor
+        data["size"] = functools.reduce(operator.mul,[x["size"] for _,x in product]) * Factor
         data["formula"] = " & ".join("(%s)"%x["formula"] for _,x in product)
             
         attrs = [x["attractors"] for _,x in product]
         attrs = list(itertools.product(*attrs))
-        attrs = [Utility.Misc.merge_dicts(x) for x in attrs]
+        attrs = [PyBoolNet.Utility.Misc.merge_dicts(x) for x in attrs]
         data["attractors"] = attrs
 
         node = tuple(x for x,_ in product)
 
-        diagram.add_node(node, data)
-
+        result.add_node(node, data)
 
     # create edges
-    for source in diagram.nodes():
-        for s, graph in zip(source, Diagrams):
-            factor = diagram.node[source]["size"] / graph.node[s]["size"]
-            for _, t, data in graph.out_edges(s,data=True):
+    for source in result.nodes():
+        for s, diagram in zip(source, Diagrams):
+            factor = result.node[source]["size"] / diagram.node[s]["size"]
+            for _, t, data in diagram.out_edges(s,data=True):
                 
                 data = {}
-                basic_formula = ["(%s)"%g.node[x]["formula"] for x,g in zip(source,Diagrams) if not g==graph]
-                data["finally_size"]    = factor * graph.edge[s][t]["finally_size"]
-                formula = basic_formula + ["(%s)"%graph.edge[s][t]["finally_formula"]]
+                basic_formula = ["(%s)"%g.node[x]["formula"] for x,g in zip(source,Diagrams) if not g==diagram]
+                data["finally_size"]    = factor * diagram.edge[s][t]["finally_size"]
+                formula = basic_formula + ["(%s)"%diagram.edge[s][t]["finally_formula"]]
                 data["finally_formula"]  = " & ".join(formula)
 
                 if ComputeBorders:
-                    data["border_size"]     = factor * graph.edge[s][t]["border_size"]
-                    formula = basic_formula + ["(%s)"%graph.edge[s][t]["border_formula"]]
+                    data["border_size"]     = factor * diagram.edge[s][t]["border_size"]
+                    formula = basic_formula + ["(%s)"%diagram.edge[s][t]["border_formula"]]
                     data["border_formula"]  = " & ".join(formula)                    
 
-                target = tuple(x if not g==graph else t for x,g in zip(source,Diagrams))
+                target = tuple(x if not g==diagram else t for x,g in zip(source,Diagrams))
                 
-                diagram.add_edge(source, target, data)
-
-
+                result.add_edge(source, target, data)
 
     # relabel nodes
-    diagram = networkx.convert_node_labels_to_integers(diagram)
+    result = networkx.convert_node_labels_to_integers(result)
         
-    return diagram
+    return result
 
 
 def diagrams_are_equal(Diagram1, Diagram2):

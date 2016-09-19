@@ -10,7 +10,7 @@ import itertools
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(BASE)
 
-import Utility
+import PyBoolNet.Utility.Misc
 
 FNAME_SETTINGS = os.path.join(BASE, "Dependencies", "settings.cfg")
 
@@ -32,8 +32,8 @@ if not os.path.exists(FNAME_SETTINGS):
     print("created %s"%FNAME_SETTINGS)
 
 
-config = Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
+config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
 
 
 def run():
@@ -47,12 +47,12 @@ class TestNetworkX(unittest.TestCase):
             import networkx
         except ImportError:
             msg = '"import networkx" raises ImportError'
-            self.fail( msg )
+            self.fail(msg)
             
 class TestPotassco(unittest.TestCase):
     def test_gringo_responds(self):
         cmd = config.get("Executables", "gringo")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
+        cmd = os.path.join(BASE, "Dependencies", cmd)
         cmd = os.path.normpath(cmd)
         cmd = [cmd, "--help"]
         
@@ -62,15 +62,15 @@ class TestPotassco(unittest.TestCase):
 
         msg = "\nCall to gringo resulted in return code %i."%proc.returncode
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( proc.returncode, 0, msg )
+        self.assertEqual(proc.returncode, 0, msg)
         
         msg = '\ngringo did not respond with "Gringo"'
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "Gringo" in out, msg )
+        self.assertTrue("Gringo" in out, msg)
 
     def test_clasp_responds(self):
         cmd = config.get("Executables", "clasp")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
+        cmd = os.path.join(BASE, "Dependencies", cmd)
         cmd = os.path.normpath(cmd)
         cmd = [cmd, "--help"]
         
@@ -80,30 +80,31 @@ class TestPotassco(unittest.TestCase):
 
         msg = "\nCall to clasp resulted in return code %i."%proc.returncode
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( proc.returncode, 0, msg )
+        self.assertEqual(proc.returncode, 0, msg)
         
         msg = '\nclasp did not respond with "clasp version 3.1.1"'
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "clasp version 3.1.1" in out, msg )
+        self.assertTrue("clasp version 3.1.1" in out, msg)
 
 class TestNuSMV(unittest.TestCase):
     def test_nusmv_responds(self):
         cmd = config.get("Executables", "nusmv")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
+        cmd = os.path.join(BASE, "Dependencies", cmd)
         cmd = [os.path.normpath(cmd)]
 
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate( input="MODULE main" )
+        out, err = proc.communicate(input="MODULE main".encode())
+        out = out.decode()
 
         msg = "\n%s"%out
         msg+= "\nCall to NuSMV failed."
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( True, "NuSMV" in out, msg )
+        self.assertEqual(True, "NuSMV" in out, msg)
 
 class TestBNetToPrime(unittest.TestCase):
     def test_bnet2primes_responds(self):
         cmd = config.get("Executables", "bnet2prime")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
+        cmd = os.path.join(BASE, "Dependencies", cmd)
         cmd = os.path.normpath(cmd)
         cmd = [cmd, "--ver"]
         
@@ -113,11 +114,11 @@ class TestBNetToPrime(unittest.TestCase):
 
         msg = "\nCall to Bnet2Primes resulted in return code %i."%proc.returncode
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertEqual( proc.returncode, 0, msg )
+        self.assertEqual(proc.returncode, 0, msg)
         
         msg = '\nBnet2Primes did not respond with "BNetToPrime 1.0"'
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "BNetToPrime 1.0" in out, msg )
+        self.assertTrue("BNetToPrime 1.0" in out, msg)
 
 
 class TestGraphviz(unittest.TestCase):
@@ -131,17 +132,17 @@ class TestGraphviz(unittest.TestCase):
 
             msg = "\nCall to dot resulted in return code %i."%proc.returncode
             msg+= '\ncommand: "%s"'%' '.join(cmd)
-            self.assertEqual( proc.returncode, 0, msg )
+            self.assertEqual(proc.returncode, 0, msg)
 
             msg = '\ndot did not respond with "%s - graphviz version"'%name
             msg+= '\ncommand: "%s"'%' '.join(cmd)
-            self.assertTrue( "%s - graphviz version"%name in err, msg )
+            self.assertTrue("%s - graphviz version"%name in err, msg)
 
 
 class TestImageMagick(unittest.TestCase):
     def test_imagemagick_responds(self):
         cmd = config.get("Executables", "convert")
-        cmd = os.path.join( BASE, "Dependencies", cmd )
+        cmd = os.path.join(BASE, "Dependencies", cmd)
         cmd = os.path.normpath(cmd)
         cmd = [cmd, "-help"]
         
@@ -150,11 +151,11 @@ class TestImageMagick(unittest.TestCase):
 
         #msg = "\nCall to convert resulted in return code %i."%proc.returncode
         #msg+= '\ncommand: "%s"'%' '.join(cmd)
-        #self.assertEqual( proc.returncode, 0, msg )
+        #self.assertEqual(proc.returncode, 0, msg)
         
         msg = '\ndot did not respond with "ImageMagick"'
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue( "ImageMagick" in out, msg )
+        self.assertTrue("ImageMagick" in out, msg)
 
 
 

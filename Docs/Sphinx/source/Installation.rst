@@ -9,30 +9,44 @@ Installation
 Installation
 ============
 
+Python
+------
+|software| was written in Python 2.7 but should be compatible with Python 3.
+If you experience problems with your version of Python and |software| please contact `hannes.klarner@fu-berlin.de` or
+post an issue on the project homepage at
+
+   * https://github.com/hklarner/PyBoolNet/issues
+
+   
+
+
 Linux
 -----
 
 Download the latest release from
 
    * https://github.com/hklarner/PyBoolNet/releases
-   
-|software| is written in Python 2.7 and packaged using *Distutils*.
-We recommend to install the package using *pip*::
 
-   $ sudo pip install PyBoolNet-2.0_linux.tar.gz
+We recommend to install the package using *pip*. If it is not already installed on your computer try::
+
+   $ apt-get install python-pip
+   
+Install |software| with *pip*::
+
+   $ sudo pip install PyBoolNet-2.1_linux32.tar.gz
    
 which should place the package here::
 
-   /home/<user>/.local/lib/python2.7.x/dist-packages/PyBoolNet
+   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
    
-where ``<user>`` is the name you are logged in with (to find out, type ``whoami``).   
-Use the option ``--user`` (this time literally, do not replace it with you actual user name) if you do not have sudo rights::
+where ``<user>`` is the name you are logged in with, to find out call ``whoami``, and ``<version>`` is the Python version you are using.
+Use the option ``--user``, this time literally, do not replace it with you actual user name, if you do not have sudo rights::
 
    $ pip install PyBoolNet-2.0.tar.gz --user
    
 The package is likely going to be placed here::
 
-   /usr/local/lib/python2.7.x/dist-packages/PyBoolNet
+   /usr/local/lib/python<version>/dist-packages/PyBoolNet
 
 To install |software| using *Distutils* unpack *PyBoolNet-2.0.tar.gz* into a temporary folder and run::
 
@@ -57,17 +71,101 @@ You should now be able to import |software|::
    
    If you do not have *pip*, all files must be removed manually.   
 
-.. note::
-
-   |software| should also run with Python 3.
    
 Windows
 -------
-Not available yet.
+Download the latest release from
+
+   * https://github.com/hklarner/PyBoolNet/releases
+
+We recommend to install the package using *pip*. If it is not already shipped with your Python version (>=2.7.9) follow the instructions
+on
+
+   * https://pip.pypa.io/en/latest/installing
+   
+To install |software| with *pip*::
+
+   C:\> pip.exe install PyBoolNet-2.1_win64.tar.gz
+   
+which should place the package here::
+
+   C:\Python<version>\Lib\site-packages
+   
+where ``<version>`` is the Python version you are using.
+
+To install |software| using *Distutils* unpack *PyBoolNet-2.1_win64.tar.gz* into a temporary folder, e.g., C:\Downloads\tmp and run::
+
+   C:\Downloads\tmp\> python setup.py install
+   
+The locations should be the same as when installing with *pip*.
+
+You should now be able to import |software|::
+
+   C:\> python
+   >>> import PyBoolNet
+   >>>
+
+
+.. note:: To remove |software| using *pip* run::
+
+      C:\> pip.exe uninstall PyBoolNet
+   
+   If you do not have *pip*, all files must be removed manually.
+   
 
 Mac
 ---
-Not available yet.
+Download the latest release from
+
+   * https://github.com/hklarner/PyBoolNet/releases
+
+We recommend to install the package using *pip*. If it is not already installed on your computer try::
+
+   $ sudo easy_install pip
+   
+or if you do not have super user rights
+
+   $ easy_install --user pip
+   
+Install |software| with *pip*::
+
+   $ sudo pip install PyBoolNet-2.1_mac64.tar.gz
+   
+which should place the package here::
+
+   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
+   
+where ``<user>`` is the name you are logged in with, to find out call ``whoami``, and ``<version>`` is the Python version you are using.
+Use the option ``--user``, this time literally, do not replace it with you actual user name, if you do not have sudo rights::
+
+   $ pip install PyBoolNet-2.1_mac64.tar.gz --user
+   
+The package is likely going to be placed here::
+
+   /usr/local/lib/python<version>/dist-packages/PyBoolNet
+
+To install |software| using *Distutils* unpack *PyBoolNet-2.1_mac64.tar.gz* into a temporary folder and run::
+
+   $ sudo python setup.py install
+
+again, using the ``--user`` flag if you do not have sudo rights::
+
+   $ python setup.py install --user
+   
+The locations should be the same as when installing with *pip*.
+
+You should now be able to import |software|::
+
+   $ python
+   >>> import PyBoolNet
+   >>>
+
+
+.. note:: To remove |software| using *pip* run::
+
+      $ pip uninstall PyBoolNet
+   
+   If you do not have *pip*, all files must be removed manually. 
 
 
 Dependencies
@@ -84,10 +182,10 @@ The default location is::
 The file is a standard configuration file of ``name = value`` pairs. The default is::
 
    [Executables]
-   nusmv           = ./linux/NuSMV-a/NuSMVa
-   gringo          = ./linux/gringo-4.4.0/gringo
-   clasp           = ./linux/clasp-3.1.1/clasp-3.1.1-x86-linux
-   bnet2prime      = ./linux/BNetToPrime/BNetToPrime
+   nusmv           = ./NuSMV-a/NuSMVa
+   gringo          = ./gringo-4.4.0/gringo
+   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86-linux
+   bnet2prime      = ./BNetToPrime/BNetToPrime
    dot             = /usr/bin/dot
    neato           = /usr/bin/neato
    fdp             = /usr/bin/fdp
@@ -103,7 +201,7 @@ To test whether the dependencies are correctly installed, run::
 
    $ python
    >>> import PyBoolNet
-   >>> PyBoolNet.Tests.dependencies.run()
+   >>> PyBoolNet.Tests.Dependencies.run()
    
 For information on what to do when not all tests are OK see :ref:`Troubleshooting <installation_troubleshooting>`.
    
@@ -176,7 +274,9 @@ To install it on Linux run::
 
    $ sudo apt-get install graphviz
    
-   
+Make sure to update the paths in ``settings.cfg``.
+
+
 .. _installation_imagemagick:
 
 ImageMagick
@@ -192,6 +292,8 @@ ImageMagick_ is available at
 
    * http://www.imagemagick.org/
    
+Make sure to update the paths in ``settings.cfg``.
+
 
 .. _installation_networkx:
 
@@ -255,6 +357,29 @@ GINsim_ is available at
    
 Troubleshooting
 ---------------
+
+For questions that are not listed here please contact `hannes.klarner@fu-berlin.de` or post an issue on the project homepage at
+
+   * https://github.com/hklarner/PyBoolNet/issues
+
+
+libreadline.so.6
+................
+
+If you get the error message::
+
+   ./NuSMVa: error while loading shared libraries: libreadline.so.6:
+   cannot open shared object file: No such file or directory
+
+then a solution for linux is available at stackoverflow:
+
+   * http://stackoverflow.com/questions/23993377/red-language-console-error-libreadline-so-6-cannot-open-shared-object-file
+
+The crucial command::
+
+   sudo apt-get install libreadline6:i386
+
+
 permission denied
 .................
 If you get *permission denied* erros like::
@@ -268,6 +393,7 @@ Locate the directory that contains |Software| (see :ref:`Installation of PyBoolN
    ../PyBoolNet$ chmod -R +x Dependencies/
    ../PyBoolNet$
    
+
 no such file or directory
 .........................   
    

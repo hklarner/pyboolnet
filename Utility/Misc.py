@@ -14,6 +14,11 @@ myconfigparser = configparser
 
 import math
 
+COLOR_MAP = {"red1":"#df3e47","green1":"#4bb93f","blue1":"#7463b3","yellow1":"#eecf1a","pink1":"#db42a6","green2":"#4cbd38","red2":"#df3d47","yellow2":"#efce1a"}
+COLORS = ["dodgerblue3","firebrick2","chartreuse3","gold1","aquamarine2","darkorchid2"]
+UPDATES = ["synchronous", "asynchronous", "mixed"]
+GRAPHVIZ_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
+
 
 def dicts_are_consistent(X, Y):
     """

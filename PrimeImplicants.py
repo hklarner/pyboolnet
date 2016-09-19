@@ -1,9 +1,10 @@
 
 
-import FileExchange
-import QuineMcCluskey
-import InteractionGraphs
-import Utility
+import PyBoolNet.FileExchange
+import PyBoolNet.QuineMcCluskey
+import PyBoolNet.InteractionGraphs
+import PyBoolNet.Utility.DiGraphs
+import PyBoolNet.Utility.Misc
 
 import itertools
 
@@ -25,7 +26,7 @@ def copy(Primes):
 
     **example**::
 
-            >>> primes_new = copy(primes)
+        >>> primes_new = copy(primes)
     """
     
     primes_new = {}
@@ -52,8 +53,8 @@ def are_equal(Primes1, Primes2):
 
     **example**::
 
-            >>> are_equal(primes1, primes2)
-            True
+        >>> are_equal(primes1, primes2)
+        True
     """
     
     if len(Primes1)!=len(Primes2):
@@ -84,9 +85,8 @@ def find_inputs(Primes):
 
     **example**::
 
-            >>> inputs = find_inputs(primes)
-            >>> print(inputs)
-            ['DNA_damage','EGFR','FGFR3']
+        >>> find_inputs(primes)
+        ['DNA_damage','EGFR','FGFR3']
     """
 
     inputs = []
@@ -109,12 +109,11 @@ def find_outputs(Primes):
 
     **example**::
 
-            >>> inputs = find_inputs(primes)
-            >>> print(inputs)
-            ['Proliferation','Apoptosis','GrowthArrest']
+        >>> find_inputs(primes)
+        ['Proliferation','Apoptosis','GrowthArrest']
     """
 
-    igraph = InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     outputs = [x for x in igraph if not igraph.successors(x)]
 
     return sorted(outputs)
@@ -132,8 +131,8 @@ def find_constants(Primes):
 
     **example**::
 
-            >>> find_constants(primes)
-            {'CGC':1,'IFNAR1':1,'IFNAR2':0,'IL4RA':1}
+        >>> find_constants(primes)
+        {'CGC':1,'IFNAR1':1,'IFNAR2':0,'IL4RA':1}
     """
 
     constants = {}
@@ -157,7 +156,7 @@ def create_constants(Primes, Constants):
 
     **example**::
 
-            >>> create_constants(primes, {"p53":1, "p21":0})
+        >>> create_constants(primes, {"p53":1, "p21":0})
     """
 
     for name, value in Constants.items():
@@ -189,8 +188,8 @@ def create_inputs(Primes, Names):
 
     **example**::
 
-            >>> names = ["p21", "p53"]
-            >>> create_inputs(primes, names)
+        >>> names = ["p21", "p53"]
+        >>> create_inputs(primes, names)
     """
 
     for name in Names:
@@ -227,8 +226,8 @@ def create_blinkers(Primes, Names):
 
     **example**::
 
-            >>> names = ["p21", "p53"]
-            >>> create_blinkers(primes, names)
+        >>> names = ["p21", "p53"]
+        >>> create_blinkers(primes, names)
     """
 
     for name in Names:
@@ -269,9 +268,9 @@ def create_variables(Primes, UpdateFunctions):
         names.add(name)
         if type(function)==str:
             line = "%s, %s"%(name,function)
-            newprimes[name] = FileExchange.bnet2primes(line)[name]
+            newprimes[name] = PyBoolNet.FileExchange.bnet2primes(line)[name]
         else:
-            newprimes[name] = QuineMcCluskey.functions2primes({name:function})[name]
+            newprimes[name] = PyBoolNet.QuineMcCluskey.functions2primes({name:function})[name]
 
         for x in newprimes[name][1]:
             dependencies.update(set(x))
@@ -299,14 +298,14 @@ def create_disjoint_union(Primes1, Primes2):
 
     **example**::
 
-            >>> primes1 = bnet2primes("A, B \n B, A")
-            >>> primes1 = bnet2primes("C, D \n D, E")
-            >>> newprimes = create_disjoint_union(primes1, primes2)
-            >>> FileExchange.primes2bnet(newprimes)
-            A, B
-            B, A
-            C, D
-            D, E
+        >>> primes1 = bnet2primes("A, B \\n B, A")
+        >>> primes1 = bnet2primes("C, D \\n D, E")
+        >>> newprimes = create_disjoint_union(primes1, primes2)
+        >>> FileExchange.primes2bnet(newprimes)
+        A, B
+        B, A
+        C, D
+        D, E
     """
 
     assert(not set(Primes1).intersection(set(Primes2)))
@@ -331,12 +330,12 @@ def remove_variables(Primes, Names):
 
     **example**::
 
-            >>> names = ["PKC","GADD45","ELK1","FOS"]
-            >>> remove_variables(primes, names)
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_variables(primes, names)
     """
 
-    igraph = InteractionGraphs.primes2igraph(Primes)
-    hit = [x for x in Utility.DiGraphs.successors(igraph, Names) if x not in Names]
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    hit = [x for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names) if x not in Names]
     if hit:
         print(" error: can not remove variables that are not closed under successor relation.")
         print("        these variables have successors outside the given set: %s"%", ".join(hit))
@@ -359,12 +358,12 @@ def remove_all_variables_except(Primes, Names):
 
     **example**::
 
-            >>> names = ["PKC","GADD45","ELK1","FOS"]
-            >>> remove_all_variables_except(primes, names)
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_all_variables_except(primes, names)
     """
 
-    igraph = InteractionGraphs.primes2igraph(Primes)
-    hit = [x for x in Utility.DiGraphs.predecessors(igraph, Names) if x not in Names]
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, Names) if x not in Names]
     if hit:
         print(" error: can not remove variables that are not closed under predecessor relation.")
         print("        these variables have predecessors outside the given set: %s"%hit)
@@ -374,26 +373,70 @@ def remove_all_variables_except(Primes, Names):
         for name in list(Primes):
             if not name in Names:
                 Primes.pop(name)
-        
 
-def _substitute( Primes, Name, Constants ):
+
+def rename_variable(Primes, OldName, NewName):
+    """
+    Renames a single component, i.e., replace every occurence of *OldName* with *NewName*.
+    Throws an exception if *NewName* is already contained in *Primes*.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *OldName* (str): the old name of the component
+        * *NewName* (str): the new name of the component
+
+    **example**::
+
+        
+        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> remove_all_variables_except(primes, names)
+    """
+
+    if OldName==NewName:
+        return
+
+    if NewName in Primes:
+        print(" error: can not rename because %s already exists in primes."%NewName)
+        raise Exception
+
+    else:
+        Primes[NewName] = Primes.pop(OldName)
+        for name in Primes:
+            for value in [0,1]:
+                for prime in Primes[name][value]:
+                    if OldName in prime:
+                        prime[NewName] = prime.pop(OldName)
+                
+
+
+def _substitute(Primes, Name, Constants):
     """
     replaces the primes of *Name* by the ones obtained from substituting *Constants*.
     """
-
+        
     for value in [0,1]:
         newprimes = []
-        for x in Primes[Name][value]:
-            if Utility.Misc.dicts_are_consistent(x, Constants):
-                Utility.Misc.remove_d1_from_d2(d1=Constants, d2=x)
-                if x == {}:
+        for prime in Primes[Name][value]:
+            consistent, inconsistent = [], []
+            for k in Constants:
+                if k in prime:
+                    if prime[k]==Constants[k]:
+                        consistent.append(k)
+                    else:
+                        inconsistent.append(k)
+                    
+            if inconsistent:
+                continue
+            else:
+                for k in consistent: prime.pop(k)
+                if prime=={}:
                     newprimes = [{}]
                     break
-                elif x not in newprimes:
-                    newprimes.append(x)
+                elif prime not in newprimes:
+                    newprimes.append(prime)
                     
         Primes[Name][value] = newprimes
-
+      
 
 def _percolation( Primes, RemoveConstants ):
     """
@@ -409,15 +452,15 @@ def _percolation( Primes, RemoveConstants ):
 
     **example**::
 
-            >>> percolate_constants(primes)
-            >>> constants = percolate_constants(primes, True)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> percolate_constants(primes)
+        >>> constants = percolate_constants(primes, True)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
     
-    igraph = InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     constants  = find_constants(Primes)
-    fringe = Utility.DiGraphs.successors(igraph, constants)
+    fringe = PyBoolNet.Utility.DiGraphs.successors(igraph, constants)
 
     while fringe:
         newconstants = {}
@@ -427,7 +470,7 @@ def _percolation( Primes, RemoveConstants ):
             elif Primes[name] == CONSTANT_OFF: newconstants[name] = 0
 
         constants.update(newconstants)
-        fringe = set(Utility.DiGraphs.successors(igraph, newconstants)) - set(constants)
+        fringe = set(PyBoolNet.Utility.DiGraphs.successors(igraph, newconstants)) - set(constants)
 
     if RemoveConstants:
         for name in constants: Primes.pop(name)
@@ -448,9 +491,9 @@ def percolate_and_keep_constants( Primes ):
 
     **example**::
 
-            >>> constants = percolate_and_keep_constants(primes)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> constants = percolate_and_keep_constants(primes)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
     return _percolation( Primes, RemoveConstants=False )
@@ -469,9 +512,9 @@ def percolate_and_remove_constants( Primes ):
 
     **example**::
 
-            >>> constants = percolate_and_remove_constants(primes)
-            >>> constants
-            {'Erk':0, 'Mapk':0, 'Raf':1}
+        >>> constants = percolate_and_remove_constants(primes)
+        >>> constants
+        {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
     return _percolation( Primes, RemoveConstants=True )
@@ -480,6 +523,7 @@ def percolate_and_remove_constants( Primes ):
 def input_combinations(Primes):
     """
     A generator for all possible input combinations of *Primes*.
+    Returns the empty dictionary if there are no inputs.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -489,19 +533,21 @@ def input_combinations(Primes):
 
     **example**::
 
-            >>> len(find_inputs(primes))
-            >>> for x in input_combinations(primes):
-            ...     print(STGs.subspace2str(primes,x))
-            00
-            01
-            10
-            11
+        >>> len(find_inputs(primes))
+        >>> for x in input_combinations(primes):
+        ...     print(STGs.subspace2str(primes,x))
+        00
+        01
+        10
+        11
     """
     
     inputs = find_inputs(Primes)
     if inputs:
         for x in itertools.product(*len(inputs)*[[0,1]]):
             yield dict(zip(inputs,x))
+    else:
+        yield {}
 
 
 
