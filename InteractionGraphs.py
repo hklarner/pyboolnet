@@ -202,7 +202,7 @@ def find_outdag(IGraph):
     return outdags
 
 
-def find_minimal_autonomous_nodes(IGraph, Superset=None):
+def find_minimal_autonomous_nodes(IGraph, Superset=set([])):
     """
     Returns the minimal autonomous node sets of *IGraph*.
     See :ref:`Klarner2015(b) <klarner2015approx>` Sec. 5.2 for a formal definition and details.
@@ -224,7 +224,7 @@ def find_minimal_autonomous_nodes(IGraph, Superset=None):
 
     cgraph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(IGraph)
     for x in cgraph.nodes():
-        if  set(x).issubset(Superset):
+        if set(x).issubset(Superset):
             cgraph.remove_node(x)
     
     return [set(x) for x in cgraph.nodes() if cgraph.in_degree(x)==0]
