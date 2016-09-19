@@ -31,6 +31,15 @@ We recommend to install the package using *pip*. If it is not already installed 
 
    $ apt-get install python-pip
    
+Make sure that the lates version of *networkx* is installed::
+
+   $ sudo pip install networkx
+   
+And that *graphviz* and *imagemagick*::
+
+   $ sudo apt-get install graphviz
+   $ sudo apt-get install imagemagick
+   
 Install |software| with *pip*::
 
    $ sudo pip install PyBoolNet-2.1_linux32.tar.gz
@@ -123,9 +132,17 @@ We recommend to install the package using *pip*. If it is not already installed 
 
    $ sudo easy_install pip
    
-or if you do not have super user rights
+or if you do not have super user rights::
 
    $ easy_install --user pip
+   
+Install *networkx* with::
+
+   $ sudo pip install networkx
+   
+Download and install *graphviz* from
+
+   * http://www.graphviz.org/Download..php
    
 Install |software| with *pip*::
 
