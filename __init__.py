@@ -14,8 +14,8 @@ import PyBoolNet.StateTransitionGraphs
 import PyBoolNet.QueryPatterns
 import PyBoolNet.TrapSpaces
 import PyBoolNet.Repository
-
-import PyBoolNet.Tests.Dependencies
+import PyBoolNet.Utility
+import PyBoolNet.Tests
 
 
 def version():

@@ -5,7 +5,7 @@ import subprocess
 import networkx
 import itertools
 
-import PyBoolNet.Utility
+import PyBoolNet.Utility.Misc
     
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 BASE = os.path.normpath(BASE)
