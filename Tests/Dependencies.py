@@ -82,9 +82,9 @@ class TestPotassco(unittest.TestCase):
         msg+= '\ncommand: "%s"'%' '.join(cmd)
         self.assertEqual(proc.returncode, 0, msg)
         
-        msg = '\nclasp did not respond with "clasp version 3.1.1"'
+        msg = '\nclasp did not respond with "clasp version"'
         msg+= '\ncommand: "%s"'%' '.join(cmd)
-        self.assertTrue("clasp version 3.1.1" in out, msg)
+        self.assertTrue("clasp version" in out, msg)
 
 class TestNuSMV(unittest.TestCase):
     def test_nusmv_responds(self):
