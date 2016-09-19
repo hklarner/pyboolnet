@@ -555,10 +555,8 @@ def output2acceptingstates( NuSMVOutput ):
             * INITACCEPTING_SIZE: number of initial and accepting states
             * ANSWER: whether the query is true
     """
-
     
     accepting = {}
-    
     for line in NuSMVOutput.split("\n"):
         if line.startswith("initial states:"):
             accepting["INIT"] = str(line.split(":")[1].strip())
@@ -572,13 +570,12 @@ def output2acceptingstates( NuSMVOutput ):
         elif line.startswith("number of accepting states:"):
             accepting["ACCEPTING_SIZE"] = _read_number(line)
             
-        elif line.startswith("initial and accepting States:"):
+        elif line.startswith("initial and accepting states:"):
             accepting["INITACCEPTING"] = str(line.split(":")[1].strip())
             
         elif line.startswith("number of initial and accepting states:"):
             accepting["INITACCEPTING_SIZE"] = _read_number(line)
             
-    
     return accepting
 
 
