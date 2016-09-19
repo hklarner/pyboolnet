@@ -8,7 +8,7 @@ import itertools
 import PyBoolNet.FileExchange
 
 BASE = os.path.join(os.path.dirname(__file__))
-fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
+fname_nusmvkeywords = os.path.join(BASE, "Dependencies", "nusmvkeywords.json")
 with open(fname_nusmvkeywords) as f:
             NUSMVKEYWORDS = f.read()
             NUSMVKEYWORDS = ast.literal_eval(NUSMVKEYWORDS)
@@ -16,7 +16,7 @@ with open(fname_nusmvkeywords) as f:
 
 
 
-def primes2mindnf( Primes ):
+def primes2mindnf(Primes):
     """
     Creates a minimal *disjunctive normal form* (DNF) expression for the Boolean network represented by *Primes*.
     The algorithm uses :ref:`Prekas2012 <Prekas2012>`, a Python implementation of the Quine-McCluskey algorithm.
@@ -57,9 +57,9 @@ def primes2mindnf( Primes ):
                 if all([state[x]==prime[x] for x in prime]):
                     ones+=[i]
                     
-        primes_tuples = [ primedict2primetuple( x, inputs ) for x in Primes[name][1] ]
+        primes_tuples = [ primedict2primetuple(x, inputs) for x in Primes[name][1] ]
         
-        quine = QM( list(reversed(inputs)) )
+        quine = QM(list(reversed(inputs)))
         complexity, minterms = quine.unate_cover(list(primes_tuples), ones)
         
 
@@ -68,12 +68,12 @@ def primes2mindnf( Primes ):
     return expressions
 
     
-def functions2primes( BooleanFunctions ):
+def functions2primes(Functions):
     """
-    Generates and returns the prime implicants of a Boolean network represented by *BooleanFunctions*.
+    Generates and returns the prime implicants of a Boolean network represented by *Functions*.
 
     **arguments**:
-        * *BooleanFunctions* (dict): keys are component names and values are Boolean functions
+        * *Functions* (dict): keys are component names and values are Boolean functions
 
     **returns**:
         * *Primes*: primes implicants
@@ -85,19 +85,19 @@ def functions2primes( BooleanFunctions ):
         >>> primes = functions2primes(funcs)
     """
     
-    mindnf = functions2mindnf( BooleanFunctions )
+    mindnf = functions2mindnf(Functions)
     lines = ["%s,\t\t%s"%x for x in mindnf.items()]
 
-    return PyBoolNet.FileExchange.bnet2primes( BNET='\n'.join(lines) )
+    return PyBoolNet.FileExchange.bnet2primes(BNET='\n'.join(lines))
 
     
-def functions2mindnf( BooleanFunctions ):
+def functions2mindnf(Functions):
     """
-    Generates and returns a minimal *disjunctive normal form* (DNF) for the Boolean network represented by *BooleanFunctions*.
+    Generates and returns a minimal *disjunctive normal form* (DNF) for the Boolean network represented by *Functions*.
     The algorithm uses :ref:`Prekas2012 <Prekas2012>`, a Python implementation of the Quine-McCluskey algorithm.
 
     **arguments**:
-        * *BooleanFunctions* (dict): keys are component names and values are Boolean functions
+        * *Functions* (dict): keys are component names and values are Boolean functions
 
     **returns**:
         * *MinDNF* (dict): keys are component names and values are minimal DNF expressions
@@ -111,9 +111,9 @@ def functions2mindnf( BooleanFunctions ):
         ((! v2) | v1)
     """
 
-    assert( all([inspect.isfunction(f) for f in BooleanFunctions.values()]) )
+    assert(all([inspect.isfunction(f) for f in Functions.values()]))
 
-    Names = BooleanFunctions.keys()
+    Names = Functions.keys()
     
     too_short = [x for x in Names if len(x)==1]
     if too_short:
@@ -126,7 +126,7 @@ def functions2mindnf( BooleanFunctions ):
         print('Names that are keywords:', ', '.join(keywords))
 
     expressions = {}
-    for name, func in BooleanFunctions.items():
+    for name, func in Functions.items():
         inputs = inspect.getargspec(func).args
 
         # name is constant (no inputs)
@@ -155,8 +155,8 @@ def functions2mindnf( BooleanFunctions ):
             expressions[name] = '1'
             continue
 
-        quine = QM( list(reversed(inputs)) )
-        primes = quine.compute_primes( ones  )
+        quine = QM(list(reversed(inputs)))
+        primes = quine.compute_primes(ones )
         complexity, minterms = quine.unate_cover(list(primes), ones)
 
         expressions[name] = quine.get_function(minterms)
@@ -460,8 +460,6 @@ class QM:
     return and_terms
   
 
-
-
 def bitcount(i):
   """ Count set bits of the input. """
 
@@ -471,6 +469,7 @@ def bitcount(i):
     i>>=1
   return res
 
+
 def is_power_of_two_or_zero(x):
   """
   Determine if an input is zero or a power of two. Alternative, determine if an
@@ -478,6 +477,7 @@ def is_power_of_two_or_zero(x):
   """
 
   return (x & (~x + 1)) == x
+
 
 def merge(i, j):
   """ Combine two minterms. """
@@ -490,8 +490,7 @@ def merge(i, j):
   return (i[0] & j[0],i[1]|y)
 
 
-
-def primedict2primetuple( Primes, Names ):
+def primedict2primetuple(Primes, Names):
     atoms = ''.join(['1' if (x in Primes and Primes[x]==1) else '0' for x in Names])
     atoms = int(atoms,2)
     mask  = ''.join(['1' if x not in Primes else '0' for x in Names])
