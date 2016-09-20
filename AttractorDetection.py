@@ -690,7 +690,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         return "\n".join(lines)
 
 
-def compute_attractors_tarjan(Primes, STG):
+def compute_attractors_tarjan(STG):
     """
     Uses `networkx.strongly_connected_components <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly_connected.strongly_connected_components.html>`_
     , i.e., Tarjan's algorithm with Nuutila's modifications, to compute the SCCs of *STG* and
@@ -700,7 +700,6 @@ def compute_attractors_tarjan(Primes, STG):
     
 
     **arguments**:
-        * *Primes*: prime implicants
         * *STG*: state transition graph
 
     **returns**:
