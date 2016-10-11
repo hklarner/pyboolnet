@@ -413,7 +413,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
 
     names = sorted(Primes)
     lines = ['-- created on %s using PyBoolNet'%datetime.date.today().strftime('%d. %b. %Y'),
-             '-- available at "sourceforge.net/projects/boolnetfixpoints".',
+             '-- project home page https://github.com/hklarner/PyBoolNet',
              '',
              '',
              'MODULE main']

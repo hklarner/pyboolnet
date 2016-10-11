@@ -378,7 +378,7 @@ class TestAttractorDetection(unittest.TestCase):
             
             for update in ["asynchronous", "synchronous", "mixed"]:
                 stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, update)
-                steady_tarjan, cyclic_tarjan = PyBoolNet.AttractorDetection.compute_attractors_tarjan(primes, stg)
+                steady_tarjan, cyclic_tarjan = PyBoolNet.AttractorDetection.compute_attractors_tarjan(stg)
                 steady_rep, cyclic_rep = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
 
                 k1 = len(steady_tarjan)+len(cyclic_tarjan)
@@ -409,7 +409,7 @@ class TestAttractorDetection(unittest.TestCase):
         bnet = "\n".join(bnet)
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-        steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractors_tarjan(primes, stg)
+        steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractors_tarjan(stg)
 
         steady_expected = ["101"]
         cyclic_expected = [set(["010","110"])]

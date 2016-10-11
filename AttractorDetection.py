@@ -17,6 +17,8 @@ import PyBoolNet.Utility
 
 def compute_attractor_representatives(Primes, Update):
     """
+    THIS FUNCTION IS NOT READY FOR RELEASE
+
     Computes a representative state for every attractor of the network defined by *Primes* and *Update* if the network's attractors can be approximated
     by its minimal trap spaces, see :ref:`Klarner2015(b) <klarner2015approx>` for details.
     The function first computes all minimal trap spaces.
@@ -142,9 +144,9 @@ def compute_attractor_representatives(Primes, Update):
             constants_new = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_new)
             c,d = wtf(primes_auto)
             if (a and b) and (c and not d):
-                print "gotcha 2"
-                print b
-                print d
+                print("gotcha 2")
+                print(b)
+                print(d)
             
 
             igraph_new = PyBoolNet.InteractionGraphs.primes2igraph(primes_new)
