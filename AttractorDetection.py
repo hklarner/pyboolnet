@@ -623,14 +623,14 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ w*"-" +" | "]
         
     for x in steady:
-        lines+= ["| "+StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
+        lines+= ["| "+PyBoolNet.StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
     lines+= [""]
 
     width = max([len(Primes), 14])
     spacer1 = lambda x: x.ljust(width)
     
     lines+= ["### Asynchronous STG"]
-    answer, counterex = completeness_iterative(Primes, "asynchronous")
+    answer = completeness(Primes, "asynchronous")
     lines+= [" * completeness: %s"%answer]
 
     if not cyclic:
@@ -642,14 +642,14 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
     
     for x in cyclic:
-        line =  "| "+ ("%s"%StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
-        line+= " | "+ ("%s"%univocal(Primes, "asynchronous", x)[0]).ljust(9)
-        line+= " | "+ ("%s"%faithful(Primes, "asynchronous", x)[0]).ljust(9)+" |"
+        line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line+= " | "+ ("%s"%univocality(Primes, "asynchronous", x)).ljust(9)
+        line+= " | "+ ("%s"%faithfulness(Primes, "asynchronous", x)).ljust(9)+" |"
         lines+= [line]
     lines+=[""]
 
     lines+= ["### Synchronous STG"]
-    answer, counterex = completeness_iterative(Primes, "synchronous")
+    answer = completeness(Primes, "synchronous")
     lines+= [" * completeness: %s"%answer]
 
     if not cyclic:
@@ -661,9 +661,9 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
     
     for x in cyclic:
-        line =  "| "+ ("%s"%StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
-        line+= " | "+ ("%s"%univocal(Primes, "synchronous", x)[0]).ljust(9)
-        line+= " | "+ ("%s"%faithful(Primes, "synchronous", x)[0]).ljust(9)+" |"
+        line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line+= " | "+ ("%s"%univocality(Primes, "synchronous", x)).ljust(9)
+        line+= " | "+ ("%s"%faithfulness(Primes, "synchronous", x)).ljust(9)+" |"
         lines+= [line]
     lines+=[""]
 
