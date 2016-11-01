@@ -128,7 +128,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     return primes
 
 
-def primes2bnet(Primes, FnameBNET=None, Minimize=False):
+def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     """
     Saves *Primes* as a *bnet* file, including the header *"targets, factors"* for compatibility with :ref:`installation_boolnet`.
     Without minimization, the resuting formulas are disjunctions of all prime implicants and may therefore be very long.
@@ -140,6 +140,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False):
        * *Primes*: prime implicants
        * *FnameBNET* (str): name of *bnet* file or *None* for the string of the file contents
        * *Minimize* (bool): whether the expressions should be minimized
+       * *Header* (bool): whether to include the "targets, factors" header
 
     **returns**:
         * *BNET* (str) if *FnameBNET=None* or *None* otherwise
@@ -155,7 +156,10 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False):
     width = max([len(x) for x in Primes]) + 5
     names = sorted(Primes.keys())
 
-    lines = ['targets, factors']
+    lines = []
+    if Header:
+        lines+= ['targets, factors']
+        
     if Minimize:
         expressions = PyBoolNet.QuineMcCluskey.primes2mindnf(Primes)
         for name in names:
