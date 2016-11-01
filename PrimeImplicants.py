@@ -145,7 +145,7 @@ def find_constants(Primes):
     return constants
 
             
-def create_constants(Primes, Constants):
+def create_constants(Primes, Constants, Copy=False):
     """
     Creates a constant in *Primes* for every name, value pair in *Constants*.
     Names that already exist in *Primes* are overwritten.
@@ -153,11 +153,19 @@ def create_constants(Primes, Constants):
     **arguments**:
         * *Primes*: prime implicants
         * *Constants* (dict): names and values
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
         >>> create_constants(primes, {"p53":1, "p21":0})
     """
+
+    if Copy:
+        Primes = copy(Primes)
 
     for name, value in Constants.items():
         if value:
@@ -165,8 +173,11 @@ def create_constants(Primes, Constants):
         else:
             Primes[name] = CONSTANT_OFF
 
+    if Copy:
+        return Primes
 
-def create_inputs(Primes, Names):
+
+def create_inputs(Primes, Names, Copy=False):
     """
     Creates an input for every member of *Names*.
     Variables that already exist in *Primes* are overwritten.
@@ -185,6 +196,11 @@ def create_inputs(Primes, Names):
     **arguments**:
         * *Primes*: prime implicants
         * *Names* (list): variables to become constants
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
@@ -192,12 +208,18 @@ def create_inputs(Primes, Names):
         >>> create_inputs(primes, names)
     """
 
+    if Copy:
+        Primes = Copy(Primes)
+    
     for name in Names:
         Primes[name][0]=[{name:1}]
         Primes[name][1]=[{name:0}]
 
+    if Copy:
+        return Primes
 
-def create_blinkers(Primes, Names):
+    
+def create_blinkers(Primes, Names, Copy=False):
     """
     Creates a blinker for every member of *Names*.
     Variables that alrerady exist in *Primes* are overwritten.
@@ -219,10 +241,14 @@ def create_blinkers(Primes, Names):
             >>> create_blinkers(primes, inputs)
             >>> tspaces = TS.trap_spaces(primes, "min")
 
-
     **arguments**:
         * *Primes*: prime implicants
         * *Names* (list): variables to become blinkers
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
@@ -230,12 +256,18 @@ def create_blinkers(Primes, Names):
         >>> create_blinkers(primes, names)
     """
 
+    if Copy:
+        Primes = copy(Primes)
+        
     for name in Names:
         Primes[name][0]=[{name:1}]
         Primes[name][1]=[{name:0}]
 
+    if Copy:
+        return Primes
 
-def create_variables(Primes, UpdateFunctions):
+
+def create_variables(Primes, UpdateFunctions, Copy=False):
     """
     Creates the variables defined in *UpdateFunctions* and add them to *Primes*.
     Variables that already exist in *Primes* are overwritten.
@@ -245,9 +277,11 @@ def create_variables(Primes, UpdateFunctions):
     **arguments**:
         * *Primes*: prime implicants
         * *UpdateFunctions* (dict): a dictionary of names and update functions
+        * *Copy* (bool): change *Primes* in place or copy and return
 
     **returns**:
-        * *None*
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
@@ -260,6 +294,9 @@ def create_variables(Primes, UpdateFunctions):
         C, A&!B
     """
 
+    if Copy:
+        Primes = copy(Primes)
+        
     newprimes = {}
     dependencies = set([])
     names = set(Primes)
@@ -282,6 +319,9 @@ def create_variables(Primes, UpdateFunctions):
         raise Exception
 
     Primes.update(newprimes)
+
+    if Copy:
+        return Primes
     
 
 def create_disjoint_union(Primes1, Primes2):
@@ -317,7 +357,7 @@ def create_disjoint_union(Primes1, Primes2):
     return newprimes
 
 
-def remove_variables(Primes, Names):
+def remove_variables(Primes, Names, Copy=False):
     """
     Removes all variables contained in *Names* from *Primes*.
     Members of *Names* that are not in *Primes* are ignored.
@@ -327,12 +367,20 @@ def remove_variables(Primes, Names):
     **arguments**:
         * *Primes*: prime implicants
         * *Names* (list): the names of variables to remove
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
         >>> names = ["PKC","GADD45","ELK1","FOS"]
         >>> remove_variables(primes, names)
     """
+
+    if Copy:
+        Primes = copy(Primes)
 
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     hit = [x for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names) if x not in Names]
@@ -344,8 +392,11 @@ def remove_variables(Primes, Names):
         for name in Names:
             Primes.pop(name)
 
+    if Copy:
+        return Primes
 
-def remove_all_variables_except(Primes, Names):
+
+def remove_all_variables_except(Primes, Names, Copy=False):
     """
     Removes all variables except those in *Names* from *Primes*.
     Members of *Names* that are not in *Primes* are ignored.
@@ -355,12 +406,20 @@ def remove_all_variables_except(Primes, Names):
     **arguments**:
         * *Primes*: prime implicants
         * *Names* (list): the names of variables to keep
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
 
         >>> names = ["PKC","GADD45","ELK1","FOS"]
         >>> remove_all_variables_except(primes, names)
     """
+
+    if Copy:
+        Primes = copy(Primes)
 
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, Names) if x not in Names]
@@ -374,8 +433,11 @@ def remove_all_variables_except(Primes, Names):
             if not name in Names:
                 Primes.pop(name)
 
+    if Copy:
+        return Primes
+    
 
-def rename_variable(Primes, OldName, NewName):
+def rename_variable(Primes, OldName, NewName, Copy=False):
     """
     Renames a single component, i.e., replace every occurence of *OldName* with *NewName*.
     Throws an exception if *NewName* is already contained in *Primes*.
@@ -384,13 +446,20 @@ def rename_variable(Primes, OldName, NewName):
         * *Primes*: prime implicants
         * *OldName* (str): the old name of the component
         * *NewName* (str): the new name of the component
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        * *NewPrimes* if *Copy=True*
+        * *None* else
 
     **example**::
-
         
         >>> names = ["PKC","GADD45","ELK1","FOS"]
         >>> remove_all_variables_except(primes, names)
     """
+
+    if Copy:
+        Primes = copy(Primes)
 
     if OldName==NewName:
         return
@@ -407,7 +476,9 @@ def rename_variable(Primes, OldName, NewName):
                     if OldName in prime:
                         prime[NewName] = prime.pop(OldName)
                 
-
+    if Copy:
+        return Primes
+    
 
 def _substitute(Primes, Name, Constants):
     """
@@ -438,7 +509,7 @@ def _substitute(Primes, Name, Constants):
         Primes[Name][value] = newprimes
       
 
-def _percolation( Primes, RemoveConstants ):
+def _percolation(Primes, RemoveConstants):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Use *RemoveConstants* to determine whether constants should be kept in the remaining network or whether you want to remove them.
@@ -478,7 +549,7 @@ def _percolation( Primes, RemoveConstants ):
     return constants
 
 
-def percolate_and_keep_constants( Primes ):
+def percolate_and_keep_constants(Primes):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Keeps constants in the *Primes*.
@@ -499,7 +570,7 @@ def percolate_and_keep_constants( Primes ):
     return _percolation( Primes, RemoveConstants=False )
 
     
-def percolate_and_remove_constants( Primes ):
+def percolate_and_remove_constants(Primes):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Removes constants from the *Primes*.

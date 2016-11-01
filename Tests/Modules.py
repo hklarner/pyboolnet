@@ -1124,19 +1124,51 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
         
-        
-        
 
 class TestPrimeImplicants(unittest.TestCase):
-    def test_rename(self):
-        primes = PyBoolNet.Repository.get_primes("raf")
-        PyBoolNet.PrimeImplicants.rename_variable(primes, "Raf", "Raf23")
-        expected = {'Raf23': [[{'Raf23': 1, 'Erk': 1}], [{'Raf23': 0}, {'Erk': 0}]], 'Mek': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0, 'Erk': 0}], [{'Mek': 1, 'Raf23': 1}, {'Erk': 1}]], 'Erk': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0}], [{'Mek': 1, 'Raf23': 1}, {'Mek': 1, 'Erk': 1}]]}
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(primes)
-        self.assertTrue(primes==expected, msg)
-        self.assertRaises(Exception, PyBoolNet.PrimeImplicants.rename_variable, primes, "GADD", "GADD12")
+    def test_remove_variables(self):
+        expected = {'v1': [[{'v1': 0}], [{'v1': 1}]]}
+        for copy in [True, False]:
+            if copy:
+                primes = PyBoolNet.FileExchange.bnet2primes("v1, v1 \n v2, v1")
+                answer = PyBoolNet.PrimeImplicants.remove_variables(primes, ["v2"], Copy=True)
+            else:
+                answer = PyBoolNet.FileExchange.bnet2primes("v1, v1 \n v2, v1")
+                PyBoolNet.PrimeImplicants.remove_variables(answer, ["v2"])
 
+            msg = "\nexpected: "+str(expected)
+            msg+= "\ngot:      "+str(answer)
+            self.assertTrue(answer==expected, msg)
+
+    def test_remove_all_variables_except(self):
+        expected = {'v1': [[{'v1': 0}], [{'v1': 1}]]}
+        for copy in [True, False]:
+            if copy:
+                primes = PyBoolNet.FileExchange.bnet2primes("v1, v1 \n v2, v1")
+                answer = PyBoolNet.PrimeImplicants.remove_all_variables_except(primes, ["v1"], Copy=True)
+            else:
+                answer = PyBoolNet.FileExchange.bnet2primes("v1, v1 \n v2, v1")
+                PyBoolNet.PrimeImplicants.remove_all_variables_except(answer, ["v1"])
+
+            msg = "\nexpected: "+str(expected)
+            msg+= "\ngot:      "+str(answer)
+            self.assertTrue(answer==expected, msg)
+        
+    def test_rename(self):
+        for copy in [True, False]:
+            if copy:
+                primes = PyBoolNet.Repository.get_primes("raf")
+                primes = PyBoolNet.PrimeImplicants.rename_variable(primes, "Raf", "Raf23", Copy=True)
+            else:
+                primes = PyBoolNet.Repository.get_primes("raf")
+                PyBoolNet.PrimeImplicants.rename_variable(primes, "Raf", "Raf23")
+                
+            expected = {'Raf23': [[{'Raf23': 1, 'Erk': 1}], [{'Raf23': 0}, {'Erk': 0}]], 'Mek': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0, 'Erk': 0}], [{'Mek': 1, 'Raf23': 1}, {'Erk': 1}]], 'Erk': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0}], [{'Mek': 1, 'Raf23': 1}, {'Mek': 1, 'Erk': 1}]]}
+            msg = "\nexpected: "+str(expected)
+            msg+= "\ngot:      "+str(primes)
+            self.assertTrue(primes==expected, msg)
+
+        self.assertRaises(Exception, PyBoolNet.PrimeImplicants.rename_variable, primes, "GADD", "GADD12")
         
     def test_create_disjoint_union(self):
         primes1 = PyBoolNet.FileExchange.bnet2primes("A, B \n B, !A")
@@ -1150,14 +1182,19 @@ class TestPrimeImplicants(unittest.TestCase):
         primes1 = PyBoolNet.FileExchange.bnet2primes("A, B \n B, !A")
         primes2 = PyBoolNet.FileExchange.bnet2primes("C, B \n D, C")
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.create_disjoint_union, primes1, primes2)
-
         
     def test_remove_variables(self):
         primes = PyBoolNet.FileExchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
-        newprimes = PyBoolNet.PrimeImplicants.copy(primes)
-        PyBoolNet.PrimeImplicants.remove_variables(newprimes,["A","B","C"])
-        expected = {}
-        self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
+        
+        for copy in [True, False]:
+            if copy:
+                newprimes = PyBoolNet.PrimeImplicants.copy(primes)
+                newprimes = PyBoolNet.PrimeImplicants.remove_variables(newprimes,["A","B","C"], Copy=True)
+            else:
+                newprimes = PyBoolNet.PrimeImplicants.copy(primes)
+                PyBoolNet.PrimeImplicants.remove_variables(newprimes,["A","B","C"])
+            expected = {}
+            self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
 
         newprimes = PyBoolNet.PrimeImplicants.copy(primes)
         PyBoolNet.PrimeImplicants.remove_variables(Primes=primes,Names=[])
@@ -1175,12 +1212,17 @@ class TestPrimeImplicants(unittest.TestCase):
     def test_create_variables(self):
         primes = PyBoolNet.FileExchange.bnet2primes("v1,v1\nv2,v1")
 
-        answer = PyBoolNet.PrimeImplicants.copy(primes)
-        PyBoolNet.PrimeImplicants.create_variables(answer, {"v1":"v2"})
-        expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]} 
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
-        self.assertTrue(answer==expected, msg)
+        for copy in [True, False]:
+            if copy:
+                answer = PyBoolNet.PrimeImplicants.create_variables(primes, {"v1":"v2"}, Copy=True)
+            else:
+                answer = PyBoolNet.PrimeImplicants.copy(primes)
+                PyBoolNet.PrimeImplicants.create_variables(answer, {"v1":"v2"})
+                
+            expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]} 
+            msg = "\nexpected: "+str(expected)
+            msg+= "\ngot:      "+str(answer)
+            self.assertTrue(answer==expected, msg)
         
         answer = PyBoolNet.PrimeImplicants.copy(primes)
         PyBoolNet.PrimeImplicants.create_variables(answer, {"v1":lambda v2: not v2})
@@ -1190,6 +1232,7 @@ class TestPrimeImplicants(unittest.TestCase):
 
         newprimes = PyBoolNet.PrimeImplicants.copy(primes)
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.create_variables, newprimes, {"v3":"v4"})
+
     
     def test_input_combinations(self):
         bnet = "input1, input1 \n input2, input2 \n"
