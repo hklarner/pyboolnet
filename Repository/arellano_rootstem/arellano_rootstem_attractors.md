@@ -1,14 +1,11 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 21. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
 | ------------ | 
-| 001000000    |
-| 001000010    |
-| 001110110    |
 | 110001000    |
 | 110001010    |
 | 110101111    |
@@ -26,7 +23,7 @@
 | targets | factors                                        |
 | ------- | ---------------------------------------------- |
 | ARF     | !IAA                                           |
-| AUXINS  | AUXINS                                         |
+| AUXINS  | 1                                              |
 | IAA     | !AUXINS                                        |
 | JKD     | SHR & SCR                                      |
 | MGP     | SHR & !WOX & SCR                               |
