@@ -102,6 +102,22 @@ subspace2dict
 .. autofunction:: PyBoolNet.StateTransitionGraphs.subspace2dict
 
 
+.. _state_is_in_subspace:
+
+state_is_in_subspace
+--------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.state_is_in_subspace
+
+
+.. _subspace1_is_in_subspace2:
+
+subspace1_is_in_subspace2
+-------------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2
+
+
 .. _list_states_in_subspace:
 
 list_states_in_subspace

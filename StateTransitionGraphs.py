@@ -41,7 +41,7 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): either *"asynchronous"* or *"synchronous"*
-        * *InitialStates* (func / str / dict / list): a function, a subspace, a state or a list of states
+        * *InitialStates* (func/str/dict/list): a function, a subspace, a state or a list of states
 
     **returns**:
         * *STG* (networkx.DiGraph): state transition graph
@@ -462,7 +462,7 @@ def successor_synchronous(Primes, State):
 
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (str / dict): a state
+        * *State* (str/dict): a state
 
     **returns**:
         * *Successor* (dict): the synchronous successor of *State* 
@@ -498,7 +498,7 @@ def successors_asynchronous(Primes, State):
 
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (str / dict): a state
+        * *State* (str/dict): a state
 
     **returns**:
         * *Successors* (list): the asynchronous successors of *State* 
@@ -539,7 +539,7 @@ def random_successor_mixed(Primes, State):
 
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (str / dict): a state
+        * *State* (str/dict): a state
 
     **returns**:
         * *Successor* (dict): a random successor of *State* using the mixed update
@@ -571,7 +571,7 @@ def random_state(Primes, Subspace={}):
 
     **arguments**:
         * *Primes*: prime implicants
-        * *Subspace* (str / dict): a subspace
+        * *Subspace* (str/dict): a subspace
 
     **returns**:
         * *State* (dict): random state inside *Subspace*
@@ -610,7 +610,7 @@ def random_walk(Primes, Update, InitialState, Length):
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *InitialState* (str / dict): an initial state or subspace
+        * *InitialState* (str/dict): an initial state or subspace
         * *Length* (int): length of the random walk
 
     **returns**:
@@ -667,8 +667,8 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
     
     **arguments**:
         * *Primes*: prime implicants
-        * *InitialSpace* (str / dict): initial subspace
-        * *GoalSpace* (str / dict): goal subspace
+        * *InitialSpace* (str/dict): initial subspace
+        * *GoalSpace* (str/dict): goal subspace
         * *Memory* (int): maximal number of states memorized before search is stopped
 
     **returns**:
@@ -1191,3 +1191,63 @@ def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
     graph = HTG.copy()
     PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
     PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
+
+
+
+def state_is_in_subspace(Primes, State, Subspace):
+    """
+    Checks whether *State* is a state in *Subspace*.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (str/dict): a state
+        * *Subspace* (str/dict): a subspace
+
+    **returns**:
+        * *Answer* (bool): whether *State* is a state in *Subspace*
+        
+    **example**::
+
+          >>> state_is_in_subspace(Primes, State, Subspace)
+          False
+    """
+
+    if type(State)==str:
+        State = state2dict(Primes,State)
+    if type(Subspace)==str:
+        Subspace = subspace2dict(Primes,Subspace)
+
+    for k in Subspace:
+        if State[k]!=Subspace[k]:
+            return False
+
+    return True
+    
+    
+
+def subspace1_is_in_subspace2(Primes, Subspace1, Subspace2):
+    """
+    Checks whether *State* is a state in *Subspace*.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (str/dict): a state
+        * *Subspace* (str/dict): a subspace
+
+    **returns**:
+        * *Answer* (bool): whether *State* is a state in *Subspace*
+        
+    **example**::
+
+          >>> subspace1_is_in_subspace2(Primes, Subspace1, Subspace2)
+          True
+    """
+
+    if type(Subspace1)==str:
+        Subspace1 = subspace2dict(Primes,Subspace1)
+    if type(Subspace2)==str:
+        Subspace2 = subspace2dict(Primes,Subspace2)
+
+    return set(Subspace1.items()).issuperset(set(Subspace2.items()))
+
+    

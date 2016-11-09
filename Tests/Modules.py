@@ -70,11 +70,7 @@ class TestAttractorBasins(unittest.TestCase):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
         attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
-        diagram = PyBoolNet.AttractorBasins.basins_diagram(primes, update, attractors, Silent=False)
-        data = {'directed': True, 'graph': {'name': '()_with_int_labels'}, 'nodes': [{'formula': '(!AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 0, 'size': 128}, {'formula': '(!(AUXINS | (SCR | !(SHR))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 1, 'size': 64}, {'formula': '(!(AUXINS | !(JKD & (SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}], 'id': 2, 'size': 32}, {'formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 3, 'size': 8}, {'formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'attractors': [{u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 1, u'ARF': 0, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 0, u'AUXINS': 0, u'WOX': 0, u'IAA': 1, u'MGP': 0, u'ARF': 0, u'JKD': 0, u'SCR': 0}], 'id': 4, 'size': 32}, {'formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 5, 'size': 20}, {'formula': '(AUXINS&!SHR)', 'attractors': [{u'SHR': 0, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 6, 'size': 128}, {'formula': '(!((SCR | !(SHR)) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}], 'id': 7, 'size': 64}, {'formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 0, u'SCR': 0}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 8, 'size': 2}, {'formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}, {u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 9, 'size': 20}, {'formula': '(!(((IAA | !(JKD & (SCR & (SHR & (WOX))) | !JKD & !(MGP | !(SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 1, u'IAA': 0, u'MGP': 0, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 10, 'size': 6}, {'formula': '(!((((((WOX) | !SHR) | !SCR) | !MGP) | !JKD) | !AUXINS))', 'attractors': [{u'SHR': 1, u'PLT': 1, u'AUXINS': 1, u'WOX': 0, u'IAA': 0, u'MGP': 1, u'ARF': 1, u'JKD': 1, u'SCR': 1}], 'id': 11, 'size': 8}], 'links': [{'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 11, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!((JKD | ((((WOX) | !SHR) | !SCR) | !MGP)) | !AUXINS))', 'target': 7, 'source': 3, 'finally_size': 8}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 1, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(AUXINS | (JKD | !(SCR & (SHR)))))', 'target': 2, 'source': 4, 'finally_size': 32}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 8, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 9, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 10, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & ((IAA & (JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & (JKD | (MGP | (((WOX) | !SHR) | !SCR)))) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !AUXINS)))', 'target': 3, 'source': 5, 'finally_size': 20}, {'finally_formula': '(!(ARF & (((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !IAA) | !AUXINS) | !ARF & ((JKD | !(MGP & (SCR & (SHR & (WOX))))) | !AUXINS)))', 'target': 7, 'source': 5, 'finally_size': 6}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 10, 'source': 8, 'finally_size': 2}, {'finally_formula': '(!(((IAA | (JKD | !(MGP & (SCR & (SHR & (WOX)))))) | !AUXINS) | !ARF))', 'target': 7, 'source': 8, 'finally_size': 2}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 10, 'source': 9, 'finally_size': 20}, {'finally_formula': '(ARF & (AUXINS & (IAA & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR)))) | !IAA & !((MGP | (((WOX) | !SHR) | !SCR)) | !JKD))) | !ARF & (AUXINS & (JKD & (MGP & (SCR & (SHR & (WOX))) | !MGP & (SCR & (SHR))))))', 'target': 11, 'source': 9, 'finally_size': 20}], 'multigraph': False}
-        expected = json_graph.node_link_graph(data)
-                
-        self.assertTrue(PyBoolNet.AttractorBasins.diagrams_are_equal(diagram, expected))
+        diagram = PyBoolNet.AttractorBasins.commitment_diagram(primes, update, attractors, Silent=False)
                 
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
                 
@@ -85,7 +81,6 @@ class TestAttractorBasins(unittest.TestCase):
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleFillColor=True)
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRefinement=True)
         PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
         PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
         
@@ -122,6 +117,28 @@ class TestQuineMcCluskey(unittest.TestCase):
         
 
 class TestStateTransitionGraphs(unittest.TestCase):
+    def test_state_is_in_subspace(self):
+        primes = ["a","b","c"]
+        answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,{"a":1,"b":1,"c":0},{"a":1})
+        self.assertTrue(answer)
+        answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","1--")
+        self.assertTrue(answer)
+        answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,{"a":1,"b":1,"c":0},{"a":0})
+        self.assertFalse(answer)
+        answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","0--")
+        self.assertFalse(answer)
+    
+    def test_subspace1_is_in_subspace2(self):
+        primes = ["a","b","c","d"]
+        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, {"a":1,"b":1,"c":0},{"a":1})
+        self.assertTrue(answer)
+        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, "110-","1---")
+        self.assertTrue(answer)
+        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,{"a":1,"b":1,"c":0},{"a":0})
+        self.assertFalse(answer)
+        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,"110-","0---")
+        self.assertFalse(answer)
+    
     def test_list_states_referenced_by_proposition(self):
         primes = PyBoolNet.Repository.get_primes("raf")
         prop = "!Erk | (Raf & Mek)"
@@ -1691,7 +1708,7 @@ if __name__=="__main__":
 
         import inspect
 
-        class_name = TestPyBoolNet.PrimeImplicants
+        class_name = TestPyBoolNet.StateTransitionGraphs
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):
