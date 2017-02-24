@@ -381,9 +381,8 @@ def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     
     names = sorted(Primes)
     states = STG.nodes()
-    smallest_subspace = bounding_box(Primes,states)
     
-    for tspace in PyBoolNet.TrapSpaces.trap_spaces_insideof(Primes, "min", smallest_subspace, MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.TrapSpaces.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
 
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes,tspace) if x in states])

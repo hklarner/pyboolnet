@@ -19,8 +19,8 @@ import PyBoolNet.Tests
 
 
 def version():
-    import pkg_resources
-    return pkg_resources.get_distribution("PyBoolNet").version
+
+    return "2.11"
 
 
 

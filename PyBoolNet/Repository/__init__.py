@@ -28,7 +28,10 @@ def get_all_names():
         ['arellano_rootstem', 'dahlhaus_neuroplastoma', ...]
     """
 
-    return sorted([os.path.basename(subdir) for subdir, _, _ in os.walk(BASE) if not subdir==BASE])
+    print("I DONT BELIEVE IT!")
+    result = sorted([os.path.basename(subdir) for subdir, _, _ in os.walk(BASE) if not subdir==BASE and not "__" in subdir])
+
+    return result
         
 
 def get_primes(Fname):

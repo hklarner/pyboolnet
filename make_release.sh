@@ -1,5 +1,5 @@
 
-VERSION=2.1
+VERSION=2.11
 
 echo "Creating releases for PyBoolNet ver $VERSION"
 cp PyBoolNet/readme.md README.txt

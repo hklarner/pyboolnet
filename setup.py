@@ -17,7 +17,7 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
     
 
 setup(name          = "PyBoolNet",
-      version       = "2.1",
+      version       = "2.11",
       description   = "Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
       author        = "Hannes Klarner",
       author_email  = "hannes.klarner@fu-berlin.de",

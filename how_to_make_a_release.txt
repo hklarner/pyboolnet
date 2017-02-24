@@ -1,8 +1,0 @@
-
-1. replace all references to version in Docs/Sphinx/source, for example sudo pip install PyBoolNet-2.0_linux.tar.gz
-2. change PyBoolNet/__init__.version() to correct version
-4. merge and tag with git:
-3. open dists/make_new_release.sh and update VERSION
-   $ git checkout master
-   $ git merge --no-ff develop
-   $ git tag -a v3.0
