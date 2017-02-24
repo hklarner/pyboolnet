@@ -1,0 +1,24 @@
+MODULE main
+
+VAR
+   v1:   boolean;
+   v2:   boolean;
+   v3:   boolean;
+   
+DEFINE
+   v1_IMAGE:=  v1 | !v2&!v3;
+   v2_IMAGE:=  v1&!v3;
+   v3_IMAGE:=  !v1 | v2 | v3;
+   
+   SUCCESSORS := count((v1!=v1_IMAGE), (v2!=v2_IMAGE), (v3!=v3_IMAGE));
+   
+ASSIGN
+   next(v1):=  {v1, v1_IMAGE};
+   next(v2):=  {v2, v2_IMAGE};
+   next(v3):=  {v3, v3_IMAGE};
+   
+INIT !v1&v2
+
+TRANS SUCCESSORS=0 | count((next(v1)!=v1), (next(v2)!=v2), (next(v3)!=v3))=1;
+
+CTLSPEC AF(!v1&!v2&v3)

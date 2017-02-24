@@ -1,0 +1,24 @@
+
+
+targets, factors
+
+# taken from
+# Davidich, Maria I., and Stefan Bornholdt. "Boolean network model predicts cell cycle sequence of fission yeast." PloS one 3.2 (2008): e1672.
+# imported via GINsim and BoolNet:
+# (1) download fissionYeastDavidich2008.zginml from GINsim repository (http://ginsim.org/node/37)
+# (2) Open fissionYeastDavidich2008.zginml with GINsim and export it as fissionYeastDavidich2008.sbml (SBML-qual format, rename "Cdc2_Cdc13-A" to "Cdc2_Cdc13_A")
+# (3) Open fissionYeastDavidich2008.sbml with R package Boolnet and use function "loadSBML" and "saveNetwork" to import and convert model:    
+#    net = loadSBML("fissionYeastDavidich2008.sbml")
+#    saveNetwork(net, "fissionYeastDavidich2008.bnet")
+
+Cdc25,               (Cdc2_Cdc13 & !PP) | (Cdc2_Cdc13 & Cdc25) | (!PP & Cdc25)
+Cdc2_Cdc13,          (!Slp1 & !Rum1 & !Ste9)
+Cdc2_Cdc13_A,        (!Slp1 & !Rum1 & Cdc25 & !Ste9 & !Wee1_Mik1)
+PP,                  (Slp1)
+Rum1,                (!SK & Rum1 & PP & !Cdc2_Cdc13) | (!SK & Rum1 & !Cdc2_Cdc13 & !Cdc2_Cdc13_A) | (Rum1 & PP & !Cdc2_Cdc13 & !Cdc2_Cdc13_A) | (!SK & Rum1 & PP & !Cdc2_Cdc13_A) | (!SK & !Cdc2_Cdc13 & PP & !Cdc2_Cdc13_A)
+SK,                  (Start)
+Slp1,                (Cdc2_Cdc13_A)
+Start,               0
+Ste9,                (!SK & !Cdc2_Cdc13 & PP & Ste9) | (!SK & !Cdc2_Cdc13 & Ste9 & !Cdc2_Cdc13_A) | (!Cdc2_Cdc13 & PP & Ste9 & !Cdc2_Cdc13_A) | (!SK & PP & Ste9 & !Cdc2_Cdc13_A) | (!SK & !Cdc2_Cdc13 & PP & !Cdc2_Cdc13_A)
+Wee1_Mik1,           (!Cdc2_Cdc13 & PP) | (PP & Wee1_Mik1) | (!Cdc2_Cdc13 & Wee1_Mik1)
+

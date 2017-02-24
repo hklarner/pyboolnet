@@ -16,6 +16,9 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 - made the header _targets, factors_ in `FileExchange.primes2bnet(..)` optional (default without header)
 - added argument `Copy` to `create_blinkers(..)`, `create_variables(..)`, `create_disjoint_union(..)`, `rename(..)`, `remove_variables(..)` and `remove_all_variables_except(..)` of module `PrimeImplicants`
 
+#### release notes for version 2.11 (February 2017)
+- refactored git repository so that all necessary files for building PyBoolNet are available at github
+
 #### release notes for version 2.1 (September 2016)
 - support for windows and macos
 - refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `list_states_referenced_by_proposition`

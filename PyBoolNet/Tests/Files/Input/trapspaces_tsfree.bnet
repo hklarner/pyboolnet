@@ -1,0 +1,6 @@
+
+# this network is trap-space-free.
+
+v1,   !v3
+v2,   v1
+v3,   v2

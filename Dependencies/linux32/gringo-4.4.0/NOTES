@@ -1,0 +1,291 @@
+Release Notes for gringo and clingo 4
+-------------------------------------
+
+These notes provide some hints on the language of the new gringo/clingo series
+4. A full documentation of the language will be provided in the future.
+
+A good starting point is the ASPCore 2 language specification (gringo/clingo-4
+should support everything but queries) at
+
+    https://www.mat.unical.it/aspcomp2013/ASPStandardization
+
+Furthermore, you find ASPCore 2 encodings along with problem descriptions
+in the benchmark suite of the ASP Competition 2013 at
+
+    https://www.mat.unical.it/aspcomp2013/OfficialProblemSuite
+
+Note that Version 4.2 still lacks support for some features like for example
+reification (--reify). Call gringo with option --help to get an overview what
+is supported.
+
+Please direct all questions, bug reports, and feature requests through the
+support facilities at http://sourceforge.net/p/potassco/wiki/Home
+
+- http://sourceforge.net/mailarchive/forum.php?forum_name=potassco-users
+- http://sourceforge.net/p/potassco/bugs
+- http://sourceforge.net/p/potassco/feature-requests
+
+Finally, here is a collection of small example programs, which highlight
+similarities and differences between the gringo-3 and gringo-4 language, and
+show some features beyond the ASPCore 2 language.
+
+Ground Terms:
+  gringo-3 and gringo-4:
+    p(1). p(2). p(3).
+    p(a). p(b). p(c).
+    p(#infimum).
+    p(#supremum).
+    p("hello world!").
+    p(f(1,g(2))).
+    p(|20+2*-3|/2\3).
+  gringo-4:
+    p(#inf).
+    p(#sup).
+
+Definitions:
+  gringo-3 and gringo-4:
+    #const a = 1.
+    #const b = a + a.
+    p(b).
+  gringo-3:
+    p(a).
+    #const a = 1.
+  gringo-4:
+    p(a).
+    #const a = 1.
+
+Range Terms:
+  gringo-3 and gringo-4:
+    p(1..10).
+
+Normal Rules:
+  gringo-3 and gringo-4:
+    q(1,2). q(2,3).
+    r(2,3). r(3,4).
+    s(4).
+    p(X) :- q(X,Y), r(Y,Z), not s(Z).
+  gringo-4:
+    q(1,2). q(2,3).
+    r(2,3). r(3,4).
+    s(4).
+    p(X) :- q(X,Y); r(Y,Z); not s(Z).
+
+Negation:
+  gringo-4:
+    not p(X) :- q(X,Y); r(Y,Z); not not s(Z).
+    not not p(X) :- q(X,Y); r(Y,Z); not not s(Z).
+
+Pooling:
+  gringo-3 and gringo-4:
+    p(a;b;c).
+  gringo-3:
+    p(a,b;c).
+  gringo-4:
+    p(a,b;c).
+
+Projection:
+  gringo-3 and gringo-4:
+    p(1,2). p(1,3).
+    q(X) :- p(X,_).
+  gringo-4:
+    p(1) :- not q(1).
+    q(1) :- not p(1).
+    r :- not p(_).
+
+Extended Safety:
+  gringo-4:
+    p(10).
+    q(X) :- p(X-1).
+    r(X) :- p(X+1).
+    s(X) :- p(X*2).
+    t(X) :- p(2*(X-1)).
+
+Counting Literals:
+  Head:
+    gringo-3:
+      p(1..3).
+      1 { q(X,Y): p(X): p(Y): X < Y, q(X,X): p(X) }.
+    gringo-4:
+      p(1..3).
+      1 { q(X,Y): p(X), p(Y), X < Y; q(X,X): p(X) }.
+    gringo-4:
+      { p(1..3) }.
+      1 { q(X,Y): p(X), p(Y), X < Y; q(X,X): p(X) }.
+    gringo-4:
+      2 != { p(1..3) } <= 2.
+  Body:
+    gringo-3:
+      p(1..3).
+      { q(X,Y): p(X): p(Y) }.
+      q :- 1 { q(X,Y): p(X): p(Y): X < Y, q(X,X): p(X) }.
+    gringo-4:
+      p(1..3).
+      { q(X,Y): p(X), p(Y) }.
+      q :- 1 { q(X,Y): p(X), p(Y), X < Y; q(X,X): p(X) }.
+    gringo-4:
+      { p(1..3) }.
+      { q(X,Y): p(X), p(Y) }.
+      q :- 1 { q(X,Y): p(X), p(Y), X < Y; q(X,X): p(X) }.
+
+Aggregates:
+  Head:
+    gringo-3:
+      p(1..3). q(2..4).
+      #sum [ r(X)=X: p(X): q(X) ] 1.
+    gringo-4:
+      p(1..3). q(2..4).
+      #sum { X,r: r(X): p(X), q(X) } 1.
+  Body:
+    gringo-3:
+      p(1..3). q(2..4).
+      { r(X): p(X), r(X): q(X) }.
+      s :- #sum { r(X)=X: p(X): q(X) } 1.
+    gringo-4:
+      p(1..3). q(2..4).
+      { r(X): p(X); r(X): q(X) }.
+      s :- #sum { X,r: r(X), p(X), q(X) } 1.
+  Assignments:
+    gringo-3:
+      p(1..3).
+      q(X) :- X = [ p(Y)=Y ].
+    gringo-4:
+      p(1..3).
+      q(X) :- X = #sum { Y: p(Y) }.
+  Supported Functions:
+    #min, #max, #sum, #sum+, #count
+    
+Conditional Literals:
+  Head:
+    gringo-3:
+      p(1..3). q(2..4).
+      r(X): p(X): q(X) | a.
+    gringo-4:
+      p(1..3). q(2..4).
+      r(X): p(X), q(X); a.
+    gringo-4:
+      p(1..3). q(2..4).
+      r(X): p(X), q(X) | a.
+    gringo-4:
+      { p(1..3); q(2..4) }.
+      r(X): p(X), q(X); a.
+  Body:
+    gringo-3:
+      p(1..3). q(2..4). a.
+      { r(X): p(X), r(X): q(X) }.
+      s :- r(X): p(X): q(X), a.
+    gringo-4:
+      p(1..3). q(2..4). a.
+      { r(X): p(X); r(X): q(X) }.
+      s :- r(X): p(X), q(X); a.
+    gringo-4:
+      { p(1..3); q(2..4); a}.
+      { r(X): p(X); r(X): q(X) }.
+      s :- r(X): p(X), q(X); a.
+
+Optimization:
+  gringo-3:
+    p(1..6).
+    q(2..7).
+    a.
+    3 { r(X): p(X), r(X): q(X) }.
+    #minimize [ r(X)=X@1: p(X): q(X), a=2@3 ].
+  gringo-4:
+    p(1..6).
+    q(2..7).
+    a.
+    3 { r(X): p(X); r(X): q(X) }.
+    #minimize { X@1,r: r(X), p(X), q(X); 2@3: a }.
+  gringo-4:
+    p(1..6).
+    q(2..7).
+    a.
+    3 { r(X): p(X); r(X): q(X) }.
+    #maximize { -X@1,r: r(X), p(X), q(X); -2@3: a }.
+  gringo-4:
+    p(1..6).
+    q(2..7).
+    a.
+    3 { r(X): p(X); r(X): q(X) }.
+    :~ r(X), p(X), q(X). [X@1,r]
+    :~ a. [2@3]
+
+Display Statements:
+  Predicate:
+    gringo-3:
+      #hide.
+      #show a/0.
+      a. b.
+    gringo-4:
+      #show a/0.
+      a. b.
+  Term:
+    gringo-4:
+      #show a.
+      #show 1+2.
+    gringo-4:
+      #show.
+      #show q(X): p(X), X!=2, 2 { p(Z) }.
+      { p(1..3) }.
+
+Include Files:
+  gringo-3 and gringo-4:
+    #include "file.lp".
+
+Linear Constraints (experimental; syntax subject to change):
+  gringo-4:
+    1 $<= $(x;y;z) $<= 3.
+    1$*$x $+ 2$*$y $+ 1 $< 3 $+ $z.
+  gringo-4:
+    #const n=5.
+    1 $<= $q(1..n) $<= n.
+    $q(X) $!= $q(Y) :- X=1..n, Y=1..n, X<Y.
+    X $+ $q(Y) $!= Y $+ $q(X) :- X=1..n, Y=1..n, X<Y.
+    X $+ $q(X) $!= Y $+ $q(Y) :- X=1..n, Y=1..n, X<Y.
+
+Disjoint Constraints (experimental; syntax subject to change):
+  gringo-4:
+    #const n=5.
+    1 $<= $q(1..n) $<= n.
+    #disjoint { X : $q(X)$+0 : X=1..n }.
+    #disjoint { X : $q(X)$+X : X=1..n }.
+    #disjoint { X : $q(X)$-X : X=1..n }.
+  gringo-4:
+    #const n=5.
+    1 $<= $q(1..n) $<= n.
+    #disjoint         { X : $q(X)$+0 : X=1..n }.
+    :- not #disjoint  { X : $q(X)$+X : X=1..n }.
+    not not #disjoint { X : $q(X)$-X : X=1..n }.
+  gringo-4:
+    1 $<= $x $<= 2.
+    #disjoint{ 1:1; 2:$x }.
+  gringo-4:
+    $x $= 1.
+    { a; b }.
+    #disjoint{ a:$x:a; b:$x:b }.
+  gringo-4:
+    1 $<= $y $<= 2.
+    { a; b }.
+    #disjoint{ 1:1:a; 1:1:b; 2:$y }.
+  gringo-4:
+    1 $<= $(p(1..3);q(1..3)) $<= 2.
+    #disjoint{ 1:$p(1..3); 2:$q(1..3) }.
+  gringo-4:
+    6  $<= $x $<=  7.
+    35 $<= $y $<= 36.
+    not #disjoint{ 1:6$*$y; 2:35$*$x }.
+  gringo-4:
+    1 $<= $(x;y;z) $<= 3.
+    not #disjoint{ 1:2$*$x$+3$*$y; 2:2$*$y$+3$*$z; 3:2$*$z$+3$*$x }.
+  gringo-4:
+    X $<= $x $<= Y : b(X,Y).
+    b(1,2). b(3,3). b(5,5). b(7,9).
+
+Show Constraint Variables (experimental; syntax subject to change):
+  gringo-4:
+    $x $= 1.
+    $y $= 1.
+    $z $= 1.
+    #show $x/0.
+    #show $y.
+
+PS: Roland never said the examples would make any sense.

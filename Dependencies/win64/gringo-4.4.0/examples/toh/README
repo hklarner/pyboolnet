@@ -1,0 +1,4 @@
+Incrementally solve a Towers of Hanoi problem.
+
+Example calls:
+  clingo-4-banane tohI.lp tohE.lp
