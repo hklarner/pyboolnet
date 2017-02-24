@@ -9,7 +9,13 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
- 
+
+
+#### release notes for version 2.2 (...)
+- added functions `state_is_in_subspace` and `subspace1_is_in_subspace2` to `StateTransitionGraphs`
+- made the header _targets, factors_ in `FileExchange.primes2bnet(..)` optional (default without header)
+- added argument `Copy` to `create_blinkers(..)`, `create_variables(..)`, `create_disjoint_union(..)`, `rename(..)`, `remove_variables(..)` and `remove_all_variables_except(..)` of module `PrimeImplicants`
+
 #### release notes for version 2.1 (September 2016)
 - support for windows and macos
 - refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `list_states_referenced_by_proposition`

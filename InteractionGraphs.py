@@ -257,7 +257,7 @@ def add_style_interactionsigns(IGraph):
             IGraph.edge[source][target]["color"] = "black"
 
     
-def add_style_activities(IGraph, Activities):
+def add_style_activities(IGraph, Activities, ColorActive="/paired10/5", ColorInactive="/paired10/1"):
     """
     Sets attributes for the color and fillcolor of nodes to indicate which variables are activated and which are inhibited in *Activities*.
     All activated or inhibited components get the attribute *"color"="black"*.
@@ -268,6 +268,8 @@ def add_style_activities(IGraph, Activities):
     **arguments**:
         * *IGraph*: interaction graph
         * *Activities* (dict): activated and inhibited nodes
+        * *ColorActive* (str): color in dot format for active components
+        * *ColorInactive* (str): color in dot format for inactive components
         
     **example**::
 
@@ -287,13 +289,11 @@ def add_style_activities(IGraph, Activities):
             
             IGraph.node[name]["color"] = "black"
                 
-            # inactive = blue
             if value == 0:
-                IGraph.node[name]["fillcolor"] = "/paired10/1"
+                IGraph.node[name]["fillcolor"] = ColorInactive
 
-            # active = red
             else:
-                IGraph.node[name]["fillcolor"] = "/paired10/5"
+                IGraph.node[name]["fillcolor"] = ColorActive
 
     for x,y in IGraph.edges():
         if x in Activities or y in Activities:

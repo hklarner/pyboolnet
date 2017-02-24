@@ -811,6 +811,57 @@ class TestModelChecking(unittest.TestCase):
 
 
 class TestTrapSpaces(unittest.TestCase):
+    def test_percolate_trapspace(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+
+        tspace = {'Mek': 0, 'Erk': 0}
+        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        expected = {'Raf': 1, 'Mek': 0, 'Erk': 0}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        tspace = {}
+        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        expected = {}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        tspace = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
+        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        expected = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
+    
+    def test_smallest_trapspace(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+
+        state = {'Raf':1, 'Mek':0, 'Erk':0}
+        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        expected = {'Raf':1, 'Mek':0, 'Erk':0}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
+
+        state = {'Raf':0, 'Mek':1, 'Erk':1}
+        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        expected = {'Mek':1, 'Erk':1}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        state = {'Raf':1, 'Mek':1, 'Erk':0}
+        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        expected = {}
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+    
+        
     def test_trap_spaces_piped1(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_posfeedback.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
@@ -1067,48 +1118,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
-
-
-    def test_trap_spaces_inside_and_outside(self):
-        lines = ["x,    !x&!y | x&y",
-                 "y,    y",
-                 "z,    z"]
-        bnet = "\n".join(lines)
-        primes = PyBoolNet.FileExchange.bnet2primes(bnet)
-
-        """
-        trap spaces "all":
-        {}
-        {'y': 0}
-        {'y': 1}
-        {'z': 0}
-        {'z': 1}
-        {'y': 1, 'x': 0}
-        {'y': 1, 'x': 1}
-        {'y': 0, 'z': 0}
-        {'y': 0, 'z': 1}
-        {'y': 1, 'z': 0}
-        {'y': 1, 'z': 1}
-        {'y': 1, 'x': 0, 'z': 0}
-        {'y': 1, 'x': 0, 'z': 1}
-        {'y': 1, 'x': 1, 'z': 0}
-        {'y': 1, 'x': 1, 'z': 1}
-        """
-
-        result = PyBoolNet.TrapSpaces.trap_spaces_outsideof(primes, "all", OutsideOf={'y': 0, 'z': 1})
-        result.sort(key=lambda x: tuple(sorted(x.items())))
-        expected = [{}, {'y': 0}, {'y': 0, 'z': 1}, {'z': 1}]
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(result)
-        self.assertTrue(result==expected, msg)
-
-        result = PyBoolNet.TrapSpaces.trap_spaces_insideof(primes, "all", InsideOf={'y': 1, 'x': 0})
-        result.sort(key=lambda x: tuple(sorted(x.items())))
-        expected = [{'y': 1, 'x': 0}, {'y': 1, 'x': 0, 'z': 0}, {'y': 1, 'x': 0, 'z': 1}]
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(result)
-        self.assertTrue(result==expected, msg)
-
+        
 
     def test_encoding_bijection(self):
         """
@@ -1489,7 +1499,7 @@ class TestFileExchange(unittest.TestCase):
         
         for i, (cbounds, cproj) in enumerate(itertools.product([None,(1,2)],[None,['A','B']])):
             fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case%i.asp"%i)
-            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, InsideOf={}, OutsideOf={})
+            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj)
         ## no assertion ##
 
 
@@ -1691,14 +1701,14 @@ if __name__=="__main__":
 
 
     
-    if 1:
+    if 0:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 0:
+    if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestAttractorDetection("test_attractor_representatives"))
+        suite.addTest(TestTrapSpaces("test_percolate_trapspace"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)

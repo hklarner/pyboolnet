@@ -160,7 +160,7 @@ def functions2mindnf(Functions):
         complexity, minterms = quine.unate_cover(list(primes), ones)
 
         expressions[name] = quine.get_function(minterms)
-
+        
 
     return expressions
         

@@ -548,7 +548,7 @@ def _percolation(Primes, RemoveConstants):
 
     return constants
 
-
+    
 def percolate_and_keep_constants(Primes):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.

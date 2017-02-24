@@ -168,7 +168,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
     """
     
     if DiGraph.order()==0:
-        print("DiGrap has no nodes.")
+        print("DiGraph has no nodes.")
         if FnameDOT!=None:
             print("%s was not created."%FnameDot)
         return
@@ -251,7 +251,9 @@ def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
     proc.stdin.close()
 
     if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
+        print(dotfile)
         print(out)
+        print(err)
         print('dot did not respond with return code 0')
         raise Exception
     

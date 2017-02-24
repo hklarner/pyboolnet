@@ -22,7 +22,7 @@ GRAPHVIZ_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 
 def dicts_are_consistent(X, Y):
     """
-    checks if all items whose keys are in X and Y are equal.
+    checks if all items whose keys are in (X and Y) are equal.
     returns bool.
     """
 
