@@ -1,0 +1,19 @@
+
+
+targets, factors
+
+# taken from
+# Arellano, Gustavo, et al. "Antelope: a hybrid-logic model checker for branching-time Boolean GRN analysis." BMC bioinformatics 12.1 (2011): 1.
+# note that AUXINS is defined as an input in the paper (AUXINS:=AUXINS) but as an underdetermined component in the model file (AUXINS:=true, AUXINS). PyBoolNet can in general not handle indeterminations but in this case the indeterminations results in a constant at 1.
+
+
+PLT,     ARF
+AUXINS,  1
+IAA,     !AUXINS
+ARF,     !IAA
+SHR,     SHR
+SCR,     SHR & SCR & (JKD | !MGP)
+JKD,     SHR & SCR
+MGP,     SHR & SCR & !WOX
+WOX,     ARF & SHR & SCR & ( !MGP | WOX)
+

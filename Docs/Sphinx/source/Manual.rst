@@ -3,7 +3,7 @@
 
 Manual
 ======
-Importing Boolean networks
+Importing Boolean Networks
 --------------------------
 
 prime implicants
@@ -1551,7 +1551,7 @@ You can use the function :ref:`list_states_referenced_by_proposition` to enumera
    100
    
    
-computing trap spaces
+Computing Trap Spaces
 ---------------------
 Maximal, Minimal and All Trap Spaces 
 The term *trap space* merges the notions "subspace" and "trap set".
@@ -1655,7 +1655,7 @@ As an example for computing attractors with this algorithm consider the followin
    >>> STGs.add_style_sccs(stg)
    >>> stg.graph["label"] = "Example 25: A network with a cyclic attractor and a steady state."
    >>> STGs.stg2image(stg, "example25_stg.pdf")
-   >>> attractors = AD.compute_attractors_tarjan(primes, stg)
+   >>> attractors = AD.compute_attractors_tarjan(stg)
    >>> len(attractors)
    2
    >>> for A in attractors:

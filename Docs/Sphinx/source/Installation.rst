@@ -12,12 +12,10 @@ Installation
 Python
 ------
 |software| was written in Python 2.7 but should be compatible with Python 3.
-If you experience problems with your version of Python and |software| please contact `hannes.klarner@fu-berlin.de` or
+If you experience problems with your version of Python and |software| please contact |myemail| or
 post an issue on the project homepage at
 
-   * https://github.com/hklarner/PyBoolNet/issues
-
-   
+   * http://github.com/hklarner/PyBoolNet/issues
 
 
 Linux
@@ -25,29 +23,35 @@ Linux
 
 Download the latest release from
 
-   * https://github.com/hklarner/PyBoolNet/releases
+   * http://github.com/hklarner/PyBoolNet/releases
 
-We recommend to install the package using *pip*. If it is not already installed on your computer try::
+64bit and 32bit versions are available. We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
-   $ apt-get install python-pip
+   $ sudo apt-get install python-pip
+   
+Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installation_graphviz>` and :ref:`ImageMagick <installation_imagemagick>` are installed::
+
+   $ sudo pip install networkx
+   $ sudo apt-get install graphviz
+   $ sudo apt-get install imagemagick
    
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.1_linux32.tar.gz
+   $ sudo pip install PyBoolNet-2.11_linux64.tar.gz
    
 which should place the package here::
 
-   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
+   /usr/local/lib/python<version>/dist-packages/PyBoolNet
    
-where ``<user>`` is the name you are logged in with, to find out call ``whoami``, and ``<version>`` is the Python version you are using.
-Use the option ``--user``, this time literally, do not replace it with you actual user name, if you do not have sudo rights::
+Use the option ``--user`` (literally) if you do not have sudo rights::
 
    $ pip install PyBoolNet-2.0.tar.gz --user
    
 The package is likely going to be placed here::
 
-   /usr/local/lib/python<version>/dist-packages/PyBoolNet
+   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
+where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
 To install |software| using *Distutils* unpack *PyBoolNet-2.0.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
@@ -62,30 +66,86 @@ You should now be able to import |software|::
 
    $ python
    >>> import PyBoolNet
-   >>>
 
 
-.. note:: To remove |software| using *pip* run::
+To remove |software| using *pip* run::
 
       $ pip uninstall PyBoolNet
    
-   If you do not have *pip*, all files must be removed manually.   
-
+If you do not have *pip*, all files must be removed manually.   
    
+
+Mac OS
+------
+Download the latest release from
+
+   * http://github.com/hklarner/PyBoolNet/releases
+
+We recommend to install the package using *pip*. If it is not already installed on your computer try::
+
+   $ sudo easy_install pip
+   
+or if you do not have super user rights::
+
+   $ easy_install --user pip
+   
+Install NetworkX_ with::
+
+   $ sudo pip install networkx
+   
+or::
+
+   $ pip install networkx --user
+   
+Download and install Graphviz_ and ImageMagick_ from
+
+   * http://www.graphviz.org/Download.php
+   * http://www.imagemagick.org/script/binary-releases.php
+
+Install |software| with *pip*::
+
+   $ sudo pip install PyBoolNet-2.11_mac64.tar.gz
+   
+which should place the package here::
+
+   /usr/local/lib/python<version>/dist-packages/PyBoolNet
+   
+Use the option ``--user`` (literally) if you do not have sudo rights::
+
+   $ pip install PyBoolNet-2.0.tar.gz --user
+   
+The package is likely going to be placed here::
+
+   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
+
+where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
+
+You should now be able to import |software|::
+
+   $ python
+   >>> import PyBoolNet
+
+To remove |software| using *pip* run::
+
+      $ pip uninstall PyBoolNet
+   
+If you do not have *pip*, all files must be removed manually. 
+
+
 Windows
 -------
 Download the latest release from
 
-   * https://github.com/hklarner/PyBoolNet/releases
+   * http://github.com/hklarner/PyBoolNet/releases
 
-We recommend to install the package using *pip*. If it is not already shipped with your Python version (>=2.7.9) follow the instructions
+We recommend to install the package using *pip*. If it is not already shipped with your Python version follow the instructions
 on
 
-   * https://pip.pypa.io/en/latest/installing
+   * http://pip.pypa.io/en/latest/installing
    
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.1_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.11_win64.tar.gz
    
 which should place the package here::
 
@@ -93,99 +153,47 @@ which should place the package here::
    
 where ``<version>`` is the Python version you are using.
 
-To install |software| using *Distutils* unpack *PyBoolNet-2.1_win64.tar.gz* into a temporary folder, e.g., C:\Downloads\tmp and run::
+.. important::
 
-   C:\Downloads\tmp\> python setup.py install
+   Make sure you check the paths to the executables. Locate the file ``settings.cfg`` in the ``Dependencies`` folder of your installation and
+   try to run each program.
    
-The locations should be the same as when installing with *pip*.
+To install NetworkX_ use *pip* again::
+
+   C:\> pip.exe install netwokrx
+   
+To install Graphviz_ and ImageMagick_ download the respective executables from the home pages:
+
+   * http://www.graphviz.org/Download_windows.php
+   * http://www.imagemagick.org/script/binary-releases.php#windows
 
 You should now be able to import |software|::
 
    C:\> python
    >>> import PyBoolNet
-   >>>
-
-
-.. note:: To remove |software| using *pip* run::
+   
+To remove |software| using *pip* run::
 
       C:\> pip.exe uninstall PyBoolNet
    
-   If you do not have *pip*, all files must be removed manually.
-   
-
-Mac
----
-Download the latest release from
-
-   * https://github.com/hklarner/PyBoolNet/releases
-
-We recommend to install the package using *pip*. If it is not already installed on your computer try::
-
-   $ sudo easy_install pip
-   
-or if you do not have super user rights
-
-   $ easy_install --user pip
-   
-Install |software| with *pip*::
-
-   $ sudo pip install PyBoolNet-2.1_mac64.tar.gz
-   
-which should place the package here::
-
-   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
-   
-where ``<user>`` is the name you are logged in with, to find out call ``whoami``, and ``<version>`` is the Python version you are using.
-Use the option ``--user``, this time literally, do not replace it with you actual user name, if you do not have sudo rights::
-
-   $ pip install PyBoolNet-2.1_mac64.tar.gz --user
-   
-The package is likely going to be placed here::
-
-   /usr/local/lib/python<version>/dist-packages/PyBoolNet
-
-To install |software| using *Distutils* unpack *PyBoolNet-2.1_mac64.tar.gz* into a temporary folder and run::
-
-   $ sudo python setup.py install
-
-again, using the ``--user`` flag if you do not have sudo rights::
-
-   $ python setup.py install --user
-   
-The locations should be the same as when installing with *pip*.
-
-You should now be able to import |software|::
-
-   $ python
-   >>> import PyBoolNet
-   >>>
-
-
-.. note:: To remove |software| using *pip* run::
-
-      $ pip uninstall PyBoolNet
-   
-   If you do not have *pip*, all files must be removed manually. 
-
+If you do not have *pip*, all files must be removed manually.
 
 Dependencies
 ------------
 
 Most of what |software| does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-If you are using Linux the dependencies should work out of the box.
-Otherwise you will have to download the binaries that fit your OS and modify the paths to the executables.
-The file that records the locations is called ``settings.cfg`` and located in the folder ``Dependencies`` of |software|.
+The file that records the locations to third party binaries is called ``settings.cfg`` and located in the folder ``Dependencies`` of |software|.
 The default location is::
 
-   /usr/local/lib/python2.7/dist-packages/PyBoolNet/Dependencies/settings.cfg
+   /usr/local/lib/python<version>/dist-packages/PyBoolNet/Dependencies/settings.cfg
    
-The file is a standard configuration file of ``name = value`` pairs. The default is::
+The file is a standard configuration file of ``name = value`` pairs. The default for Linux 64 bit is::
 
    [Executables]
-   nusmv           = ./NuSMV-a/NuSMVa
+   nusmv           = ./NuSMV-a/NuSMVa_linux64
    gringo          = ./gringo-4.4.0/gringo
-   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86-linux
-   bnet2prime      = ./BNetToPrime/BNetToPrime
+   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86_64-linux
+   bnet2prime      = ./BNetToPrime/BNetToPrime_linux64
    dot             = /usr/bin/dot
    neato           = /usr/bin/neato
    fdp             = /usr/bin/fdp
@@ -194,105 +202,19 @@ The file is a standard configuration file of ``name = value`` pairs. The default
    twopi           = /usr/bin/twopi
    convert         = /usr/bin/convert
    
-Simply replace the default paths with the paths to your own installations.
-Note that ``./`` indicates a relative path while ``/`` is an absolute path.
- 
-To test whether the dependencies are correctly installed, run::
+If you want to use your own binaries simply replace the respective paths. Note that ``./`` indicates a relative path while ``/`` is an absolute path.
+Make sure all these paths work and that rights for execution and access are set on linux systems. 
+To test whether the dependencies work correctly, run::
 
    $ python
    >>> import PyBoolNet
    >>> PyBoolNet.Tests.Dependencies.run()
-   
-For information on what to do when not all tests are OK see :ref:`Troubleshooting <installation_troubleshooting>`.
-   
-   
-.. _installation_bnettoprime:
 
-BNetToPrime
-...........
+If you get fails or errors, read :ref:`Troubleshooting <installation_troubleshooting>` and the issues section of the homepage:
 
-BNetToPrime_ stands for "Boolean network to prime implicants".
-It is necessary to compute the prime implicants of a Boolean network. The binaries and source are available at:
+   * http://github.com/hklarner/PyBoolNet/issues
 
-   * https://github.com/xstreck1/BNetToPrime
-
-You can also compile BNetToPrime_ from source, see the tool's homepage on github for instructions.
-Make sure to update the paths in ``settings.cfg``.
-
-   
-.. _installation_potassco:
-
-Potassco
-........
-
-The Potassco answer set solving collection consists of the ASP solver clasp_ and the grounder gringo_, see :ref:`Gebser2011 <Gebser2011>`.
-They are necessary to compute trap spaces by means of stable and consistent arc sets in the prime implicant graph, see :ref:`Klarner2015(a)<klarner2015trap>`.
-
-.. note:: 
-   The development of the Potassco solving collection is active with frequent releases.
-   |software| is tested with two specific versions, clasp-3.1.1_ and gringo-4.4.0_, and we recommend you use them.
-
-The binaries and source are available at:
-
-   * https://sourceforge.net/projects/potassco/files/clasp/3.1.1
-   * https://sourceforge.net/projects/potassco/files/gringo/4.4.0
-
-You can also compile gringo_ and clasp_ from source or download 64bit binaries, see the tool's homepage on sourceforge for instructions.
-Make sure to update the paths in ``settings.cfg``.
-
-
-.. _installation_nusmv:
-
-NuSMV
-.....
-
-NuSMV_ is a symbolic model checker that we use to decide LTL and CTL queries.
-|software| requires the extension NuSMV-a_ for model checking with accepting states.
-
-.. note:: 
-   |software| is tested with NuSMV-a_.
-   
-Binaries and source available at:
-
-   * https://github.com/hklarner/NuSMV-a
-   
-You can also compile NuSMV-a_ from source, see the tool's homepage on github for instructions.
-Make sure to update the paths in ``settings.cfg``.
-   
-
-.. _installation_graphviz:   
-
-Graphviz
-........
-
-The program *dot* is part of the graph visualization software Graphviz_ and available at
-
-   * http://www.graphviz.org/
-   
-It is required to generate drawings of interaction graphs and state transition graphs.
-To install it on Linux run::
-
-   $ sudo apt-get install graphviz
-   
-Make sure to update the paths in ``settings.cfg``.
-
-
-.. _installation_imagemagick:
-
-ImageMagick
-...........
-
-The program *convert* is part of the ImageMagick_ software suite which is part of most Linux distributions.
-It is required to generate animations of trajectories in the state transition graph.
-To install it on linux run::
-
-   $ sudo apt-get install ImageMagick
-   
-ImageMagick_ is available at
-
-   * http://www.imagemagick.org/
-   
-Make sure to update the paths in ``settings.cfg``.
+where you can also post issues. Also, do not hesitate to contact me at |myemail|.
 
 
 .. _installation_networkx:
@@ -304,15 +226,15 @@ NetworkX_ is a Python package and required for standard operations on directed g
 deciding if a path between two nodes exists.
 The package is available at:
 
-   * https://networkx.github.io
+   * http://networkx.github.io
    
-To install it using *pip* run::
+To install it on Linux using *pip* run::
 
-   $ sudo pip install networkx>=1.10
+   $ sudo pip install networkx
 
 or::
    
-   $ pip install networkx>=1.10 --user
+   $ pip install networkx --user
    
 if you do not have super user rights.
   
@@ -320,12 +242,95 @@ if you do not have super user rights.
    |software| is tested with NetworkX_ version 1.10 and older versions will almost surely not work.
 
 
+.. _installation_bnettoprime:
+
+BNetToPrime
+...........
+
+BNetToPrime_ stands for "Boolean network to prime implicants". It is necessary to compute the prime implicants of a Boolean network. It is included in every release and should work out of the box. The binaries and source are available at:
+
+   * http://github.com/xstreck1/BNetToPrime
+
+   
+.. _installation_potassco:
+
+Potassco
+........
+
+The Potassco answer set solving collection consists of the ASP solver clasp_ and the grounder gringo_, see :ref:`Gebser2011 <Gebser2011>`.
+They are necessary to compute trap spaces by means of stable and consistent arc sets in the prime implicant graph, see :ref:`Klarner2015(a)<klarner2015trap>`. They are included in every release and should work out of the box.
+
+.. note:: 
+   The development of the Potassco solving collection is active with frequent releases.
+   |software| is tested with two specific versions, clasp-3.1.1_ and gringo-4.4.0_ and we strongly recommend you use them because of syntax differences between versions.
+
+The binaries and source are available at:
+
+   * http://sourceforge.net/projects/potassco/files/clasp/3.1.1
+   * http://sourceforge.net/projects/potassco/files/gringo/4.4.0
+
+
+.. _installation_nusmv:
+
+NuSMV
+.....
+
+NuSMV_ is a symbolic model checker that we use to decide LTL and CTL queries.
+|software| requires the extension NuSMV-a_ for model checking with accepting states.
+It is included with every release and should work out of the box.
+
+.. note:: 
+   |software| is tested with NuSMV-a_, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+   
+Binaries and source available at:
+
+   * http://github.com/hklarner/NuSMV-a
+   
+
+.. _installation_graphviz:   
+
+Graphviz
+........
+
+The program *dot* is part of the graph visualization software Graphviz_ and available at
+
+   * http://www.graphviz.org
+   
+It is required to generate drawings of interaction graphs and state transition graphs.
+To install it on Linux run::
+
+   $ sudo apt-get install graphviz
+   
+Make sure to check the paths in ``settings.cfg``.
+
+
+.. _installation_imagemagick:
+
+ImageMagick
+...........
+
+The program *convert* is part of the ImageMagick_ software suite.
+It is required to generate animations of trajectories in the state transition graph.
+To install it on linux run::
+
+   $ sudo apt-get install ImageMagick
+   
+ImageMagick_ is available at
+
+   * http://www.imagemagick.org
+   
+Make sure to check the paths in ``settings.cfg``.
+
+
+Additional Software
+-------------------
+
 .. _installation_boolnet:
 
 BoolNet
 .......
 BoolNet_ is a library for R_ that is used for the construction, simulation and analysis of Boolean networks, see :ref:`Müssel2010 <Müssel2010>`.
-It is not a required dependency of |software| but you need it if you want to convert *sbml-qual* files into *bnet* files.
+It is not a required dependency of |software| but you need it if you want to convert *SBML-qual* files into *bnet* files.
 To install it run::
 
    $ sudo R
@@ -334,7 +339,7 @@ To install it run::
 select a CRAN mirror and wait for the download and installation to finish.
 BoolNet_ is available at
 
-   * https://cran.r-project.org/web/packages/BoolNet/index.html
+   * http://cran.r-project.org/web/packages/BoolNet/index.html
 
 
 .. _installation_ginsim:
@@ -343,14 +348,14 @@ GINsim
 ......
 
 GINsim_ is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see :ref:`Chaouiya2012 <Chaouiya2012>`.
-Like BoolNet_, GINsim_ is not a required dependency of |software| but it has a useful model repository and to use GINsim_ models you need to export them as *sbml-qual* files which can then be converted using BoolNet_.
+Like BoolNet_, GINsim_ is not a required dependency of |software| but it has a useful model repository. To convert GINsim_ models you need to export them as *SBML-qual* files which can then be converted into *bnet* files using BoolNet_.
 No installation required, just download the latest version (tested with version 2.9) and call::
 
    $ java -jar GINsim-2.9.3.jar
    
 GINsim_ is available at
 
-   * http://www.ginsim.org/
+   * http://www.ginsim.org
    
 
 .. _installation_troubleshooting:   
@@ -358,9 +363,9 @@ GINsim_ is available at
 Troubleshooting
 ---------------
 
-For questions that are not listed here please contact `hannes.klarner@fu-berlin.de` or post an issue on the project homepage at
+For questions that are not listed here please contact |myemail| or post an issue on the project homepage at
 
-   * https://github.com/hklarner/PyBoolNet/issues
+   * http://github.com/hklarner/PyBoolNet/issues
 
 
 libreadline.so.6
@@ -377,7 +382,7 @@ then a solution for linux is available at stackoverflow:
 
 The crucial command::
 
-   sudo apt-get install libreadline6:i386
+   $ sudo apt-get install libreadline6:i386
 
 
 permission denied
@@ -397,14 +402,14 @@ Locate the directory that contains |Software| (see :ref:`Installation of PyBoolN
 no such file or directory
 .........................   
    
-If you get *No such file or directory* errors you are likely on a 64 bit Linux distribution that does not have 32-bit support. Follow the instructions here:
+If you get *No such file or directory* errors you might have installed the wrong package for your OS. In particular check whether you are on 32 bit or 64 bit Linux and download the respective files from:
 
-   * http://askubuntu.com/questions/231479/no-such-file-when-running-a-32-bit-program-on-a-64-bit-system
-
-
+   * http://github.com/hklarner/PyBoolNet/releases
    
 
 .. include:: Substitutions.rst
+
+
 
   
 
