@@ -17,7 +17,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 - added argument `Copy` to `create_blinkers(..)`, `create_variables(..)`, `create_disjoint_union(..)`, `rename(..)`, `remove_variables(..)` and `remove_all_variables_except(..)` of module `PrimeImplicants`
 
 #### release notes for version 2.11 (February 2017)
-- refactored git repository so that all necessary files for building PyBoolNet are available at github
+- refactored git repository so that all necessary files for building PyBoolNet are available on github
 
 #### release notes for version 2.1 (September 2016)
 - support for windows and macos
@@ -54,27 +54,31 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 ### How to Clone, Develop and Release
-_How to clone_
+__How to clone__:
 You need to follow two branches, _master_ and _develop_.
-To clone from github run `git clone git@github.com:hklarner/PyBoolNet.git`.
-To get the development branch run `git checkout -b develop origin/develop`.
+To clone from github run::
+   $ git clone git@github.com:hklarner/PyBoolNet.git
+   
+To get the development branch run:
+   $ cd PyBoolNet
+   $ git checkout -b develop origin/develop
 
 
-_How to develop_
+__How to develop__:
 To develop you need to first copy the dependencies that fit your system from dependencies source folder `./Dependencies` into the package folder `./PyBoolNet/Dependencies`.
-For example:
+For example::
    $ cp -a Dependencies/linux32/. PyBoolNet/Dependencies
 
 To test your local version of PyBoolNet either make a release and install it,
 or add the path to your local version before importing PyBoolNet.
 Assume you cloned into `/home/github/PyBoolNet`.
-Use:
+Use::
    import sys
    sys.path.insert(0,'/home/github/PyBoolNet/PyBoolNet')
    import PyBoolNet
 
 
-_How to make a release_
+__How to make a release__:
 Update all references to the current version in:
    - ./Docs/Sphinx/source/conf.py
    - ./Docs/Sphinx/source/Substitutions.rst
@@ -83,22 +87,22 @@ Update all references to the current version in:
    - ./PyBoolNet/\_\_init\_\_.version()
    - ./make_release.sh $VERSION
 
-You should be on branch "develop".
-Make final commits:
+You should be on branch _develop_.
+Make final commits::
    $ git commit -a -m "last commit"
    $ git push
 
-Merge with master:
+Merge with branch _master_::
    $ git checkout master
    $ git merge --no-ff develop
    
-Add correct tag:
+Add correct tag::
    $ git tag -a v3.0
  
-Create Python packages:
+Create Python packages::
    $ ./make_release
    
 Packages will be created inside `./dist` 
    
-Continue with branch develop:
+Continue with branch develop::
    $ git checkout develop
