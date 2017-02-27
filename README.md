@@ -61,10 +61,11 @@ To clone from github run
    $ git clone git@github.com:hklarner/PyBoolNet.git
 ```
    
-To get the development branch run:
+To get the development branch run
+```shell
    $ cd PyBoolNet
    $ git checkout -b develop origin/develop
-
+```
 
 __How to develop__:
 To develop you need to first copy the dependencies that fit your system from dependencies source folder `./Dependencies` into the package folder `./PyBoolNet/Dependencies`.
@@ -74,11 +75,12 @@ For example::
 To test your local version of PyBoolNet either make a release and install it,
 or add the path to your local version before importing PyBoolNet.
 Assume you cloned into `/home/github/PyBoolNet`.
-Use::
+Use
+```python
    import sys
    sys.path.insert(0,'/home/github/PyBoolNet/PyBoolNet')
    import PyBoolNet
-
+```
 
 __How to make a release__:
 Update all references to the current version in:
