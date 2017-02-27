@@ -12,12 +12,14 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 #### release notes for version 2.2 (...)
+
+
+#### release notes for version 2.11 (February 2017)
+- refactored git repository so that all necessary files for building PyBoolNet are available on github
 - added functions `state_is_in_subspace` and `subspace1_is_in_subspace2` to `StateTransitionGraphs`
 - made the header _targets, factors_ in `FileExchange.primes2bnet(..)` optional (default without header)
 - added argument `Copy` to `create_blinkers(..)`, `create_variables(..)`, `create_disjoint_union(..)`, `rename(..)`, `remove_variables(..)` and `remove_all_variables_except(..)` of module `PrimeImplicants`
 
-#### release notes for version 2.11 (February 2017)
-- refactored git repository so that all necessary files for building PyBoolNet are available on github
 
 #### release notes for version 2.1 (September 2016)
 - support for windows and macos
@@ -28,6 +30,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 - removed function `completeness_naive` from AD since it is always less efficient than `completeness_iterative`
 - renamed module `TemporalQueries` to `QueryPatterns` for clarity
 - bugfix absolute import for Python 3.x
+
 
 #### release notes for version 2.0 (August 2016)
 - added functions `create_variables`, `create_disjoin_union` to module PIs
