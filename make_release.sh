@@ -1,10 +1,8 @@
 
 VERSION=2.11
+LOCALOS=linux32
 
 echo "Creating releases for PyBoolNet ver $VERSION"
-cp PyBoolNet/readme.md README.txt
-
-echo
 echo "Removing local Dependencies"
 rm -rf PyBoolNet/Dependencies
 
@@ -37,12 +35,12 @@ mv dist/PyBoolNet-$VERSION.tar.gz dist/PyBoolNet-$VERSION\_mac64.tar.gz
 rm -rf PyBoolNet/Dependencies
 
 echo
-echo "Restoring local Dependencies (linux32)"
-cp -ap Dependencies/linux32/. PyBoolNet/Dependencies
+echo "Copying manual from PyBoolNet/Docs/Sphinx"
+cp Docs/Sphinx/build/latex/PyBoolNet.pdf dist/PyBoolNet-$VERSION\_manual.pdf
 
 echo
-echo "Copying manual from PyBoolNet/Docs/Sphinx"
-cp PyBoolNet/Docs/Sphinx/build/latex/PyBoolNet.pdf dist/PyBoolNet-$VERSION\_manual.pdf
+echo "Restoring local Dependencies ($LOCALOS)"
+cp -ap Dependencies/$LOCALOS/. PyBoolNet/Dependencies
 
 echo
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/conf.py to $VERSION"

@@ -82,6 +82,19 @@ Use
    import PyBoolNet
 ```
 
+To compile the manual you need Sphinx
+```shell
+   $ apt-get install python-sphinx
+```
+
+To compile the manual
+```shell
+   $ cd Docs/Sphinx
+   $ make latexpdf
+```
+The link to the PDF file is in `Docs/Sphinx`.
+
+
 __How to make a release__:
 Update all references to the current version in:
    - ./Docs/Sphinx/source/conf.py
