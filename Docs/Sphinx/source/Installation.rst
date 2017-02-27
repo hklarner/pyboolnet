@@ -37,7 +37,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
    
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.1_linux64.tar.gz
+   $ sudo pip install PyBoolNet-2.11_linux64.tar.gz
    
 which should place the package here::
 
@@ -104,7 +104,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.1_mac64.tar.gz
+   $ sudo pip install PyBoolNet-2.11_mac64.tar.gz
    
 which should place the package here::
 
@@ -145,7 +145,7 @@ on
    
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.1_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.11_win64.tar.gz
    
 which should place the package here::
 

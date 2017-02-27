@@ -50,3 +50,55 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 #### release notes for version 1.0 (February 2016)
 - first official release
+
+
+
+### How to Clone, Develop and Release
+### How to clone
+You need to follow two branches: _master_ and _develop_.
+To clone from github run `git clone git@github.com:hklarner/PyBoolNet.git`.
+To get the development branch run `git checkout -b develop origin/develop`.
+
+
+### How to develop
+To develop you need to copy the dependencies that fit your system from `./Dependencies` into `./PyBoolNet/Dependencies`.
+For example:
+   $ cp -a Dependencies/linux32/. PyBoolNet/Dependencies
+
+To test your local version of PyBoolNet either make a realse and install it.
+Or add the path to your local version before importing PyBoolNet.
+Assume you cloned into `/home/github/PyBoolNet`.
+Use:
+   import sys
+   sys.path.insert(0,'/home/github/PyBoolNet/PyBoolNet')
+   import PyBoolNet
+
+
+### How to make a release
+Update all references to the current version in:
+   - ./Docs/Sphinx/source/conf.py
+   - ./Docs/Sphinx/source/Substitutions.rst
+   - ./Docs/Sphinx/source/Installation.rst
+   - ./setup.py
+   - ./PyBoolNet/__init__.version()
+   - ./make_release.sh $VERSION
+
+You should be on branch "develop".
+Make final commits:
+   $ git commit -a -m "last commit"
+   $ git push
+
+Merge with master:
+   $ git checkout master
+   $ git merge --no-ff develop
+   
+Add correct tag:
+   $ git tag -a v3.0
+ 
+Create Python packages:
+   $ ./make_release
+   
+Packages will be created inside `./dist` 
+   
+Continue with branch develop:
+   $ git checkout develop
