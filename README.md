@@ -1,6 +1,6 @@
 
 
-### About PyBoolNet
+## About PyBoolNet
 PyBoolNet is a Python package for the generation, modification and analysis of Boolean networks.
 The current version is available at [PyBoolNet/releases](http://github.com/hklarner/PyBoolNet/releases).
 
@@ -53,7 +53,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 
-### How to Clone, Develop and Release
+## How to Clone, Develop and Release
 __How to clone__:
 You need to follow two branches, _master_ and _develop_.
 To clone from github run
@@ -92,21 +92,31 @@ Update all references to the current version in:
    - ./make_release.sh $VERSION
 
 You should be on branch _develop_.
-Make final commits::
+Make final commits
+```shell
    $ git commit -a -m "last commit"
    $ git push
+```
 
-Merge with branch _master_::
+Merge with branch _master_
+```shell
    $ git checkout master
    $ git merge --no-ff develop
+```
    
-Add correct tag::
+Add correct tag
+```shell
    $ git tag -a v3.0
+```
  
-Create Python packages::
+Create Python packages
+```shell
    $ ./make_release
+```
    
 Packages will be created inside `./dist` 
    
-Continue with branch develop::
+Continue with branch develop
+```shell
    $ git checkout develop
+```
