@@ -54,19 +54,19 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 ### How to Clone, Develop and Release
-### How to clone
-You need to follow two branches: _master_ and _develop_.
+_How to clone_
+You need to follow two branches, _master_ and _develop_.
 To clone from github run `git clone git@github.com:hklarner/PyBoolNet.git`.
 To get the development branch run `git checkout -b develop origin/develop`.
 
 
-### How to develop
-To develop you need to copy the dependencies that fit your system from `./Dependencies` into `./PyBoolNet/Dependencies`.
+_How to develop_
+To develop you need to first copy the dependencies that fit your system from dependencies source folder `./Dependencies` into the package folder `./PyBoolNet/Dependencies`.
 For example:
    $ cp -a Dependencies/linux32/. PyBoolNet/Dependencies
 
-To test your local version of PyBoolNet either make a realse and install it.
-Or add the path to your local version before importing PyBoolNet.
+To test your local version of PyBoolNet either make a release and install it,
+or add the path to your local version before importing PyBoolNet.
 Assume you cloned into `/home/github/PyBoolNet`.
 Use:
    import sys
@@ -74,13 +74,13 @@ Use:
    import PyBoolNet
 
 
-### How to make a release
+_How to make a release_
 Update all references to the current version in:
    - ./Docs/Sphinx/source/conf.py
    - ./Docs/Sphinx/source/Substitutions.rst
    - ./Docs/Sphinx/source/Installation.rst
    - ./setup.py
-   - ./PyBoolNet/__init__.version()
+   - ./PyBoolNet/\_\_init\_\_.version()
    - ./make_release.sh $VERSION
 
 You should be on branch "develop".
