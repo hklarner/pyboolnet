@@ -131,7 +131,7 @@ Please post questions, report bugs or suggest features in the issues section of 
 
 \end{itemize}
 
-or contact \href{mailto:hannes.klarner@fu-berlin.de}{hannes.klarner@fu-berlin.de}
+or contact \emph{hannes.klarner@fu-berlin.de}.
 \end{notice}
 
 
@@ -427,7 +427,7 @@ If you get fails or errors, read {\hyperref[Installation:installation-troublesho
 
 \end{itemize}
 
-where you can also post issues. Also, do not hesitate to contact me at \href{mailto:hannes.klarner@fu-berlin.de}{hannes.klarner@fu-berlin.de}
+where you can also post issues. Also, do not hesitate to contact me at \emph{hannes.klarner@fu-berlin.de}.
 
 
 \subsection{NetworkX}
@@ -4255,7 +4255,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x435b75dc\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x4350e64c\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -6837,6 +6837,123 @@ Uncovering operational interactions in genetic networks using asynchronous Boole
 L. Tournier and M. Chaves.
 Theoretical Biology, 2009
 \end{quote}
+
+
+\chapter{For Developers}
+\label{Development:networkx-has-path}\label{Development::doc}\label{Development:for-developers}
+The github repository contains all files you need to clone, devolop and make your own release of PyBoolNet.
+Please contact me at \emph{hannes.klarner@fu-berlin.de} if you plan to do so.
+
+
+\section{How to Clone, Develop and Release}
+\label{Development:how-to-clone-develop-and-release}
+\textbf{How to clone}:
+You need to follow two branches, \emph{master} and \emph{develop}.
+To clone from github run:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} git clone git@github.com:hklarner/PyBoolNet.git
+\end{Verbatim}
+
+To get the development branch run:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} cd PyBoolNet
+\PYGZdl{} git checkout \PYGZhy{}b develop origin/develop
+\end{Verbatim}
+
+\textbf{How to develop}:
+To develop you need to first copy the dependencies that fit your system from dependencies source folder \code{./Dependencies} into the package folder \code{./PyBoolNet/Dependencies}.
+For example:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} cp \PYGZhy{}a Dependencies/linux32/. PyBoolNet/Dependencies
+\end{Verbatim}
+
+To test your local version of PyBoolNet either make a release and install it,
+or add the path to your local version before importing PyBoolNet.
+Assume you cloned into \code{/home/github/PyBoolNet}.
+Use:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{sys}
+\PYG{n}{sys}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{insert}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}}\PYG{l+s}{/home/github/PyBoolNet/PyBoolNet}\PYG{l+s}{\PYGZsq{}}\PYG{p}{)}
+\PYG{k+kn}{import} \PYG{n+nn}{PyBoolNet}
+\end{Verbatim}
+
+To compile the manual you need Sphinx:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} apt\PYGZhy{}get install python\PYGZhy{}sphinx
+\end{Verbatim}
+
+To compile the manual:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} cd Docs/Sphinx
+\PYGZdl{} make latexpdf
+\end{Verbatim}
+
+The link to the PDF file is in \code{Docs/Sphinx}.
+
+\textbf{How to make a release}:
+Define your local OS in \code{make\_release.sh \$LOCALOS}.
+Update all references to the current version in
+\begin{itemize}
+\item {} 
+\code{./Docs/Sphinx/source/conf.py}
+
+\item {} 
+\code{./Docs/Sphinx/source/Substitutions.rst}
+
+\item {} 
+\code{./Docs/Sphinx/source/Installation.rst}
+
+\item {} 
+\code{./setup.py}
+
+\item {} 
+\code{./PyBoolNet/\textbackslash{}\_\textbackslash{}\_init\textbackslash{}\_\textbackslash{}\_.version()}
+
+\item {} 
+\code{./make\_release.sh \$VERSION}
+
+\end{itemize}
+
+You should be on branch \emph{develop}.
+Make final commits:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} git commit \PYGZhy{}a \PYGZhy{}m \PYGZdq{}last commit\PYGZdq{}
+\PYGZdl{} git push
+\end{Verbatim}
+
+Merge with branch \emph{master}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} git checkout master
+\PYGZdl{} git merge \PYGZhy{}\PYGZhy{}no\PYGZhy{}ff develop
+\end{Verbatim}
+
+Add correct tag:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} git tag \PYGZhy{}a v3.0
+\end{Verbatim}
+
+Create Python packages:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} ./make\PYGZus{}release
+\end{Verbatim}
+
+Packages will be created inside \code{./dist}
+
+Continue with branch develop:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} git checkout develop
+\end{Verbatim}
 
 
 

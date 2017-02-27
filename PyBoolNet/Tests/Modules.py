@@ -23,19 +23,14 @@ import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Repository
 import PyBoolNet.Utility
 
-FILES_IN   = os.path.join(BASE, "PyBoolNet", "Tests", "Files", "Input")
-FILES_OUT  = os.path.join(BASE, "PyBoolNet", "Tests", "Files")
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read(os.path.join(BASE, "PyBoolNet", "Dependencies", "settings.cfg"))
+FILES_IN   = os.path.join(BASE, "PyBoolNet", "Tests", "Files", "Input")
+FILES_OUT  = os.path.normpath(config.get("Executables", "tmpfolder"))
 
 
 def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
-
-
-# for TestPyBoolNet.AttractorBasins
-import json
-from networkx.readwrite import json_graph
 
 
 class TestUtility(unittest.TestCase):
@@ -980,7 +975,7 @@ class TestTrapSpaces(unittest.TestCase):
 
     def test_trap_spaces_bounded(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_bounded.bnet")
-        fname_out  = os.path.join(FILES_IN,  "trapspaces_bounded.primes")
+        fname_out  = os.path.join(FILES_OUT,  "trapspaces_bounded.primes")
         primes = PyBoolNet.FileExchange.bnet2primes(fname_in, fname_out)
 
         tspaces_all = PyBoolNet.TrapSpaces.trap_spaces(primes, "all")

@@ -4,6 +4,7 @@
 
 
 .. |software| replace:: *PyBoolNet 2.11*
+.. |myemail| replace:: *hannes.klarner@fu-berlin.de*
 
 .. _BNetToPrime:  https://github.com/xstreck1/BNetToPrime
 .. _clasp-3.1.1:  https://sourceforge.net/projects/potassco/files/clasp/3.1.1

@@ -14,7 +14,7 @@ The project home page is https://github.com/hklarner/PyBoolNet.
    
    * https://github.com/hklarner/PyBoolNet/issues
   
-   or contact hannes.klarner@fu-berlin.de
+   or contact |myemail|.
 
 
 .. toctree::
@@ -25,6 +25,7 @@ The project home page is https://github.com/hklarner/PyBoolNet.
    Manual
    Reference
    Bibliography
+   Development
 
 
 .. include:: Substitutions.rst

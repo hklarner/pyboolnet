@@ -36,11 +36,11 @@ rm -rf PyBoolNet/Dependencies
 
 echo
 echo "Copying manual from PyBoolNet/Docs/Sphinx"
-cp Docs/Sphinx/build/latex/PyBoolNet.pdf dist/PyBoolNet-$VERSION\_manual.pdf
+cp -v Docs/Sphinx/build/latex/PyBoolNet.pdf dist/PyBoolNet-$VERSION\_manual.pdf
 
 echo
 echo "Restoring local Dependencies ($LOCALOS)"
-cp -ap Dependencies/$LOCALOS/. PyBoolNet/Dependencies
+cp -vap Dependencies/$LOCALOS/. PyBoolNet/Dependencies
 
 echo
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/conf.py to $VERSION"

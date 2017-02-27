@@ -13,8 +13,12 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
 # adding repository files
 for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
     root = root.replace('PyBoolNet/Repository','Repository')
+    package_data_files.extend([os.path.join(root,x) for x in filenames])
+
+# adding test files
+for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
+    root = root.replace('PyBoolNet/Tests','Tests')
     package_data_files.extend([os.path.join(root,x) for x in filenames])    
-    
 
 setup(name          = "PyBoolNet",
       version       = "2.11",

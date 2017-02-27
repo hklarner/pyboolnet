@@ -12,7 +12,7 @@ Installation
 Python
 ------
 |software| was written in Python 2.7 but should be compatible with Python 3.
-If you experience problems with your version of Python and |software| please contact `hannes.klarner@fu-berlin.de` or
+If you experience problems with your version of Python and |software| please contact |myemail| or
 post an issue on the project homepage at
 
    * http://github.com/hklarner/PyBoolNet/issues
@@ -214,7 +214,7 @@ If you get fails or errors, read :ref:`Troubleshooting <installation_troubleshoo
 
    * http://github.com/hklarner/PyBoolNet/issues
 
-where you can also post issues. Also, do not hesitate to contact me at hannes.klarner@fu-berlin.de
+where you can also post issues. Also, do not hesitate to contact me at |myemail|.
 
 
 .. _installation_networkx:
@@ -363,7 +363,7 @@ GINsim_ is available at
 Troubleshooting
 ---------------
 
-For questions that are not listed here please contact `hannes.klarner@fu-berlin.de` or post an issue on the project homepage at
+For questions that are not listed here please contact |myemail| or post an issue on the project homepage at
 
    * http://github.com/hklarner/PyBoolNet/issues
 
@@ -408,6 +408,8 @@ If you get *No such file or directory* errors you might have installed the wrong
    
 
 .. include:: Substitutions.rst
+
+
 
   
 
