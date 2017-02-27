@@ -56,8 +56,10 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 ### How to Clone, Develop and Release
 __How to clone__:
 You need to follow two branches, _master_ and _develop_.
-To clone from github run::
+To clone from github run
+```shell
    $ git clone git@github.com:hklarner/PyBoolNet.git
+```
    
 To get the development branch run:
    $ cd PyBoolNet
