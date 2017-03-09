@@ -1,5 +1,5 @@
 def hello():
-"""
+    """
     Creates the interaction graph from the prime implicants of a network.
     Interaction graphs are implemented as :ref:`installation_networkx` digraph objects.
     Edges are given the attribute *sign* whose value is a Python set containing 1 or -1 or both, depending on
