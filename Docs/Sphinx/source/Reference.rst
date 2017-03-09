@@ -17,3 +17,4 @@ Reference
    QueryPatterns
    TrapSpaces
    QuineMcCluskey
+   BooleanExpressions
