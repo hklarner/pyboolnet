@@ -16,6 +16,7 @@ import PyBoolNet.TrapSpaces
 import PyBoolNet.Repository
 import PyBoolNet.Utility
 import PyBoolNet.Tests
+import PyBoolNet.BooleanExpressions
 
 
 def version():
