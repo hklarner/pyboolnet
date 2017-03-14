@@ -1,0 +1,386 @@
+sarah@Wunderland ~/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx $ make latexpdf
+sphinx-build -b latex -d build/doctrees   source build/latex
+Running Sphinx v1.3.6
+loading pickled environment... done
+building [mo]: targets for 0 po files that are out of date
+building [latex]: all documents
+updating environment: 0 added, 4 changed, 0 removed
+reading sources... [100%] index                                                                                      
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/AttractorBasins.rst:13: WARNING: autodoc: failed to import function u'basins_diagram' from module u'PyBoolNet.AttractorBasins'; the following exception was raised:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/dist-packages/sphinx/ext/autodoc.py", line 393, in import_object
+    obj = self.get_attr(obj, part)
+  File "/usr/lib/python2.7/dist-packages/sphinx/ext/autodoc.py", line 289, in get_attr
+    return safe_getattr(obj, name, *defargs)
+  File "/usr/lib/python2.7/dist-packages/sphinx/util/inspect.py", line 115, in safe_getattr
+    raise AttributeError(name)
+AttributeError: basins_diagram
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/BooleanExpressions.rst:14: WARNING: Duplicate explicit target name: "minimize_boolean".
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:125: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:327: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:354: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:414: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:473: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:571: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: InteractionGraphs.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: tutorial_A_figure1_cropped.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: tutorial_B_figure1.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: tutorial_B_figure2_cropped.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: tutorial_C_figure1_cropped.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:None: WARNING: image file not readable: tutorial_C_figure2.pdf
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/index.rst:20: WARNING: toctree contains reference to nonexisting document u'Development'
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... /home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Repository.rst:: WARNING: document isn't included in any toctree
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Substitutions.rst:: WARNING: document isn't included in any toctree
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Tutorials.rst:: WARNING: document isn't included in any toctree
+done
+processing PyBoolNet.tex... index Installation Manual Reference FileExchange PrimeImplicants InteractionGraphs StateTransitionGraphs AttractorDetection AttractorBasins ModelChecking QueryPatterns TrapSpaces QuineMcCluskey BooleanExpressions Bibliography 
+resolving references...
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:389: WARNING: undefined label: add_style_interactionsings (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:729: WARNING: undefined label: trap_spaces_and_attractors (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1483: WARNING: undefined label: check_primes_with_acceptingstates (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1748: WARNING: undefined label: figure26 (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1754: WARNING: undefined label: univocal (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1799: WARNING: undefined label: naldi2007 (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1805: WARNING: undefined label: univocal (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1805: WARNING: undefined label: faithful (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1809: WARNING: undefined label: univocal (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1809: WARNING: undefined label: faithful (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/Manual.rst:1835: WARNING: undefined label: univocality_with_counterexample`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal), see :ref:`univocality (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/StateTransitionGraphs.rst:11: WARNING: undefined label: sec:trap_spaces (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/AttractorDetection.rst:5: WARNING: undefined label: agef_oneof_subspaces (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/AttractorDetection.rst:5: WARNING: undefined label: ef_all_unsteady (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/AttractorBasins.rst:5: WARNING: undefined label: commitment_diagram (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/TrapSpaces.rst:5: WARNING: undefined label: sec:trap_spaces (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/TrapSpaces.rst:5: WARNING: undefined label: sec:trap_spaces (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/BooleanExpressions.rst:20: WARNING: undefined label: installation_eqntott (if the link has no caption the label must precede a section header)
+/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/source/BooleanExpressions.rst:20: WARNING: undefined label: installation_eqntott (if the link has no caption the label must precede a section header)
+writing... done
+copying images... figure19.pdf figure01.pdf figure10.pdf figure18.pdf figure26.pdf figure23.pdf figure05.pdf figure09.pdf figure20.pdf figure27.pdf figure22.pdf figure02.pdf figure21.pdf figure25.pdf figure12.pdf figure03.pdf figure04.pdf figure13.pdf figure16.pdf figure15.pdf figure24.pdf figure17.pdf figure07.pdf figure08.pdf figure11.pdf figure14.pdf
+copying TeX support files...
+done
+build succeeded, 37 warnings.
+Running LaTeX files through pdflatex...
+make -C build/latex all-pdf
+make[1]: Verzeichnis „/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/build/latex“ wird betreten
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2016/02/01>
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/upquote/upquote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/generic/pdftex/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/newfloat.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/capt-of/capt-of.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/needspace/needspace.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/eqparbox/eqparbox.sty
+(/usr/share/texlive/texmf-dist/tex/latex/environ/environ.sty
+(/usr/share/texlive/texmf-dist/tex/latex/trimspaces/trimspaces.sty)))
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 134--134
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>>
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [1{/var/lib/texmf/fo
+nts/map/pdftex/updmap/pdftex.map}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 628--629
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd) [11] [12] [13]
+[14] <figure01.pdf, id=1061, 224.84pt x 188.705pt> <use figure01.pdf>
+<use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1080, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 1117--1122
+\T1/ptm/m/it/10 PyBoolNet 2.11 \T1/ptm/m/n/10 has pre-de-fined styles for addin
+g at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1094, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf>
+! Undefined control sequence.
+<argument> \node@class@name 
+                            
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \ifcsname docutilsrole\node@class@name 
+                                                  \endcsname \csname docutil...
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \node@class@name 
+                            
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \ifcsname docutilsrole\node@class@name 
+                                                  \endcsname \csname docutil...
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \node@class@name 
+                            
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \ifcsname docutilsrole\node@class@name 
+                                                  \endcsname \csname docutil...
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \node@class@name 
+                            
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \@nil 
+                 
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Undefined control sequence.
+<argument> \ifcsname docutilsrole\node@class@name 
+                                                  \endcsname \csname docutil...
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+! Argument of \@iforloop has an extra }.
+<inserted text> 
+                \par 
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+Runaway argument?
+\@nil \@@ \node@class@name {\ifcsname docutilsrole\node@class@name \endcsname \
+ETC.
+! Paragraph ended before \@iforloop was complete.
+<to be read again> 
+                   \par 
+l.1143 ...std-ref}{add\_style\_interactionsings}.}
+                                                  \label{Manual:figure03}\en...
+
+? 
+[17 <./figure03.pdf>] <figure04.pdf, id=1110, 500.87125pt x 486.81876pt>
+<use figure04.pdf> <use figure04.pdf>
+<figure05.pdf, id=1120, 423.5825pt x 460.72125pt> <use figure05.pdf>
+<use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1143, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1159, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1180, 427.5975pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1210, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 1397--1402
+
+[22] <figure11.pdf, id=1220, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23 <./figure10.pdf>]
+<figure12.pdf, id=1234, 281.05pt x 343.2825pt> <use figure12.pdf>
+<use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1253, 521.95pt x 368.37625pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1257, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1273, 501.875pt x 508.90125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1276, 492.84125pt x 625.33624pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1337, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1346, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf>] [33 <./figure18.pdf>] [34]
+<figure19.pdf, id=1408, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+Overfull \vbox (0.5881pt too high) detected at line 2108
+[36] <figure20.pdf, id=1432, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1433, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [37 <./figure20.pdf>] [38 <./figure21.pdf
+>] [39] <figure22.pdf, id=1466, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1498, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> [43 <./figure23.pdf>]
+<figure24.pdf, id=1513, 497.86pt x 508.90125pt> <use figure24.pdf>
+<use figure24.pdf> [44 <./figure24.pdf>]
+<figure25.pdf, id=1529, 480.79625pt x 420.57124pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>] [46]
+<figure26.pdf, id=1559, 606.265pt x 369.38pt> <use figure26.pdf>
+<use figure26.pdf> [47 <./figure26.pdf>]
+<figure27.pdf, id=1574, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48 <./figure27.pdf>] <use figure25.pdf> <use figure25.pdf>
+[49] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+Underfull \hbox (badness 10000) in paragraph at lines 5735--5735
+\T1/ptm/m/it/10 Style-Fill-Color=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Style-Sp
+lines='curved'\T1/ptm/m/n/10 , \T1/ptm/m/it/10 StyleEdges=False\T1/ptm/m/n/10 ,
+ \T1/ptm/m/it/10 StyleR-anks=True\T1/ptm/m/n/10 ,
+[81] [82] [83]
+Underfull \hbox (badness 5189) in paragraph at lines 5958--5958
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[84]
+Underfull \hbox (badness 10000) in paragraph at lines 6067--6067
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[85] [86] [87] [88]
+Underfull \hbox (badness 10000) in paragraph at lines 6429--6433
+
+[89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6734--6734
+[]\T1/ptm/m/it/10 Equation\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Out-put-file=None\T1
+/ptm/m/n/10 , \T1/ptm/m/it/10 Sum-mary=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Me
+rge=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Echo=False\T1/ptm/m/n/10 ,
+[92]
+Underfull \hbox (badness 10000) in paragraph at lines 6798--6798
+[]\T1/ptm/m/it/10 Equation\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Out-put-file=None\T1
+/ptm/m/n/10 , \T1/ptm/m/it/10 Sum-mary=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Me
+rge=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Echo=False\T1/ptm/m/n/10 ,
+[93] [94]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 6959--6963
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[95]
+No file PyBoolNet.ind.
+[96] (./PyBoolNet.aux)
+
+Package rerunfilecheck Warning: File `PyBoolNet.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ )
+(\end occurred when \ifx on line 1143 was incomplete)
+(\end occurred when \ifx on line 1143 was incomplete)
+(\end occurred when \ifx on line 1143 was incomplete){/usr/share/texlive/texmf-
+dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw
+/courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
+8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri
+8a.pfb>
+Output written on PyBoolNet.pdf (102 pages, 526450 bytes).
+Transcript written on PyBoolNet.log.
+Makefile:58: die Regel für Ziel „PyBoolNet.pdf“ scheiterte
+make[1]: *** [PyBoolNet.pdf] Fehler 1
+make[1]: Verzeichnis „/home/sarah/Schreibtisch/Bachelorarbeit/Git/PyBoolNet/Docs/Sphinx/build/latex“ wird verlassen
+Makefile:124: die Regel für Ziel „latexpdf“ scheiterte
+make: *** [latexpdf] Fehler 2
+
