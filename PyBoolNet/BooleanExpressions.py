@@ -58,7 +58,7 @@ def run_espresso(espresso_cmd, eqntott_out):
 
 
 
-def minimize_boolean(Equation, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
+def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
     """
     Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
     espresso and eqntott for its input preparation. Resulting equation is saved in file if filename
@@ -86,6 +86,16 @@ def minimize_boolean(Equation, Outputfile=None, Summary=False, Merge=False, Echo
 
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
     """
+    AddName = False
+    AddCol = False
+    if not ("=" in Equation):
+        Equation = "Test = " + Equation
+        AddName = True
+    if not (";" in Equation):
+        Equation = Equation + ";"
+        AddCol = True
+
+
     eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
     espresso_cmd =[ESPRESSO_CMD, '-o', 'eqntott']
     eqntott_in = None
@@ -117,8 +127,8 @@ def minimize_boolean(Equation, Outputfile=None, Summary=False, Merge=False, Echo
         PLA_Name = Equation
     #if input is the equation as string
     elif (type(Equation) == str):
-            eqntott_cmd += ['/dev/stdin']
-            eqntott_in = Equation
+        eqntott_cmd += ['/dev/stdin']
+        eqntott_in = Equation
     #wrong input
     else:
         print("File or function as string needed as Input")
@@ -126,7 +136,11 @@ def minimize_boolean(Equation, Outputfile=None, Summary=False, Merge=False, Echo
 
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
     espresso_out = run_espresso(espresso_cmd, eqntott_out)
-    espresso_out = re.sub(r'\.na .*\n', PLA_Name + '\n\n', espresso_out)
+    espresso_out = re.sub(r'\.na .*\n', '\n', espresso_out)
+    if (AddName == True):
+        espresso_out = espresso_out.replace('Test = ', '')
+    if (AddCol == True):
+        espresso_out = espresso_out.replace(';', '')
 
     if (Outputfile == None):
         print(espresso_out)
@@ -164,32 +178,6 @@ def minimize_many_boolean(Equation, Outputfile=None, Summary=False, Merge=False,
 
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
     """
-
-    eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
-    espresso_cmd =[ESPRESSO_CMD, '-o', 'eqntott', '-Dmany']
-    eqntott_in = None
-    espresso_out = ''
-    PLA_Name = 'Standard Input'
-
-    if Summary == True:
-        espresso_cmd += ['-s']
-    if Merge == True:
-        espresso_cmd += ['-Dd1merge']
-    if Echo == True:
-        espresso_cmd += ['-Decho']
-    if Equiv == True:
-        espresso_cmd += ['-Dequiv']
-    if Exact == True:
-        espresso_cmd += ['-Dexact']
-    if Stats == True:
-        espresso_cmd += ['-Dstats']
-    if Trace == True:
-        espresso_cmd += ['-t']
-    if Reduce == True:
-        eqntott_cmd += ['-r']
-    if NoRedundancy == True:
-        eqntott_cmd += ['-R']
-
     # if input is file: read equations from file
     if (os.path.exists(Equation)):
         with open(Equation, 'r') as fname:
@@ -202,14 +190,13 @@ def minimize_many_boolean(Equation, Outputfile=None, Summary=False, Merge=False,
     else:
         print("File or function as string needed as Input")
         raise Exception
-
-    eqntott_cmd += ['/dev/stdin']
+    espresso_out = ''
     sep = ";"
     for elem in EquationString.strip(sep).split(sep):
-        eqntott_in = elem + sep
-        eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-        espresso_temp = run_espresso(espresso_cmd, eqntott_out)
-        espresso_out += re.sub(r'\.na .*\n', PLA_Name + '\n\n', espresso_temp)
+        SingleEquation = elem + sep
+        espresso_temp = minimize_espresso(SingleEquation, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False)
+        print espresso_temp
+        espresso_out += re.sub(r'\.na .*\n', '\n', espresso_temp)
 
     if (Outputfile == None):
         print(espresso_out)
@@ -247,33 +234,6 @@ def minimize_MCOutput(Equation, Outputfile=None, Summary=False, Merge=False, Ech
 
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
     """
-
-    eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
-    espresso_cmd =[ESPRESSO_CMD, '-o', 'eqntott', '-Dmany']
-    eqntott_in = None
-    truthtables = ''
-    espresso_out = ''
-    PLA_Name = 'Standard Input'
-
-    if Summary == True:
-        espresso_cmd += ['-s']
-    if Merge == True:
-        espresso_cmd += ['-Dd1merge']
-    if Echo == True:
-        espresso_cmd += ['-Decho']
-    if Equiv == True:
-        espresso_cmd += ['-Dequiv']
-    if Exact == True:
-        espresso_cmd += ['-Dexact']
-    if Stats == True:
-        espresso_cmd += ['-Dstats']
-    if Trace == True:
-        espresso_cmd += ['-t']
-    if Reduce == True:
-        eqntott_cmd += ['-r']
-    if NoRedundancy == True:
-        eqntott_cmd += ['-R']
-
     # if input is file: read equations from file
     if (os.path.exists(Equation)):
         with open(Equation, 'r') as fname:
@@ -290,6 +250,7 @@ def minimize_MCOutput(Equation, Outputfile=None, Summary=False, Merge=False, Ech
     sep = ";"
 
     EquationString = EquationString.replace(':', ' =')
+
     EquationString = EquationString.replace(',', ';')
     EquationString = EquationString.replace('})', '')
     EquationString = EquationString.replace('({', '')
@@ -312,23 +273,3 @@ def minimize_MCOutput(Equation, Outputfile=None, Summary=False, Merge=False, Ech
 
 
 
-
-
- #signals = (" 'ACCEPTING'", " 'INITACCEPTING'")
- #EquationList += re.findall(r'\'INITACCEPTING\'.*?\;', EquationString)
-    #EquationList = EquationList.split(',')
-   # print(EquationList)
-    #EquationString = re.sub(r'\(\{', '', kartoffel[0])
-    #EquationString = re.sub(r'\}\)', '', EquationString)
-   # EquationString = re.sub(r'[\'\}\{]', '', kartoffel[0])
-   # EquationString = EquationString.strip(sep).split(sep)
-   # print(EquationString)
-    #kartoffel = re.findall(r'\{.*?\}', EquationString)
-   # newlist = [elem for elem in EquationList if elem.startswith(signals)]
-   # print(newlist)
-   # for elem in EquationString:
-    #    print(elem)
-     #EquationList = re.findall(r'\{.*?\}', EquationString)
-    #EquationList = re.sub(r'[\'\}\{]', '', ''.join(EquationList))
-   # print(type(EquationList))
-    #EquationList = re.findall(r'\'INITACCEPTING\'.*?\, | \'ACCEPTING\'.*?\,', EquationString)
