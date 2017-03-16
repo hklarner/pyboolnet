@@ -350,12 +350,12 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, Aggregate, FnameAS
         print(msg)
         raise Ex
 
-    if error:
-        print(aspfile)
-        print(error)
+    if "ERROR" in error:
         msg = "\nCall to gringo and / or clasp failed."
         if FnameASP!=None:
-            msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
+            msg+= '\nasp file: "%s"'%aspfile
+        msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
+        msg+= '\nerror: "%s"'%error
         print(msg)
         raise Exception
 
