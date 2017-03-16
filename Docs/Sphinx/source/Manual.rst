@@ -1861,11 +1861,11 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
 
 .. _figure28:
 
-.. figure:: figure28.pdf
+.. figure:: figure27.pdf
    :scale: 60%
    :align: center
    
-   The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
+   WRONG FIGURE! The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
    
    >>> mintspaces = TS.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
