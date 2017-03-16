@@ -4,9 +4,16 @@ BooleanExpressions
 ==================
 
 
-.. _hello:
+.. _minimize_boolean:
 
-hello
------
+minimize_boolean
+----------------
 
-.. autofunction:: PyBoolNet.BooleanExpressions.hello
+.. autofunction:: PyBoolNet.BooleanExpressions.minimize_boolean
+
+.. _minimize_boolean:
+
+minimize_many_boolean
+---------------------
+
+.. autofunction:: PyBoolNet.BooleanExpressions.minimize_boolean

@@ -386,7 +386,7 @@ The result is shown in :ref:`the figure below <figure03>`.
    :scale: 60%
    :align: center
    
-   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsings`. 
+   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsigns`. 
 
 
 styles for inputs, outputs and constants
