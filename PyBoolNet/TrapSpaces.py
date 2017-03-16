@@ -134,7 +134,7 @@ def trap_spaces(Primes, Type, MaxOutput=100, FnameASP=None):
 
 def steady_states(Primes, MaxOutput=100, FnameASP=None):
     """
-    Wrapper function for :ref:`trap_spaces_bounded <sec:trap_spaces>` that sets the bounds to *n,n* to return steady states.
+    Returns steady states.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -158,7 +158,6 @@ def steady_states(Primes, MaxOutput=100, FnameASP=None):
 def steady_states_projected(Primes, Project, Aggregate=False, MaxOutput=100, FnameASP=None):
     """
     Returns a list of projected steady states using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
-    This function works like :ref:`trap_spaces_projected <sec:trap_spaces>` but enforces that the returned elements are steady states.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -350,12 +349,12 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, Aggregate, FnameAS
         print(msg)
         raise Ex
 
-    if error:
-        print(aspfile)
-        print(error)
+    if "ERROR" in error:
         msg = "\nCall to gringo and / or clasp failed."
         if FnameASP!=None:
-            msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
+            msg+= '\nasp file: "%s"'%aspfile
+        msg+= '\ncommand: "%s"'%' '.join(cmd_gringo+['|']+cmd_clasp)
+        msg+= '\nerror: "%s"'%error
         print(msg)
         raise Exception
 

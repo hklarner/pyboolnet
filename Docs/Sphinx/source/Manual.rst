@@ -386,7 +386,7 @@ The result is shown in :ref:`the figure below <figure03>`.
    :scale: 60%
    :align: center
    
-   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsings`. 
+   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsigns`. 
 
 
 styles for inputs, outputs and constants
@@ -727,7 +727,7 @@ the min trap spaces style
 *************************
 
 The min trap spaces style is adds a *dot* subgraph for every minimal trap space of the state transition graph.
-For an introduction to trap spaces, see :ref:`Klarner2015(a) <klarner2015trap>` and also :ref:`trap_spaces_and_attractors`::
+For an introduction to trap spaces, see :ref:`Klarner2015(a) <klarner2015trap>`::
 
    >>> bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
    >>> primes = FEX.bnet2primes(bnet)
@@ -1753,7 +1753,7 @@ Cyclic attractros are represented by minimal trap spaces.
 
 Note that the function :ref:`basins_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
 or it will compute the minimal trap spaces and *assume* that they are complete and univocal.
-You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness` and :ref:`univocal`.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness` and :ref:`univocality`.
 
 .. _figure26:
 
@@ -1803,12 +1803,12 @@ in practice we may get away with computing their minimal trap spaces which can e
 Note that for limit cycles of synchronous STGs and steady states other algorithms, e.g. :ref:`Dubrova2011 <Dubrova2011>` and :ref:`Naldi2007 <Naldi2007>` are more suitable.
 
 In :ref:`Klarner2015(a) <klarner2015trap>` we demonstrate that completeness, univocality and faithfulness can all be decided using CTL model checking.
-The functions :ref:`completeness`, :ref:`univocal` and :ref:`faithful` automatically generate and test the respective queries,
+The functions :ref:`completeness`, :ref:`univocality` and :ref:`faithfulness` automatically generate and test the respective queries,
 which are defined in Sections 4.1, 4.2 and 4.3 of :ref:`Klarner2015(a) <klarner2015trap>`.
 
 As an example of a network whose minimal trap spaces are complete, univocal and faithful
 consider again the network defined in :ref:`the figure above <figure25>`.
-The functions :ref:`univocal` and :ref:`faithful` each require the primes, update strategy and a trap space::
+The functions :ref:`univocality` and :ref:`faithfulness` each require the primes, update strategy and a trap space::
 
    >>> update = "asynchronous"
    >>> mintspaces = TS.trap_spaces(primes, "min")
@@ -1841,7 +1841,7 @@ The function :ref:`faithfulness_with_counterexample` returns a tuple that consis
 As an illustration, consider network (A) given in Figure 1 of :ref:`Klarner2015(a) <klarner2015trap>`.
 It is defined by the following functions::
 
-The resulting STG is shown in :ref:`the figure below <figure25>`.
+The resulting STG is shown in :ref:`the figure below <figure28>`.
 
 Its STG contains two cyclic attractors and its minimal trap space ``---`` contains two cyclic attractors and it therefore not univocal.
 
@@ -1859,9 +1859,9 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
    >>> STGs.add_style_subspaces(primes, stg, mintspaces)
 
 
-.. _figure26:
+.. _figure28:
 
-.. figure:: figure25.pdf
+.. figure:: figure28.pdf
    :scale: 60%
    :align: center
    

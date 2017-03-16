@@ -403,7 +403,6 @@ class TestAttractorDetection(unittest.TestCase):
         
         update = "asynchronous"
         for name in PyBoolNet.Repository.get_all_names():
-            print name
             primes = PyBoolNet.Repository.get_primes(name)
             if len(primes)>10: continue
             steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
