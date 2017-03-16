@@ -5,12 +5,12 @@
 AttractorBasins
 ===============
 
-.. _basins_diagram:
+.. _commitment_diagram:
 
-basins_diagram
---------------
+commitment_diagram
+------------------
 
-.. autofunction:: PyBoolNet.AttractorBasins.basins_diagram
+.. autofunction:: PyBoolNet.AttractorBasins.commitment_diagram
 
 
 .. _diagram2image:

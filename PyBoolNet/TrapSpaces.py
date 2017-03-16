@@ -134,7 +134,7 @@ def trap_spaces(Primes, Type, MaxOutput=100, FnameASP=None):
 
 def steady_states(Primes, MaxOutput=100, FnameASP=None):
     """
-    Wrapper function for :ref:`trap_spaces_bounded <sec:trap_spaces>` that sets the bounds to *n,n* to return steady states.
+    Returns steady states.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -158,7 +158,6 @@ def steady_states(Primes, MaxOutput=100, FnameASP=None):
 def steady_states_projected(Primes, Project, Aggregate=False, MaxOutput=100, FnameASP=None):
     """
     Returns a list of projected steady states using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
-    This function works like :ref:`trap_spaces_projected <sec:trap_spaces>` but enforces that the returned elements are steady states.
 
     **arguments**:
         * *Primes*: prime implicants
