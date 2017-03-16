@@ -14,7 +14,7 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{February 27, 2017}
+\date{March 16, 2017}
 \release{2.11}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
@@ -1126,7 +1126,7 @@ The result is shown in {\hyperref[Manual:figure03]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure03.pdf}}
-\caption{The interaction graph ``\emph{example04\_igraph.pdf}'' with attributes added by \emph{add\_style\_interactionsings}.}\label{Manual:figure03}\end{figure}
+\caption{The interaction graph ``\emph{example04\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-interactionsigns]{\emph{add\_style\_interactionsigns}}}.}\label{Manual:figure03}\end{figure}
 
 
 \subsection{styles for inputs, outputs and constants}
@@ -1471,7 +1471,7 @@ The result is shown in {\hyperref[Manual:figure13]{\emph{the figure below}}}.
 \subsection{the min trap spaces style}
 \label{Manual:the-min-trap-spaces-style}
 The min trap spaces style is adds a \emph{dot} subgraph for every minimal trap space of the state transition graph.
-For an introduction to trap spaces, see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}} and also \emph{trap\_spaces\_and\_attractors}:
+For an introduction to trap spaces, see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y\PYGZam{}z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, x\PYGZam{}!y\textbar{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, z\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
@@ -2321,7 +2321,7 @@ Since Version 2.0 PyBoolnet supports model checking with so-called accepting sta
 That is, PyBoolNet uses \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a} to return a Boolean expression that represents all states that satisfy the CTL spec and another Boolean
 expression that represents all initial states that satisfy the CTL spec.
 The functionality of returning accepting states was implemented in \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of \href{http://nusmv.fbk.eu}{NuSMV}.
-To return the accepting states use the function \emph{check\_primes\_with\_acceptingstates} or {\hyperref[ModelChecking:check-smv-with-acceptingstates]{\emph{check\_smv\_with\_acceptingstates}}}.
+To return the accepting states use the function {\hyperref[ModelChecking:check-primes-with-acceptingstates]{\emph{check\_primes\_with\_acceptingstates}}} or {\hyperref[ModelChecking:check-smv-with-acceptingstates]{\emph{check\_smv\_with\_acceptingstates}}}.
 It returns a tuple consisting of the answer and a dictionary with the following keys and values:
 \begin{itemize}
 \item {} 
@@ -2588,7 +2588,7 @@ Hence, {\hyperref[AttractorDetection:find-attractor-state-by-randomwalk-and-ctl]
 The module {\hyperref[AttractorBasins:attractorbasins]{\emph{AttractorBasins}}} contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
 In non-deterministic STGs there are usually states from which more than one attractor is reachable.
 But, not every combination of attractors has states that can reach exactly that subset of attractors.
-The function {\hyperref[AttractorBasins:basins-diagram]{\emph{basins\_diagram}}} checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
+The function \emph{basins\_diagram} checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
 If there are states a basin node is created.
 An edge between basin nodes indicates the existence of a transition between two states of the respective sets of states.
 The nodes of a basin diagram have the following attributes:
@@ -2630,15 +2630,15 @@ Consider the following example:
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AB}\PYG{o}{.}\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{diagram.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
-The output is given in \emph{the figure below}.
+The output is given in {\hyperref[Manual:figure26]{\emph{the figure below}}}.
 It uses the following convention: basin nodes that belong to the same input combination are grouped as light green subgraphs.
 The fillcolor of a basin node reflects the proportion of states that belong to it: the darker the more states.
 Nodes are labeled by the attractors they can reach which are enumerated by A0, A1, etc.
 Cyclic attractros are represented by minimal trap spaces.
 
-Note that the function {\hyperref[AttractorBasins:basins-diagram]{\emph{basins\_diagram}}} either requires a list of states representing attractors (given via the parameter \emph{Attractors}),
+Note that the function \emph{basins\_diagram} either requires a list of states representing attractors (given via the parameter \emph{Attractors}),
 or it will compute the minimal trap spaces and \emph{assume} that they are complete and univocal.
-You should make sure that the minimal trap spaces are indeed complete and univocal using the functions {\hyperref[AttractorDetection:completeness]{\emph{completeness}}} and \emph{univocal}.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions {\hyperref[AttractorDetection:completeness]{\emph{completeness}}} and {\hyperref[AttractorDetection:univocality]{\emph{univocality}}}.
 \begin{figure}[htbp]
 \centering
 \capstart
@@ -2695,12 +2695,12 @@ in practice we may get away with computing their minimal trap spaces which can e
 Note that for limit cycles of synchronous STGs and steady states other algorithms, e.g. {\hyperref[Bibliography:dubrova2011]{\emph{Dubrova2011}}} and \emph{Naldi2007} are more suitable.
 
 In {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}} we demonstrate that completeness, univocality and faithfulness can all be decided using CTL model checking.
-The functions {\hyperref[AttractorDetection:completeness]{\emph{completeness}}}, \emph{univocal} and \emph{faithful} automatically generate and test the respective queries,
+The functions {\hyperref[AttractorDetection:completeness]{\emph{completeness}}}, {\hyperref[AttractorDetection:univocality]{\emph{univocality}}} and {\hyperref[AttractorDetection:faithfulness]{\emph{faithfulness}}} automatically generate and test the respective queries,
 which are defined in Sections 4.1, 4.2 and 4.3 of {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
 As an example of a network whose minimal trap spaces are complete, univocal and faithful
 consider again the network defined in {\hyperref[Manual:figure25]{\emph{the figure above}}}.
-The functions \emph{univocal} and \emph{faithful} each require the primes, update strategy and a trap space:
+The functions {\hyperref[AttractorDetection:univocality]{\emph{univocality}}} and {\hyperref[AttractorDetection:faithfulness]{\emph{faithfulness}}} each require the primes, update strategy and a trap space:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{update} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}
@@ -2737,7 +2737,7 @@ The function {\hyperref[AttractorDetection:faithfulness-with-counterexample]{\em
 As an illustration, consider network (A) given in Figure 1 of {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 It is defined by the following functions:
 
-The resulting STG is shown in {\hyperref[Manual:figure25]{\emph{the figure below}}}.
+The resulting STG is shown in {\hyperref[Manual:figure28]{\emph{the figure below}}}.
 
 Its STG contains two cyclic attractors and its minimal trap space \code{-{-}-} contains two cyclic attractors and it therefore not univocal.
 
@@ -2761,8 +2761,8 @@ Its STG contains two cyclic attractors and its minimal trap space \code{-{-}-} c
 \centering
 \capstart
 
-\scalebox{0.600000}{\includegraphics{figure25.pdf}}
-\caption{The state transition graph \emph{``example25\_stg.pdf''} in which the minimal trap space ``---'' is not univocal.}{\small 
+\scalebox{0.600000}{\includegraphics{figure27.pdf}}
+\caption{WRONG FIGURE! The state transition graph \emph{``example25\_stg.pdf''} in which the minimal trap space ``---'' is not univocal.}{\small 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{print} \PYG{p}{[}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{]}
@@ -2770,7 +2770,7 @@ Its STG contains two cyclic attractors and its minimal trap space \code{-{-}-} c
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}subspaces}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{n}{mintspaces}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 26: An STG whose minimal trap space }\PYG{l+s}{\PYGZsq{}}\PYG{l+s}{\PYGZhy{}\PYGZhy{}\PYGZhy{}}\PYG{l+s}{\PYGZsq{}}\PYG{l+s}{ is not univocal}\PYG{l+s}{\PYGZdq{}}
 \end{Verbatim}
-}\label{Manual:id6}\end{figure}
+}\label{Manual:figure28}\end{figure}
 
 
 \chapter{Reference}
@@ -4255,7 +4255,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x4350e64c\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x434d32cc\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -5711,8 +5711,71 @@ Creates an attractor report for the network defined by \emph{Primes}.
 \section{AttractorBasins}
 \label{AttractorBasins:attractorbasins}\label{AttractorBasins::doc}\label{AttractorBasins:id1}
 
-\subsection{basins\_diagram}
-\label{AttractorBasins:id2}\label{AttractorBasins:basins-diagram}
+\subsection{commitment\_diagram}
+\label{AttractorBasins:id2}\label{AttractorBasins:commitment-diagram}\index{commitment\_diagram() (in module PyBoolNet.AttractorBasins)}
+
+\begin{fulllineitems}
+\phantomsection\label{AttractorBasins:PyBoolNet.AttractorBasins.commitment_diagram}\pysiglinewithargsret{\bfcode{commitment\_diagram}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{AdditionalEdgeData=False}, \emph{Silent=True}, \emph{ReturnCounter=False}}{}
+Creates the commitment diagram, a networkx.DiGraph, of the STG defined by \emph{Primes} and \emph{Update}.
+The nodes of the diagram represent states that can reach the exact same subset of \emph{Attractors}.
+Nodes are labeled by the index of the attractor in the order given in \emph{Attractors} and the number of states
+that are represented. Edges indicate the existence of a transition between two nodes in the respective sets.
+Edges are labeled by the number of states of the source set that can reach the target set and,
+if \emph{AdditionalEdgeData} is true, additionally by the size of the border.
+
+The algorithm requires model checking with accepting states, i.e., NuSMV-a.
+Basic steps towards increased efficiency are implemented:
+out-DAGs (a.k.a. output cascades) are discarded during model checking, and
+disconnected components are considered separately (and recombined using a cartesian product of diagrams).
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{Update} (str): the update strategy, one of \emph{``asynchronous''}, \emph{``synchronous''}, \emph{``mixed''}
+
+\item {} 
+\emph{Attractors} (list): list of states or subspaces representing the attractors. \emph{None} results in the computation of the minimal trap spaces.
+
+\item {} 
+\emph{AdditionalEdgeData} (bool): whether the computation of the so-called border states should be included in the diagram
+
+\item {} 
+\emph{Silent} (bool): whether information regarding the execution of the algorithm should be printed
+
+\item {} 
+\emph{ReturnCounter} (bool): whether the number of performed model checks should be returned
+
+\end{itemize}
+
+\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\emph{BasinsDiagram} (netowrkx.DiGraph): the basins diagram
+
+\item {} 
+\emph{Counter} (int): number of model checks performed, if \emph{ReturnCounter=True}
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{REPO}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{xiao\PYGZus{}wnt5a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{commitment\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram}\PYG{o}{.}\PYG{n}{order}\PYG{p}{(}\PYG{p}{)}
+\PYG{g+go}{6}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram}\PYG{o}{.}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{formula}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
+\PYG{g+go}{\PYGZsq{}(x4 \PYGZam{} (x7))\PYGZsq{}}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram}\PYG{o}{.}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{size}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
+\PYG{g+go}{32}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{diagram2image}
 \label{AttractorBasins:diagram2image}\label{AttractorBasins:id3}\index{diagram2image() (in module PyBoolNet.AttractorBasins)}
@@ -5722,7 +5785,7 @@ Creates an attractor report for the network defined by \emph{Primes}.
 Creates the image file \emph{FnameIMAGE} for the basin diagram given by \emph{Diagram}.
 Use \emph{FnameATTRACTORS} to create a separate image in which the indices of the diagram are mapped to the given attractors.
 The flag \emph{StyleInputs} can be used to highlight which basins belong to which input combination.
-\emph{StyleEdges} adds edge labels that indicate the size of the ``border'' (if \emph{ComputeBorder} was enabled in \emph{commitment\_diagram})
+\emph{StyleEdges} adds edge labels that indicate the size of the ``border'' (if \emph{ComputeBorder} was enabled in {\hyperref[AttractorBasins:commitment-diagram]{\emph{commitment\_diagram}}})
 and the size of the states of the source basin that can reach the target basin.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -5938,7 +6001,7 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 
 
 \subsection{check\_primes\_with\_acceptingstates}
-\label{ModelChecking:check-primes-with-acceptingstates}\label{ModelChecking:check-primes-with-accepting-states}\index{check\_primes\_with\_acceptingstates() (in module PyBoolNet.ModelChecking)}
+\label{ModelChecking:id4}\label{ModelChecking:check-primes-with-acceptingstates}\index{check\_primes\_with\_acceptingstates() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes_with_acceptingstates}\pysiglinewithargsret{\bfcode{check\_primes\_with\_acceptingstates}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{CTLSpec}, \emph{DynamicReorder=True}, \emph{ConeOfInfluence=True}}{}
@@ -5996,7 +6059,7 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 
 
 \subsection{check\_smv}
-\label{ModelChecking:id4}\label{ModelChecking:check-smv}\index{check\_smv() (in module PyBoolNet.ModelChecking)}
+\label{ModelChecking:id5}\label{ModelChecking:check-smv}\index{check\_smv() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv}\pysiglinewithargsret{\bfcode{check\_smv}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{ConeOfInfluence=True}}{}
@@ -6047,7 +6110,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 
 
 \subsection{check\_smv\_with\_counterexample}
-\label{ModelChecking:id5}\label{ModelChecking:check-smv-with-counterexample}\index{check\_smv\_with\_counterexample() (in module PyBoolNet.ModelChecking)}
+\label{ModelChecking:id6}\label{ModelChecking:check-smv-with-counterexample}\index{check\_smv\_with\_counterexample() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv_with_counterexample}\pysiglinewithargsret{\bfcode{check\_smv\_with\_counterexample}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}}{}
@@ -6097,7 +6160,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 
 
 \subsection{check\_smv\_with\_acceptingstates}
-\label{ModelChecking:id6}\label{ModelChecking:check-smv-with-acceptingstates}\index{check\_smv\_with\_acceptingstates() (in module PyBoolNet.ModelChecking)}
+\label{ModelChecking:id7}\label{ModelChecking:check-smv-with-acceptingstates}\index{check\_smv\_with\_acceptingstates() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv_with_acceptingstates}\pysiglinewithargsret{\bfcode{check\_smv\_with\_acceptingstates}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{ConeOfInfluence=True}}{}
@@ -6144,7 +6207,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 
 
 \subsection{primes2smv}
-\label{ModelChecking:id7}\label{ModelChecking:primes2smv}\index{primes2smv() (in module PyBoolNet.ModelChecking)}
+\label{ModelChecking:id8}\label{ModelChecking:primes2smv}\index{primes2smv() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.primes2smv}\pysiglinewithargsret{\bfcode{primes2smv}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{FnameSMV=None}}{}
@@ -6464,7 +6527,7 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 
 \begin{fulllineitems}
 \phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
-Wrapper function for \emph{trap\_spaces\_bounded} that sets the bounds to \emph{n,n} to return steady states.
+Returns steady states.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6504,7 +6567,6 @@ Wrapper function for \emph{trap\_spaces\_bounded} that sets the bounds to \emph{
 \begin{fulllineitems}
 \phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{Aggregate=False}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
 Returns a list of projected steady states using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
-This function works like \emph{trap\_spaces\_projected} but enforces that the returned elements are steady states.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6913,7 +6975,7 @@ Update all references to the current version in
 \code{./setup.py}
 
 \item {} 
-\code{./PyBoolNet/\textbackslash{}\_\textbackslash{}\_init\textbackslash{}\_\textbackslash{}\_.version()}
+\code{./PyBoolNet/\_\_init\_\_.version()}
 
 \item {} 
 \code{./make\_release.sh \$VERSION}
@@ -6939,6 +7001,7 @@ Add correct tag:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} git tag \PYGZhy{}a v3.0
+\PYGZdl{} git push
 \end{Verbatim}
 
 Create Python packages:
