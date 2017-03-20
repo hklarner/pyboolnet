@@ -60,10 +60,7 @@ class TestUtility(unittest.TestCase):
         self.assertTrue(answer==expected, msg)
 
 class TestBooleanExpressions(unittest.TestCase):
-    # kommt bei espresso denn immer das gleiche raus? oder ist da irgendwo zufall drinne?
     def test_minimize_espresso(self):
-        # input der klappen sollte: datei mit einer fkt; eine fkt als string; datei mit mehreren; string mit mehreren
-        # flags testen?
         equation = "1"
         expected = "1"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
