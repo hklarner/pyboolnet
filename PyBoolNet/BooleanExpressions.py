@@ -86,15 +86,21 @@ def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Ech
 
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
     """
+    #file input
+    if (os.path.exists(Equation)):
+        with open(Equation, 'r') as fname:
+            Equation = fname.read()
+    assert(type(Equation) == str)
+    forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
+    assert(all(var not in Equation for var in forbidden))
     AddName = False
-    AddCol = False
+    AddColon = False
     if not ("=" in Equation):
         Equation = "Test = " + Equation
         AddName = True
     if not (";" in Equation):
         Equation = Equation + ";"
-        AddCol = True
-
+        AddColon = True
 
     eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
     espresso_cmd =[ESPRESSO_CMD, '-o', 'eqntott']
@@ -121,155 +127,23 @@ def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Ech
     if NoRedundancy == True:
         eqntott_cmd += ['-R']
 
-    # if input is file: read equation from file
-    if (os.path.exists(Equation)):
-        eqntott_cmd += [Equation]
-        PLA_Name = Equation
-    #if input is the equation as string
-    elif (type(Equation) == str):
-        eqntott_cmd += ['/dev/stdin']
-        eqntott_in = Equation
-    #wrong input
-    else:
-        print("File or function as string needed as Input")
-        raise Exception
-
+    eqntott_cmd += ['/dev/stdin']
+    eqntott_in = Equation
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-    espresso_out = run_espresso(espresso_cmd, eqntott_out)
-    espresso_out = re.sub(r'\.na .*\n', '\n', espresso_out)
+
+    if int(re.search(r'\.i\s\d+', eqntott_out).group().strip(".i "))>1:
+        espresso_out = run_espresso(espresso_cmd, eqntott_out)
+        espresso_out = re.sub(r'\.na .*\n', '\n', espresso_out)
+    else:
+        espresso_out = Equation
+
     if (AddName == True):
         espresso_out = espresso_out.replace('Test = ', '')
-    if (AddCol == True):
+    if (AddColon == True):
         espresso_out = espresso_out.replace(';', '')
 
     if (Outputfile == None):
-        print(espresso_out)
+        return(espresso_out.replace("\n", "").replace("\s", "").replace("\t", ""))
     else:
         with open(Outputfile, 'w') as results:
             results.write(espresso_out)
-
-
-
-def minimize_many_boolean(Equation, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
-    """
-    Tries to minimize multiple given boolean expression utilizing the heuristic minimization algorithm
-    espresso and eqntott for its input preparation. Resulting equations are saved in file if filename
-    for output is specified. The argument *Equation* may be either the name of the input file containing
-    the boolean expressions or the string representing the expressions itself. Each expression must
-
-    **arguments**:
-       * *Equation*: name of file containing the expressions or string contents of file
-       * *Outputfile*: name of the file to write the output to
-       * *summary*: provides a short summary including initial and final cost of the function
-       * *Merge*: performs distance-1 merge on input, useful if very large
-       * *Echo*: echoes the function to standard output
-       * *Equiv*: identifies equivalent output variables
-       * *Exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-       * *Stats*: provides simple statistics on the size of the function
-       * *Trace*: produces a trace showing the program execution, including current cost of function
-       * *Reduce*: :ref:`installation_eqntott` tries to reduce the size of the truth table by merging minterms
-       * *NoRedundancy*: forces eqntott to produce a truth table with no redundant terms
-
-
-    **returns**:
-       * *Minimized*: minimized result
-
-    **example**::
-
-          >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
-    """
-    # if input is file: read equations from file
-    if (os.path.exists(Equation)):
-        with open(Equation, 'r') as fname:
-            EquationString = fname.read()
-            PLA_Name = Equation
-    #if input is the equations as string
-    elif (type(Equation) == str):
-        EquationString = Equation
-    #wrong input
-    else:
-        print("File or function as string needed as Input")
-        raise Exception
-    espresso_out = ''
-    sep = ";"
-    for elem in EquationString.strip(sep).split(sep):
-        SingleEquation = elem + sep
-        espresso_temp = minimize_espresso(SingleEquation, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False)
-        print espresso_temp
-        espresso_out += re.sub(r'\.na .*\n', '\n', espresso_temp)
-
-    if (Outputfile == None):
-        print(espresso_out)
-    else:
-        with open(Outputfile, 'w') as results:
-            results.write(espresso_out)
-
-
-
-def minimize_MCOutput(Equation, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
-    """
-    Tries to minimize multiple given boolean expression utilizing the heuristic minimization algorithm
-    espresso and eqntott for its input preparation. Resulting equations are saved in file if filename
-    for output is specified. The argument *Equation* may be either the name of the input file containing
-    the boolean expressions or the string representing the expressions itself. Each expression must
-
-    **arguments**:
-       * *Equation*: name of file containing the expressions or string contents of file
-       * *Outputfile*: name of the file to write the output to
-       * *summary*: provides a short summary including initial and final cost of the function
-       * *Merge*: performs distance-1 merge on input, useful if very large
-       * *Echo*: echoes the function to standard output
-       * *Equiv*: identifies equivalent output variables
-       * *Exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-       * *Stats*: provides simple statistics on the size of the function
-       * *Trace*: produces a trace showing the program execution, including current cost of function
-       * *Reduce*: :ref:`installation_eqntott` tries to reduce the size of the truth table by merging minterms
-       * *NoRedundancy*: forces eqntott to produce a truth table with no redundant terms
-
-
-    **returns**:
-       * *Minimized*: minimized result
-
-    **example**::
-
-          >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
-    """
-    # if input is file: read equations from file
-    if (os.path.exists(Equation)):
-        with open(Equation, 'r') as fname:
-            EquationString = fname.read()
-            PLA_Name = Equation
-    #if input is the equations as string
-    elif (type(Equation) == str):
-        EquationString = Equation
-    #wrong input
-    else:
-        print("File or function as string needed as Input")
-        raise Exception
-
-    sep = ";"
-
-    EquationString = EquationString.replace(':', ' =')
-
-    EquationString = EquationString.replace(',', ';')
-    EquationString = EquationString.replace('})', '')
-    EquationString = EquationString.replace('({', '')
-    EquationString = EquationString.replace('\'', '')
-    EquationList = re.findall(r'ACCEPTING\s=.*?\;', EquationString)
-    EquationList += re.findall(r'INITACCEPTING\s=.*?\;', EquationString)
-
-    eqntott_cmd += ['/dev/stdin']
-    for elem in EquationList:
-        eqntott_in = elem.replace("'", "")
-        eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-        espresso_temp = run_espresso(espresso_cmd, eqntott_out)
-        espresso_out += re.sub(r'\.na .*\n', PLA_Name + '\n\n', espresso_temp)
-
-    if (Outputfile == None):
-        print(espresso_out)
-    else:
-        with open(Outputfile, 'w') as results:
-            results.write(espresso_out)
-
-
-

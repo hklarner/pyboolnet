@@ -61,65 +61,29 @@ class TestUtility(unittest.TestCase):
 
 class TestBooleanExpressions(unittest.TestCase):
     # kommt bei espresso denn immer das gleiche raus? oder ist da irgendwo zufall drinne?
-    def test_minimize_boolean(self):
+    def test_minimize_espresso(self):
         # input der klappen sollte: datei mit einer fkt; eine fkt als string; datei mit mehreren; string mit mehreren
         # flags testen?
-        fname_in = os.path.join(FILES_IN, "minimize_boolean_input.bnet")
-        primes = PyBoolNet.FileExchange.bnet2primes(fname_in)
-        update = "asynchronous"
-        init = "INIT TRUE"
-        spec = "CTLSPEC AF(EF(AURKAActive))"
-        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
-        equation = "Test = " + str(accepting["INITACCEPTING"]) + "; "
-        equation += equation
-        expected = '???'
-        answer = PyBoolNet.BooleanExpressions.minimize_many_boolean(equation)
+        equation = "1"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
+        msg = "\nexpected: "+str(expected.replace(" ", ""))
+        msg+= "\ngot:      "+str(answer.replace(" ", ""))
+        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
 
+        equation = "(a & b) | a"
+        expected = "(a)"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
+        msg = "\nexpected: "+str(expected.replace(" ", ""))
+        msg+= "\ngot:      "+str(answer.replace(" ", ""))
+        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
 
-
-    def test_minimize_many_boolean(self):
-        fname_in = os.path.join(FILES_IN, "minimize_boolean_input.bnet")
-        primes = PyBoolNet.FileExchange.bnet2primes(fname_in)
-        update = "asynchronous"
-        init = "INIT TRUE"
-        spec = "CTLSPEC AF(EF(AURKAActive))"
-        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
-        equation = "Test = " + str(accepting["INITACCEPTING"]) + ";"
-        expected = '???'
-        answer = PyBoolNet.BooleanExpressions.minimize_boolean(equation)
-
-
-
-
-
-
-#       def test_accepting_states(self):
-#        bnet = """
-#        Erk, Raf&Mek | Mek&Erk
-#   Mek, Raf&Mek | Erk
-#   Raf, !Raf | !Erk
-#        """
-#
-#        fname_out = os.path.join(FILES_OUT, "modelchecking_acceptingstates.smv")
-#        primes = PyBoolNet.FileExchange.bnet2primes(bnet)
-#
-#        spec = "CTLSPEC EF(!Erk&!Mek&Raf) &  EF(Erk&Mek&Raf)"
-#        init = "INIT TRUE"
-#        update = "asynchronous"
-#
-#        PyBoolNet.ModelChecking.primes2smv(primes, update, init, spec, fname_out)
-#        answer, accepting = PyBoolNet.ModelChecking.check_smv_with_acceptingstates(fname_out)
-#
-#        expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
-#        msg = "\nexpected: "+str(expected)
-#        msg+= "\ngot:      "+str(accepting)
-#        self.assertTrue(accepting==expected, msg)
-#
-#        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
-#        expected = {'ACCEPTING_SIZE': 3, 'INIT': 'TRUE', 'INIT_SIZE': 8, 'INITACCEPTING_SIZE': 3, 'INITACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))', 'ACCEPTING': '!(Erk & (Mek) | !Erk & ((Raf) | !Mek))'}
-#        msg = "\nexpected: "+str(expected)
-#        msg+= "\ngot:      "+str(accepting)
-#        self.assertTrue(accepting==expected, msg)
+        equation = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
+        expected = "Test = (!Cytokinesis&!CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | ( !STMN&!CentrosomeMat) | (!PLK1) | (!STMNCanAct&!Cytokinesis) | (!STMNCanAct&!STMN);"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
+        msg = "\nexpected: "+str(expected.replace(" ", ""))
+        msg+= "\ngot:      "+str(answer.replace(" ", ""))
+        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
 
 
 class TestAttractorBasins(unittest.TestCase):
