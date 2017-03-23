@@ -58,15 +58,15 @@ def run_espresso(espresso_cmd, eqntott_out):
 
 
 
-def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
+def minimize_espresso(Expression, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
     """
     Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
-    espresso and eqntott for its input preparation. Resulting equation is saved in file if filename
-    for output is specified. The argument *Equation* may be either the name of the input file containing
+    espresso and eqntott for its input preparation. Resulting expression is saved in file if filename
+    for output is specified. The argument *Expression* may be either the name of the input file containing
     the boolean expression or the string representing the expression itself.
 
     **arguments**:
-       * *Equation*: name of file containing the expression or string contents of file
+       * *Expression*: name of file containing the expression or string contents of file
        * *Outputfile*: name of the file to write the output to
        * *summary*: provides a short summary including initial and final cost of the function
        * *Merge*: performs distance-1 merge on input, useful if very large
@@ -87,19 +87,19 @@ def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Ech
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
     """
     #file input
-    if (os.path.exists(Equation)):
-        with open(Equation, 'r') as fname:
-            Equation = fname.read()
-    assert(type(Equation) == str)
+    if (os.path.isfile(Expression)):
+        with open(Expression, 'r') as fname:
+            Expression = fname.read()
+    assert(type(Expression) == str)
     forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
-    assert(all(var not in Equation for var in forbidden))
+    assert(all(var not in Expression for var in forbidden))
     AddName = False
     AddColon = False
-    if not ("=" in Equation):
-        Equation = "Test = " + Equation
+    if not ("=" in Expression):
+        Expression = "Test = " + Expression
         AddName = True
-    if not (";" in Equation):
-        Equation = Equation + ";"
+    if not (";" in Expression):
+        Expression = Expression + ";"
         AddColon = True
 
     eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
@@ -128,14 +128,14 @@ def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Ech
         eqntott_cmd += ['-R']
 
     eqntott_cmd += ['/dev/stdin']
-    eqntott_in = Equation
+    eqntott_in = Expression
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-
     if int(re.search(r'\.i\s\d+', eqntott_out).group().strip(".i "))>1:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
-        espresso_out = re.sub(r'\.na .*\n', '\n', espresso_out)
+        espresso_out = re.sub(r'\.na .*\n', '', espresso_out)
+        espresso_out = espresso_out.replace('&', ' & ')
     else:
-        espresso_out = Equation
+        espresso_out = Expression
 
     if (AddName == True):
         espresso_out = espresso_out.replace('Test = ', '')
@@ -143,7 +143,7 @@ def minimize_espresso(Equation, Outputfile=None, Summary=False, Merge=False, Ech
         espresso_out = espresso_out.replace(';', '')
 
     if (Outputfile == None):
-        return(espresso_out.replace("\n", "").replace("\s", "").replace("\t", ""))
+        return(espresso_out)
     else:
         with open(Outputfile, 'w') as results:
             results.write(espresso_out)

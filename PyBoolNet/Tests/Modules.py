@@ -75,9 +75,11 @@ class TestBooleanExpressions(unittest.TestCase):
         msg+= "\ngot:      "+str(answer.replace(" ", ""))
         self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
 
+
         equation = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
         expected = "Test = (!Cytokinesis&!CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | ( !STMN&!CentrosomeMat) | (!PLK1) | (!STMNCanAct&!Cytokinesis) | (!STMNCanAct&!STMN);"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
+
         msg = "\nexpected: "+str(expected.replace(" ", ""))
         msg+= "\ngot:      "+str(answer.replace(" ", ""))
         self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
