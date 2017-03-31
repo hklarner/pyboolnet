@@ -61,28 +61,27 @@ class TestUtility(unittest.TestCase):
 
 class TestBooleanExpressions(unittest.TestCase):
     def test_minimize_espresso(self):
-        equation = "1"
+        expression = "1"
         expected = "1"
-        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
-        msg = "\nexpected: "+str(expected.replace(" ", ""))
-        msg+= "\ngot:      "+str(answer.replace(" ", ""))
-        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
 
-        equation = "(a & b) | a"
+        expression = "(a & b) | a"
         expected = "(a)"
-        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
-        msg = "\nexpected: "+str(expected.replace(" ", ""))
-        msg+= "\ngot:      "+str(answer.replace(" ", ""))
-        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        print answer
+        self.assertTrue(answer==expected, msg)
 
-
-        equation = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
-        expected = "Test = (!Cytokinesis&!CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | ( !STMN&!CentrosomeMat) | (!PLK1) | (!STMNCanAct&!Cytokinesis) | (!STMNCanAct&!STMN);"
-        answer = PyBoolNet.BooleanExpressions.minimize_espresso(equation)
-
-        msg = "\nexpected: "+str(expected.replace(" ", ""))
-        msg+= "\ngot:      "+str(answer.replace(" ", ""))
-        self.assertTrue(answer.replace(" ", "")==expected.replace(" ", ""), msg)
+        expression = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
+        expected = "Test = (!Cytokinesis & !CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | (!STMN & !CentrosomeMat) | (!PLK1) | (!STMNCanAct & !Cytokinesis) | (!STMNCanAct & !STMN);"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
 
 
 class TestAttractorBasins(unittest.TestCase):

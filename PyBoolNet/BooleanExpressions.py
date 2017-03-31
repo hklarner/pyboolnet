@@ -58,26 +58,22 @@ def run_espresso(espresso_cmd, eqntott_out):
 
 
 
-def minimize_espresso(Expression, Outputfile=None, Summary=False, Merge=False, Echo=False, Equiv=False, Exact=False, Stats=False, Trace=False, Reduce=False, NoRedundancy=False):
+def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exact=False, Reduce=False):
     """
     Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
-    espresso and eqntott for its input preparation. Resulting expression is saved in file if filename
-    for output is specified. The argument *Expression* may be either the name of the input file containing
-    the boolean expression or the string representing the expression itself.
+    :ref:`_espresso` and :ref:`_eqntott` for its input preparation. Resulting expression is saved
+    in file if filename for output is specified. The argument *Expression* may be either the name
+    of the input file containing the boolean expression or the string representing the expression
+    itself. The input expression may not contain the following words: *False*, *FALSE*, *True*,
+    *TRUE*, *Zero*, *ZERO*, *One*, *ONE*.
 
     **arguments**:
        * *Expression*: name of file containing the expression or string contents of file
        * *Outputfile*: name of the file to write the output to
-       * *summary*: provides a short summary including initial and final cost of the function
        * *Merge*: performs distance-1 merge on input, useful if very large
-       * *Echo*: echoes the function to standard output
        * *Equiv*: identifies equivalent output variables
        * *Exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-       * *Stats*: provides simple statistics on the size of the function
-       * *Trace*: produces a trace showing the program execution, including current cost of function
        * *Reduce*: :ref:`installation_eqntott` tries to reduce the size of the truth table by merging minterms
-       * *NoRedundancy*: forces *eqntott* to produce a truth table with no redundant terms
-
 
     **returns**:
        * *Minimized*: minimized result
@@ -85,6 +81,10 @@ def minimize_espresso(Expression, Outputfile=None, Summary=False, Merge=False, E
     **example**::
 
           >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
+          >>> minimized = minimize_boolean("var = (a & b) | a;")
+          >>> minimized = minimize_boolean("var = 1")
+          >>> minimized = minimize_boolean("(a & b) | a")
+
     """
     #file input
     if (os.path.isfile(Expression)):
@@ -108,24 +108,15 @@ def minimize_espresso(Expression, Outputfile=None, Summary=False, Merge=False, E
     espresso_out = ''
     PLA_Name = 'Standard Input'
 
-    if Summary == True:
-        espresso_cmd += ['-s']
     if Merge == True:
         espresso_cmd += ['-Dd1merge']
-    if Echo == True:
-        espresso_cmd += ['-Decho']
     if Equiv == True:
         espresso_cmd += ['-Dequiv']
     if Exact == True:
         espresso_cmd += ['-Dexact']
-    if Stats == True:
-        espresso_cmd += ['-Dstats']
-    if Trace == True:
-        espresso_cmd += ['-t']
     if Reduce == True:
         eqntott_cmd += ['-r']
-    if NoRedundancy == True:
-        eqntott_cmd += ['-R']
+
 
     eqntott_cmd += ['/dev/stdin']
     eqntott_in = Expression
@@ -133,6 +124,9 @@ def minimize_espresso(Expression, Outputfile=None, Summary=False, Merge=False, E
     if int(re.search(r'\.i\s\d+', eqntott_out).group().strip(".i "))>1:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
         espresso_out = re.sub(r'\.na .*\n', '', espresso_out)
+        espresso_out = re.sub(r'\s', '', espresso_out)
+        espresso_out = espresso_out.replace('|', ' | ')
+        espresso_out = espresso_out.replace('=', ' = ')
         espresso_out = espresso_out.replace('&', ' & ')
     else:
         espresso_out = Expression
