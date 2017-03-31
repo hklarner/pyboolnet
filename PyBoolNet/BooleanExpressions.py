@@ -61,7 +61,7 @@ def run_espresso(espresso_cmd, eqntott_out):
 def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exact=False, Reduce=False):
     """
     Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
-    :ref:`_espresso` and :ref:`_eqntott` for its input preparation. Resulting expression is saved
+    `espresso <http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer>`_ and `eqntott <https://code.google.com/archive/p/eqntott/>`_ for its input preparation. Resulting expression is saved
     in file if filename for output is specified. The argument *Expression* may be either the name
     of the input file containing the boolean expression or the string representing the expression
     itself. The input expression may not contain the following words: *False*, *FALSE*, *True*,
@@ -73,7 +73,7 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
        * *Merge*: performs distance-1 merge on input, useful if very large
        * *Equiv*: identifies equivalent output variables
        * *Exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-       * *Reduce*: :ref:`installation_eqntott` tries to reduce the size of the truth table by merging minterms
+       * *Reduce*: eqntott tries to reduce the size of the truth table by merging minterms
 
     **returns**:
        * *Minimized*: minimized result

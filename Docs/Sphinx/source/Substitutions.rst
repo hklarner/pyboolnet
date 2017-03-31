@@ -24,8 +24,6 @@
 .. _Potassco:     http://potassco.sourceforge.net/
 .. _clasp:        http://potassco.sourceforge.net/#clasp
 .. _gringo:       http://potassco.sourceforge.net/#gringo
-.. _eqntott       https://code.google.com/archive/p/eqntott/ 
-.. _espresso      http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer
 
 .. _networkx.has_path: https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html
 
