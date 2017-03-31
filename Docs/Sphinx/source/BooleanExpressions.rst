@@ -4,16 +4,10 @@ BooleanExpressions
 ==================
 
 
-.. _minimize_boolean:
+.. _minimize_espresso:
 
-minimize_boolean
+minimize_espresso
 ----------------
 
-.. autofunction:: PyBoolNet.BooleanExpressions.minimize_boolean
+.. autofunction:: PyBoolNet.BooleanExpressions.minimize_espresso
 
-.. _minimize_boolean:
-
-minimize_many_boolean
----------------------
-
-.. autofunction:: PyBoolNet.BooleanExpressions.minimize_boolean
