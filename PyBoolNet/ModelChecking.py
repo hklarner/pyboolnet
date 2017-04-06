@@ -74,6 +74,9 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     out, err = proc.communicate()
     out = out.decode()
 
+    if os.path.isfile(tmpfname):
+        os.remove(tmpfname)
+
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False, SMVstr=smvfile)
 
 
@@ -124,6 +127,9 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
+
+    if os.path.isfile(tmpfname):
+        os.remove(tmpfname)
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
 
@@ -182,6 +188,9 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
+
+    if os.path.isfile(tmpfname):
+        os.remove(tmpfname)
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
 
