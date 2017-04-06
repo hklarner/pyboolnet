@@ -12,6 +12,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 #### release notes for version
+- bugfix in `subspace2proposition`
 - renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
 
 
