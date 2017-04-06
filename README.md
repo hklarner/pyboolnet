@@ -11,7 +11,8 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for version 2.2 (...)
+#### release notes for version
+- renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
 
 
 #### release notes for version 2.11 (February 2017)

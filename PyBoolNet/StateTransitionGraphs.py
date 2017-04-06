@@ -1242,11 +1242,11 @@ def A_is_subspace_of_B(Primes, A, B):
           True
     """
 
-    if type(Subspace1)==str:
-        Subspace1 = subspace2dict(Primes,Subspace1)
-    if type(Subspace2)==str:
-        Subspace2 = subspace2dict(Primes,Subspace2)
+    if type(A)==str:
+        A = subspace2dict(Primes,A)
+    if type(B)==str:
+        B = subspace2dict(Primes,B)
 
-    return set(Subspace1.items()).issuperset(set(Subspace2.items()))
+    return set(A.items()).issuperset(set(B.items()))
 
     
