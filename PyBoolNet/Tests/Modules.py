@@ -123,15 +123,15 @@ class TestStateTransitionGraphs(unittest.TestCase):
         answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","0--")
         self.assertFalse(answer)
     
-    def test_subspace1_is_in_subspace2(self):
+    def test_A_is_subspace_of_B(self):
         primes = ["a","b","c","d"]
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, {"a":1,"b":1,"c":0},{"a":1})
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes, {"a":1,"b":1,"c":0},{"a":1})
         self.assertTrue(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, "110-","1---")
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes, "110-","1---")
         self.assertTrue(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,{"a":1,"b":1,"c":0},{"a":0})
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes,{"a":1,"b":1,"c":0},{"a":0})
         self.assertFalse(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,"110-","0---")
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes,"110-","0---")
         self.assertFalse(answer)
     
     def test_list_states_referenced_by_proposition(self):

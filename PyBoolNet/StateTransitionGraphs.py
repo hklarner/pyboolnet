@@ -1224,21 +1224,21 @@ def state_is_in_subspace(Primes, State, Subspace):
     
     
 
-def subspace1_is_in_subspace2(Primes, Subspace1, Subspace2):
+def A_is_subspace_of_B(Primes, A, B):
     """
-    Checks whether *State* is a state in *Subspace*.
+    Checks whether *A* is a subspace of *B*.
 
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (str/dict): a state
-        * *Subspace* (str/dict): a subspace
+        * *A* (str/dict): a subspace
+        * *B* (str/dict): a subspace
 
     **returns**:
-        * *Answer* (bool): whether *State* is a state in *Subspace*
+        * *Answer* (bool): whether *A* is a subspace of *B*
         
     **example**::
 
-          >>> subspace1_is_in_subspace2(Primes, Subspace1, Subspace2)
+          >>> A_is_subspace_of_B(Primes, A, B)
           True
     """
 

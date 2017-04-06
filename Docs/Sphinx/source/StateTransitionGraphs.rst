@@ -110,12 +110,12 @@ state_is_in_subspace
 .. autofunction:: PyBoolNet.StateTransitionGraphs.state_is_in_subspace
 
 
-.. _subspace1_is_in_subspace2:
+.. _A_is_subspace_of_B:
 
-subspace1_is_in_subspace2
--------------------------
+A_is_subspace_of_B
+------------------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2
+.. autofunction:: PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B
 
 
 .. _list_states_in_subspace:
