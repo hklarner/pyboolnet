@@ -12,6 +12,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 #### release notes for version
+- implemented tempfile for functions `check_primes(..)`, `check_primes_with_counterexample(..)` and `check_primes_with_acceptingstates(..)` (bugfix for windows)
 - bugfix in `subspace2proposition`
 - renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
 

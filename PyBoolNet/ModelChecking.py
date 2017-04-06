@@ -1,6 +1,7 @@
 
 
 import os, sys
+import tempfile
 import subprocess
 import unittest
 import ast
@@ -63,15 +64,15 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     if ConeOfInfluence:
         cmd+= ['-coi']
 
-    # needed, since NuSMV 2.6.0 doesn't accept stdin as input
-    cmd+= ["/dev/stdin"]
-
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None)
+    tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
+    tmpfname = tmpfile.name
+    tmpfile.close()
+    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname)
     
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate(input=smvfile.encode())
+    cmd+= [tmpfname]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
     out = out.decode()
-    proc.stdin.close()
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False, SMVstr=smvfile)
 
@@ -114,15 +115,15 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     if DisableReachableStates:
         cmd+= ['-df']
 
-    # needed, since NuSMV 2.6.0 doesn't accept stdin as input
-    cmd+= ["/dev/stdin"]
-
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None)
+    tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
+    tmpfname = tmpfile.name
+    tmpfile.close()
+    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname)
     
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate(input=smvfile.encode())
+    cmd+= [tmpfname]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
     out = out.decode()
-    proc.stdin.close()
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
 
@@ -172,15 +173,15 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     # enforced to ensure accepting states are correct
     cmd+= ['-df']
     
-    # needed, since NuSMV 2.6.0 doesn't accept stdin as input
-    cmd+= ["/dev/stdin"]
-
-    smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=None)
+    tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
+    tmpfname = tmpfile.name
+    tmpfile.close()
+    smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname)
     
-    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate(input=smvfile.encode())
+    cmd+= [tmpfname]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
     out = out.decode()
-    proc.stdin.close()
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
 
