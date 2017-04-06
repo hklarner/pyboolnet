@@ -67,7 +67,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
     tmpfile.close()
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname)
+    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -121,7 +121,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
     tmpfile.close()
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname)
+    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -182,7 +182,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
     tmpfile.close()
-    smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname)
+    smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -332,7 +332,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
 
-def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
+def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Silent=False):
     """
     Creates a NuSMV_ file from Primes and additional parameters that specify the update strategy, the initial states and the temporal logic specification.
 
@@ -360,6 +360,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
         * *InitialStates* (str): a :ref:`installation_nusmv` expression for the initial states, including the keyword *INIT*
         * *Specification* (str): a :ref:`installation_nusmv` formula, including the keyword *LTLSPEC* or *CTLSPEC*
         * *FnameSMV* (str): name for *smv* file or *None*
+        * *Silent* (bool): mutes print statement for file creation
 
     **returns**:
        * *FileSMV* (str): file as string or *None* if *FnameSMV==None*
@@ -478,7 +479,9 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None):
     
     with open(FnameSMV, 'w') as f:
         f.write('\n'.join(lines))
-    print('created %s'%FnameSMV)
+
+    if not Silent:
+        print('created %s'%FnameSMV)
 
 
 
