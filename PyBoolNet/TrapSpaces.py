@@ -252,7 +252,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project):
              ':- in_set(ID1), source(V,S,ID1), not in_set(ID2) : target(V,S,ID2).',
              '',
              '% bijection constraint (bijection between solutions and trap spaces)',
-             'in_set(ID) :- target(V,S,ID); hit(V1,S1) : source(V1,S1,ID); hit(V2,S2) : target(V2,S2,ID).',
+             'in_set(ID) :- target(V,S,ID), hit(V,S), hit(V1,S1) : source(V1,S1,ID).',
              ]
     
     lines+= ['',
