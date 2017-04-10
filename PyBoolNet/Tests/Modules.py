@@ -805,6 +805,24 @@ class TestModelChecking(unittest.TestCase):
 
 
 class TestTrapSpaces(unittest.TestCase):
+
+    def test_percolated_trapspaces(self):
+        primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
+
+        
+        all_ = PyBoolNet.TrapSpaces.trap_spaces(primes, "all", MaxOutput=200)
+        expected = set(PyBoolNet.StateTransitionGraphs.subspace2str(primes,PyBoolNet.TrapSpaces.percolate_trapspace(primes, x)) for x in all_)
+        answer   = set(PyBoolNet.TrapSpaces.trap_spaces(primes, "percolated", Representation="str"))
+
+        msg = "\nexpected: %i percolated tspaces"%len(expected)
+        msg+= "\ngot:      %i percolated tspaces"%len(answer)
+        self.assertTrue(len(expected)==len(answer),msg)
+
+        msg = "\nexpected: (e.g) %s"%expected.pop()
+        msg+= "\ngot:      (e.g) %s"%answer.pop()
+        self.assertTrue(expected==answer,msg)
+            
+    
     def test_percolate_trapspace(self):
         primes = PyBoolNet.Repository.get_primes("raf")
 
@@ -1702,7 +1720,7 @@ if __name__=="__main__":
     if 1:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestTrapSpaces("test_percolate_trapspace"))
+        suite.addTest(TestTrapSpaces("test_percolated_trapspaces"))
         
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
