@@ -141,8 +141,21 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
 
+    The accepting states are a dictionary with the following keywords:
+        * `INIT`: a Boolean expression for the initial states, or `None`, see note below
+        * `INIT_SIZE`: integer number of initial states, or `None`, see note below
+        * `ACCEPTING`: a Boolean expression for the accepting states
+        * `ACCEPTING_SIZE`: integer number of accepting states
+        * `INITACCEPTING`: a Boolean expression for the intersection of initial and accepting states, or `None`, see note below
+        * `INITACCEPTING_SIZE`: integer number of states in the intersection of initial and accepting states, or `None`, see note below
+
     .. note::
         *DisableReachableStates* is enforced as the accepting states are otherwise over-approximated.
+
+    .. note::
+        If the *CTLSpec* is equivalent to either `TRUE` or `FALSE` then NuSMV will not compute the initial states,
+        because it does not have to to find out what the *Answer* to the query is.
+        In that case the four values that involve the initial states are set to `None`.
         
     **arguments**:
         * *Primes*: prime implicants
@@ -290,10 +303,11 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
 
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
+
+    See :ref:`check_primes_with_acceptingstates` for details regarding the returned *AcceptingStates* dictionary.
     
     .. note::
-        It is currently required that *FnameSMV* contains a single CTL formula.
-        For future versions it is planned that :ref:`check_smv` returns a dictionary of answers.
+        It is required that *FnameSMV* contains a single CTL formula.
         
     **arguments**:
         * *FnameSMV*: name of smv file
@@ -467,8 +481,6 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
         lines+= ['\tnext({n}) := {{{n}, {n}_IMAGE}};'.format(n=name) for name in names]
         lines+= ['','TRANS '+ ' | '.join(['STEADYSTATE']+['(next({n})!={n})'.format(n=name) for name in names])+';']
 
-    
-        
     lines+= ['','']
     lines+= [InitialStates]
     lines+= ['']
@@ -482,12 +494,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
     if not Silent:
         print('created %s'%FnameSMV)
-
-
-
-
-
-
+        
 
 def output2counterexample( NuSMVOutput ):
     """
@@ -549,7 +556,7 @@ def _read_number(Line):
         return int(Line)
 
 
-def output2acceptingstates( NuSMVOutput ):
+def output2acceptingstates(NuSMVOutput):
     """
     Converts the output of a NuSMV call into an accepting states dictionary that contains information about the initial states,
     accepting states and accepting and initial.
@@ -643,11 +650,19 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
     result = [answer]
     
     if not DisableCounterExamples:
-        counterex = output2counterexample( NuSMVOutput=Output )
+        counterex = output2counterexample(NuSMVOutput=Output)
         result.append(counterex)
 
     if AcceptingStates:
-        accepting = output2acceptingstates( NuSMVOutput=Output )
+        accepting = output2acceptingstates(NuSMVOutput=Output)
+
+        # safety for initial states bug, see: 
+        if accepting["ACCEPTING"] in ["TRUE","FALSE"]:
+            accepting["INIT"] = None
+            accepting["INIT_SIZE"] = None
+            accepting["INITACCEPTING"] = None
+            accepting["INITACCEPTING_SIZE"] = None
+            
         result.append(accepting)
 
     return tuple(result)
