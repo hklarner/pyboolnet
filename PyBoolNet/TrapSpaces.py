@@ -156,6 +156,40 @@ def steady_states(Primes, MaxOutput=100, FnameASP=None, Representation="dict"):
     return potassco_handle(Primes, Type="all", Bounds=("n","n"), Project=[], MaxOutput=MaxOutput, Aggregate=False, FnameASP=FnameASP, Representation=Representation)
 
 
+def trap_spaces_bounded(Primes, Type, Bounds, MaxOutput=100, FnameASP=None):
+    """
+    Returns a list of bounded trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
+    See :ref:`trap_spaces <sec:trap_spaces>` for details of the parameters *Type*, *MaxOutput* and *FnameASP*.
+    The parameter *Bounds* is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
+    to those whose number of fixed variables are within the given range.
+    Example: ``Bounds=(5,8)`` instructs Potassco_ to consider only trap spaces with 5 to 8 fixed variables as feasible.
+    *Type* selects minimal, maximal or all trap spaces from the restricted set.
+    .. warning::
+        The *Bound* constraint is applied *before* selecting minimal or maximal trap spaces.
+        A trap space may therefore be minimal w.r.t. to certain bounds but not minimal in the unbounded sense.
+    
+    Use ``"n"`` as a shortcut for "all variables", i.e., instead of ``len(Primes)``.
+    Example: Use ``Bounds=("n","n")`` to compute steady states.
+    Note that the parameter *Type* becomes irrelevant for ``Bounds=(x,y)`` with ``x=y``.
+    
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Type* in ``["max","min","all"]``: subset minimal, subset maximal or all solutions
+        * *Bounds* (tuple): the upper and lower bound for the number of fixed variables
+        * *MaxOutput* (int): maximal number of trap spaces to return
+        * *FnameASP*: file name or *None*
+    **returns**:
+        * list of trap spaces
+    **example**::
+        >>> tspaces = trap_spaces_bounded(primes, "min", (2,4))
+        >>> len(tspaces)
+        12
+        >>> tspaces[0]
+        {'TGFR':0,'FGFR':0}
+    """
+    
+    return potassco_handle(Primes, Type, Bounds, Project=None, MaxOutput=MaxOutput, Aggregate=False, FnameASP=FnameASP, Representation="dict")
+
 
 def steady_states_projected(Primes, Project, Aggregate=False, MaxOutput=100, FnameASP=None):
     """
@@ -212,7 +246,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Percolate):
        * *FnameASP*: name of *ASP* file or None
        * *Bounds* (tuple): cardinality constraint for the number of fixed variables
        * *Project* (list): names to project to or *None* for no projection
-       * *Percolate* (bool): whether percolation trap spaces should be computable
+       * *Percolate* (bool): enforces percolation constraint on trap spaces
 
     **returns**:
        * *FileASP* (str): file as string if not *FnameASP==None* and *None* otherwise
@@ -397,7 +431,7 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, Aggregate, FnameAS
             tspaces.append( dict(d) )
 
     if len(tspaces)==MaxOutput:
-        print("There are possibly more than %i trap space."%MaxOutput)
+        print("There are possibly more than %i trap spaces."%MaxOutput)
         print("Increase MaxOutput to find out.")
 
 
