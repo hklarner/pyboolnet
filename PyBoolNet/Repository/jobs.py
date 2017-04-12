@@ -15,7 +15,8 @@ if __name__=="__main__":
 
     for subdir, _, files in os.walk(rootdir):
         for fname in files:
-            if fname not in ["remy_tumorigenesis.bnet"]: continue#,"klamt_tcr.bnet","grieco_mapk.bnet"]: continue
+            if fname not in ["remy_tumorigenesis.bnet", "jaoude_thdiff"]:
+                continue
             
             if fname.split(".")[1]=="bnet":
                 primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(subdir,fname))

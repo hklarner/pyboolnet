@@ -95,7 +95,7 @@ class TestQuineMcCluskey(unittest.TestCase):
                       'v3': lambda : False, 'v4': lambda v3: v3 or not v3}
 
         answer = PyBoolNet.QuineMcCluskey.functions2mindnf(bfunctions)
-        expected = {'v1': '((! v2) | v1)', 'v2': '(! v1)', 'v3': '0', 'v4': '1'}
+        expected = {'v1': '!v2 | v1', 'v2': '!v1', 'v3': '0', 'v4': '1'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -104,7 +104,7 @@ class TestQuineMcCluskey(unittest.TestCase):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
 
         answer = PyBoolNet.QuineMcCluskey.primes2mindnf(primes)
-        expected = {'A': '0', 'C': '(B & (! A))', 'B': '1'}
+        expected = {'A': '0', 'C': 'B&!A', 'B': '1'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -1511,7 +1511,7 @@ class TestFileExchange(unittest.TestCase):
         
         for i, (cbounds, cproj) in enumerate(itertools.product([None,(1,2)],[None,['A','B']])):
             fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case%i.asp"%i)
-            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj)
+            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Percolate=False)
         ## no assertion ##
 
 
@@ -1713,11 +1713,11 @@ if __name__=="__main__":
 
 
     
-    if 0:
+    if 1:
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
         suite.addTest(TestTrapSpaces("test_percolated_trapspaces"))

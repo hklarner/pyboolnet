@@ -11,17 +11,35 @@ trap_spaces
 -----------
 .. autofunction:: PyBoolNet.TrapSpaces.trap_spaces
 
+
+
+
 .. _steady_states:
 
 steady_states
 -------------
 .. autofunction:: PyBoolNet.TrapSpaces.steady_states
 
+
+
+
+.. _trap_spaces_bounded:
+
+trap_spaces_bounded
+-------------------
+.. autofunction:: PyBoolNet.TrapSpaces.trap_spaces_bounded
+
+
+
+
 .. _steady_states_projected:
 
 steady_states_projected
 -----------------------
 .. autofunction:: PyBoolNet.TrapSpaces.steady_states_projected
+
+
+
 
 .. _primes2asp:
 

@@ -14,7 +14,7 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{March 16, 2017}
+\date{April 12, 2017}
 \release{2.11}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
@@ -4255,7 +4255,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x434d32cc\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43599e9c\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -4783,28 +4783,28 @@ Checks whether \emph{State} is a state in \emph{Subspace}.
 
 
 
-\subsection{subspace1\_is\_in\_subspace2}
-\label{StateTransitionGraphs:subspace1-is-in-subspace2}\label{StateTransitionGraphs:id13}\index{subspace1\_is\_in\_subspace2() (in module PyBoolNet.StateTransitionGraphs)}
+\subsection{A\_is\_subspace\_of\_B}
+\label{StateTransitionGraphs:a-is-subspace-of-b}\label{StateTransitionGraphs:id13}\index{A\_is\_subspace\_of\_B() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2}\pysiglinewithargsret{\bfcode{subspace1\_is\_in\_subspace2}}{\emph{Primes}, \emph{Subspace1}, \emph{Subspace2}}{}
-Checks whether \emph{State} is a state in \emph{Subspace}.
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B}\pysiglinewithargsret{\bfcode{A\_is\_subspace\_of\_B}}{\emph{Primes}, \emph{A}, \emph{B}}{}
+Checks whether \emph{A} is a subspace of \emph{B}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
 \emph{Primes}: prime implicants
 
 \item {} 
-\emph{State} (str/dict): a state
+\emph{A} (str/dict): a subspace
 
 \item {} 
-\emph{Subspace} (str/dict): a subspace
+\emph{B} (str/dict): a subspace
 
 \end{itemize}
 
 \item[{\textbf{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\emph{Answer} (bool): whether \emph{State} is a state in \emph{Subspace}
+\emph{Answer} (bool): whether \emph{A} is a subspace of \emph{B}
 
 \end{itemize}
 
@@ -4813,7 +4813,7 @@ Checks whether \emph{State} is a state in \emph{Subspace}.
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{subspace1\PYGZus{}is\PYGZus{}in\PYGZus{}subspace2}\PYG{p}{(}\PYG{n}{Primes}\PYG{p}{,} \PYG{n}{Subspace1}\PYG{p}{,} \PYG{n}{Subspace2}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{A\PYGZus{}is\PYGZus{}subspace\PYGZus{}of\PYGZus{}B}\PYG{p}{(}\PYG{n}{Primes}\PYG{p}{,} \PYG{n}{A}\PYG{p}{,} \PYG{n}{B}\PYG{p}{)}
 \PYG{g+go}{True}
 \end{Verbatim}
 
@@ -6009,9 +6009,38 @@ Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whethe
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
 See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+\begin{description}
+\item[{The accepting states are a dictionary with the following keywords:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{INIT}: a Boolean expression for the initial states, or \emph{None}, see note below
+
+\item {} 
+\emph{INIT\_SIZE}: integer number of initial states, or \emph{None}, see note below
+
+\item {} 
+\emph{ACCEPTING}: a Boolean expression for the accepting states
+
+\item {} 
+\emph{ACCEPTING\_SIZE}: integer number of accepting states
+
+\item {} 
+\emph{INITACCEPTING}: a Boolean expression for the intersection of initial and accepting states, or \emph{None}, see note below
+
+\item {} 
+\emph{INITACCEPTING\_SIZE}: integer number of states in the intersection of initial and accepting states, or \emph{None}, see note below
+
+\end{itemize}
+
+\end{description}
 
 \begin{notice}{note}{Note:}
 \emph{DisableReachableStates} is enforced as the accepting states are otherwise over-approximated.
+\end{notice}
+
+\begin{notice}{note}{Note:}
+If the \emph{CTLSpec} is equivalent to either \emph{TRUE} or \emph{FALSE} then NuSMV will not compute the initial states,
+because it does not have to to find out what the \emph{Answer} to the query is.
+In that case the four values that involve the initial states are set to \emph{None}.
 \end{notice}
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6169,9 +6198,10 @@ The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{Nu
 
 See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
 
+See {\hyperref[ModelChecking:check-primes-with-acceptingstates]{\emph{check\_primes\_with\_acceptingstates}}} for details regarding the returned \emph{AcceptingStates} dictionary.
+
 \begin{notice}{note}{Note:}
-It is currently required that \emph{FnameSMV} contains a single CTL formula.
-For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph{check\_smv}}} returns a dictionary of answers.
+It is required that \emph{FnameSMV} contains a single CTL formula.
 \end{notice}
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6210,7 +6240,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 \label{ModelChecking:id8}\label{ModelChecking:primes2smv}\index{primes2smv() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
-\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.primes2smv}\pysiglinewithargsret{\bfcode{primes2smv}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{FnameSMV=None}}{}
+\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.primes2smv}\pysiglinewithargsret{\bfcode{primes2smv}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{FnameSMV=None}, \emph{Silent=False}}{}
 Creates a \href{http://nusmv.fbk.eu}{NuSMV} file from Primes and additional parameters that specify the update strategy, the initial states and the temporal logic specification.
 
 The initial states must be defined in {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} syntax, i.e.,
@@ -6247,6 +6277,9 @@ the Boolean \emph{STEADYSTATE} which is the value for whether the current state 
 
 \item {} 
 \emph{FnameSMV} (str): name for \emph{smv} file or \emph{None}
+
+\item {} 
+\emph{Silent} (bool): mutes print statement for file creation
 
 \end{itemize}
 
@@ -6468,12 +6501,12 @@ Typically this query is used to define INIT constraints from a given subspace.
 \label{TrapSpaces:id2}\label{TrapSpaces:trap-spaces}\index{trap\_spaces() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=100}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns a list of trap spaces using the {\hyperref[Installation:installation-potassco]{\emph{Potassco}}} ASP solver, see {\hyperref[Bibliography:gebser2011]{\emph{Gebser2011}}}.
 For a formal introcution to trap spaces and the ASP encoding that is used for their computation see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
-The parameter \emph{Type} must be one of \emph{``max''}, \emph{``min''} or \emph{``all''} and
-specifies whether subset minimal, subset maximal or all trap spaces should be returned.
+The parameter \emph{Type} must be one of \emph{``max''}, \emph{``min''}, \emph{``all''} or \emph{``percolated''} and
+specifies whether subset minimal, subset maximal, all trap spaces or all percolated trap spaces should be returned.
 
 \begin{notice}{warning}{Warning:}
 The number of trap spaces is easily exponential in the number of components.
@@ -6487,13 +6520,16 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 \emph{Primes}: prime implicants
 
 \item {} 
-\emph{Type} (str): either \emph{``max''}, \emph{``min''} or \emph{``all''}
+\emph{Type} (str): either \emph{``max''}, \emph{``min''}, \emph{``all''} or \emph{``percolated''}
 
 \item {} 
 \emph{MaxOutput} (int): maximal number of trap spaces to return
 
 \item {} 
 \emph{FnameASP} (str): name of \emph{asp} file to create, or \emph{None}
+
+\item {} 
+\emph{Representation} (str): either ``str'' or ``dict'', the representation of the trap spaces
 
 \end{itemize}
 
@@ -6513,8 +6549,7 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, x\PYGZam{}y \textbar{} z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{all}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{, }\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{tspaces}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{all}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{Representation}\PYG{o}{=}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{str}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}, \PYGZhy{}\PYGZhy{}1, 1\PYGZhy{}1, \PYGZhy{}00, 101}
 \end{Verbatim}
 
@@ -6526,7 +6561,7 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 \label{TrapSpaces:steady-states}\label{TrapSpaces:id3}\index{steady\_states() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=100}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns steady states.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6538,6 +6573,9 @@ Returns steady states.
 
 \item {} 
 \emph{FnameASP}: file name or \emph{None}
+
+\item {} 
+\emph{Representation} (str): either ``str'' or ``dict'', the representation of the trap spaces
 
 \end{itemize}
 
@@ -6561,8 +6599,69 @@ Returns steady states.
 
 
 
+\subsection{trap\_spaces\_bounded}
+\label{TrapSpaces:trap-spaces-bounded}\label{TrapSpaces:id4}\index{trap\_spaces\_bounded() (in module PyBoolNet.TrapSpaces)}
+
+\begin{fulllineitems}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces_bounded}\pysiglinewithargsret{\bfcode{trap\_spaces\_bounded}}{\emph{Primes}, \emph{Type}, \emph{Bounds}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
+Returns a list of bounded trap spaces using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
+See \emph{trap\_spaces} for details of the parameters \emph{Type}, \emph{MaxOutput} and \emph{FnameASP}.
+The parameter \emph{Bounds} is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
+to those whose number of fixed variables are within the given range.
+Example: \code{Bounds=(5,8)} instructs \href{http://potassco.sourceforge.net/}{Potassco} to consider only trap spaces with 5 to 8 fixed variables as feasible.
+\emph{Type} selects minimal, maximal or all trap spaces from the restricted set.
+.. warning:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+The *Bound* constraint is applied *before* selecting minimal or maximal trap spaces.
+A trap space may therefore be minimal w.r.t. to certain bounds but not minimal in the unbounded sense.
+\end{Verbatim}
+
+Use \code{"n"} as a shortcut for ``all variables'', i.e., instead of \code{len(Primes)}.
+Example: Use \code{Bounds=("n","n")} to compute steady states.
+Note that the parameter \emph{Type} becomes irrelevant for \code{Bounds=(x,y)} with \code{x=y}.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{Type} in \code{{[}"max","min","all"{]}}: subset minimal, subset maximal or all solutions
+
+\item {} 
+\emph{Bounds} (tuple): the upper and lower bound for the number of fixed variables
+
+\item {} 
+\emph{MaxOutput} (int): maximal number of trap spaces to return
+
+\item {} 
+\emph{FnameASP}: file name or \emph{None}
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+list of trap spaces
+
+\end{itemize}
+
+\item[{\textbf{example}::}] \leavevmode
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces} \PYG{o}{=} \PYG{n}{trap\PYGZus{}spaces\PYGZus{}bounded}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{tspaces}\PYG{p}{)}
+\PYG{g+go}{12}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{g+go}{\PYGZob{}\PYGZsq{}TGFR\PYGZsq{}:0,\PYGZsq{}FGFR\PYGZsq{}:0\PYGZcb{}}
+\end{Verbatim}
+
+\end{description}
+
+\end{fulllineitems}
+
+
+
 \subsection{steady\_states\_projected}
-\label{TrapSpaces:steady-states-projected}\label{TrapSpaces:id4}\index{steady\_states\_projected() (in module PyBoolNet.TrapSpaces)}
+\label{TrapSpaces:steady-states-projected}\label{TrapSpaces:id5}\index{steady\_states\_projected() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
 \phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{Aggregate=False}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
@@ -6609,10 +6708,10 @@ Returns a list of projected steady states using the \href{http://potassco.source
 
 
 \subsection{primes2asp}
-\label{TrapSpaces:id5}\label{TrapSpaces:primes2asp}\index{primes2asp() (in module PyBoolNet.TrapSpaces)}
+\label{TrapSpaces:id6}\label{TrapSpaces:primes2asp}\index{primes2asp() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}, \emph{Percolate}}{}
 Saves Primes as an \emph{asp} file in the \href{http://potassco.sourceforge.net/}{Potassco} format intended for computing minimal and maximal trap spaces.
 The homepage of the \href{http://potassco.sourceforge.net/}{Potassco} solving collection is \href{http://potassco.sourceforge.net}{http://potassco.sourceforge.net}.
 The \emph{asp} file consists of data, the hyperarcs of the prime implicant graph,
@@ -6628,6 +6727,9 @@ A tuple \emph{(a,b)} uses \href{http://potassco.sourceforge.net/}{Potassco}`s ca
 A list of names projects the solutions onto these variables using the meta command ``\#show'' and the clasp parameter ``--project''.
 Variables of \emph{Project} that do not appear in \emph{Primes} are ignored.
 \emph{None} results in no projection.
+
+\emph{Percolate} determines whether the computed trap spaces should be fully percolated, i.e., such that no variable can be fixed due to already
+fixed variables.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6641,6 +6743,9 @@ Variables of \emph{Project} that do not appear in \emph{Primes} are ignored.
 
 \item {} 
 \emph{Project} (list): names to project to or \emph{None} for no projection
+
+\item {} 
+\emph{Percolate} (bool): enforces percolation constraint on trap spaces
 
 \end{itemize}
 

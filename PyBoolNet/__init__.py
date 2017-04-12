@@ -20,7 +20,7 @@ import PyBoolNet.Tests
 
 def version():
 
-    return "2.11"
+    return "2.11x"
 
 
 
