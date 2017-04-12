@@ -13,9 +13,9 @@ import PyBoolNet.Utility.Misc
 
 BASE = os.path.join(os.path.dirname(__file__))
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
+config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
 
-CMD_BNET2PRIMES = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "bnet2prime") ))
+CMD_BNET2PRIMES = os.path.normpath(os.path.join(BASE, "Dependencies", config.get("Executables", "bnet2prime")))
 
 
 def _bnet2primes_error(proc, out, err, cmd):
@@ -153,8 +153,21 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
           >>> expr = primes2bnet(primes, True)
     """
 
-    width = max([len(x) for x in Primes]) + 5
-    names = sorted(Primes.keys())
+    width = max([len(x) for x in Primes]) + 3
+
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+
+    constants = sorted(PyBoolNet.PrimeImplicants.find_constants(Primes))
+    inputs = sorted(PyBoolNet.PrimeImplicants.find_inputs(Primes))
+    outdag = sorted(PyBoolNet.InteractionGraphs.find_outdag(igraph))
+
+    # correction, sind outdag components may also be constants
+    outdag = [x for x in outdag if not x in constants]
+    
+    body   = sorted(x for x in Primes if all(x not in X for X in [constants, inputs, outdag]))    
+
+    blocks = [constants, inputs, body, outdag]
+    assert(len(constants)+len(inputs)+len(body)+len(outdag)==len(Primes))
 
     lines = []
     if Header:
@@ -162,19 +175,23 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
         
     if Minimize:
         expressions = PyBoolNet.QuineMcCluskey.primes2mindnf(Primes)
-        for name in names:
-            lines+= [(name+',').ljust(width)+expressions[name]]
+        for block in blocks:
+            for name in block:
+                lines+= [(name+',').ljust(width)+expressions[name]]
+            lines+=['']
 
     else:
-        for name in names:
-            if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
-                expression = '1'
-            elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
-                expression = '0'
-            else:
-                expression = ' | '.join([' & '.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
+        for block in blocks:
+            for name in block:
+                if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
+                    expression = '1'
+                elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+                    expression = '0'
+                else:
+                    expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
 
-            lines+= [(name+',').ljust(width)+expression]
+                lines+= [(name+',').ljust(width)+expression]
+            lines+=['']
 
     if FnameBNET==None:
         return "\n".join(lines)
@@ -184,7 +201,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     print('created %s'%FnameBNET)
 
 
-def write_primes( Primes, FnamePRIMES ):
+def write_primes(Primes, FnamePRIMES):
     """
     Saves *Primes* as a *json* file.
 
@@ -202,7 +219,7 @@ def write_primes( Primes, FnamePRIMES ):
     print('created %s'%FnamePRIMES)
 
     
-def read_primes( FnamePRIMES ):        
+def read_primes(FnamePRIMES):        
     """
     Reads the prime implicants of a Boolean network that were previously stored as a *json* file.
 
