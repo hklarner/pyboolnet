@@ -1,0 +1,114 @@
+
+targets, factors
+
+# taken from
+# Wassim Abou-Jaoudé, Pedro T Monteiro, Aurélien Naldi, Maximilien Grandclaudon, Vassili Soumelis, Claudine Chaouiya, Denis Thieffry
+# Model checking to assess T-helper cell plasticity
+# Frontiers in bioengineering and biotechnology, 2014
+
+CGC,            1
+GP130,          1
+IFNAR1,         1
+IFNAR2,         1
+IFNGR1,         1
+IFNGR2,         1
+IL10RA,         1
+IL10RB,         1
+IL12RB1,        1
+IL15RA,         1
+IL17RB,         1
+IL18RA,         1
+IL18RAP,        1
+IL1RAP,         1
+IL1RL2,         1
+IL27RA,         1
+IL28RA,         1
+IL2RB,          1
+IL4RA,          1
+IL6RA,          1
+
+APC,            APC
+IFNA_e,         IFNA_e
+IFNB_e,         IFNB_e
+IFNG_e,         IFNG_e
+IL10_e,         IL10_e
+IL12_e,         IL12_e
+IL15_e,         IL15_e
+IL18_e,         IL18_e
+IL1A_e,         IL1A_e
+IL1B_e,         IL1B_e
+IL21_e,         IL21_e
+IL23_e,         IL23_e
+IL25_e,         IL25_e
+IL27_e,         IL27_e
+IL29_e,         IL29_e
+IL2_e,          IL2_e
+IL33_e,         IL33_e
+IL36_e,         IL36_e
+IL4_e,          IL4_e
+IL6_e,          IL6_e
+TGFB_e,         TGFB_e
+
+BCL6,           !TBET&!STAT5_b1&STAT4 | !TBET&!STAT5_b1&STAT3 | !TBET&STAT4&STAT3 | !TBET&!STAT5_b1&STAT1
+CD28,           APC
+FOXP3,          !STAT6&STAT5_b1&!STAT3&!STAT1&SMAD3&NFAT | !STAT6&STAT5_b1&!STAT1&SMAD3&!RORGT&NFAT | !STAT6&STAT5_b1&NFAT&FOXP3
+GATA3,          !TBET&STAT6&!PU1&!IL29R&!BCL6 | !TBET&!PU1&!IL29R&IL25R&!BCL6 | !PU1&!IL29R&GATA3&!BCL6
+IFNAR,          IFNB_e&IFNAR2&IFNAR1 | IFNA_e&IFNAR2&IFNAR1
+IFNG,           proliferation&TBET&RUNX3&NFAT&!FOXP3 | proliferation&STAT4&NFAT&!FOXP3 | proliferation&NFAT&IL18R&!FOXP3
+IFNGR,          IFNG_e&IFNGR2&IFNGR1 | IFNGR2&IFNGR1&IFNG
+IKB,            !TCR
+IL12R,          IL12_e&IL12RB2&IL12RB1
+IL12RB2,        !STAT6
+IL15R,          IL2RB&IL15_e&IL15RA&CGC
+IL18R,          STAT4&IL18_e&IL18RAP&IL18RA
+IL1R,           IL1RAP&IL1R1&IL1B_e | IL1RAP&IL1R1&IL1A_e
+IL1R1,          STAT3
+IL2,            !TBET&!STAT6&NFKB&!FOXP3 | !TBET&!STAT5_b1&NFKB&!FOXP3 | !STAT6&NFAT&!FOXP3 | !STAT5_b1&NFAT&!FOXP3
+IL21,           proliferation&cMAF&NFAT | proliferation&STAT4&NFAT | proliferation&STAT3&NFAT
+IL21R,          IL21_e&GP130&CGC | IL21&GP130&CGC
+IL23R,          STAT3&RORGT&IL23_e&IL12RB1&GP130
+IL25,           proliferation&NFAT&GATA3
+IL25R,          IL25_e&IL17RB | IL25&IL17RB
+IL27R,          IL27_e&IL27RA&GP130
+IL29R,          IL29_e&IL28RA&IL10RB
+IL2RA,          STAT5_b1&NFAT | SMAD3&NFAT | NFKB&NFAT | NFAT&FOXP3
+IL2R_b1,        IL2_e&IL2RB&CGC | IL2RB&IL2&CGC | IL2R_b2
+IL2R_b2,        IL2_e&IL2R_b1&IL2RB&IL2RA&CGC | IL2R_b1&IL2RB&IL2RA&IL2&CGC
+IL36R,          IL36_e&IL1RL2&IL1RAP
+IL4,            proliferation&cMAF&!TBET&NFAT&!IRF1&GATA3&!FOXP3 | proliferation&!TBET&STAT5_b1&NFAT&!IRF1&GATA3&!FOXP3 | proliferation&cMAF&!RUNX3&NFAT&!IRF1&GATA3&!FOXP3 | proliferation&STAT5_b1&!RUNX3&NFAT&!IRF1&GATA3&!FOXP3
+IL4R,           IL4_e&IL4RA&CGC | IL4RA&IL4&CGC
+IL6,            proliferation&STAT3&NFAT
+IL6R,           IL6_e&IL6RA&GP130 | IL6RA&IL6&GP130
+IRF1,           STAT1
+NFAT,           TCR&CD28
+NFKB,           !IKB&!FOXP3
+PU1,            TGFBR
+RORGT,          TGFBR&STAT3&!FOXP3&!BCL6
+RUNX3,          TBET
+SMAD3,          TGFBR
+STAT1,          IL27R | IFNGR | IFNAR
+STAT3,          IL6R | IL27R | IL23R | IL21R | IL1R
+STAT4,          IL12R&!GATA3
+STAT5_b1,       STAT5_b2 | IL2R_b1 | IL15R
+STAT5_b2,       STAT5_b1&IL2R_b2&IL2R_b1
+STAT6,          IL4R
+TBET,           TBET&!RORGT&!BCL6 | STAT1&!RORGT&!BCL6 | !RORGT&IL36R&!BCL6
+TCR,            APC
+TGFB,           proliferation&NFAT&FOXP3
+TGFBR,          TGFB_e | TGFB
+cMAF,           TGFBR&STAT3
+proliferation,  STAT5_b2&STAT5_b1 | proliferation
+
+IL10,           proliferation&cMAF&NFAT&!IL33R&!IL18R | proliferation&STAT4&NFAT&!IL33R&!IL18R | proliferation&STAT3&NFAT&!IL33R&!IL18R | proliferation&NFAT&IRF1&!IL33R&!IL18R | proliferation&NFAT&!IL33R&!IL18R&GATA3
+IL10R,          IL10_e&IL10RB&IL10RA | IL10RB&IL10RA&IL10
+IL13,           proliferation&cMAF&NFAT&!FOXP3 | proliferation&NFAT&IL33R&!FOXP3 | proliferation&NFAT&GATA3&!FOXP3
+IL17,           proliferation&!STAT6&STAT3&RORGT&NFKB&NFAT | proliferation&!STAT5_b1&STAT3&RORGT&NFKB&NFAT | proliferation&STAT3&!STAT1&RORGT&NFKB&NFAT | proliferation&STAT3&RORGT&NFKB&NFAT&!FOXP3
+IL22,           proliferation&!cMAF&STAT3&NFAT | proliferation&!cMAF&STAT1&NFAT
+IL24,           proliferation&STAT6&NFAT
+IL3,            proliferation&NFAT&GATA3
+IL31,           proliferation&STAT6&NFAT
+IL33R,          ST2&IL33_e&IL1RAP
+IL35,           proliferation&NFAT&FOXP3
+IL5,            proliferation&cMAF&NFAT&!FOXP3 | proliferation&NFAT&IL33R&!FOXP3 | proliferation&NFAT&GATA3&!FOXP3
+IL9,            proliferation&STAT6&SMAD3&NFKB | proliferation&STAT6&PU1&NFKB | proliferation&STAT6&SMAD3&NFAT | proliferation&STAT6&PU1&NFAT | proliferation&STAT6&NFKB&IL33R | proliferation&STAT6&NFAT&IL33R
+ST2,            GATA3

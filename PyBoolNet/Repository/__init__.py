@@ -28,19 +28,18 @@ def get_all_names():
         ['arellano_rootstem', 'dahlhaus_neuroplastoma', ...]
     """
 
-    print("I DONT BELIEVE IT!")
     result = sorted([os.path.basename(subdir) for subdir, _, _ in os.walk(BASE) if not subdir==BASE and not "__" in subdir])
 
     return result
         
 
-def get_primes(Fname):
+def get_primes(Name):
     """
-    Fetches the prime implicants of the network *Fname* in the model repository.
+    Fetches the prime implicants of the network *Name* in the model repository.
     Run :ref:`get_all_names` to see all networks currently available. 
     
     **arguments**:
-        * *Fname* (str): name of network
+        * *Name* (str): name of network
 
     **returns**:
         * *Primes* (dict): the prime implicants
@@ -50,10 +49,13 @@ def get_primes(Fname):
             >>> get_primes("raf")
             {'Raf': [[{'Raf': 1, 'Erk': 1}], [{'Raf': 0}, {'Erk': 0}]],...
     """
-    
-    path = os.path.join(BASE,Fname,Fname+".bnet")
 
-    return PyBoolNet.FileExchange.bnet2primes(path)
+    path = os.path.join(BASE,Name,Name+".bnet")
+    
+    if os.path.isfile(path):
+        return PyBoolNet.FileExchange.bnet2primes(path)
+    
+    print(" %s does not exist"%Name)
 
 
 def get_bnet(Fname):

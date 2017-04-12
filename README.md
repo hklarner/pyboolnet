@@ -12,6 +12,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
 
 #### release notes for version
+- improved formatting of `primes2bnet(..)` and `primes2mindnf(..)`
 - added parameter `Representation` and option `percolated` to parameter `Type` of `trap_spaces(..)`
 - implemented tempfile for functions `check_primes(..)`, `check_primes_with_counterexample(..)` and `check_primes_with_acceptingstates(..)` (bugfix for windows)
 - bugfix in `subspace2proposition`
