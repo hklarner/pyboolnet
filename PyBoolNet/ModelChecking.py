@@ -656,12 +656,11 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
     if AcceptingStates:
         accepting = output2acceptingstates(NuSMVOutput=Output)
 
-        # safety for initial states bug, see: 
+        # safety for initial states bug
         if accepting["ACCEPTING"] in ["TRUE","FALSE"]:
-            accepting["INIT"] = None
-            accepting["INIT_SIZE"] = None
-            accepting["INITACCEPTING"] = None
-            accepting["INITACCEPTING_SIZE"] = None
+            print("WARNING: accepting states may be incorrect.")
+            print("         this may affect 'INIT','INIT_SIZE','INNITACCEPTING','INNITACCEPTING_SIZE'")
+            print("         see: see http://github.com/hklarner/PyBoolNet/issues/14")
             
         result.append(accepting)
 
