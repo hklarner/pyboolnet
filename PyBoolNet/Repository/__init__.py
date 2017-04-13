@@ -14,19 +14,21 @@ def print_info(MarkDown=False):
 
     MAXOUTPUT = 100000
     
-    header = [('name','size','steady states','cyclic attractors (mints)')]
+    header = [('name','size','inputs','constants','steady states','cyclic attractors (mints)')]
     data   = []
     for name in get_all_names():
         primes = get_primes(name)
         tspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
 
-        size   = str(len(primes))
-        steady = len([x for x in tspaces if len(x)==len(primes)])
-        steady = str(steady) + '+'*(steady==MAXOUTPUT)
-        cyclic = len([x for x in tspaces if len(x)<len(primes)])
-        cyclic = str(cyclic) + '+'*(steady==MAXOUTPUT)
+        size      = str(len(primes))
+        inputs    = str(len(PyBoolNet.PrimeImplicants.find_inputs(primes)))
+        constants = str(len(PyBoolNet.PrimeImplicants.find_constants(primes)))
+        steady    = len([x for x in tspaces if len(x)==len(primes)])
+        steady    = str(steady) + '+'*(steady==MAXOUTPUT)
+        cyclic    = len([x for x in tspaces if len(x)<len(primes)])
+        cyclic    = str(cyclic) + '+'*(steady==MAXOUTPUT)
         
-        data.append((name,size,steady,cyclic))
+        data.append((name,size,inputs,constants,steady,cyclic))
 
     data.sort(key=lambda x: int(x[1]))
     data = header + data
