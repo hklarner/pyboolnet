@@ -6,6 +6,52 @@ BASE = os.path.normpath(BASE)
 import PyBoolNet.FileExchange
 
 
+
+def print_info(MarkDown=False):
+    """
+    prints repository info
+    """
+
+    MAXOUTPUT = 100000
+    
+    header = [('name','size','steady states','cyclic attractors (mints)')]
+    data   = []
+    for name in get_all_names():
+        primes = get_primes(name)
+        tspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
+
+        size   = str(len(primes))
+        steady = len([x for x in tspaces if len(x)==len(primes)])
+        steady = str(steady) + '+'*(steady==MAXOUTPUT)
+        cyclic = len([x for x in tspaces if len(x)<len(primes)])
+        cyclic = str(cyclic) + '+'*(steady==MAXOUTPUT)
+        
+        data.append((name,size,steady,cyclic))
+
+    data.sort(key=lambda x: int(x[1]))
+    data = header + data
+
+    width = {}
+    for i in range(len(data[0])):
+        width[i] = max(len(x[i]) for x in data) + 2
+
+    if MarkDown:
+        header = '| ' + ' | '.join(x.ljust(width[i]) for i,x in enumerate(data[0])) + ' |'
+        print(header)
+        print('| ' + ' | '.join('-'*width[i] for i,x in enumerate(data[0])) + ' |')
+        
+        body   = data[1:]
+        for row in body:
+            print('| ' + ' | '.join(x.ljust(width[i]) for i,x in enumerate(row)) + ' |')
+
+    else:
+        for row in data:
+            print(''.join(x.ljust(width[i]) for i,x in enumerate(row)))
+
+    
+
+
+
 def names_with_fast_basin_computation():
     result = ["arellano_rootstem","dahlhaus_neuroplastoma",
               "davidich_yeast", "dinwoodie_life", "faure_cellcycle",
@@ -80,3 +126,9 @@ def get_bnet(Fname):
         bnet = f.read()
 
     return bnet
+                     
+
+if __name__=="__main__":
+    print_info(MarkDown=True)
+
+                     

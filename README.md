@@ -11,8 +11,8 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for version
-- bugfix for accepting states when the CTL spec is trivial
+#### release notes for next version
+- warning for accepting states bug (see issue [#14](http://github.com/hklarner/PyBoolNet/issues/14)) when the CTL spec is TRUE or FALSE
 - added T-Helper cell plasticity model of Wassim Abou-Jaoudé
 - improved formatting of `primes2bnet(..)` and `primes2mindnf(..)`
 - added parameter `Representation` and option `percolated` to parameter `Type` of `trap_spaces(..)`
