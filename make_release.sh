@@ -1,6 +1,6 @@
 
 VERSION=2.11
-LOCALOS=linux62
+LOCALOS=linux32
 
 echo "Creating releases for PyBoolNet ver $VERSION"
 echo "Removing local Dependencies"
