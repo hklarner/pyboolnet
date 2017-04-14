@@ -14,7 +14,7 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{April 12, 2017}
+\date{April 14, 2017}
 \release{2.11}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
@@ -4255,7 +4255,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43599e9c\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43510e64\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -6871,6 +6871,63 @@ The algorithm uses {\hyperref[Bibliography:prekas2012]{\emph{Prekas2012}}}, a Py
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf} \PYG{o}{=} \PYG{n}{primes2mindnf}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+go}{((! v2) \textbar{} v1)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\section{BooleanExpressions}
+\label{BooleanExpressions:id1}\label{BooleanExpressions::doc}\label{BooleanExpressions:booleanexpressions}
+
+\subsection{minimize\_espresso}
+\label{BooleanExpressions:minimize-espresso}\label{BooleanExpressions:id2}\index{minimize\_espresso() (in module PyBoolNet.BooleanExpressions)}
+
+\begin{fulllineitems}
+\phantomsection\label{BooleanExpressions:PyBoolNet.BooleanExpressions.minimize_espresso}\pysiglinewithargsret{\bfcode{minimize\_espresso}}{\emph{Expression}, \emph{Outputfile=None}, \emph{Merge=False}, \emph{Equiv=False}, \emph{Exact=False}, \emph{Reduce=False}}{}
+Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
+\href{http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer}{espresso} and \href{https://code.google.com/archive/p/eqntott/}{eqntott} for its input preparation. Resulting expression is saved
+in file if filename for output is specified. The argument \emph{Expression} may be either the name
+of the input file containing the boolean expression or the string representing the expression
+itself. The input expression may not contain the following words: \emph{False}, \emph{FALSE}, \emph{True},
+\emph{TRUE}, \emph{Zero}, \emph{ZERO}, \emph{One}, \emph{ONE}.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Expression}: name of file containing the expression or string contents of file
+
+\item {} 
+\emph{Outputfile}: name of the file to write the output to
+
+\item {} 
+\emph{Merge}: performs distance-1 merge on input, useful if very large
+
+\item {} 
+\emph{Equiv}: identifies equivalent output variables
+
+\item {} 
+\emph{Exact}: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
+
+\item {} 
+\emph{Reduce}: eqntott tries to reduce the size of the truth table by merging minterms
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Minimized}: minimized result
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{bool\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{minimized\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}} \PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = (a \PYGZam{} b) \textbar{} a;}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = 1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{(a \PYGZam{} b) \textbar{} a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 \end{fulllineitems}
