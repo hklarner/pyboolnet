@@ -1,10 +1,8 @@
+
 import subprocess
-import glob
-import os.path
-import sys
+import os
 import PyBoolNet
 import re
-import ast
 
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))

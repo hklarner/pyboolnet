@@ -59,29 +59,72 @@ class TestUtility(unittest.TestCase):
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
+
 class TestBooleanExpressions(unittest.TestCase):
-    def test_minimize_espresso(self):
+    def test_minimize_espresso1(self):
         expression = "1"
         expected = "1"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         expression = "(a & b) | a"
         expected = "(a)"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
-        print answer
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         expression = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
         expected = "Test = (!Cytokinesis & !CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | (!STMN & !CentrosomeMat) | (!PLK1) | (!STMNCanAct & !Cytokinesis) | (!STMNCanAct & !STMN);"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
+
+
+    # neue tests
+    def test_minimize_espresso2(self):
+        expression = "a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso3(self):
+        expression = "a & !a&!a"
+        expected = "0"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso4(self):
+        expression = "a&b | a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso5(self):
+        expression = "1&a"
+        expected = "a"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+
 
 
 class TestAttractorBasins(unittest.TestCase):
@@ -1723,20 +1766,20 @@ if __name__=="__main__":
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestTrapSpaces("test_percolate_trapspace"))
+        suite.addTest(TestBooleanExpressions("test_minimize_espresso"))
 
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
-    if 0:
+    if 1:
         # run test class
 
         import inspect
 
-        class_name = TestPyBoolNet.StateTransitionGraphs
+        class_name = TestBooleanExpressions
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):
