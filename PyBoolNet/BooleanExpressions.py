@@ -1,12 +1,10 @@
-
-
-import tempfile
 import subprocess
-import os
-import re
-
+import glob
+import os.path
+import sys
 import PyBoolNet
-
+import re
+import ast
 
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -15,6 +13,18 @@ config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
 EQNTOTT_CMD = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "eqntott") ))
 ESPRESSO_CMD = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "espresso") ))
+
+
+
+def _eqntott_error(eqntott, eqntott_out, eqntott_err):
+    """
+    raises exception for eqntott
+    """
+    if not (eqntott.returncode == 0):
+        print(eqntott_out)
+        print(eqntott_err)
+        print('\nCall to "eqntott" resulted in return code %i'%eqntott.returncode)
+        raise Exception
 
 
 
@@ -29,6 +39,13 @@ def _espresso_error(espresso, espresso_out, espresso_err):
         raise Exception
 
 
+
+def run_eqntott(eqntott_cmd, eqntott_in):
+    eqntott = subprocess.Popen(eqntott_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    eqntott_out, eqntott_err = eqntott.communicate(input=eqntott_in)
+    eqntott.stdin.close()
+    _eqntott_error(eqntott, eqntott_out, eqntott_err)
+    return(eqntott_out)
 
 
 
@@ -101,26 +118,9 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
         eqntott_cmd += ['-r']
 
 
-    tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
-    tmpfname = tmpfile.name
-    tmpfile.write(Expression)
-    tmpfile.close()
-
-    eqntott_cmd += [tmpfname]
-
-    proc = subprocess.Popen(eqntott_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate()
-    eqntott_out = out.decode()
-
-    if not proc.returncode == 0:
-        print(eqntott_out)
-        print(eqntott_err)
-        print('\nCall to "eqntott" resulted in return code %i'%eqntott.returncode)
-        raise Exception
-
-    if os.path.isfile(tmpfname):
-        os.remove(tmpfname)
-        
+    eqntott_cmd += ['/dev/stdin']
+    eqntott_in = Expression
+    eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
     if int(re.search(r'\.i\s\d+', eqntott_out).group().strip(".i "))>1:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
         espresso_out = re.sub(r'\.na .*\n', '', espresso_out)
