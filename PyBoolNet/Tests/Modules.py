@@ -6,6 +6,8 @@ import sys
 import subprocess
 import networkx
 import itertools
+import tempfile
+import shutil
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0,BASE)
@@ -26,11 +28,15 @@ import PyBoolNet.Utility
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read(os.path.join(BASE, "PyBoolNet", "Dependencies", "settings.cfg"))
 FILES_IN   = os.path.join(BASE, "PyBoolNet", "Tests", "Files", "Input")
-FILES_OUT  = os.path.normpath(config.get("Executables", "tmpfolder"))
+FILES_OUT  = tempfile.mkdtemp(prefix='pyboolnet_')
+
 
 
 def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
+
+    if os.path.isdir(FILES_OUT):
+        shutil.rmtree(FILES_OUT)
 
 
 class TestUtility(unittest.TestCase):
@@ -1143,13 +1149,7 @@ class TestTrapSpaces(unittest.TestCase):
 
         # network has 4 steady states: 010,110,011,111
 
-        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y"], Aggregate=True)
-        expected = [({"y":1},4)]
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(result)
-        self.assertTrue(result==expected, msg)
-
-        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y","x"], Aggregate=False)
+        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y","x"])
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"x":0, "y":1}, {"x":1, "y":1}]
         msg = "\nexpected: "+str(expected)
@@ -1536,7 +1536,7 @@ class TestFileExchange(unittest.TestCase):
 
         for i, (cbounds, cproj) in enumerate(itertools.product([None,(1,2)],[None,['A','B']])):
             fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case%i.asp"%i)
-            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Percolate=False)
+            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Type="hannes")
         ## no assertion ##
 
 
@@ -1766,7 +1766,8 @@ if __name__=="__main__":
         runner.run(suite)
 
 
-
+    if os.path.isdir(FILES_OUT):
+        shutil.rmtree(FILES_OUT)
 
 
 
