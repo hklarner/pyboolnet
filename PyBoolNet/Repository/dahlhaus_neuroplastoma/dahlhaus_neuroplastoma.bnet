@@ -17,7 +17,7 @@ CDK1CCNBComplex,    !Cytokinesis & (!WEE1 | hCPEB | CDC25B)
 CDC25B,             (AURKAActive | PLK1) & !Cytokinesis
 BORA,               GSK3B & Cytokinesis & !PLK1 | !Cytokinesis
 GWL_MASTL,          CDK1CCNBComplex & !PP2A
-HCPEB,              AURKAActive
+hCPEB,              AURKAActive
 MT,                 !STMN
 NEDD9,              AURKAActive
 ENSA,               GWL_MASTL
