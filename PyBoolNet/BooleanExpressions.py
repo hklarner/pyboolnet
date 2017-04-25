@@ -119,7 +119,6 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
     eqntott_cmd += ['/dev/stdin']
     eqntott_in = Expression
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-    print eqntott_out
 
     if int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) != 0:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
