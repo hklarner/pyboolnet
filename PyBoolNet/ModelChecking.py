@@ -3,7 +3,6 @@
 import os, sys
 import tempfile
 import subprocess
-import unittest
 import ast
 import datetime
 
@@ -23,6 +22,16 @@ with open(fname_nusmvkeywords) as f:
     NUSMVKEYWORDS = ast.literal_eval(NUSMVKEYWORDS)
 
 
+
+def print_warning_accstates_bug(Primes,CTLSpec):
+    """
+    This bug occurs when the Specification is equivalent to TRUE or FALSE.
+    """
+
+    if all(x not in CTLSpec for x in Primes):
+        print("WARNING: accepting states bug might affect result, see http://github.com/hklarner/PyBoolNet/issues/14")
+
+    
 
 def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):
     """
@@ -70,7 +79,13 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception:
+        print("could not start process for nusmv")
+        print("cmd: %s"%' '.join(cmd))
+        raise Exception
+    
     out, err = proc.communicate()
     out = out.decode()
 
@@ -124,7 +139,14 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception:
+        print("could not start process for nusmv")
+        print("cmd: %s"%' '.join(cmd))
+        raise Exception
+    
     out, err = proc.communicate()
     out = out.decode()
 
@@ -179,6 +201,8 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     """
 
     assert("CTLSPEC" in CTLSpec)
+    
+    print_warning_accstates_bug(Primes, CTLSpec)
               
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
@@ -198,7 +222,14 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname, Silent=True)
     
     cmd+= [tmpfname]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception:
+        print("could not start process for nusmv")
+        print("cmd: %s"%' '.join(cmd))
+        raise Exception
+    
     out, err = proc.communicate()
     out = out.decode()
 
@@ -389,7 +420,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
         >>> lines = primes2smv(primes, "synchronous",  "INIT ERK=1", ltlspec)
     """
 
-    assert( type(FnameSMV)==type(None) or type(FnameSMV)==str )
+    assert(type(FnameSMV)==type(None) or type(FnameSMV)==str)
     assert(Update in ['synchronous', 'asynchronous', 'mixed'])
     assert(InitialStates[:5] == "INIT ")
     assert(Specification[:8] in ["CTLSPEC ", "LTLSPEC "])
@@ -553,7 +584,7 @@ def _read_number(Line):
     if "e" in Line:
         return float(Line)
     else:
-        return int(Line)
+        return long(Line)
 
 
 def output2acceptingstates(NuSMVOutput):
@@ -654,14 +685,7 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
         result.append(counterex)
 
     if AcceptingStates:
-        accepting = output2acceptingstates(NuSMVOutput=Output)
-
-        # safety for initial states bug
-        if accepting["ACCEPTING"] in ["TRUE","FALSE"]:
-            print("WARNING: accepting states may be incorrect.")
-            print("         this may affect 'INIT','INIT_SIZE','INNITACCEPTING','INNITACCEPTING_SIZE'")
-            print("         see: see http://github.com/hklarner/PyBoolNet/issues/14")
-            
+        accepting = output2acceptingstates(NuSMVOutput=Output)            
         result.append(accepting)
 
     return tuple(result)
