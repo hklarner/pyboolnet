@@ -119,19 +119,27 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
     eqntott_cmd += ['/dev/stdin']
     eqntott_in = Expression
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
-    if int(re.search(r'\.i\s\d+', eqntott_out).group().strip(".i "))>1:
+    print eqntott_out
+
+    if int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) != 0:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
         espresso_out = re.sub(r'\.na .*\n', '', espresso_out)
         espresso_out = re.sub(r'\s', '', espresso_out)
         espresso_out = espresso_out.replace('|', ' | ')
         espresso_out = espresso_out.replace('=', ' = ')
         espresso_out = espresso_out.replace('&', ' & ')
+        if espresso_out == "Test = ();":
+            espresso_out = "Test = 1;"
+    elif int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) == 1:
+        espresso_out = "1"
+    elif int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) == 0:
+        espresso_out = "0"
     else:
         espresso_out = Expression
 
-    if (AddName == True):
+    if (AddName == True and "Test" in str(espresso_out)):
         espresso_out = espresso_out.replace('Test = ', '')
-    if (AddColon == True):
+    if (AddColon == True and ";" in str(espresso_out)):
         espresso_out = espresso_out.replace(';', '')
 
     if (Outputfile == None):

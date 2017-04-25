@@ -117,7 +117,7 @@ class TestBooleanExpressions(unittest.TestCase):
 
     def test_minimize_espresso5(self):
         expression = "1&a"
-        expected = "a"
+        expected = "(a)"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
         msg = "\nexpression: "+expression
         msg+= "\nexpected:   "+str(expected)
