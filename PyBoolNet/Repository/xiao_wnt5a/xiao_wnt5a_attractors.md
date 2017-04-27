@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 27. Apr. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
@@ -20,13 +20,12 @@
  * there are only steady states
 
 ### Network
-| targets | factors                     |
-| ------- | --------------------------- |
-| x1      | !x6                         |
-| x2      | x6 & x4 | x2 & x6 | x2 & x4 |
-| x3      | !x7                         |
-| x4      | x4                          |
-| x5      | !x7 | x2                    |
-| x6      | x4 | x3                     |
-| x7      | x7 | !x2                    |
+| x4      | x4                    |
+| ------- | --------------------- |
+| x2      | x6&x4 | x2&x6 | x2&x4 |
+| x3      | !x7                   |
+| x6      | x4 | x3               |
+| x7      | x7 | !x2              |
+| x1      | !x6                   |
+| x5      | !x7 | x2              |
 

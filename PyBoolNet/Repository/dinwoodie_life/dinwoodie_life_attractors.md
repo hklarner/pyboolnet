@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 27. Apr. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state    |
@@ -23,21 +23,20 @@
  * there are only steady states
 
 ### Network
-| targets      | factors                                                   |
-| ------------ | --------------------------------------------------------- |
-| compuse      | wssigma & !mci                                            |
-| mci          | !wsq3 & !compuse & waso | sleeplivroom & !compuse & !wsq3 |
-| meanws       | wssigma & wsq3 | !wscv & wsq3                             |
-| numfir       | !wsq3 | sleeplivroom | numtrans                           |
-| numtrans     | numfir                                                    |
-| numwalks     | !wscv & wssigma                                           |
-| oohhours     | sleeplivroom & !ttib | numwalks & !ttib | !numfir & !ttib |
-| sleeplatency | ttib & waso                                               |
-| sleeplivroom | timeasleep & !ttib                                        |
-| timeasleep   | ttib                                                      |
-| ttib         | timeasleep                                                |
-| waso         | sleeplatency & ttib                                       |
-| wscv         | wssigma & !meanws | wssigma & mci                         |
-| wsq3         | !numwalks & !mci | meanws                                 |
-| wssigma      | wscv & meanws                                             |
+| compuse      | wssigma&!mci                                        |
+| ------------ | --------------------------------------------------- |
+| mci          | !wsq3&!compuse&waso | sleeplivroom&!compuse&!wsq3   |
+| meanws       | wssigma&wsq3 | !wscv&wsq3                           |
+| numfir       | !wsq3 | sleeplivroom | numtrans                     |
+| numtrans     | numfir                                              |
+| numwalks     | !wscv&wssigma                                       |
+| sleeplatency | ttib&waso                                           |
+| sleeplivroom | timeasleep&!ttib                                    |
+| timeasleep   | ttib                                                |
+| ttib         | timeasleep                                          |
+| waso         | sleeplatency&ttib                                   |
+| wscv         | wssigma&!meanws | wssigma&mci                       |
+| wsq3         | !numwalks&!mci | meanws                             |
+| wssigma      | wscv&meanws                                         |
+| oohhours     | sleeplivroom&!ttib | numwalks&!ttib | !numfir&!ttib |
 

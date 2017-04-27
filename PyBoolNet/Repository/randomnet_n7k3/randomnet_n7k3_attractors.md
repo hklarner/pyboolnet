@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 27. Apr. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
@@ -26,13 +26,12 @@
  * there are only steady states
 
 ### Network
-| targets | factors                                                           |
-| ------- | ----------------------------------------------------------------- |
-| Gene1   | Gene3 & Gene4 & !Gene5 | !Gene4 & Gene5 | !Gene3 & !Gene4         |
-| Gene2   | Gene2 & !Gene3 | !Gene1 & Gene2 | Gene1 & !Gene3                  |
-| Gene3   | !Gene5 & Gene6 | !Gene1 & !Gene5 | Gene1 & Gene6 | Gene1 & Gene5  |
-| Gene4   | !Gene3 & Gene5 | !Gene2 & Gene5 | !Gene2 & Gene3 | Gene2 & !Gene3 |
-| Gene5   | !Gene3 & Gene4 | !Gene1 & Gene4 | Gene1 & !Gene3                  |
-| Gene6   | !Gene1 & Gene6 & !Gene7 | Gene1 & Gene7 | Gene1 & !Gene6          |
-| Gene7   | !Gene3 & Gene5 & Gene7 | Gene3 & !Gene5 & Gene7                   |
+| Gene1   | Gene3&Gene4&!Gene5 | !Gene4&Gene5 | !Gene3&!Gene4         |
+| ------- | --------------------------------------------------------- |
+| Gene2   | Gene2&!Gene3 | !Gene1&Gene2 | Gene1&!Gene3                |
+| Gene3   | !Gene5&Gene6 | !Gene1&!Gene5 | Gene1&Gene6 | Gene1&Gene5  |
+| Gene4   | !Gene3&Gene5 | !Gene2&Gene5 | !Gene2&Gene3 | Gene2&!Gene3 |
+| Gene5   | !Gene3&Gene4 | !Gene1&Gene4 | Gene1&!Gene3                |
+| Gene6   | !Gene1&Gene6&!Gene7 | Gene1&Gene7 | Gene1&!Gene6          |
+| Gene7   | !Gene3&Gene5&Gene7 | Gene3&!Gene5&Gene7                   |
 
