@@ -6,9 +6,8 @@ import subprocess
 import ast
 import datetime
 
-import PyBoolNet.Utility
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.QueryPatterns
+import PyBoolNet
+
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -92,7 +91,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     if os.path.isfile(tmpfname):
         os.remove(tmpfname)
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False, SMVstr=smvfile)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
 def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False):
@@ -153,10 +152,10 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     if os.path.isfile(tmpfname):
         os.remove(tmpfname)
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False, SMVstr=smvfile)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
-def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True):
+def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, ConeOfInfluence=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *CTLSpec* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -184,7 +183,6 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
         * *InitialStates* (str): a :ref:`installation_nusmv` expression for the initial states, including the keyword *INIT*
         * *CTLSpec* (str): a :ref:`installation_nusmv` formula, including the keyword *CTLSPEC*
-        * *DynamicReorder* (bool): enables dynamic reordering of variables using *-dynamic*
         * *ConeOfInfluence* (bool): enables cone of influence reduction using *-coi*
 
     **returns**:
@@ -208,8 +206,6 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     cmd+= ['-dcx']
     cmd+= ['-a','print']
     
-    if DynamicReorder:
-        cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
 
@@ -236,7 +232,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     if os.path.isfile(tmpfname):
         os.remove(tmpfname)
 
-    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True, SMVstr=smvfile)
+    return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
 
 def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):
@@ -328,7 +324,7 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
-def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluence=True):
+def check_smv_with_acceptingstates(FnameSMV, ConeOfInfluence=True):
     """
     Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
@@ -342,7 +338,6 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
         
     **arguments**:
         * *FnameSMV*: name of smv file
-        * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
         * *ConeOfInfluence* (bool): enables cone of influence reduction (*-coi*)
 
     **returns**:
@@ -358,8 +353,6 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
 
-    if DynamicReorder:
-        cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
 
@@ -373,6 +366,8 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
+
+    print out
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
@@ -578,7 +573,7 @@ def output2counterexample( NuSMVOutput ):
 
 def _read_number(Line):
     """
-    Helper function for output2acceptingstates( NuSMVOutput )
+    Helper function for output2acceptingstates(..)
     """
     Line = Line.split(":")[1].strip()
     if "e" in Line:
@@ -586,6 +581,29 @@ def _read_number(Line):
     else:
         return long(Line)
 
+def _read_formula(Line):
+    """
+    Helper function for output2acceptingstates(..)
+    """
+    
+    formula = str(Line.split(":")[1].strip())
+
+    return formula
+
+    # minimization is very expensive
+
+    if formula in ["FALSE","TRUE"]:
+        return formula
+        
+    formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
+    if formula == "0":
+        return "FALSE"
+    if formula == "1":
+        return "TRUE"
+
+    return formula
+
+    
 
 def output2acceptingstates(NuSMVOutput):
     """
@@ -606,23 +624,35 @@ def output2acceptingstates(NuSMVOutput):
             * INITACCEPTING_SIZE: number of initial and accepting states
             * ANSWER: whether the query is true
     """
+
+
+    """
+    Example of NuSMVa output:
+
+    initial states: CHEK1_2_medium
+    number of initial states: 4294967296
+    accepting states: !(E2F1_medium)
+    number of accepting states: 4294967296
+    initial and accepting states: !((E2F1_medium) | !CHEK1_2_medium)
+    number of initial and accepting states: 2147483648
+    """
     
     accepting = {}
     for line in NuSMVOutput.split("\n"):
         if line.startswith("initial states:"):
-            accepting["INIT"] = str(line.split(":")[1].strip())
+            accepting["INIT"] = _read_formula(line)
             
         elif line.startswith("number of initial states:"):
             accepting["INIT_SIZE"] = _read_number(line)
                 
         elif line.startswith("accepting states:"):
-            accepting["ACCEPTING"] = str(line.split(":")[1].strip())
+            accepting["ACCEPTING"] = _read_formula(line)
             
         elif line.startswith("number of accepting states:"):
             accepting["ACCEPTING_SIZE"] = _read_number(line)
             
         elif line.startswith("initial and accepting states:"):
-            accepting["INITACCEPTING"] = str(line.split(":")[1].strip())
+            accepting["INITACCEPTING"] = _read_formula(line)
             
         elif line.startswith("number of initial and accepting states:"):
             accepting["INITACCEPTING_SIZE"] = _read_number(line)
@@ -630,7 +660,7 @@ def output2acceptingstates(NuSMVOutput):
     return accepting
 
 
-def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, AcceptingStates, SMVstr=None):
+def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, AcceptingStates):
     """
     The part of the code of "check_smv" and "check_primes" that is identical in both functions.
     
@@ -659,16 +689,12 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
         elif 'is true' in Output:
             answer = True
         else:
-            if SMVstr:
-                print(SMVstr)
             print(Output)
             print(Error)
             print('NuSMV output does not respond with "is false" or "is true".')
             raise Exception
             
     else:
-        if SMVstr:
-            print(SMVstr)
         print(Output)
         print(Error)
         print('NuSMV did not respond with return code 0')
