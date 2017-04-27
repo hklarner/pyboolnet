@@ -285,7 +285,7 @@ def primes2genysis(Primes, FnameGENYSIS):
     print('created %s'%FnameGENYSIS)
     
 
-def primes2bns(Primes, FnameBNS):
+def primes2bns(Primes, FnameBNS=None):
     """
     Saves Primes as a *bns* file for the computation of all attractors of the synchronous transition system.
     BNS_ is based on :ref:`Dubrova2011 <Dubrova2011>`.
@@ -293,7 +293,7 @@ def primes2bns(Primes, FnameBNS):
 
     **arguments**:
        * *Primes*: prime implicants
-       * *FnameBNS* (str): name of *bns* file
+       * *FnameBNS* (str): name of *bns* file or *None* to return file as string
 
     **example**::
     
@@ -331,9 +331,13 @@ def primes2bns(Primes, FnameBNS):
 
         lines+= ['']
 
-    with open(FnameBNS, 'w') as f:
-        f.write('\n'.join(lines))
-    print('created %s'%FnameBNS)
+    contents = '\n'.join(lines)
+    if FnameBNS==None:
+        return contents
+    else:
+        with open(FnameBNS, 'w') as f:
+            f.write(contents)
+        print('created %s'%FnameBNS)
         
 
 def primes2eqn(Primes, FnameEQN):
