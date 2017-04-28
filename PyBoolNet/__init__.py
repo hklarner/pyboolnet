@@ -15,13 +15,22 @@ import PyBoolNet.QueryPatterns
 import PyBoolNet.TrapSpaces
 import PyBoolNet.Repository
 import PyBoolNet.Utility
-import PyBoolNet.Tests
 import PyBoolNet.BooleanExpressions
+import PyBoolNet.Zanudo
+import PyBoolNet.Tests
+
+import pprint as prettyprint
+
 
 
 def version():
 
     return "2.11x"
+
+
+def pprint(X):
+    pp = prettyprint.PrettyPrinter(indent=4)
+    pp.pprint(X)
 
 
 
