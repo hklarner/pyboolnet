@@ -65,30 +65,71 @@ class TestUtility(unittest.TestCase):
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
+
 class TestBooleanExpressions(unittest.TestCase):
-    def test_minimize_espresso(self):
+    def test_minimize_espresso1(self):
         expression = "1"
         expected = "1"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         expression = "(a & b) | a"
         expected = "(a)"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
-        print answer
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         expression = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
         expected = "Test = (!Cytokinesis & !CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | (!STMN & !CentrosomeMat) | (!PLK1) | (!STMNCanAct & !Cytokinesis) | (!STMNCanAct & !STMN);"
         answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(answer)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
 
+
+    # neue tests
+    def test_minimize_espresso2(self):
+        expression = "a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso3(self):
+        expression = "a & !a&!a"
+        expected = "0"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso4(self):
+        expression = "a&b | a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso5(self):
+        expression = "1&a"
+        expected = "(a)"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
 
 class TestAttractorBasins(unittest.TestCase):
     def test_basin_diagram(self):
@@ -142,6 +183,27 @@ class TestQuineMcCluskey(unittest.TestCase):
 
 
 class TestStateTransitionGraphs(unittest.TestCase):
+    def test_energy(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "000")
+        expected = 1
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "010")
+        expected = 3
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "001")
+        expected = 0
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
     def test_state_is_in_subspace(self):
         primes = ["a","b","c"]
         answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,{"a":1,"b":1,"c":0},{"a":1})
@@ -1745,7 +1807,7 @@ if __name__=="__main__":
     if 0:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestTrapSpaces("test_percolated_trapspaces"))
+        suite.addTest(TestStateTransitionGraphs("test_energy"))
 
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)

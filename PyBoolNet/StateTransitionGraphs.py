@@ -19,6 +19,40 @@ config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
 CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 
+
+
+def energy(Primes, State):
+    """
+    This integer valued energy function E for Boolean networks is decreasing with transitions.
+    That is, E(x) >= E(y) holds for any transition x -> y.
+    It is based on the number of free variables in the smallest trapspace that contains *State*.
+    The energy is therefore n >= E(x) >= 0 and E(x)=0 for steady states holds.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (dict / str): a state
+
+    **returns**:
+        * *Energy* (int): number of free variables in smallest trapspace containing *State*
+
+    **example**::
+
+        >>> primes = Repository.get_primes("raf")
+        >>> StateTransitionGraphs.energy(primes, "000")
+        1
+        >>> StateTransitionGraphs.energy(primes, "010")
+        3
+        >>> StateTransitionGraphs.energy(primes, "001")
+        0
+    """
+
+    tspace = PyBoolNet.TrapSpaces.smallest_trapspace(Primes, State, FnameASP=None, Representation="str")
+    energy = tspace.count('-')
+
+    return energy
+    
+
+
 def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
     PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine)
 

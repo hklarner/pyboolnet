@@ -70,6 +70,17 @@ best_first_reachability
 .. autofunction:: PyBoolNet.StateTransitionGraphs.best_first_reachability
 
 
+
+.. _energy:
+
+energy
+------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.energy
+
+
+
+
 .. _state2str:
 
 state2str
