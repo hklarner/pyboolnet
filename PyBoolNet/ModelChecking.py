@@ -155,7 +155,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
-def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, ConeOfInfluence=True):
+def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *CTLSpec* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -183,6 +183,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Co
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
         * *InitialStates* (str): a :ref:`installation_nusmv` expression for the initial states, including the keyword *INIT*
         * *CTLSpec* (str): a :ref:`installation_nusmv` formula, including the keyword *CTLSPEC*
+        * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
         * *ConeOfInfluence* (bool): enables cone of influence reduction using *-coi*
 
     **returns**:
@@ -205,7 +206,9 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Co
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
     cmd+= ['-a','print']
-    
+
+    if DynamicReorder:		
+        cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
 
@@ -324,7 +327,7 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
-def check_smv_with_acceptingstates(FnameSMV, ConeOfInfluence=True):
+def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluence=True):
     """
     Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
@@ -338,6 +341,7 @@ def check_smv_with_acceptingstates(FnameSMV, ConeOfInfluence=True):
         
     **arguments**:
         * *FnameSMV*: name of smv file
+        * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
         * *ConeOfInfluence* (bool): enables cone of influence reduction (*-coi*)
 
     **returns**:
@@ -353,6 +357,8 @@ def check_smv_with_acceptingstates(FnameSMV, ConeOfInfluence=True):
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
 
+    if DynamicReorder:		
+        cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
 
@@ -366,8 +372,6 @@ def check_smv_with_acceptingstates(FnameSMV, ConeOfInfluence=True):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
-
-    print out
 
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
