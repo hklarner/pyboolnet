@@ -56,10 +56,10 @@ def print_info(MarkDown=False):
 
 def names_with_fast_basin_computation():
     result = ["arellano_rootstem","dahlhaus_neuroplastoma",
-              "davidich_yeast", "dinwoodie_life", "faure_cellcycle",
+              "dinwoodie_life", "faure_cellcycle",
               "irons_yeast", "randomnet_n7k3", "randomnet_n15k3",
               "saadatpour_guardcell", "tournier_apoptosis", "xiao_wnt5a",
-              "raf"]
+              "raf","n5s3","n3s1c1a","n3s1c1b","n6s1c2"]
     
     return result
 
@@ -105,6 +105,7 @@ def get_primes(Name):
         return PyBoolNet.FileExchange.bnet2primes(path)
     
     print(" %s does not exist"%Name)
+    raise Exception
 
 
 def get_bnet(Fname):

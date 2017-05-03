@@ -11,8 +11,9 @@ import PyBoolNet
 
 if __name__=="__main__":
 
-    for name in ["grieco_mapk", "remy_tumorigenesis"]:
-#    for name in PyBoolNet.Repository.names_with_fast_basin_computation():
+#    for name in ["grieco_mapk", "remy_tumorigenesis"]:
+#    for name in ["n5_steady3"]:
+    for name in PyBoolNet.Repository.names_with_fast_basin_computation():
         
         primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
@@ -25,10 +26,7 @@ if __name__=="__main__":
         PyBoolNet.AttractorDetection.create_attractor_report(primes, fname_attr)
 
         attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
-        fname_basins = os.path.join(name,name+"_basins.pdf")
-        fname_key = os.path.join(name,name+"_basins_key.pdf")
-        fname_abstract = os.path.join(name,name+"_basins_abstract.pdf")
+        fname_basins = os.path.join(name,name+"_commitment.pdf")
         
-        diagram = PyBoolNet.AttractorBasins.commitment_diagram(primes, "asynchronous", Silent=False)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, fname_basins, FnameATTRACTORS=fname_key)
-        PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, fname_abstract)
+        diagram = PyBoolNet.Basins.commitment_diagram(primes, "asynchronous", Silent=False)
+        PyBoolNet.Basins.diagram2image(primes, diagram, fname_basins)

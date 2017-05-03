@@ -6,25 +6,25 @@
 ### Steady States
 | steady state |
 | ------------ | 
-| 001          |
+| 111          |
 
 ### Asynchronous STG
  * completeness: True
 
 | trapspace      | univocal  | faithful  |
 | -------------- | --------- | --------- |
-| 11-            | True      | True      |
+| -00            | True      | True      |
 
 ### Synchronous STG
  * completeness: True
 
 | trapspace      | univocal  | faithful  |
 | -------------- | --------- | --------- |
-| 11-            | True      | True      |
+| -00            | True      | True      |
 
 ### Network
-| Erk     | Raf&Mek | Mek&Erk |
-| ------- | ----------------- |
-| Mek     | Raf&Mek | Erk     |
-| Raf     | !Raf | !Erk       |
+| v4      | v5&v6 | !v4 |
+| ------- | ----------- |
+| v5      | v6          |
+| v6      | v6 | v5     |
 
