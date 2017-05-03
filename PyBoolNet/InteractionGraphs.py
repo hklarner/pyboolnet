@@ -138,18 +138,19 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
 def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
     """
     A convenience function for drawing interaction graphs directly from the prime implicants.
+    *Styles* must be a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"].
     
     **arguments**:
         * *Primes*: prime implicants
         * *FnameIMAGE* (str): name of image
-        * *Styles* (list): the styles to be applied, a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs"]
+        * *Styles* (list): the styles to be applied
         
     **example**::
 
-          >>> create_image(primes, "mapk_igraph.pdf")
+          >>> create_image(primes, "mapk_igraph.pdf", Styles=["interactionsigns", "anonymous"])
     """
 
-    assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs"])))
+    assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"])))
 
     igraph = primes2igraph(Primes)
     
@@ -163,6 +164,8 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
         add_style_constants(igraph)
     if "sccs" in Styles:
         add_style_sccs(igraph)
+    if "anonymous" in Styles:
+        add_style_anonymous(igraph)
 
     igraph2image(igraph, FnameIMAGE)
         
@@ -229,6 +232,27 @@ def find_minimal_autonomous_nodes(IGraph, Superset=set([])):
     
     return [set(x) for x in cgraph.nodes() if cgraph.in_degree(x)==0]
 
+
+def add_style_anonymous(IGraph):
+    """
+    Creates an anonymous interaction graph with circular nodes without labels.
+    
+    **arguments**:
+        * *IGraph*: interaction graph
+        
+    **example**::
+
+          >>> add_style_anonymous(igraph)
+    """
+
+    IGraph.graph["node"]["shape"] = "circle"
+    IGraph.graph["node"]["style"] = "filled"
+    IGraph.graph["node"]["fillcolor"] = "lightgray"
+    
+    for x in IGraph.nodes():
+        IGraph.node[x]["label"]=""
+
+            
     
 def add_style_interactionsigns(IGraph):
     """
