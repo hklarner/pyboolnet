@@ -63,12 +63,21 @@ create_image
 .. autofunction:: PyBoolNet.InteractionGraphs.create_image
 
 
+.. _add_style_anonymous:
+
+add_style_anonymous
+-------------------
+
+.. autofunction:: PyBoolNet.InteractionGraphs.add_style_anonymous
+
+
 .. _add_style_interactionsigns:
 
 add_style_interactionsigns
 --------------------------
 
 .. autofunction:: PyBoolNet.InteractionGraphs.add_style_interactionsigns
+
 
 
 .. _add_style_activities:

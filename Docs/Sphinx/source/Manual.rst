@@ -1711,10 +1711,10 @@ Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encaps
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
 
 
-attractor basins
-****************
+basins of attraction
+********************
 
-The module :ref:`AttractorBasins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
+The module :ref:`Basins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
 In non-deterministic STGs there are usually states from which more than one attractor is reachable.
 But, not every combination of attractors has states that can reach exactly that subset of attractors.
 The function :ref:`basins_diagram` checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.

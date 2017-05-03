@@ -11,7 +11,7 @@ Reference
    InteractionGraphs
    StateTransitionGraphs
    AttractorDetection
-   AttractorBasins
+   Basins
    
    ModelChecking
    QueryPatterns

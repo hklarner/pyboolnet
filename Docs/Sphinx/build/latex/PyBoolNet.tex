@@ -14,7 +14,7 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{April 14, 2017}
+\date{May 03, 2017}
 \release{2.11}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
@@ -1168,7 +1168,7 @@ The result is shown in {\hyperref[Manual:figure04]{\emph{the figure below}}}.
 
 \subsection{the SCCs style}
 \label{Manual:the-sccs-style}
-The function {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}} defines a \emph{dot} subgraph for every non-trivial \emph{strongly connected component} (SCC) of the interaction graph.
+The function {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}} defines a \emph{dot} subgraph for every non-trivial \emph{strongly connected component} (SCC) of the interaction graph.
 Each SCC subgraph is filled by a shade of gray that indicates the longest path of SCCs leading to it,
 a unique number that intuitively represents ``the depth in the SCC hierarchy'', see {\hyperref[Bibliography:klarner2015approx]{\emph{Klarner2015(b)}}} for a formal definition.
 The further down the hierarchy, the darker the shade of gray will be.
@@ -1194,12 +1194,12 @@ The result is shown in {\hyperref[Manual:figure05]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure05.pdf}}
-\caption{The interaction graph ``\emph{example06\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure05}\end{figure}
+\caption{The interaction graph ``\emph{example06\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure05}\end{figure}
 
 
 \subsection{the subgraphs style}
 \label{Manual:the-subgraphs-style}
-The function {\hyperref[StateTransitionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}} allows you to specify subsets of nodes that will be added to a \emph{dot} subgraph.
+The function {\hyperref[InteractionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}} allows you to specify subsets of nodes that will be added to a \emph{dot} subgraph.
 The subgraphs may be specified as a list of pairs that consist of a list of names and a dictionary
 of \emph{dot} attributes for that subgraph, e.g., a label or background color.
 
@@ -1230,7 +1230,7 @@ The result is shown in {\hyperref[Manual:figure07]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure07.pdf}}
-\caption{The interaction graph ``\emph{example08\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}}.}\label{Manual:figure07}\end{figure}
+\caption{The interaction graph ``\emph{example08\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}}.}\label{Manual:figure07}\end{figure}
 
 
 \subsection{the activities style and animations}
@@ -1296,7 +1296,7 @@ The result is shown in {\hyperref[Manual:figure09]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure09.pdf}}
-\caption{The interaction graph ``\emph{example10\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure09}\end{figure}
+\caption{The interaction graph ``\emph{example10\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure09}\end{figure}
 
 
 \section{Drawing the State Transition Graph}
@@ -1442,7 +1442,7 @@ The result is shown in {\hyperref[Manual:figure12]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure12.pdf}}
-\caption{The state transition graph ``\emph{example13\_stg.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-path]{\emph{add\_style\_path}}}.}\label{Manual:figure12}\end{figure}
+\caption{The state transition graph ``\emph{example13\_stg.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-path]{\emph{add\_style\_path}}}.}\label{Manual:figure12}\end{figure}
 
 
 \subsection{the SCCs style}
@@ -1465,7 +1465,7 @@ The result is shown in {\hyperref[Manual:figure13]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure13.pdf}}
-\caption{The state transition graph ``\emph{example14\_stg.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure13}\end{figure}
+\caption{The state transition graph ``\emph{example14\_stg.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure13}\end{figure}
 
 
 \subsection{the min trap spaces style}
@@ -1543,7 +1543,7 @@ The result is shown in {\hyperref[Manual:figure16]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.800000}{\includegraphics{figure16.pdf}}
-\caption{The state transition graph \emph{``example17\_stg.pdf''} with attributes added by {\hyperref[StateTransitionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure16}\end{figure}
+\caption{The state transition graph \emph{``example17\_stg.pdf''} with attributes added by {\hyperref[InteractionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure16}\end{figure}
 
 
 \section{Modifying Networks}
@@ -2003,7 +2003,7 @@ Hence, a typical way to inspect a counterexample involves a Python if-statement:
 
 Here, {\hyperref[StateTransitionGraphs:state2str]{\emph{state2str}}} is a ``pretty print'' function contained in the module {\hyperref[StateTransitionGraphs:statetransitiongraphs]{\emph{StateTransitionGraphs}}}.
 It generates a state string from a state dictionary.
-An alternative way of inspecting counterexample is by {\hyperref[StateTransitionGraphs:add-style-path]{\emph{STGs.add\_style\_path}}}:
+An alternative way of inspecting counterexample is by {\hyperref[InteractionGraphs:add-style-path]{\emph{STGs.add\_style\_path}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
@@ -2583,9 +2583,9 @@ Hence, {\hyperref[AttractorDetection:find-attractor-state-by-randomwalk-and-ctl]
 \end{Verbatim}
 
 
-\subsection{attractor basins}
-\label{Manual:attractor-basins}
-The module {\hyperref[AttractorBasins:attractorbasins]{\emph{AttractorBasins}}} contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
+\subsection{basins of attraction}
+\label{Manual:basins-of-attraction}
+The module {\hyperref[Basins:basins]{\emph{Basins}}} contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
 In non-deterministic STGs there are usually states from which more than one attractor is reachable.
 But, not every combination of attractors has states that can reach exactly that subset of attractors.
 The function \emph{basins\_diagram} checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
@@ -2614,7 +2614,7 @@ The edges of a basin diagram have the following attributes:
 
 \end{itemize}
 
-Basin diagrams can be visualized with the function {\hyperref[AttractorBasins:diagram2image]{\emph{diagram2image}}}.
+Basin diagrams can be visualized with the function {\hyperref[Basins:diagram2image]{\emph{diagram2image}}}.
 The function takes the primes, diagram and file name of the image as parameters.
 In addition you may specify \emph{FnameATTRACTORS} if you want a separate file for the specification of the attractors.
 Otherwise they are included in the diagram image.
@@ -2647,7 +2647,7 @@ You should make sure that the minimal trap spaces are indeed complete and univoc
 \caption{The basin diagram of the network \emph{arellano\_rootstem} from the repository.}\label{Manual:figure26}\end{figure}
 
 If you want to create a separate image for the basin and the states representing the attractors use the parameter \emph{FnameATTRACTORS} of the
-function {\hyperref[AttractorBasins:diagram2image]{\emph{diagram2image}}}:
+function {\hyperref[Basins:diagram2image]{\emph{diagram2image}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AB}\PYG{o}{.}\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{diagram.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{attractors.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
@@ -2963,7 +2963,7 @@ It is available at \href{http://www.vital-it.ch/software/genYsis}{http://www.vit
 \label{FileExchange:id7}\label{FileExchange:primes2bns}\index{primes2bns() (in module PyBoolNet.FileExchange)}
 
 \begin{fulllineitems}
-\phantomsection\label{FileExchange:PyBoolNet.FileExchange.primes2bns}\pysiglinewithargsret{\bfcode{primes2bns}}{\emph{Primes}, \emph{FnameBNS}}{}
+\phantomsection\label{FileExchange:PyBoolNet.FileExchange.primes2bns}\pysiglinewithargsret{\bfcode{primes2bns}}{\emph{Primes}, \emph{FnameBNS=None}}{}
 Saves Primes as a \emph{bns} file for the computation of all attractors of the synchronous transition system.
 \href{https://people.kth.se/~dubrova/bns.html}{BNS} is based on {\hyperref[Bibliography:dubrova2011]{\emph{Dubrova2011}}}.
 It is available at \href{http://people.kth.se/~dubrova/bns.html}{http://people.kth.se/\textasciitilde{}dubrova/bns.html}.
@@ -2973,7 +2973,7 @@ It is available at \href{http://people.kth.se/~dubrova/bns.html}{http://people.k
 \emph{Primes}: prime implicants
 
 \item {} 
-\emph{FnameBNS} (str): name of \emph{bns} file
+\emph{FnameBNS} (str): name of \emph{bns} file or \emph{None} to return file as string
 
 \end{itemize}
 
@@ -3897,6 +3897,7 @@ To find out which file formats are supported call \code{\$ dot -T?}.
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.create_image}\pysiglinewithargsret{\bfcode{create\_image}}{\emph{Primes, FnameIMAGE, Styles={[}'interactionsigns'{]}}}{}
 A convenience function for drawing interaction graphs directly from the prime implicants.
+\emph{Styles} must be a sublist of {[}''interactionsigns'', ``inputs'', ``outputs'', ``constants'', ``sccs'', ``anonymous''{]}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -3906,7 +3907,7 @@ A convenience function for drawing interaction graphs directly from the prime im
 \emph{FnameIMAGE} (str): name of image
 
 \item {} 
-\emph{Styles} (list): the styles to be applied, a sublist of {[}''interactionsigns'', ``inputs'', ``outputs'', ``constants'', ``sccs''{]}
+\emph{Styles} (list): the styles to be applied
 
 \end{itemize}
 
@@ -3915,7 +3916,32 @@ A convenience function for drawing interaction graphs directly from the prime im
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{mapk\PYGZus{}igraph.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{mapk\PYGZus{}igraph.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{Styles}\PYG{o}{=}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{interactionsigns}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{anonymous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{add\_style\_anonymous}
+\label{InteractionGraphs:add-style-anonymous}\label{InteractionGraphs:id8}\index{add\_style\_anonymous() (in module PyBoolNet.InteractionGraphs)}
+
+\begin{fulllineitems}
+\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_anonymous}\pysiglinewithargsret{\bfcode{add\_style\_anonymous}}{\emph{IGraph}}{}
+Creates an anonymous interaction graph with circular nodes without labels.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{IGraph}: interaction graph
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{add\PYGZus{}style\PYGZus{}anonymous}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{)}
 \end{Verbatim}
 
 \end{fulllineitems}
@@ -3923,7 +3949,7 @@ A convenience function for drawing interaction graphs directly from the prime im
 
 
 \subsection{add\_style\_interactionsigns}
-\label{InteractionGraphs:add-style-interactionsigns}\label{InteractionGraphs:id8}\index{add\_style\_interactionsigns() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-interactionsigns}\label{InteractionGraphs:id9}\index{add\_style\_interactionsigns() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_interactionsigns}\pysiglinewithargsret{\bfcode{add\_style\_interactionsigns}}{\emph{IGraph}}{}
@@ -3951,7 +3977,7 @@ ambivalent interaction get the attributes \emph{``arrowhead''=''dot''} and \emph
 
 
 \subsection{add\_style\_activities}
-\label{InteractionGraphs:add-style-activities}\label{InteractionGraphs:id9}\index{add\_style\_activities() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:id10}\label{InteractionGraphs:add-style-activities}\index{add\_style\_activities() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_activities}\pysiglinewithargsret{\bfcode{add\_style\_activities}}{\emph{IGraph}, \emph{Activities}, \emph{ColorActive='/paired10/5'}, \emph{ColorInactive='/paired10/1'}}{}
@@ -3990,7 +4016,7 @@ Interactions involving activated or inhibited nodes get the attribute \emph{``co
 
 
 \subsection{add\_style\_inputs}
-\label{InteractionGraphs:id10}\label{InteractionGraphs:add-style-inputs}\index{add\_style\_inputs() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-inputs}\label{InteractionGraphs:id11}\index{add\_style\_inputs() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_inputs}\pysiglinewithargsret{\bfcode{add\_style\_inputs}}{\emph{IGraph}}{}
@@ -4017,7 +4043,7 @@ In addition, the subgraph is labeled by a \emph{``Inputs''} in bold font.
 
 
 \subsection{add\_style\_outputs}
-\label{InteractionGraphs:id11}\label{InteractionGraphs:add-style-outputs}\index{add\_style\_outputs() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:id12}\label{InteractionGraphs:add-style-outputs}\index{add\_style\_outputs() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_outputs}\pysiglinewithargsret{\bfcode{add\_style\_outputs}}{\emph{IGraph}}{}
@@ -4044,7 +4070,7 @@ In addition, the subgraph is labeled by a \emph{``Outputs''} in bold font.
 
 
 \subsection{add\_style\_constants}
-\label{InteractionGraphs:id12}\label{InteractionGraphs:add-style-constants}\index{add\_style\_constants() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:id13}\label{InteractionGraphs:add-style-constants}\index{add\_style\_constants() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_constants}\pysiglinewithargsret{\bfcode{add\_style\_constants}}{\emph{IGraph}}{}
@@ -4069,7 +4095,7 @@ Sets the attribute \emph{``style''=''plaintext''} with \emph{``fillcolor''=''non
 
 
 \subsection{add\_style\_sccs}
-\label{InteractionGraphs:add-style-sccs}\label{InteractionGraphs:id13}\index{add\_style\_sccs() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-sccs}\label{InteractionGraphs:id14}\index{add\_style\_sccs() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_sccs}\pysiglinewithargsret{\bfcode{add\_style\_sccs}}{\emph{IGraph}}{}
@@ -4097,7 +4123,7 @@ Shadings repeat after a depth of 9.
 
 
 \subsection{add\_style\_path}
-\label{InteractionGraphs:add-style-path}\label{InteractionGraphs:id14}\index{add\_style\_path() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-path}\label{InteractionGraphs:id15}\index{add\_style\_path() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_path}\pysiglinewithargsret{\bfcode{add\_style\_path}}{\emph{IGraph}, \emph{Path}, \emph{Color}}{}
@@ -4129,7 +4155,7 @@ Sets the color of all nodes and edges involved in the given \emph{Path} to \emph
 
 
 \subsection{add\_style\_subgraphs}
-\label{InteractionGraphs:add-style-subgraphs}\label{InteractionGraphs:id15}\index{add\_style\_subgraphs() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-subgraphs}\label{InteractionGraphs:id16}\index{add\_style\_subgraphs() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_subgraphs}\pysiglinewithargsret{\bfcode{add\_style\_subgraphs}}{\emph{IGraph}, \emph{Subgraphs}}{}
@@ -4169,7 +4195,7 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 
 \subsection{add\_style\_default}
-\label{InteractionGraphs:add-style-default}\label{InteractionGraphs:id16}\index{add\_style\_default() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:add-style-default}\label{InteractionGraphs:id17}\index{add\_style\_default() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.add_style_default}\pysiglinewithargsret{\bfcode{add\_style\_default}}{\emph{IGraph}}{}
@@ -4194,7 +4220,7 @@ A convenience function that adds styles for interaction signs, SCCs, inputs, out
 
 
 \subsection{activities2animation}
-\label{InteractionGraphs:id17}\label{InteractionGraphs:activities2animation}\index{activities2animation() (in module PyBoolNet.InteractionGraphs)}
+\label{InteractionGraphs:id18}\label{InteractionGraphs:activities2animation}\index{activities2animation() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.activities2animation}\pysiglinewithargsret{\bfcode{activities2animation}}{\emph{IGraph}, \emph{Activities}, \emph{FnameGIF}, \emph{FnameTMP='tmp*.jpg'}, \emph{Delay=50}, \emph{Loop=0}}{}
@@ -4255,7 +4281,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43510e64\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43562924\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -4598,8 +4624,51 @@ If {\hyperref[StateTransitionGraphs:best-first-reachability]{\emph{best\_first\_
 
 
 
+\subsection{energy}
+\label{StateTransitionGraphs:energy}\label{StateTransitionGraphs:id8}\index{energy() (in module PyBoolNet.StateTransitionGraphs)}
+
+\begin{fulllineitems}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.energy}\pysiglinewithargsret{\bfcode{energy}}{\emph{Primes}, \emph{State}}{}
+This integer valued energy function E for Boolean networks is decreasing with transitions.
+That is, E(x) \textgreater{}= E(y) holds for any transition x -\textgreater{} y.
+It is based on the number of free variables in the smallest trapspace that contains \emph{State}.
+The energy is therefore n \textgreater{}= E(x) \textgreater{}= 0 and E(x)=0 for steady states holds.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{State} (dict / str): a state
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Energy} (int): number of free variables in smallest trapspace containing \emph{State}
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{StateTransitionGraphs}\PYG{o}{.}\PYG{n}{energy}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{000}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{1}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{StateTransitionGraphs}\PYG{o}{.}\PYG{n}{energy}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{010}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{3}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{StateTransitionGraphs}\PYG{o}{.}\PYG{n}{energy}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{001}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{0}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
 \subsection{state2str}
-\label{StateTransitionGraphs:state2str}\label{StateTransitionGraphs:id8}\index{state2str() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:state2str}\label{StateTransitionGraphs:id9}\index{state2str() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.state2str}\pysiglinewithargsret{\bfcode{state2str}}{\emph{State}}{}
@@ -4633,7 +4702,7 @@ If \emph{State} is already of type string it is simply returned.
 
 
 \subsection{state2dict}
-\label{StateTransitionGraphs:state2dict}\label{StateTransitionGraphs:id9}\index{state2dict() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id10}\label{StateTransitionGraphs:state2dict}\index{state2dict() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.state2dict}\pysiglinewithargsret{\bfcode{state2dict}}{\emph{Primes}, \emph{State}}{}
@@ -4670,7 +4739,7 @@ If \emph{State} is already of type \emph{dict} it is simply returned.
 
 
 \subsection{subspace2str}
-\label{StateTransitionGraphs:id10}\label{StateTransitionGraphs:subspace2str}\index{subspace2str() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id11}\label{StateTransitionGraphs:subspace2str}\index{subspace2str() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.subspace2str}\pysiglinewithargsret{\bfcode{subspace2str}}{\emph{Primes}, \emph{Subspace}}{}
@@ -4708,7 +4777,7 @@ If \emph{Subspace} is already of type \emph{str} it is simply returned.
 
 
 \subsection{subspace2dict}
-\label{StateTransitionGraphs:id11}\label{StateTransitionGraphs:subspace2dict}\index{subspace2dict() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id12}\label{StateTransitionGraphs:subspace2dict}\index{subspace2dict() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.subspace2dict}\pysiglinewithargsret{\bfcode{subspace2dict}}{\emph{Primes}, \emph{Subspace}}{}
@@ -4746,7 +4815,7 @@ If \emph{Subspace} is already of type \emph{dict} it is simply returned.
 
 
 \subsection{state\_is\_in\_subspace}
-\label{StateTransitionGraphs:id12}\label{StateTransitionGraphs:state-is-in-subspace}\index{state\_is\_in\_subspace() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id13}\label{StateTransitionGraphs:state-is-in-subspace}\index{state\_is\_in\_subspace() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.state_is_in_subspace}\pysiglinewithargsret{\bfcode{state\_is\_in\_subspace}}{\emph{Primes}, \emph{State}, \emph{Subspace}}{}
@@ -4784,7 +4853,7 @@ Checks whether \emph{State} is a state in \emph{Subspace}.
 
 
 \subsection{A\_is\_subspace\_of\_B}
-\label{StateTransitionGraphs:a-is-subspace-of-b}\label{StateTransitionGraphs:id13}\index{A\_is\_subspace\_of\_B() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:a-is-subspace-of-b}\label{StateTransitionGraphs:id14}\index{A\_is\_subspace\_of\_B() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B}\pysiglinewithargsret{\bfcode{A\_is\_subspace\_of\_B}}{\emph{Primes}, \emph{A}, \emph{B}}{}
@@ -4822,7 +4891,7 @@ Checks whether \emph{A} is a subspace of \emph{B}.
 
 
 \subsection{list\_states\_in\_subspace}
-\label{StateTransitionGraphs:id14}\label{StateTransitionGraphs:list-states-in-subspace}\index{list\_states\_in\_subspace() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:list-states-in-subspace}\label{StateTransitionGraphs:id15}\index{list\_states\_in\_subspace() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.list_states_in_subspace}\pysiglinewithargsret{\bfcode{list\_states\_in\_subspace}}{\emph{Primes}, \emph{Subspace}}{}
@@ -4858,7 +4927,7 @@ Generates all states contained in \emph{Subspace}.
 
 
 \subsection{list\_states\_referenced\_by\_proposition}
-\label{StateTransitionGraphs:list-states-referenced-by-proposition}\label{StateTransitionGraphs:id15}\index{list\_states\_referenced\_by\_proposition() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:list-states-referenced-by-proposition}\label{StateTransitionGraphs:id16}\index{list\_states\_referenced\_by\_proposition() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition}\pysiglinewithargsret{\bfcode{list\_states\_referenced\_by\_proposition}}{\emph{Primes}, \emph{Proposition}}{}
@@ -4901,7 +4970,7 @@ that appear in \emph{Proposition}.
 
 
 \subsection{hamming\_distance}
-\label{StateTransitionGraphs:hamming-distance}\label{StateTransitionGraphs:id16}\index{hamming\_distance() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:hamming-distance}\label{StateTransitionGraphs:id17}\index{hamming\_distance() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.hamming_distance}\pysiglinewithargsret{\bfcode{hamming\_distance}}{\emph{Subspace1}, \emph{Subspace2}}{}
@@ -4936,7 +5005,7 @@ Variables that are free in either subspace are ignored.
 
 
 \subsection{stg2dot}
-\label{StateTransitionGraphs:stg2dot}\label{StateTransitionGraphs:id17}\index{stg2dot() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:stg2dot}\label{StateTransitionGraphs:id18}\index{stg2dot() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.stg2dot}\pysiglinewithargsret{\bfcode{stg2dot}}{\emph{STG}, \emph{FnameDOT=None}}{}
@@ -4979,7 +5048,7 @@ For a list of attributes see \href{http://www.graphviz.org/doc/info/attrs.html}{
 
 
 \subsection{stg2image}
-\label{StateTransitionGraphs:stg2image}\label{StateTransitionGraphs:id18}\index{stg2image() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:stg2image}\label{StateTransitionGraphs:id19}\index{stg2image() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.stg2image}\pysiglinewithargsret{\bfcode{stg2image}}{\emph{STG}, \emph{FnameIMAGE}, \emph{LayoutEngine='fdp'}, \emph{Silent=False}}{}
@@ -5016,7 +5085,7 @@ Use \code{dot -T?} to find out which output formats are supported on your instal
 
 
 \subsection{add\_style\_tendencies}
-\label{StateTransitionGraphs:id19}\label{StateTransitionGraphs:add-style-tendencies}\index{add\_style\_tendencies() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id20}\label{StateTransitionGraphs:add-style-tendencies}\index{add\_style\_tendencies() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_tendencies}\pysiglinewithargsret{\bfcode{add\_style\_tendencies}}{\emph{STG}}{}
@@ -5042,7 +5111,7 @@ decreases values (\emph{red}), or both (\emph{blue}) which is only possible for 
 
 
 \subsection{add\_style\_sccs}
-\label{StateTransitionGraphs:add-style-sccs}\label{StateTransitionGraphs:id20}\index{add\_style\_sccs() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-sccs}\label{StateTransitionGraphs:id21}\index{add\_style\_sccs() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_sccs}\pysiglinewithargsret{\bfcode{add\_style\_sccs}}{\emph{STG}}{}
@@ -5070,7 +5139,7 @@ Shadings repeat after a depth of 9.
 
 
 \subsection{add\_style\_subspaces}
-\label{StateTransitionGraphs:id21}\label{StateTransitionGraphs:add-style-subspaces}\index{add\_style\_subspaces() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-subspaces}\label{StateTransitionGraphs:id22}\index{add\_style\_subspaces() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_subspaces}\pysiglinewithargsret{\bfcode{add\_style\_subspaces}}{\emph{Primes}, \emph{STG}, \emph{Subspaces}}{}
@@ -5113,7 +5182,7 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 
 \subsection{add\_style\_subgraphs}
-\label{StateTransitionGraphs:add-style-subgraphs}\label{StateTransitionGraphs:id22}\index{add\_style\_subgraphs() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-subgraphs}\label{StateTransitionGraphs:id23}\index{add\_style\_subgraphs() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_subgraphs}\pysiglinewithargsret{\bfcode{add\_style\_subgraphs}}{\emph{STG}, \emph{Subgraphs}}{}
@@ -5153,7 +5222,7 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 
 \subsection{add\_style\_mintrapspaces}
-\label{StateTransitionGraphs:id23}\label{StateTransitionGraphs:add-style-mintrapspaces}\index{add\_style\_mintrapspaces() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-mintrapspaces}\label{StateTransitionGraphs:id24}\index{add\_style\_mintrapspaces() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces}\pysiglinewithargsret{\bfcode{add\_style\_mintrapspaces}}{\emph{Primes}, \emph{STG}, \emph{MaxOutput=100}}{}
@@ -5185,7 +5254,7 @@ It adds a \emph{dot} subgraphs for every minimal trap space to \emph{STG} - subg
 
 
 \subsection{add\_style\_path}
-\label{StateTransitionGraphs:add-style-path}\label{StateTransitionGraphs:id24}\index{add\_style\_path() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-path}\label{StateTransitionGraphs:id25}\index{add\_style\_path() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_path}\pysiglinewithargsret{\bfcode{add\_style\_path}}{\emph{STG}, \emph{Path}, \emph{Color}, \emph{Penwidth=3}}{}
@@ -5220,7 +5289,7 @@ Sets the color of all nodes and edges involved in the given \emph{Path} to \emph
 
 
 \subsection{add\_style\_default}
-\label{StateTransitionGraphs:add-style-default}\label{StateTransitionGraphs:id25}\index{add\_style\_default() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-default}\label{StateTransitionGraphs:id26}\index{add\_style\_default() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_default}\pysiglinewithargsret{\bfcode{add\_style\_default}}{\emph{Primes}, \emph{STG}}{}
@@ -5708,14 +5777,124 @@ Creates an attractor report for the network defined by \emph{Primes}.
 
 
 
-\section{AttractorBasins}
-\label{AttractorBasins:attractorbasins}\label{AttractorBasins::doc}\label{AttractorBasins:id1}
+\section{Basins}
+\label{Basins:basins}\label{Basins::doc}\label{Basins:id1}
 
-\subsection{commitment\_diagram}
-\label{AttractorBasins:id2}\label{AttractorBasins:commitment-diagram}\index{commitment\_diagram() (in module PyBoolNet.AttractorBasins)}
+\subsection{weak\_basins}
+\label{Basins:weak-basins}\label{Basins:id2}\index{weak\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{AttractorBasins:PyBoolNet.AttractorBasins.commitment_diagram}\pysiglinewithargsret{\bfcode{commitment\_diagram}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{AdditionalEdgeData=False}, \emph{Silent=True}, \emph{ReturnCounter=False}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameBarChart=None}}{}
+Uses model checking with accepting states to compute the weak basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
+\emph{Attractors} may be used to specify a list of representative states for the attractors.
+Otherwise the weak basins of the minimal trap spaces is returned.
+Use \emph{FnameBarChart} to create a bar char of the weak basins, this requires \emph{matplotlib}.
+The weak basins are returned in the form of a dictionary:
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{Update} (str): the update strategy, one of \emph{``asynchronous''}, \emph{``synchronous''}, \emph{``mixed''}
+
+\item {} 
+\emph{Attractors} (list): list of states or subspaces representing the attractors. \emph{None} results in the computation of the minimal trap spaces.
+
+\item {} 
+\emph{Minimize} (bool): minimize the resulting expressions
+
+\item {} 
+\emph{FnameBarChart} (str): file name of bar chart of weak basins
+
+\end{itemize}
+
+\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\emph{WeakBasins} (dict): the weak basins
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{weak\PYGZus{}basins}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{    \PYGZob{}   \PYGZsq{}001\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Raf) \textbar{} (!Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 62.5, \PYGZsq{}size\PYGZsq{}: 5L\PYGZcb{},}
+\PYG{g+go}{        \PYGZsq{}11\PYGZhy{}\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(Mek) \textbar{} (Erk)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 75.0, \PYGZsq{}size\PYGZsq{}: 6L\PYGZcb{}\PYGZcb{}}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{strong\_basins}
+\label{Basins:strong-basins}\label{Basins:id3}\index{strong\_basins() (in module PyBoolNet.Basins)}
+
+\begin{fulllineitems}
+\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnamePieChart=None}}{}
+Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
+\emph{Attractors} may be used to specify a list of representative states for the attractors.
+Otherwise the strong basins of the minimal trap spaces is returned.
+Use \emph{FnameBarChart} to create a bar char of the weak basins, this requires \emph{matplotlib}.
+The strong basins are returned in the form of a dictionary:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+* \PYGZsq{}01100\PYGZhy{}\PYGZhy{}0\PYGZsq{}: (str of attractor representant)
+    * \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{} (Boolean expression for states)
+    * \PYGZsq{}perc\PYGZsq{}:    0.5             (percentage of state space)
+    * \PYGZsq{}size\PYGZsq{}:    8               (number of states)
+\end{Verbatim}
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{Update} (str): the update strategy, one of \emph{``asynchronous''}, \emph{``synchronous''}, \emph{``mixed''}
+
+\item {} 
+\emph{Attractors} (list): list of states or subspaces representing the attractors. \emph{None} results in the computation of the minimal trap spaces.
+
+\item {} 
+\emph{Minimize} (bool): minimize the resulting expressions
+
+\item {} 
+\emph{FnameBarChart} (str): file name of pie chart of strong basins
+
+\end{itemize}
+
+\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\emph{StrongBasins} (dict): the strong basins
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{strong\PYGZus{}basins}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{    \PYGZob{}   \PYGZsq{}001\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 25.0, \PYGZsq{}size\PYGZsq{}: 2L\PYGZcb{},}
+\PYG{g+go}{        \PYGZsq{}11\PYGZhy{}\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(Mek \PYGZam{} Raf) \textbar{} (Erk \PYGZam{} Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 37.5, \PYGZsq{}size\PYGZsq{}: 3L\PYGZcb{},}
+\PYG{g+go}{        \PYGZsq{}outside\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} Mek \PYGZam{} !Raf) \textbar{} (Erk \PYGZam{} !Mek)\PYGZsq{},}
+\PYG{g+go}{                       \PYGZsq{}perc\PYGZsq{}: 37.5,}
+\PYG{g+go}{                       \PYGZsq{}size\PYGZsq{}: 3L\PYGZcb{}\PYGZcb{}}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{commitment\_diagram}
+\label{Basins:id4}\label{Basins:commitment-diagram}\index{commitment\_diagram() (in module PyBoolNet.Basins)}
+
+\begin{fulllineitems}
+\phantomsection\label{Basins:PyBoolNet.Basins.commitment_diagram}\pysiglinewithargsret{\bfcode{commitment\_diagram}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{AdditionalEdgeData=False}, \emph{Silent=False}, \emph{ReturnCounter=False}}{}
 Creates the commitment diagram, a networkx.DiGraph, of the STG defined by \emph{Primes} and \emph{Update}.
 The nodes of the diagram represent states that can reach the exact same subset of \emph{Attractors}.
 Nodes are labeled by the index of the attractor in the order given in \emph{Attractors} and the number of states
@@ -5745,7 +5924,7 @@ disconnected components are considered separately (and recombined using a cartes
 \emph{Silent} (bool): whether information regarding the execution of the algorithm should be printed
 
 \item {} 
-\emph{ReturnCounter} (bool): whether the number of performed model checks should be returned
+\emph{ReturnCounter} (bool): whether the number of performed model checks should be returned, used for statistics
 
 \end{itemize}
 
@@ -5763,7 +5942,7 @@ disconnected components are considered separately (and recombined using a cartes
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{REPO}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{xiao\PYGZus{}wnt5a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{xiao\PYGZus{}wnt5a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{commitment\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram}\PYG{o}{.}\PYG{n}{order}\PYG{p}{(}\PYG{p}{)}
 \PYG{g+go}{6}
@@ -5778,14 +5957,13 @@ disconnected components are considered separately (and recombined using a cartes
 
 
 \subsection{diagram2image}
-\label{AttractorBasins:diagram2image}\label{AttractorBasins:id3}\index{diagram2image() (in module PyBoolNet.AttractorBasins)}
+\label{Basins:diagram2image}\label{Basins:id5}\index{diagram2image() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{AttractorBasins:PyBoolNet.AttractorBasins.diagram2image}\pysiglinewithargsret{\bfcode{diagram2image}}{\emph{Primes}, \emph{Diagram}, \emph{FnameIMAGE=None}, \emph{FnameATTRACTORS=None}, \emph{StyleInputs=True}, \emph{StyleFillColor=False}, \emph{StyleSplines='curved'}, \emph{StyleEdges=False}, \emph{StyleRanks=True}, \emph{FirstIndex=0}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.diagram2image}\pysiglinewithargsret{\bfcode{diagram2image}}{\emph{Primes}, \emph{Diagram}, \emph{FnameIMAGE=None}, \emph{StyleInputs=True}, \emph{StyleSplines='curved'}, \emph{StyleEdges=False}, \emph{StyleRanks=True}, \emph{FirstIndex=1}}{}
 Creates the image file \emph{FnameIMAGE} for the basin diagram given by \emph{Diagram}.
-Use \emph{FnameATTRACTORS} to create a separate image in which the indices of the diagram are mapped to the given attractors.
 The flag \emph{StyleInputs} can be used to highlight which basins belong to which input combination.
-\emph{StyleEdges} adds edge labels that indicate the size of the ``border'' (if \emph{ComputeBorder} was enabled in {\hyperref[AttractorBasins:commitment-diagram]{\emph{commitment\_diagram}}})
+\emph{StyleEdges} adds edge labels that indicate the size of the ``border'' (if \emph{ComputeBorder} was enabled in {\hyperref[Basins:commitment-diagram]{\emph{commitment\_diagram}}})
 and the size of the states of the source basin that can reach the target basin.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -5799,13 +5977,7 @@ and the size of the states of the source basin that can reach the target basin.
 \emph{FnameIMAGE} (str): name of the diagram image
 
 \item {} 
-\emph{FnameATTRACTORS} (str): name of the attractor key file, if wanted
-
-\item {} 
 \emph{StyleInputs} (bool): whether basins should be grouped by input combinations
-
-\item {} 
-\emph{StyleFillColor} (bool): whether nodes should be given a shade of gray that represents the percentage of state spaces contained in the respective basin
 
 \item {} 
 \emph{StyleSplines} (str): dot style for edges, e.g. ``curved'', ``line'' or ``ortho'' for orthogonal edges
@@ -5837,45 +6009,6 @@ and the size of the states of the source basin that can reach the target basin.
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{basins.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{basins.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{attractors.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\end{Verbatim}
-
-\end{fulllineitems}
-
-
-
-\subsection{diagram2aggregate\_image}
-\label{AttractorBasins:id4}\label{AttractorBasins:diagram2aggregate-image}\index{diagram2aggregate\_image() (in module PyBoolNet.AttractorBasins)}
-
-\begin{fulllineitems}
-\phantomsection\label{AttractorBasins:PyBoolNet.AttractorBasins.diagram2aggregate_image}\pysiglinewithargsret{\bfcode{diagram2aggregate\_image}}{\emph{Primes}, \emph{Diagram}, \emph{FnameIMAGE}}{}
-Creates the image file \emph{FnameIMAGE} for the aggregated basin diagram given by \emph{Diagram}.
-The aggregated basin diagram takes the union of all basins from which the same number of attractors
-can be reached even if they are not the exact same set.
-\begin{description}
-\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
-\item {} 
-\emph{Primes}: prime implicants, needed for pretty printing of the attractors.
-
-\item {} 
-\emph{Diagram} (networkx.DiGrap): a basin diagram
-
-\item {} 
-\emph{FnameIMAGE} (str): name of the aggragated diagram image
-
-\end{itemize}
-
-\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
-\item {} 
-\emph{None}
-
-\end{itemize}
-
-\end{description}
-
-\textbf{example}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2aggregate\PYGZus{}image}\PYG{p}{(}\PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{aggregated.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 \end{fulllineitems}
@@ -6057,7 +6190,7 @@ In that case the four values that involve the initial states are set to \emph{No
 \emph{CTLSpec} (str): a {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} formula, including the keyword \emph{CTLSPEC}
 
 \item {} 
-\emph{DynamicReorder} (bool): enables dynamic reordering of variables using \emph{-dynamic}
+\emph{DynamicReorder} (bool): enables dynamic reordering of variables (\emph{-dynamic})
 
 \item {} 
 \emph{ConeOfInfluence} (bool): enables cone of influence reduction using \emph{-coi}
@@ -6501,7 +6634,7 @@ Typically this query is used to define INIT constraints from a given subspace.
 \label{TrapSpaces:id2}\label{TrapSpaces:trap-spaces}\index{trap\_spaces() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=100}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns a list of trap spaces using the {\hyperref[Installation:installation-potassco]{\emph{Potassco}}} ASP solver, see {\hyperref[Bibliography:gebser2011]{\emph{Gebser2011}}}.
 For a formal introcution to trap spaces and the ASP encoding that is used for their computation see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
@@ -6561,7 +6694,7 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 \label{TrapSpaces:steady-states}\label{TrapSpaces:id3}\index{steady\_states() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=100}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns steady states.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6603,7 +6736,7 @@ Returns steady states.
 \label{TrapSpaces:trap-spaces-bounded}\label{TrapSpaces:id4}\index{trap\_spaces\_bounded() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces_bounded}\pysiglinewithargsret{\bfcode{trap\_spaces\_bounded}}{\emph{Primes}, \emph{Type}, \emph{Bounds}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces_bounded}\pysiglinewithargsret{\bfcode{trap\_spaces\_bounded}}{\emph{Primes}, \emph{Type}, \emph{Bounds}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
 Returns a list of bounded trap spaces using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
 See \emph{trap\_spaces} for details of the parameters \emph{Type}, \emph{MaxOutput} and \emph{FnameASP}.
 The parameter \emph{Bounds} is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
@@ -6664,7 +6797,7 @@ list of trap spaces
 \label{TrapSpaces:steady-states-projected}\label{TrapSpaces:id5}\index{steady\_states\_projected() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{Aggregate=False}, \emph{MaxOutput=100}, \emph{FnameASP=None}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
 Returns a list of projected steady states using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6673,9 +6806,6 @@ Returns a list of projected steady states using the \href{http://potassco.source
 
 \item {} 
 \emph{Project}: list of names
-
-\item {} 
-\emph{Aggregate}: count number of steady states per projection
 
 \item {} 
 \emph{MaxOutput} (int): maximal number of trap spaces to return
@@ -6711,7 +6841,7 @@ Returns a list of projected steady states using the \href{http://potassco.source
 \label{TrapSpaces:id6}\label{TrapSpaces:primes2asp}\index{primes2asp() (in module PyBoolNet.TrapSpaces)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}, \emph{Percolate}}{}
+\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}, \emph{Type}}{}
 Saves Primes as an \emph{asp} file in the \href{http://potassco.sourceforge.net/}{Potassco} format intended for computing minimal and maximal trap spaces.
 The homepage of the \href{http://potassco.sourceforge.net/}{Potassco} solving collection is \href{http://potassco.sourceforge.net}{http://potassco.sourceforge.net}.
 The \emph{asp} file consists of data, the hyperarcs of the prime implicant graph,
@@ -6728,8 +6858,9 @@ A list of names projects the solutions onto these variables using the meta comma
 Variables of \emph{Project} that do not appear in \emph{Primes} are ignored.
 \emph{None} results in no projection.
 
-\emph{Percolate} determines whether the computed trap spaces should be fully percolated, i.e., such that no variable can be fixed due to already
-fixed variables.
+\emph{Type} specifies whether additional constraints should be enforced.
+For example for computing circuits or percolated trap spaces.
+Recognized values are `circuits' and `percolated', everything else will be ignored.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6745,7 +6876,7 @@ fixed variables.
 \emph{Project} (list): names to project to or \emph{None} for no projection
 
 \item {} 
-\emph{Percolate} (bool): enforces percolation constraint on trap spaces
+\emph{Type} (str): one of `circuits' or `percolated' or \emph{None}
 
 \end{itemize}
 
