@@ -14,6 +14,25 @@ ESPRESSO_CMD = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("
 
 
 
+def A_implies_B(A,B):
+    """
+    uses minimize_espresso to compute whether A implies B.
+    """
+    
+    res = minimize_espresso("!{B} & {A}".format(A=A,B=B))
+    
+    return res=="0"
+
+
+def A_equals_B(A,B):
+    """
+    uses minimize_espresso to compute whether A is equivalent to B.
+    """
+    
+    return A_implies_B(A,B) and A_implies_B(B,A)
+
+
+
 def _eqntott_error(eqntott, eqntott_out, eqntott_err):
     """
     raises exception for eqntott
@@ -88,7 +107,7 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
     if (os.path.isfile(Expression)):
         with open(Expression, 'r') as fname:
             Expression = fname.read()
-    assert(type(Expression) == str)
+    assert(type(Expression) in [str,unicode])
     forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
     assert(all(var not in Expression for var in forbidden))
     AddName = False
