@@ -115,7 +115,7 @@ def igraph2dot(IGraph, FnameDOT=None):
     return PyBoolNet.Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
-def igraph2image(IGraph, FnameIMAGE, Silent=False):
+def igraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     """
     Creates an image file from *IGraph* using :ref:`installation_graphviz` and the layout engine *dot*.
     To find out which file formats are supported call ``$ dot -T?``.
@@ -123,6 +123,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
     **arguments**:
         * *IGraph*: interaction graph
         * *FnameIMAGE* (str): name of image
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
@@ -132,7 +133,7 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image(igraph, "mapk_igraph.svg")
     """
 
-    PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
+    PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=Silent)
 
 
 def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
@@ -248,6 +249,7 @@ def add_style_anonymous(IGraph):
     IGraph.graph["node"]["shape"] = "circle"
     IGraph.graph["node"]["style"] = "filled"
     IGraph.graph["node"]["fillcolor"] = "lightgray"
+    IGraph.graph["node"]["color"] = "black"
     
     for x in IGraph.nodes():
         IGraph.node[x]["label"]=""

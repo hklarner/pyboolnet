@@ -130,7 +130,7 @@ class TestBooleanExpressions(unittest.TestCase):
 
 
 
-class TestAttractorBasins(unittest.TestCase):
+class TestBasins(unittest.TestCase):
     def test_basin_diagram(self):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
@@ -139,15 +139,14 @@ class TestAttractorBasins(unittest.TestCase):
 
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
 
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
-        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
-        PyBoolNet.Basins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
 
 
 
@@ -1806,16 +1805,14 @@ if __name__=="__main__":
     if 0:
         # run single test
         suite = unittest.TestSuite()
-<<<<<<< HEAD
-        suite.addTest(TestStateTransitionGraphs("test_energy"))
-=======
+
         suite.addTest(TestBooleanExpressions("test_minimize_espresso"))
->>>>>>> sarahnee
+
 
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
-    if 1:
+    if 0:
         # run test class
 
         import inspect

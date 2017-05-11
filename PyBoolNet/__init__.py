@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 
 
-import PyBoolNet.AttractorBasins
 import PyBoolNet.AttractorDetection
+import PyBoolNet.Basins
 import PyBoolNet.FileExchange
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.ModelChecking
@@ -16,7 +16,6 @@ import PyBoolNet.TrapSpaces
 import PyBoolNet.Repository
 import PyBoolNet.Utility
 import PyBoolNet.BooleanExpressions
-import PyBoolNet.Zanudo
 import PyBoolNet.Tests
 
 import pprint as prettyprint

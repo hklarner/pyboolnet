@@ -199,7 +199,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
         'v1 | v3'
     """
 
-    assert("CTLSPEC" in CTLSpec)
+    assert(CTLSpec[:7] == "CTLSPEC")
     
     print_warning_accstates_bug(Primes, CTLSpec)
               

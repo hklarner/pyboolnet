@@ -588,7 +588,7 @@ def percolate_and_remove_constants(Primes):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    return _percolation( Primes, RemoveConstants=True )
+    return _percolation(Primes, RemoveConstants=True)
     
 
 def input_combinations(Primes):

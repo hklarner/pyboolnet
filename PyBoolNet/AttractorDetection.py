@@ -670,6 +670,7 @@ def create_attractor_report(Primes, FnameTXT=None):
     
     bnet = []
     for row in PyBoolNet.FileExchange.primes2bnet(Primes).split("\n"):
+        if not row.strip(): continue
         t, f = row.split(",")
         bnet.append((t.strip(),f.strip()))
 

@@ -99,3 +99,25 @@ def divide_list_into_similar_length_lists(List):
         lists.append(stack)
 
     return lists
+
+
+def perc2str(Perc):
+    """
+    converts a number into a nice string.
+    Used for plotting the labels of quationt graphs, e.g. Basins.commitment_diagram2image(..)
+    """
+    
+    res = "%.4f"%Perc
+    i,d = res.split('.')
+    remove = d[-1]=="0"
+    while remove:
+        if len(d)>1:
+            d=d[:-1]
+            remove = d[-1]=="0"
+        else:
+            d=""
+            remove = False
+        
+    if d:
+        return i+'.'+d
+    return i

@@ -28,12 +28,16 @@ CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 
 
-def weak_basins(Primes, Update, Attractors=None, Minimize=True, FnameBarChart=None):
+perc2str = PyBoolNet.Utility.Misc.perc2str
+
+
+
+def weak_basins(Primes, Update, Attractors=None, Minimize=True, FnameImage=None, Title=None):
     """
     Uses model checking with accepting states to compute the weak basins of attraction of the network defined by *Primes* and *Update*.
     *Attractors* may be used to specify a list of representative states for the attractors.
     Otherwise the weak basins of the minimal trap spaces is returned.
-    Use *FnameBarChart* to create a bar char of the weak basins, this requires https://matplotlib.org.
+    Use *FnameImage* to create a bar chart of the weak basins, this requires https://matplotlib.org.
     The weak basins are returned in the form of a dictionary::
 
         * '01100--0': (str of attractor representant)
@@ -46,7 +50,8 @@ def weak_basins(Primes, Update, Attractors=None, Minimize=True, FnameBarChart=No
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
         * *Minimize* (bool): minimize the resulting expressions
-        * *FnameBarChart* (str): file name of bar chart of weak basins
+        * *FnameImage* (str): file name of bar chart of weak basins
+        * *Title* (str): optional title of plot
 
     **returns**::
         * *WeakBasins* (dict): the weak basins
@@ -63,27 +68,35 @@ def weak_basins(Primes, Update, Attractors=None, Minimize=True, FnameBarChart=No
         Attractors = PyBoolNet.TrapSpaces.trap_spaces(Primes,"min")
 
     total_size = 2**len(Primes)
-
     res = {}
-    for x in Attractors:
-        prop = PyBoolNet.QueryPatterns.subspace2proposition(Primes,x)
-        label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
+    
+    if len(Attractors) == 1:
+        label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,Attractors[0])
+        res[label] = {"size":    total_size,
+                      "formula": "TRUE",
+                      "perc":    100.}
+    else:
+    
+        for x in Attractors:
+            prop = PyBoolNet.QueryPatterns.subspace2proposition(Primes,x)
+            label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
 
-        init = "INIT TRUE"
-        spec = "CTLSPEC EF(%s)"%prop
-        ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
+            init = "INIT TRUE"
+            spec = "CTLSPEC EF(%s)"%prop
+            ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
 
 
-        size = acc["INITACCEPTING_SIZE"]
-        formula = acc["INITACCEPTING"]
-        if Minimize:
-            formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
-            
-        res[label] = {"size":    size,
-                      "formula": formula,
-                      "perc":    100.* size / total_size}
+            size = acc["INITACCEPTING_SIZE"]
+            formula = acc["INITACCEPTING"]
 
-    if FnameBarChart:
+            if Minimize and formula not in ["TRUE","FALSE"]:
+                formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
+                
+            res[label] = {"size":    size,
+                          "formula": formula,
+                          "perc":    100.* size / total_size}
+
+    if FnameImage:
         try:
             import matplotlib.pyplot
             success = True
@@ -97,31 +110,43 @@ def weak_basins(Primes, Update, Attractors=None, Minimize=True, FnameBarChart=No
             figure = matplotlib.pyplot.figure()
 
             labels = sorted(res, key=lambda x: res[x]["perc"], reverse=True)
-            y = [res[x]["perc"] for x in labels]
-            N = len(y)
+
+            strong = strong_basins(Primes, Update, Attractors=Attractors, Minimize=Minimize)
+            y1 = [strong[x]["perc"]  for x in labels]
+            y2 = [res[x]["perc"]-strong[x]["perc"] for x in labels]
+
+            N = len(y1)
             x = range(N)
             width = 1/1.5
 
-            matplotlib.pyplot.bar(x, y, width, color="cornflowerblue", align='center')
+            matplotlib.pyplot.bar(x, y1, width, color="gold", align='center', label='strong')
+            matplotlib.pyplot.bar(x, y2, width, bottom=y1, color="cornflowerblue", align='center', label='weak')
             matplotlib.pyplot.xticks(range(len(labels)), labels, rotation=40, ha="right")
             matplotlib.pyplot.ylim((0,100))
+            matplotlib.pyplot.legend(loc='upper left')
 
-            matplotlib.pyplot.title('Weak Basins of Attraction', y=1.08)
+            if Title:
+                matplotlib.pyplot.title(Title, y=1.08)
+            else:
+                matplotlib.pyplot.title('Weak Basins of Attraction', y=1.08)
+                
             matplotlib.pyplot.ylabel('% of state space')
+            matplotlib.pyplot.tight_layout()
 
-            figure.savefig(FnameBarChart)
-            print("created %s"%FnameBarChart)
+            figure.savefig(FnameImage)
+            print("created %s"%FnameImage)
+            matplotlib.pyplot.close(figure)
 
     return res
 
 
 
-def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnamePieChart=None):
+def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnameImage=None, Title=None):
     """
     Uses model checking with accepting states to compute the strong basins of attraction of the network defined by *Primes* and *Update*.
     *Attractors* may be used to specify a list of representative states for the attractors.
     Otherwise the strong basins of the minimal trap spaces is returned.
-    Use *FnameBarChart* to create a bar char of the weak basins, this requires https://matplotlib.org.
+    Use *FnameImage* to create a pie chart of the strong basins, this requires https://matplotlib.org.
     The strong basins are returned in the form of a dictionary::
 
         * '01100--0': (str of attractor representant)
@@ -138,7 +163,8 @@ def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnamePieChart=
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
         * *Minimize* (bool): minimize the resulting expressions
-        * *FnameBarChart* (str): file name of pie chart of strong basins
+        * *FnameImage* (str): file name of pie chart of strong basins
+        * *Title* (str): optional title of plot
 
     **returns**::
         * *StrongBasins* (dict): the strong basins
@@ -158,28 +184,40 @@ def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnamePieChart=
         Attractors = PyBoolNet.TrapSpaces.trap_spaces(Primes,"min")
 
     total_size = 2**len(Primes)
-    count = 0
+    
     
     res = {}
-           
-    for x in Attractors:
-        prop = PyBoolNet.QueryPatterns.subspace2proposition(Primes,x)
-        label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
 
-        init = "INIT TRUE"
-        spec = "CTLSPEC AG(EF(%s))"%prop
-        ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
+    if len(Attractors) == 1:
+        count = total_size
+        
+        label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,Attractors[0])
+        res[label] = {"size":    total_size,
+                      "formula": "TRUE",
+                      "perc":    100.}
+        
+        
+    else:
+        count = 0
+        
+        for x in Attractors:
+            prop = PyBoolNet.QueryPatterns.subspace2proposition(Primes,x)
+            label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
+
+            init = "INIT TRUE"
+            spec = "CTLSPEC AG(EF(%s))"%prop
+            ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
 
 
-        size = acc["INITACCEPTING_SIZE"]
-        count+=size
-        formula = acc["INITACCEPTING"]
-        if Minimize:
-            formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
-            
-        res[label] = {"size":    size,
-                      "formula": formula,
-                      "perc":    100.* size / total_size}
+            size = acc["INITACCEPTING_SIZE"]
+            count+=size
+            formula = acc["INITACCEPTING"]
+            if Minimize and formula not in ["TRUE","FALSE"]:
+                formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
+                
+            res[label] = {"size":    size,
+                          "formula": formula,
+                          "perc":    100.* size / total_size}
            
 
     if count<total_size:
@@ -197,17 +235,17 @@ def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnamePieChart=
         if Minimize:
             formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
 
-        res["outside"] = {"size":    size,
+        res["not in any strong basin"] = {"size":    size,
                           "formula": formula,
                           "perc":    100.* size / total_size}
 
     else:
-        res["outside"] = {"size":    0,
+        res["not in any strong basin"] = {"size":    0,
                           "formula": "0",
                           "perc":    .0}
 
 
-    if FnamePieChart:
+    if FnameImage:
         try:
             import matplotlib.pyplot
             success = True
@@ -222,23 +260,30 @@ def strong_basins(Primes, Update, Attractors=None, Minimize=True, FnamePieChart=
          
             labels = sorted(res)
             sizes  = [res[x]["size"] for x in labels]
-            colors = [matplotlib.pyplot.cm.rainbow(1.*x/len(labels)) for x in range(len(labels))]
+            colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(labels)+1)) for x in range(len(labels)+2)][1:-1]
+            colors[-1] = "white"
             explode = [0]*(len(labels)-1)+[.08]
              
             matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140) 
             matplotlib.pyplot.axis('equal')
 
-            matplotlib.pyplot.title('Strong Basins of Attraction', y=1.08)
+            if Title:
+                matplotlib.pyplot.title(Title, y=1.08)
+            else:
+                matplotlib.pyplot.title('Strong Basins of Attraction', y=1.08)
+                
+            matplotlib.pyplot.tight_layout()
 
-            figure.savefig(FnamePieChart)
-            print("created %s"%FnamePieChart)
+            figure.savefig(FnameImage)
+            print("created %s"%FnameImage)
+            matplotlib.pyplot.close(figure)
 
     return res
                     
 
         
 
-def commitment_diagram(Primes, Update, Attractors=None, AdditionalEdgeData=False, Silent=False, ReturnCounter=False):
+def commitment_diagram(Primes, Update, Attractors=None, AdditionalEdgeData=False, FnameImage=None, Silent=False, ReturnCounter=False):
     """
     Creates the commitment diagram, a networkx.DiGraph, of the STG defined by *Primes* and *Update*.
     The nodes of the diagram represent states that can reach the exact same subset of *Attractors*.
@@ -257,6 +302,7 @@ def commitment_diagram(Primes, Update, Attractors=None, AdditionalEdgeData=False
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
         * *AdditionalEdgeData* (bool): whether the computation of the so-called border states should be included in the diagram
+        * *FnameImage* (str): will call commitment_diagram2image(..)
         * *Silent* (bool): whether information regarding the execution of the algorithm should be printed
         * *ReturnCounter* (bool): whether the number of performed model checks should be returned, used for statistics
 
@@ -345,6 +391,11 @@ def commitment_diagram(Primes, Update, Attractors=None, AdditionalEdgeData=False
     
     if not Silent:
         print(" total executions of NuSMV: %i"%counter_mc)
+
+
+    if FnameImage:
+        commitment_diagram2image(Primes, Diagram=diagram, FnameIMAGE=FnameImage, StyleInputs=True,
+                                 StyleSplines="curved", StyleEdges=AdditionalEdgeData, StyleRanks=True, FirstIndex=1)
 
     if ReturnCounter:
         return diagram, counter_mc
@@ -466,7 +517,7 @@ def _commitment_diagram_component(Primes, Update, Attractors, AdditionalEdgeData
                         data["EF_formula"] = source_data["formula"]
 
                     else:
-                        spec = "CTLSPEC EF(%s)"%data["EX_formula"]
+                        spec = "CTLSPEC E[%s U %s]"%(source_data["formula"],target_data["formula"])
                         answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                         counter_mc+=1
                         
@@ -483,7 +534,7 @@ def _commitment_diagram_component(Primes, Update, Attractors, AdditionalEdgeData
     return diagram, counter_mc
 
 
-def diagram2image(Primes, Diagram, FnameIMAGE=None, StyleInputs=True,
+def commitment_diagram2image(Primes, Diagram, FnameIMAGE=None, StyleInputs=True,
                   StyleSplines="curved", StyleEdges=False, StyleRanks=True, FirstIndex=1):
     """
     Creates the image file *FnameIMAGE* for the basin diagram given by *Diagram*.
@@ -507,8 +558,8 @@ def diagram2image(Primes, Diagram, FnameIMAGE=None, StyleInputs=True,
 
     **example**::
 
-        >>> diagram2image(primes, diagram, "basins.pdf")
-        >>> diagram2image(primes, diagram, "basins.pdf", "attractors.pdf")
+        >>> commitment_diagram2image(primes, diagram, "basins.pdf")
+        >>> commitment_diagram2image(primes, diagram, "basins.pdf", "attractors.pdf")
     """
 
     assert(type(Primes)==dict)
@@ -563,17 +614,18 @@ def diagram2image(Primes, Diagram, FnameIMAGE=None, StyleInputs=True,
         if StyleEdges:
             edge_label = []
 
-            perc = 100.* data["EX_size"] / Diagram.node[source]["size"]
-            edge_label.append("EX: %s%%"%perc2str(perc))
+            
+            #perc = 100.* data["EX_size"] / Diagram.node[source]["size"]
+            #edge_label.append("EX: %s%%"%perc2str(perc))
     
             if "EF_size" in data:
-                perc = 100.* data["EF_size"] / Diagram.node[source]["size"]
-                edge_label.append("EF: %s%%"%perc2str(perc))
+                #perc = 100.* data["EF_size"] / Diagram.node[source]["size"]
+                #edge_label.append("EF: %s%%"%perc2str(perc))
 
                 if data["EF_size"] < Diagram.node[source]["size"]:
                     result.edge[source][target]["color"]="lightgray"
 
-            result.edge[source][target]["label"] = "<%s>"%("<br/>".join(edge_label))
+            #result.edge[source][target]["label"] = "<%s>"%("<br/>".join(edge_label))
 
 
 
@@ -633,25 +685,8 @@ def diagram2image(Primes, Diagram, FnameIMAGE=None, StyleInputs=True,
     
 
 
-
 #######################
 ## auxillary functions
-
-def perc2str(Perc):
-    res = "%.4f"%Perc
-    i,d = res.split('.')
-    remove = d[-1]=="0"
-    while remove:
-        if len(d)>1:
-            d=d[:-1]
-            remove = d[-1]=="0"
-        else:
-            d=""
-            remove = False
-        
-    if d:
-        return i+'.'+d
-    return i
 
     
 def project_attractors(Attractors, Names):
