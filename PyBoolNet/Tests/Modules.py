@@ -90,10 +90,7 @@ class TestBooleanExpressions(unittest.TestCase):
         msg = "\nexpression: "+expression
         msg+= "\nexpected:   "+str(expected)
         msg+= "\ngot:        "+str(answer)
-        self.assertTrue(answer==expected, msg)
 
-
-    # neue tests
     def test_minimize_espresso2(self):
         expression = "a | !a"
         expected = "1"
@@ -129,7 +126,9 @@ class TestBooleanExpressions(unittest.TestCase):
         msg+= "\nexpected:   "+str(expected)
         msg+= "\ngot:        "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
+
+
 
 class TestAttractorBasins(unittest.TestCase):
     def test_basin_diagram(self):
@@ -1807,17 +1806,21 @@ if __name__=="__main__":
     if 0:
         # run single test
         suite = unittest.TestSuite()
+<<<<<<< HEAD
         suite.addTest(TestStateTransitionGraphs("test_energy"))
+=======
+        suite.addTest(TestBooleanExpressions("test_minimize_espresso"))
+>>>>>>> sarahnee
 
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
-    if 0:
+    if 1:
         # run test class
 
         import inspect
 
-        class_name = TestPyBoolNet.StateTransitionGraphs
+        class_name = TestBooleanExpressions
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):
