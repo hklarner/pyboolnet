@@ -109,7 +109,10 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
             Expression = fname.read()
     assert(type(Expression) in [str,unicode])
     forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
-    assert(all(var not in Expression for var in forbidden))
+    if not all(var not in Expression for var in forbidden):
+        print("ERROR: forbidden keyword in expression: %s"%Expression)
+        return Expression
+              
     AddName = False
     AddColon = False
     if not ("=" in Expression):
