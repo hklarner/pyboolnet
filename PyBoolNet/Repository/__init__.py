@@ -59,7 +59,7 @@ def names_with_fast_basin_computation():
               "dinwoodie_life", "faure_cellcycle",
               "irons_yeast", "randomnet_n7k3", "randomnet_n15k3",
               "saadatpour_guardcell", "tournier_apoptosis", "xiao_wnt5a",
-              "raf","n5s3","n3s1c1a","n3s1c1b","n6s1c2"]
+              "raf","n5s3","n3s1c1a","n3s1c1b","n6s1c2","n7s3"]
     
     return result
 
