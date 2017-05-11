@@ -19,7 +19,7 @@ import PyBoolNet.StateTransitionGraphs
 import PyBoolNet.TrapSpaces
 import PyBoolNet.ModelChecking
 import PyBoolNet.AttractorDetection
-import PyBoolNet.AttractorBasins
+import PyBoolNet.Basins
 import PyBoolNet.QueryPatterns
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Repository
@@ -136,19 +136,19 @@ class TestAttractorBasins(unittest.TestCase):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
         attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
-        diagram = PyBoolNet.AttractorBasins.commitment_diagram(primes, update, attractors, Silent=False)
+        diagram = PyBoolNet.Basins.commitment_diagram(primes, update, attractors, Silent=False)
 
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
 
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleFillColor=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
-        PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
+        PyBoolNet.Basins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
+        PyBoolNet.Basins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
 
 
 
