@@ -548,8 +548,26 @@ To install it on linux run:
 Make sure to check the paths in \code{settings.cfg}.
 
 
-\section{Additional Software}
-\label{Installation:additional-software}
+\subsection{matplotlib}
+\label{Installation:matplotlib}\label{Installation:installation-matplotlib}
+The package matplotlib is used to plot pie charts and bar plots and similiar graphs,
+for example in the function {\hyperref[Basins:weak-basins]{\emph{weak\_basins}}} and {\hyperref[Basins:strong-basins]{\emph{strong\_basins}}} of the {\hyperref[Basins:basins]{\emph{Basins}}} module.
+To install it on linux run:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZdl{} sudo pip install matplotlib
+\end{Verbatim}
+
+\href{http://matplotlib.org}{matplotlib} is available at
+\begin{itemize}
+\item {} 
+\href{http://matplotlib.org}{http://matplotlib.org}
+
+\end{itemize}
+
+
+\section{Related Software}
+\label{Installation:related-software}
 
 \subsection{BoolNet}
 \label{Installation:boolnet}\label{Installation:installation-boolnet}
@@ -1168,7 +1186,7 @@ The result is shown in {\hyperref[Manual:figure04]{\emph{the figure below}}}.
 
 \subsection{the SCCs style}
 \label{Manual:the-sccs-style}
-The function {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}} defines a \emph{dot} subgraph for every non-trivial \emph{strongly connected component} (SCC) of the interaction graph.
+The function {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}} defines a \emph{dot} subgraph for every non-trivial \emph{strongly connected component} (SCC) of the interaction graph.
 Each SCC subgraph is filled by a shade of gray that indicates the longest path of SCCs leading to it,
 a unique number that intuitively represents ``the depth in the SCC hierarchy'', see {\hyperref[Bibliography:klarner2015approx]{\emph{Klarner2015(b)}}} for a formal definition.
 The further down the hierarchy, the darker the shade of gray will be.
@@ -1194,12 +1212,12 @@ The result is shown in {\hyperref[Manual:figure05]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure05.pdf}}
-\caption{The interaction graph ``\emph{example06\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure05}\end{figure}
+\caption{The interaction graph ``\emph{example06\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure05}\end{figure}
 
 
 \subsection{the subgraphs style}
 \label{Manual:the-subgraphs-style}
-The function {\hyperref[InteractionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}} allows you to specify subsets of nodes that will be added to a \emph{dot} subgraph.
+The function {\hyperref[StateTransitionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}} allows you to specify subsets of nodes that will be added to a \emph{dot} subgraph.
 The subgraphs may be specified as a list of pairs that consist of a list of names and a dictionary
 of \emph{dot} attributes for that subgraph, e.g., a label or background color.
 
@@ -1230,7 +1248,7 @@ The result is shown in {\hyperref[Manual:figure07]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure07.pdf}}
-\caption{The interaction graph ``\emph{example08\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}}.}\label{Manual:figure07}\end{figure}
+\caption{The interaction graph ``\emph{example08\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-subgraphs]{\emph{add\_style\_subgraphs}}}.}\label{Manual:figure07}\end{figure}
 
 
 \subsection{the activities style and animations}
@@ -1296,7 +1314,7 @@ The result is shown in {\hyperref[Manual:figure09]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure09.pdf}}
-\caption{The interaction graph ``\emph{example10\_igraph.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure09}\end{figure}
+\caption{The interaction graph ``\emph{example10\_igraph.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure09}\end{figure}
 
 
 \section{Drawing the State Transition Graph}
@@ -1442,7 +1460,7 @@ The result is shown in {\hyperref[Manual:figure12]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure12.pdf}}
-\caption{The state transition graph ``\emph{example13\_stg.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-path]{\emph{add\_style\_path}}}.}\label{Manual:figure12}\end{figure}
+\caption{The state transition graph ``\emph{example13\_stg.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-path]{\emph{add\_style\_path}}}.}\label{Manual:figure12}\end{figure}
 
 
 \subsection{the SCCs style}
@@ -1465,7 +1483,7 @@ The result is shown in {\hyperref[Manual:figure13]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.600000}{\includegraphics{figure13.pdf}}
-\caption{The state transition graph ``\emph{example14\_stg.pdf}'' with attributes added by {\hyperref[InteractionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure13}\end{figure}
+\caption{The state transition graph ``\emph{example14\_stg.pdf}'' with attributes added by {\hyperref[StateTransitionGraphs:add-style-sccs]{\emph{add\_style\_sccs}}}.}\label{Manual:figure13}\end{figure}
 
 
 \subsection{the min trap spaces style}
@@ -1543,7 +1561,7 @@ The result is shown in {\hyperref[Manual:figure16]{\emph{the figure below}}}.
 \capstart
 
 \scalebox{0.800000}{\includegraphics{figure16.pdf}}
-\caption{The state transition graph \emph{``example17\_stg.pdf''} with attributes added by {\hyperref[InteractionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure16}\end{figure}
+\caption{The state transition graph \emph{``example17\_stg.pdf''} with attributes added by {\hyperref[StateTransitionGraphs:add-style-default]{\emph{add\_style\_default}}}.}\label{Manual:figure16}\end{figure}
 
 
 \section{Modifying Networks}
@@ -2003,7 +2021,7 @@ Hence, a typical way to inspect a counterexample involves a Python if-statement:
 
 Here, {\hyperref[StateTransitionGraphs:state2str]{\emph{state2str}}} is a ``pretty print'' function contained in the module {\hyperref[StateTransitionGraphs:statetransitiongraphs]{\emph{StateTransitionGraphs}}}.
 It generates a state string from a state dictionary.
-An alternative way of inspecting counterexample is by {\hyperref[InteractionGraphs:add-style-path]{\emph{STGs.add\_style\_path}}}:
+An alternative way of inspecting counterexample is by {\hyperref[StateTransitionGraphs:add-style-path]{\emph{STGs.add\_style\_path}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
@@ -4281,7 +4299,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x43562924\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x435d9a3c\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -5784,12 +5802,19 @@ Creates an attractor report for the network defined by \emph{Primes}.
 \label{Basins:weak-basins}\label{Basins:id2}\index{weak\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameBarChart=None}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}}{}
 Uses model checking with accepting states to compute the weak basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
 \emph{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the weak basins of the minimal trap spaces is returned.
-Use \emph{FnameBarChart} to create a bar char of the weak basins, this requires \emph{matplotlib}.
+Use \emph{FnameImage} to create a bar chart of the weak basins, this requires \href{https://matplotlib.org}{https://matplotlib.org}.
 The weak basins are returned in the form of a dictionary:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+* \PYGZsq{}01100\PYGZhy{}\PYGZhy{}0\PYGZsq{}: (str of attractor representant)
+    * \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{} (Boolean expression for states)
+    * \PYGZsq{}perc\PYGZsq{}:    0.5             (percentage of state space)
+    * \PYGZsq{}size\PYGZsq{}:    8               (number of states)
+\end{Verbatim}
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -5805,7 +5830,7 @@ The weak basins are returned in the form of a dictionary:
 \emph{Minimize} (bool): minimize the resulting expressions
 
 \item {} 
-\emph{FnameBarChart} (str): file name of bar chart of weak basins
+\emph{FnameImage} (str): file name of bar chart of weak basins
 
 \end{itemize}
 
@@ -5834,11 +5859,11 @@ The weak basins are returned in the form of a dictionary:
 \label{Basins:strong-basins}\label{Basins:id3}\index{strong\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnamePieChart=None}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}}{}
 Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
 \emph{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the strong basins of the minimal trap spaces is returned.
-Use \emph{FnameBarChart} to create a bar char of the weak basins, this requires \emph{matplotlib}.
+Use \emph{FnameImage} to create a pie chart of the strong basins, this requires \href{https://matplotlib.org}{https://matplotlib.org}.
 The strong basins are returned in the form of a dictionary:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -5846,6 +5871,10 @@ The strong basins are returned in the form of a dictionary:
     * \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{} (Boolean expression for states)
     * \PYGZsq{}perc\PYGZsq{}:    0.5             (percentage of state space)
     * \PYGZsq{}size\PYGZsq{}:    8               (number of states)
+...
+* \PYGZsq{}outside\PYGZsq{}:  (special name for all states that do not belong to a strong basin)
+    ...
+    ...
 \end{Verbatim}
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -5862,7 +5891,7 @@ The strong basins are returned in the form of a dictionary:
 \emph{Minimize} (bool): minimize the resulting expressions
 
 \item {} 
-\emph{FnameBarChart} (str): file name of pie chart of strong basins
+\emph{FnameImage} (str): file name of pie chart of strong basins
 
 \end{itemize}
 
@@ -5894,7 +5923,7 @@ The strong basins are returned in the form of a dictionary:
 \label{Basins:id4}\label{Basins:commitment-diagram}\index{commitment\_diagram() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.commitment_diagram}\pysiglinewithargsret{\bfcode{commitment\_diagram}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{AdditionalEdgeData=False}, \emph{Silent=False}, \emph{ReturnCounter=False}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.commitment_diagram}\pysiglinewithargsret{\bfcode{commitment\_diagram}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{AdditionalEdgeData=False}, \emph{FnameImage=None}, \emph{Silent=False}, \emph{ReturnCounter=False}}{}
 Creates the commitment diagram, a networkx.DiGraph, of the STG defined by \emph{Primes} and \emph{Update}.
 The nodes of the diagram represent states that can reach the exact same subset of \emph{Attractors}.
 Nodes are labeled by the index of the attractor in the order given in \emph{Attractors} and the number of states
@@ -5919,6 +5948,9 @@ disconnected components are considered separately (and recombined using a cartes
 
 \item {} 
 \emph{AdditionalEdgeData} (bool): whether the computation of the so-called border states should be included in the diagram
+
+\item {} 
+\emph{FnameImage} (str): will call commitment\_diagram2image(..)
 
 \item {} 
 \emph{Silent} (bool): whether information regarding the execution of the algorithm should be printed
@@ -5957,63 +5989,7 @@ disconnected components are considered separately (and recombined using a cartes
 
 
 \subsection{diagram2image}
-\label{Basins:diagram2image}\label{Basins:id5}\index{diagram2image() (in module PyBoolNet.Basins)}
-
-\begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.diagram2image}\pysiglinewithargsret{\bfcode{diagram2image}}{\emph{Primes}, \emph{Diagram}, \emph{FnameIMAGE=None}, \emph{StyleInputs=True}, \emph{StyleSplines='curved'}, \emph{StyleEdges=False}, \emph{StyleRanks=True}, \emph{FirstIndex=1}}{}
-Creates the image file \emph{FnameIMAGE} for the basin diagram given by \emph{Diagram}.
-The flag \emph{StyleInputs} can be used to highlight which basins belong to which input combination.
-\emph{StyleEdges} adds edge labels that indicate the size of the ``border'' (if \emph{ComputeBorder} was enabled in {\hyperref[Basins:commitment-diagram]{\emph{commitment\_diagram}}})
-and the size of the states of the source basin that can reach the target basin.
-\begin{description}
-\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
-\item {} 
-\emph{Primes}: prime implicants, needed for pretty printing of the attractors.
-
-\item {} 
-\emph{Diagram} (networkx.DiGraph): a basin diagram
-
-\item {} 
-\emph{FnameIMAGE} (str): name of the diagram image
-
-\item {} 
-\emph{StyleInputs} (bool): whether basins should be grouped by input combinations
-
-\item {} 
-\emph{StyleSplines} (str): dot style for edges, e.g. ``curved'', ``line'' or ``ortho'' for orthogonal edges
-
-\item {} 
-\emph{StyleEdges} (bool): whether edges should be size of border / reachable states
-
-\item {} 
-\emph{StyleRanks} (bool): style that places nodes with the same number of reachable attractors on the same rank (level)
-
-\item {} 
-\emph{FirstIndex} (int): first index of attractor names
-
-\end{itemize}
-
-\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
-\item {} 
-\emph{None}
-
-\item {} 
-\emph{StyledDiagram} (networkx.DiGraph): if \emph{FnameIMAGE} is not given
-
-\end{itemize}
-
-\end{description}
-
-\textbf{example}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{basins.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{basins.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{attractors.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\end{Verbatim}
-
-\end{fulllineitems}
-
-
+\label{Basins:diagram2image}\label{Basins:id5}
 
 \section{ModelChecking}
 \label{ModelChecking::doc}\label{ModelChecking:modelchecking}\label{ModelChecking:id1}
