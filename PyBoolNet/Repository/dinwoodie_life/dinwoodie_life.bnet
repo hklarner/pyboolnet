@@ -3,7 +3,9 @@
 targets, factors
 
 # taken from
-# Dinwoodie, Ian H. "Computational methods for asynchronous basins." (2015). 
+# Dinwoodie, Ian H.
+# Computational methods for asynchronous basins.
+# 2015
 
 mci,            !wsq3 & !compuse & (!waso & sleeplivroom | waso)
 numtrans,       numfir

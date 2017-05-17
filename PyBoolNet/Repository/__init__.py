@@ -18,7 +18,7 @@ def print_info(MarkDown=False):
     data   = []
     for name in get_all_names():
         primes = get_primes(name)
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
 
         size      = str(len(primes))
         inputs    = str(len(PyBoolNet.PrimeImplicants.find_inputs(primes)))
@@ -54,12 +54,13 @@ def print_info(MarkDown=False):
 
 
 
-def names_with_fast_basin_computation():
+def names_with_fast_analysis():
     result = ["arellano_rootstem","dahlhaus_neuroplastoma",
               "dinwoodie_life", "faure_cellcycle",
               "irons_yeast", "randomnet_n7k3", "randomnet_n15k3",
               "saadatpour_guardcell", "tournier_apoptosis", "xiao_wnt5a",
-              "raf","n5s3","n3s1c1a","n3s1c1b","n6s1c2","n7s3"]
+              "raf","n5s3","n3s1c1a","n3s1c1b","n6s1c2","n7s3",
+              "dinwoodie_stomatal"]
     
     return result
 

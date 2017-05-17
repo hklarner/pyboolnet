@@ -11,7 +11,7 @@ import PyBoolNet
 
 if __name__=="__main__":
 
-    for name in PyBoolNet.Repository.names_with_fast_basin_computation():
+    for name in PyBoolNet.Repository.names_with_fast_analysis():
         
         primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
 
