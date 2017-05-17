@@ -171,6 +171,14 @@ stg2image
 .. autofunction:: PyBoolNet.StateTransitionGraphs.stg2image
 
 
+.. _create_image:
+
+create_image
+------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.create_image
+
+
 .. _add_style_tendencies:
 
 add_style_tendencies

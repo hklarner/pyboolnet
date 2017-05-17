@@ -14,8 +14,8 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{May 03, 2017}
-\release{2.11}
+\date{May 11, 2017}
+\release{2.2}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
 \renewcommand{\releasename}{Release}
@@ -119,11 +119,11 @@
 \maketitle
 \tableofcontents
 \phantomsection\label{index::doc}
-\emph{PyBoolNet 2.11} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
+\emph{PyBoolNet 2.2} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
 The project home page is \href{https://github.com/hklarner/PyBoolNet}{https://github.com/hklarner/PyBoolNet}.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.11} does not yet have any user friendly error messages.
+\emph{PyBoolNet 2.2} does not yet have any user friendly error messages.
 Please post questions, report bugs or suggest features in the issues section of the project's homepage:
 \begin{itemize}
 \item {} 
@@ -142,8 +142,8 @@ or contact \emph{hannes.klarner@fu-berlin.de}.
 
 \section{Python}
 \label{Installation:python}
-\emph{PyBoolNet 2.11} was written in Python 2.7 but should be compatible with Python 3.
-If you experience problems with your version of Python and \emph{PyBoolNet 2.11} please contact \emph{hannes.klarner@fu-berlin.de} or
+\emph{PyBoolNet 2.2} was written in Python 2.7 but should be compatible with Python 3.
+If you experience problems with your version of Python and \emph{PyBoolNet 2.2} please contact \emph{hannes.klarner@fu-berlin.de} or
 post an issue on the project homepage at
 \begin{itemize}
 \item {} 
@@ -175,10 +175,10 @@ Make sure that {\hyperref[Installation:installation-networkx]{\emph{NetworkX}}},
 \PYGZdl{} sudo apt\PYGZhy{}get install imagemagick
 \end{Verbatim}
 
-Install \emph{PyBoolNet 2.11} with \emph{pip}:
+Install \emph{PyBoolNet 2.2} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.11\PYGZus{}linux64.tar.gz
+\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2\PYGZus{}linux64.tar.gz
 \end{Verbatim}
 
 which should place the package here:
@@ -200,7 +200,7 @@ The package is likely going to be placed here:
 \end{Verbatim}
 
 where \code{\textless{}user\textgreater{}} is the name you are logged in with (\code{\$ whoami}) and \code{\textless{}version\textgreater{}} is the Python version you are using.
-To install \emph{PyBoolNet 2.11} using \emph{Distutils} unpack \emph{PyBoolNet-2.0.tar.gz} into a temporary folder and run:
+To install \emph{PyBoolNet 2.2} using \emph{Distutils} unpack \emph{PyBoolNet-2.0.tar.gz} into a temporary folder and run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} sudo python setup.py install
@@ -214,14 +214,14 @@ again, using the \code{-{-}user} flag if you do not have sudo rights:
 
 The locations should be the same as when installing with \emph{pip}.
 
-You should now be able to import \emph{PyBoolNet 2.11}:
+You should now be able to import \emph{PyBoolNet 2.2}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.11} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -273,7 +273,7 @@ Download and install \href{http://www.graphviz.org/}{Graphviz} and \href{http://
 
 \end{itemize}
 
-Install \emph{PyBoolNet 2.11} with \emph{pip}:
+Install \emph{PyBoolNet 2.2} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.11\PYGZus{}mac64.tar.gz
@@ -299,14 +299,14 @@ The package is likely going to be placed here:
 
 where \code{\textless{}user\textgreater{}} is the name you are logged in with (\code{\$ whoami}) and \code{\textless{}version\textgreater{}} is the Python version you are using.
 
-You should now be able to import \emph{PyBoolNet 2.11}:
+You should now be able to import \emph{PyBoolNet 2.2}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.11} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -332,7 +332,7 @@ on
 
 \end{itemize}
 
-To install \emph{PyBoolNet 2.11} with \emph{pip}:
+To install \emph{PyBoolNet 2.2} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 C:\PYGZbs{}\PYGZgt{} pip.exe install PyBoolNet\PYGZhy{}2.11\PYGZus{}win64.tar.gz
@@ -367,14 +367,14 @@ To install \href{http://www.graphviz.org/}{Graphviz} and \href{http://www.imagem
 
 \end{itemize}
 
-You should now be able to import \emph{PyBoolNet 2.11}:
+You should now be able to import \emph{PyBoolNet 2.2}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 C:\PYGZbs{}\PYGZgt{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.11} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 C:\PYGZbs{}\PYGZgt{} pip.exe uninstall PyBoolNet
@@ -385,8 +385,8 @@ If you do not have \emph{pip}, all files must be removed manually.
 
 \section{Dependencies}
 \label{Installation:dependencies}
-Most of what \emph{PyBoolNet 2.11} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called \code{settings.cfg} and located in the folder \code{Dependencies} of \emph{PyBoolNet 2.11}.
+Most of what \emph{PyBoolNet 2.2} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
+The file that records the locations to third party binaries is called \code{settings.cfg} and located in the folder \code{Dependencies} of \emph{PyBoolNet 2.2}.
 The default location is:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -456,7 +456,7 @@ or:
 if you do not have super user rights.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.11} is tested with \href{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
+\emph{PyBoolNet 2.2} is tested with \href{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
 \end{notice}
 
 
@@ -477,7 +477,7 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 \begin{notice}{note}{Note:}
 The development of the Potassco solving collection is active with frequent releases.
-\emph{PyBoolNet 2.11} is tested with two specific versions, \href{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \href{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
+\emph{PyBoolNet 2.2} is tested with two specific versions, \href{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \href{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
 \end{notice}
 
 The binaries and source are available at:
@@ -494,11 +494,11 @@ The binaries and source are available at:
 \subsection{NuSMV}
 \label{Installation:nusmv}\label{Installation:installation-nusmv}
 \href{http://nusmv.fbk.eu}{NuSMV} is a symbolic model checker that we use to decide LTL and CTL queries.
-\emph{PyBoolNet 2.11} requires the extension \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
+\emph{PyBoolNet 2.2} requires the extension \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
 It is included with every release and should work out of the box.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.11} is tested with \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+\emph{PyBoolNet 2.2} is tested with \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
 \end{notice}
 
 Binaries and source available at:
@@ -548,7 +548,7 @@ To install it on linux run:
 Make sure to check the paths in \code{settings.cfg}.
 
 
-\subsection{matplotlib}
+\subsection{Matplotlib}
 \label{Installation:matplotlib}\label{Installation:installation-matplotlib}
 The package matplotlib is used to plot pie charts and bar plots and similiar graphs,
 for example in the function {\hyperref[Basins:weak-basins]{\emph{weak\_basins}}} and {\hyperref[Basins:strong-basins]{\emph{strong\_basins}}} of the {\hyperref[Basins:basins]{\emph{Basins}}} module.
@@ -572,7 +572,7 @@ To install it on linux run:
 \subsection{BoolNet}
 \label{Installation:boolnet}\label{Installation:installation-boolnet}
 \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet} is a library for \href{https://www.r-project.org/}{R} that is used for the construction, simulation and analysis of Boolean networks, see {\hyperref[Bibliography:mussel2010]{\emph{Müssel2010}}}.
-It is not a required dependency of \emph{PyBoolNet 2.11} but you need it if you want to convert \emph{SBML-qual} files into \emph{bnet} files.
+It is not a required dependency of \emph{PyBoolNet 2.2} but you need it if you want to convert \emph{SBML-qual} files into \emph{bnet} files.
 To install it run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -592,7 +592,7 @@ select a CRAN mirror and wait for the download and installation to finish.
 \subsection{GINsim}
 \label{Installation:installation-ginsim}\label{Installation:ginsim}
 \href{http://ginsim.org/home}{GINsim} is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see {\hyperref[Bibliography:chaouiya2012]{\emph{Chaouiya2012}}}.
-Like \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \href{http://ginsim.org/home}{GINsim} is not a required dependency of \emph{PyBoolNet 2.11} but it has a useful model repository. To convert \href{http://ginsim.org/home}{GINsim} models you need to export them as \emph{SBML-qual} files which can then be converted into \emph{bnet} files using \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
+Like \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \href{http://ginsim.org/home}{GINsim} is not a required dependency of \emph{PyBoolNet 2.2} but it has a useful model repository. To convert \href{http://ginsim.org/home}{GINsim} models you need to export them as \emph{SBML-qual} files which can then be converted into \emph{bnet} files using \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
 No installation required, just download the latest version (tested with version 2.9) and call:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -649,7 +649,7 @@ OSError: [Errno 13] Permission denied
 \end{Verbatim}
 
 you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains \emph{PyBoolNet 2.11} (see {\hyperref[Installation:installation-software]{\emph{Installation of PyBoolNet}}} above) and run:
+Locate the directory that contains \emph{PyBoolNet 2.2} (see {\hyperref[Installation:installation-software]{\emph{Installation of PyBoolNet}}} above) and run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 ../PyBoolNet\PYGZdl{} chmod \PYGZhy{}R 744 Dependencies/
@@ -732,7 +732,7 @@ The returned list states that \emph{f1} has two 1-prime implicants and each cons
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
 
-It can be difficult to enumerate all prime implicants of a network and \emph{PyBoolNet 2.11} uses the program {\hyperref[Installation:installation-bnettoprime]{\emph{BNetToPrime}}} to do it.
+It can be difficult to enumerate all prime implicants of a network and \emph{PyBoolNet 2.2} uses the program {\hyperref[Installation:installation-bnettoprime]{\emph{BNetToPrime}}} to do it.
 As a user you define a network in terms of Boolean expressions, Python functions or you import it from other tools, like \href{http://ginsim.org/home}{GINsim}.
 The steps in each case are explained in the following sections.
 
@@ -794,8 +794,8 @@ Save it in a text file called \emph{example01.bnet}.
 To generate its prime implicants use the function {\hyperref[FileExchange:bnet2primes]{\emph{bnet2primes}}} of the module {\hyperref[FileExchange:fileexchange]{\emph{FileExchange}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{PyBoolNet} \PYG{k+kn}{import} \PYG{n}{FileExchange} \PYG{k}{as} \PYG{n}{FEX}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{PyBoolNet} \PYG{k+kn}{import} \PYG{n}{FileExchange}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 Instead of a file name the functions also takes string contents of a \emph{bnet} file:
@@ -805,13 +805,13 @@ Instead of a file name the functions also takes string contents of a \emph{bnet}
 \PYG{g+gp}{... }\PYG{l+s}{       v1,  v2}
 \PYG{g+gp}{... }\PYG{l+s}{       v2,  v1}
 \PYG{g+gp}{... }\PYG{l+s}{       }\PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \end{Verbatim}
 
 and a second argument can be used for saving the prime implicants as a \emph{json} file:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 Saving prime implicants in a separate file is useful in case the network has many components with high in-degrees.
@@ -819,20 +819,20 @@ For such networks the computation of all primes might take a long time.
 Previously saved primes can be read with {\hyperref[FileExchange:read-primes]{\emph{read\_primes}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{read\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{read\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 Previously generated primes can be saved as \emph{json} files using {\hyperref[FileExchange:write-primes]{\emph{write\_primes}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{write\PYGZus{}primes}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{write\PYGZus{}primes}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.primes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 You may also want to save primes as a \emph{bnet} file.
 To do so use {\hyperref[FileExchange:primes2bnet]{\emph{primes2bnet}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example01.bnet}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 The module {\hyperref[FileExchange:fileexchange]{\emph{FileExchange}}} can also export primes to \emph{bns} and \emph{genysis} files to use as inputs for the tools \href{https://people.kth.se/~dubrova/bns.html}{BNS} of {\hyperref[Bibliography:dubrova2011]{\emph{Dubrova2011}}} and \href{http://www.vital-it.ch/software/genYsis}{GenYsis} of {\hyperref[Bibliography:garg2008]{\emph{Garg2008}}}, namely {\hyperref[FileExchange:primes2bns]{\emph{primes2bns}}} and {\hyperref[FileExchange:primes2genysis]{\emph{primes2genysis}}}.
@@ -936,7 +936,7 @@ It returns a directed graph in the {\hyperref[Installation:installation-networkx
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{PyBoolNet} \PYG{k+kn}{import} \PYG{n}{InteractionGraphs} \PYG{k}{as} \PYG{n}{IGs}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v1\textbar{}v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, 1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v1\PYGZam{}!v2 \textbar{} !v1\PYGZam{}v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph}
 \PYG{g+go}{\PYGZlt{}networkx.classes.digraph.DiGraph object at 0xb513efec\PYGZgt{}}
@@ -985,7 +985,7 @@ The result is shown in {\hyperref[Manual:figure01]{\emph{the figure below}}}.
 
 \subsection{graph, node and edge attributes}
 \label{Manual:graph-node-and-edge-attributes}
-\emph{PyBoolNet 2.11} generates a \emph{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
+\emph{PyBoolNet 2.2} generates a \emph{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
 Attributes are just dictionaries that are attached to nodes, edges and the graph itself, see {\hyperref[Installation:installation-networkx]{\emph{NetworkX}}} for an introduction.
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
@@ -1070,7 +1070,7 @@ To set node or edge defaults, add them to the \emph{node} or \emph{edge} attribu
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v2 \PYGZam{} (!v1 \textbar{} v3)}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, !v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v2 \textbar{} v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{node}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{shape}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{circle}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{node}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{color}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{blue}\PYG{l+s}{\PYGZdq{}}
@@ -1118,7 +1118,7 @@ The result is shown in {\hyperref[Manual:figure02]{\emph{the figure below}}}.
 
 \subsection{the interaction signs style}
 \label{Manual:the-interaction-signs-style}
-\emph{PyBoolNet 2.11} has predefined styles for adding attributes to interaction graphs.
+\emph{PyBoolNet 2.2} has predefined styles for adding attributes to interaction graphs.
 The function {\hyperref[InteractionGraphs:add-style-interactionsigns]{\emph{add\_style\_interactionsigns}}} adds or overwrites color and arrowhead attributes to indicate whether an interaction is activating, inhibiting or both.
 Activating interactions are black with normal arrowheads,
 inhibiting interactions are red with blunt arrowhead and
@@ -1165,7 +1165,7 @@ Consider this example:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v5, v4 \PYGZam{} v2 \textbar{} v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6, 0}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v7, !v5}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v8, v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v9, v5 \PYGZam{} v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{IGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}inputs}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{IGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}constants}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{)}
@@ -1199,7 +1199,7 @@ Consider the network:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6, v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v7, v6 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v8, v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v9, v8}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v10, v7 \PYGZam{} v11}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v11, v10 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v12, v10}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{IGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}sccs}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 6: Interaction graph with SCC style}\PYG{l+s}{\PYGZdq{}}
@@ -1233,7 +1233,7 @@ Consider the network:
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, v1 \PYGZam{} v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v2 \textbar{} v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v4, v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v5, v1 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6, v5}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v7, v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{subgraphs} \PYG{o}{=} \PYG{p}{[}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}\PYG{p}{\PYGZob{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
 \PYG{g+gp}{... }             \PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Genes}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{fillcolor}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lightblue}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{]}
@@ -1263,7 +1263,7 @@ Here is an example:
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, v1 \PYGZam{} v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v2 \textbar{} v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v4, v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v5, v1 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6, v5}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v7, v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{activities} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{IGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}activities}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{,} \PYG{n}{activities}\PYG{p}{)}
@@ -1301,7 +1301,7 @@ Consider the network:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v6, v7}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v7, v6 \PYGZam{} !v4 \textbar{} !v6 \PYGZam{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v8, !v6}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v9, v8}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v10, v7 \PYGZam{} !v11}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v11, v10 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v12, v10}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph} \PYG{o}{=} \PYG{n}{IGs}\PYG{o}{.}\PYG{n}{primes2igraph}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{IGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}default}\PYG{p}{(}\PYG{n}{igraph}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{igraph}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 10: Interaction graph with default style}\PYG{l+s}{\PYGZdq{}}
@@ -1326,7 +1326,7 @@ It returns an instance of the {\hyperref[Installation:installation-networkx]{\em
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{PyBoolNet} \PYG{k+kn}{import} \PYG{n}{StateTransitionGraphs} \PYG{k}{as} \PYG{n}{STGs}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{update} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}
@@ -1415,7 +1415,7 @@ Here is an example:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, !v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{synchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{rankdir}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{LR}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 12: The synchronous STG of a negative circuit}\PYG{l+s}{\PYGZdq{}}
@@ -1441,7 +1441,7 @@ Consider the following example:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, !x\PYGZam{}!z\textbar{}x\PYGZam{}!y\PYGZam{}z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, x\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 13: STG with path style}\PYG{l+s}{\PYGZdq{}}
 \end{Verbatim}
@@ -1470,7 +1470,7 @@ steady states and cyclic attractors.:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, x\PYGZam{}!y\textbar{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, x\PYGZam{}z\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{The SCC style}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}sccs}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
@@ -1493,7 +1493,7 @@ For an introduction to trap spaces, see {\hyperref[Bibliography:klarner2015trap]
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y\PYGZam{}z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, x\PYGZam{}!y\textbar{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, z\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 15: STG with min trap spaces style}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}mintrapspaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{stg}\PYG{p}{)}
@@ -1517,7 +1517,7 @@ As for interaction graphs, you may add pairs of subspace and attribute dictionar
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y\PYGZam{}z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, x\PYGZam{}!y\textbar{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, z\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 16: STG with subspaces style}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{sub1} \PYG{o}{=} \PYG{p}{(}\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{}}\PYG{p}{,}\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x is zero}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
@@ -1548,7 +1548,7 @@ The default style combines the SCCs with the tendencies and the minimal trap spa
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x\textbar{}y\PYGZam{}z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, x\PYGZam{}!y\textbar{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, z\textbar{}!y}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 16: STG with default style}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}default}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{stg}\PYG{p}{)}
@@ -1609,19 +1609,19 @@ To create the blinkers use the function {\hyperref[PrimeImplicants:create-blinke
 \PYG{g+gp}{... }\PYG{l+s}{v3,   v1\PYGZam{}v2\PYGZam{}v3\PYGZam{}v4}
 \PYG{g+gp}{... }\PYG{l+s}{v4,   v3 \PYGZam{} (v1\textbar{}v2)}\PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
 
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{names} \PYG{o}{=} \PYG{n}{PIs}\PYG{o}{.}\PYG{n}{find\PYGZus{}constants}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{names}
 \PYG{g+go}{[\PYGZsq{}v1\PYGZsq{},\PYGZsq{}v2\PYGZsq{}]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{PIs}\PYG{o}{.}\PYG{n}{create\PYGZus{}blinkers}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{names}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{v1,   !v1}
 \PYG{g+go}{v2,   !v2}
 \PYG{g+go}{v3,   v1 \PYGZam{} v2 \PYGZam{} v3 \PYGZam{} v4}
 \PYG{g+go}{v4,   v2 \PYGZam{} v3 \textbar{} v1 \PYGZam{} v3}
 \end{Verbatim}
 
-Note that \emph{PyBoolNet 2.11} modifies the primes object in place rather than creating and returning a modified copy.
+Note that \emph{PyBoolNet 2.2} modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -1633,7 +1633,7 @@ Components may be renamed using the function {\hyperref[PrimeImplicants:rename-v
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{PIs}\PYG{o}{.}\PYG{n}{rename\PYGZus{}variable}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{x,    !x}
 \PYG{g+go}{v2,   !v2}
 \PYG{g+go}{v3,   x \PYGZam{} v2 \PYGZam{} v3 \PYGZam{} v4}
@@ -1665,11 +1665,11 @@ Both functions return a dictionary of constants.
 Keeping the constants results in:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{constants} \PYG{o}{=} \PYG{n}{PIs}\PYG{o}{.}\PYG{n}{percolate\PYGZus{}and\PYGZus{}keep\PYGZus{}constants}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{constants}
 \PYG{g+go}{\PYGZob{}\PYGZsq{}v1\PYGZsq{}:0,\PYGZsq{}v3\PYGZsq{}:1\PYGZcb{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{v1,   0}
 \PYG{g+go}{v2,   v2}
 \PYG{g+go}{v3,   1}
@@ -1679,11 +1679,11 @@ Here, v1 and v3 are kept in the model.
 Removing the constants results in:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{constants} \PYG{o}{=} \PYG{n}{PIs}\PYG{o}{.}\PYG{n}{percolate\PYGZus{}and\PYGZus{}remove\PYGZus{}constants}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{constants}
 \PYG{g+go}{\PYGZob{}\PYGZsq{}v1\PYGZsq{}:0,\PYGZsq{}v3\PYGZsq{}:1\PYGZcb{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{v2,   v2}
 \end{Verbatim}
 
@@ -1728,9 +1728,9 @@ Example:
 \PYG{g+gp}{... }\PYG{l+s}{v1,   !v1 \textbar{} v2}
 \PYG{g+gp}{... }\PYG{l+s}{v2,   v2 \PYGZam{} v1}
 \PYG{g+gp}{... }\PYG{l+s}{v3,   v1 \PYGZam{} v2 \PYGZam{} v3}\PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2pirmes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{PIs}\PYG{o}{.}\PYG{n}{remove\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{v1,   !v1 \textbar{} v2}
 \PYG{g+go}{v2,   v2 \PYGZam{} v1}
 \end{Verbatim}
@@ -1743,9 +1743,9 @@ The function raises an exception if the resulting network contains variables who
 Example of correct use:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v2 }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{ v2, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v2 }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{ v2, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{!v4 \textbar{} v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:} \PYG{k}{lambda} \PYG{n}{v1}\PYG{p}{,}\PYG{n}{v2}\PYG{p}{:} \PYG{n}{v1}\PYG{o}{+}\PYG{n}{v2}\PYG{o}{==}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{primes2bnet}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+go}{v1, v2}
 \PYG{g+go}{v2, v1}
 \PYG{g+go}{v3, !v4}
@@ -1755,7 +1755,7 @@ Example of correct use:
 An example of violating the condition that all variables must be defined is:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1, v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3 \textbar{} v4}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{!v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
 \PYG{g+go}{error: can not add variables that are dependent on undefined variables.}
 \end{Verbatim}
@@ -1766,7 +1766,7 @@ An example of violating the condition that all variables must be defined is:
 To enumerate all possible input combinations of a given network use the function {\hyperref[PrimeImplicants:input-combinations]{\emph{input\_combinations}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{input1, input1 }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{ input2, input2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{input1, input1 }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{ input2, input2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{input1 \PYGZam{} input2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{input1 \textbar{} input2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{input\PYGZus{}combintations}\PYG{p}{:}
@@ -1780,7 +1780,7 @@ To enumerate all possible input combinations of a given network use the function
 
 \section{Model Checking}
 \label{Manual:sec-model-checking}\label{Manual:model-checking}
-\emph{PyBoolNet 2.11} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to decide model checking queries for Boolean networks.
+\emph{PyBoolNet 2.2} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to decide model checking queries for Boolean networks.
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example {\hyperref[Bibliography:baier2008]{\emph{Baier2008}}}.
 
@@ -1796,7 +1796,7 @@ As an example, consider the following network:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Mek,  Erk \textbar{} Mek \PYGZam{} Raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Raf,  !Erk \textbar{} !Raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 18: STG of the Erk\PYGZhy{}Mek\PYGZhy{}Raf network}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{stg2image}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example18\PYGZus{}stg.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
@@ -1804,7 +1804,7 @@ As an example, consider the following network:
 
 The state transition graph is shown in {\hyperref[Manual:figure17]{\emph{the figure below}}}.
 
-When model checking, \emph{PyBoolNet 2.11} translates state transition graphs into transition systems.
+When model checking, \emph{PyBoolNet 2.2} translates state transition graphs into transition systems.
 The basic approach to doing so is shown in {\hyperref[Manual:figure17]{\emph{the figure below}}}.
 Here, each state string is replaced by a subset of atomic propositions.
 The subset is chosen to correspond with the state string, i.e.,
@@ -1842,7 +1842,7 @@ The transition system with the extended set of atomic propositions is shown in {
 \subsection{LTL model checking}
 \label{Manual:ltl-model-checking}
 Apart from a transition system, a model checking problem requires a \emph{temporal specification}.
-Since \emph{PyBoolNet 2.11} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} for solving model checking problems, two specification languages are available:
+Since \emph{PyBoolNet 2.2} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} for solving model checking problems, two specification languages are available:
 \emph{linear time logic} (LTL) and \emph{computational tree logic} (CTL).
 
 LTL specifications are statements about the sequence of events that are expressed in terms of atomic propositions and temporal operators.
@@ -2065,7 +2065,7 @@ Consider the following toy model of cell proliferation:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Proliferation, GrowthFactor \textbar{} Proliferation \PYGZam{} !DNAdamage}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{DNAdamage,     !GrowthFactor \PYGZam{} DNAdamage}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{update} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}
 \end{Verbatim}
 
@@ -2263,7 +2263,7 @@ As an example consider the following network:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x1,   !x0 \textbar{} x1 \textbar{} x2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x2,   x0\PYGZam{}!x1 \textbar{} x2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \end{Verbatim}
 
 and the queries ``Every state that satisfies \emph{x1=0} can reach an attractor in which \emph{x0} is steady'' (Q1)
@@ -2369,7 +2369,7 @@ Consider the previous network as an example:
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x1,   !x0 \textbar{} x1 \textbar{} x2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x2,   x0\PYGZam{}!x1 \textbar{} x2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \end{Verbatim}
 
 We already know that the query with initial states \code{!x1} and the CTL spec \code{EF(AG(x0\_STEADY))} is false.
@@ -2414,7 +2414,7 @@ The size of this set tells us that there are two states outside of the initial o
 \PYG{g+go}{5}
 \end{Verbatim}
 
-Note that \emph{PyBoolNet 2.11} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+Note that \emph{PyBoolNet 2.2} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property \code{EF(STEADYSTATE)}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -2446,17 +2446,16 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
-\emph{PyBoolNet 2.11} uses the module {\hyperref[TrapSpaces:trapspaces]{\emph{TrapSpaces}}} and the function {\hyperref[TrapSpaces:trap-spaces]{\emph{trap\_spaces}}} to compute trap spaces.
+\emph{PyBoolNet 2.2} uses the module \emph{AspSolver} and the function \emph{trap\_spaces} to compute trap spaces.
 As an example, consider the following network which has five trap spaces:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{PyBoolNet} \PYG{k+kn}{import} \PYG{n}{TrapSpaces} \PYG{k}{as} \PYG{n}{TS}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{x, !x \textbar{} y \textbar{} z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{y, !x\PYGZam{}z \textbar{} y\PYGZam{}!z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{z, x\PYGZam{}y \textbar{} z}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{all}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{tspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{all}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{print} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{, }\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{tspaces}\PYG{p}{)}
 \PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}, \PYGZhy{}\PYGZhy{}1, 1\PYGZhy{}1, \PYGZhy{}00, 101}
 \end{Verbatim}
@@ -2483,14 +2482,14 @@ The trap spaces are illustrated in {\hyperref[Manual:figure23]{\emph{the figure 
 \caption{The state transition graph \emph{``example23\_stg.pdf''} with every trap space highlighted by its own subgraph.}\label{Manual:figure23}\end{figure}
 
 The number of all trap spaces of a network can be very large and one is often only interested in the subset of minimal or maximal trap spaces.
-These can also be computed using {\hyperref[TrapSpaces:trap-spaces]{\emph{trap\_spaces}}} by passing \emph{``min''} or \emph{``max''} instead of the previously used value \emph{``all''} for the second parameter:
+These can also be computed using \emph{trap\_spaces} by passing \emph{``min''} or \emph{``max''} instead of the previously used value \emph{``all''} for the second parameter:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{:}
 \PYG{g+gp}{... }    \PYG{n}{sub} \PYG{o}{=} \PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{fillcolor}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{salmon}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}subspaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{stg}\PYG{p}{,} \PYG{p}{[}\PYG{n}{sub}\PYG{p}{]}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{maxtspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{max}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{maxtspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{max}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{maxtspaces}\PYG{p}{:}
 \PYG{g+gp}{... }    \PYG{k}{if} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{:}
 \PYG{g+gp}{... }        \PYG{n}{sub} \PYG{o}{=} \PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{fillcolor}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lightyellow}\PYG{l+s}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
@@ -2537,12 +2536,12 @@ As an example for computing attractors with this algorithm consider the followin
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, !v1 \textbar{} v2\PYGZam{}!v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, !v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}sccs}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{label}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Example 25: A network with a cyclic attractor and a steady state.}\PYG{l+s}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{stg2image}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example25\PYGZus{}stg.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attractors} \PYG{o}{=} \PYG{n}{AD}\PYG{o}{.}\PYG{n}{compute\PYGZus{}attractors\PYGZus{}tarjan}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attractors} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{compute\PYGZus{}attractors\PYGZus{}tarjan}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{attractors}\PYG{p}{)}
 \PYG{g+go}{2}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{A} \PYG{o+ow}{in} \PYG{n}{attractors}\PYG{p}{:}
@@ -2581,7 +2580,7 @@ This approach is based on the observation that, in practice, a random walk will 
 It is implemented in the function {\hyperref[AttractorDetection:find-attractor-state-by-randomwalk-and-ctl]{\emph{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{state} \PYG{o}{=} \PYG{n}{AD}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{state} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{state2str}\PYG{p}{(}\PYG{n}{state}\PYG{p}{)}
 \PYG{g+go}{110}
 \end{Verbatim}
@@ -2594,7 +2593,7 @@ Hence, {\hyperref[AttractorDetection:find-attractor-state-by-randomwalk-and-ctl]
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{try}\PYG{p}{:}
-\PYG{g+gp}{... }    \PYG{n}{state} \PYG{o}{=} \PYG{n}{AD}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{state} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{k}{print} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{state2str}\PYG{p}{(}\PYG{n}{state}\PYG{p}{)}
 \PYG{g+gp}{... }\PYG{k}{except}\PYG{p}{:}
 \PYG{g+gp}{... }    \PYG{k}{print} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{did not find an attractor. try increasing the length or attempts parameters}\PYG{l+s}{\PYGZdq{}}
@@ -2606,10 +2605,10 @@ Hence, {\hyperref[AttractorDetection:find-attractor-state-by-randomwalk-and-ctl]
 The module {\hyperref[Basins:basins]{\emph{Basins}}} contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
 In non-deterministic STGs there are usually states from which more than one attractor is reachable.
 But, not every combination of attractors has states that can reach exactly that subset of attractors.
-The function \emph{basins\_diagram} checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
+The function {\hyperref[Basins:commitment-diagram]{\emph{commitment\_diagram}}} checks for each possible combination of attractors whether the set of corresponding commitment states is empty or not.
 If there are states a basin node is created.
-An edge between basin nodes indicates the existence of a transition between two states of the respective sets of states.
-The nodes of a basin diagram have the following attributes:
+An edge between commitment nodes indicates the existence of a transition between two states of the respective sets of states.
+The nodes of a commitment diagram have the following attributes:
 \begin{itemize}
 \item {} 
 \code{"formula"} (str), the factored formula representing the states in that basin
@@ -2622,20 +2621,28 @@ The nodes of a basin diagram have the following attributes:
 
 \end{itemize}
 
-The edges of a basin diagram have the following attributes:
+The edges of a commitment diagram have the following attributes:
 \begin{itemize}
 \item {} 
-\code{"finally\_formula"} (str), the factored formula that represents the states that can reach a state that can make the transition
+\code{"EX\_formula"} (str), an expression that represents the states that can make the transition
 
 \item {} 
-\code{"finally\_size"} (int), the number of such states
+\code{"EX\_size"} (int), the number of such states
 
 \end{itemize}
 
-Basin diagrams can be visualized with the function {\hyperref[Basins:diagram2image]{\emph{diagram2image}}}.
+and, if the parameter \code{AdditionalEdgeData} of {\hyperref[Basins:commitment-diagram]{\emph{commitment\_diagram}}} was set to true, there are additionally the attributes:
+\begin{itemize}
+\item {} 
+\code{"EF\_formula"} (str), an expression that represents the states that can reach a state that can make the transition
+
+\item {} 
+\code{"EF\_size"} (int), the number of such states
+
+\end{itemize}
+
+Commitment diagrams can be visualized with the function {\hyperref[Basins:diagram2image]{\emph{diagram2image}}}.
 The function takes the primes, diagram and file name of the image as parameters.
-In addition you may specify \emph{FnameATTRACTORS} if you want a separate file for the specification of the attractors.
-Otherwise they are included in the diagram image.
 Two parameters for styling the diagram are provided.
 \emph{StyleInputs} highlight the basin nodes that belong to the same input combination and \emph{StyleAdvanced} modifies the node and edge styles to
 highlight nodes and transition that are \emph{homogeneous}. For details see the upcoming publication {\hyperref[Bibliography:klarner2016basins]{\emph{Klarner2016}}}.
@@ -2643,9 +2650,8 @@ highlight nodes and transition that are \emph{homogeneous}. For details see the 
 Consider the following example:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{REPO}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{arellano\PYGZus{}rootstem}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{AB}\PYG{o}{.}\PYG{n}{basins\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AB}\PYG{o}{.}\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{diagram.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{arellano\PYGZus{}rootstem}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{Basins}\PYG{o}{.}\PYG{n}{commitment\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{FnameImage}\PYG{o}{=}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{commitment.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 The output is given in {\hyperref[Manual:figure26]{\emph{the figure below}}}.
@@ -2654,7 +2660,7 @@ The fillcolor of a basin node reflects the proportion of states that belong to i
 Nodes are labeled by the attractors they can reach which are enumerated by A0, A1, etc.
 Cyclic attractros are represented by minimal trap spaces.
 
-Note that the function \emph{basins\_diagram} either requires a list of states representing attractors (given via the parameter \emph{Attractors}),
+Note that the function {\hyperref[Basins:commitment-diagram]{\emph{commitment\_diagram}}} either requires a list of states representing attractors (given via the parameter \emph{Attractors}),
 or it will compute the minimal trap spaces and \emph{assume} that they are complete and univocal.
 You should make sure that the minimal trap spaces are indeed complete and univocal using the functions {\hyperref[AttractorDetection:completeness]{\emph{completeness}}} and {\hyperref[AttractorDetection:univocality]{\emph{univocality}}}.
 \begin{figure}[htbp]
@@ -2663,28 +2669,6 @@ You should make sure that the minimal trap spaces are indeed complete and univoc
 
 \scalebox{1.000000}{\includegraphics{figure26.pdf}}
 \caption{The basin diagram of the network \emph{arellano\_rootstem} from the repository.}\label{Manual:figure26}\end{figure}
-
-If you want to create a separate image for the basin and the states representing the attractors use the parameter \emph{FnameATTRACTORS} of the
-function {\hyperref[Basins:diagram2image]{\emph{diagram2image}}}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AB}\PYG{o}{.}\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{diagram.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{attractors.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\end{Verbatim}
-
-Finally, in particular for diagrams with many nodes you may want to generate the so-called aggregate diagram in which nodes
-with the same number of reachable attractors are combined.
-That is, all nodes that can reach, for example, exactly two attractors (irrespective of which two attractors) are represented by a single node.
-An example is given in {\hyperref[Manual:figure27]{\emph{the figure below}}}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AB}\PYG{o}{.}\PYG{n}{diagram2aggregate\PYGZus{}image}\PYG{p}{(}\PYG{n}{diagram}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{aggregate.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\end{Verbatim}
-\begin{figure}[htbp]
-\centering
-\capstart
-
-\scalebox{1.000000}{\includegraphics{figure27.pdf}}
-\caption{The aggregated basin diagram of the network \emph{arellano\_rootstem} from the repository.}\label{Manual:figure27}\end{figure}
 
 
 \subsection{attractor approximations}
@@ -2722,10 +2706,10 @@ The functions {\hyperref[AttractorDetection:univocality]{\emph{univocality}}} an
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{update} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{:}
-\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}univocal} \PYG{o}{=} \PYG{n}{AD}\PYG{o}{.}\PYG{n}{univocal}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
-\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}faithful} \PYG{o}{=} \PYG{n}{AD}\PYG{o}{.}\PYG{n}{faithful}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}univocal} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{univocal}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}faithful} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{faithful}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{k}{print} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min trap space:}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{k}{print} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{  is univocal:}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{answer\PYGZus{}univocal}
 \PYG{g+gp}{... }    \PYG{k}{print} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{  is faithful:}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{answer\PYGZus{}faithful}
@@ -2742,7 +2726,7 @@ because it is implied that the trap spaces must be all minimal ones.
 See {\hyperref[AttractorDetection:completeness]{\emph{completeness}}} for details.
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AD}\PYG{o}{.}\PYG{n}{completeness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{completeness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
 \PYG{g+go}{True}
 \end{Verbatim}
 
@@ -2764,10 +2748,10 @@ Its STG contains two cyclic attractors and its minimal trap space \code{-{-}-} c
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2, !v1\PYGZam{}!v2\PYGZam{}!v3 \textbar{} !v1\PYGZam{}v2\PYGZam{}v3 \textbar{} v1\PYGZam{}!v2\PYGZam{}v3 \textbar{} v1\PYGZam{}v2\PYGZam{}!v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3, !v1\PYGZam{}!v2\PYGZam{}v3 \textbar{} !v1\PYGZam{}v2\PYGZam{}!v3 \textbar{} v1\PYGZam{}!v2\PYGZam{}!v3 \textbar{} v1\PYGZam{}v2\PYGZam{}v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FEX}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{FileExchange}\PYG{o}{.}\PYG{n}{bnet2primes}\PYG{p}{(}\PYG{n}{bnet}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{print} \PYG{p}{[}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{]}
 \end{Verbatim}
 
@@ -2782,7 +2766,7 @@ Its STG contains two cyclic attractors and its minimal trap space \code{-{-}-} c
 \scalebox{0.600000}{\includegraphics{figure27.pdf}}
 \caption{WRONG FIGURE! The state transition graph \emph{``example25\_stg.pdf''} in which the minimal trap space ``---'' is not univocal.}{\small 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{TS}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{print} \PYG{p}{[}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)} \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{]}
 \PYG{g+go}{[\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZsq{}]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}subspaces}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{n}{mintspaces}\PYG{p}{)}
@@ -3879,7 +3863,7 @@ Generates a \emph{dot} file from \emph{IGraph} and saves it as \emph{FnameDOT} o
 \label{InteractionGraphs:id6}\label{InteractionGraphs:igraph2image}\index{igraph2image() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.igraph2image}\pysiglinewithargsret{\bfcode{igraph2image}}{\emph{IGraph}, \emph{FnameIMAGE}, \emph{Silent=False}}{}
+\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.igraph2image}\pysiglinewithargsret{\bfcode{igraph2image}}{\emph{IGraph}, \emph{FnameIMAGE}, \emph{LayoutEngine='dot'}, \emph{Silent=False}}{}
 Creates an image file from \emph{IGraph} using {\hyperref[Installation:installation-graphviz]{\emph{Graphviz}}} and the layout engine \emph{dot}.
 To find out which file formats are supported call \code{\$ dot -T?}.
 \begin{description}
@@ -3889,6 +3873,9 @@ To find out which file formats are supported call \code{\$ dot -T?}.
 
 \item {} 
 \emph{FnameIMAGE} (str): name of image
+
+\item {} 
+\emph{LayoutEngine}: one of ``dot'', ``neato'', ``fdp'', ``sfdp'', ``circo'', ``twopi''
 
 \item {} 
 \emph{Silent} (bool): disables print statements
@@ -4299,7 +4286,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x435d9a3c\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x4353895c\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -5244,7 +5231,7 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces}\pysiglinewithargsret{\bfcode{add\_style\_mintrapspaces}}{\emph{Primes}, \emph{STG}, \emph{MaxOutput=100}}{}
-A convenience function that combines {\hyperref[StateTransitionGraphs:add-style-subspaces]{\emph{add\_style\_subspaces}}} and {\hyperref[TrapSpaces:trap-spaces]{\emph{TrapSpaces.trap\_spaces}}}.
+A convenience function that combines {\hyperref[StateTransitionGraphs:add-style-subspaces]{\emph{add\_style\_subspaces}}} and \emph{AspSolver.trap\_spaces}.
 It adds a \emph{dot} subgraphs for every minimal trap space to \emph{STG} - subgraphs that already exist are overwritten.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -5504,7 +5491,7 @@ If it is an arbitrary subspace then the involved variables are artificially fixe
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{TrapSpaces}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{x} \PYG{o}{=} \PYG{n}{mintrapspaces}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{univocality}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+go}{True}
@@ -5567,7 +5554,7 @@ If it is an arbitrary subspace then the involved variables are artificially fixe
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{TrapSpaces}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{x} \PYG{o}{=} \PYG{n}{mintspaces}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{faithfulness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+go}{True}
@@ -5667,7 +5654,7 @@ A counterexample of a univocality test are two states that belong to different a
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{TrapSpaces}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{trapspace} \PYG{o}{=} \PYG{n}{mintrapspaces}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{answer}\PYG{p}{,} \PYG{n}{counterex} \PYG{o}{=} \PYG{n}{univocality\PYGZus{}with\PYGZus{}counterexample}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{trapspace}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
@@ -5710,7 +5697,7 @@ A counterexample of a faithful test is a state that belongs to an attractor whic
 \textbf{example}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{TrapSpaces}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{PyBoolNet}\PYG{o}{.}\PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{x} \PYG{o}{=} \PYG{n}{mintspaces}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{faithfulness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}        
 \PYG{g+go}{True}
@@ -5802,7 +5789,7 @@ Creates an attractor report for the network defined by \emph{Primes}.
 \label{Basins:weak-basins}\label{Basins:id2}\index{weak\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}, \emph{Title=None}}{}
 Uses model checking with accepting states to compute the weak basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
 \emph{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the weak basins of the minimal trap spaces is returned.
@@ -5832,6 +5819,9 @@ The weak basins are returned in the form of a dictionary:
 \item {} 
 \emph{FnameImage} (str): file name of bar chart of weak basins
 
+\item {} 
+\emph{Title} (str): optional title of plot
+
 \end{itemize}
 
 \item[{\textbf{returns}::}] \leavevmode\begin{itemize}
@@ -5859,7 +5849,7 @@ The weak basins are returned in the form of a dictionary:
 \label{Basins:strong-basins}\label{Basins:id3}\index{strong\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}, \emph{Title=None}}{}
 Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
 \emph{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the strong basins of the minimal trap spaces is returned.
@@ -5892,6 +5882,9 @@ The strong basins are returned in the form of a dictionary:
 
 \item {} 
 \emph{FnameImage} (str): file name of pie chart of strong basins
+
+\item {} 
+\emph{Title} (str): optional title of plot
 
 \end{itemize}
 
@@ -6003,7 +5996,7 @@ Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whethe
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6059,7 +6052,7 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whether the \emph{Specification} is true or false in the transition system defined by \emph{Primes},
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 
 \begin{notice}{note}{Note:}
 \emph{ConeOfInfluence} is not available when using counterexamples as it ``messes'' with the output.
@@ -6117,7 +6110,7 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whether the \emph{CTLSpec} is true or false in the transition system defined by \emph{Primes},
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 \begin{description}
 \item[{The accepting states are a dictionary with the following keywords:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6203,7 +6196,7 @@ In that case the four values that involve the initial states are set to \emph{No
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv}\pysiglinewithargsret{\bfcode{check\_smv}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{ConeOfInfluence=True}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 
 \begin{notice}{note}{Note:}
 It is currently required that \emph{FnameSMV} contains a single LTL or CTL formula.
@@ -6254,7 +6247,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv_with_counterexample}\pysiglinewithargsret{\bfcode{check\_smv\_with\_counterexample}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 
 \begin{notice}{note}{Note:}
 It is currently required that \emph{FnameSMV} contains a single LTL or CTL formula.
@@ -6305,7 +6298,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.11}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
 
 See {\hyperref[ModelChecking:check-primes-with-acceptingstates]{\emph{check\_primes\_with\_acceptingstates}}} for details regarding the returned \emph{AcceptingStates} dictionary.
 

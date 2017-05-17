@@ -112,8 +112,8 @@ We chose this syntax for its simplicity and to be compatible with BoolNet_, see 
 Save it in a text file called *example01.bnet*.
 To generate its prime implicants use the function :ref:`bnet2primes` of the module :ref:`FileExchange`::
 
-   >>> from PyBoolNet import FileExchange as FEX
-   >>> primes = FEX.bnet2primes("example01.bnet")
+   >>> from PyBoolNet import FileExchange
+   >>> primes = FileExchange.bnet2primes("example01.bnet")
    
 Instead of a file name the functions also takes string contents of a *bnet* file::
 
@@ -121,26 +121,26 @@ Instead of a file name the functions also takes string contents of a *bnet* file
    ...        v1,  v2
    ...        v2,  v1
    ...        """
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    
 and a second argument can be used for saving the prime implicants as a *json* file::
 
-   >>> primes = FEX.bnet2primes("example01.bnet", "example01.primes")
+   >>> primes = FileExchange.bnet2primes("example01.bnet", "example01.primes")
    
 Saving prime implicants in a separate file is useful in case the network has many components with high in-degrees.
 For such networks the computation of all primes might take a long time.
 Previously saved primes can be read with :ref:`read_primes`::
 
-   >>> primes = FEX.read_primes("example01.primes")
+   >>> primes = FileExchange.read_primes("example01.primes")
    
 Previously generated primes can be saved as *json* files using :ref:`write_primes`::
 
-   >>> FEX.write_primes(primes, "example01.primes")
+   >>> FileExchange.write_primes(primes, "example01.primes")
    
 You may also want to save primes as a *bnet* file.
 To do so use :ref:`primes2bnet`::
 
-   >>> FEX.primes2bnet(primes, "example01.bnet")
+   >>> FileExchange.primes2bnet(primes, "example01.bnet")
    
 The module :ref:`FileExchange` can also export primes to *bns* and *genysis* files to use as inputs for the tools BNS_ of :ref:`Dubrova2011 <Dubrova2011>` and GenYsis_ of :ref:`Garg2008 <Garg2008>`, namely :ref:`primes2bns` and :ref:`primes2genysis`.
 
@@ -233,7 +233,7 @@ It returns a directed graph in the :ref:`installation_networkx` format, that is,
 
    >>> from PyBoolNet import InteractionGraphs as IGs
    >>> bnet = "\n".join(["v1, v1|v3","v2, 1", "v3, v1&!v2 | !v1&v2"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> igraph
    <networkx.classes.digraph.DiGraph object at 0xb513efec>
@@ -318,7 +318,7 @@ The basic edge attributes are:
 To set node or edge defaults, add them to the *node* or *edge* attribute of the graph field::
 
    >>> bnet = "\n".join(["v1, v2 & (!v1 | v3)","v2, !v3","v3, v2 | v1"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> igraph.graph["node"]["shape"] = "circle"
    >>> igraph.graph["node"]["color"] = "blue"
@@ -407,7 +407,7 @@ Consider this example::
    ...         "v5, v4 & v2 | v6", "v6, 0", "v7, !v5",
    ...         "v8, v7", "v9, v5 & v7"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> IGs.add_style_inputs(igraph)
    >>> IGs.add_style_constants(igraph)   
@@ -441,7 +441,7 @@ Consider the network::
    ...         "v6, v7", "v7, v6 | v4", "v8, v6", "v9, v8", "v10, v7 & v11",
    ...         "v11, v10 | v4", "v12, v10"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> IGs.add_style_sccs(igraph)
    >>> igraph.graph["label"] = "Example 6: Interaction graph with SCC style"
@@ -475,7 +475,7 @@ Consider the network::
    >>> bnet = ["v1, v7", "v2, v1 & v6", "v3, v2 | v7", "v4, v3",
    ...         "v5, v1 | v4", "v6, v5", "v7, v6"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> subgraphs = [(["v2","v6"],{}),
    ...              (["v1","v4"],{"label":"Genes", "fillcolor":"lightblue"})]
@@ -505,7 +505,7 @@ Here is an example::
    >>> bnet = ["v1, v7", "v2, v1 & v6", "v3, v2 | v7", "v4, v3",
    ...         "v5, v1 | v4", "v6, v5", "v7, v6"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> activities = {"v2":1, "v3":0, "v4":0}
    >>> IGs.add_style_activities(igraph, activities)
@@ -544,7 +544,7 @@ Consider the network::
    ...         "v6, v7", "v7, v6 & !v4 | !v6 & v4", "v8, !v6", "v9, v8", "v10, v7 & !v11",
    ...         "v11, v10 | v4", "v12, v10"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> IGs.add_style_default(igraph)
    >>> igraph.graph["label"] = "Example 10: Interaction graph with default style"
@@ -571,7 +571,7 @@ It returns an instance of the :ref:`installation_networkx` digraph class::
 
    >>> from PyBoolNet import StateTransitionGraphs as STGs
    >>> bnet = "\n".join(["v1, v3","v2, v1", "v3, v2"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> update = "asynchronous"
    >>> stg = STGs.primes2stg(primes, update)
    >>> stg
@@ -648,7 +648,7 @@ The latter is only possible for synchronous transition graphs.
 Here is an example::
 
    >>> bnet = "\n".join(["v1, !v3","v2, v1", "v3, v2"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "synchronous")
    >>> stg.graph["rankdir"] = "LR"
    >>> stg.graph["label"] = "Example 12: The synchronous STG of a negative circuit"
@@ -677,7 +677,7 @@ It changes the *penwidth* and *color* of transitions.
 Consider the following example::
 
    >>> bnet = "\n".join(["x, !x|y", "y, !x&!z|x&!y&z", "z, x|!y"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 13: STG with path style"
    
@@ -705,7 +705,7 @@ The SCC style is almost identical to the one for interaction graphs except that 
 steady states and cyclic attractors.::
 
    >>> bnet = "\n".join(["x, !x|y", "y, x&!y|!z", "z, x&z|!y"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "The SCC style"   
    >>> STGs.add_style_sccs(stg)
@@ -730,7 +730,7 @@ The min trap spaces style is adds a *dot* subgraph for every minimal trap space 
 For an introduction to trap spaces, see :ref:`Klarner2015(a) <klarner2015trap>`::
 
    >>> bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 15: STG with min trap spaces style"   
    >>> STGs.add_style_mintrapspaces(primes, stg)
@@ -755,7 +755,7 @@ It adds a subgraph for every given subspace.
 As for interaction graphs, you may add pairs of subspace and attribute dictionaries if you want to change the label, or color etc. of the subgraphs::
 
    >>> bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 16: STG with subspaces style"
    >>> sub1 = ({"x":0},{"label":"x is zero"})
@@ -788,7 +788,7 @@ The default style combines the SCCs with the tendencies and the minimal trap spa
 
 
    >>> bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 16: STG with default style"
    >>> STGs.add_style_default(primes, stg)
@@ -847,12 +847,12 @@ To create the blinkers use the function :ref:`create_blinkers`::
    ... v3,   v1&v2&v3&v4
    ... v4,   v3 & (v1|v2)"""
 
-   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> primes = FileExchange.bnet2pirmes(bnet)
    >>> names = PIs.find_constants(primes)
    >>> names
    ['v1','v2']
    >>> PIs.create_blinkers(primes, names)
-   >>> FEX.primes2bnet(primes)
+   >>> FileExchange.primes2bnet(primes)
    v1,   !v1
    v2,   !v2
    v3,   v1 & v2 & v3 & v4
@@ -867,7 +867,7 @@ If you want to keep the original primes and modify a copy you have to create the
 Components may be renamed using the function :ref:`rename_variable`, e.g.
 
    >>> PIs.rename_variable(primes, "v1", "x")
-   >>> FEX.primes2bnet(primes)
+   >>> FileExchange.primes2bnet(primes)
    x,    !x
    v2,   !v2
    v3,   x & v2 & v3 & v4
@@ -895,11 +895,11 @@ The second one removes all variables from the primes dict that became constant d
 Both functions return a dictionary of constants.
 Keeping the constants results in::
 
-   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> primes = FileExchange.bnet2pirmes(bnet)
    >>> constants = PIs.percolate_and_keep_constants(primes)
    >>> constants
    {'v1':0,'v3':1}
-   >>> FEX.primes2bnet(primes)
+   >>> FileExchange.primes2bnet(primes)
    v1,   0
    v2,   v2
    v3,   1
@@ -907,11 +907,11 @@ Keeping the constants results in::
 Here, v1 and v3 are kept in the model.   
 Removing the constants results in::
 
-   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> primes = FileExchange.bnet2pirmes(bnet)
    >>> constants = PIs.percolate_and_remove_constants(primes)
    >>> constants
    {'v1':0,'v3':1}
-   >>> FEX.primes2bnet(primes)
+   >>> FileExchange.primes2bnet(primes)
    v2,   v2
 
 Here, the constants v1 and v3 are removed.
@@ -948,9 +948,9 @@ Example::
    ... v1,   !v1 | v2
    ... v2,   v2 & v1
    ... v3,   v1 & v2 & v3"""
-   >>> primes = FEX.bnet2pirmes(bnet)
+   >>> primes = FileExchange.bnet2pirmes(bnet)
    >>> PIs.remove_variables(primes, ["v3"])
-   >>> FEX.primes2bnet(primes)
+   >>> FileExchange.primes2bnet(primes)
    v1,   !v1 | v2
    v2,   v2 & v1
    
@@ -962,9 +962,9 @@ This function can also be used to modify existing variables as it replaces updat
 The function raises an exception if the resulting network contains variables whose update functions are undefined.
 Example of correct use::
 
-   >>> primes = FEX.bnet2primes("v1, v2 \n v2, v1")
+   >>> primes = FileExchange.bnet2primes("v1, v2 \n v2, v1")
    >>> create_variables(primes, {"v3": "!v4 | v1", "v4": lambda v1,v2: v1+v2==1})
-   >>> primes FEX.primes2bnet(primes)
+   >>> primes FileExchange.primes2bnet(primes)
    v1, v2
    v2, v1
    v3, !v4
@@ -972,7 +972,7 @@ Example of correct use::
    
 An example of violating the condition that all variables must be defined is::
 
-   >>> primes = FEX.bnet2primes("v1, v1")
+   >>> primes = FileExchange.bnet2primes("v1, v1")
    >>> create_variables(primes, {"v2":"v3 | v4", "v3":"!v1"})
    error: can not add variables that are dependent on undefined variables.
    
@@ -981,7 +981,7 @@ input combinations
 ******************
 To enumerate all possible input combinations of a given network use the function :ref:`input_combinations`::
 
-   >>> primes = FEX.bnet2primes("input1, input1 \n input2, input2")
+   >>> primes = FileExchange.bnet2primes("input1, input1 \n input2, input2")
    >>> create_variables(primes, {"v1": "input1 & input2"})
    >>> create_variables(primes, {"v2": "input1 | input2"})
    >>> for x in input_combintations:
@@ -1010,7 +1010,7 @@ As an example, consider the following network::
    ...         "Mek,  Erk | Mek & Raf",
    ...         "Raf,  !Erk | !Raf"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 18: STG of the Erk-Mek-Raf network"
    >>> STGs.stg2image(stg, "example18_stg.pdf")
@@ -1241,7 +1241,7 @@ Consider the following toy model of cell proliferation:
    ...         "Proliferation, GrowthFactor | Proliferation & !DNAdamage",
    ...         "DNAdamage,     !GrowthFactor & DNAdamage"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> update = "asynchronous"
 
 Suppose we want to find out whether the presence of *GrowthFactor* implies the possibility of *Proliferation*.
@@ -1411,7 +1411,7 @@ As an example consider the following network::
    ...         "x1,   !x0 | x1 | x2",
    ...         "x2,   x0&!x1 | x2"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    
 and the queries "Every state that satisfies *x1=0* can reach an attractor in which *x0* is steady" (Q1)
 and "There is a state that satisfies *x1=0* that can reach an attractor in which *x0* is steady" (Q2).
@@ -1500,7 +1500,7 @@ Consider the previous network as an example::
    ...         "x1,   !x0 | x1 | x2",
    ...         "x2,   x0&!x1 | x2"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    
 We already know that the query with initial states ``!x1`` and the CTL spec ``EF(AG(x0_STEADY))`` is false.
 Using the function :ref:`check_primes_with_counterexample` we found an initial state that does not satisfy the specification, i.e., 000.
@@ -1562,16 +1562,15 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see :ref:`Klarner2015(a) <klarner2015trap>`.
 
-|Software| uses the module :ref:`TrapSpaces` and the function :ref:`trap_spaces` to compute trap spaces.
+|Software| uses the module :ref:`AspSolver` and the function :ref:`trap_spaces` to compute trap spaces.
 As an example, consider the following network which has five trap spaces::
 
-   >>> from PyBoolNet import TrapSpaces as TS
    >>> bnet = ["x, !x | y | z",
    ...         "y, !x&z | y&!z",
    ...         "z, x&y | z"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
-   >>> tspaces = TS.trap_spaces(primes, "all")
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> tspaces = AspSolver.trap_spaces(primes, "all")
    >>> print ", ".join(STGs.subspace2str(primes, x) for x in tspaces)
    ---, --1, 1-1, -00, 101
 
@@ -1599,11 +1598,11 @@ The trap spaces are illustrated in :ref:`the figure below <figure23>` using the 
 The number of all trap spaces of a network can be very large and one is often only interested in the subset of minimal or maximal trap spaces.
 These can also be computed using :ref:`trap_spaces` by passing *"min"* or *"max"* instead of the previously used value *"all"* for the second parameter::
 
-   >>> mintspaces = TS.trap_spaces(primes, "min")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> for x in mintspaces:
    ...     sub = (x,{"fillcolor":"salmon"})
    ...     STGs.add_style_subspaces(primes, stg, [sub])
-   >>> maxtspaces = TS.trap_spaces(primes, "max")
+   >>> maxtspaces = AspSolver.trap_spaces(primes, "max")
    >>> for x in maxtspaces:
    ...     if x in mintspaces:
    ...         sub = (x,{"fillcolor":"lightyellow"})
@@ -1650,12 +1649,12 @@ As an example for computing attractors with this algorithm consider the followin
    ...         "v2, !v1 | v2&!v3",
    ...         "v3, !v2"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> STGs.add_style_sccs(stg)
    >>> stg.graph["label"] = "Example 25: A network with a cyclic attractor and a steady state."
    >>> STGs.stg2image(stg, "example25_stg.pdf")
-   >>> attractors = AD.compute_attractors_tarjan(stg)
+   >>> attractors = AttractorDetection.compute_attractors_tarjan(stg)
    >>> len(attractors)
    2
    >>> for A in attractors:
@@ -1694,7 +1693,7 @@ and then testing with CTL model checking whether the final state is indeed part 
 This approach is based on the observation that, in practice, a random walk will quickly reach states that belong to an attractor.
 It is implemented in the function :ref:`find_attractor_state_by_randomwalk_and_ctl`::
 
-   >>> state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+   >>> state = AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    >>> STGs.state2str(state)
    110
    
@@ -1705,7 +1704,7 @@ Though unlikely, it is possible that the function will not find an attractor in 
 Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
 
    >>> try:
-   ...     state = AD.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+   ...     state = AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    ...     print STGs.state2str(state)
    ... except:
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
@@ -1717,33 +1716,35 @@ basins of attraction
 The module :ref:`Basins` contains functions for constructing diagrams that illustrate the basins of attraction of a given STG.
 In non-deterministic STGs there are usually states from which more than one attractor is reachable.
 But, not every combination of attractors has states that can reach exactly that subset of attractors.
-The function :ref:`basins_diagram` checks for each possible combination of attractors whether the set of corresponding basin states is empty or not.
+The function :ref:`commitment_diagram` checks for each possible combination of attractors whether the set of corresponding commitment states is empty or not.
 If there are states a basin node is created.
-An edge between basin nodes indicates the existence of a transition between two states of the respective sets of states.
-The nodes of a basin diagram have the following attributes:
+An edge between commitment nodes indicates the existence of a transition between two states of the respective sets of states.
+The nodes of a commitment diagram have the following attributes:
 
    * ``"formula"`` (str), the factored formula representing the states in that basin
    * ``"size"`` (int), the number of states in that basin
    * ``"attractors"`` (list), the list of attractors that define that basin (represented by individual states or subspaces)
    
-The edges of a basin diagram have the following attributes:
+The edges of a commitment diagram have the following attributes:
 
-   * ``"finally_formula"`` (str), the factored formula that represents the states that can reach a state that can make the transition
-   * ``"finally_size"`` (int), the number of such states
+   * ``"EX_formula"`` (str), an expression that represents the states that can make the transition
+   * ``"EX_size"`` (int), the number of such states
    
-Basin diagrams can be visualized with the function :ref:`diagram2image`.
+and, if the parameter ``AdditionalEdgeData`` of :ref:`commitment_diagram` was set to true, there are additionally the attributes:
+
+   * ``"EF_formula"`` (str), an expression that represents the states that can reach a state that can make the transition
+   * ``"EF_size"`` (int), the number of such states
+      
+Commitment diagrams can be visualized with the function :ref:`diagram2image`.
 The function takes the primes, diagram and file name of the image as parameters.
-In addition you may specify *FnameATTRACTORS* if you want a separate file for the specification of the attractors.
-Otherwise they are included in the diagram image.
 Two parameters for styling the diagram are provided.
 *StyleInputs* highlight the basin nodes that belong to the same input combination and *StyleAdvanced* modifies the node and edge styles to
 highlight nodes and transition that are *homogeneous*. For details see the upcoming publication :ref:`Klarner2016 <klarner2016basins>`.
 
 Consider the following example::
 
-   >>> primes = REPO.get_primes("arellano_rootstem")
-   >>> diagram = AB.basins_diagram(primes, "asynchronous")
-   >>> AB.diagram2image(primes, diagram, "diagram.pdf")
+   >>> primes = Repository.get_primes("arellano_rootstem")
+   >>> diagram = Basins.commitment_diagram(primes, "asynchronous", FnameImage="commitment.pdf")
 
 The output is given in :ref:`the figure below <figure26>`.
 It uses the following convention: basin nodes that belong to the same input combination are grouped as light green subgraphs.
@@ -1751,7 +1752,7 @@ The fillcolor of a basin node reflects the proportion of states that belong to i
 Nodes are labeled by the attractors they can reach which are enumerated by A0, A1, etc.
 Cyclic attractros are represented by minimal trap spaces.
 
-Note that the function :ref:`basins_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
+Note that the function :ref:`commitment_diagram` either requires a list of states representing attractors (given via the parameter *Attractors*),
 or it will compute the minimal trap spaces and *assume* that they are complete and univocal.
 You should make sure that the minimal trap spaces are indeed complete and univocal using the functions :ref:`completeness` and :ref:`univocality`.
 
@@ -1762,26 +1763,7 @@ You should make sure that the minimal trap spaces are indeed complete and univoc
    :align: center
    
    The basin diagram of the network *arellano_rootstem* from the repository.
-   
-If you want to create a separate image for the basin and the states representing the attractors use the parameter *FnameATTRACTORS* of the
-function :ref:`diagram2image`::
-
-   >>> AB.diagram2image(primes, diagram, "diagram.pdf", "attractors.pdf")
-   
-Finally, in particular for diagrams with many nodes you may want to generate the so-called aggregate diagram in which nodes
-with the same number of reachable attractors are combined.
-That is, all nodes that can reach, for example, exactly two attractors (irrespective of which two attractors) are represented by a single node.
-An example is given in :ref:`the figure below <figure27>`:
-
-   >>> AB.diagram2aggregate_image(diagram, "aggregate.pdf")
-   
-.. _figure27:
-
-.. figure:: figure27.pdf
-   :scale: 100%
-   :align: center
-   
-   The aggregated basin diagram of the network *arellano_rootstem* from the repository.
+ 
 
 attractor approximations
 ************************
@@ -1811,10 +1793,10 @@ consider again the network defined in :ref:`the figure above <figure25>`.
 The functions :ref:`univocality` and :ref:`faithfulness` each require the primes, update strategy and a trap space::
 
    >>> update = "asynchronous"
-   >>> mintspaces = TS.trap_spaces(primes, "min")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> for x in mintspaces:
-   ...     answer_univocal = AD.univocal(primes, update, x)
-   ...     answer_faithful = AD.faithful(primes, update, x)
+   ...     answer_univocal = AttractorDetection.univocal(primes, update, x)
+   ...     answer_faithful = AttractorDetection.faithful(primes, update, x)
    ...     print "min trap space:", STGs.subspace2str(primes, x)
    ...     print "  is univocal:", answer_univocal
    ...     print "  is faithful:", answer_faithful
@@ -1829,7 +1811,7 @@ The function for deciding whether the minimal trap spaces are complete requires 
 because it is implied that the trap spaces must be all minimal ones.
 See :ref:`completeness` for details.
      
-   >>> AD.completeness(primes, update)
+   >>> AttractorDetection.completeness(primes, update)
    True
    
 Since :ref:`univocality` is based on detecting at least one attractor, via the random walk algorithm explained above,
@@ -1849,10 +1831,10 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
    ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
    ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
    >>> bnet = "\n".join(bnet)
-   >>> primes = FEX.bnet2primes(bnet)
-   >>> mintspaces = TS.trap_spaces(primes, "min")
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> stg = STGs.primes2stg(primes, "asynchronous")
-   >>> mintspaces = TS.trap_spaces(primes, "min")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
         
    >>> STGs.add_style_sccs(stg)
@@ -1867,7 +1849,7 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
    
    WRONG FIGURE! The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
    
-   >>> mintspaces = TS.trap_spaces(primes, "min")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
    ['---']
    >>> STGs.add_style_subspaces(stg, mintspaces)
