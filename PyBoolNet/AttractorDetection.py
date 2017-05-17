@@ -8,7 +8,7 @@ import networkx
 import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
 import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.ModelChecking
 import PyBoolNet.QueryPatterns
@@ -106,7 +106,7 @@ def compute_attractor_representatives(Primes, Update):
         PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_auto, autoset_above)
 
         # find trapspaces inside autonomous set
-        trapspaces = [x for x in PyBoolNet.TrapSpaces.trap_spaces(primes_auto,"min") if x and set(x).issubset(autoset)]
+        trapspaces = [x for x in PyBoolNet.AspSolver.trap_spaces(primes_auto,"min") if x and set(x).issubset(autoset)]
 
         # find all new oscillating states
         initial_state = dict((x,y) for x,y in oscillating.items() if x in primes_auto)
@@ -269,7 +269,7 @@ def univocality(Primes, Update, Trapspace):
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         >>> x = mintrapspaces[0]
         >>> univocality(primes, "asynchronous", x)
         True
@@ -313,7 +313,7 @@ def faithfulness(Primes, Update, Trapspace):
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)
         True
@@ -380,7 +380,7 @@ def univocality_with_counterexample(Primes, Update, Trapspace):
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         >>> trapspace = mintrapspaces[0]
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
@@ -437,7 +437,7 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)        
         True
@@ -508,7 +508,7 @@ def completeness_with_counterexample(Primes, Update):
     
     constants_global = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
         
-    mintrapspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")   # line  1
+    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")   # line  1
     if mintrapspaces==[{}]:             # line  2
         return (True, None)             # line  3
     
@@ -550,7 +550,7 @@ def completeness_with_counterexample(Primes, Update):
             PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
             
             ## line 15: Q = MinTrapSpaces(U',F|U')
-            Q = PyBoolNet.TrapSpaces.trap_spaces(primes_restricted, "min")
+            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min")
 
             ## line 16: phi = CompletenessQuery(Q)
             phi = PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes_restricted, Q)
@@ -605,7 +605,7 @@ def create_attractor_report(Primes, FnameTXT=None):
          >>> create_attractor_report(primes, "report.txt")
     """
     
-    mints = PyBoolNet.TrapSpaces.trap_spaces(Primes, "min")
+    mints = PyBoolNet.AspSolver.trap_spaces(Primes, "min")
     steady = sorted([x for x in mints if len(x)==len(Primes)])
     cyclic = sorted([x for x in mints if len(x)<len(Primes)])
 
@@ -769,7 +769,7 @@ def completeness_naive(Primes, Update, TrapSpaces):
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         >>> answer, counterex = completeness_naive(primes, "asynchronous", mintspaces)
         >>> answer
         True

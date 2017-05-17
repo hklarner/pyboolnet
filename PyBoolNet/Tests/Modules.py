@@ -16,7 +16,7 @@ import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.ModelChecking
 import PyBoolNet.AttractorDetection
 import PyBoolNet.Basins
@@ -134,7 +134,7 @@ class TestBasins(unittest.TestCase):
     def test_basin_diagram(self):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
-        attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        attractors = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         diagram = PyBoolNet.Basins.commitment_diagram(primes, update, attractors, Silent=False)
 
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
@@ -497,7 +497,7 @@ class TestAttractorDetection(unittest.TestCase):
             primes = PyBoolNet.Repository.get_primes(name)
             if len(primes)>10: continue
             steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
-            expected = len(PyBoolNet.TrapSpaces.trap_spaces(primes,"min"))
+            expected = len(PyBoolNet.AspSolver.trap_spaces(primes,"min"))
             got = len(steadystates)+len(cyclic)
             msg = "\nname:      "+name
             msg+= "\nexpected : "+str(expected)
@@ -696,7 +696,7 @@ class TestAttractorDetection(unittest.TestCase):
         counterex = PyBoolNet.StateTransitionGraphs.state2str(counterex)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "synchronous")
 
-        for x in PyBoolNet.TrapSpaces.trap_spaces(primes, "min"):
+        for x in PyBoolNet.AspSolver.trap_spaces(primes, "min"):
             x = PyBoolNet.StateTransitionGraphs.subspace2str(primes,x)
             msg = "\n%s is a completeness counterexample but it can reach"%counterex
             msg+= "\nthe minimal trap space %s"%x
@@ -895,15 +895,15 @@ class TestModelChecking(unittest.TestCase):
         self.assertTrue(counterex==expected, msg)
 
 
-class TestTrapSpaces(unittest.TestCase):
+class TestAspSolver(unittest.TestCase):
 
     def test_percolated_trapspaces(self):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
 
         
-        all_ = PyBoolNet.TrapSpaces.trap_spaces(primes, "all", MaxOutput=200)
-        expected = set(PyBoolNet.StateTransitionGraphs.subspace2str(primes,PyBoolNet.TrapSpaces.percolate_trapspace(primes, x)) for x in all_)
-        answer   = set(PyBoolNet.TrapSpaces.trap_spaces(primes, "percolated", Representation="str"))
+        all_ = PyBoolNet.AspSolver.trap_spaces(primes, "all", MaxOutput=200)
+        expected = set(PyBoolNet.StateTransitionGraphs.subspace2str(primes,PyBoolNet.AspSolver.percolate_trapspace(primes, x)) for x in all_)
+        answer   = set(PyBoolNet.AspSolver.trap_spaces(primes, "percolated", Representation="str"))
 
         msg = "\nexpected: %i percolated tspaces"%len(expected)
         msg+= "\ngot:      %i percolated tspaces"%len(answer)
@@ -918,21 +918,21 @@ class TestTrapSpaces(unittest.TestCase):
         primes = PyBoolNet.Repository.get_primes("raf")
 
         tspace = {'Mek': 0, 'Erk': 0}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {'Raf': 1, 'Mek': 0, 'Erk': 0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         tspace = {}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         tspace = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -943,7 +943,7 @@ class TestTrapSpaces(unittest.TestCase):
         primes = PyBoolNet.Repository.get_primes("raf")
 
         state = {'Raf':1, 'Mek':0, 'Erk':0}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
         expected = {'Raf':1, 'Mek':0, 'Erk':0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -951,14 +951,14 @@ class TestTrapSpaces(unittest.TestCase):
 
 
         state = {'Raf':0, 'Mek':1, 'Erk':1}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
         expected = {'Mek':1, 'Erk':1}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         state = {'Raf':1, 'Mek':1, 'Erk':0}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
         expected = {}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -969,7 +969,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_posfeedback.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min")
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min")
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -981,7 +981,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_tsfree.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min")
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min")
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
@@ -994,7 +994,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_min.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -1004,7 +1004,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_all.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -1014,7 +1014,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_max.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
         expected = []
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -1026,7 +1026,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_min.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -1038,7 +1038,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_max.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -1050,7 +1050,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_all.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -1062,7 +1062,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds1.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces_bounded(Primes=primes, Type="all", Bounds=(1,2), FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces_bounded(Primes=primes, Type="all", Bounds=(1,2), FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = []
         msg = "\nexpected: "+str(expected)
@@ -1074,7 +1074,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds2.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces_bounded(Primes=primes, Type="max", Bounds=(0,100), FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces_bounded(Primes=primes, Type="max", Bounds=(0,100), FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
@@ -1086,7 +1086,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out  = os.path.join(FILES_OUT,  "trapspaces_bounded.primes")
         primes = PyBoolNet.FileExchange.bnet2primes(fname_in, fname_out)
 
-        tspaces_all = PyBoolNet.TrapSpaces.trap_spaces(primes, "all")
+        tspaces_all = PyBoolNet.AspSolver.trap_spaces(primes, "all")
         tspaces_all.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},
                     {"v3":1},
@@ -1113,7 +1113,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_all)
         self.assertTrue(tspaces_all==expected, msg)
 
-        tspaces_min = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        tspaces_min = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         tspaces_min.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":0,"v2":0,"v3":0,"v4":0},
@@ -1127,7 +1127,7 @@ class TestTrapSpaces(unittest.TestCase):
         self.assertTrue(tspaces_min==expected, msg)
 
 
-        tspaces_max = PyBoolNet.TrapSpaces.trap_spaces(primes, "max")
+        tspaces_max = PyBoolNet.AspSolver.trap_spaces(primes, "max")
         tspaces_max.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
@@ -1139,7 +1139,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_max)
         self.assertTrue(tspaces_max==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(1,1))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "max", Bounds=(1,1))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
@@ -1150,7 +1150,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue(tspaces_bounded==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "max", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v1":1,"v2":1},
                     {"v1":0,"v2":0},
@@ -1163,7 +1163,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue(tspaces_bounded==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "all", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "all", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1},
@@ -1184,7 +1184,7 @@ class TestTrapSpaces(unittest.TestCase):
         self.assertTrue(tspaces_bounded==expected, msg)
 
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "min", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "min", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1,"v3":1},
@@ -1209,7 +1209,7 @@ class TestTrapSpaces(unittest.TestCase):
 
         # network has 4 steady states: 010,110,011,111
 
-        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y","x"])
+        result = PyBoolNet.AspSolver.steady_states_projected(primes, ["y","x"])
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"x":0, "y":1}, {"x":1, "y":1}]
         msg = "\nexpected: "+str(expected)
@@ -1227,21 +1227,21 @@ class TestTrapSpaces(unittest.TestCase):
         bnet = "\n".join(["v1,v1|v2","v2,v1"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "all")
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "all")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}, {'v1': 0, 'v2': 0}, {'v1': 1}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
 
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
 
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "max")
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "max")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0}, {'v1': 1}]
         msg = "\nexpected: "+str(expected)
@@ -1596,7 +1596,7 @@ class TestFileExchange(unittest.TestCase):
 
         for i, (cbounds, cproj) in enumerate(itertools.product([None,(1,2)],[None,['A','B']])):
             fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case%i.asp"%i)
-            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Type="hannes")
+            PyBoolNet.AspSolver.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Type="hannes")
         ## no assertion ##
 
 

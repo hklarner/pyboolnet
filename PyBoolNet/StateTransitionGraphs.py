@@ -8,7 +8,7 @@ import subprocess
 import networkx
 
 import PyBoolNet.FileExchange
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
@@ -46,7 +46,7 @@ def energy(Primes, State):
         0
     """
 
-    tspace = PyBoolNet.TrapSpaces.smallest_trapspace(Primes, State, FnameASP=None, Representation="str")
+    tspace = PyBoolNet.AspSolver.smallest_trapspace(Primes, State, FnameASP=None, Representation="str")
     energy = tspace.count('-')
 
     return energy
@@ -144,7 +144,7 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
         seen.add(source)
 
     # defaults
-    stg.graph["node"]  = {"shape":"rect","color":"none","fillcolor":"none"}
+    stg.graph["node"]  = {"shape":"rect", "color":"none", "style":"filled", "fillcolor":"none"}
     stg.graph["edge"]  = {}
     stg.graph["subgraphs"]  = []
 
@@ -205,7 +205,39 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
 
     PyBoolNet.Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
         
+
+def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Styles=[], LayoutEngine="dot"):
+    """
+    A convenience function for drawing state transition graphs directly from the prime implicants.
+    *Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces"].
+    
+    **arguments**:
+        * *Primes*: prime implicants
+        * *FnameIMAGE* (str): name of image
+        * *InitialStates* (func/str/dict/list): a function, a subspace, a state or a list of states
+        * *Styles* (list): the styles to be applied
+        * *LayoutEngine* (str): one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         
+    **example**::
+
+          >>> create_image(primes, "asynchronous", "mapk_stg.pdf", Styles=["interactionsigns", "anonymous"])
+    """
+    
+    assert(set(Styles).issubset(set(["tendencies", "sccs", "mintrapspaces"])))
+
+    stg = primes2stg(Primes, Update, InitialStates)
+    
+    if "tendencies" in Styles:
+        add_style_tendencies(stg)
+    if "sccs" in Styles:
+        add_style_sccs(stg)
+    if "mintrapspaces" in Styles:
+        add_style_mintrapspaces(stg)
+
+    
+    stg2image(stg, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=False)
+
+    
 def copy(STG):
     """
     Creates a copy of *STG* including all *dot* attributes.
@@ -227,7 +259,7 @@ def copy(STG):
 
     return newgraph
 
-
+            
 def add_style_tendencies(STG):
     """
     Sets or overwrites the edge colors to reflect whether a transition increases values (*black*),
@@ -400,7 +432,7 @@ def add_style_subgraphs(STG, Subgraphs):
 
 def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     """
-    A convenience function that combines :ref:`add_style_subspaces` and :ref:`TrapSpaces.trap_spaces <trap_spaces>`.
+    A convenience function that combines :ref:`add_style_subspaces` and :ref:`AspSolver.trap_spaces <trap_spaces>`.
     It adds a *dot* subgraphs for every minimal trap space to *STG* - subgraphs that already exist are overwritten.
 
     **arguments**:
@@ -416,7 +448,7 @@ def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     names = sorted(Primes)
     states = STG.nodes()
     
-    for tspace in PyBoolNet.TrapSpaces.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.AspSolver.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
 
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes,tspace) if x in states])

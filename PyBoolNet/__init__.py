@@ -12,7 +12,7 @@ import PyBoolNet.PrimeImplicants
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.StateTransitionGraphs
 import PyBoolNet.QueryPatterns
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.Repository
 import PyBoolNet.Utility
 import PyBoolNet.BooleanExpressions
@@ -24,7 +24,7 @@ import pprint as prettyprint
 
 def version():
 
-    return "2.11x"
+    return "2.12"
 
 
 def pprint(X):

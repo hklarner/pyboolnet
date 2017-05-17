@@ -1,0 +1,21 @@
+
+targets, factors
+
+# taken from
+# Dinwoodie, Ian H. "Computational Methods for Asynchronous Basins." Discrete and continuous dynamical systems. Series B 21.10 (2016): 3391.
+
+NOS,     Ca2
+NO,      NOS
+GC,      NO
+ADPRc,   NO
+cADPR,   ADPRc
+cGMP,    GC
+PLC,     Ca2
+InsP3,   PLC
+CIS,     (cGMP & cADPR) | InsP3
+Ca2ATP,  Ca2
+Ca2,     CIS & (!Ca2ATP)
+KAP,     !Ca2
+KEV,     Ca2
+
+

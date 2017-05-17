@@ -66,7 +66,11 @@ def primes2igraph(Primes):
         igraph.add_edge(k, name, sign=edges[(k,name)])
 
     # defaults
-    igraph.graph["node"]  = {"style":"filled","shape":"rect","color":"none","fillcolor":"gray95"}
+
+    factor = 0.2
+    width = factor * sum(len(x) for x in Primes) / len(Primes)
+    
+    igraph.graph["node"]  = {"style":"filled","shape":"circle", "fixedsize":"true", "width":str(width),"color":"none","fillcolor":"gray95"}
     igraph.graph["edge"]  = {}
     igraph.graph["subgraphs"]  = []
                 
@@ -115,9 +119,9 @@ def igraph2dot(IGraph, FnameDOT=None):
     return PyBoolNet.Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
-def igraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
+def igraph2image(IGraph, FnameIMAGE, LayoutEngine="fdp", Silent=False):
     """
-    Creates an image file from *IGraph* using :ref:`installation_graphviz` and the layout engine *dot*.
+    Creates an image file from *IGraph* using :ref:`installation_graphviz` and the force directed layout engine *fdp*.
     To find out which file formats are supported call ``$ dot -T?``.
     
     **arguments**:
@@ -136,7 +140,7 @@ def igraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=Silent)
 
 
-def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
+def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"], LayoutEngine="fdp"):
     """
     A convenience function for drawing interaction graphs directly from the prime implicants.
     *Styles* must be a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"].
@@ -145,6 +149,7 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
         * *Primes*: prime implicants
         * *FnameIMAGE* (str): name of image
         * *Styles* (list): the styles to be applied
+        * *LayoutEngine* (str): one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         
     **example**::
 
@@ -168,7 +173,7 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
     if "anonymous" in Styles:
         add_style_anonymous(igraph)
 
-    igraph2image(igraph, FnameIMAGE)
+    igraph2image(igraph, FnameIMAGE, LayoutEngine=LayoutEngine)
         
 
 def find_outdag(IGraph):

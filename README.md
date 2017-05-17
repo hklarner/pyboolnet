@@ -11,8 +11,24 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for next version
-- warning for accepting states bug (see issue [#14](http://github.com/hklarner/PyBoolNet/issues/14)) when the CTL spec is TRUE or FALSE
+#### release notes for version 2.12 (May 2017)
+- IMPORTANT NOTE: this version is rushed to publish new features.
+- IMPORTANT NOTE: there may be bugs.
+- IMPORTANT NOTE: only available on linux 32bit
+- IMPORTANT NOTE: next stable release will be 2.2
+- added module `BooleanExpressions` with `minimize_espresso(..)` (work by Sarah Nee)
+- bugfix for `Utility.Diagraphs.subgraphs2tree(..)` that affected `StateTransitionGraphs.add_style_subspaces(..)`
+- added functions `weak_basins(..)` `strong_basins(..)` with bar plot and pie chart visualizations to `Basins`. Plotting requires [matplotlib](https://matplotlib.org/).
+- added `add_style_anonymous(..)` to `InteractionGraphs` which hides node labels
+- added some toy networks to the `Repository`
+- renamed module `TrapSpaces` to `AspSolver`
+- renamed module `AttractorBasins` to `Basins`
+- added energy function `energy(..)` to `StateTransitionGraphs`
+- added pretty print function `pprint(..)` to `PyBoolNet`
+- bugfix in NuSMV-a for dynamic reordering (currently compiled only in 32bit)
+- bugfix in NuSMV-a for large numbers (currently compiled only in 32bit)
+- removed parameter `Aggregate` from `TrapSpaces.trap_spaces(..)` and similar functions as it is rarely useful
+- added warning for accepting states bug (see issue [#14](http://github.com/hklarner/PyBoolNet/issues/14))
 - added T-Helper cell plasticity model of Wassim Abou-Jaoudé
 - improved formatting of `primes2bnet(..)` and `primes2mindnf(..)`
 - added parameter `Representation` and option `percolated` to parameter `Type` of `trap_spaces(..)`

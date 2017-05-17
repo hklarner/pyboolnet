@@ -1,6 +1,13 @@
 
-VERSION=2.11
+VERSION=2.12
 LOCALOS=linux32
+
+echo "creating manual"
+cd Docs/Sphinx
+make latexpdf
+cd ../..
+
+
 
 echo "Creating releases for PyBoolNet ver $VERSION"
 echo "Removing local Dependencies"
@@ -46,8 +53,8 @@ echo
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/conf.py to $VERSION"
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/Substitutions.rst to $VERSION"
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/Installation.rst to $VERSION"
+echo "make sure you changed version in PyBoolNet/__inti__.py to $VERSION"
 echo "make sure you changed version in setup.py to $VERSION"
-
 
 
 

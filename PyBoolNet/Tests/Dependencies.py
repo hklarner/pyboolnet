@@ -188,8 +188,9 @@ class TestEspresso(unittest.TestCase):
 
 
 
-
-
+class TestMatplotLib(unittest.TestCase):
+    def test_matplotlib_responds(self):
+        import matplotlib.pyplot 
 
 
 if __name__=="__main__":
