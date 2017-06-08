@@ -1,7 +1,7 @@
 
 
 # name: n12c5
-# toy net with monotone edges and five attractors:
+# toy net with monotone edges and five cyclic attractors:
 # A1=-0000-000000
 # A2=0-0011111011
 # A3=000011-00000

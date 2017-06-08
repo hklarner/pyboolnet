@@ -1,4 +1,10 @@
+
+
 targets, factors
+
+# generated with BoolNet
+# Mussel, Christoph, Martin Hopfensitz, and Hans A. Kestler. "BoolNet: an R package for generation, reconstruction and analysis of Boolean networks." Bioinformatics 26.10 (2010): 1378-1380.
+
 Gene1, (!Gene4 & !Gene3) | (!Gene4 & Gene5) | (Gene4 & Gene3 & !Gene5)
 Gene2, (Gene1 & !Gene3) | (Gene2 & !Gene3) | (Gene2 & !Gene1)
 Gene3, (!Gene5 & !Gene1) | (Gene6 & Gene1) | (Gene5 & Gene1)
