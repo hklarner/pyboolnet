@@ -167,6 +167,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     body   = sorted(x for x in Primes if all(x not in X for X in [constants, inputs, outdag]))    
 
     blocks = [constants, inputs, body, outdag]
+    blocks = [x for x in blocks if x]
     assert(len(constants)+len(inputs)+len(body)+len(outdag)==len(Primes))
 
     lines = []
@@ -325,7 +326,11 @@ def primes2bns(Primes, FnameBNS=None):
                             seq.append('0')
                     else:
                         seq.append('-')
-                seq.append(' %i'%v)
+
+                if regulators:
+                    seq.append(' ')
+                    
+                seq.append('%i'%v)
 
                 lines+= [''.join(seq)]
 
