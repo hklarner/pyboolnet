@@ -22,6 +22,8 @@ def run():
     
     for name in PyBoolNet.Repository.names_with_fast_analysis():
         
+        name = "davidich_yeast"
+        
         primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
 
         fname = os.path.join(name,name+"_attractors.md")
@@ -33,12 +35,13 @@ def run():
         fname = os.path.join(name,name+"_commitment_pie.pdf")        
         PyBoolNet.Basins.commitment_pie(primes, "asynchronous", Silent=False, FnameImage=fname)
 
-        fname = os.path.join(name,name+"_weak_basins.pdf")        
-        PyBoolNet.Basins.weak_basins(primes, "asynchronous", FnameImage=fname, Title="Weak Basins - %s"%name)
+        fname = os.path.join(name,name+"_all_basins.pdf")        
+        PyBoolNet.Basins.all_basins(primes, "asynchronous", FnameImage=fname, Title="All Basins - %s"%name)
 
         fname = os.path.join(name,name+"_strong_basins.pdf")        
         PyBoolNet.Basins.strong_basins(primes, "asynchronous", FnameImage=fname, Title="Strong Basins - %s"%name)
 
+        break
 
 if __name__=="__main__":
     run()
