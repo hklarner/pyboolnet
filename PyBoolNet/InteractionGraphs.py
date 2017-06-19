@@ -22,6 +22,24 @@ def dot2image(FnameDOT, FnameIMAGE):
     PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
+def create_empty_igraph(Primes):
+    """
+    creates an empty igraph with default attributes
+    """
+
+    igraph = networkx.DiGraph()
+    
+    factor = 0.2
+    width = factor * sum(len(x) for x in Primes) / len(Primes)
+    
+    igraph.graph["node"]  = {"style":"filled","shape":"circle", "fixedsize":"true", "width":str(width),"color":"none","fillcolor":"gray95"}
+    igraph.graph["edge"]  = {}
+    igraph.graph["subgraphs"]  = []
+
+    return igraph
+    
+
+
 def primes2igraph(Primes):
     """
     Creates the interaction graph from the prime implicants of a network.
@@ -48,7 +66,8 @@ def primes2igraph(Primes):
             set([1, -1])
     """
 
-    igraph = networkx.DiGraph()
+    igraph = create_empty_igraph(Primes)
+
     edges = {}
     for name in Primes:
         igraph.add_node(name)
@@ -64,18 +83,63 @@ def primes2igraph(Primes):
                 
     for k,name in edges:
         igraph.add_edge(k, name, sign=edges[(k,name)])
-
-    # defaults
-
-    factor = 0.2
-    width = factor * sum(len(x) for x in Primes) / len(Primes)
-    
-    igraph.graph["node"]  = {"style":"filled","shape":"circle", "fixedsize":"true", "width":str(width),"color":"none","fillcolor":"gray95"}
-    igraph.graph["edge"]  = {}
-    igraph.graph["subgraphs"]  = []
-                
+        
     return igraph
 
+
+def local_igraph_of_state(Primes, State):
+    """
+    computes the local interaction graph of a state.
+    """ 
+
+    if type(State)==str:
+        State = PyBoolNet.StateTransitionGraphs.state2dict(Primes, State)
+
+    local_igraph = create_empty_igraph(Primes)
+    
+    F = lambda x: PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes, x)
+    x = State
+
+    for i in Primes:        
+        for j in Primes:
+
+            y = dict(State)
+            y[i] = 1-x[i]
+
+            dx = x[i] - y[i]
+            dF = F(x)[j] - F(y)[j]
+
+            sign = int( dF/dx )
+
+            if sign:
+                local_igraph.add_edge(i,j,sign=set([sign]))
+
+    return local_igraph
+    
+
+def local_igraph_of_states(Primes, States):
+    """
+    computes the local interaction graph of a states.
+    """
+
+    States = PyBoolNet.StateTransitionGraphs.states2dict(Primes, States)
+
+    local_igraph = create_empty_igraph(Primes)
+
+    for state in States:
+        g = local_igraph_of_state(Primes, state)
+        
+        for i, j in g.edges():
+            signs = g[i][j]["sign"]
+
+            if local_igraph.has_edge(i,j):
+                local_igraph[i][j]["sign"].update(signs)
+            else:
+                local_igraph.add_edge(i,j,sign=signs)
+
+    return local_igraph
+        
+    
 
 def copy(IGraph):
     """
