@@ -23,8 +23,7 @@ import pprint as prettyprint
 
 
 def version():
-
-    return "2.12"
+    return "2.1.2dev"
 
 
 def pprint(X):

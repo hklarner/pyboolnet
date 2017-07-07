@@ -173,7 +173,8 @@ def digraph2dot(DiGraph, FnameDOT=None):
             print("%s was not created."%FnameDot)
         return
 
-    assert(type(DiGraph.nodes()[0])==str)
+    if not type(DiGraph.nodes()[0])==str:
+        DiGraph = networkx.relabel_nodes(DiGraph, mapping = lambda x: str(x))
     
     lines = ['digraph {']
     lines+= digraph2dotlines(DiGraph)
@@ -255,6 +256,7 @@ def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
         print(out)
         print(err)
         print('dot did not respond with return code 0')
+        print('command: %s'%' '.join(cmd))
         raise Exception
     
     if not Silent:
@@ -506,7 +508,7 @@ def add_style_subgraphs(DiGraph, Subgraphs):
                 raise Exception
             
         subgraph = networkx.DiGraph()
-        subgraph.graph["color"] = "black"
+        subgraph.graph["color"] = "none"
         subgraph.add_nodes_from(nodes)
         if attr:
             subgraph.graph.update(attr)

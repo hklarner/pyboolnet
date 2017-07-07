@@ -66,22 +66,24 @@ def percolate_trapspace(Primes, Trapspace):
     
     
 
-def smallest_trapspace(Primes, State, FnameASP=None, Representation="dict"):
+def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representation="dict"):
     """
-    Computes the smallest trap space that contains *State*.
+    Computes trap spaces that contain *State*.
     
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (dict): a state in dict format 
+        * *State* (dict): a state in dict format
+        * *Type* (str): either "min", "max", "all" or "percolated"
         * *FnameASP* (str): file name or *None*
         * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
     **returns**:
-        * *TrapSpace* (dict): smallest trap spaces that contains *State*
+        * either *TrapSpaces* (list): the trap spaces that contain *State* if *Type* is "max", "all" or "percolated"
+        * or *TrapSpace* (dict): the unique minimal trap space that contains *State* if *Type* is "min"
 
     **example**::
 
-        >>> smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
+        >>> trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
     """
 
     assert(len(Primes)==len(State))
@@ -90,38 +92,60 @@ def smallest_trapspace(Primes, State, FnameASP=None, Representation="dict"):
     if type(State)==str:
         State = PyBoolNet.StateTransitionGraphs.state2dict(Primes,State)
 
-    active_primes = dict((name,[[],[]]) for name in Primes)
-    
-    for name in Primes:
-        for v in [0,1]:
-            for p in Primes[name][v]:
-                if State[name]==v:
-                    if PyBoolNet.Utility.Misc.dicts_are_consistent(p,State):
-                        active_primes[name][v].append(dict(p))
+    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, State)
 
     # note: Bounds=(1,"n") enforces at least one variable fixed.
     #       This is required for the subset maximal enumeration mode "--enum-mode=domRec --heuristic=Domain --dom-mod=3,16"
     #       Otherwise clasp returns "*** Warn : (clasp): domRec ignored: no domain atoms found!"
-    #       Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE 
-    tspaces = potassco_handle(active_primes, Type="min", Bounds=(1,"n"), Project=[], MaxOutput=10, FnameASP=FnameASP, Representation=Representation)
+    #       Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE
+    
+    tspaces = potassco_handle(active_primes, Type=Type, Bounds=(1,"n"), Project=[], MaxOutput=1000, FnameASP=FnameASP, Representation=Representation)
     
     if not tspaces:
         # ASP program is unsatisfiable
+
         answer = {}
         
-        if Representation=="dict":
-            return answer
-        else:
-            return PyBoolNet.StateTransitionGraphs.subspace2str(Primes, answer)
+        if Representation=="str":
+            answer = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, answer)
 
-    elif len(tspaces)>1:
-        print("the smallest trap space containing a state (or other space) must be unique!")
-        print("found %i smallest tspaces."%len(tspaces))
-        print(tspaces)
-        raise Exception
+        if Type != "min":
+            answer = [answer]
 
-    else:
+        return answer
+
+    if Type=="min":
+        if len(tspaces)>1:
+            print("the smallest trap space containing a state (or other space) must be unique!")
+            print("found %i smallest tspaces."%len(tspaces))
+            print(tspaces)
+            raise Exception
+
         return tspaces.pop()
+
+    return tspaces
+
+
+
+def smallest_trapspace(Primes, State, Representation="dict"):
+    """
+    Returns the (unique) smallest trap space that contains *State*.
+    Calls :ref:`trapspaces_that_contain_state`
+    
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (dict): a state in dict format
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
+
+    **returns**:
+        * *TrapSpace* (dict): the unique minimal trap space that contains *State*
+
+    **example**::
+
+        >>> smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
+    """
+    
+    return trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None, Representation=Representation)
 
     
 

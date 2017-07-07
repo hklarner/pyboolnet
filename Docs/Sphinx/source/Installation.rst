@@ -37,7 +37,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
    
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.12_linux64.tar.gz
+   $ sudo pip install PyBoolNet-2.1.3x_linux64.tar.gz
    
 which should place the package here::
 
@@ -45,14 +45,14 @@ which should place the package here::
    
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.12.tar.gz --user
+   $ pip install PyBoolNet-2.1.3x.tar.gz --user
    
 The package is likely going to be placed here::
 
    /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
-To install |software| using *Distutils* unpack *PyBoolNet-2.12.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.1.3x.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -104,7 +104,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.12_mac64.tar.gz
+   $ sudo pip install PyBoolNet-2.1.3x_mac64.tar.gz
    
 which should place the package here::
 
@@ -112,7 +112,7 @@ which should place the package here::
    
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.12.tar.gz --user
+   $ pip install PyBoolNet-2.1.3x.tar.gz --user
    
 The package is likely going to be placed here::
 
@@ -145,7 +145,7 @@ on
    
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.12_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.1.3x_win64.tar.gz
    
 which should place the package here::
 

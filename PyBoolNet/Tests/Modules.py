@@ -139,14 +139,14 @@ class TestBasins(unittest.TestCase):
 
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
 
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
-        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=False)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleRanks=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleSplines="ortho")
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleEdges=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, FirstIndex=10)
 
 
 
@@ -939,11 +939,11 @@ class TestAspSolver(unittest.TestCase):
         self.assertTrue(answer==expected, msg)
 
 
-    def test_smallest_trapspace(self):
+    def test_trapspaces_that_containt_state(self):
         primes = PyBoolNet.Repository.get_primes("raf")
 
         state = {'Raf':1, 'Mek':0, 'Erk':0}
-        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {'Raf':1, 'Mek':0, 'Erk':0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -951,14 +951,14 @@ class TestAspSolver(unittest.TestCase):
 
 
         state = {'Raf':0, 'Mek':1, 'Erk':1}
-        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {'Mek':1, 'Erk':1}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         state = {'Raf':1, 'Mek':1, 'Erk':0}
-        answer = PyBoolNet.AspSolver.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)

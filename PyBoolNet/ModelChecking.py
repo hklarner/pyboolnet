@@ -29,10 +29,9 @@ def print_warning_accstates_bug(Primes,CTLSpec):
 
     if all(x not in CTLSpec for x in Primes):
         print("WARNING: accepting states bug might affect result, see http://github.com/hklarner/PyBoolNet/issues/14")
+        
 
-    
-
-def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):
+def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True, Silent=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -48,6 +47,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
         * *DynamicReorder* (bool): enables dynamic reordering of variables using *-dynamic*
         * *DisableReachableStates* (bool): disables the computation of reachable states using *-df*
         * *ConeOfInfluence* (bool): enables cone of influence reduction using *-coi*
+        * *Silent* (bool): prints info to screen
 
     **returns**:
         * *Answer* (bool): result of query
@@ -74,6 +74,8 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
 
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
+    if not Silent:
+        print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
@@ -94,7 +96,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
-def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False):
+def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, Silent=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -111,6 +113,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
         * *Specification* (str): a :ref:`installation_nusmv` formula, including the keyword *LTLSPEC* or *CTLSPEC*
         * *DynamicReorder* (bool): enables dynamic reordering of variables using *-dynamic*
         * *DisableReachableStates* (bool): disables the computation of reachable states using *-df*
+        * *Silent* (bool): prints info to screen
 
     **returns**:
         * *Answer, Counterexample* (bool, tuple/None): result of query with counterexample
@@ -134,6 +137,8 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
 
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
+    if not Silent:
+        print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
     
@@ -155,7 +160,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=False, AcceptingStates=False)
 
 
-def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True):
+def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, DynamicReorder=True, ConeOfInfluence=True, Silent=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *CTLSpec* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -185,6 +190,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
         * *CTLSpec* (str): a :ref:`installation_nusmv` formula, including the keyword *CTLSPEC*
         * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
         * *ConeOfInfluence* (bool): enables cone of influence reduction using *-coi*
+        * *Silent* (bool): prints info to screen
 
     **returns**:
         * *Answer, AcceptingStates* (bool, dict): result of query with accepting states
@@ -217,6 +223,8 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
+    if not Silent:
+        print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname, Silent=True)
     

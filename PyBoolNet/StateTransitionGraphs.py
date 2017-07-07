@@ -46,7 +46,7 @@ def energy(Primes, State):
         0
     """
 
-    tspace = PyBoolNet.AspSolver.smallest_trapspace(Primes, State, FnameASP=None, Representation="str")
+    tspace = PyBoolNet.AspSolver.trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None, Representation="str")
     energy = tspace.count('-')
 
     return energy
@@ -128,7 +128,8 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
     # some iterable
     else:
         fringe = [state2str(x) for x in InitialStates]
-    
+        print fringe
+        
     seen = set([])
     while fringe:
         source = fringe.pop()
@@ -223,7 +224,7 @@ def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Style
           >>> create_image(primes, "asynchronous", "mapk_stg.pdf", Styles=["interactionsigns", "anonymous"])
     """
     
-    assert(set(Styles).issubset(set(["tendencies", "sccs", "mintrapspaces"])))
+    assert(set(Styles).issubset(set(["tendencies", "sccs", "mintrapspaces", "anonymous"])))
 
     stg = primes2stg(Primes, Update, InitialStates)
     
@@ -520,6 +521,27 @@ def add_style_default(Primes, STG):
     add_style_mintrapspaces(Primes, STG)
 
 
+def add_style_anonymous(STG):
+    """
+    Removes the labels and draws each state as a filled circle.
+
+    **arguments**:
+        * *STG*: state transition graph
+    
+    **example**::
+
+        >>> add_style_anonymous(stg)
+    """
+
+    STG.graph["node"]["shape"] = "circle"
+    STG.graph["node"]["style"] = "filled"
+    STG.graph["node"]["fillcolor"] = "lightgray"
+    STG.graph["node"]["color"] = "none"
+
+    for x in STG:
+        STG.node[x]["label"] = ""
+
+
 def successor_synchronous(Primes, State):
     """
     Returns the successor of *State* in the fully synchronous transition system defined by *Primes*.
@@ -717,7 +739,7 @@ def random_walk(Primes, Update, InitialState, Length):
     return Path
     
 
-def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
+def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent=False):
     """
     Performs a best-first search in the asynchronous transition system defined by *Primes* to answer the question whether there
     is a path from a random state in *InitalSpace* to a state in *GoalSpace*.
@@ -735,6 +757,7 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
         * *InitialSpace* (str/dict): initial subspace
         * *GoalSpace* (str/dict): goal subspace
         * *Memory* (int): maximal number of states memorized before search is stopped
+        * *Silent* (bool): print information
 
     **returns**:
         * *Path* (list): a path from *InitalSpace* to *GoalSpace* if it was found, or *None* otherwise.
@@ -772,7 +795,11 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
                 heapq.heappush(fringe, (hamming_distance(ydict,GoalSpace), path+[y]))
                 
         if len(seen)>Memory:
-            return None
+            break
+
+    if not Silent:
+        print("best_first_reachability(..)")
+        print(" explored %i transitions, not path found."%len(seen))
         
     return None
 
@@ -799,6 +826,28 @@ def state2str(State):
         return State
     
     return ''.join([str(State[x]) for x in sorted(State)])
+
+
+def states2str(Primes, States):
+    """
+    Converts the string representation of a list of states into the dictionary representations.
+    If *State* is already of type *dict* it is simply returned.
+        
+    **arguments**
+        * *Primes*: prime implicants or a list of names
+        * *States* (list of str): dictionary representation of states
+
+    **returns**
+        * *States* (list of dict): string representation of states
+
+    **example**::
+
+        >>> states = [{'v2':0, 'v1':1, 'v3':1},{'v2':0, 'v1':1, 'v3':0}]
+        >>> states2dict(primes, state)
+        ["101", "100"]
+    """
+
+    return [state2dict(Primes, x) for x in States]
 
 
 def state2dict(Primes, State):
@@ -828,6 +877,28 @@ def state2dict(Primes, State):
     assert(len(State)==len(Primes))
 
     return dict((k,int(v)) for k,v in zip(sorted(Primes), State))
+
+
+def states2dict(Primes, States):
+    """
+    Converts the string representation of a list of states into the dictionary representations.
+    If *State* is already of type *dict* it is simply returned.
+        
+    **arguments**
+        * *Primes*: prime implicants or a list of names
+        * *States* (list of str): string representation of states
+
+    **returns**
+        * *States* (list of dict): dictionary representation of states
+
+    **example**::
+
+        >>> states = ["101", "100"]
+        >>> states2dict(primes, state)
+        [{'v2':0, 'v1':1, 'v3':1},{'v2':0, 'v1':1, 'v3':0}]
+    """
+
+    return [state2dict(Primes, x) for x in States]
 
 
 def subspace2str(Primes, Subspace):
