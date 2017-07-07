@@ -15,14 +15,11 @@ def run():
         if name=="n12c5": continue
         
         primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
-
         fname = os.path.join(name,name+"_igraph.pdf")
         PyBoolNet.InteractionGraphs.create_image(primes,fname)
         
     
     for name in PyBoolNet.Repository.names_with_fast_analysis():
-        
-        name = "davidich_yeast"
         
         primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
 
@@ -41,7 +38,6 @@ def run():
         fname = os.path.join(name,name+"_strong_basins.pdf")        
         PyBoolNet.Basins.strong_basins(primes, "asynchronous", FnameImage=fname, Title="Strong Basins - %s"%name)
 
-        break
 
 if __name__=="__main__":
     run()

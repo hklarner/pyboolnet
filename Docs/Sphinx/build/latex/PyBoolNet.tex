@@ -14,8 +14,8 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{May 11, 2017}
-\release{2.2}
+\date{June 19, 2017}
+\release{2.1.3x}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{}
 \renewcommand{\releasename}{Release}
@@ -119,11 +119,11 @@
 \maketitle
 \tableofcontents
 \phantomsection\label{index::doc}
-\emph{PyBoolNet 2.2} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
+\emph{PyBoolNet 2.1.3x} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
 The project home page is \href{https://github.com/hklarner/PyBoolNet}{https://github.com/hklarner/PyBoolNet}.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.2} does not yet have any user friendly error messages.
+\emph{PyBoolNet 2.1.3x} does not yet have any user friendly error messages.
 Please post questions, report bugs or suggest features in the issues section of the project's homepage:
 \begin{itemize}
 \item {} 
@@ -142,8 +142,8 @@ or contact \emph{hannes.klarner@fu-berlin.de}.
 
 \section{Python}
 \label{Installation:python}
-\emph{PyBoolNet 2.2} was written in Python 2.7 but should be compatible with Python 3.
-If you experience problems with your version of Python and \emph{PyBoolNet 2.2} please contact \emph{hannes.klarner@fu-berlin.de} or
+\emph{PyBoolNet 2.1.3x} was written in Python 2.7 but should be compatible with Python 3.
+If you experience problems with your version of Python and \emph{PyBoolNet 2.1.3x} please contact \emph{hannes.klarner@fu-berlin.de} or
 post an issue on the project homepage at
 \begin{itemize}
 \item {} 
@@ -175,10 +175,10 @@ Make sure that {\hyperref[Installation:installation-networkx]{\emph{NetworkX}}},
 \PYGZdl{} sudo apt\PYGZhy{}get install imagemagick
 \end{Verbatim}
 
-Install \emph{PyBoolNet 2.2} with \emph{pip}:
+Install \emph{PyBoolNet 2.1.3x} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2\PYGZus{}linux64.tar.gz
+\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.1.3x\PYGZus{}linux64.tar.gz
 \end{Verbatim}
 
 which should place the package here:
@@ -190,7 +190,7 @@ which should place the package here:
 Use the option \code{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.0.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.1.3x.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{Verbatim}
 
 The package is likely going to be placed here:
@@ -200,7 +200,7 @@ The package is likely going to be placed here:
 \end{Verbatim}
 
 where \code{\textless{}user\textgreater{}} is the name you are logged in with (\code{\$ whoami}) and \code{\textless{}version\textgreater{}} is the Python version you are using.
-To install \emph{PyBoolNet 2.2} using \emph{Distutils} unpack \emph{PyBoolNet-2.0.tar.gz} into a temporary folder and run:
+To install \emph{PyBoolNet 2.1.3x} using \emph{Distutils} unpack \emph{PyBoolNet-2.1.3x.tar.gz} into a temporary folder and run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} sudo python setup.py install
@@ -214,14 +214,14 @@ again, using the \code{-{-}user} flag if you do not have sudo rights:
 
 The locations should be the same as when installing with \emph{pip}.
 
-You should now be able to import \emph{PyBoolNet 2.2}:
+You should now be able to import \emph{PyBoolNet 2.1.3x}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.1.3x} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -273,10 +273,10 @@ Download and install \href{http://www.graphviz.org/}{Graphviz} and \href{http://
 
 \end{itemize}
 
-Install \emph{PyBoolNet 2.2} with \emph{pip}:
+Install \emph{PyBoolNet 2.1.3x} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.11\PYGZus{}mac64.tar.gz
+\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.1.3x\PYGZus{}mac64.tar.gz
 \end{Verbatim}
 
 which should place the package here:
@@ -288,7 +288,7 @@ which should place the package here:
 Use the option \code{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.0.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.1.3x.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{Verbatim}
 
 The package is likely going to be placed here:
@@ -299,14 +299,14 @@ The package is likely going to be placed here:
 
 where \code{\textless{}user\textgreater{}} is the name you are logged in with (\code{\$ whoami}) and \code{\textless{}version\textgreater{}} is the Python version you are using.
 
-You should now be able to import \emph{PyBoolNet 2.2}:
+You should now be able to import \emph{PyBoolNet 2.1.3x}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.1.3x} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -332,10 +332,10 @@ on
 
 \end{itemize}
 
-To install \emph{PyBoolNet 2.2} with \emph{pip}:
+To install \emph{PyBoolNet 2.1.3x} with \emph{pip}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
-C:\PYGZbs{}\PYGZgt{} pip.exe install PyBoolNet\PYGZhy{}2.11\PYGZus{}win64.tar.gz
+C:\PYGZbs{}\PYGZgt{} pip.exe install PyBoolNet\PYGZhy{}2.1.3x\PYGZus{}win64.tar.gz
 \end{Verbatim}
 
 which should place the package here:
@@ -367,14 +367,14 @@ To install \href{http://www.graphviz.org/}{Graphviz} and \href{http://www.imagem
 
 \end{itemize}
 
-You should now be able to import \emph{PyBoolNet 2.2}:
+You should now be able to import \emph{PyBoolNet 2.1.3x}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 C:\PYGZbs{}\PYGZgt{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{Verbatim}
 
-To remove \emph{PyBoolNet 2.2} using \emph{pip} run:
+To remove \emph{PyBoolNet 2.1.3x} using \emph{pip} run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 C:\PYGZbs{}\PYGZgt{} pip.exe uninstall PyBoolNet
@@ -385,8 +385,8 @@ If you do not have \emph{pip}, all files must be removed manually.
 
 \section{Dependencies}
 \label{Installation:dependencies}
-Most of what \emph{PyBoolNet 2.2} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called \code{settings.cfg} and located in the folder \code{Dependencies} of \emph{PyBoolNet 2.2}.
+Most of what \emph{PyBoolNet 2.1.3x} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
+The file that records the locations to third party binaries is called \code{settings.cfg} and located in the folder \code{Dependencies} of \emph{PyBoolNet 2.1.3x}.
 The default location is:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -456,7 +456,7 @@ or:
 if you do not have super user rights.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.2} is tested with \href{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
+\emph{PyBoolNet 2.1.3x} is tested with \href{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
 \end{notice}
 
 
@@ -477,7 +477,7 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 \begin{notice}{note}{Note:}
 The development of the Potassco solving collection is active with frequent releases.
-\emph{PyBoolNet 2.2} is tested with two specific versions, \href{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \href{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
+\emph{PyBoolNet 2.1.3x} is tested with two specific versions, \href{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \href{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
 \end{notice}
 
 The binaries and source are available at:
@@ -494,11 +494,11 @@ The binaries and source are available at:
 \subsection{NuSMV}
 \label{Installation:nusmv}\label{Installation:installation-nusmv}
 \href{http://nusmv.fbk.eu}{NuSMV} is a symbolic model checker that we use to decide LTL and CTL queries.
-\emph{PyBoolNet 2.2} requires the extension \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
+\emph{PyBoolNet 2.1.3x} requires the extension \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
 It is included with every release and should work out of the box.
 
 \begin{notice}{note}{Note:}
-\emph{PyBoolNet 2.2} is tested with \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+\emph{PyBoolNet 2.1.3x} is tested with \href{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
 \end{notice}
 
 Binaries and source available at:
@@ -572,7 +572,7 @@ To install it on linux run:
 \subsection{BoolNet}
 \label{Installation:boolnet}\label{Installation:installation-boolnet}
 \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet} is a library for \href{https://www.r-project.org/}{R} that is used for the construction, simulation and analysis of Boolean networks, see {\hyperref[Bibliography:mussel2010]{\emph{Müssel2010}}}.
-It is not a required dependency of \emph{PyBoolNet 2.2} but you need it if you want to convert \emph{SBML-qual} files into \emph{bnet} files.
+It is not a required dependency of \emph{PyBoolNet 2.1.3x} but you need it if you want to convert \emph{SBML-qual} files into \emph{bnet} files.
 To install it run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -592,7 +592,7 @@ select a CRAN mirror and wait for the download and installation to finish.
 \subsection{GINsim}
 \label{Installation:installation-ginsim}\label{Installation:ginsim}
 \href{http://ginsim.org/home}{GINsim} is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see {\hyperref[Bibliography:chaouiya2012]{\emph{Chaouiya2012}}}.
-Like \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \href{http://ginsim.org/home}{GINsim} is not a required dependency of \emph{PyBoolNet 2.2} but it has a useful model repository. To convert \href{http://ginsim.org/home}{GINsim} models you need to export them as \emph{SBML-qual} files which can then be converted into \emph{bnet} files using \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
+Like \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \href{http://ginsim.org/home}{GINsim} is not a required dependency of \emph{PyBoolNet 2.1.3x} but it has a useful model repository. To convert \href{http://ginsim.org/home}{GINsim} models you need to export them as \emph{SBML-qual} files which can then be converted into \emph{bnet} files using \href{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
 No installation required, just download the latest version (tested with version 2.9) and call:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -649,7 +649,7 @@ OSError: [Errno 13] Permission denied
 \end{Verbatim}
 
 you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains \emph{PyBoolNet 2.2} (see {\hyperref[Installation:installation-software]{\emph{Installation of PyBoolNet}}} above) and run:
+Locate the directory that contains \emph{PyBoolNet 2.1.3x} (see {\hyperref[Installation:installation-software]{\emph{Installation of PyBoolNet}}} above) and run:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 ../PyBoolNet\PYGZdl{} chmod \PYGZhy{}R 744 Dependencies/
@@ -732,7 +732,7 @@ The returned list states that \emph{f1} has two 1-prime implicants and each cons
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
 
-It can be difficult to enumerate all prime implicants of a network and \emph{PyBoolNet 2.2} uses the program {\hyperref[Installation:installation-bnettoprime]{\emph{BNetToPrime}}} to do it.
+It can be difficult to enumerate all prime implicants of a network and \emph{PyBoolNet 2.1.3x} uses the program {\hyperref[Installation:installation-bnettoprime]{\emph{BNetToPrime}}} to do it.
 As a user you define a network in terms of Boolean expressions, Python functions or you import it from other tools, like \href{http://ginsim.org/home}{GINsim}.
 The steps in each case are explained in the following sections.
 
@@ -985,7 +985,7 @@ The result is shown in {\hyperref[Manual:figure01]{\emph{the figure below}}}.
 
 \subsection{graph, node and edge attributes}
 \label{Manual:graph-node-and-edge-attributes}
-\emph{PyBoolNet 2.2} generates a \emph{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
+\emph{PyBoolNet 2.1.3x} generates a \emph{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
 Attributes are just dictionaries that are attached to nodes, edges and the graph itself, see {\hyperref[Installation:installation-networkx]{\emph{NetworkX}}} for an introduction.
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
@@ -1118,7 +1118,7 @@ The result is shown in {\hyperref[Manual:figure02]{\emph{the figure below}}}.
 
 \subsection{the interaction signs style}
 \label{Manual:the-interaction-signs-style}
-\emph{PyBoolNet 2.2} has predefined styles for adding attributes to interaction graphs.
+\emph{PyBoolNet 2.1.3x} has predefined styles for adding attributes to interaction graphs.
 The function {\hyperref[InteractionGraphs:add-style-interactionsigns]{\emph{add\_style\_interactionsigns}}} adds or overwrites color and arrowhead attributes to indicate whether an interaction is activating, inhibiting or both.
 Activating interactions are black with normal arrowheads,
 inhibiting interactions are red with blunt arrowhead and
@@ -1621,7 +1621,7 @@ To create the blinkers use the function {\hyperref[PrimeImplicants:create-blinke
 \PYG{g+go}{v4,   v2 \PYGZam{} v3 \textbar{} v1 \PYGZam{} v3}
 \end{Verbatim}
 
-Note that \emph{PyBoolNet 2.2} modifies the primes object in place rather than creating and returning a modified copy.
+Note that \emph{PyBoolNet 2.1.3x} modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -1780,7 +1780,7 @@ To enumerate all possible input combinations of a given network use the function
 
 \section{Model Checking}
 \label{Manual:sec-model-checking}\label{Manual:model-checking}
-\emph{PyBoolNet 2.2} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to decide model checking queries for Boolean networks.
+\emph{PyBoolNet 2.1.3x} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to decide model checking queries for Boolean networks.
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example {\hyperref[Bibliography:baier2008]{\emph{Baier2008}}}.
 
@@ -1804,7 +1804,7 @@ As an example, consider the following network:
 
 The state transition graph is shown in {\hyperref[Manual:figure17]{\emph{the figure below}}}.
 
-When model checking, \emph{PyBoolNet 2.2} translates state transition graphs into transition systems.
+When model checking, \emph{PyBoolNet 2.1.3x} translates state transition graphs into transition systems.
 The basic approach to doing so is shown in {\hyperref[Manual:figure17]{\emph{the figure below}}}.
 Here, each state string is replaced by a subset of atomic propositions.
 The subset is chosen to correspond with the state string, i.e.,
@@ -1842,7 +1842,7 @@ The transition system with the extended set of atomic propositions is shown in {
 \subsection{LTL model checking}
 \label{Manual:ltl-model-checking}
 Apart from a transition system, a model checking problem requires a \emph{temporal specification}.
-Since \emph{PyBoolNet 2.2} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} for solving model checking problems, two specification languages are available:
+Since \emph{PyBoolNet 2.1.3x} uses {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} for solving model checking problems, two specification languages are available:
 \emph{linear time logic} (LTL) and \emph{computational tree logic} (CTL).
 
 LTL specifications are statements about the sequence of events that are expressed in terms of atomic propositions and temporal operators.
@@ -2414,7 +2414,7 @@ The size of this set tells us that there are two states outside of the initial o
 \PYG{g+go}{5}
 \end{Verbatim}
 
-Note that \emph{PyBoolNet 2.2} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+Note that \emph{PyBoolNet 2.1.3x} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property \code{EF(STEADYSTATE)}:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -2446,7 +2446,7 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
-\emph{PyBoolNet 2.2} uses the module \emph{AspSolver} and the function \emph{trap\_spaces} to compute trap spaces.
+\emph{PyBoolNet 2.1.3x} uses the module {\hyperref[AspSolver:aspsolver]{\emph{AspSolver}}} and the function {\hyperref[AspSolver:trap-spaces]{\emph{trap\_spaces}}} to compute trap spaces.
 As an example, consider the following network which has five trap spaces:
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -2482,7 +2482,7 @@ The trap spaces are illustrated in {\hyperref[Manual:figure23]{\emph{the figure 
 \caption{The state transition graph \emph{``example23\_stg.pdf''} with every trap space highlighted by its own subgraph.}\label{Manual:figure23}\end{figure}
 
 The number of all trap spaces of a network can be very large and one is often only interested in the subset of minimal or maximal trap spaces.
-These can also be computed using \emph{trap\_spaces} by passing \emph{``min''} or \emph{``max''} instead of the previously used value \emph{``all''} for the second parameter:
+These can also be computed using {\hyperref[AspSolver:trap-spaces]{\emph{trap\_spaces}}} by passing \emph{``min''} or \emph{``max''} instead of the previously used value \emph{``all''} for the second parameter:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{min}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
@@ -3863,8 +3863,8 @@ Generates a \emph{dot} file from \emph{IGraph} and saves it as \emph{FnameDOT} o
 \label{InteractionGraphs:id6}\label{InteractionGraphs:igraph2image}\index{igraph2image() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.igraph2image}\pysiglinewithargsret{\bfcode{igraph2image}}{\emph{IGraph}, \emph{FnameIMAGE}, \emph{LayoutEngine='dot'}, \emph{Silent=False}}{}
-Creates an image file from \emph{IGraph} using {\hyperref[Installation:installation-graphviz]{\emph{Graphviz}}} and the layout engine \emph{dot}.
+\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.igraph2image}\pysiglinewithargsret{\bfcode{igraph2image}}{\emph{IGraph}, \emph{FnameIMAGE}, \emph{LayoutEngine='fdp'}, \emph{Silent=False}}{}
+Creates an image file from \emph{IGraph} using {\hyperref[Installation:installation-graphviz]{\emph{Graphviz}}} and the force directed layout engine \emph{fdp}.
 To find out which file formats are supported call \code{\$ dot -T?}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -3900,7 +3900,7 @@ To find out which file formats are supported call \code{\$ dot -T?}.
 \label{InteractionGraphs:id7}\label{InteractionGraphs:create-image}\index{create\_image() (in module PyBoolNet.InteractionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.create_image}\pysiglinewithargsret{\bfcode{create\_image}}{\emph{Primes, FnameIMAGE, Styles={[}'interactionsigns'{]}}}{}
+\phantomsection\label{InteractionGraphs:PyBoolNet.InteractionGraphs.create_image}\pysiglinewithargsret{\bfcode{create\_image}}{\emph{Primes, FnameIMAGE, Styles={[}'interactionsigns'{]}, LayoutEngine='fdp'}}{}
 A convenience function for drawing interaction graphs directly from the prime implicants.
 \emph{Styles} must be a sublist of {[}''interactionsigns'', ``inputs'', ``outputs'', ``constants'', ``sccs'', ``anonymous''{]}.
 \begin{description}
@@ -3913,6 +3913,9 @@ A convenience function for drawing interaction graphs directly from the prime im
 
 \item {} 
 \emph{Styles} (list): the styles to be applied
+
+\item {} 
+\emph{LayoutEngine} (str): one of ``dot'', ``neato'', ``fdp'', ``sfdp'', ``circo'', ``twopi''
 
 \end{itemize}
 
@@ -4286,7 +4289,7 @@ both are parameters that are directly passed to \emph{convert}.
 \label{StateTransitionGraphs:primes2stg}\label{StateTransitionGraphs:id2}\index{primes2stg() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x4353895c\textgreater{}}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.primes2stg}\pysiglinewithargsret{\bfcode{primes2stg}}{\emph{Primes}, \emph{Update}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x435d6a3c\textgreater{}}}{}
 Creates the state transition graph (STG) of a network defined by \emph{Primes} and \emph{Update}.
 The \emph{InitialStates} are either a list of states (in \emph{dict} or \emph{str} representation),
 a function that flags states that belong to the initial states, or
@@ -4579,7 +4582,7 @@ If \emph{InitialState} is a subspace then {\hyperref[StateTransitionGraphs:rando
 \label{StateTransitionGraphs:id7}\label{StateTransitionGraphs:best-first-reachability}\index{best\_first\_reachability() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.best_first_reachability}\pysiglinewithargsret{\bfcode{best\_first\_reachability}}{\emph{Primes}, \emph{InitialSpace}, \emph{GoalSpace}, \emph{Memory=1000}}{}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.best_first_reachability}\pysiglinewithargsret{\bfcode{best\_first\_reachability}}{\emph{Primes}, \emph{InitialSpace}, \emph{GoalSpace}, \emph{Memory=1000}, \emph{Silent=False}}{}
 Performs a best-first search in the asynchronous transition system defined by \emph{Primes} to answer the question whether there
 is a path from a random state in \emph{InitalSpace} to a state in \emph{GoalSpace}.
 \emph{Memory} specifies the maximal number of states that can be kept in memory as ``already explored'' before the algorithm terminates.
@@ -4604,6 +4607,9 @@ If {\hyperref[StateTransitionGraphs:best-first-reachability]{\emph{best\_first\_
 
 \item {} 
 \emph{Memory} (int): maximal number of states memorized before search is stopped
+
+\item {} 
+\emph{Silent} (bool): print information
 
 \end{itemize}
 
@@ -5089,8 +5095,46 @@ Use \code{dot -T?} to find out which output formats are supported on your instal
 
 
 
+\subsection{create\_image}
+\label{StateTransitionGraphs:id20}\label{StateTransitionGraphs:create-image}\index{create\_image() (in module PyBoolNet.StateTransitionGraphs)}
+
+\begin{fulllineitems}
+\phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.create_image}\pysiglinewithargsret{\bfcode{create\_image}}{\emph{Primes}, \emph{Update}, \emph{FnameIMAGE}, \emph{InitialStates=\textless{}function \textless{}lambda\textgreater{} at 0x435d6b1c\textgreater{}}, \emph{Styles=}\optional{}, \emph{LayoutEngine='dot'}}{}
+A convenience function for drawing state transition graphs directly from the prime implicants.
+\emph{Styles} must be a sublist of {[}''tendencies'', ``sccs'', ``mintrapspaces''{]}.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{FnameIMAGE} (str): name of image
+
+\item {} 
+\emph{InitialStates} (func/str/dict/list): a function, a subspace, a state or a list of states
+
+\item {} 
+\emph{Styles} (list): the styles to be applied
+
+\item {} 
+\emph{LayoutEngine} (str): one of ``dot'', ``neato'', ``fdp'', ``sfdp'', ``circo'', ``twopi''
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{mapk\PYGZus{}stg.pdf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{Styles}\PYG{o}{=}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{interactionsigns}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{anonymous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
 \subsection{add\_style\_tendencies}
-\label{StateTransitionGraphs:id20}\label{StateTransitionGraphs:add-style-tendencies}\index{add\_style\_tendencies() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id21}\label{StateTransitionGraphs:add-style-tendencies}\index{add\_style\_tendencies() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_tendencies}\pysiglinewithargsret{\bfcode{add\_style\_tendencies}}{\emph{STG}}{}
@@ -5116,7 +5160,7 @@ decreases values (\emph{red}), or both (\emph{blue}) which is only possible for 
 
 
 \subsection{add\_style\_sccs}
-\label{StateTransitionGraphs:add-style-sccs}\label{StateTransitionGraphs:id21}\index{add\_style\_sccs() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-sccs}\label{StateTransitionGraphs:id22}\index{add\_style\_sccs() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_sccs}\pysiglinewithargsret{\bfcode{add\_style\_sccs}}{\emph{STG}}{}
@@ -5144,7 +5188,7 @@ Shadings repeat after a depth of 9.
 
 
 \subsection{add\_style\_subspaces}
-\label{StateTransitionGraphs:add-style-subspaces}\label{StateTransitionGraphs:id22}\index{add\_style\_subspaces() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-subspaces}\label{StateTransitionGraphs:id23}\index{add\_style\_subspaces() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_subspaces}\pysiglinewithargsret{\bfcode{add\_style\_subspaces}}{\emph{Primes}, \emph{STG}, \emph{Subspaces}}{}
@@ -5187,7 +5231,7 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 
 \subsection{add\_style\_subgraphs}
-\label{StateTransitionGraphs:add-style-subgraphs}\label{StateTransitionGraphs:id23}\index{add\_style\_subgraphs() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-subgraphs}\label{StateTransitionGraphs:id24}\index{add\_style\_subgraphs() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_subgraphs}\pysiglinewithargsret{\bfcode{add\_style\_subgraphs}}{\emph{STG}, \emph{Subgraphs}}{}
@@ -5227,11 +5271,11 @@ The reason for this requirement is that \emph{dot} can not draw intersecting sub
 
 
 \subsection{add\_style\_mintrapspaces}
-\label{StateTransitionGraphs:add-style-mintrapspaces}\label{StateTransitionGraphs:id24}\index{add\_style\_mintrapspaces() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:id25}\label{StateTransitionGraphs:add-style-mintrapspaces}\index{add\_style\_mintrapspaces() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces}\pysiglinewithargsret{\bfcode{add\_style\_mintrapspaces}}{\emph{Primes}, \emph{STG}, \emph{MaxOutput=100}}{}
-A convenience function that combines {\hyperref[StateTransitionGraphs:add-style-subspaces]{\emph{add\_style\_subspaces}}} and \emph{AspSolver.trap\_spaces}.
+A convenience function that combines {\hyperref[StateTransitionGraphs:add-style-subspaces]{\emph{add\_style\_subspaces}}} and {\hyperref[AspSolver:trap-spaces]{\emph{AspSolver.trap\_spaces}}}.
 It adds a \emph{dot} subgraphs for every minimal trap space to \emph{STG} - subgraphs that already exist are overwritten.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -5259,7 +5303,7 @@ It adds a \emph{dot} subgraphs for every minimal trap space to \emph{STG} - subg
 
 
 \subsection{add\_style\_path}
-\label{StateTransitionGraphs:add-style-path}\label{StateTransitionGraphs:id25}\index{add\_style\_path() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-path}\label{StateTransitionGraphs:id26}\index{add\_style\_path() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_path}\pysiglinewithargsret{\bfcode{add\_style\_path}}{\emph{STG}, \emph{Path}, \emph{Color}, \emph{Penwidth=3}}{}
@@ -5294,7 +5338,7 @@ Sets the color of all nodes and edges involved in the given \emph{Path} to \emph
 
 
 \subsection{add\_style\_default}
-\label{StateTransitionGraphs:add-style-default}\label{StateTransitionGraphs:id26}\index{add\_style\_default() (in module PyBoolNet.StateTransitionGraphs)}
+\label{StateTransitionGraphs:add-style-default}\label{StateTransitionGraphs:id27}\index{add\_style\_default() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
 \phantomsection\label{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.add_style_default}\pysiglinewithargsret{\bfcode{add\_style\_default}}{\emph{Primes}, \emph{STG}}{}
@@ -5786,70 +5830,13 @@ Creates an attractor report for the network defined by \emph{Primes}.
 \label{Basins:basins}\label{Basins::doc}\label{Basins:id1}
 
 \subsection{weak\_basins}
-\label{Basins:weak-basins}\label{Basins:id2}\index{weak\_basins() (in module PyBoolNet.Basins)}
-
-\begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.weak_basins}\pysiglinewithargsret{\bfcode{weak\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}, \emph{Title=None}}{}
-Uses model checking with accepting states to compute the weak basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
-\emph{Attractors} may be used to specify a list of representative states for the attractors.
-Otherwise the weak basins of the minimal trap spaces is returned.
-Use \emph{FnameImage} to create a bar chart of the weak basins, this requires \href{https://matplotlib.org}{https://matplotlib.org}.
-The weak basins are returned in the form of a dictionary:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-* \PYGZsq{}01100\PYGZhy{}\PYGZhy{}0\PYGZsq{}: (str of attractor representant)
-    * \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{} (Boolean expression for states)
-    * \PYGZsq{}perc\PYGZsq{}:    0.5             (percentage of state space)
-    * \PYGZsq{}size\PYGZsq{}:    8               (number of states)
-\end{Verbatim}
-\begin{description}
-\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
-\item {} 
-\emph{Primes}: prime implicants
-
-\item {} 
-\emph{Update} (str): the update strategy, one of \emph{``asynchronous''}, \emph{``synchronous''}, \emph{``mixed''}
-
-\item {} 
-\emph{Attractors} (list): list of states or subspaces representing the attractors. \emph{None} results in the computation of the minimal trap spaces.
-
-\item {} 
-\emph{Minimize} (bool): minimize the resulting expressions
-
-\item {} 
-\emph{FnameImage} (str): file name of bar chart of weak basins
-
-\item {} 
-\emph{Title} (str): optional title of plot
-
-\end{itemize}
-
-\item[{\textbf{returns}::}] \leavevmode\begin{itemize}
-\item {} 
-\emph{WeakBasins} (dict): the weak basins
-
-\end{itemize}
-
-\end{description}
-
-\textbf{example}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{raf}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{weak\PYGZus{}basins}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{asynchronous}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+go}{    \PYGZob{}   \PYGZsq{}001\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Raf) \textbar{} (!Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 62.5, \PYGZsq{}size\PYGZsq{}: 5L\PYGZcb{},}
-\PYG{g+go}{        \PYGZsq{}11\PYGZhy{}\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(Mek) \textbar{} (Erk)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 75.0, \PYGZsq{}size\PYGZsq{}: 6L\PYGZcb{}\PYGZcb{}}
-\end{Verbatim}
-
-\end{fulllineitems}
-
-
+\label{Basins:weak-basins}\label{Basins:id2}
 
 \subsection{strong\_basins}
 \label{Basins:strong-basins}\label{Basins:id3}\index{strong\_basins() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{Attractors=None}, \emph{Minimize=True}, \emph{FnameImage=None}, \emph{Title=None}}{}
+\phantomsection\label{Basins:PyBoolNet.Basins.strong_basins}\pysiglinewithargsret{\bfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{FnameImage=None}, \emph{Attractors=None}, \emph{Minimize=False}, \emph{Title=None}, \emph{Silent=True}}{}
 Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \emph{Primes} and \emph{Update}.
 \emph{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the strong basins of the minimal trap spaces is returned.
@@ -5885,6 +5872,9 @@ The strong basins are returned in the form of a dictionary:
 
 \item {} 
 \emph{Title} (str): optional title of plot
+
+\item {} 
+\emph{Silent} (bool): info on progress
 
 \end{itemize}
 
@@ -5991,12 +5981,12 @@ disconnected components are considered separately (and recombined using a cartes
 \label{ModelChecking:id2}\label{ModelChecking:check-primes}\index{check\_primes() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
-\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes}\pysiglinewithargsret{\bfcode{check\_primes}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{ConeOfInfluence=True}}{}
+\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes}\pysiglinewithargsret{\bfcode{check\_primes}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{ConeOfInfluence=True}, \emph{Silent=True}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whether the \emph{Specification} is true or false in the transition system defined by \emph{Primes},
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6019,6 +6009,9 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 
 \item {} 
 \emph{ConeOfInfluence} (bool): enables cone of influence reduction using \emph{-coi}
+
+\item {} 
+\emph{Silent} (bool): prints info to screen
 
 \end{itemize}
 
@@ -6048,11 +6041,11 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 \label{ModelChecking:check-primes-with-counterexample}\label{ModelChecking:id3}\index{check\_primes\_with\_counterexample() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
-\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes_with_counterexample}\pysiglinewithargsret{\bfcode{check\_primes\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}}{}
+\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes_with_counterexample}\pysiglinewithargsret{\bfcode{check\_primes\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{Specification}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{Silent=True}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whether the \emph{Specification} is true or false in the transition system defined by \emph{Primes},
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 
 \begin{notice}{note}{Note:}
 \emph{ConeOfInfluence} is not available when using counterexamples as it ``messes'' with the output.
@@ -6076,6 +6069,9 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 
 \item {} 
 \emph{DisableReachableStates} (bool): disables the computation of reachable states using \emph{-df}
+
+\item {} 
+\emph{Silent} (bool): prints info to screen
 
 \end{itemize}
 
@@ -6106,11 +6102,11 @@ See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manu
 \label{ModelChecking:id4}\label{ModelChecking:check-primes-with-acceptingstates}\index{check\_primes\_with\_acceptingstates() (in module PyBoolNet.ModelChecking)}
 
 \begin{fulllineitems}
-\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes_with_acceptingstates}\pysiglinewithargsret{\bfcode{check\_primes\_with\_acceptingstates}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{CTLSpec}, \emph{DynamicReorder=True}, \emph{ConeOfInfluence=True}}{}
+\phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_primes_with_acceptingstates}\pysiglinewithargsret{\bfcode{check\_primes\_with\_acceptingstates}}{\emph{Primes}, \emph{Update}, \emph{InitialStates}, \emph{CTLSpec}, \emph{DynamicReorder=True}, \emph{ConeOfInfluence=True}, \emph{Silent=True}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} to check whether the \emph{CTLSpec} is true or false in the transition system defined by \emph{Primes},
 the \emph{InitialStates} and \emph{Update}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 \begin{description}
 \item[{The accepting states are a dictionary with the following keywords:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6164,6 +6160,9 @@ In that case the four values that involve the initial states are set to \emph{No
 \item {} 
 \emph{ConeOfInfluence} (bool): enables cone of influence reduction using \emph{-coi}
 
+\item {} 
+\emph{Silent} (bool): prints info to screen
+
 \end{itemize}
 
 \item[{\textbf{returns}:}] \leavevmode\begin{itemize}
@@ -6196,7 +6195,7 @@ In that case the four values that involve the initial states are set to \emph{No
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv}\pysiglinewithargsret{\bfcode{check\_smv}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}, \emph{ConeOfInfluence=True}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 
 \begin{notice}{note}{Note:}
 It is currently required that \emph{FnameSMV} contains a single LTL or CTL formula.
@@ -6247,7 +6246,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 \phantomsection\label{ModelChecking:PyBoolNet.ModelChecking.check_smv_with_counterexample}\pysiglinewithargsret{\bfcode{check\_smv\_with\_counterexample}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=False}}{}
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 
 \begin{notice}{note}{Note:}
 It is currently required that \emph{FnameSMV} contains a single LTL or CTL formula.
@@ -6298,7 +6297,7 @@ For future versions it is planned that {\hyperref[ModelChecking:check-smv]{\emph
 Calls {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} with the query defined in the \emph{smv} file \emph{FnameSMV}.
 The remaining arguments are {\hyperref[Installation:installation-nusmv]{\emph{NuSMV}}} options, see the manual at \href{http://nusmv.fbk.eu}{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.2}.
+See {\hyperref[ModelChecking:primes2smv]{\emph{primes2smv}}} and {\hyperref[Manual:sec-model-checking]{\emph{Sec. 3.4}}} for details on model checking with \emph{PyBoolNet 2.1.3x}.
 
 See {\hyperref[ModelChecking:check-primes-with-acceptingstates]{\emph{check\_primes\_with\_acceptingstates}}} for details regarding the returned \emph{AcceptingStates} dictionary.
 
@@ -6596,14 +6595,71 @@ Typically this query is used to define INIT constraints from a given subspace.
 
 
 
-\section{TrapSpaces}
-\label{TrapSpaces::doc}\label{TrapSpaces:trapspaces}\label{TrapSpaces:id1}
+\section{BooleanExpressions}
+\label{BooleanExpressions:id1}\label{BooleanExpressions::doc}\label{BooleanExpressions:booleanexpressions}
 
-\subsection{trap\_spaces}
-\label{TrapSpaces:id2}\label{TrapSpaces:trap-spaces}\index{trap\_spaces() (in module PyBoolNet.TrapSpaces)}
+\subsection{minimize\_espresso}
+\label{BooleanExpressions:minimize-espresso}\label{BooleanExpressions:id2}\index{minimize\_espresso() (in module PyBoolNet.BooleanExpressions)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
+\phantomsection\label{BooleanExpressions:PyBoolNet.BooleanExpressions.minimize_espresso}\pysiglinewithargsret{\bfcode{minimize\_espresso}}{\emph{Expression}, \emph{Outputfile=None}, \emph{Merge=False}, \emph{Equiv=False}, \emph{Exact=False}, \emph{Reduce=False}}{}
+Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
+\href{http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer}{espresso} and \href{https://code.google.com/archive/p/eqntott/}{eqntott} for its input preparation. Resulting expression is saved
+in file if filename for output is specified. The argument \emph{Expression} may be either the name
+of the input file containing the boolean expression or the string representing the expression
+itself. The input expression may not contain the following words: \emph{False}, \emph{FALSE}, \emph{True},
+\emph{TRUE}, \emph{Zero}, \emph{ZERO}, \emph{One}, \emph{ONE}.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Expression}: name of file containing the expression or string contents of file
+
+\item {} 
+\emph{Outputfile}: name of the file to write the output to
+
+\item {} 
+\emph{Merge}: performs distance-1 merge on input, useful if very large
+
+\item {} 
+\emph{Equiv}: identifies equivalent output variables
+
+\item {} 
+\emph{Exact}: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
+
+\item {} 
+\emph{Reduce}: eqntott tries to reduce the size of the truth table by merging minterms
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Minimized}: minimized result
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{bool\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{minimized\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}} \PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = (a \PYGZam{} b) \textbar{} a;}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = 1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{(a \PYGZam{} b) \textbar{} a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\section{AspSolver}
+\label{AspSolver:aspsolver}\label{AspSolver::doc}\label{AspSolver:id1}
+
+\subsection{trap\_spaces}
+\label{AspSolver:id2}\label{AspSolver:trap-spaces}\index{trap\_spaces() (in module PyBoolNet.AspSolver)}
+
+\begin{fulllineitems}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.trap_spaces}\pysiglinewithargsret{\bfcode{trap\_spaces}}{\emph{Primes}, \emph{Type}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns a list of trap spaces using the {\hyperref[Installation:installation-potassco]{\emph{Potassco}}} ASP solver, see {\hyperref[Bibliography:gebser2011]{\emph{Gebser2011}}}.
 For a formal introcution to trap spaces and the ASP encoding that is used for their computation see {\hyperref[Bibliography:klarner2015trap]{\emph{Klarner2015(a)}}}.
 
@@ -6660,10 +6716,10 @@ To create the \emph{asp} file for inspection or manual editing, pass a file name
 
 
 \subsection{steady\_states}
-\label{TrapSpaces:steady-states}\label{TrapSpaces:id3}\index{steady\_states() (in module PyBoolNet.TrapSpaces)}
+\label{AspSolver:steady-states}\label{AspSolver:id3}\index{steady\_states() (in module PyBoolNet.AspSolver)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.steady_states}\pysiglinewithargsret{\bfcode{steady\_states}}{\emph{Primes}, \emph{MaxOutput=1000}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
 Returns steady states.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6701,11 +6757,95 @@ Returns steady states.
 
 
 
-\subsection{trap\_spaces\_bounded}
-\label{TrapSpaces:trap-spaces-bounded}\label{TrapSpaces:id4}\index{trap\_spaces\_bounded() (in module PyBoolNet.TrapSpaces)}
+\subsection{smallest\_trapspace}
+\label{AspSolver:id4}\label{AspSolver:smallest-trapspace}\index{smallest\_trapspace() (in module PyBoolNet.AspSolver)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.trap_spaces_bounded}\pysiglinewithargsret{\bfcode{trap\_spaces\_bounded}}{\emph{Primes}, \emph{Type}, \emph{Bounds}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.smallest_trapspace}\pysiglinewithargsret{\bfcode{smallest\_trapspace}}{\emph{Primes}, \emph{State}, \emph{Representation='dict'}}{}
+Returns the (unique) smallest trap space that contains \emph{State}.
+Calls {\hyperref[AspSolver:trapspaces-that-contain-state]{\emph{trapspaces\_that\_contain\_state}}}
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{State} (dict): a state in dict format
+
+\item {} 
+\emph{Representation} (str): either ``str'' or ``dict'', the representation of the trap spaces
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{TrapSpace} (dict): the unique minimal trap space that contains \emph{State}
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{smallest\PYGZus{}trapspace}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{trapspaces\_that\_contain\_state}
+\label{AspSolver:trapspaces-that-contain-state}\label{AspSolver:id5}\index{trapspaces\_that\_contain\_state() (in module PyBoolNet.AspSolver)}
+
+\begin{fulllineitems}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.trapspaces_that_contain_state}\pysiglinewithargsret{\bfcode{trapspaces\_that\_contain\_state}}{\emph{Primes}, \emph{State}, \emph{Type}, \emph{FnameASP=None}, \emph{Representation='dict'}}{}
+Computes trap spaces that contain \emph{State}.
+\begin{description}
+\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\emph{Primes}: prime implicants
+
+\item {} 
+\emph{State} (dict): a state in dict format
+
+\item {} 
+\emph{Type} (str): either ``min'', ``max'', ``all'' or ``percolated''
+
+\item {} 
+\emph{FnameASP} (str): file name or \emph{None}
+
+\item {} 
+\emph{Representation} (str): either ``str'' or ``dict'', the representation of the trap spaces
+
+\end{itemize}
+
+\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+either \emph{TrapSpaces} (list): the trap spaces that contain \emph{State} if \emph{Type} is ``max'', ``all'' or ``percolated''
+
+\item {} 
+or \emph{TrapSpace} (dict): the unique minimal trap space that contains \emph{State} if \emph{Type} is ``min''
+
+\end{itemize}
+
+\end{description}
+
+\textbf{example}:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{trapspaces\PYGZus{}that\PYGZus{}contain\PYGZus{}state}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v2}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v3}\PYG{l+s}{\PYGZdq{}}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{trap\_spaces\_bounded}
+\label{AspSolver:trap-spaces-bounded}\label{AspSolver:id6}\index{trap\_spaces\_bounded() (in module PyBoolNet.AspSolver)}
+
+\begin{fulllineitems}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.trap_spaces_bounded}\pysiglinewithargsret{\bfcode{trap\_spaces\_bounded}}{\emph{Primes}, \emph{Type}, \emph{Bounds}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
 Returns a list of bounded trap spaces using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
 See \emph{trap\_spaces} for details of the parameters \emph{Type}, \emph{MaxOutput} and \emph{FnameASP}.
 The parameter \emph{Bounds} is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
@@ -6763,10 +6903,10 @@ list of trap spaces
 
 
 \subsection{steady\_states\_projected}
-\label{TrapSpaces:steady-states-projected}\label{TrapSpaces:id5}\index{steady\_states\_projected() (in module PyBoolNet.TrapSpaces)}
+\label{AspSolver:steady-states-projected}\label{AspSolver:id7}\index{steady\_states\_projected() (in module PyBoolNet.AspSolver)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.steady_states_projected}\pysiglinewithargsret{\bfcode{steady\_states\_projected}}{\emph{Primes}, \emph{Project}, \emph{MaxOutput=1000}, \emph{FnameASP=None}}{}
 Returns a list of projected steady states using the \href{http://potassco.sourceforge.net/}{Potassco} ASP solver {\hyperref[Bibliography:gebser2011]{\emph{{[}Gebser2011{]}}}}.
 \begin{description}
 \item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
@@ -6807,10 +6947,10 @@ Returns a list of projected steady states using the \href{http://potassco.source
 
 
 \subsection{primes2asp}
-\label{TrapSpaces:id6}\label{TrapSpaces:primes2asp}\index{primes2asp() (in module PyBoolNet.TrapSpaces)}
+\label{AspSolver:primes2asp}\label{AspSolver:id8}\index{primes2asp() (in module PyBoolNet.AspSolver)}
 
 \begin{fulllineitems}
-\phantomsection\label{TrapSpaces:PyBoolNet.TrapSpaces.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}, \emph{Type}}{}
+\phantomsection\label{AspSolver:PyBoolNet.AspSolver.primes2asp}\pysiglinewithargsret{\bfcode{primes2asp}}{\emph{Primes}, \emph{FnameASP}, \emph{Bounds}, \emph{Project}, \emph{Type}}{}
 Saves Primes as an \emph{asp} file in the \href{http://potassco.sourceforge.net/}{Potassco} format intended for computing minimal and maximal trap spaces.
 The homepage of the \href{http://potassco.sourceforge.net/}{Potassco} solving collection is \href{http://potassco.sourceforge.net}{http://potassco.sourceforge.net}.
 The \emph{asp} file consists of data, the hyperarcs of the prime implicant graph,
@@ -6971,63 +7111,6 @@ The algorithm uses {\hyperref[Bibliography:prekas2012]{\emph{Prekas2012}}}, a Py
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf} \PYG{o}{=} \PYG{n}{primes2mindnf}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{v1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{]}
 \PYG{g+go}{((! v2) \textbar{} v1)}
-\end{Verbatim}
-
-\end{fulllineitems}
-
-
-
-\section{BooleanExpressions}
-\label{BooleanExpressions:id1}\label{BooleanExpressions::doc}\label{BooleanExpressions:booleanexpressions}
-
-\subsection{minimize\_espresso}
-\label{BooleanExpressions:minimize-espresso}\label{BooleanExpressions:id2}\index{minimize\_espresso() (in module PyBoolNet.BooleanExpressions)}
-
-\begin{fulllineitems}
-\phantomsection\label{BooleanExpressions:PyBoolNet.BooleanExpressions.minimize_espresso}\pysiglinewithargsret{\bfcode{minimize\_espresso}}{\emph{Expression}, \emph{Outputfile=None}, \emph{Merge=False}, \emph{Equiv=False}, \emph{Exact=False}, \emph{Reduce=False}}{}
-Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
-\href{http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer}{espresso} and \href{https://code.google.com/archive/p/eqntott/}{eqntott} for its input preparation. Resulting expression is saved
-in file if filename for output is specified. The argument \emph{Expression} may be either the name
-of the input file containing the boolean expression or the string representing the expression
-itself. The input expression may not contain the following words: \emph{False}, \emph{FALSE}, \emph{True},
-\emph{TRUE}, \emph{Zero}, \emph{ZERO}, \emph{One}, \emph{ONE}.
-\begin{description}
-\item[{\textbf{arguments}:}] \leavevmode\begin{itemize}
-\item {} 
-\emph{Expression}: name of file containing the expression or string contents of file
-
-\item {} 
-\emph{Outputfile}: name of the file to write the output to
-
-\item {} 
-\emph{Merge}: performs distance-1 merge on input, useful if very large
-
-\item {} 
-\emph{Equiv}: identifies equivalent output variables
-
-\item {} 
-\emph{Exact}: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-
-\item {} 
-\emph{Reduce}: eqntott tries to reduce the size of the truth table by merging minterms
-
-\end{itemize}
-
-\item[{\textbf{returns}:}] \leavevmode\begin{itemize}
-\item {} 
-\emph{Minimized}: minimized result
-
-\end{itemize}
-
-\end{description}
-
-\textbf{example}:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{bool\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{minimized\PYGZus{}function.txt}\PYG{l+s}{\PYGZdq{}} \PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = (a \PYGZam{} b) \textbar{} a;}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{var = 1}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{minimized} \PYG{o}{=} \PYG{n}{minimize\PYGZus{}boolean}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{(a \PYGZam{} b) \textbar{} a}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}
 \end{Verbatim}
 
 \end{fulllineitems}

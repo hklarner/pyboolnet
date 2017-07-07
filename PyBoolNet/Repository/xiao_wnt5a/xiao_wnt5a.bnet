@@ -4,6 +4,7 @@ targets, factors
 
 # taken from
 # Xiao, Yufei, and Edward R. Dougherty. "The impact of function perturbations in Boolean networks." Bioinformatics 23.10 (2007): 1265-1273.
+# WNT5A (x1) indicates metastatic competence
 
 x4,  x4
 

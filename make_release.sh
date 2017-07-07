@@ -1,5 +1,5 @@
 
-VERSION=2.12
+VERSION=2.1.3x
 LOCALOS=linux32
 
 echo "creating manual"

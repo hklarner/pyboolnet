@@ -15,6 +15,7 @@ Reference
    
    ModelChecking
    QueryPatterns
-   TrapSpaces
-   QuineMcCluskey
    BooleanExpressions
+   AspSolver
+   QuineMcCluskey
+   
