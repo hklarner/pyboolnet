@@ -1,6 +1,6 @@
 
 VERSION=2.1.3x
-LOCALOS=linux32
+LOCALOS=linux64
 
 echo "creating manual"
 cd Docs/Sphinx
@@ -11,13 +11,6 @@ cd ../..
 
 echo "Creating releases for PyBoolNet ver $VERSION"
 echo "Removing local Dependencies"
-rm -rf PyBoolNet/Dependencies
-
-echo
-echo "Creating linux32 release"
-cp -ap Dependencies/linux32/. PyBoolNet/Dependencies
-python setup.py sdist
-mv dist/PyBoolNet-$VERSION.tar.gz dist/PyBoolNet-$VERSION\_linux32.tar.gz
 rm -rf PyBoolNet/Dependencies
 
 echo
