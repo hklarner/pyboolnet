@@ -9,33 +9,35 @@ sys.path.insert(0,BASE)
 import PyBoolNet
 
 
+def run():
+
+    for name in PyBoolNet.Repository.get_all_names():
+        if name=="n12c5": continue
+        
+        primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
+        fname = os.path.join(name,name+"_igraph.pdf")
+        PyBoolNet.InteractionGraphs.create_image(primes,fname)
+        
+    
+    for name in PyBoolNet.Repository.names_with_fast_analysis():
+        
+        primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
+
+        fname = os.path.join(name,name+"_attractors.md")
+        PyBoolNet.AttractorDetection.create_attractor_report(primes, fname)
+
+        fname = os.path.join(name,name+"_commitment_diagram.pdf")        
+        PyBoolNet.Basins.commitment_diagram(primes, "asynchronous", Silent=False, FnameImage=fname)
+
+        fname = os.path.join(name,name+"_commitment_pie.pdf")        
+        PyBoolNet.Basins.commitment_pie(primes, "asynchronous", Silent=False, FnameImage=fname)
+
+        fname = os.path.join(name,name+"_all_basins.pdf")        
+        PyBoolNet.Basins.all_basins(primes, "asynchronous", FnameImage=fname, Title="All Basins - %s"%name)
+
+        fname = os.path.join(name,name+"_strong_basins.pdf")        
+        PyBoolNet.Basins.strong_basins(primes, "asynchronous", FnameImage=fname, Title="Strong Basins - %s"%name)
+
+
 if __name__=="__main__":
-
-    rootdir = '.'
-
-    for subdir, _, files in os.walk(rootdir):
-        for fname in files:
-            if fname not in ["remy_tumorigenesis.bnet"]: continue#,"klamt_tcr.bnet","grieco_mapk.bnet"]: continue
-            
-            if fname.split(".")[1]=="bnet":
-                primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(subdir,fname))
-                igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
-                PyBoolNet.InteractionGraphs.add_style_sccs(igraph)
-                PyBoolNet.InteractionGraphs.add_style_interactionsigns(igraph)
-                fname_igraph = os.path.join(subdir,fname.split(".")[0]+"_igraph.pdf")
-                PyBoolNet.InteractionGraphs.igraph2image(igraph,fname_igraph)
-                
-
-                fname_attr = os.path.join(subdir,fname.split(".")[0]+"_attractors.md")
-                #PyBoolNet.AttractorDetection.create_attractor_report(primes, fname_attr)
-
-                attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
-                fname_basins = os.path.join(subdir,fname.split(".")[0]+"_basins.pdf")
-                fname_key = os.path.join(subdir,fname.split(".")[0]+"_basins_key.pdf")
-                
-                diagram = PyBoolNet.AttractorBasins.commitment_diagram(primes, "asynchronous")
-                PyBoolNet.AttractorBasins.diagram2image(primes, diagram, fname_basins, FnameATTRACTORS=fname_key)
-                fname_abstract = os.path.join(subdir,fname.split(".")[0]+"_basins_abstract.pdf")
-                PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, fname_abstract)
-
-                
+    run()

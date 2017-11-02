@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 12. Jun. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
@@ -24,18 +24,17 @@
 | -110-00----1   | True      | True      |
 
 ### Network
-| targets | factors                                         |
-| ------- | ----------------------------------------------- |
-| A20a    | NFkBnuc & TNF                                   |
-| C3a     | C8a & !IAP                                      |
-| C8a     | !CARP & T2 | !CARP & C3a                        |
-| CARP    | NFkB & !TNF | !TNF & !C3a | NFkBnuc & !C3a      |
-| FLIP    | NFkBnuc                                         |
-| IAP     | NFkBnuc & !TNF | !TNF & !C3a | NFkBnuc & !C3a   |
-| IKKa    | !C3a & TNF & !A20a                              |
-| IkB     | NFkBnuc & !TNF | !TNF & !IKKa | NFkBnuc & !IKKa |
-| NFkB    | !IkB                                            |
-| NFkBnuc | !IkB & NFkB                                     |
-| T2      | TNF & !FLIP                                     |
-| TNF     | TNF                                             |
+| TNF     | TNF                                       |
+| ------- | ----------------------------------------- |
+| A20a    | NFkBnuc&TNF                               |
+| C3a     | C8a&!IAP                                  |
+| C8a     | !CARP&T2 | !CARP&C3a                      |
+| CARP    | NFkB&!TNF | !TNF&!C3a | NFkBnuc&!C3a      |
+| FLIP    | NFkBnuc                                   |
+| IAP     | NFkBnuc&!TNF | !TNF&!C3a | NFkBnuc&!C3a   |
+| IKKa    | !C3a&TNF&!A20a                            |
+| IkB     | NFkBnuc&!TNF | !TNF&!IKKa | NFkBnuc&!IKKa |
+| NFkB    | !IkB                                      |
+| NFkBnuc | !IkB&NFkB                                 |
+| T2      | TNF&!FLIP                                 |
 

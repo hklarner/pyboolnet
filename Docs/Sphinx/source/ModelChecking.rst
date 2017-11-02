@@ -21,7 +21,7 @@ check_primes_with_counterexample
 .. autofunction:: PyBoolNet.ModelChecking.check_primes_with_counterexample
 
 
-.. _check_primes_with_accepting_states:
+.. _check_primes_with_acceptingstates:
 
 check_primes_with_acceptingstates
 ---------------------------------

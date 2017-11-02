@@ -19,5 +19,6 @@ Gene11, (!Gene14) | (Gene12) | (Gene13)
 Gene12, (!Gene4 & Gene3) | (Gene8 & Gene4)
 Gene13, (!Gene6 & !Gene11 & Gene2) | (!Gene6 & Gene11 & !Gene2) | (Gene6 & !Gene11 & !Gene2) | (Gene6 & Gene11 & Gene2)
 Gene14, (!Gene5 & !Gene9) | (Gene8 & Gene9)
+
 Gene15, (!Gene8 & Gene9) | (Gene8 & !Gene9) | (!Gene2 & Gene9)
 

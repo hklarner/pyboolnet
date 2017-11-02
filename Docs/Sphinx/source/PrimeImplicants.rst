@@ -16,7 +16,7 @@ copy
 .. _are_equal:
 
 are_equal
---------
+---------
 
 .. autofunction:: PyBoolNet.PrimeImplicants.are_equal
 
@@ -31,7 +31,7 @@ find_inputs
 .. _find_outputs:
 
 find_outputs
------------
+------------
 
 .. autofunction:: PyBoolNet.PrimeImplicants.find_outputs
 

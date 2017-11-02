@@ -11,9 +11,11 @@ Reference
    InteractionGraphs
    StateTransitionGraphs
    AttractorDetection
-   AttractorBasins
+   Basins
    
    ModelChecking
    QueryPatterns
-   TrapSpaces
+   BooleanExpressions
+   AspSolver
    QuineMcCluskey
+   

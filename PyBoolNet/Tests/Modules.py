@@ -6,6 +6,8 @@ import sys
 import subprocess
 import networkx
 import itertools
+import tempfile
+import shutil
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0,BASE)
@@ -14,10 +16,10 @@ import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.ModelChecking
 import PyBoolNet.AttractorDetection
-import PyBoolNet.AttractorBasins
+import PyBoolNet.Basins
 import PyBoolNet.QueryPatterns
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Repository
@@ -26,11 +28,15 @@ import PyBoolNet.Utility
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read(os.path.join(BASE, "PyBoolNet", "Dependencies", "settings.cfg"))
 FILES_IN   = os.path.join(BASE, "PyBoolNet", "Tests", "Files", "Input")
-FILES_OUT  = os.path.normpath(config.get("Executables", "tmpfolder"))
+FILES_OUT  = tempfile.mkdtemp(prefix='pyboolnet_')
+
 
 
 def run():
     unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
+
+    if os.path.isdir(FILES_OUT):
+        shutil.rmtree(FILES_OUT)
 
 
 class TestUtility(unittest.TestCase):
@@ -58,29 +64,92 @@ class TestUtility(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
-    
-class TestAttractorBasins(unittest.TestCase):
+
+
+class TestBooleanExpressions(unittest.TestCase):
+    def test_minimize_espresso1(self):
+        expression = "1"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        expression = "(a & b) | a"
+        expected = "(a)"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        expression = "Test = STMNCanAct & (STMN & ((Cytokinesis & ((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis & (((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat)) | !PLK1) | !STMN & ((((MTCanAct | (MT)) | !GSK3B) | !CentrosomeMat) | !PLK1)) | !STMNCanAct & (((((MTCanAct | (MT)) | !GSK3B) | !Cytokinesis) | !PLK1) | !STMN);"
+        expected = "Test = (!Cytokinesis & !CentrosomeMat) | (!GSK3B) | (MT) | (MTCanAct) | (!STMN & !CentrosomeMat) | (!PLK1) | (!STMNCanAct & !Cytokinesis) | (!STMNCanAct & !STMN);"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+
+    def test_minimize_espresso2(self):
+        expression = "a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso3(self):
+        expression = "a & !a&!a"
+        expected = "0"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso4(self):
+        expression = "a&b | a | !a"
+        expected = "1"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+    def test_minimize_espresso5(self):
+        expression = "1&a"
+        expected = "(a)"
+        answer = PyBoolNet.BooleanExpressions.minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+        msg = "\nexpression: "+expression
+        msg+= "\nexpected:   "+str(expected)
+        msg+= "\ngot:        "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+
+
+
+class TestBasins(unittest.TestCase):
     def test_basin_diagram(self):
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
         update = "asynchronous"
-        attractors = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
-        diagram = PyBoolNet.AttractorBasins.commitment_diagram(primes, update, attractors, Silent=False)
-                
+        attractors = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+        diagram = PyBoolNet.Basins.commitment_diagram(primes, update, attractors, Silent=False)
+
         fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
-                
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleInputs=False)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FnameATTRACTORS=fname_out)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleRanks=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleFillColor=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleSplines="ortho")
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, StyleEdges=True)
-        PyBoolNet.AttractorBasins.diagram2image(primes, diagram, FnameIMAGE=fname_out, FirstIndex=10)
-        PyBoolNet.AttractorBasins.diagram2aggregate_image(primes, diagram, FnameIMAGE=fname_out)
-        
-        
-        
+
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=False)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleRanks=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleSplines="ortho")
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleEdges=True)
+        PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, FirstIndex=10)
+
+
+
 
 class TestRepository(unittest.TestCase):
     def test_calls(self):
@@ -95,7 +164,7 @@ class TestQuineMcCluskey(unittest.TestCase):
                       'v3': lambda : False, 'v4': lambda v3: v3 or not v3}
 
         answer = PyBoolNet.QuineMcCluskey.functions2mindnf(bfunctions)
-        expected = {'v1': '((! v2) | v1)', 'v2': '(! v1)', 'v3': '0', 'v4': '1'}
+        expected = {'v1': '!v2 | v1', 'v2': '!v1', 'v3': '0', 'v4': '1'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
@@ -104,14 +173,35 @@ class TestQuineMcCluskey(unittest.TestCase):
         primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
 
         answer = PyBoolNet.QuineMcCluskey.primes2mindnf(primes)
-        expected = {'A': '0', 'C': '(B & (! A))', 'B': '1'}
+        expected = {'A': '0', 'C': 'B&!A', 'B': '1'}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
-        
+
 
 class TestStateTransitionGraphs(unittest.TestCase):
+    def test_energy(self):
+        primes = PyBoolNet.Repository.get_primes("raf")
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "000")
+        expected = 1
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "010")
+        expected = 3
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+
+        answer = PyBoolNet.StateTransitionGraphs.energy(primes, "001")
+        expected = 0
+        msg = "\nexpected: "+str(expected)
+        msg+= "\ngot:      "+str(answer)
+        self.assertTrue(answer==expected, msg)
+        
     def test_state_is_in_subspace(self):
         primes = ["a","b","c"]
         answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,{"a":1,"b":1,"c":0},{"a":1})
@@ -123,17 +213,18 @@ class TestStateTransitionGraphs(unittest.TestCase):
         answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","0--")
         self.assertFalse(answer)
     
-    def test_subspace1_is_in_subspace2(self):
+    def test_A_is_subspace_of_B(self):
+
         primes = ["a","b","c","d"]
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, {"a":1,"b":1,"c":0},{"a":1})
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes, {"a":1,"b":1,"c":0},{"a":1})
         self.assertTrue(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes, "110-","1---")
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes, "110-","1---")
         self.assertTrue(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,{"a":1,"b":1,"c":0},{"a":0})
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes,{"a":1,"b":1,"c":0},{"a":0})
         self.assertFalse(answer)
-        answer = PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2(primes,"110-","0---")
+        answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes,"110-","0---")
         self.assertFalse(answer)
-    
+
     def test_list_states_referenced_by_proposition(self):
         primes = PyBoolNet.Repository.get_primes("raf")
         prop = "!Erk | (Raf & Mek)"
@@ -156,7 +247,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
     def test_random_mixed_transition(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")
         fname_out = os.path.join(FILES_OUT, "randomnet.primes")
@@ -166,7 +257,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         PyBoolNet.StateTransitionGraphs.random_successor_mixed(primes, state)
         # no assertion
 
-        
+
     def test_successors_asynchronous(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")
         fname_out = os.path.join(FILES_OUT, "randomnet.primes")
@@ -175,7 +266,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         state = dict([('Gene%i'%(i+1),i%2) for i in range(20)])
         PyBoolNet.StateTransitionGraphs.successors_asynchronous(primes, state)
         # no assertion
-        
+
     def test_successor_synchronous(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")
         fname_out = os.path.join(FILES_OUT, "randomnet.primes")
@@ -199,7 +290,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
     def test_state2str(self):
         state = {"v2":0, "v1":1, "v3":1}
-        
+
         answer = PyBoolNet.StateTransitionGraphs.state2str(state)
         expected = "101"
         msg = "\nexpected: "+str(expected)
@@ -243,7 +334,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
     def test_stg2dot(self):
         fname_in  = os.path.join(FILES_IN,  "irma.primes")
         fname_out = os.path.join(FILES_OUT, "irma_stg.dot")
@@ -297,8 +388,8 @@ class TestStateTransitionGraphs(unittest.TestCase):
         PyBoolNet.StateTransitionGraphs.add_style_path(stg, walk, "blue")
         PyBoolNet.StateTransitionGraphs.stg2image(stg, fname_out4)
         # no assertion
-        
-        
+
+
     def test_random_state(self):
         fname_in  = os.path.join(FILES_IN,  "irma.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
@@ -329,7 +420,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
         htg = PyBoolNet.StateTransitionGraphs.stg2htg(stg)
         PyBoolNet.StateTransitionGraphs.htg2image(htg, fname_out)
         # no assertion
-        
+
 
 
 
@@ -338,7 +429,7 @@ class TestAttractorDetection(unittest.TestCase):
     def test_attractor_representatives(self):
         # not finished
         return
-    
+
         bnet = """
         v1, !v1&v2&v3 | v1&!v2 | v1&!v3
         v2, !v1&!v2 | v1&v2&v3
@@ -349,12 +440,12 @@ class TestAttractorDetection(unittest.TestCase):
         # identical for sync/async updates
         steadystates_expected = ["100"]
         cyclic_attractors = [["010","000"],["001","011","111"]]
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
         for update in ["asynchronous","synchronous"]:
             steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
-            
+
             for x in steadystates:
                 msg = "\nexpected one of: "+str(steadystates_expected)
                 msg+= "\ngot:             "+str(x)
@@ -387,7 +478,7 @@ class TestAttractorDetection(unittest.TestCase):
         for name in PyBoolNet.Repository.get_all_names():
             primes = PyBoolNet.Repository.get_primes(name)
             if len(primes)>10: continue
-            
+
             for update in ["asynchronous", "synchronous", "mixed"]:
                 stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, update)
                 steady_tarjan, cyclic_tarjan = PyBoolNet.AttractorDetection.compute_attractors_tarjan(stg)
@@ -399,21 +490,20 @@ class TestAttractorDetection(unittest.TestCase):
                 msg+= "\nreps finds %i attractors."%k2
                 self.assertTrue(k1==k2, msg)
 
-                
-        
+
+
         update = "asynchronous"
         for name in PyBoolNet.Repository.get_all_names():
-            print name
             primes = PyBoolNet.Repository.get_primes(name)
             if len(primes)>10: continue
             steadystates, cyclic = PyBoolNet.AttractorDetection.compute_attractor_representatives(primes, update)
-            expected = len(PyBoolNet.TrapSpaces.trap_spaces(primes,"min"))
+            expected = len(PyBoolNet.AspSolver.trap_spaces(primes,"min"))
             got = len(steadystates)+len(cyclic)
             msg = "\nname:      "+name
             msg+= "\nexpected : "+str(expected)
             msg+= "\ngot:       "+str(got)
             self.assertTrue(expected==got, msg)
-            
+
     def test_compute_attractors_tarjan(self):
         bnet = ["x, !x&y | z",
                 "y, !x | !z",
@@ -433,7 +523,7 @@ class TestAttractorDetection(unittest.TestCase):
         msg = "\nexpected: "+str(cyclic_expected)
         msg+= "\ngot:      "+str(cyclic)
         self.assertTrue(cyclic==cyclic_expected, msg)
-        
+
     def test_find_attractor_state_by_randomwalk_and_ctl(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")
         fname_out = os.path.join(FILES_OUT, "randomnet.primes")
@@ -449,7 +539,7 @@ class TestAttractorDetection(unittest.TestCase):
         update = "mixed"
         PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, update, subspace, lengthrandomwalk, attempts)
         # no assertion
-        
+
     def test_univocality(self):
 
         # not univocal
@@ -484,7 +574,7 @@ class TestAttractorDetection(unittest.TestCase):
         expected = [{"v1":0,"v2":0},{"v1":0,"v2":1}]
         self.assertTrue(counterex[0] in expected)
         self.assertTrue(counterex[1] in expected)
-        self.assertTrue(len(counterex)==2)        
+        self.assertTrue(len(counterex)==2)
 
         # univocal with unique steady state
 
@@ -501,16 +591,16 @@ class TestAttractorDetection(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
         self.assertTrue(counterex==expected, msg)
-        
+
         answer = PyBoolNet.AttractorDetection.univocality(primes, "asynchronous", trapspace)
         expected = True
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
 
     def test_faithfulness(self):
-        
+
         bnet = ["v1, !v1&!v2 | !v2&!v3",
                 "v2, !v1&!v2&v3 | v1&!v3",
                 "v3, !v1&v3 | !v2"]
@@ -542,7 +632,7 @@ class TestAttractorDetection(unittest.TestCase):
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         trapspace = {"v1":0}
         expected = False
-        
+
         answer, counterex = PyBoolNet.AttractorDetection.faithfulness_with_counterexample(primes, "asynchronous", trapspace)
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
@@ -551,10 +641,10 @@ class TestAttractorDetection(unittest.TestCase):
         msg = "\nexpected on of: "+str(expected_counterex)
         msg+= "\ngot:            "+str(counterex)
         self.assertTrue(counterex in expected_counterex, msg)
-        
-        
+
+
     def test_completeness_naive(self):
-        
+
         bnet= ["v1, v1 | v2&!v3",
                "v2, !v1&v2&v3",
                "v3, !v2&!v3 | v2&v3"]
@@ -605,8 +695,8 @@ class TestAttractorDetection(unittest.TestCase):
         answer, counterex = PyBoolNet.AttractorDetection.completeness_with_counterexample(primes, "synchronous")
         counterex = PyBoolNet.StateTransitionGraphs.state2str(counterex)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "synchronous")
-        
-        for x in PyBoolNet.TrapSpaces.trap_spaces(primes, "min"):
+
+        for x in PyBoolNet.AspSolver.trap_spaces(primes, "min"):
             x = PyBoolNet.StateTransitionGraphs.subspace2str(primes,x)
             msg = "\n%s is a completeness counterexample but it can reach"%counterex
             msg+= "\nthe minimal trap space %s"%x
@@ -615,7 +705,7 @@ class TestAttractorDetection(unittest.TestCase):
             result = PyBoolNet.Utility.DiGraphs.has_path(stg, counterex, X)
 
             self.assertTrue(result==False, msg)
-            
+
         bnet= ["v1, !v1&v2&v3 | v1&!v2&!v3",
                "v2, !v1&!v2 | v1&v3",
                "v3, !v1&v3 | v1&v2",
@@ -644,7 +734,7 @@ class TestAttractorDetection(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
         bnet = ["v1, !v1&v2&v3 | v1&!v2&!v3",
                 "v2, !v1&!v2 | v1&v3",
                 "v3, v2 | v3"]
@@ -681,7 +771,7 @@ class TestAttractorDetection(unittest.TestCase):
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
-        
+
 
 class TestTemporalQueries(unittest.TestCase):
     def test_EF_subspaces(self):
@@ -715,13 +805,13 @@ class TestModelChecking(unittest.TestCase):
     def test_accepting_states(self):
         bnet = """
         Erk, Raf&Mek | Mek&Erk
-	Mek, Raf&Mek | Erk
-	Raf, !Raf | !Erk
+    Mek, Raf&Mek | Erk
+    Raf, !Raf | !Erk
         """
 
         fname_out = os.path.join(FILES_OUT, "modelchecking_acceptingstates.smv")
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
-        
+
         spec = "CTLSPEC EF(!Erk&!Mek&Raf) &  EF(Erk&Mek&Raf)"
         init = "INIT TRUE"
         update = "asynchronous"
@@ -739,18 +829,18 @@ class TestModelChecking(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(accepting)
         self.assertTrue(accepting==expected, msg)
-        
-        
+
+
     def test_check_smv_true(self):
         fname_in  = os.path.join(FILES_IN,  "modelchecking_check_smv_true.smv")
 
         self.assertTrue(PyBoolNet.ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
-        
+
     def test_check_smv_false(self):
         fname_in  = os.path.join(FILES_IN,  "modelchecking_check_smv_false.smv")
 
         self.assertFalse(PyBoolNet.ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True))
-        
+
 
     def test_check_smv_counterexample(self):
         fname_in  = os.path.join(FILES_IN,  "modelchecking_check_smv_counterexample.smv")
@@ -760,11 +850,11 @@ class TestModelChecking(unittest.TestCase):
 
         expected = ({'v1':0,'v2':1,'v3':0},{'v1':0,'v2':0,'v3':0},{'v1':1,'v2':0,'v3':0},
                     {'v1':1,'v2':1,'v3':0},{'v1':1,'v2':1,'v3':1},{'v1':1,'v2':0,'v3':1})
-        
+
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
         self.assertTrue(counterex==expected, msg)
-        
+
 
     def test_check_primes_async(self):
         primes = {'v1': [[{'v1': 0, 'v3': 1}, {'v1': 0, 'v2': 1}], [{'v2': 0, 'v3': 0}, {'v1': 1}]], 'v2': [[{'v3': 1}, {'v1': 0}], [{'v1': 1, 'v3': 0}]], 'v3': [[{'v1': 1, 'v2': 0, 'v3': 0}], [{'v3': 1}, {'v2': 1}, {'v1': 0}]]}
@@ -776,20 +866,20 @@ class TestModelChecking(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
         self.assertTrue(counterex==expected, msg)
-        
+
 
     def test_check_primes_sync(self):
         primes = {'v1': [[{'v1': 0, 'v3': 1}, {'v1': 0, 'v2': 1}], [{'v2': 0, 'v3': 0}, {'v1': 1}]], 'v2': [[{'v3': 1}, {'v1': 0}], [{'v1': 1, 'v3': 0}]], 'v3': [[{'v1': 1, 'v2': 0, 'v3': 0}], [{'v3': 1}, {'v2': 1}, {'v1': 0}]]}
-        
+
 
         expected = None
-        
+
         answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes=primes, Update="synchronous", InitialStates="INIT !v1&v2&!v3", Specification="CTLSPEC AF(!v1&!v2&v3)", DynamicReorder=True, DisableReachableStates=False)
 
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(counterex)
         self.assertTrue(counterex==expected, msg)
-        
+
 
     def test_check_primes_mixed(self):
         primes = {'v1': [[{'v1': 0, 'v3': 1}, {'v1': 0, 'v2': 1}], [{'v2': 0, 'v3': 0}, {'v1': 1}]], 'v2': [[{'v3': 1}, {'v1': 0}], [{'v1': 1, 'v3': 0}]], 'v3': [[{'v1': 1, 'v2': 0, 'v3': 0}], [{'v3': 1}, {'v2': 1}, {'v1': 0}]]}
@@ -805,98 +895,116 @@ class TestModelChecking(unittest.TestCase):
         self.assertTrue(counterex==expected, msg)
 
 
-class TestTrapSpaces(unittest.TestCase):
+class TestAspSolver(unittest.TestCase):
+
+    def test_percolated_trapspaces(self):
+        primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
+
+        
+        all_ = PyBoolNet.AspSolver.trap_spaces(primes, "all", MaxOutput=200)
+        expected = set(PyBoolNet.StateTransitionGraphs.subspace2str(primes,PyBoolNet.AspSolver.percolate_trapspace(primes, x)) for x in all_)
+        answer   = set(PyBoolNet.AspSolver.trap_spaces(primes, "percolated", Representation="str"))
+
+        msg = "\nexpected: %i percolated tspaces"%len(expected)
+        msg+= "\ngot:      %i percolated tspaces"%len(answer)
+        self.assertTrue(len(expected)==len(answer),msg)
+
+        msg = "\nexpected: (e.g) %s"%expected.pop()
+        msg+= "\ngot:      (e.g) %s"%answer.pop()
+        self.assertTrue(expected==answer,msg)
+            
+    
     def test_percolate_trapspace(self):
         primes = PyBoolNet.Repository.get_primes("raf")
 
         tspace = {'Mek': 0, 'Erk': 0}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {'Raf': 1, 'Mek': 0, 'Erk': 0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         tspace = {}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         tspace = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
-        answer = PyBoolNet.TrapSpaces.percolate_trapspace(primes, tspace)
+        answer = PyBoolNet.AspSolver.percolate_trapspace(primes, tspace)
         expected = {u'Raf': 1, u'Mek': 0, u'Erk': 0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
-    
-    def test_smallest_trapspace(self):
+
+
+    def test_trapspaces_that_containt_state(self):
         primes = PyBoolNet.Repository.get_primes("raf")
 
         state = {'Raf':1, 'Mek':0, 'Erk':0}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {'Raf':1, 'Mek':0, 'Erk':0}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-        
+
 
         state = {'Raf':0, 'Mek':1, 'Erk':1}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {'Mek':1, 'Erk':1}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
         state = {'Raf':1, 'Mek':1, 'Erk':0}
-        answer = PyBoolNet.TrapSpaces.smallest_trapspace(primes, state, FnameASP=None)
+        answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, state, "min", FnameASP=None)
         expected = {}
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
-    
-        
+
+
     def test_trap_spaces_piped1(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_posfeedback.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min")
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min")
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
         self.assertTrue(tspaces==expected, msg)
-        
+
 
     def test_trap_spaces_piped2(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_tsfree.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min")
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min")
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
         self.assertTrue(tspaces==expected, msg)
-        
-        
+
+
     def test_trap_spaces_tsfree(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_tsfree.primes")
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_min.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
-        self.assertTrue(tspaces==expected, msg)        
+        self.assertTrue(tspaces==expected, msg)
 
         fname_in  = os.path.join(FILES_IN,  "trapspaces_tsfree.primes")
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_all.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
         expected = [{}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
@@ -906,19 +1014,19 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_max.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
         expected = []
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces)
         self.assertTrue(tspaces==expected, msg)
 
-        
+
     def test_trap_spaces_posfeedback_min(self):
         fname_in  = os.path.join(FILES_IN,  "trapspaces_posfeedback.primes")
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_min.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="min", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -930,7 +1038,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_max.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="max", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -942,7 +1050,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_all.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=primes, Type="all", FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},{'v1': 0, 'v2': 0, 'v3': 0}, {'v1': 1, 'v2': 1, 'v3': 1}]
         msg = "\nexpected: "+str(expected)
@@ -954,7 +1062,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds1.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces_bounded(Primes=primes, Type="all", Bounds=(1,2), FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces_bounded(Primes=primes, Type="all", Bounds=(1,2), FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = []
         msg = "\nexpected: "+str(expected)
@@ -966,7 +1074,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds2.asp")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
-        tspaces = PyBoolNet.TrapSpaces.trap_spaces_bounded(Primes=primes, Type="max", Bounds=(0,100), FnameASP=fname_out)
+        tspaces = PyBoolNet.AspSolver.trap_spaces_bounded(Primes=primes, Type="max", Bounds=(0,100), FnameASP=fname_out)
         tspaces.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}]
         msg = "\nexpected: "+str(expected)
@@ -978,7 +1086,7 @@ class TestTrapSpaces(unittest.TestCase):
         fname_out  = os.path.join(FILES_OUT,  "trapspaces_bounded.primes")
         primes = PyBoolNet.FileExchange.bnet2primes(fname_in, fname_out)
 
-        tspaces_all = PyBoolNet.TrapSpaces.trap_spaces(primes, "all")
+        tspaces_all = PyBoolNet.AspSolver.trap_spaces(primes, "all")
         tspaces_all.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{},
                     {"v3":1},
@@ -1004,8 +1112,8 @@ class TestTrapSpaces(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(tspaces_all)
         self.assertTrue(tspaces_all==expected, msg)
-        
-        tspaces_min = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+
+        tspaces_min = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         tspaces_min.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":0,"v2":0,"v3":0,"v4":0},
@@ -1018,8 +1126,8 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_min)
         self.assertTrue(tspaces_min==expected, msg)
 
-        
-        tspaces_max = PyBoolNet.TrapSpaces.trap_spaces(primes, "max")
+
+        tspaces_max = PyBoolNet.AspSolver.trap_spaces(primes, "max")
         tspaces_max.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
@@ -1031,7 +1139,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_max)
         self.assertTrue(tspaces_max==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(1,1))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "max", Bounds=(1,1))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v3":1},
                     {"v3":0},
@@ -1042,7 +1150,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue(tspaces_bounded==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "max", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "max", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"v1":1,"v2":1},
                     {"v1":0,"v2":0},
@@ -1055,7 +1163,7 @@ class TestTrapSpaces(unittest.TestCase):
         msg+= "\ngot:      "+str(tspaces_bounded)
         self.assertTrue(tspaces_bounded==expected, msg)
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "all", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "all", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1},
@@ -1076,7 +1184,7 @@ class TestTrapSpaces(unittest.TestCase):
         self.assertTrue(tspaces_bounded==expected, msg)
 
 
-        tspaces_bounded = PyBoolNet.TrapSpaces.trap_spaces_bounded(primes, "min", Bounds=(2,3))
+        tspaces_bounded = PyBoolNet.AspSolver.trap_spaces_bounded(primes, "min", Bounds=(2,3))
         tspaces_bounded.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [
                     {"v1":1,"v2":1,"v3":1},
@@ -1101,19 +1209,13 @@ class TestTrapSpaces(unittest.TestCase):
 
         # network has 4 steady states: 010,110,011,111
 
-        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y"], Aggregate=True)
-        expected = [({"y":1},4)]
-        msg = "\nexpected: "+str(expected)
-        msg+= "\ngot:      "+str(result)
-        self.assertTrue(result==expected, msg)
-
-        result = PyBoolNet.TrapSpaces.steady_states_projected(primes, ["y","x"], Aggregate=False)
+        result = PyBoolNet.AspSolver.steady_states_projected(primes, ["y","x"])
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{"x":0, "y":1}, {"x":1, "y":1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
-        
+
 
     def test_encoding_bijection(self):
         """
@@ -1125,27 +1227,27 @@ class TestTrapSpaces(unittest.TestCase):
         bnet = "\n".join(["v1,v1|v2","v2,v1"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "all")
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "all")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{}, {'v1': 0, 'v2': 0}, {'v1': 1}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
-        
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "min")
+
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0}, {'v1': 1, 'v2': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
-        
-        result = PyBoolNet.TrapSpaces.trap_spaces(primes, "max")
+
+        result = PyBoolNet.AspSolver.trap_spaces(primes, "max")
         result.sort(key=lambda x: tuple(sorted(x.items())))
         expected = [{'v1': 0, 'v2': 0}, {'v1': 1}]
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(result)
         self.assertTrue(result==expected, msg)
-        
+
 
 class TestPrimeImplicants(unittest.TestCase):
     def test_remove_variables(self):
@@ -1175,7 +1277,7 @@ class TestPrimeImplicants(unittest.TestCase):
             msg = "\nexpected: "+str(expected)
             msg+= "\ngot:      "+str(answer)
             self.assertTrue(answer==expected, msg)
-        
+
     def test_rename(self):
         for copy in [True, False]:
             if copy:
@@ -1184,14 +1286,14 @@ class TestPrimeImplicants(unittest.TestCase):
             else:
                 primes = PyBoolNet.Repository.get_primes("raf")
                 PyBoolNet.PrimeImplicants.rename_variable(primes, "Raf", "Raf23")
-                
+
             expected = {'Raf23': [[{'Raf23': 1, 'Erk': 1}], [{'Raf23': 0}, {'Erk': 0}]], 'Mek': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0, 'Erk': 0}], [{'Mek': 1, 'Raf23': 1}, {'Erk': 1}]], 'Erk': [[{'Raf23': 0, 'Erk': 0}, {'Mek': 0}], [{'Mek': 1, 'Raf23': 1}, {'Mek': 1, 'Erk': 1}]]}
             msg = "\nexpected: "+str(expected)
             msg+= "\ngot:      "+str(primes)
             self.assertTrue(primes==expected, msg)
 
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.rename_variable, primes, "GADD", "GADD12")
-        
+
     def test_create_disjoint_union(self):
         primes1 = PyBoolNet.FileExchange.bnet2primes("A, B \n B, !A")
         primes2 = PyBoolNet.FileExchange.bnet2primes("C, D \n D, C")
@@ -1204,10 +1306,10 @@ class TestPrimeImplicants(unittest.TestCase):
         primes1 = PyBoolNet.FileExchange.bnet2primes("A, B \n B, !A")
         primes2 = PyBoolNet.FileExchange.bnet2primes("C, B \n D, C")
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.create_disjoint_union, primes1, primes2)
-        
+
     def test_remove_variables(self):
         primes = PyBoolNet.FileExchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
-        
+
         for copy in [True, False]:
             if copy:
                 newprimes = PyBoolNet.PrimeImplicants.copy(primes)
@@ -1227,10 +1329,10 @@ class TestPrimeImplicants(unittest.TestCase):
         PyBoolNet.PrimeImplicants.remove_all_variables_except(Primes=newprimes,Names=["B","C"])
         expected = PyBoolNet.FileExchange.bnet2primes("B, 0 \n C, 1")
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(expected, newprimes), str(newprimes)+' vs '+str(expected))
-        
+
         newprimes = PyBoolNet.PrimeImplicants.copy(primes)
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.remove_variables, newprimes, ["B"])
-        
+
     def test_create_variables(self):
         primes = PyBoolNet.FileExchange.bnet2primes("v1,v1\nv2,v1")
 
@@ -1240,12 +1342,12 @@ class TestPrimeImplicants(unittest.TestCase):
             else:
                 answer = PyBoolNet.PrimeImplicants.copy(primes)
                 PyBoolNet.PrimeImplicants.create_variables(answer, {"v1":"v2"})
-                
-            expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]} 
+
+            expected = {'v1': [[{'v2': 0}], [{'v2': 1}]], 'v2': [[{'v1': 0}], [{'v1': 1}]]}
             msg = "\nexpected: "+str(expected)
             msg+= "\ngot:      "+str(answer)
             self.assertTrue(answer==expected, msg)
-        
+
         answer = PyBoolNet.PrimeImplicants.copy(primes)
         PyBoolNet.PrimeImplicants.create_variables(answer, {"v1":lambda v2: not v2})
 
@@ -1255,7 +1357,7 @@ class TestPrimeImplicants(unittest.TestCase):
         newprimes = PyBoolNet.PrimeImplicants.copy(primes)
         self.assertRaises(Exception, PyBoolNet.PrimeImplicants.create_variables, newprimes, {"v3":"v4"})
 
-    
+
     def test_input_combinations(self):
         bnet = "input1, input1 \n input2, input2 \n"
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
@@ -1278,7 +1380,7 @@ class TestPrimeImplicants(unittest.TestCase):
         msg+= "\ngot:      "+str(answer)
         self.assertTrue(answer==expected, msg)
 
-    
+
     def test_copy(self):
         p1 = {"v1":[[{"v2":0}],[{"v2":1}]],"v2":[[{"v2":0},{"v1":1}],[{"v1":0,"v2":1}]]}
         p2 = PyBoolNet.PrimeImplicants.copy(p1)
@@ -1312,7 +1414,7 @@ class TestPrimeImplicants(unittest.TestCase):
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         const = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
         self.assertTrue(const=={"A":0,"B":0})
-        
+
     def test_percolation1A(self):
         primes = {'A': [[{}], []], 'B': [[{}], []], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
         PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
@@ -1372,11 +1474,11 @@ class TestFileExchange(unittest.TestCase):
         fname_out = os.path.join(FILES_OUT, "fileexchange_primes2eqn.eqn")
         primes = PyBoolNet.Repository.get_primes("raf")
         PyBoolNet.FileExchange.primes2eqn(primes, fname_out)
-    
+
     def test_bnet2primes_operatorbinding(self):
         fname_in  = os.path.join(FILES_IN,  "fileexchange_operatorbinding.bnet")
         fname_out = os.path.join(FILES_OUT, "fileexchange_operatorbinding.primes")
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
         names = "abcde"
         results = []
@@ -1384,13 +1486,13 @@ class TestFileExchange(unittest.TestCase):
             for y in names:
                 name = x
                 results.append(PyBoolNet.PrimeImplicants.are_equal({name:primes[x]},{name:primes[y]}))
-                                              
+
         self.assertTrue(all(results))
-        
+
     def test_bnet2primes_results(self):
         fname_in  = os.path.join(FILES_IN,  "fileexchange_feedback.bnet")
         fname_out = os.path.join(FILES_OUT, "fileexchange_feedback.primes")
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
         primes_expected = {"v1":[[{"v2":0}],[{"v2":1}]],"v2":[[{"v2":0},{"v1":1}],[{"v1":0,"v2":1}]]}
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,primes_expected))
@@ -1398,7 +1500,7 @@ class TestFileExchange(unittest.TestCase):
     def test_bnet2primes_empty(self):
         fname_in  = os.path.join(FILES_IN,  "fileexchange_empty.bnet")
         fname_out = os.path.join(FILES_OUT, "fileexchange_empty.primes")
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
         primes_expected = {}
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,primes_expected), str(primes))
@@ -1406,7 +1508,7 @@ class TestFileExchange(unittest.TestCase):
     def test_bnet2primes_missing_inputs(self):
         fname_in  = os.path.join(FILES_IN,  "fileexchange_missing_inputs.bnet")
         fname_out = os.path.join(FILES_OUT, "fileexchange_missing_inputs.primes")
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
         primes_expected = {'B': [[{'B': 0}], [{'B': 1}]], 'C': [[{'C': 0}], [{'C': 1}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,primes_expected), str(primes))
@@ -1414,7 +1516,7 @@ class TestFileExchange(unittest.TestCase):
     def test_bnet2primes_constants(self):
         fname_in  = os.path.join(FILES_IN,  "fileexchange_constants.bnet")
         fname_out = os.path.join(FILES_OUT, "fileexchange_constants.primes")
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
         primes_expected = {'A': [[{}], []], 'B': [[], [{}]]}
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,primes_expected), str(primes))
@@ -1426,15 +1528,15 @@ class TestFileExchange(unittest.TestCase):
         file_in = "A, 0\nB, 1"
 
         expected = {"A":[[{}],[]],"B":[[],[{}]]}
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in)
         msg = "expected: %s\ngot: %s"%(str(expected), str(primes))
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,expected), msg)
-        
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=file_in)
         msg = "expected: %s\ngot: %s"%(str(expected), str(primes))
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,expected), msg)
-                                                          
+
         primes = PyBoolNet.FileExchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out1)
         msg = "expected: %s\ngot: %s"%(str(expected), str(primes))
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,expected), msg)
@@ -1444,21 +1546,21 @@ class TestFileExchange(unittest.TestCase):
         primes = {'B': [[{}], []], 'C': [[{'C': 0}], [{'C': 1}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
         PyBoolNet.FileExchange.primes2bnet(Primes=primes, FnameBNET=fname)
         PyBoolNet.FileExchange.primes2bnet(Primes=primes, FnameBNET=fname, Minimize=True)
-        
+
         # no assertion
-        
+
 
 
     def test_read_primes(self):
         fname  = os.path.join(FILES_IN, "fileexchange_missing_inputs.primes")
-        
+
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname)
         primes_expected = {'B': [[{'B': 0}], [{'B': 1}]], 'C': [[{'C': 0}], [{'C': 1}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
         self.assertTrue(PyBoolNet.PrimeImplicants.are_equal(primes,primes_expected), str(primes))
 
     def test_read_write_primes(self):
         fname  = os.path.join(FILES_OUT, "fileexchange_read_write.primes")
-        
+
         primes_write = {'B': [[{}], []], 'C': [[{'C': 0}], [{'C': 1}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
         PyBoolNet.FileExchange.write_primes(Primes=primes_write, FnamePRIMES=fname)
         primes_read = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname)
@@ -1491,10 +1593,10 @@ class TestFileExchange(unittest.TestCase):
 
     def test_primes2asp(self):
         primes = {'B': [[{}], []], 'C': [[{'C': 0}], [{'C': 1}]], 'A': [[{'B': 0, 'C': 1}], [{'C': 0}, {'B': 1}]]}
-        
+
         for i, (cbounds, cproj) in enumerate(itertools.product([None,(1,2)],[None,['A','B']])):
             fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case%i.asp"%i)
-            PyBoolNet.TrapSpaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj)
+            PyBoolNet.AspSolver.primes2asp(Primes=primes, FnameASP=fname, Bounds=cbounds, Project=cproj, Type="hannes")
         ## no assertion ##
 
 
@@ -1508,7 +1610,7 @@ class TestInteractionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str(expected)
         msg+= "\ngot:      "+str(nodes)
         self.assertTrue( expected==nodes , msg)
-        
+
     def test_create_image(self):
         fname = os.path.join(FILES_OUT, "interactiongraphs_create_image.pdf")
         primes = PyBoolNet.Repository.get_primes("raf")
@@ -1521,7 +1623,7 @@ class TestInteractionGraphs(unittest.TestCase):
         msg = "\nexpected: "+str([7])
         msg+= "\ngot:      "+str(outdag)
         self.assertTrue(outdag == [7], msg)
-                              
+
 
     def test_activities2animation(self):
         fname_in  = os.path.join(FILES_IN,  "irma.primes")
@@ -1529,7 +1631,7 @@ class TestInteractionGraphs(unittest.TestCase):
         fname_out2 = os.path.join(FILES_OUT, "irma.gif")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
-        
+
         activities = [{"gal":0, "Cbf1":1, "Gal80":1, "Ash1":0, "Gal4":0, "Swi5":1},
                       {"gal":1, "Cbf1":1, "Gal80":1, "Ash1":0, "Gal4":0, "Swi5":1},
                       {"gal":1, "Cbf1":0, "Gal80":1, "Ash1":0, "Gal4":0, "Swi5":1},
@@ -1545,7 +1647,7 @@ class TestInteractionGraphs(unittest.TestCase):
     def test_primes2igraph1(self):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         nodes_edges = sorted(igraph.nodes()) + sorted(igraph.edges())
         expected =  ['Ash1', 'Cbf1', 'Gal4', 'Gal80', 'Swi5', 'gal',
@@ -1559,7 +1661,7 @@ class TestInteractionGraphs(unittest.TestCase):
     def test_primes2igraph2(self):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
         expected =  [('Ash1', {}), ('Cbf1', {}), ('Gal4', {}), ('Gal80', {}), ('Swi5', {}), ('gal', {}),
@@ -1573,7 +1675,7 @@ class TestInteractionGraphs(unittest.TestCase):
 
     def test_primes2igraph3(self):
         primes = {'A': [[{'A':0}], [{'A':1}]], 'B': [[{}], []], 'C': [[{'B': 0}], [{'B': 1}]]}
-                  
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
         expected =  [('A', {}), ('B', {}), ('C', {}),
@@ -1593,7 +1695,7 @@ class TestInteractionGraphs(unittest.TestCase):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
         fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2dot.dot")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         PyBoolNet.InteractionGraphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out)
         ## no assertion ##
@@ -1601,7 +1703,7 @@ class TestInteractionGraphs(unittest.TestCase):
     def test_igraph2dot_string(self):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         PyBoolNet.InteractionGraphs.igraph2dot(IGraph=igraph, FnameDOT=None)
         ## no assertion ##
@@ -1609,7 +1711,7 @@ class TestInteractionGraphs(unittest.TestCase):
     def test_igraph2image(self):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.jpg")
         PyBoolNet.InteractionGraphs.igraph2image(IGraph=igraph, FnameIMAGE=fname_out)
@@ -1621,19 +1723,19 @@ class TestInteractionGraphs(unittest.TestCase):
         fname_out2 = os.path.join(FILES_OUT, "interactiongraphs_dot2image2.svg")
         fname_out3 = os.path.join(FILES_OUT, "interactiongraphs_dot2image3.eps")
         fname_out4 = os.path.join(FILES_OUT, "interactiongraphs_dot2image4.gif")
-        
+
         PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out1)
         PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out2)
         PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out3)
         PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out4)
-        ## no assertion ##    
+        ## no assertion ##
 
     def test_styles(self):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
         fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_interactionsigns.dot")
         fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_interactionsigns.pdf")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         PyBoolNet.InteractionGraphs.add_style_interactionsigns(IGraph=igraph)
         PyBoolNet.InteractionGraphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
@@ -1654,12 +1756,12 @@ class TestInteractionGraphs(unittest.TestCase):
         PyBoolNet.InteractionGraphs.add_style_activities(IGraph=igraph, Activities=activities)
         PyBoolNet.InteractionGraphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
         PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_out_dot, FnameIMAGE=fname_out_pdf)
-        
+
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
         fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_sccs.dot")
         fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_sccs.pdf")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         PyBoolNet.InteractionGraphs.add_style_sccs(IGraph=igraph)
         PyBoolNet.InteractionGraphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
@@ -1668,7 +1770,7 @@ class TestInteractionGraphs(unittest.TestCase):
         fname_in  = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
         fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_ioc.pdf")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         PyBoolNet.InteractionGraphs.add_style_inputs(IGraph=igraph)
         PyBoolNet.InteractionGraphs.add_style_constants(IGraph=igraph)
@@ -1679,7 +1781,7 @@ class TestInteractionGraphs(unittest.TestCase):
         fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_subgrapghs.pdf")
         fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_subgrapghs.dot")
         primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-        
+
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
         subgraphs = [(["v1","v2"],{}),(["v3","v4"],{"label":"jo"})]
         PyBoolNet.InteractionGraphs.add_style_subgraphs(IGraph=igraph, Subgraphs=subgraphs)
@@ -1688,23 +1790,25 @@ class TestInteractionGraphs(unittest.TestCase):
 
         ## no assertion ##
 
-    
+
 
 
 
 if __name__=="__main__":
 
 
-    
-    if 0:
+    if 1:
+
         # run all tests
         unittest.main(verbosity=2, buffer=True)
 
-    if 1:
+    if 0:
         # run single test
         suite = unittest.TestSuite()
-        suite.addTest(TestTrapSpaces("test_percolate_trapspace"))
-        
+
+        suite.addTest(TestBooleanExpressions("test_minimize_espresso"))
+
+
         runner = unittest.TextTestRunner(buffer=True)
         runner.run(suite)
 
@@ -1713,7 +1817,7 @@ if __name__=="__main__":
 
         import inspect
 
-        class_name = TestPyBoolNet.StateTransitionGraphs
+        class_name = TestBooleanExpressions
 
         suite = unittest.TestSuite()
         for name, obj in inspect.getmembers(class_name):
@@ -1722,11 +1826,12 @@ if __name__=="__main__":
 
         runner = unittest.TextTestRunner()
         runner.run(suite)
-            
-            
-        
-            
-    
+
+
+    if os.path.isdir(FILES_OUT):
+        shutil.rmtree(FILES_OUT)
+
+
 
 
 

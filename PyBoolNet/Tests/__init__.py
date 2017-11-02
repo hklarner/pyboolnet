@@ -1,4 +1,4 @@
 
-import Dependencies
-import Modules
+import PyBoolNet.Tests.Dependencies
+import PyBoolNet.Tests.Modules
 

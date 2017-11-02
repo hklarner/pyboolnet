@@ -144,7 +144,7 @@ def subspace2proposition(Primes, Subspace):
     """
 
     
-    if not Subspace:
+    if not Subspace or Subspace==len(Primes)*"-":
         return "TRUE"
 
     if type(Subspace)==str:

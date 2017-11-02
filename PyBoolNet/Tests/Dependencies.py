@@ -158,10 +158,39 @@ class TestImageMagick(unittest.TestCase):
         self.assertTrue("ImageMagick" in out, msg)
 
 
+class TestEspresso(unittest.TestCase):
+    def test_espresso_responds(self):
+        cmd = config.get("Executables", "espresso")
+        cmd = os.path.join(BASE, "Dependencies", cmd)
+        cmd = os.path.normpath(cmd)
+        cmd = [cmd, "--help"]
+        
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+
+        msg = out
+        msg+= '\nespresso did not respond with "Espresso Version"'
+        msg+= '\ncommand: "%s"'%' '.join(cmd)
+        self.assertTrue("Espresso Version" in out, msg)
+
+    def test_eqntott_responds(self):
+        cmd = config.get("Executables", "eqntott")
+        cmd = os.path.join(BASE, "Dependencies", cmd)
+        cmd = os.path.normpath(cmd)
+        cmd = [cmd, "--help"]
+        
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+
+        msg = '\neqntott did not respond with "usage:"'
+        msg+= '\ncommand: "%s"'%' '.join(cmd)
+        self.assertTrue("usage:" in err, msg)
 
 
 
-
+class TestMatplotLib(unittest.TestCase):
+    def test_matplotlib_responds(self):
+        import matplotlib.pyplot 
 
 
 if __name__=="__main__":

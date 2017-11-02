@@ -5,16 +5,18 @@ targets, factors
 # taken from
 # Saadatpour, Assieh, Istvan Albert, and Reka Albert. "Attractor analysis of asynchronous Boolean models of signal transduction networks." Journal of theoretical biology 266.4 (2010): 641-656.
 
-NOS,    Ca2
-NO,     NOS
-GC,     NO
-ADPRc,  NO
-cADPR,  ADPRc
-cGMP,   GC
-PLC,    Ca2
-InsP3,  PLC
-CIS,    (cGMP & cADPR) | InsP3
-Ca2ATP, Ca2
-Ca2,    CIS & !Ca2ATP
-KAP,    !Ca2
-KEV,    Ca2
+ADPRc,   NO
+CIS,     cGMP&cADPR | InsP3
+Ca2,     !Ca2ATP&CIS
+Ca2ATP,  Ca2
+GC,      NO
+InsP3,   PLC
+NO,      NOS
+NOS,     Ca2
+PLC,     Ca2
+cADPR,   ADPRc
+cGMP,    GC
+
+KAP,     !Ca2
+KEV,     Ca2
+

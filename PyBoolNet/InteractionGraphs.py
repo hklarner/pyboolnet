@@ -22,6 +22,24 @@ def dot2image(FnameDOT, FnameIMAGE):
     PyBoolNet.Utility.DiGraphs.dot2image(FnameDOT, FnameIMAGE, LayoutEngine="dot")
 
 
+def create_empty_igraph(Primes):
+    """
+    creates an empty igraph with default attributes
+    """
+
+    igraph = networkx.DiGraph()
+    
+    factor = 0.2
+    width = factor * sum(len(x) for x in Primes) / len(Primes)
+    
+    igraph.graph["node"]  = {"style":"filled","shape":"circle", "fixedsize":"true", "width":str(width),"color":"none","fillcolor":"gray95"}
+    igraph.graph["edge"]  = {}
+    igraph.graph["subgraphs"]  = []
+
+    return igraph
+    
+
+
 def primes2igraph(Primes):
     """
     Creates the interaction graph from the prime implicants of a network.
@@ -48,7 +66,8 @@ def primes2igraph(Primes):
             set([1, -1])
     """
 
-    igraph = networkx.DiGraph()
+    igraph = create_empty_igraph(Primes)
+
     edges = {}
     for name in Primes:
         igraph.add_node(name)
@@ -64,14 +83,63 @@ def primes2igraph(Primes):
                 
     for k,name in edges:
         igraph.add_edge(k, name, sign=edges[(k,name)])
-
-    # defaults
-    igraph.graph["node"]  = {"style":"filled","shape":"rect","color":"none","fillcolor":"gray95"}
-    igraph.graph["edge"]  = {}
-    igraph.graph["subgraphs"]  = []
-                
+        
     return igraph
 
+
+def local_igraph_of_state(Primes, State):
+    """
+    computes the local interaction graph of a state.
+    """ 
+
+    if type(State)==str:
+        State = PyBoolNet.StateTransitionGraphs.state2dict(Primes, State)
+
+    local_igraph = create_empty_igraph(Primes)
+    
+    F = lambda x: PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes, x)
+    x = State
+
+    for i in Primes:        
+        for j in Primes:
+
+            y = dict(State)
+            y[i] = 1-x[i]
+
+            dx = x[i] - y[i]
+            dF = F(x)[j] - F(y)[j]
+
+            sign = int( dF/dx )
+
+            if sign:
+                local_igraph.add_edge(i,j,sign=set([sign]))
+
+    return local_igraph
+    
+
+def local_igraph_of_states(Primes, States):
+    """
+    computes the local interaction graph of a states.
+    """
+
+    States = PyBoolNet.StateTransitionGraphs.states2dict(Primes, States)
+
+    local_igraph = create_empty_igraph(Primes)
+
+    for state in States:
+        g = local_igraph_of_state(Primes, state)
+        
+        for i, j in g.edges():
+            signs = g[i][j]["sign"]
+
+            if local_igraph.has_edge(i,j):
+                local_igraph[i][j]["sign"].update(signs)
+            else:
+                local_igraph.add_edge(i,j,sign=signs)
+
+    return local_igraph
+        
+    
 
 def copy(IGraph):
     """
@@ -115,14 +183,15 @@ def igraph2dot(IGraph, FnameDOT=None):
     return PyBoolNet.Utility.DiGraphs.digraph2dot(IGraph, FnameDOT)
 
 
-def igraph2image(IGraph, FnameIMAGE, Silent=False):
+def igraph2image(IGraph, FnameIMAGE, LayoutEngine="fdp", Silent=False):
     """
-    Creates an image file from *IGraph* using :ref:`installation_graphviz` and the layout engine *dot*.
+    Creates an image file from *IGraph* using :ref:`installation_graphviz` and the force directed layout engine *fdp*.
     To find out which file formats are supported call ``$ dot -T?``.
     
     **arguments**:
         * *IGraph*: interaction graph
         * *FnameIMAGE* (str): name of image
+        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *Silent* (bool): disables print statements
         
     **example**::
@@ -132,24 +201,26 @@ def igraph2image(IGraph, FnameIMAGE, Silent=False):
           >>> igraph2image(igraph, "mapk_igraph.svg")
     """
 
-    PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine="dot", Silent=Silent)
+    PyBoolNet.Utility.DiGraphs.digraph2image(IGraph, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=Silent)
 
 
-def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
+def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"], LayoutEngine="fdp"):
     """
     A convenience function for drawing interaction graphs directly from the prime implicants.
+    *Styles* must be a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"].
     
     **arguments**:
         * *Primes*: prime implicants
         * *FnameIMAGE* (str): name of image
-        * *Styles* (list): the styles to be applied, a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs"]
+        * *Styles* (list): the styles to be applied
+        * *LayoutEngine* (str): one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         
     **example**::
 
-          >>> create_image(primes, "mapk_igraph.pdf")
+          >>> create_image(primes, "mapk_igraph.pdf", Styles=["interactionsigns", "anonymous"])
     """
 
-    assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs"])))
+    assert(set(Styles).issubset(set(["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"])))
 
     igraph = primes2igraph(Primes)
     
@@ -163,8 +234,10 @@ def create_image(Primes, FnameIMAGE, Styles=["interactionsigns"]):
         add_style_constants(igraph)
     if "sccs" in Styles:
         add_style_sccs(igraph)
+    if "anonymous" in Styles:
+        add_style_anonymous(igraph)
 
-    igraph2image(igraph, FnameIMAGE)
+    igraph2image(igraph, FnameIMAGE, LayoutEngine=LayoutEngine)
         
 
 def find_outdag(IGraph):
@@ -229,6 +302,28 @@ def find_minimal_autonomous_nodes(IGraph, Superset=set([])):
     
     return [set(x) for x in cgraph.nodes() if cgraph.in_degree(x)==0]
 
+
+def add_style_anonymous(IGraph):
+    """
+    Creates an anonymous interaction graph with circular nodes without labels.
+    
+    **arguments**:
+        * *IGraph*: interaction graph
+        
+    **example**::
+
+          >>> add_style_anonymous(igraph)
+    """
+
+    IGraph.graph["node"]["shape"] = "circle"
+    IGraph.graph["node"]["style"] = "filled"
+    IGraph.graph["node"]["fillcolor"] = "lightgray"
+    IGraph.graph["node"]["color"] = "black"
+    
+    for x in IGraph.nodes():
+        IGraph.node[x]["label"]=""
+
+            
     
 def add_style_interactionsigns(IGraph):
     """

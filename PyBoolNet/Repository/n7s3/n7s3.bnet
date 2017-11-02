@@ -1,0 +1,13 @@
+
+# toy net with positive edges and three steady states:
+# A1=1111111
+# A2=0000111
+# A3=0000000
+
+v1, v4&v5
+v2, v1
+v3, v2
+v4, v3
+v5, v1|v7
+v6, v5|v2
+v7, v6

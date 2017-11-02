@@ -70,6 +70,17 @@ best_first_reachability
 .. autofunction:: PyBoolNet.StateTransitionGraphs.best_first_reachability
 
 
+
+.. _energy:
+
+energy
+------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.energy
+
+
+
+
 .. _state2str:
 
 state2str
@@ -110,12 +121,12 @@ state_is_in_subspace
 .. autofunction:: PyBoolNet.StateTransitionGraphs.state_is_in_subspace
 
 
-.. _subspace1_is_in_subspace2:
+.. _A_is_subspace_of_B:
 
-subspace1_is_in_subspace2
--------------------------
+A_is_subspace_of_B
+------------------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.subspace1_is_in_subspace2
+.. autofunction:: PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B
 
 
 .. _list_states_in_subspace:
@@ -160,6 +171,14 @@ stg2image
 .. autofunction:: PyBoolNet.StateTransitionGraphs.stg2image
 
 
+.. _stgs_create_image:
+
+create_image
+------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.create_image
+
+
 .. _add_style_tendencies:
 
 add_style_tendencies
@@ -168,7 +187,7 @@ add_style_tendencies
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_tendencies
 
 
-.. _add_style_sccs:
+.. _stgs_add_style_sccs:
 
 add_style_sccs
 --------------
@@ -184,7 +203,7 @@ add_style_subspaces
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subspaces
 
 
-.. _add_style_subgraphs:
+.. _stgs_add_style_subgraphs:
 
 add_style_subgraphs
 -------------------
@@ -200,7 +219,7 @@ add_style_mintrapspaces
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces
 
 
-.. _add_style_path:
+.. _stgs_add_style_path:
 
 add_style_path
 --------------
@@ -208,10 +227,10 @@ add_style_path
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_path
 
 
-.. _add_style_default:
+.. _stgs_add_style_default:
 
 add_style_default
---------------
+-----------------
 
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_default
 

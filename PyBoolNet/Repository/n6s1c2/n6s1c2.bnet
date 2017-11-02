@@ -1,0 +1,14 @@
+
+
+# name: n6s1c2
+# toy net with monotone edges and three attractors:
+# A1=011111
+# A2=011-00
+# A3=-0-000
+
+v1, (!v1&!v2 | !v1&!v3) 
+v2, (!v1&v2)            
+v3, (!v1 | v2)          
+v4, (!v4 | v5&v6) & !v1&v2&v3
+v5, (v6) & !v1&v2&v3
+v6, (v5 | v6) & !v1&v2&v3

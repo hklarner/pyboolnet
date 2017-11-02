@@ -1,0 +1,10 @@
+
+
+# name: n3s1c1a
+# toy net monotone edges and two attrators:
+# A1=011
+# A2=-0-
+
+v1, (!v1&!v2 | !v1&!v3)
+v2, (!v1&v2)
+v3, (!v1 | v2)

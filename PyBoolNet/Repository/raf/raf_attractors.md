@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 18. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 12. Jun. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
@@ -23,9 +23,8 @@
 | 11-            | True      | True      |
 
 ### Network
-| targets | factors               |
-| ------- | --------------------- |
-| Erk     | Raf & Mek | Mek & Erk |
-| Mek     | Raf & Mek | Erk       |
-| Raf     | !Raf | !Erk           |
+| Erk     | Raf&Mek | Mek&Erk |
+| ------- | ----------------- |
+| Mek     | Raf&Mek | Erk     |
+| Raf     | !Raf | !Erk       |
 

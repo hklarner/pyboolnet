@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 21. Oct. 2016 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 12. Jun. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state |
@@ -20,15 +20,14 @@
  * there are only steady states
 
 ### Network
-| targets | factors                                        |
-| ------- | ---------------------------------------------- |
-| ARF     | !IAA                                           |
-| AUXINS  | 1                                              |
-| IAA     | !AUXINS                                        |
-| JKD     | SHR & SCR                                      |
-| MGP     | SHR & !WOX & SCR                               |
-| PLT     | ARF                                            |
-| SCR     | SHR & !MGP & SCR | JKD & SHR & SCR             |
-| SHR     | SHR                                            |
-| WOX     | SHR & WOX & ARF & SCR | SHR & !MGP & ARF & SCR |
+| AUXINS  | 1                                  |
+| ------- | ---------------------------------- |
+| SHR     | SHR                                |
+| ARF     | !IAA                               |
+| IAA     | !AUXINS                            |
+| JKD     | SHR&SCR                            |
+| MGP     | SHR&!WOX&SCR                       |
+| SCR     | SHR&!MGP&SCR | JKD&SHR&SCR         |
+| WOX     | SHR&WOX&ARF&SCR | SHR&!MGP&ARF&SCR |
+| PLT     | ARF                                |
 

@@ -8,7 +8,7 @@ import subprocess
 import networkx
 
 import PyBoolNet.FileExchange
-import PyBoolNet.TrapSpaces
+import PyBoolNet.AspSolver
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
@@ -17,6 +17,40 @@ BASE = os.path.normpath(BASE)
 config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
 CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
+
+
+
+
+def energy(Primes, State):
+    """
+    This integer valued energy function E for Boolean networks is decreasing with transitions.
+    That is, E(x) >= E(y) holds for any transition x -> y.
+    It is based on the number of free variables in the smallest trapspace that contains *State*.
+    The energy is therefore n >= E(x) >= 0 and E(x)=0 for steady states holds.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (dict / str): a state
+
+    **returns**:
+        * *Energy* (int): number of free variables in smallest trapspace containing *State*
+
+    **example**::
+
+        >>> primes = Repository.get_primes("raf")
+        >>> StateTransitionGraphs.energy(primes, "000")
+        1
+        >>> StateTransitionGraphs.energy(primes, "010")
+        3
+        >>> StateTransitionGraphs.energy(primes, "001")
+        0
+    """
+
+    tspace = PyBoolNet.AspSolver.trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None, Representation="str")
+    energy = tspace.count('-')
+
+    return energy
+    
 
 
 def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
@@ -94,7 +128,8 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
     # some iterable
     else:
         fringe = [state2str(x) for x in InitialStates]
-    
+        print fringe
+        
     seen = set([])
     while fringe:
         source = fringe.pop()
@@ -110,7 +145,7 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
         seen.add(source)
 
     # defaults
-    stg.graph["node"]  = {"shape":"rect","color":"none","fillcolor":"none"}
+    stg.graph["node"]  = {"shape":"rect", "color":"none", "style":"filled", "fillcolor":"none"}
     stg.graph["edge"]  = {}
     stg.graph["subgraphs"]  = []
 
@@ -171,7 +206,39 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
 
     PyBoolNet.Utility.DiGraphs.digraph2image(STG, FnameIMAGE, LayoutEngine, Silent)
         
+
+def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Styles=[], LayoutEngine="dot"):
+    """
+    A convenience function for drawing state transition graphs directly from the prime implicants.
+    *Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces"].
+    
+    **arguments**:
+        * *Primes*: prime implicants
+        * *FnameIMAGE* (str): name of image
+        * *InitialStates* (func/str/dict/list): a function, a subspace, a state or a list of states
+        * *Styles* (list): the styles to be applied
+        * *LayoutEngine* (str): one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         
+    **example**::
+
+          >>> create_image(primes, "asynchronous", "mapk_stg.pdf", Styles=["interactionsigns", "anonymous"])
+    """
+    
+    assert(set(Styles).issubset(set(["tendencies", "sccs", "mintrapspaces", "anonymous"])))
+
+    stg = primes2stg(Primes, Update, InitialStates)
+    
+    if "tendencies" in Styles:
+        add_style_tendencies(stg)
+    if "sccs" in Styles:
+        add_style_sccs(stg)
+    if "mintrapspaces" in Styles:
+        add_style_mintrapspaces(stg)
+
+    
+    stg2image(stg, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=False)
+
+    
 def copy(STG):
     """
     Creates a copy of *STG* including all *dot* attributes.
@@ -193,7 +260,7 @@ def copy(STG):
 
     return newgraph
 
-
+            
 def add_style_tendencies(STG):
     """
     Sets or overwrites the edge colors to reflect whether a transition increases values (*black*),
@@ -366,7 +433,7 @@ def add_style_subgraphs(STG, Subgraphs):
 
 def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     """
-    A convenience function that combines :ref:`add_style_subspaces` and :ref:`TrapSpaces.trap_spaces <trap_spaces>`.
+    A convenience function that combines :ref:`add_style_subspaces` and :ref:`AspSolver.trap_spaces <trap_spaces>`.
     It adds a *dot* subgraphs for every minimal trap space to *STG* - subgraphs that already exist are overwritten.
 
     **arguments**:
@@ -382,7 +449,7 @@ def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     names = sorted(Primes)
     states = STG.nodes()
     
-    for tspace in PyBoolNet.TrapSpaces.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.AspSolver.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
 
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes,tspace) if x in states])
@@ -452,6 +519,27 @@ def add_style_default(Primes, STG):
     add_style_sccs(STG)
     add_style_tendencies(STG)
     add_style_mintrapspaces(Primes, STG)
+
+
+def add_style_anonymous(STG):
+    """
+    Removes the labels and draws each state as a filled circle.
+
+    **arguments**:
+        * *STG*: state transition graph
+    
+    **example**::
+
+        >>> add_style_anonymous(stg)
+    """
+
+    STG.graph["node"]["shape"] = "circle"
+    STG.graph["node"]["style"] = "filled"
+    STG.graph["node"]["fillcolor"] = "lightgray"
+    STG.graph["node"]["color"] = "none"
+
+    for x in STG:
+        STG.node[x]["label"] = ""
 
 
 def successor_synchronous(Primes, State):
@@ -651,7 +739,7 @@ def random_walk(Primes, Update, InitialState, Length):
     return Path
     
 
-def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
+def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent=False):
     """
     Performs a best-first search in the asynchronous transition system defined by *Primes* to answer the question whether there
     is a path from a random state in *InitalSpace* to a state in *GoalSpace*.
@@ -669,6 +757,7 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
         * *InitialSpace* (str/dict): initial subspace
         * *GoalSpace* (str/dict): goal subspace
         * *Memory* (int): maximal number of states memorized before search is stopped
+        * *Silent* (bool): print information
 
     **returns**:
         * *Path* (list): a path from *InitalSpace* to *GoalSpace* if it was found, or *None* otherwise.
@@ -706,7 +795,11 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000):
                 heapq.heappush(fringe, (hamming_distance(ydict,GoalSpace), path+[y]))
                 
         if len(seen)>Memory:
-            return None
+            break
+
+    if not Silent:
+        print("best_first_reachability(..)")
+        print(" explored %i transitions, not path found."%len(seen))
         
     return None
 
@@ -733,6 +826,28 @@ def state2str(State):
         return State
     
     return ''.join([str(State[x]) for x in sorted(State)])
+
+
+def states2str(Primes, States):
+    """
+    Converts the string representation of a list of states into the dictionary representations.
+    If *State* is already of type *dict* it is simply returned.
+        
+    **arguments**
+        * *Primes*: prime implicants or a list of names
+        * *States* (list of str): dictionary representation of states
+
+    **returns**
+        * *States* (list of dict): string representation of states
+
+    **example**::
+
+        >>> states = [{'v2':0, 'v1':1, 'v3':1},{'v2':0, 'v1':1, 'v3':0}]
+        >>> states2dict(primes, state)
+        ["101", "100"]
+    """
+
+    return [state2dict(Primes, x) for x in States]
 
 
 def state2dict(Primes, State):
@@ -762,6 +877,28 @@ def state2dict(Primes, State):
     assert(len(State)==len(Primes))
 
     return dict((k,int(v)) for k,v in zip(sorted(Primes), State))
+
+
+def states2dict(Primes, States):
+    """
+    Converts the string representation of a list of states into the dictionary representations.
+    If *State* is already of type *dict* it is simply returned.
+        
+    **arguments**
+        * *Primes*: prime implicants or a list of names
+        * *States* (list of str): string representation of states
+
+    **returns**
+        * *States* (list of dict): dictionary representation of states
+
+    **example**::
+
+        >>> states = ["101", "100"]
+        >>> states2dict(primes, state)
+        [{'v2':0, 'v1':1, 'v3':1},{'v2':0, 'v1':1, 'v3':0}]
+    """
+
+    return [state2dict(Primes, x) for x in States]
 
 
 def subspace2str(Primes, Subspace):
@@ -1224,29 +1361,29 @@ def state_is_in_subspace(Primes, State, Subspace):
     
     
 
-def subspace1_is_in_subspace2(Primes, Subspace1, Subspace2):
+def A_is_subspace_of_B(Primes, A, B):
     """
-    Checks whether *State* is a state in *Subspace*.
+    Checks whether *A* is a subspace of *B*.
 
     **arguments**:
         * *Primes*: prime implicants
-        * *State* (str/dict): a state
-        * *Subspace* (str/dict): a subspace
+        * *A* (str/dict): a subspace
+        * *B* (str/dict): a subspace
 
     **returns**:
-        * *Answer* (bool): whether *State* is a state in *Subspace*
+        * *Answer* (bool): whether *A* is a subspace of *B*
         
     **example**::
 
-          >>> subspace1_is_in_subspace2(Primes, Subspace1, Subspace2)
+          >>> A_is_subspace_of_B(Primes, A, B)
           True
     """
 
-    if type(Subspace1)==str:
-        Subspace1 = subspace2dict(Primes,Subspace1)
-    if type(Subspace2)==str:
-        Subspace2 = subspace2dict(Primes,Subspace2)
+    if type(A)==str:
+        A = subspace2dict(Primes,A)
+    if type(B)==str:
+        B = subspace2dict(Primes,B)
 
-    return set(Subspace1.items()).issuperset(set(Subspace2.items()))
+    return set(A.items()).issuperset(set(B.items()))
 
     

@@ -173,7 +173,8 @@ def digraph2dot(DiGraph, FnameDOT=None):
             print("%s was not created."%FnameDot)
         return
 
-    assert(type(DiGraph.nodes()[0])==str)
+    if not type(DiGraph.nodes()[0])==str:
+        DiGraph = networkx.relabel_nodes(DiGraph, mapping = lambda x: str(x))
     
     lines = ['digraph {']
     lines+= digraph2dotlines(DiGraph)
@@ -255,6 +256,7 @@ def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
         print(out)
         print(err)
         print('dot did not respond with return code 0')
+        print('command: %s'%' '.join(cmd))
         raise Exception
     
     if not Silent:
@@ -297,42 +299,23 @@ def subgraphs2tree(Subgraphs):
 
     tree = networkx.DiGraph()
     tree.add_nodes_from(Subgraphs)
-    
-    for source in Subgraphs:
-        for target in Subgraphs:
-            if source==target:
-                continue
 
-            if set(source.nodes()).issuperset(set(target.nodes())):
 
-                p = tree.predecessors(target)
 
-                if not p:
-                    # source is the first graph to contain target: add source->target
-                    tree.add_edge(source,target)
-                    
-                else:
-                    # p already contains target
-                    assert(len(p)==1)
-                    p=p[0]
+    for x in Subgraphs:
+        for y in Subgraphs:
+            if x==y: continue
 
-                    if networkx.has_path(tree, p, source):
-                        # source is subset of p, replace p->target by source->target
-                        tree.remove_edge(p,target)
-                        tree.add_edge(source,target)
+            if set(x.nodes()).issuperset(set(y.nodes())):
+                tree.add_edge(x,y)
 
-                    elif networkx.has_path(tree, source, p):
-                        # p is subset of source, nothing to do
-                        pass
 
-                    else:
-                        # source and p have non-empty intersection but neither is included in the other.
-                        print("cannot build inclusion tree")
-                        print(" source: %s"%source.nodes())
-                        print(" target: %s"%target.nodes())
-                        print(" p (predecessor of target): %s"%p.nodes())
-                        print(" intersection source and p: %s"%','.join(set(source.nodes()).intersection(set(p.nodes()))))
-                        raise Exception
+    for x,y in tree.edges():
+
+        for path in networkx.all_simple_paths(tree,x,y):
+            if len(path)>2:
+                tree.remove_edge(x,y)
+                break
 
 
     for node in tree.nodes():
@@ -525,7 +508,7 @@ def add_style_subgraphs(DiGraph, Subgraphs):
                 raise Exception
             
         subgraph = networkx.DiGraph()
-        subgraph.graph["color"] = "black"
+        subgraph.graph["color"] = "none"
         subgraph.add_nodes_from(nodes)
         if attr:
             subgraph.graph.update(attr)

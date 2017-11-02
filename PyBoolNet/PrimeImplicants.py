@@ -588,7 +588,7 @@ def percolate_and_remove_constants(Primes):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    return _percolation( Primes, RemoveConstants=True )
+    return _percolation(Primes, RemoveConstants=True)
     
 
 def input_combinations(Primes):
@@ -622,9 +622,21 @@ def input_combinations(Primes):
 
 
 
+def active_primes(Primes, State):
+    """
+    returns all primes that are active in, i.e., consistent with, *State*.
+    """
 
+    active_primes = dict((name,[[],[]]) for name in Primes)
+    
+    for name in Primes:
+        for v in [0,1]:
+            for p in Primes[name][v]:
+                if State[name]==v:
+                    if PyBoolNet.Utility.Misc.dicts_are_consistent(p,State):
+                        active_primes[name][v].append(dict(p))
 
-
+    return active_primes
 
 
 

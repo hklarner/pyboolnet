@@ -416,12 +416,6 @@ class QM:
     if isinstance(minterms,str):
       return minterms
 
-    def parentheses(glue, array):
-      if len(array) > 1:
-        return ''.join(['(',glue.join(array),')'])
-      else:
-        return glue.join(array)
-
     or_terms = []
     for minterm in minterms:
       and_terms = []
@@ -429,9 +423,9 @@ class QM:
         if minterm[0] & 1<<j:
           and_terms.append(self.variables[j])
         elif not minterm[1] & 1<<j:
-          and_terms.append('(! %s)' % self.variables[j])
-      or_terms.append(parentheses(' & ', and_terms))
-    return parentheses(' | ', or_terms)
+          and_terms.append('!%s' % self.variables[j])
+      or_terms.append('&'.join(and_terms))
+    return ' | '.join(or_terms)
 
   def get_prime_dict(self, minterms):
     """
@@ -441,13 +435,6 @@ class QM:
     if isinstance(minterms,str):
       return minterms
 
-    def parentheses(glue, array):
-      if len(array) > 1:
-        return ''.join(['(',glue.join(array),')'])
-      else:
-        return glue.join(array)
-
-    or_terms = []
     for minterm in minterms:
       and_terms = {}
       for j in range(len(self.variables)):
@@ -455,7 +442,6 @@ class QM:
           and_terms[self.variables[j]]=1
         elif not minterm[1] & 1<<j:
           and_terms[self.variables[j]]=0
-      or_terms.append(parentheses(' & ', and_terms))
       
     return and_terms
   

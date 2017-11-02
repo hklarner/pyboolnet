@@ -4,27 +4,28 @@ targets, factors
 # taken from
 # Dahlhaus, Meike, et al. "Boolean modeling identifies Greatwall/MASTL as an important regulator in the AURKA network of neuroblastoma." Cancer letters 371.1 (2016): 79-89.
 
-CentrosomeMat,      CDK1CCNBComplex & !SpindleAssembly
-SpindleAssembly,    CentrosomeMat & !Cytokinesis
-Cytokinesis,        SpindleAssembly & !CentrosomeMat
-AURKAActive,        AURKAPresent & (( TPX2 | (AJUBA & BORA) | (AJUBA & NEDD9) ) & !(AURKAActive & (PP1)))
-AURKAPresent,       !PP2A
-GSK3B,              GSK3B
-AJUBA,              AJUBA
-MTCanAct,           MTCanAct
-STMNCanAct,         STMNCanAct
-CDK1CCNBComplex,    !Cytokinesis & (!WEE1 | hCPEB | CDC25B)
-CDC25B,             (AURKAActive | PLK1) & !Cytokinesis
-BORA,               GSK3B & Cytokinesis & !PLK1 | !Cytokinesis
-GWL_MASTL,          CDK1CCNBComplex & !PP2A
-HCPEB,              AURKAActive
-MT,                 !STMN
-NEDD9,              AURKAActive
-ENSA,               GWL_MASTL
-PLK1,               AURKAActive | !STMN & STMNCanAct | MT & MTCanAct
-PP1,                !Cytokinesis & !(AURKAActive | CDK1CCNBComplex)
-PP2A,               (PP1 & ( ! ENSA) )
-STMN,               !AURKAActive
-TPX2,               PLK1
-WEE1,               !PLK1
+AJUBA,            AJUBA
+GSK3B,            GSK3B
+MTCanAct,         MTCanAct
+STMNCanAct,       STMNCanAct
+
+AURKAActive,      AURKAPresent & (( TPX2 | (AJUBA & BORA) | (AJUBA & NEDD9) ) & !(AURKAActive & (PP1)))
+AURKAPresent,     !PP2A
+BORA,             !PLK1&GSK3B | !Cytokinesis
+CDC25B,           PLK1&!Cytokinesis | !Cytokinesis&AURKAActive
+CDK1CCNBComplex,  hCPEB&!Cytokinesis | !WEE1&!Cytokinesis | !Cytokinesis&CDC25B
+CentrosomeMat,    !SpindleAssembly&CDK1CCNBComplex
+Cytokinesis,      SpindleAssembly&!CentrosomeMat
+ENSA,             GWL_MASTL
+GWL_MASTL,        !PP2A&CDK1CCNBComplex
+MT,               !STMN
+NEDD9,            AURKAActive
+PLK1,             STMNCanAct&!STMN | MTCanAct&MT | AURKAActive
+PP1,              !Cytokinesis&!CDK1CCNBComplex&!AURKAActive
+PP2A,             PP1&!ENSA
+STMN,             !AURKAActive
+SpindleAssembly,  !Cytokinesis&CentrosomeMat
+TPX2,             PLK1
+WEE1,             !PLK1
+hCPEB,            AURKAActive
 
