@@ -11,7 +11,8 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for version 2.2 (August 2017)
+#### release notes for version 2.2.0 (November 2017)
+- bugfix for linux dependencies, see [Issue17](https://github.com/hklarner/PyBoolNet/issues/17)
 - removed support for linux 32 bit
 - added module `BooleanExpressions` with `minimize_espresso(..)` (work by Sarah Nee)
 - bugfix for `Utility.Diagraphs.subgraphs2tree(..)` that affected `StateTransitionGraphs.add_style_subspaces(..)`
@@ -33,7 +34,7 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 - bugfix in `subspace2proposition`
 - renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
 
-For older release notes, see [release_note.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
+For older release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
 
 
 

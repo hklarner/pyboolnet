@@ -171,7 +171,7 @@ stg2image
 .. autofunction:: PyBoolNet.StateTransitionGraphs.stg2image
 
 
-.. _create_image:
+.. _stgs_create_image:
 
 create_image
 ------------
@@ -187,7 +187,7 @@ add_style_tendencies
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_tendencies
 
 
-.. _add_style_sccs:
+.. _stgs_add_style_sccs:
 
 add_style_sccs
 --------------
@@ -203,7 +203,7 @@ add_style_subspaces
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_subspaces
 
 
-.. _add_style_subgraphs:
+.. _stgs_add_style_subgraphs:
 
 add_style_subgraphs
 -------------------
@@ -219,7 +219,7 @@ add_style_mintrapspaces
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces
 
 
-.. _add_style_path:
+.. _stgs_add_style_path:
 
 add_style_path
 --------------
@@ -227,10 +227,10 @@ add_style_path
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_path
 
 
-.. _add_style_default:
+.. _stgs_add_style_default:
 
 add_style_default
---------------
+-----------------
 
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_default
 
