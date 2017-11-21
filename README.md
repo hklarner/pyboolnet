@@ -10,6 +10,13 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
+ 
+## Installation
+Do not try to install this git repository directly, see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16). Instead download the latest release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
+
+```
+sudo pip install PyBoolNet-2.2.0_linux64.tar.gz
+```
 
 
 #### release notes for version 2.2.0 (November 2017)
