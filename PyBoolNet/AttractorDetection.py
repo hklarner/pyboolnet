@@ -30,11 +30,11 @@ def compute_attractor_representatives(Primes, Update):
         function will hence raise an exception.
         If you want to compute attractors of synchronous STGs we suggest to use other tools,
         for example *bns* which was introduced in :ref:`Dubrova2011 <Dubrova2011>`.
-    
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-    
+
     **returns**:
         * *Representatives* (list of str): each state belongs to a different attractor
 
@@ -48,14 +48,14 @@ def compute_attractor_representatives(Primes, Update):
     raise Exception
 
     assert(Update in ["asynchronous", "synchronous", "mixed"])
-    
+
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
     constants = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
     oscillating = {}
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
     outdag = PyBoolNet.InteractionGraphs.find_outdag(igraph)
     PyBoolNet.PrimeImplicants.remove_variables(primes, outdag)
-    
+
     steadystates = []
     cyclic = []
     stack = []
@@ -71,7 +71,7 @@ def compute_attractor_representatives(Primes, Update):
         # stopping criterion
         if len(oscillating)==len(primes):
             primes_global = PyBoolNet.PrimeImplicants.copy(Primes)
-        
+
             if oscillating=={}:
                 PyBoolNet.PrimeImplicants.create_constants(primes_global, constants)
                 x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_global)
@@ -80,7 +80,7 @@ def compute_attractor_representatives(Primes, Update):
 
             else:
                 x = PyBoolNet.Utility.Misc.merge_dicts([constants, oscillating])
-                
+
                 if Update=="synchronous":
                     igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes_global)
                     igraph.remove_nodes_from(x)
@@ -94,11 +94,11 @@ def compute_attractor_representatives(Primes, Update):
                     x = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes_global)
 
                 cyclic.append(PyBoolNet.StateTransitionGraphs.state2str(x))
-                
+
             continue
-            
+
         # find autonomous set
-        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)    
+        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
         autoset = PyBoolNet.InteractionGraphs.find_minimal_autonomous_nodes(igraph, oscillating).pop()
         autoset_above = PyBoolNet.Utility.DiGraphs.ancestors(igraph, autoset)
         primes_auto = PyBoolNet.PrimeImplicants.copy(primes)
@@ -119,10 +119,10 @@ def compute_attractor_representatives(Primes, Update):
 
         finished = False
         while not finished:
-            
+
             init = "INIT %s"%PyBoolNet.QueryPatterns.subspace2proposition(primes_auto, initial_state)
             spec = "CTLSPEC %s"%PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes_auto, oscillating_states_new + trapspaces)
-            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_auto, Update, init, spec)            
+            answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_auto, Update, init, spec)
             if answer:
                 finished = True
             else:
@@ -147,16 +147,16 @@ def compute_attractor_representatives(Primes, Update):
                 print("gotcha 2")
                 print(b)
                 print(d)
-            
+
 
             igraph_new = PyBoolNet.InteractionGraphs.primes2igraph(primes_new)
             outdag = PyBoolNet.InteractionGraphs.find_outdag(igraph_new)
-              
+
             PyBoolNet.PrimeImplicants.remove_variables(primes_new, outdag)
 
             stack.append((primes_new, constants_new, oscillating))
 
-    
+
     return steadystates, cyclic
 
 
@@ -177,7 +177,7 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
             Length = 10*len(Primes)
 
         which proved sufficient in out computer experiments.
-        
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
@@ -205,7 +205,7 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
     # transition function
     if Update=='asynchronous':
         transition = lambda current_state: random.choice(PyBoolNet.StateTransitionGraphs.successors_asynchronous(Primes,current_state))
-        
+
     elif Update=='synchronous':
         transition = lambda current_state: PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes,current_state)
 
@@ -226,13 +226,13 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
         init = 'INIT ' + PyBoolNet.QueryPatterns.subspace2proposition(Primes, current_state)
         if PyBoolNet.ModelChecking.check_primes(Primes, Update, init, spec):
             return current_state
-        
+
         trials+=1
 
     print("found no attractor after generating %i random walks of length %i."%(Attempts, LengthRandomWalk))
     print("increase either or both values.")
     raise Exception
- 
+
 
 def univocality(Primes, Update, Trapspace):
     """
@@ -292,7 +292,7 @@ def univocality(Primes, Update, Trapspace):
 
     # univocality
     spec = 'CTLSPEC ' + PyBoolNet.QueryPatterns.EF_oneof_subspaces(primes, [attractor_state1])
-    init = 'INIT TRUE'
+    init = 'INIT TRUE'    
     answer = PyBoolNet.ModelChecking.check_primes(primes, Update, init, spec)
 
     return answer
@@ -693,14 +693,14 @@ def create_attractor_report(Primes, FnameTXT=None):
         w = max([12,len(Primes)])
         lines+= ["| "+"steady state".ljust(w)+" |"]
         lines+= ["| "+ w*"-" +" | "]
-        
+
     for x in steady:
         lines+= ["| "+PyBoolNet.StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
     lines+= [""]
 
     width = max([len(Primes), 14])
     spacer1 = lambda x: x.ljust(width)
-    
+
     lines+= ["### Asynchronous STG"]
     answer = completeness(Primes, "asynchronous")
     lines+= [" * completeness: %s"%answer]
@@ -712,7 +712,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
         lines+= [line]
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
-    
+
     for x in cyclic:
         line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
         line+= " | "+ ("%s"%univocality(Primes, "asynchronous", x)).ljust(9)
@@ -731,7 +731,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
         lines+= [line]
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
-    
+
     for x in cyclic:
         line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
         line+= " | "+ ("%s"%univocality(Primes, "synchronous", x)).ljust(9)
@@ -739,14 +739,14 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= [line]
     lines+=[""]
 
-    
+
     bnet = []
     for row in PyBoolNet.FileExchange.primes2bnet(Primes).split("\n"):
         if not row.strip(): continue
         t, f = row.split(",")
         bnet.append((t.strip(),f.strip()))
 
-    t_width = max([7]+[len(x) for x,_ in bnet])    
+    t_width = max([7]+[len(x) for x,_ in bnet])
     f_width = max([7]+[len(x) for _,x in bnet])
     lines+= ["### Network"]
     t,f = bnet.pop(0)
@@ -754,7 +754,7 @@ def create_attractor_report(Primes, FnameTXT=None):
     lines+= ["| "+t_width*"-"+" | "+f_width*"-"+" |"]
     for t,f in bnet:
         lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
-             
+
     lines+=["",""]
 
     if FnameTXT:
@@ -772,7 +772,7 @@ def compute_attractors_tarjan(STG):
     `networkx.has_path <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html>`_
     to decide whether a SCC is reachable from another.
     Returns the attractors as lists of states.
-    
+
 
     **arguments**:
         * *STG*: state transition graph
@@ -909,7 +909,3 @@ def Intersection(*ListOfDicts):
     """
 
     return [PyBoolNet.Utility.Misc.merge_dicts(x) for x in itertools.product(*ListOfDicts)]
-    
-
-
-    
