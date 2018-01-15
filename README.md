@@ -12,8 +12,8 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for version 2.2.1 (January 2018)
-- hotfix for `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`, see [issue]()
+#### release notes for hotfix version 2.2.1 (January 2018)
+- **bugfix: removed slowdown** that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 
 
 For older release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)

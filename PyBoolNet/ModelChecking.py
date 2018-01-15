@@ -29,16 +29,16 @@ def print_warning_accstates_bug(Primes,CTLSpec):
 
     if all(x not in CTLSpec for x in Primes):
         print("WARNING: accepting states bug might affect result, see http://github.com/hklarner/PyBoolNet/issues/14")
-        
 
-def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True, Silent=True):
+
+def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True, Silent=True):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
 
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
-    
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
@@ -51,7 +51,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
 
     **returns**:
         * *Answer* (bool): result of query
-        
+
     **example**::
 
         >>> init = "INIT TRUE"
@@ -59,12 +59,12 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
         >>> spec = "CTLSPEC AF(EG(v1&!v2))"
         >>> check_primes(primes, update, init, spec)
         False
-        
+
     """
 
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
-    
+
     if DynamicReorder:
         cmd+= ['-dynamic']
     if DisableReachableStates:
@@ -78,15 +78,16 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
         print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
-    
+
     cmd+= [tmpfname]
     try:
+        if not Silent: print("cmd: %s"%' '.join(cmd))
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception:
         print("could not start process for nusmv")
         print("cmd: %s"%' '.join(cmd))
         raise Exception
-    
+
     out, err = proc.communicate()
     out = out.decode()
 
@@ -105,7 +106,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
 
     .. note::
         *ConeOfInfluence* is not available when using counterexamples as it "messes" with the output.
-    
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
@@ -127,9 +128,9 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
         >>> counterex
          ({'v1':0,'v2':0},{'v1':1,'v2':0},{'v1':1,'v2':1})
     """
-              
+
     cmd = [CMD_NUSMV]
-    
+
     if DynamicReorder:
         cmd+= ['-dynamic']
     if DisableReachableStates:
@@ -141,7 +142,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
         print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
-    
+
     cmd+= [tmpfname]
 
     try:
@@ -150,7 +151,7 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
         print("could not start process for nusmv")
         print("cmd: %s"%' '.join(cmd))
         raise Exception
-    
+
     out, err = proc.communicate()
     out = out.decode()
 
@@ -182,7 +183,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
         If the *CTLSpec* is equivalent to either `TRUE` or `FALSE` then NuSMV will not compute the initial states,
         because it does not have to to find out what the *Answer* to the query is.
         In that case the four values that involve the initial states are set to `None`.
-        
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
@@ -206,28 +207,28 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
     """
 
     assert(CTLSpec[:7] == "CTLSPEC")
-    
+
     print_warning_accstates_bug(Primes, CTLSpec)
-              
+
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
     cmd+= ['-a','print']
 
-    if DynamicReorder:		
+    if DynamicReorder:
         cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
 
     # enforced to ensure accepting states are correct
     cmd+= ['-df']
-    
+
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
     if not Silent:
         print("created %s"%tmpfname)
     tmpfile.close()
     smvfile = primes2smv(Primes, Update, InitialStates, CTLSpec, FnameSMV=tmpfname, Silent=True)
-    
+
     cmd+= [tmpfname]
 
     try:
@@ -236,7 +237,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
         print("could not start process for nusmv")
         print("cmd: %s"%' '.join(cmd))
         raise Exception
-    
+
     out, err = proc.communicate()
     out = out.decode()
 
@@ -251,11 +252,11 @@ def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeO
     Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
-    
+
     .. note::
         It is currently required that *FnameSMV* contains a single LTL or CTL formula.
         For future versions it is planned that :ref:`check_smv` returns a dictionary of answers.
-        
+
     **arguments**:
         * *FnameSMV*: name of smv file
         * *DisableCounterExamples* (bool): disables computation of counterexamples (*-dcx*)
@@ -265,7 +266,7 @@ def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeO
 
     **returns**:
         * *Answer* (bool): result of query
-        
+
     **example**::
 
         >>> check_smv("mapk.smv")
@@ -274,16 +275,16 @@ def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeO
 
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
-    
+
     if DynamicReorder:
         cmd+= ['-dynamic']
     if DisableReachableStates:
         cmd+= ['-df']
     if ConeOfInfluence:
         cmd+= ['-coi']
-    
+
     cmd+= [FnameSMV]
-    
+
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
@@ -296,14 +297,14 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
     Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
-    
+
     .. note::
         It is currently required that *FnameSMV* contains a single LTL or CTL formula.
         For future versions it is planned that :ref:`check_smv` returns a dictionary of answers.
-    
+
     .. note::
         *ConeOfInfluence* is not available when using counterexamples as it "messes" with the output.
-        
+
     **arguments**:
         * *FnameSMV*: name of smv file
         * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
@@ -311,7 +312,7 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
 
     **returns**:
         * *Answer, Counterexample* (bool, tuple/None): result of query with counterexample
-        
+
     **example**::
 
         >>> answer, counterex = check_smv_with_counterexample("mapk.smv")
@@ -320,14 +321,14 @@ def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachabl
     """
 
     cmd = [CMD_NUSMV]
-    
+
     if DynamicReorder:
         cmd+= ['-dynamic']
     if DisableReachableStates:
         cmd+= ['-df']
-    
+
     cmd+= [FnameSMV]
-    
+
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
@@ -343,10 +344,10 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
 
     See :ref:`check_primes_with_acceptingstates` for details regarding the returned *AcceptingStates* dictionary.
-    
+
     .. note::
         It is required that *FnameSMV* contains a single CTL formula.
-        
+
     **arguments**:
         * *FnameSMV*: name of smv file
         * *DynamicReorder* (bool): enables dynamic reordering of variables (*-dynamic*)
@@ -354,7 +355,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
 
     **returns**:
         * *Answer, AcceptingStates* (bool, dict): result of query with accepting states
-        
+
     **example**::
 
         >>> answer, accepting = check_smv_with_acceptingstates("mapk.smv")
@@ -365,7 +366,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
 
-    if DynamicReorder:		
+    if DynamicReorder:
         cmd+= ['-dynamic']
     if ConeOfInfluence:
         cmd+= ['-coi']
@@ -374,9 +375,9 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
 
     # enforced to ensure accepting states are correct
     cmd+= ['-df']
-    
+
     cmd+= [FnameSMV]
-    
+
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
@@ -396,7 +397,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
     .. note::
         The :ref:`installation_nusmv` language is case-sensitive and does not allow single character names for variables.
-    
+
     In addition to variables that encode the activities of the components,
     auxillary variables are defined and available for use in CTL or LTL formulas,
     see :ref:`Sec. 3.4 <sec:model_checking>` for details:
@@ -405,7 +406,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     the Boolean *name_STEADY* which is the value for whether the variable *name* is steady in a state,
     the integer *SUCCESSORS* which is the number of successors excluding itself (i.e., the number of variables that are changing in a state), and
     the Boolean *STEADYSTATE* which is the value for whether the current state is a steady state (which is equivalent to *SUCCESSORS=0*).
-    
+
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, either *"synchronous"*, *"asynchronous"* or *"mixed"*
@@ -472,7 +473,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
         print('NuSMV keywords are not allowed as variable names.')
         print('The network contains the following variables names that are also NuSMVkeywords: %s'%str(keywords))
         raise Exception
-              
+
 
     names = sorted(Primes)
     lines = ['-- created on %s using PyBoolNet'%datetime.date.today().strftime('%d. %b. %Y'),
@@ -485,18 +486,18 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     lines+= ['\t%s: boolean;'%name for name in names]
 
     lines+= ['']
-    lines+= ['DEFINE']   
+    lines+= ['DEFINE']
     for name in names:
-        
+
         if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
             expression = 'TRUE'
-            
+
         elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
             expression = 'FALSE'
-            
+
         else:
             expression = ' | '.join(PyBoolNet.QueryPatterns.subspace2proposition(Primes, x) for x in Primes[name][1])
-            
+
         lines+= ['\t%s_IMAGE := %s;'%(name, expression)]
 
     lines+= ['']
@@ -505,7 +506,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     x = ', '.join(['(!{n}_STEADY)'.format(n=name) for name in names])
     lines+= ['\tSUCCESSORS := count(%s);'%x]
     lines+= ['\tSTEADYSTATE := (SUCCESSORS = 0);']
-        
+
     lines+= ['']
     lines+= ['ASSIGN']
     if Update=='synchronous':
@@ -526,13 +527,13 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
     if FnameSMV==None:
         return '\n'.join(lines)
-    
+
     with open(FnameSMV, 'w') as f:
         f.write('\n'.join(lines))
 
     if not Silent:
         print('created %s'%FnameSMV)
-        
+
 
 def output2counterexample( NuSMVOutput ):
     """
@@ -551,7 +552,7 @@ def output2counterexample( NuSMVOutput ):
     assert(NuSMVOutput.count('Trace Type: Counterexample')==1)
     counterexample = []
     last_state = False
-    
+
     blocks = NuSMVOutput.split('Trace Type: Counterexample')[1]
 
     blocks = blocks.split('-> ')
@@ -566,12 +567,12 @@ def output2counterexample( NuSMVOutput ):
         lines = [x for x in lines if x!=[]]
 
         if lines:
-            
+
             if last_state:
                 state = last_state.copy()
             else:
                 state = {}
-                
+
             for line in lines:
                 name, value = line.split(' = ')
                 assert(value in ['TRUE','FALSE'])
@@ -579,7 +580,7 @@ def output2counterexample( NuSMVOutput ):
 
             counterexample.append( state )
             last_state = state
-    
+
     return tuple(counterexample)
 
 
@@ -597,7 +598,7 @@ def _read_formula(Line):
     """
     Helper function for output2acceptingstates(..)
     """
-    
+
     formula = str(Line.split(":")[1].strip())
 
     return formula
@@ -606,7 +607,7 @@ def _read_formula(Line):
 
     if formula in ["FALSE","TRUE"]:
         return formula
-        
+
     formula = PyBoolNet.BooleanExpressions.minimize_espresso(formula)
     if formula == "0":
         return "FALSE"
@@ -615,7 +616,7 @@ def _read_formula(Line):
 
     return formula
 
-    
+
 
 def output2acceptingstates(NuSMVOutput):
     """
@@ -648,34 +649,34 @@ def output2acceptingstates(NuSMVOutput):
     initial and accepting states: !((E2F1_medium) | !CHEK1_2_medium)
     number of initial and accepting states: 2147483648
     """
-    
+
     accepting = {}
     for line in NuSMVOutput.split("\n"):
         if line.startswith("initial states:"):
             accepting["INIT"] = _read_formula(line)
-            
+
         elif line.startswith("number of initial states:"):
             accepting["INIT_SIZE"] = _read_number(line)
-                
+
         elif line.startswith("accepting states:"):
             accepting["ACCEPTING"] = _read_formula(line)
-            
+
         elif line.startswith("number of accepting states:"):
             accepting["ACCEPTING_SIZE"] = _read_number(line)
-            
+
         elif line.startswith("initial and accepting states:"):
             accepting["INITACCEPTING"] = _read_formula(line)
-            
+
         elif line.startswith("number of initial and accepting states:"):
             accepting["INITACCEPTING_SIZE"] = _read_number(line)
-            
+
     return accepting
 
 
 def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, AcceptingStates):
     """
     The part of the code of "check_smv" and "check_primes" that is identical in both functions.
-    
+
     **arguments**:
         * *Command* (list): list of commands that was used to call subprocess.Popen.
         It is only used for creating an error message if the process does not finish correctly.
@@ -689,7 +690,7 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
         * *CounterExample* (list): a counterexample if NuSMV returns "is false" and DisableCounterExamples==False.
         * *AcceptingStates* (dict): information about the accepting states, if *DisableAcceptingStates==False*.
     """
-    
+
     if Process.returncode == 0:
 
         if Output.count('specification')>1:
@@ -705,7 +706,7 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
             print(Error)
             print('NuSMV output does not respond with "is false" or "is true".')
             raise Exception
-            
+
     else:
         print(Output)
         print(Error)
@@ -717,17 +718,13 @@ def nusmv_handle(Command, Process, Output, Error, DisableCounterExamples, Accept
         return answer
 
     result = [answer]
-    
+
     if not DisableCounterExamples:
         counterex = output2counterexample(NuSMVOutput=Output)
         result.append(counterex)
 
     if AcceptingStates:
-        accepting = output2acceptingstates(NuSMVOutput=Output)            
+        accepting = output2acceptingstates(NuSMVOutput=Output)
         result.append(accepting)
 
     return tuple(result)
-
-
-
-    

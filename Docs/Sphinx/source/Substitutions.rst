@@ -3,7 +3,7 @@
 
 
 
-.. |software| replace:: *PyBoolNet 2.2.0*
+.. |software| replace:: *PyBoolNet 2.2.1*
 .. |myemail| replace:: *hannes.klarner@fu-berlin.de*
 
 .. _BNetToPrime:  https://github.com/xstreck1/BNetToPrime
@@ -27,5 +27,3 @@
 .. _matplotlib:   http://matplotlib.org
 
 .. _networkx.has_path: https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html
-
-  

@@ -18,10 +18,10 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
 # adding test files
 for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
     root = root.replace('PyBoolNet/Tests','Tests')
-    package_data_files.extend([os.path.join(root,x) for x in filenames])    
+    package_data_files.extend([os.path.join(root,x) for x in filenames])
 
 setup(name          = "PyBoolNet",
-      version       = "2.2.0",
+      version       = "2.2.1",
       description   = "Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
       author        = "Hannes Klarner",
       author_email  = "hannes.klarner@fu-berlin.de",
@@ -32,7 +32,7 @@ setup(name          = "PyBoolNet",
                        "PyBoolNet.Repository",
                        ],
       package_data  = {'PyBoolNet': package_data_files},
-      
+
       classifiers   = [
           "Programming Language :: Python",
           "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
@@ -43,31 +43,3 @@ setup(name          = "PyBoolNet",
           ],
       requires=['networkx (>=1.10)'],
       )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
