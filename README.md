@@ -12,32 +12,8 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
  * heike.siebert@fu-berlin.de
 
 
-#### release notes for version 2.2.0 (November 2017)
-- bugfix for linux dependencies, see [Issue17](https://github.com/hklarner/PyBoolNet/issues/17)
-- removed support for linux 32 bit
-- added module `BooleanExpressions` with `minimize_espresso(..)` (work by Sarah Nee)
-- bugfix for `Utility.Diagraphs.subgraphs2tree(..)` that affected `StateTransitionGraphs.add_style_subspaces(..)`
-- added functions `weak_basins(..)` `strong_basins(..)` with bar plot and pie chart visualizations to `Basins`. Plotting requires [matplotlib](https://matplotlib.org/).
-- added `add_style_anonymous(..)` to `InteractionGraphs` which hides node labels
-- added some toy networks to the `Repository`
-- renamed module `TrapSpaces` to `AspSolver`
-- renamed module `AttractorBasins` to `Basins`
-- added energy function `energy(..)` to `StateTransitionGraphs`
-- added pretty print function `pprint(..)` to `PyBoolNet`
-- bugfix in NuSMV-a for dynamic reordering (currently compiled only in 32bit)
-- bugfix in NuSMV-a for large numbers (currently compiled only in 32bit)
-- removed parameter `Aggregate` from `TrapSpaces.trap_spaces(..)` and similar functions as it is rarely useful
-- added warning for accepting states bug (see issue [#14](http://github.com/hklarner/PyBoolNet/issues/14))
-- added T-Helper cell plasticity model of Wassim Abou-Jaoudé
-- improved formatting of `primes2bnet(..)` and `primes2mindnf(..)`
-- added parameter `Representation` and option `percolated` to parameter `Type` of `trap_spaces(..)`
-- implemented tempfile for functions `check_primes(..)`, `check_primes_with_counterexample(..)` and `check_primes_with_acceptingstates(..)` (bugfix for windows)
-- bugfix in `subspace2proposition`
-- renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
+#### release notes for hotfix version 2.2.1 (January 2018)
+- **bugfix: removed slowdown** that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
+
 
 For older release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
-
-
-
-
-
