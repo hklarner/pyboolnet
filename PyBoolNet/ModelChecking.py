@@ -97,7 +97,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
 	return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
-def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=False, Silent=True):
+def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=True, Silent=True):
 	"""
 	Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
 	the *InitialStates* and *Update*.
@@ -247,7 +247,7 @@ def check_primes_with_acceptingstates(Primes, Update, InitialStates, CTLSpec, Dy
 	return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
 
-def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeOfInfluence=True):
+def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True):
 	"""
 	Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
 	The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
@@ -292,7 +292,7 @@ def check_smv(FnameSMV, DynamicReorder=True, DisableReachableStates=False, ConeO
 	return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
-def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachableStates=False):
+def check_smv_with_counterexample(FnameSMV, DynamicReorder=True, DisableReachableStates=True):
 	"""
 	Calls :ref:`installation_nusmv` with the query defined in the *smv* file *FnameSMV*.
 	The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
