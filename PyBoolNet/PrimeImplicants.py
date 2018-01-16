@@ -28,7 +28,7 @@ def copy(Primes):
 
         >>> primes_new = copy(primes)
     """
-    
+
     primes_new = {}
     for name in Primes:
         primes_new[name]=[[],[]]
@@ -39,7 +39,7 @@ def copy(Primes):
 
     return primes_new
 
-    
+
 def are_equal(Primes1, Primes2):
     """
     Tests whether *Primes1* and *Primes2* are equal.
@@ -56,20 +56,20 @@ def are_equal(Primes1, Primes2):
         >>> are_equal(primes1, primes2)
         True
     """
-    
+
     if len(Primes1)!=len(Primes2):
         return False
-    
+
     for name in Primes1:
         if not name in Primes2:
             return False
-        
+
         for value in [0,1]:
             p1 = sorted([sorted(d.items()) for d in Primes1[name][value]])
             p2 = sorted([sorted(d.items()) for d in Primes2[name][value]])
             if not p1==p2:
                 return False
-            
+
     return True
 
 
@@ -99,7 +99,7 @@ def find_inputs(Primes):
 
 def find_outputs(Primes):
     """
-    Finds all outputs in the network defined by *Primes*. 
+    Finds all outputs in the network defined by *Primes*.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -144,7 +144,71 @@ def find_constants(Primes):
 
     return constants
 
-            
+
+def find_vanham_variables(Primes):
+    """
+    A ternary variables x is usually encoded via two Boolean variables x_medium and x_high.
+    This functions returns all names x if there are corresponding variables x_medium and x_high.
+    This function is used for example by :ref:`ModelChecking.primes2smv <primes2smv>` to add
+    INIT constraints to the smv file that forbid all "meaningless states" in which x_medium and x_high
+    are active simultaneously.
+
+    **arguments**:
+        * *Primes*: prime implicants
+
+    **returns**:
+        * *Names* (list): the names of ternary variables
+
+    **example**::
+
+        >>> find_vanham_variables(primes)
+        ['E2F1', 'ATM']
+    """
+
+    names = [x[:-7] for x in Primes if x[-7:]=="_medium"]
+    names = [x for x in names if x+"_high" in Primes]
+
+    return sorted(names)
+
+
+# todo: add parameter VanHam=True
+VAN_HAM_EXTENSIONS = ["_medium", "_high"]
+def size_state_space(Primes, Type):
+    """
+    This function computes the number of states in states space of *Primes*.
+    Detects if there are pairs of variables x_medium and x_high that represent ternary variables x.
+    *Type* specifies whether the size is to be considered by input combination or in total.
+
+    If Type == "total" then size = 2**(binary) * 3**(ternary).
+    If Type == "per_input_combination" then size = 2**(binary - inputs) * 3**(ternary).
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Type* (str): either "total" or "per_input_combination"
+
+    **returns**:
+        * *Size* (int): number of states
+
+    **example**::
+
+        >>> size_state_space(primes, "total")
+        256
+    """
+
+    assert(Type in ["total", "per_input_combination"])
+
+    ternary = len(PyBoolNet.PrimeImplicants.find_vanham_variables(Primes))
+    binary = len(Primes) - 2*ternary
+
+    if Type=="total":
+        return 2**binary * 3**ternary
+
+    else:
+        inputs = len(PyBoolNet.PrimeImplicants.find_inputs(Primes))
+        per_combination = binary - inputs
+        return 2**per_combination * 3**ternary
+
+
 def create_constants(Primes, Constants, Copy=False):
     """
     Creates a constant in *Primes* for every name, value pair in *Constants*.
@@ -210,7 +274,7 @@ def create_inputs(Primes, Names, Copy=False):
 
     if Copy:
         Primes = Copy(Primes)
-    
+
     for name in Names:
         Primes[name][0]=[{name:1}]
         Primes[name][1]=[{name:0}]
@@ -218,7 +282,7 @@ def create_inputs(Primes, Names, Copy=False):
     if Copy:
         return Primes
 
-    
+
 def create_blinkers(Primes, Names, Copy=False):
     """
     Creates a blinker for every member of *Names*.
@@ -235,7 +299,7 @@ def create_blinkers(Primes, Names, Copy=False):
         Since input combinations define trap spaces, see e.g. :ref:`Klarner2015(b) <klarner2015approx>` Sec. 5.1,
         all of which contain at least one minimal trap space,
         it follows that the network has at least 2^20 minimal trap spaces - too many to enumerate.
-        To find out how non-input variables stabilize in minimal trap spaces turn the inputs into blinkers:: 
+        To find out how non-input variables stabilize in minimal trap spaces turn the inputs into blinkers::
 
             >>> inputs = find_inputs(primes)
             >>> create_blinkers(primes, inputs)
@@ -258,7 +322,7 @@ def create_blinkers(Primes, Names, Copy=False):
 
     if Copy:
         Primes = copy(Primes)
-        
+
     for name in Names:
         Primes[name][0]=[{name:1}]
         Primes[name][1]=[{name:0}]
@@ -296,7 +360,7 @@ def create_variables(Primes, UpdateFunctions, Copy=False):
 
     if Copy:
         Primes = copy(Primes)
-        
+
     newprimes = {}
     dependencies = set([])
     names = set(Primes)
@@ -322,7 +386,7 @@ def create_variables(Primes, UpdateFunctions, Copy=False):
 
     if Copy:
         return Primes
-    
+
 
 def create_disjoint_union(Primes1, Primes2):
     """
@@ -357,6 +421,8 @@ def create_disjoint_union(Primes1, Primes2):
     return newprimes
 
 
+# todo: refactor: create_subnetwork_by_successor_invariance
+# add function is_successor_invariant_set(Primes, Names)
 def remove_variables(Primes, Names, Copy=False):
     """
     Removes all variables contained in *Names* from *Primes*.
@@ -396,6 +462,8 @@ def remove_variables(Primes, Names, Copy=False):
         return Primes
 
 
+# todo: refactor: create_subnetwork_predecessor_invariance
+# add function is_predecessor_invariant_set(Primes, Names)
 def remove_all_variables_except(Primes, Names, Copy=False):
     """
     Removes all variables except those in *Names* from *Primes*.
@@ -427,7 +495,7 @@ def remove_all_variables_except(Primes, Names, Copy=False):
         print(" error: can not remove variables that are not closed under predecessor relation.")
         print("        these variables have predecessors outside the given set: %s"%hit)
         raise Exception
-        
+
     else:
         for name in list(Primes):
             if not name in Names:
@@ -435,7 +503,7 @@ def remove_all_variables_except(Primes, Names, Copy=False):
 
     if Copy:
         return Primes
-    
+
 
 def rename_variable(Primes, OldName, NewName, Copy=False):
     """
@@ -453,7 +521,7 @@ def rename_variable(Primes, OldName, NewName, Copy=False):
         * *None* else
 
     **example**::
-        
+
         >>> names = ["PKC","GADD45","ELK1","FOS"]
         >>> remove_all_variables_except(primes, names)
     """
@@ -475,16 +543,17 @@ def rename_variable(Primes, OldName, NewName, Copy=False):
                 for prime in Primes[name][value]:
                     if OldName in prime:
                         prime[NewName] = prime.pop(OldName)
-                
+
     if Copy:
         return Primes
-    
 
+
+# todo: refactor: _percolation_step(..)
 def _substitute(Primes, Name, Constants):
     """
     replaces the primes of *Name* by the ones obtained from substituting *Constants*.
     """
-        
+
     for value in [0,1]:
         newprimes = []
         for prime in Primes[Name][value]:
@@ -495,7 +564,7 @@ def _substitute(Primes, Name, Constants):
                         consistent.append(k)
                     else:
                         inconsistent.append(k)
-                    
+
             if inconsistent:
                 continue
             else:
@@ -505,15 +574,58 @@ def _substitute(Primes, Name, Constants):
                     break
                 elif prime not in newprimes:
                     newprimes.append(prime)
-                    
-        Primes[Name][value] = newprimes
-      
 
+        Primes[Name][value] = newprimes
+
+# todo: refactor: substitute(..)
+def substitute_and_remove(Primes, Names, Copy=False):
+    """
+    Substitutes the values of all *Names* to its successors and then removes them.
+    Checks that *Names* are a subset of constants.
+    Note that the resulting primes may contain new constants.
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Names* (list): variables to be substituted and removed
+        * *Copy* (bool): change *Primes* in place or copy and return
+
+    **returns**:
+        if *Copy==True*:
+            * *NewPrimes*
+        else:
+            * *None* else
+
+    **example**::
+
+        >>> substitute_and_remove(primes)
+    """
+
+    if Copy:
+        Primes = copy(Primes)
+
+    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    constants = find_constants(Primes)
+    for name in Names:
+        if name not in constants:
+            constants.pop(name)
+
+    for name in PyBoolNet.Utility.DiGraphs.successors(igraph, constants):
+        _substitute(Primes, name, constants)
+
+    for name in constants: Primes.pop(name)
+
+    print("removed " + ", ".join(constants))
+
+    if Copy:
+        return Primes
+
+
+# todo:refactor: _handle_percolation(..)
 def _percolation(Primes, RemoveConstants):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Use *RemoveConstants* to determine whether constants should be kept in the remaining network or whether you want to remove them.
-    
+
     **arguments**:
         * *Primes*: prime implicants
         * *RemoveConstants* (bool): whether constants should be kept
@@ -528,7 +640,7 @@ def _percolation(Primes, RemoveConstants):
         >>> constants
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
-    
+
     igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     constants  = find_constants(Primes)
     fringe = PyBoolNet.Utility.DiGraphs.successors(igraph, constants)
@@ -548,7 +660,7 @@ def _percolation(Primes, RemoveConstants):
 
     return constants
 
-    
+
 def percolate_and_keep_constants(Primes):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
@@ -569,7 +681,7 @@ def percolate_and_keep_constants(Primes):
 
     return _percolation( Primes, RemoveConstants=False )
 
-    
+
 def percolate_and_remove_constants(Primes):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
@@ -589,34 +701,44 @@ def percolate_and_remove_constants(Primes):
     """
 
     return _percolation(Primes, RemoveConstants=True)
-    
 
-def input_combinations(Primes):
+
+def input_combinations(Primes, Format="dict"):
     """
     A generator for all possible input combinations of *Primes*.
     Returns the empty dictionary if there are no inputs.
 
     **arguments**:
         * *Primes*: prime implicants
+        * *Format* (str): format of returned subspaces, "str" or "dict"
 
     **returns**:
-        * *Activities* (dict): generates all input combinations in dict representation
+        * *Subspaces* (str / dict): input combination in desired format
 
     **example**::
 
-        >>> len(find_inputs(primes))
-        >>> for x in input_combinations(primes):
-        ...     print(STGs.subspace2str(primes,x))
-        00
-        01
-        10
-        11
+        >>> for x in input_combinations(primes, "str"): print(x)
+        0--0--
+        0--1--
+        1--0--
+        1--1--
     """
-    
+
+    assert(Format in ["str", "dict"])
+
     inputs = find_inputs(Primes)
+
     if inputs:
-        for x in itertools.product(*len(inputs)*[[0,1]]):
-            yield dict(zip(inputs,x))
+        if Format=="dict":
+            for x in itertools.product(*len(inputs)*[[0,1]]):
+                yield dict(zip(inputs,x))
+
+        else:
+            for x in itertools.product(*len(inputs)*[[0,1]]):
+                x = dict(zip(inputs,x))
+                x = PyBoolNet.StateTransitionGraphs.subspace2str(primes,x)
+                yield x
+
     else:
         yield {}
 
@@ -624,11 +746,11 @@ def input_combinations(Primes):
 
 def active_primes(Primes, State):
     """
-    returns all primes that are active in, i.e., consistent with, *State*.
+    returns all primes that are active in, i.e., consistent with *State*.
     """
 
     active_primes = dict((name,[[],[]]) for name in Primes)
-    
+
     for name in Primes:
         for v in [0,1]:
             for p in Primes[name][v]:
@@ -637,11 +759,3 @@ def active_primes(Primes, State):
                         active_primes[name][v].append(dict(p))
 
     return active_primes
-
-
-
-
-
-    
-
-                
