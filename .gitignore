@@ -10,14 +10,7 @@ Docs/Sphinx/merge_figure17.dvi
 Docs/Sphinx/merge_figure17.log
 Docs/Sphinx/merge_figure17.pdf
 
-Docs/Sphinx/source/Tutorials_old.rst
-
-Lab/**
-
 Releases/
 dist/
 
 MANIFEST
-
-Macros/*.pdf
-Macros/*.dot
