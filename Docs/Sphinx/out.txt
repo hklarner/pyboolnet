@@ -1,0 +1,1979 @@
+sphinx-build -b latex -d build/doctrees   source build/latex
+Running Sphinx v1.2.2
+loading pickled environment... done
+building [latex]: all documents
+updating environment: 0 added, 2 changed, 0 removed
+reading sources... [ 50%] Basins
+reading sources... [100%] index
+
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+processing PyBoolNet.tex... index Installation Manual Reference FileExchange PrimeImplicants InteractionGraphs StateTransitionGraphs AttractorDetection Basins ModelChecking QueryPatterns BooleanExpressions AspSolver QuineMcCluskey Bibliography Development 
+resolving references...
+writing... done
+copying images... figure19.pdf figure01.pdf figure10.pdf figure18.pdf figure26.pdf figure23.pdf figure05.pdf figure09.pdf figure20.pdf figure27.pdf figure04.pdf figure02.pdf figure21.pdf figure25.pdf figure12.pdf figure03.pdf figure22.pdf figure13.pdf figure16.pdf figure15.pdf figure24.pdf figure17.pdf figure07.pdf figure08.pdf figure11.pdf figure14.pdf
+copying TeX support files...
+done
+build succeeded, 9 warnings.
+Running LaTeX files through pdflatex...
+make -C build/latex all-pdf
+make[1]: Entering directory `/home/klarner/PyBoolNet/Docs/Sphinx/build/latex'
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/plain/misc/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>> [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+[11] [12] [13] [14] <figure01.pdf, id=1112, 224.84pt x 188.705pt>
+<use figure01.pdf> <use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1130, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 7486) in paragraph at lines 1121--1126
+\T1/ptm/m/it/10 PyBoolNet 2.1.3x \T1/ptm/m/n/10 has pre-de-fined styles for add
+ing at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1144, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf> [17 <./figure03.pdf>]
+<figure04.pdf, id=1161, 500.87125pt x 486.81876pt> <use figure04.pdf>
+<use figure04.pdf> <figure05.pdf, id=1171, 351.3125pt x 460.72125pt>
+<use figure05.pdf> <use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1194, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1211, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1232, 425.59pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1261, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf> [22 <./figure10.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 1401--1406
+
+<figure11.pdf, id=1277, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23] <figure12.pdf, id=1285, 281.05pt x 343.2825pt>
+<use figure12.pdf> <use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1304, 523.9575pt x 390.45876pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1308, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1325, 454.69875pt x 468.75125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1328, 458.71375pt x 566.115pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1388, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1398, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf> <./figure18.pdf
+
+pdfTeX warning: pdflatex (file ./figure18.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [33] [34] <figure19.pdf, id=1459, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+<figure20.pdf, id=1476, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1477, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [36] [37 <./figure20.pdf> <./figure21.pdf
+
+
+pdfTeX warning: pdflatex (file ./figure21.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [38] <figure22.pdf, id=1511, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [39] [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1550, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> <figure24.pdf, id=1553, 497.86pt x 508.90125pt>
+<use figure24.pdf> <use figure24.pdf> [43 <./figure23.pdf>] [44 <./figure24.pdf
+>] <figure25.pdf, id=1582, 455.7025pt x 426.59375pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>]
+<figure26.pdf, id=1608, 670.505pt x 352.31625pt> <use figure26.pdf>
+<use figure26.pdf> [46] [47 <./figure26.pdf>]
+<figure27.pdf, id=1648, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48] [49 <./figure27.pdf>] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+[81] [82]
+Underfull \hbox (badness 7944) in paragraph at lines 5969--5969
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 At-trac-tors=None\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Ad-di-tiona
+lEdge-Data=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 FnameIm-
+[83] [84]
+Underfull \hbox (badness 5189) in paragraph at lines 6159--6159
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[85] [86]
+Underfull \hbox (badness 10000) in paragraph at lines 6297--6297
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[87] [88] [89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6720--6724
+
+[92] [93] [94] [95] [96]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 7188--7192
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[97] [98]
+Chapter 5.
+[99] (./PyBoolNet.ind [100]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+[]\T1/ptm/m/n/10 A_is_subspace_of_B() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--7
+[]\T1/ptm/m/n/10 activities2animation() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+[]\T1/ptm/m/n/10 add_style_activities() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--9
+[]\T1/ptm/m/n/10 add_style_anonymous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+[]\T1/ptm/m/n/10 add_style_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+[]\T1/ptm/m/n/10 add_style_inputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/ptm/m/n/10 add_style_interactionsigns() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+[]\T1/ptm/m/n/10 add_style_mintrapspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+[]\T1/ptm/m/n/10 add_style_outputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/ptm/m/n/10 add_style_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\T1/ptm/m/n/10 add_style_tendencies() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/ptm/m/n/10 AGEF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+[]\T1/ptm/m/n/10 best_first_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 5245) in paragraph at lines 35--36
+[]\T1/ptm/m/n/10 check_primes_with_acceptingstates() (in mod-ule Py-
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+[]\T1/ptm/m/n/10 completeness() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+[]\T1/ptm/m/n/10 compute_attractors_tarjan() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\T1/ptm/m/n/10 create_attractor_report() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+[]\T1/ptm/m/n/10 create_blinkers() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 create_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\T1/ptm/m/n/10 create_disjoint_union() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+[]\T1/ptm/m/n/10 create_variables() (in mod-ule Py-Bool-
+[101]
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+[]\T1/ptm/m/n/10 EF_nested_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+[]\T1/ptm/m/n/10 EF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+[]\T1/ptm/m/n/10 EF_unsteady_states() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+[]\T1/ptm/m/n/10 find_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+[]\T1/ptm/m/n/10 functions2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+[]\T1/ptm/m/n/10 functions2primes() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
+[]\T1/ptm/m/n/10 hamming_distance() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]\T1/ptm/m/n/10 igraph2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/ptm/m/n/10 input_combinations() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/ptm/m/n/10 list_states_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[]\T1/ptm/m/n/10 minimize_espresso() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 7722) in paragraph at lines 101--102
+[]\T1/ptm/m/n/10 percolate_and_keep_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+[]\T1/ptm/m/n/10 primes2igraph() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[]\T1/ptm/m/n/10 primes2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+[]\T1/ptm/m/n/10 primes2stg() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+[]\T1/ptm/m/n/10 random_state() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+[]\T1/ptm/m/n/10 random_successor_mixed() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+[]\T1/ptm/m/n/10 random_walk() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]\T1/ptm/m/n/10 remove_all_variables_except() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]\T1/ptm/m/n/10 remove_variables() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]\T1/ptm/m/n/10 rename_variable() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\T1/ptm/m/n/10 state2dict() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\T1/ptm/m/n/10 state_is_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+[]\T1/ptm/m/n/10 steady_states_projected() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
+[]\T1/ptm/m/n/10 stg2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
+[]\T1/ptm/m/n/10 subspace2dict() (in mod-ule Py-Bool-
+[102]
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]\T1/ptm/m/n/10 subspace2proposition() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+[]\T1/ptm/m/n/10 subspace2str() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]\T1/ptm/m/n/10 successor_synchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]\T1/ptm/m/n/10 successors_asynchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+[]\T1/ptm/m/n/10 trap_spaces_bounded() (in mod-ule Py-Bool-
+[103]) (./PyBoolNet.aux) )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/
+courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on PyBoolNet.pdf (109 pages, 556791 bytes).
+Transcript written on PyBoolNet.log.
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/plain/misc/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>> [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+[11] [12] [13] [14] <figure01.pdf, id=1112, 224.84pt x 188.705pt>
+<use figure01.pdf> <use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1130, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 7486) in paragraph at lines 1121--1126
+\T1/ptm/m/it/10 PyBoolNet 2.1.3x \T1/ptm/m/n/10 has pre-de-fined styles for add
+ing at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1144, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf> [17 <./figure03.pdf>]
+<figure04.pdf, id=1161, 500.87125pt x 486.81876pt> <use figure04.pdf>
+<use figure04.pdf> <figure05.pdf, id=1171, 351.3125pt x 460.72125pt>
+<use figure05.pdf> <use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1194, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1211, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1232, 425.59pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1261, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf> [22 <./figure10.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 1401--1406
+
+<figure11.pdf, id=1277, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23] <figure12.pdf, id=1285, 281.05pt x 343.2825pt>
+<use figure12.pdf> <use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1304, 523.9575pt x 390.45876pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1308, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1325, 454.69875pt x 468.75125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1328, 458.71375pt x 566.115pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1388, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1398, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf> <./figure18.pdf
+
+pdfTeX warning: pdflatex (file ./figure18.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [33] [34] <figure19.pdf, id=1459, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+<figure20.pdf, id=1476, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1477, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [36] [37 <./figure20.pdf> <./figure21.pdf
+
+
+pdfTeX warning: pdflatex (file ./figure21.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [38] <figure22.pdf, id=1511, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [39] [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1550, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> <figure24.pdf, id=1553, 497.86pt x 508.90125pt>
+<use figure24.pdf> <use figure24.pdf> [43 <./figure23.pdf>] [44 <./figure24.pdf
+>] <figure25.pdf, id=1582, 455.7025pt x 426.59375pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>]
+<figure26.pdf, id=1608, 670.505pt x 352.31625pt> <use figure26.pdf>
+<use figure26.pdf> [46] [47 <./figure26.pdf>]
+<figure27.pdf, id=1648, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48] [49 <./figure27.pdf>] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+[81] [82]
+Underfull \hbox (badness 7944) in paragraph at lines 5969--5969
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 At-trac-tors=None\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Ad-di-tiona
+lEdge-Data=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 FnameIm-
+[83] [84]
+Underfull \hbox (badness 5189) in paragraph at lines 6159--6159
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[85] [86]
+Underfull \hbox (badness 10000) in paragraph at lines 6297--6297
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[87] [88] [89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6720--6724
+
+[92] [93] [94] [95] [96]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 7188--7192
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[97] [98]
+Chapter 5.
+[99] (./PyBoolNet.ind [100]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+[]\T1/ptm/m/n/10 A_is_subspace_of_B() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--7
+[]\T1/ptm/m/n/10 activities2animation() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+[]\T1/ptm/m/n/10 add_style_activities() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--9
+[]\T1/ptm/m/n/10 add_style_anonymous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+[]\T1/ptm/m/n/10 add_style_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+[]\T1/ptm/m/n/10 add_style_inputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/ptm/m/n/10 add_style_interactionsigns() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+[]\T1/ptm/m/n/10 add_style_mintrapspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+[]\T1/ptm/m/n/10 add_style_outputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/ptm/m/n/10 add_style_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\T1/ptm/m/n/10 add_style_tendencies() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/ptm/m/n/10 AGEF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+[]\T1/ptm/m/n/10 best_first_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 5245) in paragraph at lines 35--36
+[]\T1/ptm/m/n/10 check_primes_with_acceptingstates() (in mod-ule Py-
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+[]\T1/ptm/m/n/10 completeness() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+[]\T1/ptm/m/n/10 compute_attractors_tarjan() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\T1/ptm/m/n/10 create_attractor_report() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+[]\T1/ptm/m/n/10 create_blinkers() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 create_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\T1/ptm/m/n/10 create_disjoint_union() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+[]\T1/ptm/m/n/10 create_variables() (in mod-ule Py-Bool-
+[101]
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+[]\T1/ptm/m/n/10 EF_nested_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+[]\T1/ptm/m/n/10 EF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+[]\T1/ptm/m/n/10 EF_unsteady_states() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+[]\T1/ptm/m/n/10 find_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+[]\T1/ptm/m/n/10 functions2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+[]\T1/ptm/m/n/10 functions2primes() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
+[]\T1/ptm/m/n/10 hamming_distance() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]\T1/ptm/m/n/10 igraph2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/ptm/m/n/10 input_combinations() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/ptm/m/n/10 list_states_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[]\T1/ptm/m/n/10 minimize_espresso() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 7722) in paragraph at lines 101--102
+[]\T1/ptm/m/n/10 percolate_and_keep_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+[]\T1/ptm/m/n/10 primes2igraph() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[]\T1/ptm/m/n/10 primes2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+[]\T1/ptm/m/n/10 primes2stg() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+[]\T1/ptm/m/n/10 random_state() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+[]\T1/ptm/m/n/10 random_successor_mixed() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+[]\T1/ptm/m/n/10 random_walk() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]\T1/ptm/m/n/10 remove_all_variables_except() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]\T1/ptm/m/n/10 remove_variables() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]\T1/ptm/m/n/10 rename_variable() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\T1/ptm/m/n/10 state2dict() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\T1/ptm/m/n/10 state_is_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+[]\T1/ptm/m/n/10 steady_states_projected() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
+[]\T1/ptm/m/n/10 stg2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
+[]\T1/ptm/m/n/10 subspace2dict() (in mod-ule Py-Bool-
+[102]
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]\T1/ptm/m/n/10 subspace2proposition() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+[]\T1/ptm/m/n/10 subspace2str() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]\T1/ptm/m/n/10 successor_synchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]\T1/ptm/m/n/10 successors_asynchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+[]\T1/ptm/m/n/10 trap_spaces_bounded() (in mod-ule Py-Bool-
+[103]) (./PyBoolNet.aux) )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/
+courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on PyBoolNet.pdf (109 pages, 556791 bytes).
+Transcript written on PyBoolNet.log.
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/plain/misc/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>> [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+[11] [12] [13] [14] <figure01.pdf, id=1112, 224.84pt x 188.705pt>
+<use figure01.pdf> <use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1130, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 7486) in paragraph at lines 1121--1126
+\T1/ptm/m/it/10 PyBoolNet 2.1.3x \T1/ptm/m/n/10 has pre-de-fined styles for add
+ing at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1144, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf> [17 <./figure03.pdf>]
+<figure04.pdf, id=1161, 500.87125pt x 486.81876pt> <use figure04.pdf>
+<use figure04.pdf> <figure05.pdf, id=1171, 351.3125pt x 460.72125pt>
+<use figure05.pdf> <use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1194, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1211, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1232, 425.59pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1261, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf> [22 <./figure10.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 1401--1406
+
+<figure11.pdf, id=1277, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23] <figure12.pdf, id=1285, 281.05pt x 343.2825pt>
+<use figure12.pdf> <use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1304, 523.9575pt x 390.45876pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1308, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1325, 454.69875pt x 468.75125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1328, 458.71375pt x 566.115pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1388, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1398, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf> <./figure18.pdf
+
+pdfTeX warning: pdflatex (file ./figure18.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [33] [34] <figure19.pdf, id=1459, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+<figure20.pdf, id=1476, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1477, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [36] [37 <./figure20.pdf> <./figure21.pdf
+
+
+pdfTeX warning: pdflatex (file ./figure21.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [38] <figure22.pdf, id=1511, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [39] [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1550, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> <figure24.pdf, id=1553, 497.86pt x 508.90125pt>
+<use figure24.pdf> <use figure24.pdf> [43 <./figure23.pdf>] [44 <./figure24.pdf
+>] <figure25.pdf, id=1582, 455.7025pt x 426.59375pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>]
+<figure26.pdf, id=1608, 670.505pt x 352.31625pt> <use figure26.pdf>
+<use figure26.pdf> [46] [47 <./figure26.pdf>]
+<figure27.pdf, id=1648, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48] [49 <./figure27.pdf>] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+[81] [82]
+Underfull \hbox (badness 7944) in paragraph at lines 5969--5969
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 At-trac-tors=None\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Ad-di-tiona
+lEdge-Data=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 FnameIm-
+[83] [84]
+Underfull \hbox (badness 5189) in paragraph at lines 6159--6159
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[85] [86]
+Underfull \hbox (badness 10000) in paragraph at lines 6297--6297
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[87] [88] [89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6720--6724
+
+[92] [93] [94] [95] [96]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 7188--7192
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[97] [98]
+Chapter 5.
+[99] (./PyBoolNet.ind [100]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+[]\T1/ptm/m/n/10 A_is_subspace_of_B() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--7
+[]\T1/ptm/m/n/10 activities2animation() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+[]\T1/ptm/m/n/10 add_style_activities() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--9
+[]\T1/ptm/m/n/10 add_style_anonymous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+[]\T1/ptm/m/n/10 add_style_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+[]\T1/ptm/m/n/10 add_style_inputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/ptm/m/n/10 add_style_interactionsigns() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+[]\T1/ptm/m/n/10 add_style_mintrapspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+[]\T1/ptm/m/n/10 add_style_outputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/ptm/m/n/10 add_style_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\T1/ptm/m/n/10 add_style_tendencies() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/ptm/m/n/10 AGEF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+[]\T1/ptm/m/n/10 best_first_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 5245) in paragraph at lines 35--36
+[]\T1/ptm/m/n/10 check_primes_with_acceptingstates() (in mod-ule Py-
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+[]\T1/ptm/m/n/10 completeness() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+[]\T1/ptm/m/n/10 compute_attractors_tarjan() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\T1/ptm/m/n/10 create_attractor_report() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+[]\T1/ptm/m/n/10 create_blinkers() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 create_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\T1/ptm/m/n/10 create_disjoint_union() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+[]\T1/ptm/m/n/10 create_variables() (in mod-ule Py-Bool-
+[101]
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+[]\T1/ptm/m/n/10 EF_nested_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+[]\T1/ptm/m/n/10 EF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+[]\T1/ptm/m/n/10 EF_unsteady_states() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+[]\T1/ptm/m/n/10 find_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+[]\T1/ptm/m/n/10 functions2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+[]\T1/ptm/m/n/10 functions2primes() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
+[]\T1/ptm/m/n/10 hamming_distance() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]\T1/ptm/m/n/10 igraph2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/ptm/m/n/10 input_combinations() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/ptm/m/n/10 list_states_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[]\T1/ptm/m/n/10 minimize_espresso() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 7722) in paragraph at lines 101--102
+[]\T1/ptm/m/n/10 percolate_and_keep_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+[]\T1/ptm/m/n/10 primes2igraph() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[]\T1/ptm/m/n/10 primes2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+[]\T1/ptm/m/n/10 primes2stg() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+[]\T1/ptm/m/n/10 random_state() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+[]\T1/ptm/m/n/10 random_successor_mixed() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+[]\T1/ptm/m/n/10 random_walk() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]\T1/ptm/m/n/10 remove_all_variables_except() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]\T1/ptm/m/n/10 remove_variables() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]\T1/ptm/m/n/10 rename_variable() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\T1/ptm/m/n/10 state2dict() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\T1/ptm/m/n/10 state_is_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+[]\T1/ptm/m/n/10 steady_states_projected() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
+[]\T1/ptm/m/n/10 stg2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
+[]\T1/ptm/m/n/10 subspace2dict() (in mod-ule Py-Bool-
+[102]
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]\T1/ptm/m/n/10 subspace2proposition() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+[]\T1/ptm/m/n/10 subspace2str() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]\T1/ptm/m/n/10 successor_synchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]\T1/ptm/m/n/10 successors_asynchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+[]\T1/ptm/m/n/10 trap_spaces_bounded() (in mod-ule Py-Bool-
+[103]) (./PyBoolNet.aux) )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/
+courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on PyBoolNet.pdf (109 pages, 556791 bytes).
+Transcript written on PyBoolNet.log.
+makeindex -s python.ist 'PyBoolNet.idx'
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/plain/misc/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>> [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+[11] [12] [13] [14] <figure01.pdf, id=1112, 224.84pt x 188.705pt>
+<use figure01.pdf> <use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1130, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 7486) in paragraph at lines 1121--1126
+\T1/ptm/m/it/10 PyBoolNet 2.1.3x \T1/ptm/m/n/10 has pre-de-fined styles for add
+ing at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1144, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf> [17 <./figure03.pdf>]
+<figure04.pdf, id=1161, 500.87125pt x 486.81876pt> <use figure04.pdf>
+<use figure04.pdf> <figure05.pdf, id=1171, 351.3125pt x 460.72125pt>
+<use figure05.pdf> <use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1194, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1211, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1232, 425.59pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1261, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf> [22 <./figure10.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 1401--1406
+
+<figure11.pdf, id=1277, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23] <figure12.pdf, id=1285, 281.05pt x 343.2825pt>
+<use figure12.pdf> <use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1304, 523.9575pt x 390.45876pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1308, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1325, 454.69875pt x 468.75125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1328, 458.71375pt x 566.115pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1388, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1398, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf> <./figure18.pdf
+
+pdfTeX warning: pdflatex (file ./figure18.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [33] [34] <figure19.pdf, id=1459, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+<figure20.pdf, id=1476, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1477, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [36] [37 <./figure20.pdf> <./figure21.pdf
+
+
+pdfTeX warning: pdflatex (file ./figure21.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [38] <figure22.pdf, id=1511, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [39] [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1550, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> <figure24.pdf, id=1553, 497.86pt x 508.90125pt>
+<use figure24.pdf> <use figure24.pdf> [43 <./figure23.pdf>] [44 <./figure24.pdf
+>] <figure25.pdf, id=1582, 455.7025pt x 426.59375pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>]
+<figure26.pdf, id=1608, 670.505pt x 352.31625pt> <use figure26.pdf>
+<use figure26.pdf> [46] [47 <./figure26.pdf>]
+<figure27.pdf, id=1648, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48] [49 <./figure27.pdf>] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+[81] [82]
+Underfull \hbox (badness 7944) in paragraph at lines 5969--5969
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 At-trac-tors=None\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Ad-di-tiona
+lEdge-Data=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 FnameIm-
+[83] [84]
+Underfull \hbox (badness 5189) in paragraph at lines 6159--6159
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[85] [86]
+Underfull \hbox (badness 10000) in paragraph at lines 6297--6297
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[87] [88] [89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6720--6724
+
+[92] [93] [94] [95] [96]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 7188--7192
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[97] [98]
+Chapter 5.
+[99] (./PyBoolNet.ind [100]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+[]\T1/ptm/m/n/10 A_is_subspace_of_B() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--7
+[]\T1/ptm/m/n/10 activities2animation() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+[]\T1/ptm/m/n/10 add_style_activities() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--9
+[]\T1/ptm/m/n/10 add_style_anonymous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+[]\T1/ptm/m/n/10 add_style_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+[]\T1/ptm/m/n/10 add_style_inputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/ptm/m/n/10 add_style_interactionsigns() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+[]\T1/ptm/m/n/10 add_style_mintrapspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+[]\T1/ptm/m/n/10 add_style_outputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/ptm/m/n/10 add_style_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\T1/ptm/m/n/10 add_style_tendencies() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/ptm/m/n/10 AGEF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+[]\T1/ptm/m/n/10 best_first_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 5245) in paragraph at lines 35--36
+[]\T1/ptm/m/n/10 check_primes_with_acceptingstates() (in mod-ule Py-
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+[]\T1/ptm/m/n/10 completeness() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+[]\T1/ptm/m/n/10 compute_attractors_tarjan() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\T1/ptm/m/n/10 create_attractor_report() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+[]\T1/ptm/m/n/10 create_blinkers() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 create_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\T1/ptm/m/n/10 create_disjoint_union() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+[]\T1/ptm/m/n/10 create_variables() (in mod-ule Py-Bool-
+[101]
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+[]\T1/ptm/m/n/10 EF_nested_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+[]\T1/ptm/m/n/10 EF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+[]\T1/ptm/m/n/10 EF_unsteady_states() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+[]\T1/ptm/m/n/10 find_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+[]\T1/ptm/m/n/10 functions2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+[]\T1/ptm/m/n/10 functions2primes() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
+[]\T1/ptm/m/n/10 hamming_distance() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]\T1/ptm/m/n/10 igraph2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/ptm/m/n/10 input_combinations() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/ptm/m/n/10 list_states_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[]\T1/ptm/m/n/10 minimize_espresso() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 7722) in paragraph at lines 101--102
+[]\T1/ptm/m/n/10 percolate_and_keep_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+[]\T1/ptm/m/n/10 primes2igraph() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[]\T1/ptm/m/n/10 primes2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+[]\T1/ptm/m/n/10 primes2stg() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+[]\T1/ptm/m/n/10 random_state() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+[]\T1/ptm/m/n/10 random_successor_mixed() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+[]\T1/ptm/m/n/10 random_walk() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]\T1/ptm/m/n/10 remove_all_variables_except() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]\T1/ptm/m/n/10 remove_variables() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]\T1/ptm/m/n/10 rename_variable() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\T1/ptm/m/n/10 state2dict() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\T1/ptm/m/n/10 state_is_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+[]\T1/ptm/m/n/10 steady_states_projected() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
+[]\T1/ptm/m/n/10 stg2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
+[]\T1/ptm/m/n/10 subspace2dict() (in mod-ule Py-Bool-
+[102]
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]\T1/ptm/m/n/10 subspace2proposition() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+[]\T1/ptm/m/n/10 subspace2str() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]\T1/ptm/m/n/10 successor_synchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]\T1/ptm/m/n/10 successors_asynchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+[]\T1/ptm/m/n/10 trap_spaces_bounded() (in mod-ule Py-Bool-
+[103]) (./PyBoolNet.aux) )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/
+courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on PyBoolNet.pdf (109 pages, 556791 bytes).
+Transcript written on PyBoolNet.log.
+pdflatex  'PyBoolNet.tex'
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./PyBoolNet.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./sphinxmanual.cls
+Document Class: sphinxmanual 2009/06/02 Document class (Sphinx manual)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty) (./fncychap.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty) (./sphinx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancybox/fancybox.sty
+Style option: `fancybox' v1.4 <2010/05/15> (tvz)
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty)
+(./tabulary.sty (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz) (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/footnote.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/plain/misc/pdfcolor.tex)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/hypcap.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty)
+Writing index file PyBoolNet.idx
+(./PyBoolNet.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./PyBoolNet.out) (./PyBoolNet.out)
+Underfull \hbox (badness 10000) in paragraph at lines 120--120
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)<<ot1.cmap>><<oml.cmap
+>><<oms.cmap>><<omx.cmap>> [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+}] [2] (./PyBoolNet.toc [1] [2] [3]) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1] [2]
+Chapter 1.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd) [3] [4] [5] [6]
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[][][]\T1/ptm/m/n/10 http://stackoverflow.com/questions/23993377/red-language-c
+onsole-error-libreadline-so-6-cannot-open-
+[9] [10]
+Chapter 2.
+[11] [12] [13] [14] <figure01.pdf, id=1112, 224.84pt x 188.705pt>
+<use figure01.pdf> <use figure01.pdf> [15 <./figure01.pdf>]
+<figure02.pdf, id=1130, 339.2675pt x 166.6225pt> <use figure02.pdf>
+<use figure02.pdf>
+Underfull \hbox (badness 7486) in paragraph at lines 1121--1126
+\T1/ptm/m/it/10 PyBoolNet 2.1.3x \T1/ptm/m/n/10 has pre-de-fined styles for add
+ing at-tributes to in-ter-ac-tion graphs. The func-tion
+[16 <./figure02.pdf>] <figure03.pdf, id=1144, 315.1775pt x 180.675pt>
+<use figure03.pdf> <use figure03.pdf> [17 <./figure03.pdf>]
+<figure04.pdf, id=1161, 500.87125pt x 486.81876pt> <use figure04.pdf>
+<use figure04.pdf> <figure05.pdf, id=1171, 351.3125pt x 460.72125pt>
+<use figure05.pdf> <use figure05.pdf> [18 <./figure04.pdf>]
+<figure07.pdf, id=1194, 377.41pt x 323.2075pt> <use figure07.pdf>
+<use figure07.pdf> [19 <./figure05.pdf>]
+<figure08.pdf, id=1211, 676.5275pt x 237.88875pt> <use figure08.pdf>
+<use figure08.pdf> [20 <./figure07.pdf> <./figure08.pdf
+
+pdfTeX warning: pdflatex (file ./figure08.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure09.pdf, id=1232, 425.59pt x 486.81876pt> <use figure09.pdf>
+<use figure09.pdf> [21 <./figure09.pdf>]
+<figure10.pdf, id=1261, 331.2375pt x 343.2825pt> <use figure10.pdf>
+<use figure10.pdf> [22 <./figure10.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 1401--1406
+
+<figure11.pdf, id=1277, 406.51875pt x 249.93375pt> <use figure11.pdf>
+<use figure11.pdf> [23] <figure12.pdf, id=1285, 281.05pt x 343.2825pt>
+<use figure12.pdf> <use figure12.pdf> [24 <./figure11.pdf> <./figure12.pdf
+
+pdfTeX warning: pdflatex (file ./figure12.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] <figure13.pdf, id=1304, 523.9575pt x 390.45876pt> <use figure13.pdf>
+<use figure13.pdf> <figure14.pdf, id=1308, 473.77pt x 289.08pt>
+<use figure14.pdf> <use figure14.pdf> [25 <./figure13.pdf>]
+<figure15.pdf, id=1325, 454.69875pt x 468.75125pt> <use figure15.pdf>
+<use figure15.pdf> <figure16.pdf, id=1328, 458.71375pt x 566.115pt>
+<use figure16.pdf> <use figure16.pdf> [26 <./figure14.pdf>] [27 <./figure15.pdf
+>] [28 <./figure16.pdf>] [29] [30]
+<figure17.pdf, id=1388, 290.08376pt x 122.4575pt> <use figure17.pdf>
+<use figure17.pdf> [31] <figure18.pdf, id=1398, 652.4375pt x 527.9725pt>
+<use figure18.pdf> [32 <./figure17.pdf> <./figure18.pdf
+
+pdfTeX warning: pdflatex (file ./figure18.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [33] [34] <figure19.pdf, id=1459, 337.26pt x 347.2975pt> <use figure19.pdf>
+<use figure19.pdf> [35 <./figure19.pdf>]
+<figure20.pdf, id=1476, 434.62375pt x 408.52625pt> <use figure20.pdf>
+<use figure20.pdf> <figure21.pdf, id=1477, 434.62375pt x 408.52625pt>
+<use figure21.pdf> <use figure21.pdf> [36] [37 <./figure20.pdf> <./figure21.pdf
+
+
+pdfTeX warning: pdflatex (file ./figure21.pdf): PDF inclusion: multiple pdfs wi
+th page group included in a single page
+>] [38] <figure22.pdf, id=1511, 319.1925pt x 469.755pt> <use figure22.pdf>
+<use figure22.pdf> [39] [40 <./figure22.pdf>] [41] [42]
+<figure23.pdf, id=1550, 497.86pt x 508.90125pt> <use figure23.pdf>
+<use figure23.pdf> <figure24.pdf, id=1553, 497.86pt x 508.90125pt>
+<use figure24.pdf> <use figure24.pdf> [43 <./figure23.pdf>] [44 <./figure24.pdf
+>] <figure25.pdf, id=1582, 455.7025pt x 426.59375pt> <use figure25.pdf>
+<use figure25.pdf> [45 <./figure25.pdf>]
+<figure26.pdf, id=1608, 670.505pt x 352.31625pt> <use figure26.pdf>
+<use figure26.pdf> [46] [47 <./figure26.pdf>]
+<figure27.pdf, id=1648, 195.73125pt x 266.9975pt> <use figure27.pdf>
+<use figure27.pdf> [48] [49 <./figure27.pdf>] [50]
+Chapter 3.
+[51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]
+[66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80]
+[81] [82]
+Underfull \hbox (badness 7944) in paragraph at lines 5969--5969
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 At-trac-tors=None\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Ad-di-tiona
+lEdge-Data=False\T1/ptm/m/n/10 , \T1/ptm/m/it/10 FnameIm-
+[83] [84]
+Underfull \hbox (badness 5189) in paragraph at lines 6159--6159
+[]\T1/ptm/m/it/10 Primes\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Up-date\T1/ptm/m/n/10 
+, \T1/ptm/m/it/10 Ini-tial-States\T1/ptm/m/n/10 , \T1/ptm/m/it/10 CTL-Spec\T1/p
+tm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-
+[85] [86]
+Underfull \hbox (badness 10000) in paragraph at lines 6297--6297
+[]\T1/ptm/m/it/10 FnameSMV\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dy-nami-cRe-order=Tr
+ue\T1/ptm/m/n/10 , \T1/ptm/m/it/10 Dis-ableReach-
+[87] [88] [89] [90] [91]
+Underfull \hbox (badness 10000) in paragraph at lines 6720--6724
+
+[92] [93] [94] [95] [96]
+Chapter 4.
+
+Overfull \hbox (23.45001pt too wide) in paragraph at lines 7188--7192
+[]\T1/ptm/m/it/10 Prekas2012\T1/ptm/m/n/10 : Quine-McCluskey al-go-rithm. G. Pr
+ekas. [][]https://github.com/prekageo/optistate/blob/master/qm.py[][] 
+[97] [98]
+Chapter 5.
+[99] (./PyBoolNet.ind [100]
+Underfull \hbox (badness 10000) in paragraph at lines 5--6
+[]\T1/ptm/m/n/10 A_is_subspace_of_B() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--7
+[]\T1/ptm/m/n/10 activities2animation() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+[]\T1/ptm/m/n/10 add_style_activities() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--9
+[]\T1/ptm/m/n/10 add_style_anonymous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+[]\T1/ptm/m/n/10 add_style_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+[]\T1/ptm/m/n/10 add_style_default() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
+[]\T1/ptm/m/n/10 add_style_inputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+[]\T1/ptm/m/n/10 add_style_interactionsigns() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+[]\T1/ptm/m/n/10 add_style_mintrapspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
+[]\T1/ptm/m/n/10 add_style_outputs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--17
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T1/ptm/m/n/10 add_style_path() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+[]\T1/ptm/m/n/10 add_style_sccs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
+[]\T1/ptm/m/n/10 add_style_subgraphs() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+[]\T1/ptm/m/n/10 add_style_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\T1/ptm/m/n/10 add_style_tendencies() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+[]\T1/ptm/m/n/10 AGEF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+[]\T1/ptm/m/n/10 best_first_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 5245) in paragraph at lines 35--36
+[]\T1/ptm/m/n/10 check_primes_with_acceptingstates() (in mod-ule Py-
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+[]\T1/ptm/m/n/10 completeness() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
+[]\T1/ptm/m/n/10 compute_attractors_tarjan() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\T1/ptm/m/n/10 create_attractor_report() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+[]\T1/ptm/m/n/10 create_blinkers() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 create_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\T1/ptm/m/n/10 create_disjoint_union() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/ptm/m/n/10 create_image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+[]\T1/ptm/m/n/10 create_variables() (in mod-ule Py-Bool-
+[101]
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+[]\T1/ptm/m/n/10 EF_nested_reachability() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+[]\T1/ptm/m/n/10 EF_oneof_subspaces() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+[]\T1/ptm/m/n/10 EF_unsteady_states() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+[]\T1/ptm/m/n/10 find_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+[]\T1/ptm/m/n/10 functions2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
+[]\T1/ptm/m/n/10 functions2primes() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
+[]\T1/ptm/m/n/10 hamming_distance() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+[]\T1/ptm/m/n/10 igraph2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/ptm/m/n/10 input_combinations() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+[]\T1/ptm/m/n/10 list_states_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[]\T1/ptm/m/n/10 minimize_espresso() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 7722) in paragraph at lines 101--102
+[]\T1/ptm/m/n/10 percolate_and_keep_constants() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+[]\T1/ptm/m/n/10 primes2igraph() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[]\T1/ptm/m/n/10 primes2mindnf() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+[]\T1/ptm/m/n/10 primes2stg() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+[]\T1/ptm/m/n/10 random_state() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
+[]\T1/ptm/m/n/10 random_successor_mixed() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+[]\T1/ptm/m/n/10 random_walk() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]\T1/ptm/m/n/10 remove_all_variables_except() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+[]\T1/ptm/m/n/10 remove_variables() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]\T1/ptm/m/n/10 rename_variable() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\T1/ptm/m/n/10 state2dict() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\T1/ptm/m/n/10 state_is_in_subspace() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+[]\T1/ptm/m/n/10 steady_states_projected() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
+[]\T1/ptm/m/n/10 stg2image() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
+[]\T1/ptm/m/n/10 subspace2dict() (in mod-ule Py-Bool-
+[102]
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]\T1/ptm/m/n/10 subspace2proposition() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+[]\T1/ptm/m/n/10 subspace2str() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
+[]\T1/ptm/m/n/10 successor_synchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--138
+[]\T1/ptm/m/n/10 successors_asynchronous() (in mod-ule Py-Bool-
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+[]\T1/ptm/m/n/10 trap_spaces_bounded() (in mod-ule Py-Bool-
+[103]) (./PyBoolNet.aux) )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/
+courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+r8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on PyBoolNet.pdf (109 pages, 556791 bytes).
+Transcript written on PyBoolNet.log.
+make[1]: Leaving directory `/home/klarner/PyBoolNet/Docs/Sphinx/build/latex'
+pdflatex finished; the PDF files are in build/latex.

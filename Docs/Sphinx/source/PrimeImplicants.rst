@@ -44,6 +44,22 @@ find_constants
 .. autofunction:: PyBoolNet.PrimeImplicants.find_constants
 
 
+.. _find_vanham_variables:
+
+find_vanham_variables
+---------------------
+
+.. autofunction:: PyBoolNet.PrimeImplicants.find_vanham_variables
+
+
+.. _size_state_space:
+
+size_state_space
+----------------
+
+.. autofunction:: PyBoolNet.PrimeImplicants.size_state_space
+
+
 .. _create_constants:
 
 create_constants
@@ -130,7 +146,3 @@ input_combinations
 ------------------
 
 .. autofunction:: PyBoolNet.PrimeImplicants.input_combinations
-
-
-
-

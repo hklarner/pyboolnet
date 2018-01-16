@@ -10,12 +10,12 @@ Reference
    PrimeImplicants
    InteractionGraphs
    StateTransitionGraphs
-   AttractorDetection
+   Attractors
    Basins
    
    ModelChecking
-   QueryPatterns
-   BooleanExpressions
+   TemporalLogic
+   BooleanLogic
    AspSolver
    QuineMcCluskey
    

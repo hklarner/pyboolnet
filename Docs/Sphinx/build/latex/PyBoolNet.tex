@@ -54,7 +54,7 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{Jan 15, 2018}
+\date{Jan 16, 2018}
 \release{2.2.1}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -2497,11 +2497,11 @@ Attractors capture the long-term activities of the components of Boolean network
 Two different types of attractors are possible: either all activities stabilize at some values and the network enters a steady state or at least one component shows sustained oscillations and the network enters a cyclic attractor.
 Formally, attractors are defined as the inclusion-wise minimal trap sets of a given STG which is equivalent to the so-called terminal SCCs of the state transition graph.
 One approach to computing the attractors is to use Tarjan’s algorithm for computing the SCCs of a directed graph, see {\hyperref[\detokenize{Bibliography:tarjan1972}]{\sphinxcrossref{\DUrole{std,std-ref}{Tarjan1972}}}} and then to select those SCCs that are terminal, i.e., those for which there is no path to another SCC.
-This approach is implemented in the function {\hyperref[\detokenize{AttractorDetection:compute-attractors-tarjan}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_attractors\_tarjan}}}}.
+This approach is implemented in the function {\hyperref[\detokenize{Attractors:compute-attractors-tarjan}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_attractors\_tarjan}}}}.
 As an example for computing attractors with this algorithm consider the following network and its asynchronous STG which is given in {\hyperref[\detokenize{Manual:figure25}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure below}}}}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{AttractorDetection} \PYG{k}{as} \PYG{n+nn}{AD}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{Attractors} \PYG{k}{as} \PYG{n+nn}{AD}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{bnet} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1, !v1 \textbar{} v3}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v2, !v1 \textbar{} v2\PYGZam{}!v3}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
 \PYG{g+gp}{... }        \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v3, !v2}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
@@ -2511,7 +2511,7 @@ As an example for computing attractors with this algorithm consider the followin
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{add\PYGZus{}style\PYGZus{}sccs}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{label}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Example 25: A network with a cyclic attractor and a steady state.}\PYG{l+s+s2}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{stg2image}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{example25\PYGZus{}stg.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attractors} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{compute\PYGZus{}attractors\PYGZus{}tarjan}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attractors} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{compute\PYGZus{}attractors\PYGZus{}tarjan}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{attractors}\PYG{p}{)}
 \PYG{g+go}{2}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{A} \PYG{o+ow}{in} \PYG{n}{attractors}\PYG{p}{:}
@@ -2528,7 +2528,7 @@ As an example for computing attractors with this algorithm consider the followin
 \caption{The asynchronous STG \sphinxstyleemphasis{“example25\_stg.pdf”} of a network with a steady state and a cyclic attractor.}\label{\detokenize{Manual:figure25}}\label{\detokenize{Manual:id29}}\end{figure}
 
 Due to the state space explosion problem, the approach of computing the terminal SCCs by explicitly
-constructing the underlying STG as a digraphis limited to networks with less than 15\textasciitilde{}20 components.
+constructing the underlying STG as a digraph is limited to networks with up to 15 to 20 components.
 
 There are algorithms for larger networks, but the “best” algorithm for solving the detection problem will depend on the chosen update strategy.
 For synchronous STGs we suggest to use an approach that was suggested
@@ -2548,10 +2548,10 @@ A fairly efficient approach to detecting at least some attractors or larger netw
 and based on the idea of generating a random walk in the STG, starting from some initial state,
 and then testing with CTL model checking whether the final state is indeed part of an attractor.
 This approach is based on the observation that, in practice, a random walk will quickly reach states that belong to an attractor.
-It is implemented in the function {\hyperref[\detokenize{AttractorDetection:find-attractor-state-by-randomwalk-and-ctl}]{\sphinxcrossref{\DUrole{std,std-ref}{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}}}:
+It is implemented in the function {\hyperref[\detokenize{Attractors:find-attractor-state-by-randomwalk-and-ctl}]{\sphinxcrossref{\DUrole{std,std-ref}{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}}}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{state} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{state} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{state2str}\PYG{p}{(}\PYG{n}{state}\PYG{p}{)}
 \PYG{g+go}{110}
 \end{sphinxVerbatim}
@@ -2560,11 +2560,11 @@ The function takes three optional parameters: \sphinxstyleemphasis{InitialState}
 \sphinxstyleemphasis{Length} which is an integer that specifies the number of transitions for the generation of the random walk,
 and \sphinxstyleemphasis{Attempts} which is the maximal number of random walks that are generated if each time the last state does not belong to an attractor.
 Though unlikely, it is possible that the function will not find an attractor in which case it will raise an exception.
-Hence, {\hyperref[\detokenize{AttractorDetection:find-attractor-state-by-randomwalk-and-ctl}]{\sphinxcrossref{\DUrole{std,std-ref}{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}}} should always be encapsulated in a \sphinxstyleemphasis{Try-Except} block:
+Hence, {\hyperref[\detokenize{Attractors:find-attractor-state-by-randomwalk-and-ctl}]{\sphinxcrossref{\DUrole{std,std-ref}{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}}} should always be encapsulated in a \sphinxstyleemphasis{Try-Except} block:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{try}\PYG{p}{:}
-\PYG{g+gp}{... }    \PYG{n}{state} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{state} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{find\PYGZus{}attractor\PYGZus{}state\PYGZus{}by\PYGZus{}randomwalk\PYGZus{}and\PYGZus{}ctl}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{n+nb}{print} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{state2str}\PYG{p}{(}\PYG{n}{state}\PYG{p}{)}
 \PYG{g+gp}{... }\PYG{k}{except}\PYG{p}{:}
 \PYG{g+gp}{... }    \PYG{n+nb}{print} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{did not find an attractor. try increasing the length or attempts parameters}\PYG{l+s+s2}{\PYGZdq{}}
@@ -2633,7 +2633,7 @@ Cyclic attractros are represented by minimal trap spaces.
 
 Note that the function {\hyperref[\detokenize{Basins:commitment-diagram}]{\sphinxcrossref{\DUrole{std,std-ref}{commitment\_diagram}}}} either requires a list of states representing attractors (given via the parameter \sphinxstyleemphasis{Attractors}),
 or it will compute the minimal trap spaces and \sphinxstyleemphasis{assume} that they are complete and univocal.
-You should make sure that the minimal trap spaces are indeed complete and univocal using the functions {\hyperref[\detokenize{AttractorDetection:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} and {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}}.
+You should make sure that the minimal trap spaces are indeed complete and univocal using the functions {\hyperref[\detokenize{Attractors:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} and {\hyperref[\detokenize{Attractors:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}}.
 
 \begin{figure}[htbp]
 \centering
@@ -2669,19 +2669,19 @@ in practice we may get away with computing their minimal trap spaces which can e
 Note that for limit cycles of synchronous STGs and steady states other algorithms, e.g. {\hyperref[\detokenize{Bibliography:dubrova2011}]{\sphinxcrossref{\DUrole{std,std-ref}{Dubrova2011}}}} and \DUrole{xref,std,std-ref}{Naldi2007} are more suitable.
 
 In {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}} we demonstrate that completeness, univocality and faithfulness can all be decided using CTL model checking.
-The functions {\hyperref[\detokenize{AttractorDetection:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}}, {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} and {\hyperref[\detokenize{AttractorDetection:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} automatically generate and test the respective queries,
+The functions {\hyperref[\detokenize{Attractors:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}}, {\hyperref[\detokenize{Attractors:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} and {\hyperref[\detokenize{Attractors:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} automatically generate and test the respective queries,
 which are defined in Sections 4.1, 4.2 and 4.3 of {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}}.
 
 As an example of a network whose minimal trap spaces are complete, univocal and faithful
 consider again the network defined in {\hyperref[\detokenize{Manual:figure25}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure above}}}}.
-The functions {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} and {\hyperref[\detokenize{AttractorDetection:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} each require the primes, update strategy and a trap space:
+The functions {\hyperref[\detokenize{Attractors:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} and {\hyperref[\detokenize{Attractors:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} each require the primes, update strategy and a trap space:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{update} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mintspaces} \PYG{o}{=} \PYG{n}{AspSolver}\PYG{o}{.}\PYG{n}{trap\PYGZus{}spaces}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{min}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{mintspaces}\PYG{p}{:}
-\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}univocal} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{univocal}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
-\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}faithful} \PYG{o}{=} \PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{faithful}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}univocal} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{univocal}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
+\PYG{g+gp}{... }    \PYG{n}{answer\PYGZus{}faithful} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{faithful}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{n+nb}{print} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{min trap space:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}
 \PYG{g+gp}{... }    \PYG{n+nb}{print} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{  is univocal:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{answer\PYGZus{}univocal}
 \PYG{g+gp}{... }    \PYG{n+nb}{print} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{  is faithful:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{answer\PYGZus{}faithful}
@@ -2695,18 +2695,18 @@ The functions {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcro
 
 The function for deciding whether the minimal trap spaces are complete requires only two arguments, the primes and the update strategy,
 because it is implied that the trap spaces must be all minimal ones.
-See {\hyperref[\detokenize{AttractorDetection:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} for details.
+See {\hyperref[\detokenize{Attractors:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} for details.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{AttractorDetection}\PYG{o}{.}\PYG{n}{completeness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{completeness}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
 \PYG{g+go}{True}
 \end{sphinxVerbatim}
 
-Since {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} is based on detecting at least one attractor, via the random walk algorithm explained above,
+Since {\hyperref[\detokenize{Attractors:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} is based on detecting at least one attractor, via the random walk algorithm explained above,
 and since a counterexample to the univocality query contains information about additional attractors,
 there is a second function, called \DUrole{xref,std,std-ref}{univocality\_with\_counterexample{}`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
 see :ref:{}`univocality} for details.
-The function {\hyperref[\detokenize{AttractorDetection:faithfulness-with-counterexample}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness\_with\_counterexample}}}} returns a tuple that consists of the answer and a counterexample if it exists.
+The function {\hyperref[\detokenize{Attractors:faithfulness-with-counterexample}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness\_with\_counterexample}}}} returns a tuple that consists of the answer and a counterexample if it exists.
 
 As an illustration, consider network (A) given in Figure 1 of {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}}.
 It is defined by the following functions:
@@ -3158,8 +3158,84 @@ Finds all constants in the network defined by \sphinxstyleemphasis{Primes}.
 
 
 
+\subsection{find\_vanham\_variables}
+\label{\detokenize{PrimeImplicants:id6}}\label{\detokenize{PrimeImplicants:find-vanham-variables}}\index{find\_vanham\_variables() (in module PyBoolNet.PrimeImplicants)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.find_vanham_variables}}\pysiglinewithargsret{\sphinxbfcode{find\_vanham\_variables}}{\emph{Primes}}{}
+A ternary variables x is usually encoded via two Boolean variables x\_medium and x\_high.
+This functions returns all names x if there are corresponding variables x\_medium and x\_high.
+This function is used for example by {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{ModelChecking.primes2smv}}}} to add
+INIT constraints to the smv file that forbid all “meaningless states” in which x\_medium and x\_high
+are active simultaneously.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Names} (list): the names of ternary variables
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{find\PYGZus{}vanham\PYGZus{}variables}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+go}{[\PYGZsq{}E2F1\PYGZsq{}, \PYGZsq{}ATM\PYGZsq{}]}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
+
+\subsection{size\_state\_space}
+\label{\detokenize{PrimeImplicants:id7}}\label{\detokenize{PrimeImplicants:size-state-space}}\index{size\_state\_space() (in module PyBoolNet.PrimeImplicants)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.size_state_space}}\pysiglinewithargsret{\sphinxbfcode{size\_state\_space}}{\emph{Primes}, \emph{Type}}{}
+This function computes the number of states in states space of \sphinxstyleemphasis{Primes}.
+Detects if there are pairs of variables x\_medium and x\_high that represent ternary variables x.
+\sphinxstyleemphasis{Type} specifies whether the size is to be considered by input combination or in total.
+
+If Type == “total” then size = 2**(binary) * 3**(ternary).
+If Type == “per\_input\_combination” then size = 2**(binary - inputs) * 3**(ternary).
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\item {} 
+\sphinxstyleemphasis{Type} (str): either “total” or “per\_input\_combination”
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Size} (int): number of states
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{size\PYGZus{}state\PYGZus{}space}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{total}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{256}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
+
 \subsection{create\_constants}
-\label{\detokenize{PrimeImplicants:id6}}\label{\detokenize{PrimeImplicants:create-constants}}\index{create\_constants() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:create-constants}}\label{\detokenize{PrimeImplicants:id8}}\index{create\_constants() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.create_constants}}\pysiglinewithargsret{\sphinxbfcode{create\_constants}}{\emph{Primes}, \emph{Constants}, \emph{Copy=False}}{}
@@ -3200,7 +3276,7 @@ Names that already exist in \sphinxstyleemphasis{Primes} are overwritten.
 
 
 \subsection{create\_inputs}
-\label{\detokenize{PrimeImplicants:id7}}\label{\detokenize{PrimeImplicants:create-inputs}}\index{create\_inputs() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:id9}}\label{\detokenize{PrimeImplicants:create-inputs}}\index{create\_inputs() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.create_inputs}}\pysiglinewithargsret{\sphinxbfcode{create\_inputs}}{\emph{Primes}, \emph{Names}, \emph{Copy=False}}{}
@@ -3258,7 +3334,7 @@ Too analyze how the network behaves under all possible values for these constant
 
 
 \subsection{create\_blinkers}
-\label{\detokenize{PrimeImplicants:create-blinkers}}\label{\detokenize{PrimeImplicants:id8}}\index{create\_blinkers() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:create-blinkers}}\label{\detokenize{PrimeImplicants:id10}}\index{create\_blinkers() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.create_blinkers}}\pysiglinewithargsret{\sphinxbfcode{create\_blinkers}}{\emph{Primes}, \emph{Names}, \emph{Copy=False}}{}
@@ -3322,7 +3398,7 @@ To find out how non-input variables stabilize in minimal trap spaces turn the in
 
 
 \subsection{create\_variables}
-\label{\detokenize{PrimeImplicants:create-variables}}\label{\detokenize{PrimeImplicants:id9}}\index{create\_variables() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:id11}}\label{\detokenize{PrimeImplicants:create-variables}}\index{create\_variables() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.create_variables}}\pysiglinewithargsret{\sphinxbfcode{create\_variables}}{\emph{Primes}, \emph{UpdateFunctions}, \emph{Copy=False}}{}
@@ -3371,7 +3447,7 @@ The \sphinxstyleemphasis{UpdateFunctions} are given as a dictionary of names and
 
 
 \subsection{create\_disjoint\_union}
-\label{\detokenize{PrimeImplicants:id10}}\label{\detokenize{PrimeImplicants:create-disjoint-union}}\index{create\_disjoint\_union() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:create-disjoint-union}}\label{\detokenize{PrimeImplicants:id12}}\index{create\_disjoint\_union() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.create_disjoint_union}}\pysiglinewithargsret{\sphinxbfcode{create\_disjoint\_union}}{\emph{Primes1}, \emph{Primes2}}{}
@@ -3413,7 +3489,7 @@ Here, “disjoint” means that the names of \sphinxstyleemphasis{Primes1} and \
 
 
 \subsection{remove\_variables}
-\label{\detokenize{PrimeImplicants:remove-variables}}\label{\detokenize{PrimeImplicants:id11}}\index{remove\_variables() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:remove-variables}}\label{\detokenize{PrimeImplicants:id13}}\index{remove\_variables() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.remove_variables}}\pysiglinewithargsret{\sphinxbfcode{remove\_variables}}{\emph{Primes}, \emph{Names}, \emph{Copy=False}}{}
@@ -3457,7 +3533,7 @@ it must be a set of variables that contains all its successors.
 
 
 \subsection{remove\_all\_variables\_except}
-\label{\detokenize{PrimeImplicants:id12}}\label{\detokenize{PrimeImplicants:remove-all-variables-except}}\index{remove\_all\_variables\_except() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:remove-all-variables-except}}\label{\detokenize{PrimeImplicants:id14}}\index{remove\_all\_variables\_except() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.remove_all_variables_except}}\pysiglinewithargsret{\sphinxbfcode{remove\_all\_variables\_except}}{\emph{Primes}, \emph{Names}, \emph{Copy=False}}{}
@@ -3501,7 +3577,7 @@ it must be a set of variables that contains all its predecessors.
 
 
 \subsection{rename\_variable}
-\label{\detokenize{PrimeImplicants:rename-variable}}\label{\detokenize{PrimeImplicants:id13}}\index{rename\_variable() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:rename-variable}}\label{\detokenize{PrimeImplicants:id15}}\index{rename\_variable() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.rename_variable}}\pysiglinewithargsret{\sphinxbfcode{rename\_variable}}{\emph{Primes}, \emph{OldName}, \emph{NewName}, \emph{Copy=False}}{}
@@ -3546,7 +3622,7 @@ Throws an exception if \sphinxstyleemphasis{NewName} is already contained in \sp
 
 
 \subsection{percolate\_and\_keep\_constants}
-\label{\detokenize{PrimeImplicants:percolate-and-keep-constants}}\label{\detokenize{PrimeImplicants:id14}}\index{percolate\_and\_keep\_constants() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:percolate-and-keep-constants}}\label{\detokenize{PrimeImplicants:id16}}\index{percolate\_and\_keep\_constants() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.percolate_and_keep_constants}}\pysiglinewithargsret{\sphinxbfcode{percolate\_and\_keep\_constants}}{\emph{Primes}}{}
@@ -3580,7 +3656,7 @@ Keeps constants in the \sphinxstyleemphasis{Primes}.
 
 
 \subsection{percolate\_and\_remove\_constants}
-\label{\detokenize{PrimeImplicants:percolate-and-remove-constants}}\label{\detokenize{PrimeImplicants:id15}}\index{percolate\_and\_remove\_constants() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:percolate-and-remove-constants}}\label{\detokenize{PrimeImplicants:id17}}\index{percolate\_and\_remove\_constants() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.percolate_and_remove_constants}}\pysiglinewithargsret{\sphinxbfcode{percolate\_and\_remove\_constants}}{\emph{Primes}}{}
@@ -3614,10 +3690,10 @@ Removes constants from the \sphinxstyleemphasis{Primes}.
 
 
 \subsection{input\_combinations}
-\label{\detokenize{PrimeImplicants:input-combinations}}\label{\detokenize{PrimeImplicants:id16}}\index{input\_combinations() (in module PyBoolNet.PrimeImplicants)}
+\label{\detokenize{PrimeImplicants:id18}}\label{\detokenize{PrimeImplicants:input-combinations}}\index{input\_combinations() (in module PyBoolNet.PrimeImplicants)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.input_combinations}}\pysiglinewithargsret{\sphinxbfcode{input\_combinations}}{\emph{Primes}}{}
+\phantomsection\label{\detokenize{PrimeImplicants:PyBoolNet.PrimeImplicants.input_combinations}}\pysiglinewithargsret{\sphinxbfcode{input\_combinations}}{\emph{Primes}, \emph{Format='dict'}}{}
 A generator for all possible input combinations of \sphinxstyleemphasis{Primes}.
 Returns the empty dictionary if there are no inputs.
 \begin{description}
@@ -3625,11 +3701,14 @@ Returns the empty dictionary if there are no inputs.
 \item {} 
 \sphinxstyleemphasis{Primes}: prime implicants
 
+\item {} 
+\sphinxstyleemphasis{Format} (str): format of returned subspaces, “str” or “dict”
+
 \end{itemize}
 
 \item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Activities} (dict): generates all input combinations in dict representation
+\sphinxstyleemphasis{Subspaces} (str / dict): input combination in desired format
 
 \end{itemize}
 
@@ -3638,13 +3717,11 @@ Returns the empty dictionary if there are no inputs.
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{find\PYGZus{}inputs}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{input\PYGZus{}combinations}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}\PYG{p}{:}
-\PYG{g+gp}{... }    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{STGs}\PYG{o}{.}\PYG{n}{subspace2str}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
-\PYG{g+go}{00}
-\PYG{g+go}{01}
-\PYG{g+go}{10}
-\PYG{g+go}{11}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{input\PYGZus{}combinations}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{str}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{:} \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+\PYG{g+go}{0\PYGZhy{}\PYGZhy{}0\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{0\PYGZhy{}\PYGZhy{}1\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{1\PYGZhy{}\PYGZhy{}0\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{1\PYGZhy{}\PYGZhy{}1\PYGZhy{}\PYGZhy{}}
 \end{sphinxVerbatim}
 
 \end{fulllineitems}
@@ -3853,7 +3930,7 @@ To find out which file formats are supported call \sphinxcode{\$ dot -T?}.
 \sphinxstyleemphasis{LayoutEngine}: one of “dot”, “neato”, “fdp”, “sfdp”, “circo”, “twopi”
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): disables print statements
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -4584,7 +4661,7 @@ If {\hyperref[\detokenize{StateTransitionGraphs:best-first-reachability}]{\sphin
 \sphinxstyleemphasis{Memory} (int): maximal number of states memorized before search is stopped
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): print information
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -4843,23 +4920,23 @@ Checks whether \sphinxstyleemphasis{State} is a state in \sphinxstyleemphasis{Su
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B}}\pysiglinewithargsret{\sphinxbfcode{A\_is\_subspace\_of\_B}}{\emph{Primes}, \emph{A}, \emph{B}}{}
+todo: add unit tests
+
 Checks whether \sphinxstyleemphasis{A} is a subspace of \sphinxstyleemphasis{B}.
+\begin{quote}
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
 \sphinxstyleemphasis{Primes}: prime implicants
 
 \item {} 
-\sphinxstyleemphasis{A} (str/dict): a subspace
-
-\item {} 
-\sphinxstyleemphasis{B} (str/dict): a subspace
+\sphinxstyleemphasis{A}, \sphinxstyleemphasis{B} (str / dict): subspaces in str or dict format
 
 \end{itemize}
 
 \item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Answer} (bool): whether \sphinxstyleemphasis{A} is a subspace of \sphinxstyleemphasis{B}
+\sphinxstyleemphasis{Answer} (bool)
 
 \end{itemize}
 
@@ -4868,9 +4945,10 @@ Checks whether \sphinxstyleemphasis{A} is a subspace of \sphinxstyleemphasis{B}.
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{A\PYGZus{}is\PYGZus{}subspace\PYGZus{}of\PYGZus{}B}\PYG{p}{(}\PYG{n}{Primes}\PYG{p}{,} \PYG{n}{A}\PYG{p}{,} \PYG{n}{B}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{A\PYGZus{}is\PYGZus{}subspace\PYGZus{}of\PYGZus{}B}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{sub1}\PYG{p}{,} \PYG{n}{sub2}\PYG{p}{)}
 \PYG{g+go}{True}
 \end{sphinxVerbatim}
+\end{quote}
 
 \end{fulllineitems}
 
@@ -5023,7 +5101,7 @@ For a list of attributes see \sphinxurl{http://www.graphviz.org/doc/info/attrs.h
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg} \PYG{o}{=} \PYG{n}{primes2stg}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{n}{init}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{label}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{IRMA Network \PYGZhy{} State Transition Graph}\PYG{l+s+s2}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{node}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{style}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{filled}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{color}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{red}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{edge}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{arrowsize}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{2.0}\PYG{p}{\PYGZcb{}}      
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{edge}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{arrowsize}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{2.0}\PYG{p}{\PYGZcb{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{node}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{001000}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{fontsize}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{20}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg}\PYG{o}{.}\PYG{n}{edge}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{001110}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{001010}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{style}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{dotted}\PYG{l+s+s2}{\PYGZdq{}}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{stg2image}\PYG{p}{(}\PYG{n}{stg}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{irma\PYGZus{}stg.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
@@ -5052,7 +5130,7 @@ Use \sphinxcode{dot -T?} to find out which output formats are supported on your 
 \sphinxstyleemphasis{LayoutEngine}: one of “dot”, “neato”, “fdp”, “sfdp”, “circo”, “twopi”
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): disables print statements
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -5340,14 +5418,14 @@ A convenience function that adds styles for tendencies, SCCs and minimal trap sp
 
 
 
-\section{AttractorDetection}
-\label{\detokenize{AttractorDetection:attractordetection}}\label{\detokenize{AttractorDetection::doc}}\label{\detokenize{AttractorDetection:id1}}
+\section{Attractors}
+\label{\detokenize{Attractors:attractors}}\label{\detokenize{Attractors::doc}}\label{\detokenize{Attractors:id1}}
 
 \subsection{compute\_attractors\_tarjan}
-\label{\detokenize{AttractorDetection:id2}}\label{\detokenize{AttractorDetection:compute-attractors-tarjan}}\index{compute\_attractors\_tarjan() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:id2}}\label{\detokenize{Attractors:compute-attractors-tarjan}}\index{compute\_attractors\_tarjan() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.compute_attractors_tarjan}}\pysiglinewithargsret{\sphinxbfcode{compute\_attractors\_tarjan}}{\emph{STG}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.compute_attractors_tarjan}}\pysiglinewithargsret{\sphinxbfcode{compute\_attractors\_tarjan}}{\emph{STG}}{}
 Uses \sphinxhref{https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly\_connected.strongly\_connected\_components.html}{networkx.strongly\_connected\_components}
 , i.e., Tarjan’s algorithm with Nuutila’s modifications, to compute the SCCs of \sphinxstyleemphasis{STG} and
 \sphinxhref{https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest\_paths.generic.has\_path.html}{networkx.has\_path}
@@ -5392,10 +5470,10 @@ Returns the attractors as lists of states.
 
 
 \subsection{find\_attractor\_state\_by\_randomwalk\_and\_ctl}
-\label{\detokenize{AttractorDetection:find-attractor-state-by-randomwalk-and-ctl}}\label{\detokenize{AttractorDetection:id3}}\index{find\_attractor\_state\_by\_randomwalk\_and\_ctl() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:find-attractor-state-by-randomwalk-and-ctl}}\label{\detokenize{Attractors:id3}}\index{find\_attractor\_state\_by\_randomwalk\_and\_ctl() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl}}\pysiglinewithargsret{\sphinxbfcode{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}{\emph{Primes}, \emph{Update}, \emph{InitialState=\{\}}, \emph{Length=0}, \emph{Attempts=10}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl}}\pysiglinewithargsret{\sphinxbfcode{find\_attractor\_state\_by\_randomwalk\_and\_ctl}}{\emph{Primes}, \emph{Update}, \emph{InitialState=\{\}}, \emph{Length=0}, \emph{Attempts=10}, \emph{Silent=True}}{}
 Attempts to find a state inside an attractor by the “long random walk” method,
 see {\hyperref[\detokenize{Bibliography:klarner2015approx}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(b)}}}} Sec. 3.2 for a formal definition.
 The method generates a random walk of \sphinxstyleemphasis{Length} many states, starting from a state defined by \sphinxstyleemphasis{InitialState}.
@@ -5406,13 +5484,13 @@ If so it is returned, otherwise the process is repeated.
 If no attractor state has been found after \sphinxstyleemphasis{Attempts} many trials an exception is raised.
 
 \begin{sphinxadmonition}{note}{Note:}
-The default value for length, namely \sphinxstyleemphasis{Length=0}, will be converted:
+The default value for length, namely \sphinxstyleemphasis{Length=0}, will be replaced by:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{Length} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{o}{*}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{Primes}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-which proved sufficient in out computer experiments.
+which proved sufficiently large in our computer experiments.
 \end{sphinxadmonition}
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -5430,6 +5508,9 @@ which proved sufficient in out computer experiments.
 
 \item {} 
 \sphinxstyleemphasis{Attempts} (int): number of attempts before exception is raised
+
+\item {} 
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -5456,10 +5537,10 @@ raises \sphinxstyleemphasis{Exception} if no attractor state is found
 
 
 \subsection{univocality}
-\label{\detokenize{AttractorDetection:univocality}}\label{\detokenize{AttractorDetection:id4}}\index{univocality() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:univocality}}\label{\detokenize{Attractors:id4}}\index{univocality() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.univocality}}\pysiglinewithargsret{\sphinxbfcode{univocality}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.univocality}}\pysiglinewithargsret{\sphinxbfcode{univocality}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
 The model checking and random-walk-based method for deciding whether \sphinxstyleemphasis{Trapspace} is univocal,
 i.e., whether there is a unique attractor contained in it,
 in the state transition graph defined by \sphinxstyleemphasis{Primes} and \sphinxstyleemphasis{Update}.
@@ -5521,10 +5602,10 @@ If it is an arbitrary subspace then the involved variables are artificially fixe
 
 
 \subsection{faithfulness}
-\label{\detokenize{AttractorDetection:id5}}\label{\detokenize{AttractorDetection:faithfulness}}\index{faithfulness() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:id5}}\label{\detokenize{Attractors:faithfulness}}\index{faithfulness() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.faithfulness}}\pysiglinewithargsret{\sphinxbfcode{faithfulness}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.faithfulness}}\pysiglinewithargsret{\sphinxbfcode{faithfulness}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
 The model checking approach for deciding whether \sphinxstyleemphasis{Trapspace} is faithful,
 i.e., whether all free variables oscillate in all of the attractors contained in it,
 in the state transition graph defined by \sphinxstyleemphasis{Primes} and \sphinxstyleemphasis{Update}.
@@ -5584,10 +5665,10 @@ If it is an arbitrary subspace then the involved variables are artificially fixe
 
 
 \subsection{completeness}
-\label{\detokenize{AttractorDetection:id6}}\label{\detokenize{AttractorDetection:completeness}}\index{completeness() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:id6}}\label{\detokenize{Attractors:completeness}}\index{completeness() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.completeness}}\pysiglinewithargsret{\sphinxbfcode{completeness}}{\emph{Primes}, \emph{Update}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.completeness}}\pysiglinewithargsret{\sphinxbfcode{completeness}}{\emph{Primes}, \emph{Update}}{}
 The ASP and CTL model checking based algorithm for deciding whether the minimal trap spaces of a network are complete.
 The algorithm is discussed in {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}}.
 It splits the problem of deciding completeness into smaller subproblems by searching for so-called autonomous sets in the
@@ -5640,11 +5721,11 @@ Each line that corresponds to a line of the pseudo code of Figure 3 in {\hyperre
 
 
 \subsection{univocality\_with\_counterexample}
-\label{\detokenize{AttractorDetection:id7}}\label{\detokenize{AttractorDetection:univocality-with-counterexample}}\index{univocality\_with\_counterexample() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:id7}}\label{\detokenize{Attractors:univocality-with-counterexample}}\index{univocality\_with\_counterexample() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.univocality_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{univocality\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
-Performs the same steps as {\hyperref[\detokenize{AttractorDetection:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.univocality_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{univocality\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
+Performs the same steps as {\hyperref[\detokenize{Attractors:univocality}]{\sphinxcrossref{\DUrole{std,std-ref}{univocality}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
 A counterexample of a univocality test are two states that belong to different attractors.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -5683,11 +5764,11 @@ A counterexample of a univocality test are two states that belong to different a
 
 
 \subsection{faithfulness\_with\_counterexample}
-\label{\detokenize{AttractorDetection:faithfulness-with-counterexample}}\label{\detokenize{AttractorDetection:id8}}\index{faithfulness\_with\_counterexample() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:faithfulness-with-counterexample}}\label{\detokenize{Attractors:id8}}\index{faithfulness\_with\_counterexample() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.faithfulness_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{faithfulness\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
-Performs the same steps as {\hyperref[\detokenize{AttractorDetection:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.faithfulness_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{faithfulness\_with\_counterexample}}{\emph{Primes}, \emph{Update}, \emph{Trapspace}}{}
+Performs the same steps as {\hyperref[\detokenize{Attractors:faithfulness}]{\sphinxcrossref{\DUrole{std,std-ref}{faithfulness}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
 A counterexample of a faithful test is a state that belongs to an attractor which has more fixed variables than there are in \sphinxstyleemphasis{Trapspace}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -5727,11 +5808,11 @@ A counterexample of a faithful test is a state that belongs to an attractor whic
 
 
 \subsection{completeness\_with\_counterexample}
-\label{\detokenize{AttractorDetection:completeness-with-counterexample}}\label{\detokenize{AttractorDetection:id9}}\index{completeness\_with\_counterexample() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:completeness-with-counterexample}}\label{\detokenize{Attractors:id9}}\index{completeness\_with\_counterexample() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.completeness_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{completeness\_with\_counterexample}}{\emph{Primes}, \emph{Update}}{}
-Performs the same steps as {\hyperref[\detokenize{AttractorDetection:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.completeness_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{completeness\_with\_counterexample}}{\emph{Primes}, \emph{Update}}{}
+Performs the same steps as {\hyperref[\detokenize{Attractors:completeness}]{\sphinxcrossref{\DUrole{std,std-ref}{completeness}}}} but also returns a counterexample which is \sphinxstyleemphasis{None} if it does not exist.
 A counterexample of a completeness test is a state that can not reach one of the minimal trap spaces of \sphinxstyleemphasis{Primes}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -5769,10 +5850,10 @@ A counterexample of a completeness test is a state that can not reach one of the
 
 
 \subsection{create\_attractor\_report}
-\label{\detokenize{AttractorDetection:id10}}\label{\detokenize{AttractorDetection:create-attractor-report}}\index{create\_attractor\_report() (in module PyBoolNet.AttractorDetection)}
+\label{\detokenize{Attractors:id10}}\label{\detokenize{Attractors:create-attractor-report}}\index{create\_attractor\_report() (in module PyBoolNet.Attractors)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{AttractorDetection:PyBoolNet.AttractorDetection.create_attractor_report}}\pysiglinewithargsret{\sphinxbfcode{create\_attractor\_report}}{\emph{Primes}, \emph{FnameTXT=None}}{}
+\phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.create_attractor_report}}\pysiglinewithargsret{\sphinxbfcode{create\_attractor\_report}}{\emph{Primes}, \emph{FnameTXT=None}}{}
 Creates an attractor report for the network defined by \sphinxstyleemphasis{Primes}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -5809,7 +5890,36 @@ Creates an attractor report for the network defined by \sphinxstyleemphasis{Prim
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.weak_basin}}\pysiglinewithargsret{\sphinxbfcode{weak\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Attractor}}{}
+todo: finish code
+todo: add unit tests
+
 computes a single strong basin
+\begin{quote}
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{p}{(}\PYG{o}{.}\PYG{o}{.}\PYG{p}{)}
+\PYG{g+go}{\PYGZlt{}result\PYGZgt{}}
+\end{sphinxVerbatim}
+\end{quote}
 
 \end{fulllineitems}
 
@@ -5820,7 +5930,36 @@ computes a single strong basin
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.strong_basin}}\pysiglinewithargsret{\sphinxbfcode{strong\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Attractor}}{}
+todo: finish code
+todo: add unit tests
+
 computes a single strong basin
+\begin{quote}
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{p}{(}\PYG{o}{.}\PYG{o}{.}\PYG{p}{)}
+\PYG{g+go}{\PYGZlt{}result\PYGZgt{}}
+\end{sphinxVerbatim}
+\end{quote}
 
 \end{fulllineitems}
 
@@ -5831,7 +5970,36 @@ computes a single strong basin
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.cycfree_basin}}\pysiglinewithargsret{\sphinxbfcode{cycfree\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Attractor}}{}
+todo: finish code
+todo: add unit tests
+
 computes a single cycle-free basin
+\begin{quote}
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{\textless{}arg\textgreater{}} (\textless{}type\textgreater{}): \textless{}description\textgreater{}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{p}{(}\PYG{o}{.}\PYG{o}{.}\PYG{p}{)}
+\PYG{g+go}{\PYGZlt{}result\PYGZgt{}}
+\end{sphinxVerbatim}
+\end{quote}
 
 \end{fulllineitems}
 
@@ -5842,6 +6010,8 @@ computes a single cycle-free basin
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.all_basins}}\pysiglinewithargsret{\sphinxbfcode{all\_basins}}{\emph{Primes}, \emph{Update}, \emph{FnameImage=None}, \emph{Attractors=None}, \emph{Minimize=False}, \emph{Title=None}, \emph{Silent=True}}{}
+todo: proof read docstring
+
 Uses model checking with accepting states to compute the three types of basins of attraction for each attractor.
 \sphinxstyleemphasis{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the basins of the minimal trap spaces is returned.
@@ -5849,7 +6019,7 @@ Use \sphinxstyleemphasis{FnameImage} to create a bar plot, this requires \sphinx
 The basins are returned in the form of a dictionary:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{01100\PYGZhy{}\PYGZhy{}0}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{p}{(}\PYG{n+nb}{str} \PYG{n}{of} \PYG{n}{attractor} \PYG{n}{representant}\PYG{p}{)}
+\PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{01100\PYGZhy{}\PYGZhy{}0}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{p}{(}\PYG{n+nb}{str} \PYG{n}{of} \PYG{n}{attractor} \PYG{n}{representantion}\PYG{p}{)}
     \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{weak}\PYG{l+s+s1}{\PYGZsq{}}
         \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{formula}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{(!Erk \PYGZam{} !Mek)}\PYG{l+s+s1}{\PYGZsq{}} \PYG{p}{(}\PYG{n}{Boolean} \PYG{n}{expression} \PYG{k}{for} \PYG{n}{states}\PYG{p}{)}
         \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{perc}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}    \PYG{l+m+mf}{0.5}             \PYG{p}{(}\PYG{n}{percentage} \PYG{n}{of} \PYG{n}{state} \PYG{n}{space}\PYG{p}{)}
@@ -5880,7 +6050,7 @@ The basins are returned in the form of a dictionary:
 \sphinxstyleemphasis{Title} (str): optional title of plot
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): info on progress
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -5910,6 +6080,8 @@ The basins are returned in the form of a dictionary:
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.strong_basins}}\pysiglinewithargsret{\sphinxbfcode{strong\_basins}}{\emph{Primes}, \emph{Update}, \emph{FnameImage=None}, \emph{Attractors=None}, \emph{Minimize=False}, \emph{Title=None}, \emph{Silent=True}}{}
+todo: proofread docstring
+
 Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \sphinxstyleemphasis{Primes} and \sphinxstyleemphasis{Update}.
 \sphinxstyleemphasis{Attractors} may be used to specify a list of representative states for the attractors.
 Otherwise the strong basins of the minimal trap spaces is returned.
@@ -5947,7 +6119,7 @@ The strong basins are returned in the form of a dictionary:
 \sphinxstyleemphasis{Title} (str): optional title of plot
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): info on progress
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -5989,8 +6161,14 @@ if \sphinxstyleemphasis{AdditionalEdgeData} is true, additionally by the size of
 
 The algorithm requires model checking with accepting states, i.e., NuSMV-a.
 Basic steps towards increased efficiency are implemented:
-out-DAGs (a.k.a. output cascades) are discarded during model checking, and
+\begin{enumerate}
+\item {} 
+out-DAGs (output cascades) are discarded during model checking, and
+
+\item {} 
 disconnected components are considered separately (and recombined using a cartesian product of diagrams).
+
+\end{enumerate}
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6009,7 +6187,7 @@ disconnected components are considered separately (and recombined using a cartes
 \sphinxstyleemphasis{FnameImage} (str): will call commitment\_diagram2image(..)
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): whether information regarding the execution of the algorithm should be printed
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \item {} 
 \sphinxstyleemphasis{ReturnCounter} (bool): whether the number of performed model checks should be returned, used for statistics
@@ -6080,16 +6258,13 @@ and the size of the states of the source basin that can reach the target basin.
 \sphinxstyleemphasis{FirstIndex} (int): first index of attractor names
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): print additional info and \sphinxstyleemphasis{dot} file
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
 \item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{None}
-
-\item {} 
-\sphinxstyleemphasis{StyledDiagram} (networkx.DiGraph): if \sphinxstyleemphasis{FnameImage} is not given
+\sphinxstyleemphasis{StyledDiagram} (networkx.DiGraph)
 
 \end{itemize}
 
@@ -6141,7 +6316,7 @@ disconnected components are considered separately (and recombined using a cartes
 \sphinxstyleemphasis{ColorMap} (dict): assignment of diagram nodes to colors for custom colors
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): whether information regarding the execution of the algorithm should be printed
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \item {} 
 \sphinxstyleemphasis{Title} (str): optional title of plot
@@ -6204,7 +6379,7 @@ See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{st
 \sphinxstyleemphasis{ConeOfInfluence} (bool): enables cone of influence reduction using \sphinxstyleemphasis{-coi}
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): prints info to screen
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -6264,7 +6439,7 @@ See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{st
 \sphinxstyleemphasis{DisableReachableStates} (bool): disables the computation of reachable states using \sphinxstyleemphasis{-df}
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): prints info to screen
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -6354,7 +6529,7 @@ In that case the four values that involve the initial states are set to \sphinxt
 \sphinxstyleemphasis{ConeOfInfluence} (bool): enables cone of influence reduction using \sphinxstyleemphasis{-coi}
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): prints info to screen
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -6547,6 +6722,14 @@ CTL formulas must start with the keyword \sphinxstyleemphasis{CTLSPEC} and LTL f
 The {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} language is case-sensitive and does not allow single character names for variables.
 \end{sphinxadmonition}
 
+\begin{sphinxadmonition}{note}{Note:}
+todo: check that version in this note is correct
+Since PyBoolNet 2.2.2 this function detects variables that represent ternary components using the function
+{\hyperref[\detokenize{PrimeImplicants:find-vanham-variables}]{\sphinxcrossref{\DUrole{std,std-ref}{PrimeImplicants.find\_vanham\_variables}}}}.
+For each it adds an INIT constraint that removes the “meaningless states” in which the ternary variable would be
+simultaneously active at medium and high activities.
+\end{sphinxadmonition}
+
 In addition to variables that encode the activities of the components,
 auxillary variables are defined and available for use in CTL or LTL formulas,
 see {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details:
@@ -6573,7 +6756,7 @@ the Boolean \sphinxstyleemphasis{STEADYSTATE} which is the value for whether the
 \sphinxstyleemphasis{FnameSMV} (str): name for \sphinxstyleemphasis{smv} file or \sphinxstyleemphasis{None}
 
 \item {} 
-\sphinxstyleemphasis{Silent} (bool): mutes print statement for file creation
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
 
 \end{itemize}
 
@@ -6602,14 +6785,14 @@ raises \sphinxstyleemphasis{Exception} if \sphinxstyleemphasis{Primes} is the em
 
 
 
-\section{QueryPatterns}
-\label{\detokenize{QueryPatterns:querypatterns}}\label{\detokenize{QueryPatterns:networkx-has-path}}\label{\detokenize{QueryPatterns::doc}}\label{\detokenize{QueryPatterns:id1}}
+\section{TemporalLogic}
+\label{\detokenize{TemporalLogic:temporallogic}}\label{\detokenize{TemporalLogic:networkx-has-path}}\label{\detokenize{TemporalLogic::doc}}\label{\detokenize{TemporalLogic:id1}}
 
 \subsection{EF\_nested\_reachability}
-\label{\detokenize{QueryPatterns:ef-nested-reachability}}\index{EF\_nested\_reachability() (in module PyBoolNet.QueryPatterns)}
+\label{\detokenize{TemporalLogic:ef-nested-reachability}}\index{EF\_nested\_reachability() (in module PyBoolNet.TemporalLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{QueryPatterns:PyBoolNet.QueryPatterns.EF_nested_reachability}}\pysiglinewithargsret{\sphinxbfcode{EF\_nested\_reachability}}{\emph{Primes}, \emph{Subspaces}}{}
+\phantomsection\label{\detokenize{TemporalLogic:PyBoolNet.TemporalLogic.EF_nested_reachability}}\pysiglinewithargsret{\sphinxbfcode{EF\_nested\_reachability}}{\emph{Primes}, \emph{Subspaces}}{}
 Constructs a CTL formula that queries whether there is a path that visits the given \sphinxstyleemphasis{Subspaces} in the order given.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -6639,10 +6822,10 @@ Constructs a CTL formula that queries whether there is a path that visits the gi
 
 
 \subsection{AGEF\_oneof\_subspaces}
-\label{\detokenize{QueryPatterns:agef-oneof-subspaces}}\index{AGEF\_oneof\_subspaces() (in module PyBoolNet.QueryPatterns)}
+\label{\detokenize{TemporalLogic:agef-oneof-subspaces}}\index{AGEF\_oneof\_subspaces() (in module PyBoolNet.TemporalLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{QueryPatterns:PyBoolNet.QueryPatterns.AGEF_oneof_subspaces}}\pysiglinewithargsret{\sphinxbfcode{AGEF\_oneof\_subspaces}}{\emph{Primes}, \emph{Subspaces}}{}
+\phantomsection\label{\detokenize{TemporalLogic:PyBoolNet.TemporalLogic.AGEF_oneof_subspaces}}\pysiglinewithargsret{\sphinxbfcode{AGEF\_oneof\_subspaces}}{\emph{Primes}, \emph{Subspaces}}{}
 Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given \sphinxstyleemphasis{Subspaces}.
 
 \begin{sphinxadmonition}{note}{Note:}
@@ -6681,10 +6864,10 @@ To find out pick arbitrary representative states x1, x2, … xn for each attract
 
 
 \subsection{EF\_oneof\_subspaces}
-\label{\detokenize{QueryPatterns:ef-oneof-subspaces}}\index{EF\_oneof\_subspaces() (in module PyBoolNet.QueryPatterns)}
+\label{\detokenize{TemporalLogic:ef-oneof-subspaces}}\index{EF\_oneof\_subspaces() (in module PyBoolNet.TemporalLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{QueryPatterns:PyBoolNet.QueryPatterns.EF_oneof_subspaces}}\pysiglinewithargsret{\sphinxbfcode{EF\_oneof\_subspaces}}{\emph{Primes}, \emph{Subspaces}}{}
+\phantomsection\label{\detokenize{TemporalLogic:PyBoolNet.TemporalLogic.EF_oneof_subspaces}}\pysiglinewithargsret{\sphinxbfcode{EF\_oneof\_subspaces}}{\emph{Primes}, \emph{Subspaces}}{}
 Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
@@ -6714,10 +6897,10 @@ Constructs a CTL formula that queries whether there is a path that leads to one 
 
 
 \subsection{EF\_unsteady\_states}
-\label{\detokenize{QueryPatterns:ef-unsteady-states}}\index{EF\_unsteady\_states() (in module PyBoolNet.QueryPatterns)}
+\label{\detokenize{TemporalLogic:ef-unsteady-states}}\index{EF\_unsteady\_states() (in module PyBoolNet.TemporalLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{QueryPatterns:PyBoolNet.QueryPatterns.EF_unsteady_states}}\pysiglinewithargsret{\sphinxbfcode{EF\_unsteady\_states}}{\emph{Names}}{}
+\phantomsection\label{\detokenize{TemporalLogic:PyBoolNet.TemporalLogic.EF_unsteady_states}}\pysiglinewithargsret{\sphinxbfcode{EF\_unsteady\_states}}{\emph{Names}}{}
 Constructs a CTL formula that queries whether for every variables v specified in \sphinxstyleemphasis{Names} there is a path to a state x in which v is unsteady.
 
 \begin{sphinxadmonition}{note}{Note:}
@@ -6751,10 +6934,10 @@ Typically this query is used to find out if the variables given in \sphinxstylee
 
 
 \subsection{subspace2proposition}
-\label{\detokenize{QueryPatterns:subspace2proposition}}\index{subspace2proposition() (in module PyBoolNet.QueryPatterns)}
+\label{\detokenize{TemporalLogic:subspace2proposition}}\index{subspace2proposition() (in module PyBoolNet.TemporalLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{QueryPatterns:PyBoolNet.QueryPatterns.subspace2proposition}}\pysiglinewithargsret{\sphinxbfcode{subspace2proposition}}{\emph{Primes}, \emph{Subspace}}{}
+\phantomsection\label{\detokenize{TemporalLogic:PyBoolNet.TemporalLogic.subspace2proposition}}\pysiglinewithargsret{\sphinxbfcode{subspace2proposition}}{\emph{Primes}, \emph{Subspace}}{}
 Constructs a CTL formula that is true in a state x if and only if x belongs to the given Subspace.
 
 \begin{sphinxadmonition}{note}{Note:}
@@ -6788,14 +6971,14 @@ Typically this query is used to define INIT constraints from a given subspace.
 
 
 
-\section{BooleanExpressions}
-\label{\detokenize{BooleanExpressions:id1}}\label{\detokenize{BooleanExpressions::doc}}\label{\detokenize{BooleanExpressions:booleanexpressions}}
+\section{BooleanLogic}
+\label{\detokenize{BooleanLogic:booleanlogic}}\label{\detokenize{BooleanLogic::doc}}\label{\detokenize{BooleanLogic:id1}}
 
 \subsection{minimize\_espresso}
-\label{\detokenize{BooleanExpressions:minimize-espresso}}\label{\detokenize{BooleanExpressions:id2}}\index{minimize\_espresso() (in module PyBoolNet.BooleanExpressions)}
+\label{\detokenize{BooleanLogic:minimize-espresso}}\label{\detokenize{BooleanLogic:id2}}\index{minimize\_espresso() (in module PyBoolNet.BooleanLogic)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{BooleanExpressions:PyBoolNet.BooleanExpressions.minimize_espresso}}\pysiglinewithargsret{\sphinxbfcode{minimize\_espresso}}{\emph{Expression}, \emph{Outputfile=None}, \emph{Merge=False}, \emph{Equiv=False}, \emph{Exact=False}, \emph{Reduce=False}}{}
+\phantomsection\label{\detokenize{BooleanLogic:PyBoolNet.BooleanLogic.minimize_espresso}}\pysiglinewithargsret{\sphinxbfcode{minimize\_espresso}}{\emph{Expression}, \emph{Outputfile=None}, \emph{Merge=False}, \emph{Equiv=False}, \emph{Exact=False}, \emph{Reduce=False}}{}
 Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
 \sphinxhref{http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer}{espresso} and \sphinxhref{https://code.google.com/archive/p/eqntott/}{eqntott} for its input preparation. Resulting expression is saved
 in file if filename for output is specified. The argument \sphinxstyleemphasis{Expression} may be either the name

@@ -1,17 +1,17 @@
 
 
 
-.. _AttractorDetection:
+.. _Attractors:
 
-AttractorDetection
-==================
+Attractors
+==========
 
 .. _compute_attractors_tarjan:
 
 compute_attractors_tarjan
 -------------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.compute_attractors_tarjan
+.. autofunction:: PyBoolNet.Attractors.compute_attractors_tarjan
 
 
 .. _find_attractor_state_by_randomwalk_and_ctl:
@@ -19,7 +19,7 @@ compute_attractors_tarjan
 find_attractor_state_by_randomwalk_and_ctl
 ------------------------------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl
+.. autofunction:: PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl
 
 
 .. _univocality:
@@ -27,7 +27,7 @@ find_attractor_state_by_randomwalk_and_ctl
 univocality
 -----------
 
-.. autofunction:: PyBoolNet.AttractorDetection.univocality
+.. autofunction:: PyBoolNet.Attractors.univocality
 
 
 .. _faithfulness:
@@ -35,7 +35,7 @@ univocality
 faithfulness
 ------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.faithfulness
+.. autofunction:: PyBoolNet.Attractors.faithfulness
 
 
 .. _completeness:
@@ -43,7 +43,7 @@ faithfulness
 completeness
 ------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.completeness
+.. autofunction:: PyBoolNet.Attractors.completeness
 
 
 .. _univocality_with_counterexample:
@@ -51,7 +51,7 @@ completeness
 univocality_with_counterexample
 -------------------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.univocality_with_counterexample
+.. autofunction:: PyBoolNet.Attractors.univocality_with_counterexample
 
 
 .. _faithfulness_with_counterexample:
@@ -59,7 +59,7 @@ univocality_with_counterexample
 faithfulness_with_counterexample
 --------------------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.faithfulness_with_counterexample
+.. autofunction:: PyBoolNet.Attractors.faithfulness_with_counterexample
 
 
 .. _completeness_with_counterexample:
@@ -67,7 +67,7 @@ faithfulness_with_counterexample
 completeness_with_counterexample
 --------------------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.completeness_with_counterexample
+.. autofunction:: PyBoolNet.Attractors.completeness_with_counterexample
 
 
 .. _create_attractor_report:
@@ -75,13 +75,4 @@ completeness_with_counterexample
 create_attractor_report
 -----------------------
 
-.. autofunction:: PyBoolNet.AttractorDetection.create_attractor_report
-
-
-
-
-
-
-
-
-
+.. autofunction:: PyBoolNet.Attractors.create_attractor_report
