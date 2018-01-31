@@ -5,6 +5,8 @@ from __future__ import absolute_import
 
 import PyBoolNet.Attractors
 import PyBoolNet.Basins
+import PyBoolNet.Commitment
+import PyBoolNet.Phenotypes
 import PyBoolNet.FileExchange
 import PyBoolNet.InteractionGraphs
 import PyBoolNet.ModelChecking
@@ -24,7 +26,7 @@ import pprint as prettyprint
 
 
 def version():
-    return "2.2.1_development"
+    return "2.2.2_development"
 
 
 def pprint(X):

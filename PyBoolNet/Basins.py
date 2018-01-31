@@ -26,103 +26,117 @@ config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
 config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
 CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
-
 perc2str = PyBoolNet.Utility.Misc.perc2str
 
+BASIN_COLORS = ["#ddf2db", "#a0dcb5", "#2ba0c6"] # weak, strong, cycle-free
+PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"] # pastel19 color scheme
 
-def weak_basin(Primes, Update, Minimize, Attractor):
+def weak_basin(Primes, Update, Subspace, Minimize=False):
 	"""
-	todo: finish code
 	todo: add unit tests
 
-	computes a single strong basin
+	Computes the weak basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
 	  **arguments**:
 		* *Primes*: prime implicants
-		* *<arg>* (<type>): <description>
+		* *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+		* *Minimize* (bool): minimize the Boolean expressions
+		* *Subspace* (str/dict): a subspace
 
 	  **returns**:
-		* *<arg>* (<type>): <description>
+		* *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
 	  **example**::
 
-		>>> (..)
-		<result>
+		>>> weak_basin(primes, update, True, "0---1")
+		{"size":	134,
+		"formula":	"Erk & !Raf | Mek",
+		"perc":		12.89338}
 	"""
 
-	return _basin_handle(Primes, Update, Minimize, Attractor, CTLpattern="CTLSPEC EF(%s)")
+	return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC EF({x})")
 
 
-def strong_basin(Primes, Update, Minimize, Attractor):
+def strong_basin(Primes, Update, Subspace, Minimize=False):
 	"""
-	todo: finish code
 	todo: add unit tests
 
-	computes a single strong basin
+	Computes the strong basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
 	  **arguments**:
 		* *Primes*: prime implicants
-		* *<arg>* (<type>): <description>
+		* *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+		* *Minimize* (bool): minimize the Boolean expressions
+		* *Subspace* (str/dict): a subspace
 
 	  **returns**:
-		* *<arg>* (<type>): <description>
+		* *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
 	  **example**::
 
-		>>> (..)
-		<result>
+		>>> strong_basin(primes, update, True, "0---1")
+		{"size":	134,
+		"formula":	"Erk & !Raf | Mek",
+		"perc":		12.89338}
 	"""
 
-	return _basin_handle(Primes, Update, Minimize, Attractor, CTLpattern="CTLSPEC AG(EF(%s))")
+	return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC AG(EF({x}))")
 
 
-def cycfree_basin(Primes, Update, Minimize, Attractor):
+def cyclefree_basin(Primes, Update, Subspace, Minimize=False):
 	"""
-	todo: finish code
 	todo: add unit tests
 
-	computes a single cycle-free basin
+	Computes the cycle-free basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
 	  **arguments**:
 		* *Primes*: prime implicants
-		* *<arg>* (<type>): <description>
+		* *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+		* *Minimize* (bool): minimize the Boolean expressions
+		* *Subspace* (str/dict): a subspace
 
 	  **returns**:
-		* *<arg>* (<type>): <description>
+		* *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
 	  **example**::
 
-		>>> (..)
-		<result>
+	  	>>> cyclefree_basin(primes, update, True, "0---1")
+		{"size":	134,
+		"formula":	"Erk & !Raf | Mek",
+		"perc":		12.89338}
 	"""
 
-	return _basin_handle(Primes, Update, Minimize, Attractor, CTLpattern="CTLSPEC AF(%s)")
+	return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC AF({x})")
 
 
-def _basin_handle(Primes, Update, Minimize, Attractor, CTLpattern):
+def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
 	"""
-	todo: finish code
 	todo: add unit tests
 
-	<description>
+	The handle for :ref:`weak_basin`, :ref:`strong_basin` and :ref:`cyclefree_basin`.
 
 	  **arguments**:
 		* *Primes*: prime implicants
-		* *Attractor* (str / dict): a subspace
+		* *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+		* *Minimize* (bool): minimize the Boolean expressions
+		* *Subspace* (str/dict): a subspace
+		* *CTLpattern* (str):
 
 	  **returns**:
-		* *<arg>* (<type>): <description>
+		* *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
 	  **example**::
 
-		>>> (..)
-		<result>
+		>>> _basin_handle(primes, update, True, "0---1", "CTLSPEC EF({x})")
+		{"size":	134,
+		"formula":	"Erk & !Raf | Mek",
+		"perc":		12.89338}
 	"""
 
-	prop = PyBoolNet.TemporalLogic.subspace2proposition(Primes,Attractor)
+	prop = PyBoolNet.TemporalLogic.subspace2proposition(Primes, Subspace)
 	init = "INIT TRUE"
-	spec = CTLpattern%prop
-	ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
+	spec = CTLpattern.format(x=prop)
+	ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 
 	size = acc["INITACCEPTING_SIZE"]
 	formula = acc["INITACCEPTING"]
@@ -130,7 +144,7 @@ def _basin_handle(Primes, Update, Minimize, Attractor, CTLpattern):
 	if Minimize and formula not in ["TRUE","FALSE"]:
 		formula = PyBoolNet.BooleanLogic.minimize_espresso(formula)
 
-	size_total = PyBoolNet.PrimeImplicants.size_state_space(Primes, Type="total")
+	size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
 
 	return {"size":	size,
 			"formula": formula,
@@ -156,284 +170,250 @@ def _default_basin(Primes):
 		<result>
 	"""
 
-	size_total = PyBoolNet.PrimeImplicants.size_state_space(Primes, Type="total")
+	size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
 
 	return {"size":	size_total,
 			"formula": "TRUE",
 			"perc":	100.}
 
 
-def create_barplot(Primes, Update, FnameImage=None, Attractors=None, Minimize=False, Title=None, Silent=True):
+def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplot=None, FnamePiechart=None, Minimize=False, Silent=False):
 	"""
-	todo: use attr object
-	todo: proof read docstring
+	todo: add unit tests
 
-	Uses model checking with accepting states to compute the three types of basins of attraction for each attractor.
-	*Attractors* may be used to specify a list of representative states for the attractors.
-	Otherwise the basins of the minimal trap spaces is returned.
-	Use *FnameImage* to create a bar plot, this requires https://matplotlib.org.
-	The basins are returned in the form of a dictionary::
-
-		* '01100--0': (str of attractor representantion)
-			* 'weak'
-				* 'formula': '(!Erk & !Mek)' (Boolean expression for states)
-				* 'perc':	0.5			 (percentage of state space)
-				* 'size':	8			   (number of states)
-			* 'strong'
-				...
-			* 'cycfree'
-				...
+	Extends *AttrJson* with basin of attraction.
+	Use *FnameBarplot* and *FnamePiechart* to create plots of the basins, see :ref:`create_barplot` and :ref:`basins_create_piechart`.
 
 	**arguments**:
-		* *Primes*: prime implicants
-		* *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-		* *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
-		* *Minimize* (bool): minimize the resulting expressions
-		* *FnameImage* (str): file name of bar chart of weak basins
-		* *Title* (str): optional title of plot
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *Weak* (bool): compute weak basins
+		* *Strong* (bool): compute strong basins
+		* *CycleFree* (bool): compute cycle-free basins
+		* *FnameBarplot* (str): file name of bar plot
+		* *FnamePiechart* (str): file name of pie chart
+		* *Minimize* (bool): minimize the Boolean expressions
 		* *Silent* (bool): print infos to screen
 
 	**returns**::
-		* *Basins* (dict): the basins of attraction
+		* *None*
 
 	**example**::
 
 		>>> primes = Repository.get_primes("raf")
-		>>> create_barplot(primes, "asynchronous")
-			{   '001': {'weak': {'formula': '(!Erk & !Raf) | (!Mek)', 'perc': 62.5, 'size': 5L},...},
-				'11-': {'weak': {'formula': '(Mek) | (Erk)', 'perc': 75.0, 'size': 6L}},...}}
+		>>> attrs = Attractors.compute_json(primes, update)
+		>>> compute_basins(attrs)
 	"""
 
-	if not Attractors:
-		Attractors = PyBoolNet.AspSolver.trap_spaces(Primes,"min")
-
-	weak = {}
-	strong = {}
-	cycfree = {}
-
+	Primes = AttrJson["primes"]
+	Update = AttrJson["update"]
 
 	if not Silent:
-		print("create_barplot(..)")
+		print("compute_basins(..)")
 
-	for x in Attractors:
+	n = len(AttrJson["attractors"])
+	for i,x in enumerate(AttrJson["attractors"]):
+		i+=1
 		if not Silent:
-			print(" working on attractor %s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x))
-
-		label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
+			print(" working on attractor {i}/{n}: {l}".format(i=i,n=n,l=x["state"]["str"]))
 
 		# weak basin
-		if len(Attractors) == 1:
-			label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,Attractors[0])
-			weak[label] = _default_basin(Primes)
+		if n == 1:
+			x["weak_basin"] = _default_basin(Primes)
 		else:
-			weak[label] = weak_basin(Primes, Update, Minimize, Attractor=x)
+			x["weak_basin"] = weak_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
 		# strong basin
-		if len(Attractors) == 1:
-			label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,Attractors[0])
-			strong[label] = _default_basin(Primes)
+		if n == 1:
+			x["strong_basin"] = _default_basin(Primes)
 
 		else:
-			strong[label] = strong_basin(Primes, Update, Minimize, Attractor=x)
+			x["strong_basin"] = strong_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
 		# cycle-free basin
-		cycfree[label] = cycfree_basin(Primes, Update, Minimize, Attractor=x)
+		x["cyclefree_basin"] = cyclefree_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
-	if FnameImage:
-		try:
-			import matplotlib.pyplot
-			success = True
+	if FnameBarplot:
+		create_barplot(AttrJson, FnameBarplot, Minimize, Title=None, Silent=Silent)
 
-		except ImportError:
-			print("ERROR: can not import matplotlib.pyplot")
-			success = False
-
-		if success:
-
-			figure = matplotlib.pyplot.figure()
-
-			labels = sorted(weak, key=lambda x: weak[x]["perc"], reverse=True)
+	if FnamePiechart:
+		create_piechart(AttrJson, FnamePiechart, Title=None, Silent=Silent)
 
 
-
-			y1 = [cycfree[x]["perc"] for x in labels]
-			y2 = [strong[x]["perc"]-cycfree[x]["perc"] for x in labels]
-			y3 = [weak[x]["perc"]-strong[x]["perc"] for x in labels]
-
-			N = len(y1)
-			x = range(N)
-			width = 1/1.5
-
-			h3 = matplotlib.pyplot.bar(x, y1, width, color="black", align='center', label='cycle-free')
-			h2 = matplotlib.pyplot.bar(x, y2, width, bottom=y1, color="gray", align='center', label='strong')
-			h1 = matplotlib.pyplot.bar(x, y3, width, bottom=[sum(x) for x in zip(y1,y2)], color="lightgrey", align='center', label='weak')
-			matplotlib.pyplot.xticks(range(len(labels)), labels, rotation=40, ha="right")
-			matplotlib.pyplot.ylim((0,100))
-			matplotlib.pyplot.legend(handles = [h1,h2,h3], loc='upper left')
-
-			if Title:
-				matplotlib.pyplot.title(Title, y=1.08)
-			else:
-				matplotlib.pyplot.title('Basins of Attraction', y=1.08)
-
-			matplotlib.pyplot.ylabel('% of state space')
-			matplotlib.pyplot.xlabel('attractors')
-			matplotlib.pyplot.tight_layout()
-
-			figure.savefig(FnameImage, bbox_inches='tight')
-			print("created %s"%FnameImage)
-			matplotlib.pyplot.close(figure)
-
-
-	result = {}
-	for x in weak:
-		result[x] = {}
-		result[x]["weak"] = weak[x]
-
-	for x in strong:
-		result[x]["strong"] = strong[x]
-
-	for x in cycfree:
-		result[x]["cycfree"] = cycfree[x]
-
-	return result
-
-
-def create_piechart(Primes, Update, FnameImage=None, Attractors=None, Minimize=False, Title=None, Silent=True):
+def create_barplot(AttrJson, FnameImage, Title=None, Silent=False):
 	"""
-	todo: add cycle-free subset to plot using pairs of similar colours
-	todo: proofread docstring
+	todo: add unit tests
 
-	Uses model checking with accepting states to compute the strong basins of attraction of the network defined by *Primes* and *Update*.
-	*Attractors* may be used to specify a list of representative states for the attractors.
-	Otherwise the strong basins of the minimal trap spaces is returned.
-	Use *FnameImage* to create a pie chart of the strong basins, this requires https://matplotlib.org.
-	The strong basins are returned in the form of a dictionary::
-
-		* '01100--0': (str of attractor representant)
-			* 'formula': '(!Erk & !Mek)' (Boolean expression for states)
-			* 'perc':	0.5			 (percentage of state space)
-			* 'size':	8			   (number of states)
-		...
-		* 'outside':  (special name for all states that do not belong to a strong basin)
-			...
-			...
+	Creates a bar plot of the basins of attraction specified in *AttrJson*.
+	Requires that *AttrJson* has been extended with basins information by :ref:`compute_basins`.
+	Requires https://matplotlib.org.
 
 	**arguments**:
-		* *Primes*: prime implicants
-		* *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-		* *Attractors* (list): list of states or subspaces representing the attractors. *None* results in the computation of the minimal trap spaces.
-		* *Minimize* (bool): minimize the resulting expressions
-		* *FnameImage* (str): file name of pie chart of strong basins
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *FnameImage* (str): create image for bar plot
 		* *Title* (str): optional title of plot
 		* *Silent* (bool): print infos to screen
 
-	**returns**::
-		* *StrongBasins* (dict): the strong basins
+	**returns**:
+		* *None*
 
 	**example**::
 
-		>>> primes = Repository.get_primes("raf")
-		>>> create_piechart(primes, "asynchronous")
-			{   '001': {   'formula': '(!Erk & !Mek)', 'perc': 25.0, 'size': 2L},
-				'11-': {   'formula': '(Mek & Raf) | (Erk & Mek)', 'perc': 37.5, 'size': 3L},
-				'outside': {   'formula': '(!Erk & Mek & !Raf) | (Erk & !Mek)',
-							   'perc': 37.5,
-							   'size': 3L}}
+		>>> attrs = Attractors.compute_json(primes, update)
+		>>> compute_basins(attrs)
+		>>> create_barplot(attrs, "barplot.pdf")
+		created barplot.pdf
 	"""
 
-	if not Attractors:
-		Attractors = PyBoolNet.AspSolver.trap_spaces(Primes,"min")
+	import matplotlib.pyplot
 
-	res = {}
+	Attrs = AttrJson["attractors"]
+	Primes = AttrJson["primes"]
+	assert(all(basin in x for basin in ["weak_basin", "strong_basin", "cyclefree_basin"] for x in Attrs))
 
-	if len(Attractors) == 1:
+	total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+	is_small_network = total <= 1024
+	key = "size" if is_small_network else "perc"
 
-		label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,Attractors[0])
-		res[label] = _default_basin(Primes)
+	indeces = range(len(Attrs))
+	indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
+
+	y1 = [Attrs[i]["cyclefree_basin"][key] for i in indeces]
+	y2 = [Attrs[i]["strong_basin"][key] - Attrs[i]["cyclefree_basin"][key]  for i in indeces]
+	y3 = [Attrs[i]["weak_basin"][key]   - Attrs[i]["strong_basin"][key]   for i in indeces]
+
+	N = len(y1)
+	x = range(N)
+	width = 1/1.5
+
+	labels = [Attrs[i]["mintrapspace"]["str"] for i in indeces]
+
+	figure = matplotlib.pyplot.figure()
+	h3 = matplotlib.pyplot.bar(x, y1, width, color=BASIN_COLORS[2], align='center', label='cycle-free basin')
+	h2 = matplotlib.pyplot.bar(x, y2, width, bottom=y1, color=BASIN_COLORS[1], align='center', label='strong basin')
+	h1 = matplotlib.pyplot.bar(x, y3, width, bottom=[sum(x) for x in zip(y1,y2)], color=BASIN_COLORS[0], align='center', label='weak basin')
+	matplotlib.pyplot.xticks(range(len(labels)), labels, rotation=40, ha="right")
+
+	ylim = (0,total) if is_small_network else (0,100)
+	matplotlib.pyplot.ylim(ylim)
+
+	matplotlib.pyplot.legend(handles = [h1,h2,h3], loc='upper right')
+
+	if Title==None:
+		Title = 'Basins of Attraction'
+
+	matplotlib.pyplot.title(Title, y=1.08)
+
+	ylabel = "number of states" if is_small_network else "percent of state space"
+	matplotlib.pyplot.ylabel(ylabel)
+	matplotlib.pyplot.xlabel('attractors')
+	matplotlib.pyplot.tight_layout()
+
+	figure.savefig(FnameImage, bbox_inches='tight')
+	matplotlib.pyplot.close(figure)
+
+	if not Silent:
+		print("created {x}".format(x=FnameImage))
 
 
+def create_piechart(AttrJson, FnameImage, Title=None, Silent=False):
+	"""
+	todo: add cycle-free subset to plot using pairs of similar colours
+	todo: add unit tests
+
+	Creates a pie chart of the basins of attraction specified in *AttrJson*.
+	Requires that *AttrJson* has been extended with basins information by :ref:`compute_basins`.
+	Requires https://matplotlib.org.
+
+	**arguments**:
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *FnameImage* (str): create image for pie chart
+		* *Title* (str): optional title of plot
+		* *Silent* (bool): print infos to screen
+
+	**returns**:
+		* *None*
+
+	**example**::
+
+		>>> attrs = Attractors.compute_json(primes, update)
+		>>> compute_basins(attrs)
+		>>> create_piechart(attrs, "piechart.pdf")
+		created piechart.pdf
+	"""
+
+	import matplotlib.pyplot
+
+	Primes = AttrJson["primes"]
+	Attrs = AttrJson["attractors"]
+
+	assert(all(basin in x for basin in ["weak_basin", "strong_basin", "cyclefree_basin"] for x in Attrs))
+
+	if not Silent:
+		print("create_piechart(..)")
+
+	total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+	strong = sum(x["strong_basin"]["size"] for x in Attrs)
+	outside = total - strong
+	is_small_network = total <= 1024
+	key = "size" if is_small_network else "perc"
+
+	indeces = range(len(Attrs))
+	indeces.sort(key=lambda i: Attrs[i]["strong_basin"]["perc"], reverse=True)
+
+	figure = matplotlib.pyplot.figure()
+	sizes  = [Attrs[i]["strong_basin"]["size"] for i in indeces] + [outside]
+
+	if len(Attrs)<=9:
+		colors = [PIE_COLORS[i] for i,x in enumerate(Attrs)]
 	else:
-		count = 0
+		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(indeces)+1)) for x in range(len(indeces)+2)][1:-1]
 
-		total_size = PyBoolNet.PrimeImplicants.size_state_space(Primes, Type="total")
+	colors.append("white") # for slice that represents "outside" states
 
-		if not Silent:
-			print("create_piechart(..)")
+	explode = [0]*len(indeces)+[.08]
+	labels = [Attrs[i]["mintrapspace"]["str"] for i in indeces] + [""]
 
-		for x in Attractors:
-			if not Silent:
-				print(" working on attractor %s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x))
+	autopct = lambda p: '{:.0f}'.format(p * total / 100) if is_small_network else "%1.1f%%"
+	matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
 
-			label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
-			res[label] = strong_basin(Primes, Update, Minimize, Attractor=x)
-			count+= res[label]["size"]
+	matplotlib.pyplot.axis('equal')
 
+	if Title==None:
+		Title = 'Strong Basins of Attraction'
 
-		if count<total_size:
+	matplotlib.pyplot.title(Title, y=1.08)
+	matplotlib.pyplot.tight_layout()
+	figure.savefig(FnameImage, bbox_inches='tight')
+	matplotlib.pyplot.close(figure)
 
-			init = "INIT TRUE"
-			prop = " & ".join("!(%s)"%x["formula"] for x in res.values())
-			spec = "CTLSPEC %s"%prop
-			ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes,Update,init,spec)
-
-			size = acc["INITACCEPTING_SIZE"]
-			count+=size
-
-			assert(count==total_size)
-
-			formula = acc["INITACCEPTING"]
-			if Minimize:
-				formula = PyBoolNet.BooleanLogic.minimize_espresso(formula)
-
-			res["None"] = {"size":	size,
-						   "formula": formula,
-						   "perc":	100.* size / total_size}
-
-		else:
-			res["None"] = {"size":	0,
-						   "formula": "0",
-						   "perc":	.0}
+	if not Silent:
+		print("created %s"%FnameImage)
 
 
-	if FnameImage:
-		try:
-			import matplotlib.pyplot
-			success = True
 
-		except ImportError:
-			print("ERROR: can not import matplotlib.pyplot")
-			success = False
 
-		if success:
 
-			figure = matplotlib.pyplot.figure()
 
-			labels = sorted(res)
 
-			if Update=="synchronous":
-				labels.remove("not in any strong basin")
-				explode = None
 
-			sizes  = [res[x]["size"] for x in labels]
-			colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(labels)+1)) for x in range(len(labels)+2)][1:-1]
 
-			if Update=="asynchronous":
-				colors[-1] = "white"
-				explode = [0]*(len(labels)-1)+[.08]
 
-			matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
-			matplotlib.pyplot.axis('equal')
 
-			if Title:
-				matplotlib.pyplot.title(Title, y=1.08)
-			else:
-				matplotlib.pyplot.title('Strong Basins of Attraction', y=1.08)
 
-			matplotlib.pyplot.tight_layout()
 
-			figure.savefig(FnameImage, bbox_inches='tight')
-			print("created %s"%FnameImage)
-			matplotlib.pyplot.close(figure)
 
-	return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# end of file

@@ -104,7 +104,7 @@ def divide_list_into_similar_length_lists(List):
 def perc2str(Perc):
 	"""
 	converts a number into a nice string.
-	Used for plotting the labels of quotient graphs, e.g. Basins.commitment_diagram2image(..)
+	Used for plotting the labels of quotient graphs, e.g. Commitment.diagram2image(..)
 	"""
 
 	res = "%.4f"%Perc
@@ -148,3 +148,25 @@ def open_json_data(Fname):
 		data = json.load(fp=f)
 
 	return data
+
+
+def copy_json_data(Data):
+	"""
+	todo: finish code
+	todo: add unit tests
+
+	creates a copy of a json data structure by conversion to string and back.
+
+	**arguments**:
+		* *Data* (json): json data
+
+	**returns**:
+		* *DataCopy* (json): a copy of *Data*
+
+	**example**::
+
+		>>> data = Attractors.compute_json(primes, update)
+		>>> data2 = copy_json_data(data)
+	"""
+
+	return json.loads(json.dumps(Data))
