@@ -33,6 +33,13 @@ FILES_OUT  = tempfile.mkdtemp(prefix='pyboolnet_')
 
 
 def run():
+
+	import PyBoolNet.Tests.StateTransitionGraphs
+	unittest.main(verbosity=2, buffer=True, exit=False, module=PyBoolNet.Tests.StateTransitionGraphs)
+
+	return
+
+	# old test setup
 	unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
 
 	if os.path.isdir(FILES_OUT):
@@ -128,29 +135,7 @@ class TestBooleanLogic(unittest.TestCase):
 		self.assertTrue(answer==expected, msg)
 
 
-class TestBasins(unittest.TestCase):
-	def test_commitment_diagram_styles(self):
-		primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
-		update = "asynchronous"
-		attractors = PyBoolNet.AspSolver.trap_spaces(primes, "min")
-		diagram = PyBoolNet.Basins.commitment_diagram(primes, update, attractors, Silent=False)
 
-		fname_out = os.path.join(FILES_OUT, "basin_diagram.pdf")
-
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=True)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleInputs=False)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleRanks=True)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleSplines="ortho")
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, StyleEdges=True)
-		PyBoolNet.Basins.commitment_diagram2image(primes, diagram, FnameImage=fname_out, FirstIndex=10)
-
-	def test_commitment_diagram_critical_nodes(self):
-		primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
-		update = "asynchronous"
-		attractors = [{"x1":1},{"x1":0}]
-		diagram = PyBoolNet.Basins.commitment_diagram(primes, update, attractors, Silent=False)
 
 
 class TestRepository(unittest.TestCase):
@@ -226,25 +211,25 @@ class TestStateTransitionGraphs(unittest.TestCase):
 		answer = PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(primes,"110-","0---")
 		self.assertFalse(answer)
 
-	def test_list_states_referenced_by_proposition(self):
+	def test_enumerate_states(self):
 		primes = PyBoolNet.Repository.get_primes("raf")
 		prop = "!Erk | (Raf & Mek)"
 		expected = set(["010","011","001","000","111"])
-		answer = set(PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition(primes, prop))
+		answer = set(PyBoolNet.StateTransitionGraphs.enumerate_states(primes, prop))
 		msg = "\nexpected: "+str(expected)
 		msg+= "\ngot:	  "+str(answer)
 		self.assertTrue(answer==expected, msg)
 
 		prop = "0"
 		expected = set([])
-		answer = set(PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition(primes, prop))
+		answer = set(PyBoolNet.StateTransitionGraphs.enumerate_states(primes, prop))
 		msg = "\nexpected: "+str(expected)
 		msg+= "\ngot:	  "+str(answer)
 		self.assertTrue(answer==expected, msg)
 
 		prop = "TRUE"
 		expected = set(["010","011","001","000","111","110","101","100"])
-		answer = set(PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition(primes, prop))
+		answer = set(PyBoolNet.StateTransitionGraphs.enumerate_states(primes, prop))
 		msg = "\nexpected: "+str(expected)
 		msg+= "\ngot:	  "+str(answer)
 		self.assertTrue(answer==expected, msg)
