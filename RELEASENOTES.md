@@ -2,7 +2,7 @@
 
 
 #### release notes for hotfix version 2.2.1 (January 2018)
-- *bugfix: removed slowdown* that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
+- **bugfix**: removed slowdown that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 
 
 #### release notes for version 2.2.0 (November 2017)
@@ -39,7 +39,7 @@
 
 #### release notes for version 2.1 (September 2016)
 - support for windows and macos
-- refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `list_states_referenced_by_proposition`
+- refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `enumerate_states`
 - refactored function for state and subspace conversions to `state2str`, `state2dict`, `subspace2str`, `subspace2dict` and added basic asserts
 - added functions `univocality_with_counterexample`, `faithfulness_with_counterexample` and `completeness_with_counterexample`
 - refactored the functions `univocal`, `faithful` and `completeness_iterative` to two `univocality`, `faithfulness` and `completeness`

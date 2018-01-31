@@ -17,5 +17,6 @@ Releases/
 dist/
 
 Tutorials/Klarner2018/jobs.py
+Tutorials/Klarner2018/*.pdf
 
 MANIFEST
