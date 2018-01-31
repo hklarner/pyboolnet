@@ -15,9 +15,8 @@ import PyBoolNet.TemporalLogic
 import PyBoolNet.Utility
 
 
-def compute_attractors_object(Primes, Update, Fname=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False):
+def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False):
 	"""
-	todo: finish code
 	todo: add unit tests
 
 	Computes the attractors object.
@@ -64,41 +63,41 @@ def compute_attractors_object(Primes, Update, Fname=None, CheckCompleteness=True
 	**arguments**:
 	  * *Primes*: prime implicants
 	  * *Update* (str): description
-	  * *Fname* (str): description
+	  * *FnameJson* (str): description
 	  * *CheckCompleteness* (bool): description
 	  * *CheckFaithfulness* (bool): description
 	  * *CheckUnivocality* (bool): description
 	  * *Silent* (bool): print infos to screen
 
 	**returns**:
-	  * *AttrObj* (json): description
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
 
 	**example**::
 
-	  >>> attrobj = compute_attractor_object(..)
-	  created attrobj.json
+	  >>> attrs = compute_json(primes, update, "attrs.json")
+	  created attrs.json
 	"""
 
 	assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
 	assert(Primes)
 
-	attrobj = {}
-	attrobj["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
-	attrobj["update"] = Update
+	attrs = {}
+	attrs["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
+	attrs["update"] = Update
 
 	mintspaces = PyBoolNet.AspSolver.trap_spaces(Primes, "min")
 
 	if CheckCompleteness:
 		is_complete = completeness(Primes, Update)
 		if is_complete:
-			attrobj["is_complete"] = "yes"
+			attrs["is_complete"] = "yes"
 		else:
-			attrobj["is_complete"] = "no"
+			attrs["is_complete"] = "no"
 	else:
-		attrobj["is_complete"] = "unknown"
+		attrs["is_complete"] = "unknown"
 
 
-	attrobj["attractors"] = []
+	attrs["attractors"] = []
 
 	for mints in mintspaces:
 
@@ -136,60 +135,58 @@ def compute_attractors_object(Primes, Update, Fname=None, CheckCompleteness=True
 		attractor_obj["is_steady"] = len(mints)==len(Primes)
 		attractor_obj["is_cyclic"] = len(mints)!=len(Primes)
 
-		attrobj["attractors"].append(attractor_obj)
+		attrs["attractors"].append(attractor_obj)
 
-	attrobj["attractors"] = tuple(sorted(attrobj["attractors"], key=lambda x: x["state"]["str"]))
+	attrs["attractors"] = tuple(sorted(attrs["attractors"], key=lambda x: x["state"]["str"]))
 
-	if Fname:
-		save_attractors_object(attrobj, Fname, Silent)
+	if FnameJson:
+		save_json(attrs, FnameJson, Silent)
 
-	return attrobj
+	return attrs
 
 
-def save_attractors_object(AttrObj, Fname, Silent=False):
+def save_json(AttrJson, FnameJson, Silent=False):
 	"""
-	todo: finish code
-	todo: add unit tests, add to sphinx
+	todo: add unit tests
 
 	saves the attractor object as a JSON file.
 
 	**arguments**:
-	  * *AttrObj*: attractor object, see todo: add :ref:`xxx`
-	  * *Fname* (str): file name
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *FnameJson* (str): file name
 
 	**returns**:
-	  * *None*
+		* *None*
 
 	**example**::
 
-	  >>> save_attractor_object(attrobj, "attrs.json")
-	  created attrs.json
+		>>> save_attractor(attrs, "attrs.json")
+		created attrs.json
 	"""
 
-	PyBoolNet.Utility.Misc.save_json_data(AttrObj, Fname, Silent=Silent)
+	PyBoolNet.Utility.Misc.save_json_data(AttrJson, FnameJson, Silent=Silent)
 
 
-def open_attractors_object(Fname):
+def open_json(Fname):
 	"""
-	todo: finish code
-	todo: add unit tests, add to sphinx
+	todo: add unit tests
 
 	opens the attractor object, see todo: add :ref:`xxx`
 
 	**arguments**:
-	  * *Fname* (str): file name
+		* *Fname* (str): file name
 
 	**returns**:
-	  * *AttrObj*: attractor object, see todo: add :ref:`xxx`
+		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
 
 	**example**::
 
-	  >>> attrobj = open_attractor_object("attrs.json")
+		>>> attrs = open_attractor("attrs.json")
 	"""
 
-	attrobj = PyBoolNet.Utility.Misc.open_json_data(Fname)
+	attrs = PyBoolNet.Utility.Misc.open_json_data(Fname)
 
-	return attrobj
+	return attrs
 
 
 def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, Length=0, Attempts=10, Silent=True):
@@ -712,7 +709,7 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample):
 		return True
 
 
-# todo: refactor using AttrObj
+# todo: refactor using AttrJson
 def create_attractor_report(Primes, FnameTXT=None):
 	"""
 	Creates an attractor report for the network defined by *Primes*.

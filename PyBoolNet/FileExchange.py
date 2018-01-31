@@ -31,25 +31,25 @@ def _bnet2primes_error(proc, out, err, cmd):
 
 
 def bnet2primes( BNET, FnamePRIMES=None ):
-    """    
+    """
     Generates and returns the prime implicants of a Boolean network in :ref:`installation_boolnet` format.
     The primes are saved as a *json* file if *FnamePRIMES* is given.
     The argument *BNET* may be either the name of a *bnet* file or a string containing the file contents.
     Use the function :ref:`FileExchange.read_primes <read_primes>` to open a previously saved *json* file.
 
     .. note::
-    
+
         Requires the program :ref:`BNetToPrime <installation_bnettoprime>`.
 
     **arguments**:
        * *BNET*: name of *bnet* file or string contents of file
        * *FnamePRIMES*: *None* or name of *json* file to save primes
 
-    **returns**:    
+    **returns**:
        * *Primes*: prime implicants
 
     **example**::
-    
+
           >>> primes = bnet2primes("mapk.bnet", "mapk.primes" )
           >>> primes = bnet2primes("mapk.bnet")
           >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek")
@@ -60,16 +60,16 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     if os.path.isfile(BNET) and not FnamePRIMES==None:
         FnameBNET = BNET
 
-        
+
         if FnamePRIMES!=None:
-            
+
             cmd = [CMD_BNET2PRIMES, FnameBNET, FnamePRIMES]
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = proc.communicate()
             out = out.decode()
             _bnet2primes_error(proc, out, err, cmd)
             print('created %s'%FnamePRIMES)
-            
+
             with open(FnamePRIMES) as f:
                 lines = f.read()
             primes = ast.literal_eval(lines)
@@ -78,7 +78,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     # input via filename / output to stdout
     elif os.path.isfile(BNET) and FnamePRIMES==None:
         FnameBNET = BNET
-        
+
         cmd = [CMD_BNET2PRIMES, FnameBNET]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate()
@@ -93,17 +93,17 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
     # input via stdin / output to filename
     elif not os.path.isfile(BNET) and not FnamePRIMES==None:
-        
+
         print("This is the only combination that is currently not possible.")
         print("Need to specify either a bnet file name or a json file name.")
         raise Exception
-            
+
         cmd = [CMD_BNET2PRIMES, ">", FnamePRIMES]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate( input=BNET.encode() )
         out = out.decode()
         proc.stdin.close()
-        
+
         _bnet2primes_error(proc, out, err, cmd)
         print('created %s'%FnamePRIMES)
 
@@ -119,12 +119,12 @@ def bnet2primes( BNET, FnamePRIMES=None ):
         proc.stdin.close()
         _bnet2primes_error(proc, out, err, cmd)
         out = out.decode()
-        
+
         out = out.replace('\x08','') # remove backspaces
         out = out.replace(' ','') # remove whitespaces
 
         primes = ast.literal_eval(out)
-    
+
     return primes
 
 
@@ -139,14 +139,14 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     **arguments**:
        * *Primes*: prime implicants
        * *FnameBNET* (str): name of *bnet* file or *None* for the string of the file contents
-       * *Minimize* (bool): whether the expressions should be minimized
+		* *Minimize* (bool): minimize the Boolean expressions
        * *Header* (bool): whether to include the "targets, factors" header
 
     **returns**:
         * *BNET* (str) if *FnameBNET=None* or *None* otherwise
 
     **example**::
-    
+
           >>> primes2bnet(primes, "mapk.bnet")
           >>> primes2bnet(primes, "mapk.bnet", True)
           >>> expr = primes2bnet(primes)
@@ -163,8 +163,8 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
 
     # correction, sind outdag components may also be constants
     outdag = [x for x in outdag if not x in constants]
-    
-    body   = sorted(x for x in Primes if all(x not in X for X in [constants, inputs, outdag]))    
+
+    body   = sorted(x for x in Primes if all(x not in X for X in [constants, inputs, outdag]))
 
     blocks = [constants, inputs, body, outdag]
     blocks = [x for x in blocks if x]
@@ -173,7 +173,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     lines = []
     if Header:
         lines+= ['targets, factors']
-        
+
     if Minimize:
         expressions = PyBoolNet.QuineMcCluskey.primes2mindnf(Primes)
         for block in blocks:
@@ -196,7 +196,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
 
     if FnameBNET==None:
         return "\n".join(lines)
-    
+
     with open(FnameBNET, 'w') as f:
         f.writelines('\n'.join(lines))
     print('created %s'%FnameBNET)
@@ -211,16 +211,16 @@ def write_primes(Primes, FnamePRIMES):
        * *FnamePRIMES* (str): name of *json* file
 
     **example**::
-    
+
           >>> write_primes(primes, "mapk.primes")
     """
-    
+
     with open(FnamePRIMES, 'w') as f:
         f.write(str(Primes))
     print('created %s'%FnamePRIMES)
 
-    
-def read_primes(FnamePRIMES):        
+
+def read_primes(FnamePRIMES):
     """
     Reads the prime implicants of a Boolean network that were previously stored as a *json* file.
 
@@ -231,10 +231,10 @@ def read_primes(FnamePRIMES):
        * *Primes*: prime implicants
 
     **example**::
-    
+
           >>> primes = read_primes("mapk.primes")
     """
-        
+
     with open(FnamePRIMES, 'r') as f:
         lines = f.read()
 
@@ -246,21 +246,21 @@ def primes2genysis(Primes, FnameGENYSIS):
     Generates a GenYsis_ file from *Primes* for the computation of all attractors of the synchronous or asynchronous transition system.
     GenYsis_ was introduced in :ref:`Garg2008 <Garg2008>`.
     It is available at http://www.vital-it.ch/software/genYsis.
-    
+
 
     **arguments**:
        * *Primes*: prime implicants
        * *FnameGENYSIS* (str): name of GenYsis_ file
 
     **example**::
-    
+
           >>> primes2genysis(primes, "mapk.genysis")
     """
 
     lines = []
     for name in sorted(Primes):
 
-        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:  
+        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
             lines+= [name+' -> '+name]
             lines+= ['^'+name+' -> '+name]
 
@@ -268,9 +268,9 @@ def primes2genysis(Primes, FnameGENYSIS):
             lines+= [name+' -| '+name]
             lines+= ['^'+name+' -| '+name]
 
-        else: 
+        else:
             for prime in Primes[name][1]:
-                
+
                 seq = []
                 for n,v in sorted(prime.items()):
                     if v==1:
@@ -284,7 +284,7 @@ def primes2genysis(Primes, FnameGENYSIS):
         f.write('\n'.join(lines))
 
     print('created %s'%FnameGENYSIS)
-    
+
 
 def primes2bns(Primes, FnameBNS=None):
     """
@@ -297,14 +297,14 @@ def primes2bns(Primes, FnameBNS=None):
        * *FnameBNS* (str): name of *bns* file or *None* to return file as string
 
     **example**::
-    
+
           >>> primes2bns(primes, "mapk.bns")
     """
-    
+
     names_sorted = sorted(Primes)
     lines = ['# '+', '.join(names_sorted),'']
     lines+= ['.v %i'%len(names_sorted),'']
-    
+
     ig = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
     for i, name in enumerate(names_sorted):
         i=i+1
@@ -312,7 +312,7 @@ def primes2bns(Primes, FnameBNS=None):
         regulators = sorted(ig.predecessors(name))
         nregs = len(regulators)
         iregs = ' '.join([str(names_sorted.index(reg)+1) for reg in regulators])
-        
+
         lines+= ['.n {index} {number_regs} {ids_regs}'.format(index=i, number_regs=nregs, ids_regs=iregs)]
 
         for v in [0,1]:
@@ -329,7 +329,7 @@ def primes2bns(Primes, FnameBNS=None):
 
                 if regulators:
                     seq.append(' ')
-                    
+
                 seq.append('%i'%v)
 
                 lines+= [''.join(seq)]
@@ -343,7 +343,7 @@ def primes2bns(Primes, FnameBNS=None):
         with open(FnameBNS, 'w') as f:
             f.write(contents)
         print('created %s'%FnameBNS)
-        
+
 
 def primes2eqn(Primes, FnameEQN):
     """
@@ -355,14 +355,14 @@ def primes2eqn(Primes, FnameEQN):
        * *FnameEQN* (str): name of *eqn* file
 
     **example**::
-    
+
           >>> primes2eqn(primes, "mapk.eqn")
     """
 
     lines = []
     for name in sorted(Primes):
 
-        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:  
+        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
             lines+= [name+' := true;']
 
         elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
@@ -371,25 +371,19 @@ def primes2eqn(Primes, FnameEQN):
         else:
             disj = []
             for prime in Primes[name][1]:
-                
+
                 conj = []
                 for n,v in sorted(prime.items()):
                     if v==1:
                         conj.append(n)
                     else:
                         conj.append('~'+n)
-                        
+
                 disj+= ['&'.join(conj)]
 
             lines+=[name+' := '+' | '.join(disj)+';']
 
     with open(FnameEQN, 'w') as f:
         f.write('\n'.join(lines))
-        
+
     print('created %s'%FnameEQN)
-
-
-
-
-
-        
