@@ -24,26 +24,39 @@ def run():
 
 
 	names = PyBoolNet.Repository.names_with_fast_analysis()
-	names = ["remy_tumorigenesis", "remy_tumorigenesis_new"]
 
 	for name in names:
 
 		primes = PyBoolNet.FileExchange.bnet2primes(os.path.join(name,name+".bnet"))
 
-		fname = os.path.join(name,name+"_attractors.md")
-		PyBoolNet.Attractors.create_attractor_report(primes, fname)
+		fname = os.path.join(name,name+"_attrs.json")
+		attrs = PyBoolNet.Attractors.compute_json(primes, Update="asynchronous", FnameJson=fname)
 
-		fname = os.path.join(name,name+"_commitment_diagram.pdf")
-		PyBoolNet.Basins.commitment_diagram(primes, "asynchronous", Silent=False, FnameImage=fname)
+		markers = PyBoolNet.PrimeImplicants.find_outputs(primes)
+		if markers:
+			fname = os.path.join(name,name+"_phenos.json")
+			phenos = PyBoolNet.Phenotypes.compute_json(attrs, markers)
+
+			fname = os.path.join(name,name+"_phenos.pdf")
+			diagram = PyBoolNet.Phenotypes.compute_diagram(phenos, FnameImage=fname)
+
+			fname = os.path.join(name,name+"_phenos_pie.pdf")
+			PyBoolNet.Phenotypes.create_piechart(diagram, FnameImage=fname)
+
+		#fname = os.path.join(name,name+"_attractors.md")
+		#PyBoolNet.Attractors.create_attractor_report(primes, fname)
+
+		fname = os.path.join(name,name+"_commitment.pdf")
+		diagram = PyBoolNet.Commitment.compute_diagram(attrs, FnameImage=fname, FnameJson=None, EdgeData=False, Silent=False)
 
 		fname = os.path.join(name,name+"_commitment_pie.pdf")
-		PyBoolNet.Basins.commitment_pie(primes, "asynchronous", Silent=False, FnameImage=fname)
+		PyBoolNet.Commitment.create_piechart(diagram, FnameImage=fname, ColorMap=None, Silent=False, Title=None)
+		
+		fname = os.path.join(name,name+"_basins.pdf")
+		PyBoolNet.Basins.create_barplot(primes, "asynchronous", FnameImage=fname, Title="All Basins - %s"%name)
 
-		fname = os.path.join(name,name+"_all_basins.pdf")
-		PyBoolNet.Basins.all_basins(primes, "asynchronous", FnameImage=fname, Title="All Basins - %s"%name)
-
-		fname = os.path.join(name,name+"_strong_basins.pdf")
-		PyBoolNet.Basins.strong_basins(primes, "asynchronous", FnameImage=fname, Title="Strong Basins - %s"%name)
+		fname = os.path.join(name,name+"_basins_pie.pdf")
+		PyBoolNet.Basins.create_piechart(primes, "asynchronous", FnameImage=fname, Title="Strong Basins - %s"%name)
 
 
 if __name__=="__main__":
