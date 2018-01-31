@@ -70,15 +70,12 @@ best_first_reachability
 .. autofunction:: PyBoolNet.StateTransitionGraphs.best_first_reachability
 
 
-
 .. _energy:
 
 energy
 ------
 
 .. autofunction:: PyBoolNet.StateTransitionGraphs.energy
-
-
 
 
 .. _state2str:
@@ -95,8 +92,8 @@ state2dict
 ----------
 
 .. autofunction:: PyBoolNet.StateTransitionGraphs.state2dict
-   
-   
+
+
 .. _subspace2str:
 
 subspace2str
@@ -137,12 +134,12 @@ list_states_in_subspace
 .. autofunction:: PyBoolNet.StateTransitionGraphs.list_states_in_subspace
 
 
-.. _list_states_referenced_by_proposition:
+.. _enumerate_states:
 
-list_states_referenced_by_proposition
--------------------------------------
+enumerate_states
+----------------
 
-.. autofunction:: PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition
+.. autofunction:: PyBoolNet.StateTransitionGraphs.enumerate_states
 
 
 .. _hamming_distance:
@@ -153,6 +150,22 @@ hamming_distance
 .. autofunction:: PyBoolNet.StateTransitionGraphs.hamming_distance
 
 .. include:: Substitutions.rst
+
+
+.. _find_vanham_variables:
+
+find_vanham_variables
+---------------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.find_vanham_variables
+
+
+.. _size_state_space:
+
+size_state_space
+----------------
+
+.. autofunction:: PyBoolNet.StateTransitionGraphs.size_state_space
 
 
 .. _stg2dot:
@@ -233,4 +246,3 @@ add_style_default
 -----------------
 
 .. autofunction:: PyBoolNet.StateTransitionGraphs.add_style_default
-

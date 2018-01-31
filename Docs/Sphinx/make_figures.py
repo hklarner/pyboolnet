@@ -56,7 +56,7 @@ def run():
     if 0 or RUN_ALL:
         print("creates basin diagrams")
         primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
-        diagram = PyBoolNet.Basins.commitment_diagram(primes, "asynchronous")
+        diagram = PyBoolNet.Commitment.compute_diagram(primes, "asynchronous")
         print(diagram.order())
         print(diagram.nodes())
         print(diagram.node["4"]["formula"])
@@ -64,7 +64,7 @@ def run():
 
 
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
-        diagram = PyBoolNet.Basins.commitment_diagram(primes, "asynchronous", FnameImage="source/figure26.pdf")
+        diagram = PyBoolNet.Commitment.compute_diagram(primes, "asynchronous", FnameImage="source/figure26.pdf")
 
     if 0 or RUN_ALL:
         print("creates interaction graphs for all repository networks:")
@@ -108,7 +108,7 @@ def run():
         spec = "CTLSPEC EF(STEADYSTATE)"
         print(PyBoolNet.ModelChecking.check_primes(primes, update, init, spec))
 
-        for x in PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition(primes, prop):
+        for x in PyBoolNet.StateTransitionGraphs.enumerate_states(primes, prop):
             print(x)
 
 

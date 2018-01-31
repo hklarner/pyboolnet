@@ -1543,9 +1543,9 @@ For example, we may query whether all initial states that satisfy the original s
    >>> MC.check_primes(primes, update, init, spec)
    True
 
-You can use the function :ref:`list_states_referenced_by_proposition` to enumerate all states that are referenced by a propositional formula::
+You can use the function :ref:`enumerate_states` to enumerate all states that are referenced by a propositional formula::
 
-   >>> for x in STGs.list_states_referenced_by_proposition(primes, prop): print x
+   >>> for x in STGs.enumerate_states(primes, prop): print x
    001
    101
    100
@@ -1735,16 +1735,12 @@ and, if the parameter ``AdditionalEdgeData`` of :ref:`commitment_diagram` was se
    * ``"EF_formula"`` (str), an expression that represents the states that can reach a state that can make the transition
    * ``"EF_size"`` (int), the number of such states
 
-Commitment diagrams can be visualized with the function :ref:`diagram2image`.
-The function takes the primes, diagram and file name of the image as parameters.
-Two parameters for styling the diagram are provided.
-*StyleInputs* highlight the basin nodes that belong to the same input combination and *StyleAdvanced* modifies the node and edge styles to
-highlight nodes and transition that are *homogeneous*. For details see the upcoming publication :ref:`Klarner2016 <klarner2016basins>`.
+Commitment diagrams can be visualized with the function :ref:`commitment_diagram2image`.
 
 Consider the following example::
 
    >>> primes = Repository.get_primes("arellano_rootstem")
-   >>> diagram = Basins.commitment_diagram(primes, "asynchronous", FnameImage="commitment.pdf")
+   >>> diagram = Commitment.compute_diagram(primes, "asynchronous", FnameImage="commitment.pdf")
 
 The output is given in :ref:`the figure below <figure26>`.
 It uses the following convention: basin nodes that belong to the same input combination are grouped as light green subgraphs.

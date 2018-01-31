@@ -328,7 +328,7 @@ Matplotlib
 ..........
 
 The package matplotlib is used to plot pie charts and bar plots and similiar graphs,
-for example in the function :ref:`weak_basins` and :ref:`strong_basins` of the :ref:`basins` module.
+for example in the function :ref:`create_barplot` and :ref:`basins_create_piechart` of the :ref:`Basins` module.
 To install it on linux run::
 
    $ sudo pip install matplotlib

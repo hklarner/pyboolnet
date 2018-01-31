@@ -116,7 +116,7 @@ def compute_attractors_object(Primes, Update, Fname=None, CheckCompleteness=True
 			mints_obj["is_univocal"] = "unknown"
 
 		if CheckFaithfulness:
-			if univocality(Primes, Update, mints):
+			if faithfulness(Primes, Update, mints):
 				mints_obj["is_faithful"] = "yes"
 			else:
 				mints_obj["is_faithful"] = "no"
@@ -187,7 +187,7 @@ def open_attractors_object(Fname):
 	  >>> attrobj = open_attractor_object("attrs.json")
 	"""
 
-	attrobj = PyBoolNet.Utility.Misc.open_json_data(AttrObj, Fname)
+	attrobj = PyBoolNet.Utility.Misc.open_json_data(Fname)
 
 	return attrobj
 

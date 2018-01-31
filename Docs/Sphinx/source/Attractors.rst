@@ -6,6 +6,30 @@
 Attractors
 ==========
 
+.. _attractors_compute_json:
+
+compute_json
+------------
+
+.. autofunction:: PyBoolNet.Attractors.compute_json
+
+
+.. _attractors_save_json:
+
+save_json
+---------
+
+.. autofunction:: PyBoolNet.Attractors.save_json
+
+
+.. _attractors_open_json:
+
+open_json
+---------
+
+.. autofunction:: PyBoolNet.Attractors.open_json
+
+
 .. _compute_attractors_tarjan:
 
 compute_attractors_tarjan
