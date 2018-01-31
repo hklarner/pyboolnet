@@ -400,7 +400,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
 	.. note::
 		todo: check that version in this note is correct
-		Since PyBoolNet 2.2.2 this function detects Boolean variables that represent multi-valued components (van Ham encoding), see :ref:`PrimeImplicants.find_vanham_variables <find_vanham_variables>` for details.
+		Since PyBoolNet 2.2.2 this function detects Boolean variables that represent multi-valued components (van Ham encoding), see :ref:`StateTransitionGraphs.find_vanham_variables <find_vanham_variables>` for details.
 		For each multi-valued variable it adds an INIT constraint that restricts the initial states to the admissible states of the van Ham encoding.
 
 
@@ -529,14 +529,21 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 	lines+= ['','']
 	lines+= [InitialStates]
 
-	ternary = PyBoolNet.PrimeImplicants.find_vanham_variables(Primes)
-	if ternary:
+	vanham = PyBoolNet.StateTransitionGraphs.find_vanham_variables(Primes)
+
+	for k in vanham:
+		if k==2: continue
+		if not vanham[k]: continue
+
 		lines+= ['']
-		lines+= ['-- these constraints forbid "meaningless states" for the ternary components {x}'.format(x=', '.join(ternary))]
-		lines+= ['INIT !({x}_medium & {x}_high)'.format(x=x) for x in ternary]
-		#print '\n'.join(lines)
+		lines+= ['-- adding van ham constraints for {k}-valued variables: {x}'.format(k=k, x=", ".join(vanham[k]))]
+		zipped = zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1])
+
+		for name in vanham[k]:
+			lines+= ['INIT {x} => {y}'.format(x=name+x, y=name+y) for x,y in zipped]
+
 		if not Silent:
-			print('added INIT constraints for ternary components {x}'.format(x=', '.join(ternary)))
+			print(' added INIT constraints (Van Ham encoding) for {k}-valued components {x}'.format(k=k, x=', '.join(vanham[k])))
 
 	lines+= ['']
 	lines+= [Specification]

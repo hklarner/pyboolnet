@@ -992,7 +992,7 @@ def list_states_in_subspace(Primes, Subspace):
 	return states
 
 
-def list_states_referenced_by_proposition(Primes, Proposition):
+def enumerate_states(Primes, Proposition):
 	"""
 	Generates all states that are referenced by *Proposition* in the context of the variables given by *Primes*.
 	The syntax of *Proposition* should be as in bnet files and TRUE and FALSE in will be treated as 1 and 0.
@@ -1012,7 +1012,7 @@ def list_states_referenced_by_proposition(Primes, Proposition):
 	**example**:
 
 		>>> prop = "!Erk | (Raf & Mek)"
-		>>> list_states_referenced_by_proposition(primes,prop)[0]
+		>>> enumerate_states(primes,prop)[0]
 		'010'
 	"""
 
@@ -1080,6 +1080,98 @@ def hamming_distance(Subspace1, Subspace2):
 	"""
 
 	return len([k for k,v in Subspace1.items() if k in Subspace2 and Subspace2[k]!=v])
+
+
+
+VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
+					  4: ["_level1", "_level2", "_level3"],
+					  5: ["_level1", "_level2", "_level3", "_level4"]}
+
+def find_vanham_variables(Primes):
+	"""
+	Detects variables that represent multi-valued variables using the Van Ham encoding, see :ref:`Didier2011` for more details.
+	E.g. three-valued variables x are encoded via two Boolean variables x_medium and x_high.
+	This function is used for example by :ref:`ModelChecking.primes2smv <primes2smv>` to add
+	INIT constraints to the smv file that forbid all states that are not admissible, e.g. in which "!x_medium & x_high" is true.
+
+	**arguments**:
+		* *Primes*: prime implicants
+
+	**returns**:
+		* *Names* (dict): activity levels and names
+
+	**example**::
+
+		>>> find_vanham_variables(primes)
+		{2: ['E2F1', 'ATM'],
+		 3: ['ERK'],
+		 4: [],
+		 5: []}
+	"""
+
+	seen_base = []
+	seen_names = []
+	vanham = {}
+
+	for val in sorted(VAN_HAM_EXTENSIONS, reverse=True):
+		post = VAN_HAM_EXTENSIONS[val][0]
+		base = [x.replace(post,"") for x in Primes if x.endswith(post)] # possible base names
+		base = [x for x in base if not x in seen_base] # base already seen for larger val
+		base = [x for x in base if all(x+y in Primes for y in VAN_HAM_EXTENSIONS[val])] # bingo
+		names = [x+y for x in base for y in VAN_HAM_EXTENSIONS[val]]
+
+		vanham[val] = sorted(base)
+		seen_base.extend(base)
+		seen_names.extend(names)
+
+	vanham[2] = sorted(x for x in Primes if not x in seen_names)
+
+	return vanham
+
+
+def size_state_space(Primes, VanHam=True, FixedInputs=False):
+	"""
+	This function computes the number of states in states space of *Primes*.
+	Detects if there are variables that encode multi-valued variables via the Van Ham encoding.
+	Variables that have the same name module the Van Ham extension (see example below) are identified.
+	E.g. the state space of x_medium, x_high is 3 instead of 4 since "!x_medium & x_high" is not an admissible state, see :ref:`Didier2011` for more details.
+
+
+	**arguments**:
+		* *Primes*: prime implicants
+		* *VanHam* (bool): exclude states that are not admissible in Van Ham encoding
+		* *FixedInputs* (bool): return number of states for single input combination
+
+	**returns**:
+		* *Size* (int): number of states
+
+	**example**::
+
+		>>> StateTransitionGraphs.VAN_HAM_EXTENSIONS
+		["_medium", "_high", "_level1", "_level2", "_level3", "_level4", "_level5"]
+		>>> size_state_space(primes, VanHam=False)
+		256
+		>>> size_state_space(primes)
+		192
+		>>> size_state_space(primes, FixedInputs=True)
+		96
+	"""
+
+	if VanHam:
+		vanham = find_vanham_variables(Primes)
+
+		size = 1
+		for x in vanham:
+			size*= x**(len(vanham[x]))
+	else:
+		size = 2**len(Primes)
+
+
+	if FixedInputs:
+		factor = 2**len(PyBoolNet.PrimeImplicants.find_inputs(Primes))
+		size = size / factor
+
+	return size
 
 
 ################ The Strongly Connected Component Graph (SCC Graph) ################
