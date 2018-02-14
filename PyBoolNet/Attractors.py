@@ -70,7 +70,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
 	  * *Silent* (bool): print infos to screen
 
 	**returns**:
-		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *AttrJson* (dict): json attractor data
 
 	**example**::
 

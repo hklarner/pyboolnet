@@ -107,7 +107,7 @@ def perc2str(Perc):
 	Used for plotting the labels of quotient graphs, e.g. Commitment.diagram2image(..)
 	"""
 
-	res = "%.4f"%Perc
+	res = "%.1f"%Perc
 	i,d = res.split('.')
 	remove = d[-1]=="0"
 	while remove:

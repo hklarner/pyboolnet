@@ -59,7 +59,6 @@ def _eqntott_error(eqntott, eqntott_out, eqntott_err):
 		raise Exception
 
 
-
 def _espresso_error(espresso, espresso_out, espresso_err):
 	"""
 	raises exception for espresso
@@ -71,7 +70,6 @@ def _espresso_error(espresso, espresso_out, espresso_err):
 		raise Exception
 
 
-
 def run_eqntott(eqntott_cmd, eqntott_in):
 	eqntott = subprocess.Popen(eqntott_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	eqntott_out, eqntott_err = eqntott.communicate(input=eqntott_in)
@@ -80,14 +78,12 @@ def run_eqntott(eqntott_cmd, eqntott_in):
 	return(eqntott_out)
 
 
-
 def run_espresso(espresso_cmd, eqntott_out):
 	espresso = subprocess.Popen(espresso_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	espresso_out, espresso_err = espresso.communicate(input=eqntott_out.encode())
 	espresso.stdin.close()
 	_espresso_error(espresso, espresso_out, espresso_err)
 	return(espresso_out)
-
 
 
 def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exact=False, Reduce=False):

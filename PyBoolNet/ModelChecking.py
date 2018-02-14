@@ -540,7 +540,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 		zipped = zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1])
 
 		for name in vanham[k]:
-			lines+= ['INIT {x} => {y}'.format(x=name+x, y=name+y) for x,y in zipped]
+			lines+= ['INIT {x} -> {y}'.format(x=name+x, y=name+y) for x,y in zipped]
 
 		if not Silent:
 			print(' added INIT constraints (Van Ham encoding) for {k}-valued components {x}'.format(k=k, x=', '.join(vanham[k])))

@@ -21,7 +21,7 @@ sudo pip install PyBoolNet-2.2.1_linux64.tar.gz
 ```
 
 
-#### release notes for hotfix version 2.2.1 (January 2018)
+## Latest Release Notes (hotfix version 2.2.1, January 2018)
 - **bugfix**: removed slowdown that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 
 
