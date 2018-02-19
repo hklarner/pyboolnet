@@ -1,7 +1,10 @@
 *.pyc
 *~
+
 PyBoolNet/Tests/Files/**
+
 Docs/Sphinx/build/**
+
 PyBoolNet/Dependencies/**
 
 Docs/Sphinx/merge_figure17-crop.pdf
@@ -10,14 +13,11 @@ Docs/Sphinx/merge_figure17.dvi
 Docs/Sphinx/merge_figure17.log
 Docs/Sphinx/merge_figure17.pdf
 
-Docs/Sphinx/source/Tutorials_old.rst
-
-Lab/**
-
 Releases/
 dist/
 
-MANIFEST
+Tutorials/Klarner2018/jobs.py
+Tutorials/*/*.json
+Tutorials/*/*.pdf
 
-Macros/*.pdf
-Macros/*.dot
+MANIFEST

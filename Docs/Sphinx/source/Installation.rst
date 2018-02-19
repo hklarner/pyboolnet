@@ -37,7 +37,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.1_linux64.tar.gz
+   $ sudo pip install PyBoolNet-2.2.2_linux64.tar.gz
 
 which should place the package here::
 
@@ -45,14 +45,14 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.1.tar.gz --user
+   $ pip install PyBoolNet-2.2.2.tar.gz --user
 
 The package is likely going to be placed here::
 
    /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
-To install |software| using *Distutils* unpack *PyBoolNet-2.2.1.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.2.2.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -104,7 +104,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.1_mac64.tar.gz
+   $ sudo pip install PyBoolNet-2.2.2_mac64.tar.gz
 
 which should place the package here::
 
@@ -112,7 +112,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.1.tar.gz --user
+   $ pip install PyBoolNet-2.2.2.tar.gz --user
 
 The package is likely going to be placed here::
 
@@ -145,7 +145,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.2.1_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.2.2_win64.tar.gz
 
 which should place the package here::
 
@@ -328,7 +328,7 @@ Matplotlib
 ..........
 
 The package matplotlib is used to plot pie charts and bar plots and similiar graphs,
-for example in the function :ref:`weak_basins` and :ref:`strong_basins` of the :ref:`basins` module.
+for example in the function :ref:`create_barplot` and :ref:`basins_create_piechart` of the :ref:`Basins` module.
 To install it on linux run::
 
    $ sudo pip install matplotlib

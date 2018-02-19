@@ -1,0 +1,24 @@
+
+
+targets, factors
+
+# This is a toy example for a Boolean network that contains a multivalued variable x1 in van Ham encoding.
+
+input,		input
+
+x1_medium, 	!x2 & x3
+x1_high, 	x3
+
+x2, 		x1_medium | x1_high
+x3, 		x1_high & x2
+
+x4_level1,	0
+x4_level2,	1
+x4_level3,	0
+
+x5_level1,	0
+x5_level2,	0
+x5_level3,	0
+x5_level4,	1
+
+x6_level2,	1

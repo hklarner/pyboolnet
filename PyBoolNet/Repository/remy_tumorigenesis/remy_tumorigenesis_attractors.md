@@ -1,7 +1,7 @@
 
 
 ### Attractor Report
- * created on 27. Jun. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
+ * created on 06. Dec. 2017 using PyBoolNet, see https://github.com/hklarner/PyBoolNet
 
 ### Steady States
 | steady state                        |

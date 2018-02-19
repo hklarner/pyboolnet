@@ -130,7 +130,3 @@ input_combinations
 ------------------
 
 .. autofunction:: PyBoolNet.PrimeImplicants.input_combinations
-
-
-
-

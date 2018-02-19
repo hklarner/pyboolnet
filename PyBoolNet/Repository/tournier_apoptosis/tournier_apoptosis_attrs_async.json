@@ -1,0 +1,359 @@
+{
+    "attractors": [
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "C8a": 0, 
+                    "A20a": 0, 
+                    "T2": 0, 
+                    "NFkB": 0, 
+                    "C3a": 0, 
+                    "FLIP": 0, 
+                    "IAP": 1, 
+                    "NFkBnuc": 0, 
+                    "IkB": 1, 
+                    "TNF": 0, 
+                    "IKKa": 0, 
+                    "CARP": 1
+                }, 
+                "str": "000101010000", 
+                "prop": "!A20a&!C3a&!C8a&CARP&!FLIP&IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "T2": 0, 
+                    "IkB": 1, 
+                    "A20a": 0, 
+                    "CARP": 1, 
+                    "NFkB": 0, 
+                    "C3a": 0, 
+                    "FLIP": 0, 
+                    "NFkBnuc": 0, 
+                    "C8a": 0, 
+                    "TNF": 0, 
+                    "IKKa": 0, 
+                    "IAP": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "000101010000", 
+                "prop": "!A20a&!C3a&!C8a&CARP&!FLIP&IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "C8a": 1, 
+                    "A20a": 0, 
+                    "T2": 0, 
+                    "NFkB": 0, 
+                    "C3a": 1, 
+                    "FLIP": 0, 
+                    "IAP": 0, 
+                    "NFkBnuc": 0, 
+                    "IkB": 1, 
+                    "TNF": 0, 
+                    "IKKa": 0, 
+                    "CARP": 0
+                }, 
+                "str": "011000010000", 
+                "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "T2": 0, 
+                    "IkB": 1, 
+                    "A20a": 0, 
+                    "CARP": 0, 
+                    "NFkB": 0, 
+                    "C3a": 1, 
+                    "FLIP": 0, 
+                    "NFkBnuc": 0, 
+                    "C8a": 1, 
+                    "TNF": 0, 
+                    "IKKa": 0, 
+                    "IAP": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "011000010000", 
+                "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "A20a": 1, 
+                    "IkB": 1, 
+                    "T2": 0, 
+                    "CARP": 0, 
+                    "NFkB": 1, 
+                    "C3a": 1, 
+                    "FLIP": 0, 
+                    "NFkBnuc": 1, 
+                    "C8a": 1, 
+                    "TNF": 1, 
+                    "IKKa": 0, 
+                    "IAP": 0
+                }, 
+                "str": "111000011101", 
+                "prop": "A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&NFkB&NFkBnuc&!T2&TNF"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "CARP": 0, 
+                    "C3a": 1, 
+                    "C8a": 1, 
+                    "TNF": 1, 
+                    "IKKa": 0, 
+                    "IAP": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "-110-00----1", 
+                "prop": "C3a&C8a&!CARP&!IAP&!IKKa&TNF"
+            }, 
+            "is_cyclic": true
+        }
+    ], 
+    "primes": {
+        "C8a": [
+            [
+                {
+                    "C3a": 0, 
+                    "T2": 0
+                }, 
+                {
+                    "CARP": 1
+                }
+            ], 
+            [
+                {
+                    "CARP": 0, 
+                    "T2": 1
+                }, 
+                {
+                    "CARP": 0, 
+                    "C3a": 1
+                }
+            ]
+        ], 
+        "A20a": [
+            [
+                {
+                    "TNF": 0
+                }, 
+                {
+                    "NFkBnuc": 0
+                }
+            ], 
+            [
+                {
+                    "NFkBnuc": 1, 
+                    "TNF": 1
+                }
+            ]
+        ], 
+        "T2": [
+            [
+                {
+                    "TNF": 0
+                }, 
+                {
+                    "FLIP": 1
+                }
+            ], 
+            [
+                {
+                    "TNF": 1, 
+                    "FLIP": 0
+                }
+            ]
+        ], 
+        "NFkB": [
+            [
+                {
+                    "IkB": 1
+                }
+            ], 
+            [
+                {
+                    "IkB": 0
+                }
+            ]
+        ], 
+        "C3a": [
+            [
+                {
+                    "IAP": 1
+                }, 
+                {
+                    "C8a": 0
+                }
+            ], 
+            [
+                {
+                    "C8a": 1, 
+                    "IAP": 0
+                }
+            ]
+        ], 
+        "FLIP": [
+            [
+                {
+                    "NFkBnuc": 0
+                }
+            ], 
+            [
+                {
+                    "NFkBnuc": 1
+                }
+            ]
+        ], 
+        "IAP": [
+            [
+                {
+                    "NFkBnuc": 0, 
+                    "TNF": 1
+                }, 
+                {
+                    "TNF": 1, 
+                    "C3a": 1
+                }, 
+                {
+                    "NFkBnuc": 0, 
+                    "C3a": 1
+                }
+            ], 
+            [
+                {
+                    "NFkBnuc": 1, 
+                    "TNF": 0
+                }, 
+                {
+                    "TNF": 0, 
+                    "C3a": 0
+                }, 
+                {
+                    "NFkBnuc": 1, 
+                    "C3a": 0
+                }
+            ]
+        ], 
+        "NFkBnuc": [
+            [
+                {
+                    "NFkB": 0
+                }, 
+                {
+                    "IkB": 1
+                }
+            ], 
+            [
+                {
+                    "IkB": 0, 
+                    "NFkB": 1
+                }
+            ]
+        ], 
+        "IkB": [
+            [
+                {
+                    "NFkBnuc": 0, 
+                    "TNF": 1
+                }, 
+                {
+                    "TNF": 1, 
+                    "IKKa": 1
+                }, 
+                {
+                    "NFkBnuc": 0, 
+                    "IKKa": 1
+                }
+            ], 
+            [
+                {
+                    "NFkBnuc": 1, 
+                    "TNF": 0
+                }, 
+                {
+                    "TNF": 0, 
+                    "IKKa": 0
+                }, 
+                {
+                    "NFkBnuc": 1, 
+                    "IKKa": 0
+                }
+            ]
+        ], 
+        "TNF": [
+            [
+                {
+                    "TNF": 0
+                }
+            ], 
+            [
+                {
+                    "TNF": 1
+                }
+            ]
+        ], 
+        "IKKa": [
+            [
+                {
+                    "TNF": 0
+                }, 
+                {
+                    "C3a": 1
+                }, 
+                {
+                    "A20a": 1
+                }
+            ], 
+            [
+                {
+                    "A20a": 0, 
+                    "TNF": 1, 
+                    "C3a": 0
+                }
+            ]
+        ], 
+        "CARP": [
+            [
+                {
+                    "NFkBnuc": 0, 
+                    "TNF": 1
+                }, 
+                {
+                    "TNF": 1, 
+                    "C3a": 1
+                }, 
+                {
+                    "NFkB": 0, 
+                    "C3a": 1
+                }
+            ], 
+            [
+                {
+                    "NFkB": 1, 
+                    "TNF": 0
+                }, 
+                {
+                    "TNF": 0, 
+                    "C3a": 0
+                }, 
+                {
+                    "NFkBnuc": 1, 
+                    "C3a": 0
+                }
+            ]
+        ]
+    }, 
+    "update": "asynchronous", 
+    "is_complete": "yes"
+}

@@ -19,21 +19,21 @@ a clause is prime if removing any literal results in the negation of the origina
 Consider the expression::
 
    v2 & (!v1 | v3)
-   
+
 where ``&``, ``|`` and ``!`` represent conjunction, disjunction and negation, respectively.
 One of its 1-implicants is::
 
    v1 & v2 & v3
-   
+
 because::
 
    (v1 & v2 & v3) => (v2 & (!v1 | v3))
-   
+
 is valid.
 But it is not prime since removing the literal *v1* is a shorter 1-implicant::
 
    (v2 & v3) => (v2 & (!v1 | v3))
-   
+
 is also valid. In Python we represent prime implicants as nested dictionaries and lists.
 The prime implicants of a network with three components *v1*, *v2*, *v3* and three update functions *f1*, *f2*, *f3* that are defined by::
 
@@ -41,14 +41,14 @@ The prime implicants of a network with three components *v1*, *v2*, *v3* and thr
    f2 := !v3
    f3 := v2 | v1
 
-   
+
 is represented by a dictionary, say *primes*, whose keys are the names of the components, here *"v1"*, *"v2"* and *"v3"*.
 The values of each name are lists of length two that contain the 0 and 1 prime implicants.
 To access the 1-prime implicants of *v1* use::
 
    >>> primes["v1"][1]
    [{'v2':1,'v1':0},{'v2':1,'v3':1}]
-   
+
 The returned list states that *f1* has two 1-prime implicants and each consists of two literals.
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
@@ -69,14 +69,14 @@ It contains *n* items where *n* is the number of components.
 The number of components is usually accessible by::
 
    >>> n = len(primes)
-   
+
 A *path* is sequence of states represented by a Python iterable, usually a tuple or list.
 
 A state and subspace of the example network above are::
 
    >>> state = {"v1":0,"v2":1,"v3":0}
    >>> subspace = {"v1":0}
-   
+
 .. Note:
    The empty dictionary ``{}`` is a valid subspace - it represents the full state space.
 
@@ -85,7 +85,7 @@ States and subspaces may also be defined using string representations, i.e., str
 
    >>> state = "010"
    >>> subspace = "0--"
-   
+
 String and dictionary representations may be converted into each other using the functions
 :ref:`state2str`, :ref:`state2dict` and :ref:`subspace2str`, :ref:`subspace2dict`.
 
@@ -94,7 +94,7 @@ A path that consists of two states is for example::
    >>> x = {"v1":0,"v2":1,"v3":0}
    >>> y = {"v1":1,"v2":1,"v3":1}
    >>> path = [x,y]
-   
+
 
 .. _primes_from_bnet_files:
 
@@ -114,7 +114,7 @@ To generate its prime implicants use the function :ref:`bnet2primes` of the modu
 
    >>> from PyBoolNet import FileExchange
    >>> primes = FileExchange.bnet2primes("example01.bnet")
-   
+
 Instead of a file name the functions also takes string contents of a *bnet* file::
 
    >>> bnet = """
@@ -122,26 +122,26 @@ Instead of a file name the functions also takes string contents of a *bnet* file
    ...        v2,  v1
    ...        """
    >>> primes = FileExchange.bnet2primes(bnet)
-   
+
 and a second argument can be used for saving the prime implicants as a *json* file::
 
    >>> primes = FileExchange.bnet2primes("example01.bnet", "example01.primes")
-   
+
 Saving prime implicants in a separate file is useful in case the network has many components with high in-degrees.
 For such networks the computation of all primes might take a long time.
 Previously saved primes can be read with :ref:`read_primes`::
 
    >>> primes = FileExchange.read_primes("example01.primes")
-   
+
 Previously generated primes can be saved as *json* files using :ref:`write_primes`::
 
    >>> FileExchange.write_primes(primes, "example01.primes")
-   
+
 You may also want to save primes as a *bnet* file.
 To do so use :ref:`primes2bnet`::
 
    >>> FileExchange.primes2bnet(primes, "example01.bnet")
-   
+
 The module :ref:`FileExchange` can also export primes to *bns* and *genysis* files to use as inputs for the tools BNS_ of :ref:`Dubrova2011 <Dubrova2011>` and GenYsis_ of :ref:`Garg2008 <Garg2008>`, namely :ref:`primes2bns` and :ref:`primes2genysis`.
 
 
@@ -153,14 +153,14 @@ primes from GINsim files
 Open the *zginml* or *ginml* file with :ref:`GINsim <installation_ginsim>` and generate a *sbml-qual* file, for example *mapk.sbml*, by clicking::
 
    File > Export > SBML-qual > run
-   
+
 Generate a *bnet* file from *mapk.sbml* with :ref:`BoolNet <installation_boolnet>`::
 
    $ R
    > library(BoolNet)
    > net = loadSBML("mapk.sbml")
    > saveNetwork(net, "mapk.bnet")
-   
+
 .. note::
 
    In general, GINsim files define multi-valued networks. If you generate primes from a GINsim file be sure that the underlying network is Boolean.
@@ -192,7 +192,7 @@ The lambda construct is convenient for single line definitions but more complex 
    ...         return 0
    ...     else:
    ...         return sum([v1,v2,v3]) % 2
-         
+
 The definition of *f2* involves the variables *v1,v2,v3* and *f1*: it returns 0 if *f1(v2,v3,0,0)* is 1 and otherwise *v1+v2+v3 mod 2*.
 Note that *f2* returns 1 and 0 instead of *True* and *False*.
 Function can also you Python logic operators::
@@ -203,7 +203,7 @@ Constant functions always return 1 or 0 and inputs are only regulated by themsel
 
    >>> f4 = lambda: 1
    >>> f5 = lambda v5: v5
-   
+
 To generate a primes object from these functions use :ref:`functions2primes` of the module :ref:`QuineMcCluskey`.
 Its argument is a dictionary of component names and Boolean functions::
 
@@ -237,20 +237,20 @@ It returns a directed graph in the :ref:`installation_networkx` format, that is,
    >>> igraph = IGs.primes2igraph(primes)
    >>> igraph
    <networkx.classes.digraph.DiGraph object at 0xb513efec>
-   
+
 The nodes and edges of *igraph* can be accessed via the :ref:`installation_networkx` functions :py:func:`edges` and :py:func:`nodes`::
 
    >>> igraph.nodes()
    ['v1', 'v2', 'v3']
    >>> igraph.edges()
    [('v1', 'v1'), ('v1', 'v3'), ('v2', 'v3'), ('v3', 'v1')]
-   
+
 The sign of an interaction is either either positive, negative or both.
 Signs are stored as the edge attribute *sign* and are accessible via the standard :ref:`installation_networkx` edge attribute syntax::
 
    >>> igraph.edge["v3"]["v1"]["sign"]
    set([1])
-   
+
 Signs are implemented as Python sets and contain 1 if the interaction is positive and -1 if it is negative or both if the interaction is ambivalent,
 i.e., sometimes positive and sometimes negative::
 
@@ -260,7 +260,7 @@ i.e., sometimes positive and sometimes negative::
 To create a drawing of an interaction graph use the function :ref:`igraph2image`::
 
    >>> IGs.igraph2image(igraph, "example02_igraph.pdf")
-   
+
 It uses :ref:`installation_graphviz` and the layout engine *dot* to create the given image file.
 The result is shown in :ref:`the figure below <figure01>`.
 
@@ -269,8 +269,8 @@ The result is shown in :ref:`the figure below <figure01>`.
 .. figure:: figure01.pdf
    :scale: 60%
    :align: center
-   
-   The interaction graph "*example02_igraph.pdf*" of the network defined above. 
+
+   The interaction graph "*example02_igraph.pdf*" of the network defined above.
 
 
 graph, node and edge attributes
@@ -296,7 +296,7 @@ Some node attributes are:
    * *fontsize* (default is *14*): sets the font size in pt, e.g. *5*, *10*, *15*
    * *fixedsize*: specifies whether the width of a node is fixed, either *"true"* or *"false"*
    * *width*: sets the node width, e.g. *5*, *10*, *15*
-      
+
 Colors can be set by names like *"red"*, *"green"* or *"blue"*,
 or by space-separated HSV values, e.g. *"0.1 0.2 1.0"*,
 or by a RGB value, e.g *"#40e0d0"*.
@@ -306,7 +306,7 @@ For a list of predefined color names see for example
 
 The basic edge attributes are:
 
-   * *arrowhead*: sets the shape of the arrow, e.g. *"dot"*, *"tee"*, *"normal"* 
+   * *arrowhead*: sets the shape of the arrow, e.g. *"dot"*, *"tee"*, *"normal"*
    * *arrowsize*: sets the size of the arrow, e.g. *5*, *10*, *15*
    * *style*: sets the pen style of the edge, e.g. *"dotted"*, *"dashed"*
    * *color*: sets the edge color
@@ -322,28 +322,28 @@ To set node or edge defaults, add them to the *node* or *edge* attribute of the 
    >>> igraph = IGs.primes2igraph(primes)
    >>> igraph.graph["node"]["shape"] = "circle"
    >>> igraph.graph["node"]["color"] = "blue"
-   
+
 To change the appearance of specific nodes or edges, add attributes to the node or edge field::
 
    >>> igraph.node["v2"]["shape"] = "rpromoter"
    >>> igraph.node["v2"]["color"] = "black"
    >>> igraph.edge["v3"]["v1"]["arrowhead"] = "inv"
    >>> igraph.edge["v3"]["v1"]["color"] = "red"
-   
+
 In addition, *dot* graphs have general graph attributes, for example:
 
    * *splines*: sets how edges are drawn, e.g. *"line"*, *"curved"* or *"ortho"* for orthogonal edges
    * *label*: adds a label to the graph
    * *rankdir* (default is *"TB"*): sets the direction in which layout is constructed, e.g. *"LR"*, *"RL"*, *"BT"*
- 
+
 To change graph attributes, add them to the graph dictionary::
 
    >>> igraph.graph["splines"] = "ortho"
    >>> igraph.graph["rankdir"] = "LR"
    >>> igraph.graph["label"] = "Example 3: Interaction graph with attributes"
    >>> IGs.igraph2image(igraph, "example03_igraph.pdf")
-   
-   
+
+
 The result is shown in :ref:`the figure below <figure02>`.
 
 .. _figure02:
@@ -351,8 +351,8 @@ The result is shown in :ref:`the figure below <figure02>`.
 .. figure:: figure02.pdf
    :scale: 60%
    :align: center
-   
-   The interaction graph "*example03_igraph.pdf*". 
+
+   The interaction graph "*example03_igraph.pdf*".
 
 
 
@@ -376,7 +376,7 @@ Consider a network with a *exclusive or* regulation::
    >>> igraph.graph["label"] = "Example 4: Signed interaction graph"
    >>> igraph.graph["rankdir"] = "LR"
    >>> IGs.igraph2image(igraph, "example04_igraph.pdf")
-   
+
 
 The result is shown in :ref:`the figure below <figure03>`.
 
@@ -385,8 +385,8 @@ The result is shown in :ref:`the figure below <figure03>`.
 .. figure:: figure03.pdf
    :scale: 60%
    :align: center
-   
-   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsigns`. 
+
+   The interaction graph "*example04_igraph.pdf*" with attributes added by :ref:`add_style_interactionsigns`.
 
 
 styles for inputs, outputs and constants
@@ -410,7 +410,7 @@ Consider this example::
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> igraph = IGs.primes2igraph(primes)
    >>> IGs.add_style_inputs(igraph)
-   >>> IGs.add_style_constants(igraph)   
+   >>> IGs.add_style_constants(igraph)
    >>> IGs.add_style_outputs(igraph)
    >>> igraph.graph["label"] = "Example 5: Interaction graph with styles for"+
    ...                         "inputs, outputs and constants"
@@ -423,7 +423,7 @@ The result is shown in :ref:`the figure below <figure04>`.
 .. figure:: figure04.pdf
    :scale: 60%
    :align: center
-   
+
    The interaction graph "*example05.pdf*" with styles added by :ref:`add_style_inputs`, :ref:`add_style_outputs` and :ref:`add_style_constants`.
 
 the SCCs style
@@ -454,7 +454,7 @@ The result is shown in :ref:`the figure below <figure05>`.
 .. figure:: figure05.pdf
    :scale: 60%
    :align: center
-   
+
    The interaction graph "*example06_igraph.pdf*" with attributes added by :ref:`add_style_sccs`.
 
 
@@ -490,8 +490,8 @@ The result is shown in :ref:`the figure below <figure07>`.
 .. figure:: figure07.pdf
    :scale: 60%
    :align: center
-   
-   The interaction graph "*example08_igraph.pdf*" with attributes added by :ref:`add_style_subgraphs`. 
+
+   The interaction graph "*example08_igraph.pdf*" with attributes added by :ref:`add_style_subgraphs`.
 
 the activities style and animations
 ***********************************
@@ -520,16 +520,16 @@ The result is shown in :ref:`the figure below <figure08>`.
 .. figure:: figure08.pdf
    :scale: 80%
    :align: center
-   
+
    The interaction graph "*example09_igraph.pdf*" with attributes added by :ref:`add_style_activities`.
-   
+
 You can also create an animated *gif* from an interaction graph and a sequence of activities.
 Note that as mentioned in :ref:`states_subspaces_paths`, activities may be given as strings that consist of 0s, 1s and dashes
 using the function :ref:`activities2animation`::
 
    >>> activities = ["-100", "-110", "-010"]
    >>> IGs.activities2animation(igraph, activities, "animation.gif")
-   
+
 
 the default style
 *****************
@@ -557,11 +557,11 @@ The result is shown in :ref:`the figure below <figure09>`.
 .. figure:: figure09.pdf
    :scale: 60%
    :align: center
-   
+
    The interaction graph "*example10_igraph.pdf*" with attributes added by :ref:`add_style_default`.
-       
-       
-       
+
+
+
 Drawing the State Transition Graph
 ----------------------------------
 
@@ -584,13 +584,13 @@ They are vectors of activities, sorted by component names::
 
    >>> stg.nodes()[0]
    '010'
-   
+
 You may use :ref:`installation_networkx` functions on *stg*, for example networkx.has_path_::
 
    >>> import networkx
    >>> networkx.has_path(stg, "100", "111")
    True
-   
+
 State transition graphs can be styled in the same way as interaction graphs, see :ref:`drawing_interaction_graphs`.
 Use the function :ref:`stg2image` to generate a drawing of the STG::
 
@@ -605,7 +605,7 @@ The result is shown in :ref:`the figure below <figure10>`.
 .. figure:: figure10.pdf
    :scale: 80%
    :align: center
-   
+
    The state transition graph "*example11_stg.pdf*" of an isolated feedback circuit.
 
 By default, the full STG is constructed.
@@ -620,7 +620,7 @@ Either a list of states in *dict* or *str* format, see :ref:`states_subspaces_pa
 or as a function that is called on every state and must return either *True* or *False* to indicate whether the state ought to be initial::
 
    >>> init = lambda x: x["v1"]>=x["v2"]
-   
+
 or by a subspace in which case all the states contained in it are initial::
 
    >>> init = "--1"
@@ -629,7 +629,7 @@ or by a subspace in which case all the states contained in it are initial::
 To construct the STG starting from initial states call::
 
    >>> stg = STGs.primes2stg(primes, update, init)
-       
+
 
 .. warning::
    You should not draw asynchronous STGs with more than 2^7=128 states as *dot* will take very long to compute the layout.
@@ -663,9 +663,9 @@ The result is shown in :ref:`the figure below <figure11>`.
 .. figure:: figure11.pdf
    :scale: 80%
    :align: center
-   
+
    The state transition graph "*example12_stg.pdf*" with attributes added by :ref:`add_style_tendencies`.
-   
+
 
 
 the path style
@@ -680,12 +680,12 @@ Consider the following example::
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 13: STG with path style"
-   
+
 Now add the path style::
 
-   >>> path = ["011","010","110","100","000"]   
+   >>> path = ["011","010","110","100","000"]
    >>> STGs.add_style_path(stg, path, "red")
-   >>> STGs.stg2image(stg, "example13_stg.pdf")  
+   >>> STGs.stg2image(stg, "example13_stg.pdf")
 
 The result is shown in :ref:`the figure below <figure12>`.
 
@@ -694,9 +694,9 @@ The result is shown in :ref:`the figure below <figure12>`.
 .. figure:: figure12.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph "*example13_stg.pdf*" with attributes added by :ref:`add_style_path`.
-   
+
 
 the SCCs style
 **************
@@ -707,7 +707,7 @@ steady states and cyclic attractors.::
    >>> bnet = "\n".join(["x, !x|y", "y, x&!y|!z", "z, x&z|!y"])
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
-   >>> stg.graph["label"] = "The SCC style"   
+   >>> stg.graph["label"] = "The SCC style"
    >>> STGs.add_style_sccs(stg)
    >>> STGs.stg2image(stg, "example14_stg.pdf")
 
@@ -718,9 +718,9 @@ The result is shown in :ref:`the figure below <figure13>`.
 .. figure:: figure13.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph "*example14_stg.pdf*" with attributes added by :ref:`add_style_sccs`.
-     
+
 
 
 the min trap spaces style
@@ -732,9 +732,9 @@ For an introduction to trap spaces, see :ref:`Klarner2015(a) <klarner2015trap>`:
    >>> bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> stg = STGs.primes2stg(primes, "asynchronous")
-   >>> stg.graph["label"] = "Example 15: STG with min trap spaces style"   
+   >>> stg.graph["label"] = "Example 15: STG with min trap spaces style"
    >>> STGs.add_style_mintrapspaces(primes, stg)
-   >>> STGs.stg2image(stg, "example15_stg.pdf")  
+   >>> STGs.stg2image(stg, "example15_stg.pdf")
 
 The result is shown in :ref:`the figure below <figure14>`.
 
@@ -743,9 +743,9 @@ The result is shown in :ref:`the figure below <figure14>`.
 .. figure:: figure14.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph "*example15_stg.pdf*" with attributes added by :ref:`add_style_mintrapspaces`.
-     
+
 
 the subspaces style
 *******************
@@ -762,7 +762,7 @@ As for interaction graphs, you may add pairs of subspace and attribute dictionar
    >>> sub2 = {"x":1,"y":0}
    >>> subspaces = [sub1, sub2]
    >>> STGs.add_style_subspaces(primes, stg, subspaces)
-   >>> STGs.stg2image(stg, "example16_stg.pdf")  
+   >>> STGs.stg2image(stg, "example16_stg.pdf")
 
 The result is shown in :ref:`the figure below <figure15>`.
 
@@ -777,9 +777,9 @@ The result is shown in :ref:`the figure below <figure15>`.
 .. figure:: figure15.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example16_stg.pdf"* with attributes added by :ref:`add_style_subspaces`.
-  
+
 
 the default style
 *****************
@@ -801,12 +801,12 @@ The result is shown in :ref:`the figure below <figure16>`.
 .. figure:: figure16.pdf
    :scale: 80%
    :align: center
-   
+
    The state transition graph *"example17_stg.pdf"* with attributes added by :ref:`add_style_default`.
- 
- 
- 
- 
+
+
+
+
 .. _sec:modifying_networks:
 
 Modifying Networks
@@ -830,12 +830,12 @@ A node v1 is constant if in the *bnet* file it is defined by either 0 or 1, e.g.
 Note that such a node is not an input. A node v2 is an input iff::
 
    v2,   v2
-   
+
 The difference is also visible in the interaction graph where constants have in-degree 0 and input are only regulated by themselves and the regulation is positive.
 Finally, a blinker is like an input but with negative auto-regulation, e.g. v3 is a blinker iff::
 
    v3,   !v3
-   
+
 To replace all constants by blinker first we first need the names of the constants.
 If they are not known beforehand they may be computed using the function :ref:`find_constants`.
 To create the blinkers use the function :ref:`create_blinkers`::
@@ -857,13 +857,13 @@ To create the blinkers use the function :ref:`create_blinkers`::
    v2,   !v2
    v3,   v1 & v2 & v3 & v4
    v4,   v2 & v3 | v1 & v3
-  
+
 Note that |software| modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly::
 
    >>> newprimes = PIs.copy(primes)
    >>> PIs.create_inputs(newprimes, names)
-   
+
 Components may be renamed using the function :ref:`rename_variable`, e.g.
 
    >>> PIs.rename_variable(primes, "v1", "x")
@@ -872,8 +872,8 @@ Components may be renamed using the function :ref:`rename_variable`, e.g.
    v2,   !v2
    v3,   x & v2 & v3 & v4
    v4,   v2 & v3 | x & v3
-   
-   
+
+
 percolating constants
 *********************
 A frequently used step in model analysis and model reduction is to compute the set of variables *that will become constant* due the constants already in the model.
@@ -885,7 +885,7 @@ Consider this example::
    ... v1,   0
    ... v2,   v2
    ... v3,   !v1 | v2"""
-   
+
 Although v3 is not a constant its update function will be constant at 1 once v1 has attained its constant value of 0.
 We say that the value of v1 percolates to v3, that is, determines the value of v3 in the long term.
 Networks with a lot of constants are easier to analyse and understand as these nodes can, for example, be discarded for many model checking queries.
@@ -904,7 +904,7 @@ Keeping the constants results in::
    v2,   v2
    v3,   1
 
-Here, v1 and v3 are kept in the model.   
+Here, v1 and v3 are kept in the model.
 Removing the constants results in::
 
    >>> primes = FileExchange.bnet2pirmes(bnet)
@@ -936,7 +936,7 @@ But, you may remove v3 and the result is a well-defined network::
 
    v1,   !v1 | v2
    v2,   v2 & v1
-   
+
 In general, you may remove variables that are *closed under the successor relation* in the interaction graph.
 That is, any set of variables that contains all its successors may be safely removed.
 There are two functions for removing variables depending on whether you specify the names of variables to keep or to remove:
@@ -953,8 +953,8 @@ Example::
    >>> FileExchange.primes2bnet(primes)
    v1,   !v1 | v2
    v2,   v2 & v1
-   
-   
+
+
 To add a variable use the function :ref:`create_variables`.
 The update functions of new variables may either be specified as *bnet* strings or as Python function with correctly named parameters,
 see :ref:`primes_from_python_functions` for details on using Python functions to define variables.
@@ -969,13 +969,13 @@ Example of correct use::
    v2, v1
    v3, !v4
    v4, v1&!v2 | !v1&v2
-   
+
 An example of violating the condition that all variables must be defined is::
 
    >>> primes = FileExchange.bnet2primes("v1, v1")
    >>> create_variables(primes, {"v2":"v3 | v4", "v3":"!v1"})
    error: can not add variables that are dependent on undefined variables.
-   
+
 
 input combinations
 ******************
@@ -1014,7 +1014,7 @@ As an example, consider the following network::
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> stg.graph["label"] = "Example 18: STG of the Erk-Mek-Raf network"
    >>> STGs.stg2image(stg, "example18_stg.pdf")
-   
+
 The state transition graph is shown in :ref:`the figure below <figure17>`.
 
 When model checking, |Software| translates state transition graphs into transition systems.
@@ -1028,10 +1028,10 @@ a state is labeled with *Mek* iff Mek is activated in it which is the case for a
 .. figure:: figure17.pdf
    :scale: 120%
    :align: center
-   
+
    The state transition graph *"example18_stg.pdf"* of the Erk-Mek-Raf network on the left
    and the corresponding basic transition system on the right.
-   
+
 Since the choice of atomic propositions affects the expressiveness and conciseness of the model checking queries that users can formulate
 we have decided to extend this basic transition system by some *auxiliary variables*.
 First, we add a proposition that states whether a variable is steady, i.e., whether its activity is equal to the value of its update function.
@@ -1043,7 +1043,7 @@ The propositions *SUCCESSORS=0* and *STEADYSTATE* are therefore equivalent.
 
 .. note::
    The :ref:`installation_nusmv` language is case sensitive.
-   
+
 The transition system with the extended set of atomic propositions is shown in :ref:`the figure below <figure18>`.
 
 .. _figure18:
@@ -1051,7 +1051,7 @@ The transition system with the extended set of atomic propositions is shown in :
 .. figure:: figure18.pdf
    :height: 7cm
    :align: center
-   
+
    The extended transition system for the Erk-Mek-Raf network.
 
 LTL model checking
@@ -1068,13 +1068,13 @@ The basic temporal operators for LTL are:
    * *G(..)* which means *globally*
    * *[..U..]* which means *until*
    * *X(..)* which means *next*
-   
+
 LTL statements may be combined by the usual logical operators which are:
 
    * *|* which means *disjunction*
    * *&* which means *conjunction*
    * *!* which means *negation*
-   
+
 in :ref:`installation_nusmv` syntax.
 For a formal definition of LTL formulas see for example :ref:`Baier2008 <Baier2008>`.
 
@@ -1092,9 +1092,9 @@ Let us query whether along every path in its transition system there is eventual
    >>> answer = MC.check_primes(primes, update, init, spec)
    >>> answer
    True
-   
+
 The first line imports the module :ref:`ModelChecking`.
-The next line defines the initial states in :ref:`installation_nusmv` syntax with the keyword *INIT* to indicate an initial condition and 
+The next line defines the initial states in :ref:`installation_nusmv` syntax with the keyword *INIT* to indicate an initial condition and
 the expression *TRUE* which evaluates to true in every state.
 The next line starts with the keyword *LTLSPEC* which must precede the definition of a LTL specification and the formula *F(Raf)* which
 states that eventually a state will be reached that is labeled by *Raf*, i.e., in which *Raf* is activated.
@@ -1105,7 +1105,7 @@ and that it returns a Boolean value.
 
 Even for this small example network it is not trivial to see why *True* is the correct answer,
 because a brute force approach would require the enumeration of all paths but the transition system contains an infinite number of paths.
-Convince yourself that every path eventually reaches the state 101 or the state 111 or the state 001.   
+Convince yourself that every path eventually reaches the state 101 or the state 111 or the state 001.
 In all cases *Raf*, which is the third digit in the state string, is equal to 1 which is what *F(Raf)* requires.
 Hence *True* is the correct answer.
 
@@ -1115,14 +1115,14 @@ The second example is a slightly more complicated *reachability* query::
    >>> answer = MC.check_primes(primes, update, init, spec)
    >>> answer
    False
-   
+
 The LTL formula queries whether every path will eventually come across a state in which *Raf* is activated followed by a steady state.
 Note that the formula asserts an order on the sequence of events: first *Raf* and then *STEADYSTATE*.
 To see why the specification is false we only need to find one infinite path from an initial state that does not satisfy the LTL formula.
 Since all states are initial the following path will do::
 
    101 -> 100 -> 110 -> 111 -> 110 -> 111 -> 110 -> ...
-   
+
 The last two states, 111 and 110, are repeated for ever and neither is labeled with *STEADYSTATE* in the extended transition system,
 see :ref:`this figure <figure18>`.
 Hence *False* is the correct answer.
@@ -1134,7 +1134,7 @@ The third example specifies a proper subset of states as initial and queries the
    >>> answer = MC.check_primes(primes, update, init, spec)
    >>> answer
    True
-   
+
 Here, a state is initial iff *Erk* is activated in it and the number of its successors - with respect to the given the update rule - is less than two.
 The formula *G((F(Raf) & F(!Raf))* requires that however far down the sequence of states, i.e., *globally*,
 it is true that *Raf* will eventually be activated and also that *Raf* will eventually be inhibited.
@@ -1142,7 +1142,7 @@ The extended transition system, see :ref:`this figure <figure18>`, shows that ex
 Any path starting in one of those state will eventually end in the infinite sequence::
 
    111 -> 110 -> 111 -> 110 -> 111 -> ...
-   
+
 Hence, any path that starts in one of the initial states satisfies *G((F(Raf) & F(!Raf))*, i.e.,
 a sustained oscillation in *Raf*, and hence the truth of the query.
 
@@ -1160,7 +1160,7 @@ The formula states that along any path that starts from an initial state at leas
 Since the query is false there must be a path that does not satisfy the specifications, for example this one::
 
    010 -> 011 -> 111 -> 110 -> 111 -> 110 -> ...
-   
+
 It does not satisfy the LTL formula because in the state 010 only *Erk* is steady and
 hence *count(...)* which counts the number of true expressions is equal to one and hence *G(count(...)>=2)* is false.
 See the :ref:`installation_nusmv` manual for more built-in functions like *count()*.
@@ -1184,7 +1184,7 @@ Reconsider the following query, which we know is false, from above::
 
    >>> init = "INIT TRUE"
    >>> spec = "LTLSPEC F(Raf & F(STEADYSTATE))"
-   
+
 To retrieve the answer and a counterexample call::
 
    >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
@@ -1196,7 +1196,7 @@ Hence, a typical way to inspect a counterexample involves a Python if-statement:
    >>> if counterex:
    ...     print " -> ".join(STGs.state2str(x) for x in counterex)
    100 -> 101 -> 100
-   
+
 Here, :ref:`state2str` is a "pretty print" function contained in the module :ref:`StateTransitionGraphs`.
 It generates a state string from a state dictionary.
 An alternative way of inspecting counterexample is by :ref:`STGs.add_style_path <add_style_path>`::
@@ -1212,7 +1212,7 @@ An alternative way of inspecting counterexample is by :ref:`STGs.add_style_path 
 .. figure:: figure19.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example18_stg.pdf"* of the Erk-Mek-Raf network with a path style that indicates a counterexample to
    the LTL query with all states being initial and the formula *F(Raf & F(STEADYSTATE))*.
 
@@ -1259,7 +1259,7 @@ the initial states and the proliferation states highlighted by filled rectangles
    >>> STGs.add_style_subspaces(stg, [sub])
    >>> stg.graph["label"] = "Example 20: STG of the Proliferation network"
    >>> STGs.stg2image(stg, "example20_stg.pdf")
-   
+
 It is easy to see, in the :ref:`figure below <figure20>`, that for every initial state there is a path to a proliferation state.
 There are two initial states in which *Proliferation* is inhibited, namely *110* and *010*.
 For each there is a path leading to a state in which *Proliferation* is activated, namely::
@@ -1285,7 +1285,7 @@ In fact, the property *F(Proliferation)* is false, as :ref:`the figure below <fi
 .. figure:: figure20.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example20_stg.pdf"* of the Proliferation network with initial states highlighted by gray rectangles
    and proliferation states gathered in a subgraph.
 
@@ -1295,7 +1295,7 @@ In fact, the property *F(Proliferation)* is false, as :ref:`the figure below <fi
 .. figure:: figure21.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example21_stg.pdf"* of the Proliferation network with a counterexample highlighted by path.
 
 The property can, however, be formulated in CTL using the existential quantifier::
@@ -1304,7 +1304,7 @@ The property can, however, be formulated in CTL using the existential quantifier
    >>> answer = MC.check_primes(primes, update, init, spec)
    True
 
-.. note::   
+.. note::
    The LTL formula *F(Proliferation)* is equivalent to the CTL formula *AF(Proliferation)*.
    In general, however, there are LTL formulas for which no equivalent CTL formula exists, and vice versa.
 
@@ -1323,7 +1323,7 @@ In CTL, it can be formulated using the *AG(EF(AG(...)))* query pattern where "..
    >>> spec = "CTLSPEC AG(EF(AG(%s)))"%condition
    >>> answer = MC.check_primes(primes, update, init, spec)
    True
-   
+
 Other frequently used conditions are *STEADYSTATE* to query whether all attractors are steady states::
 
    >>> init = "INIT Proliferation"
@@ -1331,7 +1331,7 @@ Other frequently used conditions are *STEADYSTATE* to query whether all attracto
    >>> spec = "CTLSPEC AG(EF(AG(%s)))"%condition
    >>> answer = MC.check_primes(primes, update, init, spec)
    True
-   
+
 or disjunctions and conjunctions of basic propositions::
 
    >>> init = "INIT Proliferation"
@@ -1339,10 +1339,10 @@ or disjunctions and conjunctions of basic propositions::
    >>> spec = "CTLSPEC AG(EF(AG(%s)))"%condition
    >>> answer = MC.check_primes(primes, update, init, spec)
    True
-   
+
 .. note::
    The CTL formula *AG(EF(AG(STEADYSTATE)))* is equivalent to *AG(EF(STEADYSTATE)* because if a steady is steady then it has no successors.
-   
+
 .. note::
    To query whether *there is* an attractor of a certain type reachable from every initial state,
    rather than whether *all* attractors are of a certain type, use the query pattern *EF(AG(...))* instead of *AG(EF(AG(...)))*.
@@ -1356,7 +1356,7 @@ If a CTL formula is false then :ref:`installation_nusmv` can return a finite pat
    LTL counterexamples prove that the formula is false in the sense that any transition system that contains that path will not satisfy the formula.
    CTL counterexamples, on the other hand, can not be used as general proofs.
    They merely contain an initial state that does not satisfy the formula *in the given transition system*.
-   
+
 Suppose we want to find out whether each initial states defined by *Proliferation* has a successor state that also satisfies *Proliferation*.
 To define this property we use the CTL operator *EX*::
 
@@ -1377,14 +1377,14 @@ by using :ref:`STGs.successors_asynchronous <successors_asynchronous>`::
    >>> for x in STGs.successors_asynchronous(primes, "101"):
    ...     print x
    {'DNAdamage': 1, 'Proliferation': 0, 'GrowthFactor': 0}
-   
+
 and checking that *Proliferation=0* for all of them.
 
 .. note::
    CTL counterexamples are in general also paths, for an explanation see e.g. :ref:`Baier2008 <Baier2008>`,
    but the length of the path and which sub-formula is not satisfied by the state it leads to depend on the given formula.
    It is often easier to just return the initial state that does not satisfy the whole formula, using::
-   
+
       >>> answer, counterex = MC.check_primes_with_counterexample(primes, update, init, spec)
       >>> state = counterex[0]
 
@@ -1399,12 +1399,12 @@ The idea is to apply the following logical equivalences:
 
    There is an initial state that satisfies a given CTL formula iff
    it is *false* that every initial state satisfies the *negation* of the CTL formula.
-   
+
 and
 
    There is a path rooted in some initial state that satisfies a given LTL formula iff
    it is *false* that all paths satisfy the *negation* of the LTL formula.
-   
+
 As an example consider the following network::
 
    >>> bnet = ["x0,   !x0&x1 | x2",
@@ -1412,7 +1412,7 @@ As an example consider the following network::
    ...         "x2,   x0&!x1 | x2"]
    >>> bnet = "\n".join(bnet)
    >>> primes = FileExchange.bnet2primes(bnet)
-   
+
 and the queries "Every state that satisfies *x1=0* can reach an attractor in which *x0* is steady" (Q1)
 and "There is a state that satisfies *x1=0* that can reach an attractor in which *x0* is steady" (Q2).
 Note that the equivalence from above states that "Q2 is true iff not Q1 is false".
@@ -1439,10 +1439,10 @@ and that Q2 does hold, because 100 is an initial state that can reach the steady
 .. figure:: figure22.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example22_stg.pdf"* with initial states highlighted by gray rectangles.
    The attractors are the steady state 111 and the cyclic attractor that consists of the states 010 and 110.
-   
+
 To decide the queries with CTL model checking we use the following encoding::
 
    >>> init = "INIT !x1"
@@ -1460,13 +1460,13 @@ To decide the queries with CTL model checking we use the following encoding::
 Note that *specQ2* is exactly the negation of *specQ1* and the result of checking *specQ2* has to be negated to obtain the answer to Q2.
 
 .. note::
-   
+
    The queries *specQ1* and *specQ2* are both false although one is exactly the negation of the other.
    In LTL and CTL model checking, a formula as well as its negation may be false *simultaneously*.
    For CTL, this is the case when some initial state satisfy the formula and some other initial state does not.
    For LTL, this is the case when some admissible path satisfies the formula and some other path does not.
-   
-   
+
+
 Note also that since *specQ2* is false we can ask :ref:`installation_nusmv` to generate a counterexample, i.e.,
 an initial state that does not satisfy *specQ2*, i.e., a state that satisfies Q2.
 Counterexamples of existential queries are therefore often also called *witnesses*.
@@ -1475,7 +1475,7 @@ Counterexamples of existential queries are therefore often also called *witnesse
    >>> state = counterex[0]
    >>> STGs.state2str(state)
    100
-   
+
 
 accepting states of CTL queries
 *******************************
@@ -1501,7 +1501,7 @@ Consider the previous network as an example::
    ...         "x2,   x0&!x1 | x2"]
    >>> bnet = "\n".join(bnet)
    >>> primes = FileExchange.bnet2primes(bnet)
-   
+
 We already know that the query with initial states ``!x1`` and the CTL spec ``EF(AG(x0_STEADY))`` is false.
 Using the function :ref:`check_primes_with_counterexample` we found an initial state that does not satisfy the specification, i.e., 000.
 The function :ref:`check_primes_with_counterexample` can be used to get a complete picture of the intial states that satisfy the spec::
@@ -1512,28 +1512,28 @@ The function :ref:`check_primes_with_counterexample` can be used to get a comple
    >>> answer, accepting = MC.check_primes_with_acceptingstates(primes, update, init, spec)
    >>> accepting["INITACCEPTING"]
    '!(x0 & (x1) | !x0 & (x1 | !(x2)))'
-   
+
 The result is a *factored formula* that represents the exact set of states that satisfy the spec in NuSMV syntax so that it can be re-used for subsequent queries.
 The number of initial and accepting states can be obtained by::
 
    >>> accepting["INITACCEPTING_SIZE"]
    3
-   
+
 which explains why the query is false, since there are four initial states, i.e., one that does not satisfy the spec::
 
    >>> accepting["INIT_SIZE"]
    4
-   
+
 It is also possible to obtain the complete set of states that satisfy the spec, i.e., including states that are not initial::
 
    >>> accepting["ACCEPTING"]
    'x0 & ((x2) | !x1) | !x0 & (x2)'
-   
+
 The size of this set tells us that there are two states outside of the initial one that also satisfy the spec::
 
    >>> accepting["ACCEPTING_SIZE"]
    5
-   
+
 Note that |software| does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property ``EF(STEADYSTATE)``::
 
@@ -1543,17 +1543,17 @@ For example, we may query whether all initial states that satisfy the original s
    >>> MC.check_primes(primes, update, init, spec)
    True
 
-You can use the function :ref:`list_states_referenced_by_proposition` to enumerate all states that are referenced by a propositional formula::
+You can use the function :ref:`enumerate_states` to enumerate all states that are referenced by a propositional formula::
 
-   >>> for x in STGs.list_states_referenced_by_proposition(primes, prop): print x
+   >>> for x in STGs.enumerate_states(primes, prop): print x
    001
    101
    100
-   
-   
+
+
 Computing Trap Spaces
 ---------------------
-Maximal, Minimal and All Trap Spaces 
+Maximal, Minimal and All Trap Spaces
 The term *trap space* merges the notions "subspace" and "trap set".
 Hence, once a trajectory enters a trap space it can not escape.
 Trap spaces have a number of interesting properties: they are independent of the update strategy, i.e.,
@@ -1592,7 +1592,7 @@ The trap spaces are illustrated in :ref:`the figure below <figure23>` using the 
 .. figure:: figure23.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example23_stg.pdf"* with every trap space highlighted by its own subgraph.
 
 The number of all trap spaces of a network can be very large and one is often only interested in the subset of minimal or maximal trap spaces.
@@ -1621,10 +1621,10 @@ The result is shown in :ref:`the figure below <figure24>` in which ``-00`` is mi
 .. figure:: figure24.pdf
    :scale: 60%
    :align: center
-   
+
    The state transition graph *"example24_stg.pdf"* with minimal trap spaces in red, maximal trap spaces in blue,
    trap spaces that are minimal and maximal at the same time in yellow and the remaining trap spaces in green.
-   
+
 
 .. note::
    It is possible that two non-minimal trap spaces intersect in which case the intersection is again a trap space.
@@ -1644,7 +1644,7 @@ One approach to computing the attractors is to use Tarjan's algorithm for comput
 This approach is implemented in the function :ref:`compute_attractors_tarjan`.
 As an example for computing attractors with this algorithm consider the following network and its asynchronous STG which is given in :ref:`the figure below <figure25>`::
 
-   >>> import AttractorDetection as AD
+   >>> import Attractors as AD
    >>> bnet = ["v1, !v1 | v3",
    ...         "v2, !v1 | v2&!v3",
    ...         "v3, !v2"]
@@ -1654,7 +1654,7 @@ As an example for computing attractors with this algorithm consider the followin
    >>> STGs.add_style_sccs(stg)
    >>> stg.graph["label"] = "Example 25: A network with a cyclic attractor and a steady state."
    >>> STGs.stg2image(stg, "example25_stg.pdf")
-   >>> attractors = AttractorDetection.compute_attractors_tarjan(stg)
+   >>> attractors = Attractors.compute_attractors_tarjan(stg)
    >>> len(attractors)
    2
    >>> for A in attractors:
@@ -1667,11 +1667,11 @@ As an example for computing attractors with this algorithm consider the followin
 .. figure:: figure25.pdf
    :scale: 60%
    :align: center
-   
-   The asynchronous STG *"example25_stg.pdf"* of a network with a steady state and a cyclic attractor.   
-   
+
+   The asynchronous STG *"example25_stg.pdf"* of a network with a steady state and a cyclic attractor.
+
 Due to the state space explosion problem, the approach of computing the terminal SCCs by explicitly
-constructing the underlying STG as a digraphis limited to networks with less than 15~20 components.
+constructing the underlying STG as a digraph is limited to networks with up to 15 to 20 components.
 
 There are algorithms for larger networks, but the "best" algorithm for solving the detection problem will depend on the chosen update strategy.
 For synchronous STGs we suggest to use an approach that was suggested
@@ -1686,17 +1686,17 @@ It has been implemented as a tool called *bns* which is available at https://peo
 
    Whereas the steady states of the synchronous and asynchronous STGs are identical,
    the number and composition of cyclic attractors depends, in general, on the chosen update strategy.
-   
+
 A fairly efficient approach to detecting at least some attractors or larger networks is mentioned in :ref:`Klarner2015(a) <klarner2015trap>`
 and based on the idea of generating a random walk in the STG, starting from some initial state,
 and then testing with CTL model checking whether the final state is indeed part of an attractor.
 This approach is based on the observation that, in practice, a random walk will quickly reach states that belong to an attractor.
 It is implemented in the function :ref:`find_attractor_state_by_randomwalk_and_ctl`::
 
-   >>> state = AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+   >>> state = Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    >>> STGs.state2str(state)
    110
-   
+
 The function takes three optional parameters: *InitialState* which allows to specify a subspace from which to sample the initial state,
 *Length* which is an integer that specifies the number of transitions for the generation of the random walk,
 and *Attempts* which is the maximal number of random walks that are generated if each time the last state does not belong to an attractor.
@@ -1704,7 +1704,7 @@ Though unlikely, it is possible that the function will not find an attractor in 
 Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encapsulated in a *Try-Except* block::
 
    >>> try:
-   ...     state = AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+   ...     state = Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
    ...     print STGs.state2str(state)
    ... except:
    ...     print "did not find an attractor. try increasing the length or attempts parameters"
@@ -1724,27 +1724,23 @@ The nodes of a commitment diagram have the following attributes:
    * ``"formula"`` (str), the factored formula representing the states in that basin
    * ``"size"`` (int), the number of states in that basin
    * ``"attractors"`` (list), the list of attractors that define that basin (represented by individual states or subspaces)
-   
+
 The edges of a commitment diagram have the following attributes:
 
    * ``"EX_formula"`` (str), an expression that represents the states that can make the transition
    * ``"EX_size"`` (int), the number of such states
-   
+
 and, if the parameter ``AdditionalEdgeData`` of :ref:`commitment_diagram` was set to true, there are additionally the attributes:
 
    * ``"EF_formula"`` (str), an expression that represents the states that can reach a state that can make the transition
    * ``"EF_size"`` (int), the number of such states
-      
-Commitment diagrams can be visualized with the function :ref:`diagram2image`.
-The function takes the primes, diagram and file name of the image as parameters.
-Two parameters for styling the diagram are provided.
-*StyleInputs* highlight the basin nodes that belong to the same input combination and *StyleAdvanced* modifies the node and edge styles to
-highlight nodes and transition that are *homogeneous*. For details see the upcoming publication :ref:`Klarner2016 <klarner2016basins>`.
+
+Commitment diagrams can be visualized with the function :ref:`commitment_diagram2image`.
 
 Consider the following example::
 
    >>> primes = Repository.get_primes("arellano_rootstem")
-   >>> diagram = Basins.commitment_diagram(primes, "asynchronous", FnameImage="commitment.pdf")
+   >>> diagram = Commitment.compute_diagram(primes, "asynchronous", FnameImage="commitment.pdf")
 
 The output is given in :ref:`the figure below <figure26>`.
 It uses the following convention: basin nodes that belong to the same input combination are grouped as light green subgraphs.
@@ -1761,9 +1757,9 @@ You should make sure that the minimal trap spaces are indeed complete and univoc
 .. figure:: figure26.pdf
    :scale: 100%
    :align: center
-   
+
    The basin diagram of the network *arellano_rootstem* from the repository.
- 
+
 
 attractor approximations
 ************************
@@ -1795,8 +1791,8 @@ The functions :ref:`univocality` and :ref:`faithfulness` each require the primes
    >>> update = "asynchronous"
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> for x in mintspaces:
-   ...     answer_univocal = AttractorDetection.univocal(primes, update, x)
-   ...     answer_faithful = AttractorDetection.faithful(primes, update, x)
+   ...     answer_univocal = Attractors.univocal(primes, update, x)
+   ...     answer_faithful = Attractors.faithful(primes, update, x)
    ...     print "min trap space:", STGs.subspace2str(primes, x)
    ...     print "  is univocal:", answer_univocal
    ...     print "  is faithful:", answer_faithful
@@ -1810,10 +1806,10 @@ The functions :ref:`univocality` and :ref:`faithfulness` each require the primes
 The function for deciding whether the minimal trap spaces are complete requires only two arguments, the primes and the update strategy,
 because it is implied that the trap spaces must be all minimal ones.
 See :ref:`completeness` for details.
-     
-   >>> AttractorDetection.completeness(primes, update)
+
+   >>> Attractors.completeness(primes, update)
    True
-   
+
 Since :ref:`univocality` is based on detecting at least one attractor, via the random walk algorithm explained above,
 and since a counterexample to the univocality query contains information about additional attractors,
 there is a second function, called :ref:`univocality_with_counterexample`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
@@ -1836,7 +1832,7 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
-        
+
    >>> STGs.add_style_sccs(stg)
    >>> STGs.add_style_subspaces(primes, stg, mintspaces)
 
@@ -1846,9 +1842,9 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
 .. figure:: figure27.pdf
    :scale: 60%
    :align: center
-   
+
    WRONG FIGURE! The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
-   
+
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
    ['---']
@@ -1859,7 +1855,3 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
 
 
 .. include:: Substitutions.rst
-
-
-
-

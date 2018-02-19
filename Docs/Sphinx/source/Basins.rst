@@ -24,55 +24,25 @@ strong_basin
 .. autofunction:: PyBoolNet.Basins.strong_basin
 
 
-.. _cycfree_basin:
+.. _cyclefree_basin:
 
-cycfree_basin
--------------
+cyclefree_basin
+---------------
 
-.. autofunction:: PyBoolNet.Basins.cycfree_basin
-
-
-.. _all_basins:
-
-all_basins
-----------
-
-.. autofunction:: PyBoolNet.Basins.all_basins
+.. autofunction:: PyBoolNet.Basins.cyclefree_basin
 
 
-.. _strong_basins:
+.. _create_barplot:
 
-strong_basins
--------------
-
-.. autofunction:: PyBoolNet.Basins.strong_basins
-
-
-.. _commitment_diagram:
-
-commitment_diagram
-------------------
-
-.. autofunction:: PyBoolNet.Basins.commitment_diagram
-
-
-.. _commitment_diagram2image:
-
-commitment_diagram2image
-------------------------
-
-.. autofunction:: PyBoolNet.Basins.commitment_diagram2image
-
-
-
-.. _commitment_pie:
-
-commitment_pie
+create_barplot
 --------------
 
-.. autofunction:: PyBoolNet.Basins.commitment_pie
+.. autofunction:: PyBoolNet.Basins.create_barplot
 
 
+.. _basins_create_piechart:
 
+create_piechart
+---------------
 
-
+.. autofunction:: PyBoolNet.Basins.create_piechart

@@ -29,7 +29,7 @@ def pairs(List):
         result+=[x]
 
     return result
-    
+
 
 def run():
 
@@ -39,7 +39,7 @@ def run():
     if 0 or RUN_ALL:
         print("modifications of networks")
 
-        
+
         bnet = """
         v1, 0
         v2, 1
@@ -47,16 +47,16 @@ def run():
         v4, v3 & (v1|v2)
         """
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
-        
+
         constants = PyBoolNet.PrimeImplicants.find_constants(primes)
         PyBoolNet.PrimeImplicants.create_blinkers(primes, constants)
-        
+
         print(PyBoolNet.FileExchange.primes2bnet(primes))
 
     if 0 or RUN_ALL:
         print("creates basin diagrams")
         primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
-        diagram = PyBoolNet.Basins.commitment_diagram(primes, "asynchronous")
+        diagram = PyBoolNet.Commitment.compute_diagram(primes, "asynchronous")
         print(diagram.order())
         print(diagram.nodes())
         print(diagram.node["4"]["formula"])
@@ -64,7 +64,7 @@ def run():
 
 
         primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
-        diagram = PyBoolNet.Basins.commitment_diagram(primes, "asynchronous", FnameImage="source/figure26.pdf")
+        diagram = PyBoolNet.Commitment.compute_diagram(primes, "asynchronous", FnameImage="source/figure26.pdf")
 
     if 0 or RUN_ALL:
         print("creates interaction graphs for all repository networks:")
@@ -108,23 +108,23 @@ def run():
         spec = "CTLSPEC EF(STEADYSTATE)"
         print(PyBoolNet.ModelChecking.check_primes(primes, update, init, spec))
 
-        for x in PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition(primes, prop):
+        for x in PyBoolNet.StateTransitionGraphs.enumerate_states(primes, prop):
             print(x)
-        
-        
-        
+
+
+
 
     if 0 or RUN_ALL:
         print("primes from Python functions")
 
         f1 = lambda v2,v3,v4,v5: sum([v2,v3,v4,v5])>=2
-        
+
         def f2(v1,v2,v3):
             if f1(v2,v3,0,0):
                 return 0
             else:
                 return sum([v1,v2,v3]) % 2
-        
+
         f3 = lambda v4,v5: not (v4 or not f2(v4,v4,v5))
         f4 = lambda: 1
         f5 = lambda v5: v5
@@ -188,7 +188,7 @@ def run():
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
         PyBoolNet.InteractionGraphs.add_style_inputs(igraph)
-        PyBoolNet.InteractionGraphs.add_style_constants(igraph)   
+        PyBoolNet.InteractionGraphs.add_style_constants(igraph)
         PyBoolNet.InteractionGraphs.add_style_outputs(igraph)
         igraph.graph["label"] = "Example 5: Interaction graph with styles for inputs, outputs and constants"
         PyBoolNet.InteractionGraphs.igraph2image(igraph, "source/figure04.pdf")
@@ -211,7 +211,7 @@ def run():
 
     if 0 or RUN_ALL:
         print("the subgraph style")
-        
+
         bnet = ["v1, v7", "v2, v1 & v6", "v3, v2 | v7", "v4, v3",
                 "v5, v1 | v4", "v6, v5", "v7, v6"]
         bnet = "\n".join(bnet)
@@ -225,7 +225,7 @@ def run():
 
     if 0 or RUN_ALL:
         print("the activities style and animations")
-                
+
         bnet = ["v1, v7",
                    "v2, v1 & v6",
                    "v3, v2 | v7",
@@ -240,7 +240,7 @@ def run():
         PyBoolNet.InteractionGraphs.add_style_activities(igraph, activities)
         igraph.graph["label"] = "Example 9: Interaction graph with a activities style"
         igraph.graph["rankdir"] = "LR"
-        
+
         PyBoolNet.InteractionGraphs.igraph2image(igraph, "source/figure08.pdf")
 
 
@@ -286,7 +286,7 @@ def run():
 
     if 0 or RUN_ALL:
         print("Drawing the State Transition Graph - Synchronous")
-        
+
         bnet = "\n".join(["v1, !v3","v2, v1", "v3, v2"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "synchronous")
@@ -303,7 +303,7 @@ def run():
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
         stg.graph["label"] = "Example 13: STG with path style"
 
-        path = ["011","010","110","100","000"]   
+        path = ["011","010","110","100","000"]
         PyBoolNet.StateTransitionGraphs.add_style_path(stg, path, "red")
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure12.pdf")
 
@@ -313,7 +313,7 @@ def run():
         bnet = "\n".join(["x, !x|y", "y, x&!y|!z", "z, x&z|!y"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-        stg.graph["label"] = "Example 14: STG with SCC style"   
+        stg.graph["label"] = "Example 14: STG with SCC style"
         PyBoolNet.StateTransitionGraphs.add_style_sccs(stg)
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure13.pdf")
 
@@ -323,7 +323,7 @@ def run():
         bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-        stg.graph["label"] = "Example 15: STG with min trap spaces style"   
+        stg.graph["label"] = "Example 15: STG with min trap spaces style"
         PyBoolNet.StateTransitionGraphs.add_style_mintrapspaces(primes, stg)
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure14.pdf")
 
@@ -339,9 +339,9 @@ def run():
         sub2 = {"x":1,"y":0}
         subspaces = [sub1, sub2]
         PyBoolNet.StateTransitionGraphs.add_style_subspaces(primes, stg, subspaces)
-        
+
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure15.pdf")
-        
+
 
     if 0 or RUN_ALL:
         print("STG default style")
@@ -349,9 +349,9 @@ def run():
         bnet = "\n".join(["x, !x|y&z", "y, x&!y|!z", "z, z|!y"])
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-        stg.graph["label"] = "Example 17: STG with default style"   
+        stg.graph["label"] = "Example 17: STG with default style"
         PyBoolNet.StateTransitionGraphs.add_style_default(primes, stg)
-        
+
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure16.pdf")
 
     if 0 or RUN_ALL:
@@ -377,20 +377,20 @@ def run():
             ap_basic = [name for name in sorted(x_dict) if x_dict[name]]
             ap_auxillary = list(ap_basic)
             outdegree = len(list(y for y in stg.successors(x) if y!=x))
-            
+
             suc = PyBoolNet.StateTransitionGraphs.successor_synchronous(primes, x_dict)
             ap_auxillary+= [name+"_STEADY" for name in sorted(x_dict) if suc[name]==x_dict[name]]
             if not outdegree:
                 ap_auxillary+= ["STEADYSTATE"]
             ap_auxillary+= ["SUCCESSORS=%i"%outdegree]
-            
+
             ap_basic = pairs(ap_basic)
             ts_basic.node[x]["label"] = "{"+"\\n".join(ap_basic)+"}"
 
             ap_auxillary = pairs(ap_auxillary)
             ts_auxillary.node[x]["label"] = "{"+"\\n".join(ap_auxillary)+"}"
-            
-        
+
+
         PyBoolNet.StateTransitionGraphs.stg2image(ts_basic, "source/figure17b.pdf")
 
         print("calling pdflatex, hope its installed")
@@ -402,7 +402,7 @@ def run():
         out, err = proc.communicate()
         shutil.copyfile("merge_figure17-crop.pdf", "source/figure17.pdf")
 
-        PyBoolNet.StateTransitionGraphs.stg2image(ts_auxillary, "source/figure18.pdf")        
+        PyBoolNet.StateTransitionGraphs.stg2image(ts_auxillary, "source/figure18.pdf")
 
 
     if 0 or RUN_ALL:
@@ -448,13 +448,13 @@ def run():
         bnet = "\n".join(bnet)
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         update = "asynchronous"
-        
+
         init = "INIT TRUE"
         spec = "LTLSPEC F(Raf & F(STEADYSTATE))"
         answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, update, init, spec)
         if counterex:
             " -> ".join(PyBoolNet.StateTransitionGraphs.state2str(x) for x in counterex)
-        
+
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, update)
         PyBoolNet.StateTransitionGraphs.add_style_path(stg, counterex, "red")
         stg.graph["label"] = "Example 19: A LTL counterexample"
@@ -536,7 +536,7 @@ def run():
 
         for x in PyBoolNet.StateTransitionGraphs.successors_asynchronous(primes, "101"):
             print(x)
-                
+
     if 0 or RUN_ALL:
         bnet = ["x0,   !x0&x1 | x2",
                 "x1,   !x0 | x1 | x2",
@@ -554,7 +554,7 @@ def run():
 
         stg.graph["label"] = "Example 22: Existential queries"
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure22.pdf")
-        
+
         init = "INIT !x1"
         specQ1 = "CTLSPEC  EF(AG(x0_STEADY))"
         specQ2 = "CTLSPEC !EF(AG(x0_STEADY))"
@@ -569,9 +569,9 @@ def run():
         print(PyBoolNet.StateTransitionGraphs.state2str(state))
 
         print(counterex)
-        
+
     if 0 or RUN_ALL:
-        
+
         bnet = ["x, !x | y | z",
                 "y, !x&z | y&!z",
                 "z, x&y | z"]
@@ -589,7 +589,7 @@ def run():
         stg.graph["label"] = "Example 23: All trap spaces"
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure23.pdf")
 
-        
+
         mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         print("mintspaces", ", ".join(PyBoolNet.StateTransitionGraphs.subspace2str(primes, x) for x in mintspaces))
         for x in mintspaces:
@@ -617,29 +617,29 @@ def run():
         primes = PyBoolNet.FileExchange.bnet2primes(bnet)
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
         PyBoolNet.StateTransitionGraphs.add_style_sccs(stg)
-        steady, cyclic = PyBoolNet.AttractorDetection.compute_attractors_tarjan(stg)
-        
+        steady, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
+
         stg.graph["label"] = "Example 25: A network with a cyclic attractor and a steady state."
         PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figure25.pdf")
 
-        state = PyBoolNet.AttractorDetection.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+        state = PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
         print(PyBoolNet.StateTransitionGraphs.state2str(state))
 
         update = "asynchronous"
         mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         for x in mintspaces:
-            answer_univocal = PyBoolNet.AttractorDetection.univocality( primes, update, x )
-            answer_faithful = PyBoolNet.AttractorDetection.faithfulness( primes, update, x )
+            answer_univocal = PyBoolNet.Attractors.univocality( primes, update, x )
+            answer_faithful = PyBoolNet.Attractors.faithfulness( primes, update, x )
             print("min trap space:", PyBoolNet.StateTransitionGraphs.subspace2str(primes, x))
             print("  is univocal:", answer_univocal)
             print("  is faithful:", answer_faithful)
 
-        answer_complete, counterex = PyBoolNet.AttractorDetection.completeness_naive( primes, update, mintspaces )
+        answer_complete = PyBoolNet.Attractors.completeness_naive( primes, update, mintspaces )
         print("min trap spaces are complete:", answer_complete)
-        
-        
+
+
     if False:
-        
+
         bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
                "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
                "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
@@ -649,19 +649,16 @@ def run():
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
         mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
         print([PyBoolNet.StateTransitionGraphs.subspace2str(primes, x) for x in mintspaces])
-        
+
         PyBoolNet.StateTransitionGraphs.add_style_sccs(stg)
         PyBoolNet.StateTransitionGraphs.add_style_subspaces(primes, stg, mintspaces)
-        
-        stg.graph["label"] = "Example xx: An STG whose minimal trap space '---' is not complete"
-        PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figurexx.pdf")        
 
-        
-        
-        
-        
+        stg.graph["label"] = "Example xx: An STG whose minimal trap space '---' is not complete"
+        PyBoolNet.StateTransitionGraphs.stg2image(stg, "source/figurexx.pdf")
+
+
+
+
+
 if __name__=="__main__":
     run()
-    
-    
-   

@@ -5,17 +5,18 @@ Reference
 
 
 .. toctree::
-   
+
    FileExchange
    PrimeImplicants
    InteractionGraphs
    StateTransitionGraphs
-   AttractorDetection
+   Attractors
    Basins
-   
+   Commitment
+   Phenotypes
+
    ModelChecking
-   QueryPatterns
-   BooleanExpressions
+   TemporalLogic
+   BooleanLogic
    AspSolver
    QuineMcCluskey
-   
