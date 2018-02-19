@@ -34,10 +34,10 @@ FILES_OUT  = tempfile.mkdtemp(prefix='pyboolnet_')
 
 def run():
 
-	import PyBoolNet.Tests.StateTransitionGraphs
-	unittest.main(verbosity=2, buffer=True, exit=False, module=PyBoolNet.Tests.StateTransitionGraphs)
+	#import PyBoolNet.Tests.StateTransitionGraphs
+	#unittest.main(verbosity=2, buffer=True, exit=False, module=PyBoolNet.Tests.StateTransitionGraphs)
+	#return
 
-	return
 
 	# old test setup
 	unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
