@@ -51,9 +51,6 @@ def print_info(MarkDown=False):
 			print(''.join(x.ljust(width[i]) for i,x in enumerate(row)))
 
 
-
-
-
 def names_with_fast_analysis():
 	result = ["arellano_rootstem","dahlhaus_neuroplastoma",
 			  "dinwoodie_life", "faure_cellcycle",
@@ -85,7 +82,7 @@ def get_all_names():
 
 def get_primes(Name):
 	"""
-	Fetches the prime implicants of the network *Name* in the model repository.
+	Returns the prime implicants of the network *Name* in the model repository.
 	Run :ref:`get_all_names` to see all networks currently available.
 
 	**arguments**:
@@ -96,8 +93,7 @@ def get_primes(Name):
 
 	**example**::
 
-			>>> get_primes("raf")
-			{'Raf': [[{'Raf': 1, 'Erk': 1}], [{'Raf': 0}, {'Erk': 0}]],...
+			>>> primes = get_primes("raf")
 	"""
 
 	path = os.path.join(BASE,Name,Name+".bnet")
@@ -105,7 +101,42 @@ def get_primes(Name):
 	if os.path.isfile(path):
 		return PyBoolNet.FileExchange.bnet2primes(path)
 
-	print(" %s does not exist"%Name)
+	print(" %s does not exist"%path)
+	raise Exception
+
+
+def get_attrs(Name, Update):
+	"""
+	todo: finish code
+	todo: add unit tests
+
+	Returns the attractor data of the network *Name*.
+
+	**arguments**:
+		* *Name* (str): name of network
+
+	**returns**:
+		* *Attrs* (dict): json attractor data, see :ref:`attractors_compute_json`
+		* *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+
+	**example**::
+
+		>>> attrs = get_attrs("tournier_apoptosis", "asynchronous")
+	"""
+
+	if Update=="asynchronous":
+		ext = "async.json"
+	elif Update=="synchronous":
+		ext = "sync.json"
+	elif Update=="mixed":
+		ext = "mixed.json"
+
+	path = os.path.join(BASE,Name,Name+"_attrs_"+ext)
+
+	if os.path.isfile(path):
+		return PyBoolNet.Attractors.open_json(path)
+
+	print(" %s does not exist"%path)
 	raise Exception
 
 

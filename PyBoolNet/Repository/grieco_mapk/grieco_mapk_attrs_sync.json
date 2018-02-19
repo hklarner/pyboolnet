@@ -1,0 +1,3066 @@
+{
+    "attractors": [
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "ELK1": 0, 
+                    "MSK": 0, 
+                    "Growth_Arrest": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 0, 
+                    "FOS": 0, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "MTK1": 0, 
+                    "p70": 0, 
+                    "PI3K": 0, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 0, 
+                    "PDK1": 0, 
+                    "PTEN": 0, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 0
+                }, 
+                "str": "00000000000000000000000000000000000000000000000000000", 
+                "prop": "!AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&!GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&!MDM2&!MEK1_2&!MSK&!MTK1&!MYC&!PDK1&!PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "MTK1": 0, 
+                    "MSK": 0, 
+                    "MAP3K1_3": 0, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 0, 
+                    "PI3K": 0, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "GRB2": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 0, 
+                    "SPRY": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 0, 
+                    "PDK1": 0, 
+                    "PTEN": 0, 
+                    "ELK1": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "ATF2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00000000000000000000000000000000000000000000000000000", 
+                "prop": "!AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&!GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&!MDM2&!MEK1_2&!MSK&!MTK1&!MYC&!PDK1&!PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01101010100100001011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01101010100100001011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01101010100100101011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01101010100100101011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01101010101100001011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01101010101100001011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01101010101100101011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01101010101100101011111111001111100110110110101111110", 
+                "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 0, 
+                    "PDK1": 0, 
+                    "PTEN": 1, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011100100001001011101001110000110000000010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&!GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&!PDK1&!PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 0, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "GRB2": 0, 
+                    "RAS": 0, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 0, 
+                    "PDK1": 0, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011100100001001011101001110000110000000010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&!GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&!PDK1&!PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011100100001011011101001111100110000000010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 0, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "GRB2": 0, 
+                    "RAS": 0, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011100100001011011101001111100110000000010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011100100001011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011100100001011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011100100101011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011100100101011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 1, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 1, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011100100101011111111001111111110110010010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PKC&PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&!SMAD&SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "MAX1": 1, 
+                    "EGFR": 0, 
+                    "AKT": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "AP1": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 1, 
+                    "GAB1": 1, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "no", 
+                "str": "0111101110010-101-11-111-10011111--110--00-0010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&FGFR3_stimulus&!FOS&FOXO3&GAB1&GADD45&Growth_Arrest&JNK&JUN&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PPP2CA&PTEN&!Proliferation&!RSK&!SMAD&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011101100001011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011101100001011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 1, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 1, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011101100101011111101001111111110010010010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PKC&PLCG&PPP2CA&PTEN&!Proliferation&!RAF&RAS&!RSK&!SMAD&SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "MAX1": 1, 
+                    "GAB1": 1, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "AP1": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "011110111-110-101-11-111-10011111--110--00-0010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&EGFR_stimulus&ELK1&!ERK&FGFR3_stimulus&!FOS&FOXO3&GAB1&GADD45&Growth_Arrest&JNK&JUN&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PPP2CA&PTEN&!Proliferation&!RSK&!SMAD&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 1, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011101100101011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 1, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MAP3K1_3": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 1, 
+                    "GRB2": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 1, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "SPRY": 0, 
+                    "TGFBR": 1, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 1, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 1, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "01111011101100101011111111001111100110110110111111110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "EGFR": 1, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 1, 
+                    "ERK": 0, 
+                    "RAF": 1, 
+                    "DNA_damage": 1, 
+                    "ATM": 1, 
+                    "Apoptosis": 1, 
+                    "FOS": 0, 
+                    "JUN": 1, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 0, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 1, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 1
+                }, 
+                "str": "01111011111100001011011111001111100110100000010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 1, 
+                    "FRS2": 0, 
+                    "FOXO3": 1, 
+                    "MTK1": 1, 
+                    "MSK": 1, 
+                    "MDM2": 0, 
+                    "ERK": 0, 
+                    "DNA_damage": 1, 
+                    "Apoptosis": 1, 
+                    "PI3K": 1, 
+                    "JUN": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "ATM": 1, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 1, 
+                    "p38": 1, 
+                    "Proliferation": 0, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 1, 
+                    "AKT": 0, 
+                    "FGFR3": 0, 
+                    "p53": 1, 
+                    "TGFBR": 0, 
+                    "GADD45": 1, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 1, 
+                    "TAOK": 1, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 1, 
+                    "ELK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 1, 
+                    "p21": 1, 
+                    "CREB": 1, 
+                    "ATF2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "011110111-1100001011-111-10011111--110--00-0010011110", 
+                "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&Growth_Arrest&JNK&JUN&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PPP2CA&PTEN&!Proliferation&!RSK&!SMAD&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "ELK1": 0, 
+                    "MSK": 0, 
+                    "Growth_Arrest": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 0, 
+                    "FOS": 0, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "MTK1": 0, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "MDM2": 1, 
+                    "AKT": 1, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 0, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 0
+                }, 
+                "str": "10000000000000000010000000100001100000000000000000000", 
+                "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&MDM2&!MEK1_2&!MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "MTK1": 0, 
+                    "MSK": 0, 
+                    "MAP3K1_3": 0, 
+                    "MDM2": 1, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "Apoptosis": 0, 
+                    "PI3K": 1, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "GRB2": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "ATM": 0, 
+                    "p70": 0, 
+                    "FOS": 0, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "Growth_Arrest": 0, 
+                    "AKT": 1, 
+                    "FGFR3": 0, 
+                    "p53": 0, 
+                    "SPRY": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "PLCG": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 0, 
+                    "ELK1": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "ATF2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "BCL2": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10000000000000000010000000100001100000000000000000000", 
+                "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&MDM2&!MEK1_2&!MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 1, 
+                    "AP1": 0, 
+                    "EGFR": 1, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "ELK1": 0, 
+                    "MSK": 0, 
+                    "Growth_Arrest": 0, 
+                    "ERK": 1, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 0, 
+                    "FOS": 0, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "MTK1": 0, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 1, 
+                    "FGFR3": 1, 
+                    "PLCG": 0, 
+                    "p53": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 0, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 0
+                }, 
+                "str": "10000000011011100010000000010001100000000000000000000", 
+                "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&EGFR&EGFR_stimulus&!ELK1&ERK&FGFR3&FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&!MDM2&MEK1_2&!MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "no", 
+                "dict": {
+                    "TAK1": 0, 
+                    "TGFBR": 0, 
+                    "DNA_damage": 0, 
+                    "FGFR3_stimulus": 1, 
+                    "PI3K": 1, 
+                    "ATM": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "SMAD": 0, 
+                    "TGFBR_stimulus": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "---0---0--1---1---1------------11--------0--0000-----", 
+                "prop": "!ATM&!DNA_damage&EGFR_stimulus&FGFR3_stimulus&GAB1&PDK1&PI3K&!SMAD&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 1, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "ELK1": 1, 
+                    "MSK": 1, 
+                    "Growth_Arrest": 0, 
+                    "ERK": 1, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 0, 
+                    "FOS": 0, 
+                    "JUN": 0, 
+                    "PKC": 0, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 0, 
+                    "RAS": 0, 
+                    "MYC": 0, 
+                    "DUSP1": 0, 
+                    "MTK1": 0, 
+                    "p70": 1, 
+                    "PI3K": 1, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 0, 
+                    "p14": 0, 
+                    "SMAD": 0, 
+                    "MDM2": 1, 
+                    "AKT": 1, 
+                    "FGFR3": 0, 
+                    "PLCG": 1, 
+                    "p53": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "SPRY": 1, 
+                    "RSK": 1, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 0, 
+                    "GRB2": 1, 
+                    "EGFR_stimulus": 1, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 0, 
+                    "BCL2": 0, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 0
+                }, 
+                "str": "10000000011110000010100000101001101000001001000000001", 
+                "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&EGFR&EGFR_stimulus&ELK1&ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&MDM2&!MEK1_2&MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&RSK&!SMAD&!SOS&SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "no", 
+                "dict": {
+                    "TAK1": 0, 
+                    "TGFBR": 0, 
+                    "DNA_damage": 0, 
+                    "FGFR3_stimulus": 0, 
+                    "PI3K": 1, 
+                    "ATM": 0, 
+                    "TAOK": 0, 
+                    "FRS2": 0, 
+                    "PDK1": 1, 
+                    "EGFR_stimulus": 1, 
+                    "SMAD": 0, 
+                    "GAB1": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "FGFR3": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "---0---0--1--00--01------------11--------0--0000-----", 
+                "prop": "!ATM&!DNA_damage&EGFR_stimulus&!FGFR3&!FGFR3_stimulus&!FRS2&GAB1&PDK1&PI3K&!SMAD&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "TAK1": 0, 
+                    "MEK1_2": 0, 
+                    "AP1": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0, 
+                    "FOXO3": 0, 
+                    "ELK1": 0, 
+                    "MSK": 0, 
+                    "Growth_Arrest": 0, 
+                    "ERK": 0, 
+                    "RAF": 0, 
+                    "DNA_damage": 0, 
+                    "ATM": 0, 
+                    "Apoptosis": 0, 
+                    "FOS": 0, 
+                    "JUN": 0, 
+                    "PKC": 1, 
+                    "SOS": 0, 
+                    "MAP3K1_3": 1, 
+                    "RAS": 1, 
+                    "MYC": 1, 
+                    "DUSP1": 1, 
+                    "MTK1": 0, 
+                    "p70": 0, 
+                    "PI3K": 1, 
+                    "MAX1": 0, 
+                    "p38": 0, 
+                    "Proliferation": 1, 
+                    "p14": 1, 
+                    "SMAD": 0, 
+                    "MDM2": 0, 
+                    "AKT": 1, 
+                    "FGFR3": 0, 
+                    "PLCG": 0, 
+                    "p53": 0, 
+                    "TGFBR": 0, 
+                    "GADD45": 0, 
+                    "FGFR3_stimulus": 1, 
+                    "SPRY": 0, 
+                    "RSK": 0, 
+                    "PPP2CA": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "PTEN": 0, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 0, 
+                    "JNK": 0, 
+                    "p21": 0, 
+                    "CREB": 1, 
+                    "BCL2": 1, 
+                    "TGFBR_stimulus": 0, 
+                    "ATF2": 0
+                }, 
+                "str": "10000110100000100010000010000011110001010000000010000", 
+                "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&MAP3K1_3&!MAX1&!MDM2&!MEK1_2&!MSK&!MTK1&MYC&PDK1&PI3K&PKC&!PLCG&!PPP2CA&!PTEN&Proliferation&!RAF&RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&p14&!p21&!p38&!p53&!p70"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "no", 
+                "dict": {
+                    "TAK1": 0, 
+                    "TGFBR": 0, 
+                    "DNA_damage": 0, 
+                    "FGFR3_stimulus": 1, 
+                    "PI3K": 1, 
+                    "ATM": 0, 
+                    "TAOK": 0, 
+                    "GAB1": 1, 
+                    "PDK1": 1, 
+                    "EGFR_stimulus": 0, 
+                    "SMAD": 0, 
+                    "TGFBR_stimulus": 0
+                }, 
+                "is_univocal": "no", 
+                "str": "---0---0--0---1---1------------11--------0--0000-----", 
+                "prop": "!ATM&!DNA_damage&!EGFR_stimulus&FGFR3_stimulus&GAB1&PDK1&PI3K&!SMAD&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus"
+            }, 
+            "is_cyclic": true
+        }
+    ], 
+    "primes": {
+        "TAK1": [
+            [
+                {
+                    "TGFBR": 0
+                }
+            ], 
+            [
+                {
+                    "TGFBR": 1
+                }
+            ]
+        ], 
+        "MEK1_2": [
+            [
+                {
+                    "RAF": 0, 
+                    "MAP3K1_3": 0
+                }, 
+                {
+                    "PPP2CA": 1
+                }, 
+                {
+                    "AP1": 1
+                }
+            ], 
+            [
+                {
+                    "PPP2CA": 0, 
+                    "RAF": 1, 
+                    "AP1": 0
+                }, 
+                {
+                    "PPP2CA": 0, 
+                    "AP1": 0, 
+                    "MAP3K1_3": 1
+                }
+            ]
+        ], 
+        "AP1": [
+            [
+                {
+                    "ATF2": 0, 
+                    "FOS": 0
+                }, 
+                {
+                    "JUN": 0
+                }
+            ], 
+            [
+                {
+                    "JUN": 1, 
+                    "FOS": 1
+                }, 
+                {
+                    "JUN": 1, 
+                    "ATF2": 1
+                }
+            ]
+        ], 
+        "EGFR": [
+            [
+                {
+                    "EGFR_stimulus": 0, 
+                    "SPRY": 0
+                }, 
+                {
+                    "PKC": 1
+                }, 
+                {
+                    "GRB2": 1
+                }
+            ], 
+            [
+                {
+                    "PKC": 0, 
+                    "GRB2": 0, 
+                    "SPRY": 1
+                }, 
+                {
+                    "PKC": 0, 
+                    "GRB2": 0, 
+                    "EGFR_stimulus": 1
+                }
+            ]
+        ], 
+        "FRS2": [
+            [
+                {
+                    "SPRY": 1
+                }, 
+                {
+                    "GRB2": 1
+                }, 
+                {
+                    "FGFR3": 0
+                }
+            ], 
+            [
+                {
+                    "GRB2": 0, 
+                    "FGFR3": 1, 
+                    "SPRY": 0
+                }
+            ]
+        ], 
+        "FOXO3": [
+            [
+                {
+                    "JNK": 0
+                }, 
+                {
+                    "AKT": 1
+                }
+            ], 
+            [
+                {
+                    "JNK": 1, 
+                    "AKT": 0
+                }
+            ]
+        ], 
+        "ELK1": [
+            [
+                {
+                    "JNK": 0, 
+                    "p38": 0, 
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "p38": 1
+                }, 
+                {
+                    "JNK": 1
+                }, 
+                {
+                    "ERK": 1
+                }
+            ]
+        ], 
+        "MSK": [
+            [
+                {
+                    "p38": 0, 
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "p38": 1
+                }, 
+                {
+                    "ERK": 1
+                }
+            ]
+        ], 
+        "Growth_Arrest": [
+            [
+                {
+                    "p21": 0
+                }
+            ], 
+            [
+                {
+                    "p21": 1
+                }
+            ]
+        ], 
+        "ERK": [
+            [
+                {
+                    "MEK1_2": 0
+                }
+            ], 
+            [
+                {
+                    "MEK1_2": 1
+                }
+            ]
+        ], 
+        "RAF": [
+            [
+                {
+                    "PKC": 0, 
+                    "RAS": 0
+                }, 
+                {
+                    "ERK": 1
+                }, 
+                {
+                    "AKT": 1
+                }
+            ], 
+            [
+                {
+                    "AKT": 0, 
+                    "RAS": 1, 
+                    "ERK": 0
+                }, 
+                {
+                    "PKC": 1, 
+                    "AKT": 0, 
+                    "ERK": 0
+                }
+            ]
+        ], 
+        "DNA_damage": [
+            [
+                {
+                    "DNA_damage": 0
+                }
+            ], 
+            [
+                {
+                    "DNA_damage": 1
+                }
+            ]
+        ], 
+        "ATM": [
+            [
+                {
+                    "DNA_damage": 0
+                }
+            ], 
+            [
+                {
+                    "DNA_damage": 1
+                }
+            ]
+        ], 
+        "Apoptosis": [
+            [
+                {
+                    "p53": 0
+                }, 
+                {
+                    "FOXO3": 0
+                }, 
+                {
+                    "ERK": 1
+                }, 
+                {
+                    "BCL2": 1
+                }
+            ], 
+            [
+                {
+                    "FOXO3": 1, 
+                    "BCL2": 0, 
+                    "ERK": 0, 
+                    "p53": 1
+                }
+            ]
+        ], 
+        "FOS": [
+            [
+                {
+                    "CREB": 0, 
+                    "ELK1": 0
+                }, 
+                {
+                    "RSK": 0
+                }, 
+                {
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "ELK1": 1, 
+                    "ERK": 1, 
+                    "RSK": 1
+                }, 
+                {
+                    "CREB": 1, 
+                    "ERK": 1, 
+                    "RSK": 1
+                }
+            ]
+        ], 
+        "JUN": [
+            [
+                {
+                    "JNK": 0
+                }
+            ], 
+            [
+                {
+                    "JNK": 1
+                }
+            ]
+        ], 
+        "PKC": [
+            [
+                {
+                    "PLCG": 0
+                }
+            ], 
+            [
+                {
+                    "PLCG": 1
+                }
+            ]
+        ], 
+        "SOS": [
+            [
+                {
+                    "RSK": 1
+                }, 
+                {
+                    "GRB2": 0
+                }
+            ], 
+            [
+                {
+                    "GRB2": 1, 
+                    "RSK": 0
+                }
+            ]
+        ], 
+        "MAP3K1_3": [
+            [
+                {
+                    "RAS": 0
+                }
+            ], 
+            [
+                {
+                    "RAS": 1
+                }
+            ]
+        ], 
+        "RAS": [
+            [
+                {
+                    "SOS": 0, 
+                    "PLCG": 0
+                }
+            ], 
+            [
+                {
+                    "SOS": 1
+                }, 
+                {
+                    "PLCG": 1
+                }
+            ]
+        ], 
+        "MYC": [
+            [
+                {
+                    "MAX1": 0, 
+                    "AKT": 0
+                }, 
+                {
+                    "MSK": 0
+                }
+            ], 
+            [
+                {
+                    "MAX1": 1, 
+                    "MSK": 1
+                }, 
+                {
+                    "MSK": 1, 
+                    "AKT": 1
+                }
+            ]
+        ], 
+        "DUSP1": [
+            [
+                {
+                    "CREB": 0
+                }
+            ], 
+            [
+                {
+                    "CREB": 1
+                }
+            ]
+        ], 
+        "MTK1": [
+            [
+                {
+                    "GADD45": 0
+                }
+            ], 
+            [
+                {
+                    "GADD45": 1
+                }
+            ]
+        ], 
+        "p70": [
+            [
+                {
+                    "PDK1": 0
+                }, 
+                {
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "PDK1": 1, 
+                    "ERK": 1
+                }
+            ]
+        ], 
+        "PI3K": [
+            [
+                {
+                    "SOS": 0, 
+                    "GAB1": 0
+                }, 
+                {
+                    "RAS": 0, 
+                    "GAB1": 0
+                }
+            ], 
+            [
+                {
+                    "SOS": 1, 
+                    "RAS": 1
+                }, 
+                {
+                    "GAB1": 1
+                }
+            ]
+        ], 
+        "MAX1": [
+            [
+                {
+                    "p38": 0
+                }
+            ], 
+            [
+                {
+                    "p38": 1
+                }
+            ]
+        ], 
+        "p38": [
+            [
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "MTK1": 0, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MTK1": 0, 
+                    "DUSP1": 1, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "TAOK": 0
+                }, 
+                {
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "MTK1": 0, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "MTK1": 0
+                }
+            ], 
+            [
+                {
+                    "TAK1": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "MTK1": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "MTK1": 1
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "MAP3K1_3": 1
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "MTK1": 1
+                }, 
+                {
+                    "DUSP1": 0, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "DUSP1": 0
+                }, 
+                {
+                    "MTK1": 1, 
+                    "DUSP1": 0
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "DUSP1": 0
+                }
+            ]
+        ], 
+        "Proliferation": [
+            [
+                {
+                    "p70": 0
+                }, 
+                {
+                    "p21": 1
+                }, 
+                {
+                    "MYC": 0
+                }
+            ], 
+            [
+                {
+                    "MYC": 1, 
+                    "p21": 0, 
+                    "p70": 1
+                }
+            ]
+        ], 
+        "p14": [
+            [
+                {
+                    "MYC": 0
+                }
+            ], 
+            [
+                {
+                    "MYC": 1
+                }
+            ]
+        ], 
+        "SMAD": [
+            [
+                {
+                    "TGFBR": 0
+                }
+            ], 
+            [
+                {
+                    "TGFBR": 1
+                }
+            ]
+        ], 
+        "MDM2": [
+            [
+                {
+                    "AKT": 0, 
+                    "p53": 0
+                }, 
+                {
+                    "p14": 1
+                }
+            ], 
+            [
+                {
+                    "p14": 0, 
+                    "p53": 1
+                }, 
+                {
+                    "p14": 0, 
+                    "AKT": 1
+                }
+            ]
+        ], 
+        "AKT": [
+            [
+                {
+                    "PTEN": 1
+                }, 
+                {
+                    "PDK1": 0
+                }
+            ], 
+            [
+                {
+                    "PDK1": 1, 
+                    "PTEN": 0
+                }
+            ]
+        ], 
+        "FGFR3": [
+            [
+                {
+                    "PKC": 1
+                }, 
+                {
+                    "GRB2": 1
+                }, 
+                {
+                    "FGFR3_stimulus": 0
+                }
+            ], 
+            [
+                {
+                    "PKC": 0, 
+                    "GRB2": 0, 
+                    "FGFR3_stimulus": 1
+                }
+            ]
+        ], 
+        "PLCG": [
+            [
+                {
+                    "EGFR": 0, 
+                    "FGFR3": 0
+                }
+            ], 
+            [
+                {
+                    "FGFR3": 1
+                }, 
+                {
+                    "EGFR": 1
+                }
+            ]
+        ], 
+        "p53": [
+            [
+                {
+                    "MDM2": 1, 
+                    "p38": 0
+                }, 
+                {
+                    "p38": 0, 
+                    "ATM": 0
+                }, 
+                {
+                    "MDM2": 1, 
+                    "ATM": 0
+                }
+            ], 
+            [
+                {
+                    "MDM2": 0, 
+                    "p38": 1
+                }, 
+                {
+                    "p38": 1, 
+                    "ATM": 1
+                }, 
+                {
+                    "MDM2": 0, 
+                    "ATM": 1
+                }
+            ]
+        ], 
+        "TGFBR": [
+            [
+                {
+                    "TGFBR_stimulus": 0
+                }
+            ], 
+            [
+                {
+                    "TGFBR_stimulus": 1
+                }
+            ]
+        ], 
+        "GADD45": [
+            [
+                {
+                    "SMAD": 0, 
+                    "p53": 0
+                }
+            ], 
+            [
+                {
+                    "p53": 1
+                }, 
+                {
+                    "SMAD": 1
+                }
+            ]
+        ], 
+        "FGFR3_stimulus": [
+            [
+                {
+                    "FGFR3_stimulus": 0
+                }
+            ], 
+            [
+                {
+                    "FGFR3_stimulus": 1
+                }
+            ]
+        ], 
+        "SPRY": [
+            [
+                {
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "ERK": 1
+                }
+            ]
+        ], 
+        "RSK": [
+            [
+                {
+                    "ERK": 0
+                }
+            ], 
+            [
+                {
+                    "ERK": 1
+                }
+            ]
+        ], 
+        "PPP2CA": [
+            [
+                {
+                    "p38": 0
+                }
+            ], 
+            [
+                {
+                    "p38": 1
+                }
+            ]
+        ], 
+        "TAOK": [
+            [
+                {
+                    "ATM": 0
+                }
+            ], 
+            [
+                {
+                    "ATM": 1
+                }
+            ]
+        ], 
+        "GAB1": [
+            [
+                {
+                    "GRB2": 0, 
+                    "PI3K": 0
+                }
+            ], 
+            [
+                {
+                    "PI3K": 1
+                }, 
+                {
+                    "GRB2": 1
+                }
+            ]
+        ], 
+        "PDK1": [
+            [
+                {
+                    "PI3K": 0
+                }
+            ], 
+            [
+                {
+                    "PI3K": 1
+                }
+            ]
+        ], 
+        "PTEN": [
+            [
+                {
+                    "p53": 0
+                }
+            ], 
+            [
+                {
+                    "p53": 1
+                }
+            ]
+        ], 
+        "GRB2": [
+            [
+                {
+                    "TGFBR": 0, 
+                    "EGFR": 0, 
+                    "FRS2": 0
+                }
+            ], 
+            [
+                {
+                    "TGFBR": 1
+                }, 
+                {
+                    "FRS2": 1
+                }, 
+                {
+                    "EGFR": 1
+                }
+            ]
+        ], 
+        "EGFR_stimulus": [
+            [
+                {
+                    "EGFR_stimulus": 0
+                }
+            ], 
+            [
+                {
+                    "EGFR_stimulus": 1
+                }
+            ]
+        ], 
+        "JNK": [
+            [
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "MTK1": 0, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MTK1": 0, 
+                    "DUSP1": 1, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "TAOK": 0
+                }, 
+                {
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "MTK1": 0, 
+                    "TAOK": 0
+                }, 
+                {
+                    "TAK1": 0, 
+                    "MAP3K1_3": 0, 
+                    "DUSP1": 1, 
+                    "MTK1": 0
+                }
+            ], 
+            [
+                {
+                    "TAK1": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "MTK1": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "MTK1": 1
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "MAP3K1_3": 1
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "MTK1": 1
+                }, 
+                {
+                    "DUSP1": 0, 
+                    "TAOK": 1
+                }, 
+                {
+                    "TAK1": 1, 
+                    "DUSP1": 0
+                }, 
+                {
+                    "MTK1": 1, 
+                    "DUSP1": 0
+                }, 
+                {
+                    "MAP3K1_3": 1, 
+                    "DUSP1": 0
+                }
+            ]
+        ], 
+        "p21": [
+            [
+                {
+                    "p53": 0
+                }, 
+                {
+                    "AKT": 1
+                }
+            ], 
+            [
+                {
+                    "AKT": 0, 
+                    "p53": 1
+                }
+            ]
+        ], 
+        "CREB": [
+            [
+                {
+                    "MSK": 0
+                }
+            ], 
+            [
+                {
+                    "MSK": 1
+                }
+            ]
+        ], 
+        "BCL2": [
+            [
+                {
+                    "CREB": 0
+                }, 
+                {
+                    "AKT": 0
+                }
+            ], 
+            [
+                {
+                    "CREB": 1, 
+                    "AKT": 1
+                }
+            ]
+        ], 
+        "TGFBR_stimulus": [
+            [
+                {
+                    "TGFBR_stimulus": 0
+                }
+            ], 
+            [
+                {
+                    "TGFBR_stimulus": 1
+                }
+            ]
+        ], 
+        "ATF2": [
+            [
+                {
+                    "JNK": 0, 
+                    "p38": 0
+                }
+            ], 
+            [
+                {
+                    "p38": 1
+                }, 
+                {
+                    "JNK": 1
+                }
+            ]
+        ]
+    }, 
+    "update": "synchronous", 
+    "is_complete": "no"
+}

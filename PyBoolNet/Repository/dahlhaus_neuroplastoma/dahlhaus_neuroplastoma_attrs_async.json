@@ -1,0 +1,2333 @@
+{
+    "attractors": [
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000000000011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000000000011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000000000011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000000000011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000000010011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000000010011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000000010011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000000010011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000010000011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000010000011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000010000011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000010000011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000010010011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000010010011100010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "00010000010010011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 0, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "00010000010010011110010", 
+                "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 1, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 0
+                }, 
+                "str": "01100001000111100010101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------0-11110001-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 1, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01100001110101100010101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&GSK3B&!GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------1-10110001-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 0, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 1, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01100101101101100001101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------0-10110000-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 0, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01101000110111100000101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------1-11110000-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 1, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01101101101111100001101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------0-11110000-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01111100101101100011101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------0-10110001-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01111100111111100011101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------1-11110001-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 1, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "ENSA": 1
+                }, 
+                "str": "01111101111101100001101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 0, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "011------1-10110000-101", 
+                "prop": "!AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000000000011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000000000011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000000000011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000000000011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000000010011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000000010011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000000010011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000000010011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000010000011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000010000011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000010000011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000010000011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000010010011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000010010011100010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": true, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "str": "10010000010010011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "AURKAPresent": 0, 
+                    "PLK1": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "STMN": 1, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "PP2A": 1, 
+                    "ENSA": 0, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 1, 
+                    "AJUBA": 1, 
+                    "hCPEB": 0, 
+                    "CDC25B": 0, 
+                    "PP1": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 0, 
+                    "CentrosomeMat": 0
+                }, 
+                "is_univocal": "yes", 
+                "str": "10010000010010011110010", 
+                "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
+            }, 
+            "is_cyclic": false
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 0, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 0
+                }, 
+                "str": "11100000010111100010101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------1-11110001-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 0, 
+                    "CDK1CCNBComplex": 0, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 0
+                }, 
+                "str": "11100000011101100010101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------1-10110001-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 0, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 1, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11101110101111100001101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------0-11110000-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11111100111101100001101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------1-10110000-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 0, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11111100111111100000101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 1, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------1-11110000-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "CentrosomeMat": 1, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11111110101101100001101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 0, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------0-10110000-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 1, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 0, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11111110101101100010101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 0, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------0-10110001-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }, 
+        {
+            "is_steady": false, 
+            "state": {
+                "dict": {
+                    "AURKAPresent": 1, 
+                    "PLK1": 1, 
+                    "CDC25B": 1, 
+                    "CDK1CCNBComplex": 1, 
+                    "PP1": 0, 
+                    "STMN": 0, 
+                    "Cytokinesis": 0, 
+                    "BORA": 1, 
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "GWL_MASTL": 1, 
+                    "AURKAActive": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "CentrosomeMat": 1, 
+                    "PP2A": 0, 
+                    "hCPEB": 1, 
+                    "SpindleAssembly": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "ENSA": 1
+                }, 
+                "str": "11111110101111100011101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
+            }, 
+            "mintrapspace": {
+                "is_faithful": "yes", 
+                "dict": {
+                    "NEDD9": 1, 
+                    "TPX2": 1, 
+                    "AURKAActive": 1, 
+                    "PLK1": 1, 
+                    "MTCanAct": 1, 
+                    "GSK3B": 0, 
+                    "STMNCanAct": 1, 
+                    "MT": 1, 
+                    "PP1": 0, 
+                    "PP2A": 0, 
+                    "STMN": 0, 
+                    "hCPEB": 1, 
+                    "WEE1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                "is_univocal": "yes", 
+                "str": "111------0-11110001-101", 
+                "prop": "AJUBA&AURKAActive&AURKAPresent&!GSK3B&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&TPX2&!WEE1&hCPEB"
+            }, 
+            "is_cyclic": true
+        }
+    ], 
+    "primes": {
+        "AURKAPresent": [
+            [
+                {
+                    "PP2A": 1
+                }
+            ], 
+            [
+                {
+                    "PP2A": 0
+                }
+            ]
+        ], 
+        "PLK1": [
+            [
+                {
+                    "STMNCanAct": 0, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0
+                }, 
+                {
+                    "STMN": 1, 
+                    "AURKAActive": 0, 
+                    "MTCanAct": 0
+                }, 
+                {
+                    "STMNCanAct": 0, 
+                    "MT": 0, 
+                    "AURKAActive": 0
+                }, 
+                {
+                    "MT": 0, 
+                    "STMN": 1, 
+                    "AURKAActive": 0
+                }
+            ], 
+            [
+                {
+                    "STMNCanAct": 1, 
+                    "STMN": 0
+                }, 
+                {
+                    "MT": 1, 
+                    "MTCanAct": 1
+                }, 
+                {
+                    "AURKAActive": 1
+                }
+            ]
+        ], 
+        "CDK1CCNBComplex": [
+            [
+                {
+                    "CDC25B": 0, 
+                    "WEE1": 1, 
+                    "hCPEB": 0
+                }, 
+                {
+                    "Cytokinesis": 1
+                }
+            ], 
+            [
+                {
+                    "Cytokinesis": 0, 
+                    "hCPEB": 1
+                }, 
+                {
+                    "WEE1": 0, 
+                    "Cytokinesis": 0
+                }, 
+                {
+                    "CDC25B": 1, 
+                    "Cytokinesis": 0
+                }
+            ]
+        ], 
+        "STMN": [
+            [
+                {
+                    "AURKAActive": 1
+                }
+            ], 
+            [
+                {
+                    "AURKAActive": 0
+                }
+            ]
+        ], 
+        "Cytokinesis": [
+            [
+                {
+                    "SpindleAssembly": 0
+                }, 
+                {
+                    "CentrosomeMat": 1
+                }
+            ], 
+            [
+                {
+                    "CentrosomeMat": 0, 
+                    "SpindleAssembly": 1
+                }
+            ]
+        ], 
+        "BORA": [
+            [
+                {
+                    "PLK1": 1, 
+                    "Cytokinesis": 1
+                }, 
+                {
+                    "Cytokinesis": 1, 
+                    "GSK3B": 0
+                }
+            ], 
+            [
+                {
+                    "PLK1": 0, 
+                    "GSK3B": 1
+                }, 
+                {
+                    "Cytokinesis": 0
+                }
+            ]
+        ], 
+        "NEDD9": [
+            [
+                {
+                    "AURKAActive": 0
+                }
+            ], 
+            [
+                {
+                    "AURKAActive": 1
+                }
+            ]
+        ], 
+        "TPX2": [
+            [
+                {
+                    "PLK1": 0
+                }
+            ], 
+            [
+                {
+                    "PLK1": 1
+                }
+            ]
+        ], 
+        "PP2A": [
+            [
+                {
+                    "PP1": 0
+                }, 
+                {
+                    "ENSA": 1
+                }
+            ], 
+            [
+                {
+                    "PP1": 1, 
+                    "ENSA": 0
+                }
+            ]
+        ], 
+        "ENSA": [
+            [
+                {
+                    "GWL_MASTL": 0
+                }
+            ], 
+            [
+                {
+                    "GWL_MASTL": 1
+                }
+            ]
+        ], 
+        "SpindleAssembly": [
+            [
+                {
+                    "Cytokinesis": 1
+                }, 
+                {
+                    "CentrosomeMat": 0
+                }
+            ], 
+            [
+                {
+                    "CentrosomeMat": 1, 
+                    "Cytokinesis": 0
+                }
+            ]
+        ], 
+        "WEE1": [
+            [
+                {
+                    "PLK1": 1
+                }
+            ], 
+            [
+                {
+                    "PLK1": 0
+                }
+            ]
+        ], 
+        "AJUBA": [
+            [
+                {
+                    "AJUBA": 0
+                }
+            ], 
+            [
+                {
+                    "AJUBA": 1
+                }
+            ]
+        ], 
+        "hCPEB": [
+            [
+                {
+                    "AURKAActive": 0
+                }
+            ], 
+            [
+                {
+                    "AURKAActive": 1
+                }
+            ]
+        ], 
+        "CDC25B": [
+            [
+                {
+                    "PLK1": 0, 
+                    "AURKAActive": 0
+                }, 
+                {
+                    "Cytokinesis": 1
+                }
+            ], 
+            [
+                {
+                    "PLK1": 1, 
+                    "Cytokinesis": 0
+                }, 
+                {
+                    "Cytokinesis": 0, 
+                    "AURKAActive": 1
+                }
+            ]
+        ], 
+        "PP1": [
+            [
+                {
+                    "Cytokinesis": 1
+                }, 
+                {
+                    "CDK1CCNBComplex": 1
+                }, 
+                {
+                    "AURKAActive": 1
+                }
+            ], 
+            [
+                {
+                    "Cytokinesis": 0, 
+                    "AURKAActive": 0, 
+                    "CDK1CCNBComplex": 0
+                }
+            ]
+        ], 
+        "GWL_MASTL": [
+            [
+                {
+                    "PP2A": 1
+                }, 
+                {
+                    "CDK1CCNBComplex": 0
+                }
+            ], 
+            [
+                {
+                    "PP2A": 0, 
+                    "CDK1CCNBComplex": 1
+                }
+            ]
+        ], 
+        "AURKAActive": [
+            [
+                {
+                    "NEDD9": 0, 
+                    "TPX2": 0, 
+                    "BORA": 0
+                }, 
+                {
+                    "PP1": 1, 
+                    "AURKAActive": 1
+                }, 
+                {
+                    "TPX2": 0, 
+                    "AJUBA": 0
+                }, 
+                {
+                    "AURKAPresent": 0
+                }
+            ], 
+            [
+                {
+                    "NEDD9": 1, 
+                    "PP1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                {
+                    "PP1": 0, 
+                    "AJUBA": 1, 
+                    "AURKAPresent": 1, 
+                    "BORA": 1
+                }, 
+                {
+                    "NEDD9": 1, 
+                    "AJUBA": 1, 
+                    "AURKAActive": 0, 
+                    "AURKAPresent": 1
+                }, 
+                {
+                    "AJUBA": 1, 
+                    "AURKAActive": 0, 
+                    "BORA": 1, 
+                    "AURKAPresent": 1
+                }, 
+                {
+                    "PP1": 0, 
+                    "TPX2": 1, 
+                    "AURKAPresent": 1
+                }, 
+                {
+                    "TPX2": 1, 
+                    "AURKAActive": 0, 
+                    "AURKAPresent": 1
+                }
+            ]
+        ], 
+        "MTCanAct": [
+            [
+                {
+                    "MTCanAct": 0
+                }
+            ], 
+            [
+                {
+                    "MTCanAct": 1
+                }
+            ]
+        ], 
+        "GSK3B": [
+            [
+                {
+                    "GSK3B": 0
+                }
+            ], 
+            [
+                {
+                    "GSK3B": 1
+                }
+            ]
+        ], 
+        "STMNCanAct": [
+            [
+                {
+                    "STMNCanAct": 0
+                }
+            ], 
+            [
+                {
+                    "STMNCanAct": 1
+                }
+            ]
+        ], 
+        "MT": [
+            [
+                {
+                    "STMN": 1
+                }
+            ], 
+            [
+                {
+                    "STMN": 0
+                }
+            ]
+        ], 
+        "CentrosomeMat": [
+            [
+                {
+                    "SpindleAssembly": 1
+                }, 
+                {
+                    "CDK1CCNBComplex": 0
+                }
+            ], 
+            [
+                {
+                    "CDK1CCNBComplex": 1, 
+                    "SpindleAssembly": 0
+                }
+            ]
+        ]
+    }, 
+    "update": "asynchronous", 
+    "is_complete": "yes"
+}
