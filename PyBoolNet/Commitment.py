@@ -27,7 +27,8 @@ CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 perc2str = PyBoolNet.Utility.Misc.perc2str
 
 COMMITMENT_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"] # pastel19 color scheme
-
+COMMITMENT_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
+COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"] # colorbrewer
 
 def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, Silent=False):
 	"""
@@ -137,6 +138,58 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 	if FnameImage:
 		diagram2image(diagram, FnameImage=FnameImage, StyleInputs=True, StyleSplines="curved", StyleEdges=EdgeData, StyleRanks=True, FirstIndex=1)
 
+	if FnameJson:
+		save_diagram(diagram, FnameJson)
+
+	return diagram
+
+
+def save_diagram(Diagram, Fname):
+	"""
+	todo: finish code
+	todo: add unit tests
+
+	description
+
+	  **arguments**:
+		* *Primes*: prime implicants
+		* *arg* (type): description
+
+	  **returns**:
+		* *arg* (type): description
+
+	  **example**::
+
+		>>> save_diagram(..)
+		result
+	"""
+
+	data = networkx.readwrite.json_graph.adjacency_data(Diagram)
+
+	PyBoolNet.Utility.Misc.save_json_data(data, Fname)
+
+
+def open_diagram(Fname):
+	"""
+	todo: finish code
+	todo: add unit tests
+
+	description
+
+	**arguments**:
+		* *arg* (type): description
+
+	**returns**:
+		* *arg* (type): description
+
+	**example**::
+
+		>>> open_diagram(..)
+		result
+	"""
+
+	data = PyBoolNet.Utility.Misc.open_json_data(Fname)
+	diagram = networkx.readwrite.json_graph.adjacency_graph(data)
 
 	return diagram
 
@@ -162,7 +215,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
 	if not Silent:
 		print(" _compute_diagram_component(..)")
-		print("  inputs: %i"%len(inputs))
+		print("  inputs: {x} ({y})".format(x=len(inputs), y=", ".join(inputs)))
 		print("  combinations:  %i"%2**len(inputs))
 
 	for i, combination in enumerate(PyBoolNet.PrimeImplicants.input_combinations(Primes)):
@@ -477,12 +530,16 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 		colors = [ColorMap[x] for x in indeces]
 	else:
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
+
 	for i,x in enumerate(indeces):
 		if "fillcolor" in Diagram.node[x]:
 			colors[i] = Diagram.node[x]["fillcolor"]
 
 	autopct = lambda p: '{:.0f}'.format(p * total / 100) if is_small_network else "%1.1f%%"
-	matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
+	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
+	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
+	for i, patch in enumerate(patches):
+		patch.set_ec("black")
 	matplotlib.pyplot.axis('equal')
 
 	if Title==None:
