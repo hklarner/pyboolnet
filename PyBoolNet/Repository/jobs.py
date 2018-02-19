@@ -9,10 +9,21 @@ sys.path.insert(0,BASE)
 import PyBoolNet
 
 
+
 def run():
 
+	for name in ["tournier_apoptosis", "grieco_mapk", "remy_tumorigenesis", "dahlhaus_neuroplastoma"]:
+		primes = PyBoolNet.Repository.get_primes(name)
+		fname = os.path.join(name,name+"_attrs_sync.json")
+		PyBoolNet.Attractors.compute_json(primes, Update="synchronous", FnameJson=fname)
+
+		fname = os.path.join(name,name+"_attrs_mixed.json")
+		PyBoolNet.Attractors.compute_json(primes, Update="mixed", FnameJson=fname)
+
+
+	return
+
 	names = PyBoolNet.Repository.get_all_names()
-	names = []
 
 	for name in names:
 
@@ -51,7 +62,7 @@ def run():
 
 		fname = os.path.join(name,name+"_commitment_pie.pdf")
 		PyBoolNet.Commitment.create_piechart(diagram, FnameImage=fname, ColorMap=None, Silent=False, Title=None)
-		
+
 		fname = os.path.join(name,name+"_basins.pdf")
 		PyBoolNet.Basins.create_barplot(primes, "asynchronous", FnameImage=fname, Title="All Basins - %s"%name)
 

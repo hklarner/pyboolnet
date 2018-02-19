@@ -54,8 +54,8 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{Jan 30, 2018}
-\release{2.2.1}
+\date{Feb 19, 2018}
+\release{2.2.2}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -66,11 +66,11 @@
 \maketitle
 \sphinxtableofcontents
 \phantomsection\label{\detokenize{index::doc}}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
 The project home page is \sphinxurl{https://github.com/hklarner/PyBoolNet}.
 
 \begin{sphinxadmonition}{note}{Note:}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} does not yet have any user friendly error messages.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} does not yet have any user friendly error messages.
 Please post questions, report bugs or suggest features in the issues section of the project’s homepage:
 \begin{itemize}
 \item {} 
@@ -89,8 +89,8 @@ or contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de}.
 
 \section{Python}
 \label{\detokenize{Installation:python}}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} was written in Python 2.7 but should be compatible with Python 3.
-If you experience problems with your version of Python and \sphinxstyleemphasis{PyBoolNet 2.2.1} please contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de} or
+\sphinxstyleemphasis{PyBoolNet 2.2.2} was written in Python 2.7 but should be compatible with Python 3.
+If you experience problems with your version of Python and \sphinxstyleemphasis{PyBoolNet 2.2.2} please contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de} or
 post an issue on the project homepage at
 \begin{itemize}
 \item {} 
@@ -122,10 +122,10 @@ Make sure that {\hyperref[\detokenize{Installation:installation-networkx}]{\sphi
 \PYGZdl{} sudo apt\PYGZhy{}get install imagemagick
 \end{sphinxVerbatim}
 
-Install \sphinxstyleemphasis{PyBoolNet 2.2.1} with \sphinxstyleemphasis{pip}:
+Install \sphinxstyleemphasis{PyBoolNet 2.2.2} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2.1\PYGZus{}linux64.tar.gz
+\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2.2\PYGZus{}linux64.tar.gz
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -137,7 +137,7 @@ which should place the package here:
 Use the option \sphinxcode{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.2.1.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.2.2.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{sphinxVerbatim}
 
 The package is likely going to be placed here:
@@ -147,7 +147,7 @@ The package is likely going to be placed here:
 \end{sphinxVerbatim}
 
 where \sphinxcode{\textless{}user\textgreater{}} is the name you are logged in with (\sphinxcode{\$ whoami}) and \sphinxcode{\textless{}version\textgreater{}} is the Python version you are using.
-To install \sphinxstyleemphasis{PyBoolNet 2.2.1} using \sphinxstyleemphasis{Distutils} unpack \sphinxstyleemphasis{PyBoolNet-2.2.1.tar.gz} into a temporary folder and run:
+To install \sphinxstyleemphasis{PyBoolNet 2.2.2} using \sphinxstyleemphasis{Distutils} unpack \sphinxstyleemphasis{PyBoolNet-2.2.2.tar.gz} into a temporary folder and run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} sudo python setup.py install
@@ -161,14 +161,14 @@ again, using the \sphinxcode{-{-}user} flag if you do not have sudo rights:
 
 The locations should be the same as when installing with \sphinxstyleemphasis{pip}.
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.1}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.2}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.1} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.2} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -220,10 +220,10 @@ Download and install \sphinxhref{http://www.graphviz.org/}{Graphviz} and \sphinx
 
 \end{itemize}
 
-Install \sphinxstyleemphasis{PyBoolNet 2.2.1} with \sphinxstyleemphasis{pip}:
+Install \sphinxstyleemphasis{PyBoolNet 2.2.2} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2.1\PYGZus{}mac64.tar.gz
+\PYGZdl{} sudo pip install PyBoolNet\PYGZhy{}2.2.2\PYGZus{}mac64.tar.gz
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -235,7 +235,7 @@ which should place the package here:
 Use the option \sphinxcode{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.2.1.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip install PyBoolNet\PYGZhy{}2.2.2.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{sphinxVerbatim}
 
 The package is likely going to be placed here:
@@ -246,14 +246,14 @@ The package is likely going to be placed here:
 
 where \sphinxcode{\textless{}user\textgreater{}} is the name you are logged in with (\sphinxcode{\$ whoami}) and \sphinxcode{\textless{}version\textgreater{}} is the Python version you are using.
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.1}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.2}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.1} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.2} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip uninstall PyBoolNet
@@ -279,10 +279,10 @@ on
 
 \end{itemize}
 
-To install \sphinxstyleemphasis{PyBoolNet 2.2.1} with \sphinxstyleemphasis{pip}:
+To install \sphinxstyleemphasis{PyBoolNet 2.2.2} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{install} \PYG{n}{PyBoolNet}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.2}\PYG{o}{.}\PYG{l+m+mi}{1}\PYG{n}{\PYGZus{}win64}\PYG{o}{.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
+\PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{install} \PYG{n}{PyBoolNet}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.2}\PYG{o}{.}\PYG{l+m+mi}{2}\PYG{n}{\PYGZus{}win64}\PYG{o}{.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -314,14 +314,14 @@ To install \sphinxhref{http://www.graphviz.org/}{Graphviz} and \sphinxhref{http:
 
 \end{itemize}
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.1}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.2}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{python}
 \PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{o}{\PYGZgt{}} \PYG{k+kn}{import} \PYG{n+nn}{PyBoolNet}
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.1} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.2} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{uninstall} \PYG{n}{PyBoolNet}
@@ -332,8 +332,8 @@ If you do not have \sphinxstyleemphasis{pip}, all files must be removed manually
 
 \section{Dependencies}
 \label{\detokenize{Installation:dependencies}}
-Most of what \sphinxstyleemphasis{PyBoolNet 2.2.1} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called \sphinxcode{settings.cfg} and located in the folder \sphinxcode{Dependencies} of \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+Most of what \sphinxstyleemphasis{PyBoolNet 2.2.2} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
+The file that records the locations to third party binaries is called \sphinxcode{settings.cfg} and located in the folder \sphinxcode{Dependencies} of \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 The default location is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -403,7 +403,7 @@ or:
 if you do not have super user rights.
 
 \begin{sphinxadmonition}{note}{Note:}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} is tested with \sphinxhref{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} is tested with \sphinxhref{https://networkx.github.io/}{NetworkX} version 1.10 and older versions will almost surely not work.
 \end{sphinxadmonition}
 
 
@@ -424,7 +424,7 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 \begin{sphinxadmonition}{note}{Note:}
 The development of the Potassco solving collection is active with frequent releases.
-\sphinxstyleemphasis{PyBoolNet 2.2.1} is tested with two specific versions, \sphinxhref{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \sphinxhref{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} is tested with two specific versions, \sphinxhref{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \sphinxhref{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
 \end{sphinxadmonition}
 
 The binaries and source are available at:
@@ -441,11 +441,11 @@ The binaries and source are available at:
 \subsection{NuSMV}
 \label{\detokenize{Installation:nusmv}}\label{\detokenize{Installation:installation-nusmv}}
 \sphinxhref{http://nusmv.fbk.eu}{NuSMV} is a symbolic model checker that we use to decide LTL and CTL queries.
-\sphinxstyleemphasis{PyBoolNet 2.2.1} requires the extension \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} requires the extension \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
 It is included with every release and should work out of the box.
 
 \begin{sphinxadmonition}{note}{Note:}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} is tested with \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} is tested with \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
 \end{sphinxadmonition}
 
 Binaries and source available at:
@@ -498,7 +498,7 @@ Make sure to check the paths in \sphinxcode{settings.cfg}.
 \subsection{Matplotlib}
 \label{\detokenize{Installation:matplotlib}}\label{\detokenize{Installation:installation-matplotlib}}
 The package matplotlib is used to plot pie charts and bar plots and similiar graphs,
-for example in the function {\hyperref[\detokenize{Basins:create-barplot}]{\sphinxcrossref{\DUrole{std,std-ref}{create\_barplot}}}} and {\hyperref[\detokenize{Basins:create-piechart}]{\sphinxcrossref{\DUrole{std,std-ref}{create\_piechart}}}} of the {\hyperref[\detokenize{Basins:basins}]{\sphinxcrossref{\DUrole{std,std-ref}{Basins}}}} module.
+for example in the function {\hyperref[\detokenize{Basins:create-barplot}]{\sphinxcrossref{\DUrole{std,std-ref}{create\_barplot}}}} and {\hyperref[\detokenize{Basins:basins-create-piechart}]{\sphinxcrossref{\DUrole{std,std-ref}{create\_piechart}}}} of the {\hyperref[\detokenize{Basins:basins}]{\sphinxcrossref{\DUrole{std,std-ref}{Basins}}}} module.
 To install it on linux run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -519,7 +519,7 @@ To install it on linux run:
 \subsection{BoolNet}
 \label{\detokenize{Installation:boolnet}}\label{\detokenize{Installation:installation-boolnet}}
 \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet} is a library for \sphinxhref{https://www.r-project.org/}{R} that is used for the construction, simulation and analysis of Boolean networks, see {\hyperref[\detokenize{Bibliography:mussel2010}]{\sphinxcrossref{\DUrole{std,std-ref}{Müssel2010}}}}.
-It is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.1} but you need it if you want to convert \sphinxstyleemphasis{SBML-qual} files into \sphinxstyleemphasis{bnet} files.
+It is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.2} but you need it if you want to convert \sphinxstyleemphasis{SBML-qual} files into \sphinxstyleemphasis{bnet} files.
 To install it run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -539,7 +539,7 @@ select a CRAN mirror and wait for the download and installation to finish.
 \subsection{GINsim}
 \label{\detokenize{Installation:installation-ginsim}}\label{\detokenize{Installation:ginsim}}
 \sphinxhref{http://ginsim.org/home}{GINsim} is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see {\hyperref[\detokenize{Bibliography:chaouiya2012}]{\sphinxcrossref{\DUrole{std,std-ref}{Chaouiya2012}}}}.
-Like \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \sphinxhref{http://ginsim.org/home}{GINsim} is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.1} but it has a useful model repository. To convert \sphinxhref{http://ginsim.org/home}{GINsim} models you need to export them as \sphinxstyleemphasis{SBML-qual} files which can then be converted into \sphinxstyleemphasis{bnet} files using \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
+Like \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \sphinxhref{http://ginsim.org/home}{GINsim} is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.2} but it has a useful model repository. To convert \sphinxhref{http://ginsim.org/home}{GINsim} models you need to export them as \sphinxstyleemphasis{SBML-qual} files which can then be converted into \sphinxstyleemphasis{bnet} files using \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
 No installation required, just download the latest version (tested with version 2.9) and call:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -596,7 +596,7 @@ If you get \sphinxstyleemphasis{permission denied} erros like:
 \end{sphinxVerbatim}
 
 you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains \sphinxstyleemphasis{PyBoolNet 2.2.1} (see {\hyperref[\detokenize{Installation:installation-software}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation of PyBoolNet}}}} above) and run:
+Locate the directory that contains \sphinxstyleemphasis{PyBoolNet 2.2.2} (see {\hyperref[\detokenize{Installation:installation-software}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation of PyBoolNet}}}} above) and run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 ../PyBoolNet\PYGZdl{} chmod \PYGZhy{}R 744 Dependencies/
@@ -679,7 +679,7 @@ The returned list states that \sphinxstyleemphasis{f1} has two 1-prime implicant
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
 
-It can be difficult to enumerate all prime implicants of a network and \sphinxstyleemphasis{PyBoolNet 2.2.1} uses the program {\hyperref[\detokenize{Installation:installation-bnettoprime}]{\sphinxcrossref{\DUrole{std,std-ref}{BNetToPrime}}}} to do it.
+It can be difficult to enumerate all prime implicants of a network and \sphinxstyleemphasis{PyBoolNet 2.2.2} uses the program {\hyperref[\detokenize{Installation:installation-bnettoprime}]{\sphinxcrossref{\DUrole{std,std-ref}{BNetToPrime}}}} to do it.
 As a user you define a network in terms of Boolean expressions, Python functions or you import it from other tools, like \sphinxhref{http://ginsim.org/home}{GINsim}.
 The steps in each case are explained in the following sections.
 
@@ -933,7 +933,7 @@ The result is shown in {\hyperref[\detokenize{Manual:figure01}]{\sphinxcrossref{
 
 \subsection{graph, node and edge attributes}
 \label{\detokenize{Manual:graph-node-and-edge-attributes}}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} generates a \sphinxstyleemphasis{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} generates a \sphinxstyleemphasis{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
 Attributes are just dictionaries that are attached to nodes, edges and the graph itself, see {\hyperref[\detokenize{Installation:installation-networkx}]{\sphinxcrossref{\DUrole{std,std-ref}{NetworkX}}}} for an introduction.
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
@@ -1067,7 +1067,7 @@ The result is shown in {\hyperref[\detokenize{Manual:figure02}]{\sphinxcrossref{
 
 \subsection{the interaction signs style}
 \label{\detokenize{Manual:the-interaction-signs-style}}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} has predefined styles for adding attributes to interaction graphs.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} has predefined styles for adding attributes to interaction graphs.
 The function {\hyperref[\detokenize{InteractionGraphs:add-style-interactionsigns}]{\sphinxcrossref{\DUrole{std,std-ref}{add\_style\_interactionsigns}}}} adds or overwrites color and arrowhead attributes to indicate whether an interaction is activating, inhibiting or both.
 Activating interactions are black with normal arrowheads,
 inhibiting interactions are red with blunt arrowhead and
@@ -1583,7 +1583,7 @@ To create the blinkers use the function {\hyperref[\detokenize{PrimeImplicants:c
 \PYG{g+go}{v4,   v2 \PYGZam{} v3 \textbar{} v1 \PYGZam{} v3}
 \end{sphinxVerbatim}
 
-Note that \sphinxstyleemphasis{PyBoolNet 2.2.1} modifies the primes object in place rather than creating and returning a modified copy.
+Note that \sphinxstyleemphasis{PyBoolNet 2.2.2} modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -1742,7 +1742,7 @@ To enumerate all possible input combinations of a given network use the function
 
 \section{Model Checking}
 \label{\detokenize{Manual:sec-model-checking}}\label{\detokenize{Manual:model-checking}}
-\sphinxstyleemphasis{PyBoolNet 2.2.1} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to decide model checking queries for Boolean networks.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to decide model checking queries for Boolean networks.
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example {\hyperref[\detokenize{Bibliography:baier2008}]{\sphinxcrossref{\DUrole{std,std-ref}{Baier2008}}}}.
 
@@ -1766,7 +1766,7 @@ As an example, consider the following network:
 
 The state transition graph is shown in {\hyperref[\detokenize{Manual:figure17}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure below}}}}.
 
-When model checking, \sphinxstyleemphasis{PyBoolNet 2.2.1} translates state transition graphs into transition systems.
+When model checking, \sphinxstyleemphasis{PyBoolNet 2.2.2} translates state transition graphs into transition systems.
 The basic approach to doing so is shown in {\hyperref[\detokenize{Manual:figure17}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure below}}}}.
 Here, each state string is replaced by a subset of atomic propositions.
 The subset is chosen to correspond with the state string, i.e.,
@@ -1806,7 +1806,7 @@ The transition system with the extended set of atomic propositions is shown in {
 \subsection{LTL model checking}
 \label{\detokenize{Manual:ltl-model-checking}}
 Apart from a transition system, a model checking problem requires a \sphinxstyleemphasis{temporal specification}.
-Since \sphinxstyleemphasis{PyBoolNet 2.2.1} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} for solving model checking problems, two specification languages are available:
+Since \sphinxstyleemphasis{PyBoolNet 2.2.2} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} for solving model checking problems, two specification languages are available:
 \sphinxstyleemphasis{linear time logic} (LTL) and \sphinxstyleemphasis{computational tree logic} (CTL).
 
 LTL specifications are statements about the sequence of events that are expressed in terms of atomic propositions and temporal operators.
@@ -2382,7 +2382,7 @@ The size of this set tells us that there are two states outside of the initial o
 \PYG{g+go}{5}
 \end{sphinxVerbatim}
 
-Note that \sphinxstyleemphasis{PyBoolNet 2.2.1} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+Note that \sphinxstyleemphasis{PyBoolNet 2.2.2} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property \sphinxcode{EF(STEADYSTATE)}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -2393,10 +2393,10 @@ For example, we may query whether all initial states that satisfy the original s
 \PYG{g+go}{True}
 \end{sphinxVerbatim}
 
-You can use the function {\hyperref[\detokenize{StateTransitionGraphs:list-states-referenced-by-proposition}]{\sphinxcrossref{\DUrole{std,std-ref}{list\_states\_referenced\_by\_proposition}}}} to enumerate all states that are referenced by a propositional formula:
+You can use the function {\hyperref[\detokenize{StateTransitionGraphs:enumerate-states}]{\sphinxcrossref{\DUrole{std,std-ref}{enumerate\_states}}}} to enumerate all states that are referenced by a propositional formula:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{list\PYGZus{}states\PYGZus{}referenced\PYGZus{}by\PYGZus{}proposition}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{prop}\PYG{p}{)}\PYG{p}{:} \PYG{n+nb}{print} \PYG{n}{x}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{STGs}\PYG{o}{.}\PYG{n}{enumerate\PYGZus{}states}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{prop}\PYG{p}{)}\PYG{p}{:} \PYG{n+nb}{print} \PYG{n}{x}
 \PYG{g+go}{001}
 \PYG{g+go}{101}
 \PYG{g+go}{100}
@@ -2414,7 +2414,7 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}}.
 
-\sphinxstyleemphasis{PyBoolNet 2.2.1} uses the module {\hyperref[\detokenize{AspSolver:aspsolver}]{\sphinxcrossref{\DUrole{std,std-ref}{AspSolver}}}} and the function {\hyperref[\detokenize{AspSolver:trap-spaces}]{\sphinxcrossref{\DUrole{std,std-ref}{trap\_spaces}}}} to compute trap spaces.
+\sphinxstyleemphasis{PyBoolNet 2.2.2} uses the module {\hyperref[\detokenize{AspSolver:aspsolver}]{\sphinxcrossref{\DUrole{std,std-ref}{AspSolver}}}} and the function {\hyperref[\detokenize{AspSolver:trap-spaces}]{\sphinxcrossref{\DUrole{std,std-ref}{trap\_spaces}}}} to compute trap spaces.
 As an example, consider the following network which has five trap spaces:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -4913,11 +4913,11 @@ Generates all states contained in \sphinxstyleemphasis{Subspace}.
 
 
 
-\subsection{list\_states\_referenced\_by\_proposition}
-\label{\detokenize{StateTransitionGraphs:list-states-referenced-by-proposition}}\label{\detokenize{StateTransitionGraphs:id16}}\index{list\_states\_referenced\_by\_proposition() (in module PyBoolNet.StateTransitionGraphs)}
+\subsection{enumerate\_states}
+\label{\detokenize{StateTransitionGraphs:enumerate-states}}\label{\detokenize{StateTransitionGraphs:id16}}\index{enumerate\_states() (in module PyBoolNet.StateTransitionGraphs)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.list_states_referenced_by_proposition}}\pysiglinewithargsret{\sphinxbfcode{list\_states\_referenced\_by\_proposition}}{\emph{Primes}, \emph{Proposition}}{}
+\phantomsection\label{\detokenize{StateTransitionGraphs:PyBoolNet.StateTransitionGraphs.enumerate_states}}\pysiglinewithargsret{\sphinxbfcode{enumerate\_states}}{\emph{Primes}, \emph{Proposition}}{}
 Generates all states that are referenced by \sphinxstyleemphasis{Proposition} in the context of the variables given by \sphinxstyleemphasis{Primes}.
 The syntax of \sphinxstyleemphasis{Proposition} should be as in bnet files and TRUE and FALSE in will be treated as 1 and 0.
 
@@ -4948,7 +4948,7 @@ that appear in \sphinxstyleemphasis{Proposition}.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{prop} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{!Erk \textbar{} (Raf \PYGZam{} Mek)}\PYG{l+s+s2}{\PYGZdq{}}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{list\PYGZus{}states\PYGZus{}referenced\PYGZus{}by\PYGZus{}proposition}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,}\PYG{n}{prop}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{enumerate\PYGZus{}states}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,}\PYG{n}{prop}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
 \PYG{g+go}{\PYGZsq{}010\PYGZsq{}}
 \end{sphinxVerbatim}
 
@@ -5434,7 +5434,6 @@ A convenience function that adds styles for tendencies, SCCs and minimal trap sp
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.compute_json}}\pysiglinewithargsret{\sphinxbfcode{compute\_json}}{\emph{Primes}, \emph{Update}, \emph{FnameJson=None}, \emph{CheckCompleteness=True}, \emph{CheckFaithfulness=True}, \emph{CheckUnivocality=True}, \emph{Silent=False}}{}
-todo: finish code
 todo: add unit tests
 
 Computes the attractors object.
@@ -5519,7 +5518,7 @@ is\_faithful: str
 
 \item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{AttrJson} (json): description
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data
 
 \end{itemize}
 
@@ -5541,14 +5540,13 @@ is\_faithful: str
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.save_json}}\pysiglinewithargsret{\sphinxbfcode{save\_json}}{\emph{AttrJson}, \emph{FnameJson}, \emph{Silent=False}}{}
-todo: finish code
-todo: add unit tests, add to sphinx
+todo: add unit tests
 
 saves the attractor object as a JSON file.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{AttrJson}: attractor object, see todo: add \DUrole{xref,std,std-ref}{xxx}
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
 
 \item {} 
 \sphinxstyleemphasis{FnameJson} (str): file name
@@ -5579,8 +5577,7 @@ saves the attractor object as a JSON file.
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Attractors:PyBoolNet.Attractors.open_json}}\pysiglinewithargsret{\sphinxbfcode{open\_json}}{\emph{Fname}}{}
-todo: finish code
-todo: add unit tests, add to sphinx
+todo: add unit tests
 
 opens the attractor object, see todo: add \DUrole{xref,std,std-ref}{xxx}
 \begin{description}
@@ -5592,7 +5589,7 @@ opens the attractor object, see todo: add \DUrole{xref,std,std-ref}{xxx}
 
 \item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{AttrJson}: attractor object, see todo: add \DUrole{xref,std,std-ref}{xxx}
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
 
 \end{itemize}
 
@@ -6076,7 +6073,7 @@ Creates an attractor report for the network defined by \sphinxstyleemphasis{Prim
 \label{\detokenize{Basins:weak-basins}}\label{\detokenize{Basins:weak-basin}}\index{weak\_basin() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.weak_basin}}\pysiglinewithargsret{\sphinxbfcode{weak\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Subspace}}{}
+\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.weak_basin}}\pysiglinewithargsret{\sphinxbfcode{weak\_basin}}{\emph{Primes}, \emph{Update}, \emph{Subspace}, \emph{Minimize=False}}{}
 todo: add unit tests
 
 Computes the weak basin of \sphinxstyleemphasis{Subspace} via the CTL query AG(EF(Subspace)), for details see {\hyperref[\detokenize{Bibliography:klarner2018}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2018}}}}.
@@ -6123,7 +6120,7 @@ Computes the weak basin of \sphinxstyleemphasis{Subspace} via the CTL query AG(E
 \label{\detokenize{Basins:id2}}\label{\detokenize{Basins:strong-basin}}\index{strong\_basin() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.strong_basin}}\pysiglinewithargsret{\sphinxbfcode{strong\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Subspace}}{}
+\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.strong_basin}}\pysiglinewithargsret{\sphinxbfcode{strong\_basin}}{\emph{Primes}, \emph{Update}, \emph{Subspace}, \emph{Minimize=False}}{}
 todo: add unit tests
 
 Computes the strong basin of \sphinxstyleemphasis{Subspace} via the CTL query AG(EF(Subspace)), for details see {\hyperref[\detokenize{Bibliography:klarner2018}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2018}}}}.
@@ -6166,11 +6163,11 @@ Computes the strong basin of \sphinxstyleemphasis{Subspace} via the CTL query AG
 
 
 
-\subsection{cycfree\_basin}
-\label{\detokenize{Basins:cycfree-basin}}\label{\detokenize{Basins:id3}}\index{cycfree\_basin() (in module PyBoolNet.Basins)}
+\subsection{cyclefree\_basin}
+\label{\detokenize{Basins:cyclefree-basin}}\label{\detokenize{Basins:id3}}\index{cyclefree\_basin() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.cycfree_basin}}\pysiglinewithargsret{\sphinxbfcode{cycfree\_basin}}{\emph{Primes}, \emph{Update}, \emph{Minimize}, \emph{Subspace}}{}
+\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.cyclefree_basin}}\pysiglinewithargsret{\sphinxbfcode{cyclefree\_basin}}{\emph{Primes}, \emph{Update}, \emph{Subspace}, \emph{Minimize=False}}{}
 todo: add unit tests
 
 Computes the cycle-free basin of \sphinxstyleemphasis{Subspace} via the CTL query AG(EF(Subspace)), for details see {\hyperref[\detokenize{Bibliography:klarner2018}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2018}}}}.
@@ -6202,7 +6199,7 @@ Computes the cycle-free basin of \sphinxstyleemphasis{Subspace} via the CTL quer
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{cycfree\PYGZus{}basin}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{k+kc}{True}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{0\PYGZhy{}\PYGZhy{}\PYGZhy{}1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{cyclefree\PYGZus{}basin}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{,} \PYG{k+kc}{True}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{0\PYGZhy{}\PYGZhy{}\PYGZhy{}1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 \PYG{g+go}{\PYGZob{}\PYGZdq{}size\PYGZdq{}:        134,}
 \PYG{g+go}{\PYGZdq{}formula\PYGZdq{}:      \PYGZdq{}Erk \PYGZam{} !Raf \textbar{} Mek\PYGZdq{},}
 \PYG{g+go}{\PYGZdq{}perc\PYGZdq{}:         12.89338\PYGZcb{}}
@@ -6217,43 +6214,19 @@ Computes the cycle-free basin of \sphinxstyleemphasis{Subspace} via the CTL quer
 \label{\detokenize{Basins:id4}}\label{\detokenize{Basins:create-barplot}}\index{create\_barplot() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.create_barplot}}\pysiglinewithargsret{\sphinxbfcode{create\_barplot}}{\emph{Primes}, \emph{Update}, \emph{FnameImage=None}, \emph{Attractors=None}, \emph{Minimize=False}, \emph{Title=None}, \emph{Silent=True}}{}
-todo: use attr object
-todo: proof read docstring
+\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.create_barplot}}\pysiglinewithargsret{\sphinxbfcode{create\_barplot}}{\emph{AttrJson}, \emph{FnameImage}, \emph{Title=None}, \emph{Silent=False}}{}
+todo: add unit tests
 
-Uses model checking with accepting states to compute the three types of basins of attraction for each attractor.
-\sphinxstyleemphasis{Attractors} may be used to specify a list of representative states for the attractors.
-Otherwise the basins of the minimal trap spaces is returned.
-Use \sphinxstyleemphasis{FnameImage} to create a bar plot, this requires \sphinxurl{https://matplotlib.org}.
-The basins are returned in the form of a dictionary:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{01100\PYGZhy{}\PYGZhy{}0}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{p}{(}\PYG{n+nb}{str} \PYG{n}{of} \PYG{n}{attractor} \PYG{n}{representantion}\PYG{p}{)}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{weak}\PYG{l+s+s1}{\PYGZsq{}}
-                \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{formula}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{(!Erk \PYGZam{} !Mek)}\PYG{l+s+s1}{\PYGZsq{}} \PYG{p}{(}\PYG{n}{Boolean} \PYG{n}{expression} \PYG{k}{for} \PYG{n}{states}\PYG{p}{)}
-                \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{perc}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}       \PYG{l+m+mf}{0.5}                      \PYG{p}{(}\PYG{n}{percentage} \PYG{n}{of} \PYG{n}{state} \PYG{n}{space}\PYG{p}{)}
-                \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{size}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}       \PYG{l+m+mi}{8}                          \PYG{p}{(}\PYG{n}{number} \PYG{n}{of} \PYG{n}{states}\PYG{p}{)}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{strong}\PYG{l+s+s1}{\PYGZsq{}}
-                \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{cycfree}\PYG{l+s+s1}{\PYGZsq{}}
-                \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
-\end{sphinxVerbatim}
+Creates a bar plot of the basins of attraction specified in \sphinxstyleemphasis{AttrJson}.
+Requires that \sphinxstyleemphasis{AttrJson} has been extended with basins information by \DUrole{xref,std,std-ref}{compute\_basins}.
+Requires \sphinxurl{https://matplotlib.org}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Primes}: prime implicants
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
 
 \item {} 
-\sphinxstyleemphasis{Update} (str): the update strategy, one of \sphinxstyleemphasis{“asynchronous”}, \sphinxstyleemphasis{“synchronous”}, \sphinxstyleemphasis{“mixed”}
-
-\item {} 
-\sphinxstyleemphasis{Attractors} (list): list of states or subspaces representing the attractors. \sphinxstyleemphasis{None} results in the computation of the minimal trap spaces.
-
-\item {} 
-\sphinxstyleemphasis{Minimize} (bool): minimize the Boolean expressions
-
-\item {} 
-\sphinxstyleemphasis{FnameImage} (str): file name of bar chart of weak basins
+\sphinxstyleemphasis{FnameImage} (str): create image for bar plot
 
 \item {} 
 \sphinxstyleemphasis{Title} (str): optional title of plot
@@ -6263,9 +6236,9 @@ The basins are returned in the form of a dictionary:
 
 \end{itemize}
 
-\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Basins} (dict): the basins of attraction
+\sphinxstyleemphasis{None}
 
 \end{itemize}
 
@@ -6274,10 +6247,10 @@ The basins are returned in the form of a dictionary:
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{raf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}barplot}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+go}{        \PYGZob{}   \PYGZsq{}001\PYGZsq{}: \PYGZob{}\PYGZsq{}weak\PYGZsq{}: \PYGZob{}\PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Raf) \textbar{} (!Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 62.5, \PYGZsq{}size\PYGZsq{}: 5L\PYGZcb{},...\PYGZcb{},}
-\PYG{g+go}{                \PYGZsq{}11\PYGZhy{}\PYGZsq{}: \PYGZob{}\PYGZsq{}weak\PYGZsq{}: \PYGZob{}\PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(Mek) \textbar{} (Erk)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 75.0, \PYGZsq{}size\PYGZsq{}: 6L\PYGZcb{}\PYGZcb{},...\PYGZcb{}\PYGZcb{}}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attrs} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{compute\PYGZus{}basins}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}barplot}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{barplot.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{created barplot.pdf}
 \end{sphinxVerbatim}
 
 \end{fulllineitems}
@@ -6285,45 +6258,23 @@ The basins are returned in the form of a dictionary:
 
 
 \subsection{create\_piechart}
-\label{\detokenize{Basins:id5}}\label{\detokenize{Basins:create-piechart}}\index{create\_piechart() (in module PyBoolNet.Basins)}
+\label{\detokenize{Basins:create-piechart}}\label{\detokenize{Basins:basins-create-piechart}}\index{create\_piechart() (in module PyBoolNet.Basins)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.create_piechart}}\pysiglinewithargsret{\sphinxbfcode{create\_piechart}}{\emph{Primes}, \emph{Update}, \emph{FnameImage=None}, \emph{Attractors=None}, \emph{Minimize=False}, \emph{Title=None}, \emph{Silent=True}}{}
+\phantomsection\label{\detokenize{Basins:PyBoolNet.Basins.create_piechart}}\pysiglinewithargsret{\sphinxbfcode{create\_piechart}}{\emph{AttrJson}, \emph{FnameImage}, \emph{Title=None}, \emph{Silent=False}}{}
 todo: add cycle-free subset to plot using pairs of similar colours
-todo: proofread docstring
+todo: add unit tests
 
-Uses model checking with accepting states to compute the strong basins of attraction of the network defined by \sphinxstyleemphasis{Primes} and \sphinxstyleemphasis{Update}.
-\sphinxstyleemphasis{Attractors} may be used to specify a list of representative states for the attractors.
-Otherwise the strong basins of the minimal trap spaces is returned.
-Use \sphinxstyleemphasis{FnameImage} to create a pie chart of the strong basins, this requires \sphinxurl{https://matplotlib.org}.
-The strong basins are returned in the form of a dictionary:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{01100\PYGZhy{}\PYGZhy{}0}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{p}{(}\PYG{n+nb}{str} \PYG{n}{of} \PYG{n}{attractor} \PYG{n}{representant}\PYG{p}{)}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{formula}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{(!Erk \PYGZam{} !Mek)}\PYG{l+s+s1}{\PYGZsq{}} \PYG{p}{(}\PYG{n}{Boolean} \PYG{n}{expression} \PYG{k}{for} \PYG{n}{states}\PYG{p}{)}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{perc}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}       \PYG{l+m+mf}{0.5}                      \PYG{p}{(}\PYG{n}{percentage} \PYG{n}{of} \PYG{n}{state} \PYG{n}{space}\PYG{p}{)}
-        \PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{size}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}       \PYG{l+m+mi}{8}                          \PYG{p}{(}\PYG{n}{number} \PYG{n}{of} \PYG{n}{states}\PYG{p}{)}
-\PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
-\PYG{o}{*} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{outside}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}  \PYG{p}{(}\PYG{n}{special} \PYG{n}{name} \PYG{k}{for} \PYG{n+nb}{all} \PYG{n}{states} \PYG{n}{that} \PYG{n}{do} \PYG{o+ow}{not} \PYG{n}{belong} \PYG{n}{to} \PYG{n}{a} \PYG{n}{strong} \PYG{n}{basin}\PYG{p}{)}
-        \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
-        \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
-\end{sphinxVerbatim}
+Creates a pie chart of the basins of attraction specified in \sphinxstyleemphasis{AttrJson}.
+Requires that \sphinxstyleemphasis{AttrJson} has been extended with basins information by \DUrole{xref,std,std-ref}{compute\_basins}.
+Requires \sphinxurl{https://matplotlib.org}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Primes}: prime implicants
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
 
 \item {} 
-\sphinxstyleemphasis{Update} (str): the update strategy, one of \sphinxstyleemphasis{“asynchronous”}, \sphinxstyleemphasis{“synchronous”}, \sphinxstyleemphasis{“mixed”}
-
-\item {} 
-\sphinxstyleemphasis{Attractors} (list): list of states or subspaces representing the attractors. \sphinxstyleemphasis{None} results in the computation of the minimal trap spaces.
-
-\item {} 
-\sphinxstyleemphasis{Minimize} (bool): minimize the Boolean expressions
-
-\item {} 
-\sphinxstyleemphasis{FnameImage} (str): file name of pie chart of strong basins
+\sphinxstyleemphasis{FnameImage} (str): create image for pie chart
 
 \item {} 
 \sphinxstyleemphasis{Title} (str): optional title of plot
@@ -6333,9 +6284,9 @@ The strong basins are returned in the form of a dictionary:
 
 \end{itemize}
 
-\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{StrongBasins} (dict): the strong basins
+\sphinxstyleemphasis{None}
 
 \end{itemize}
 
@@ -6344,13 +6295,10 @@ The strong basins are returned in the form of a dictionary:
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{Repository}\PYG{o}{.}\PYG{n}{get\PYGZus{}primes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{raf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}piechart}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{asynchronous}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+go}{        \PYGZob{}   \PYGZsq{}001\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} !Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 25.0, \PYGZsq{}size\PYGZsq{}: 2L\PYGZcb{},}
-\PYG{g+go}{                \PYGZsq{}11\PYGZhy{}\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(Mek \PYGZam{} Raf) \textbar{} (Erk \PYGZam{} Mek)\PYGZsq{}, \PYGZsq{}perc\PYGZsq{}: 37.5, \PYGZsq{}size\PYGZsq{}: 3L\PYGZcb{},}
-\PYG{g+go}{                \PYGZsq{}outside\PYGZsq{}: \PYGZob{}   \PYGZsq{}formula\PYGZsq{}: \PYGZsq{}(!Erk \PYGZam{} Mek \PYGZam{} !Raf) \textbar{} (Erk \PYGZam{} !Mek)\PYGZsq{},}
-\PYG{g+go}{                                           \PYGZsq{}perc\PYGZsq{}: 37.5,}
-\PYG{g+go}{                                           \PYGZsq{}size\PYGZsq{}: 3L\PYGZcb{}\PYGZcb{}}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attrs} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{compute\PYGZus{}basins}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create\PYGZus{}piechart}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{piechart.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{created piechart.pdf}
 \end{sphinxVerbatim}
 
 \end{fulllineitems}
@@ -6364,16 +6312,16 @@ The strong basins are returned in the form of a dictionary:
 \label{\detokenize{Commitment:commitment-compute-diagram}}\label{\detokenize{Commitment:compute-diagram}}\index{compute\_diagram() (in module PyBoolNet.Commitment)}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Commitment:PyBoolNet.Commitment.compute_diagram}}\pysiglinewithargsret{\sphinxbfcode{compute\_diagram}}{\emph{Attractors}, \emph{FnameImage=None}, \emph{FnameJson=None}, \emph{EdgeData=False}, \emph{Silent=False}}{}
-Computes the commitment diagram for the attractors and STG defined in \sphinxstyleemphasis{Attractors}, a json object computed by {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
-The nodes of the diagram represent states that can reach the exact same subset of \sphinxstyleemphasis{Attractors}.
+\phantomsection\label{\detokenize{Commitment:PyBoolNet.Commitment.compute_diagram}}\pysiglinewithargsret{\sphinxbfcode{compute\_diagram}}{\emph{AttrJson}, \emph{FnameImage=None}, \emph{FnameJson=None}, \emph{EdgeData=False}, \emph{Silent=False}}{}
+Computes the commitment diagram for the AttrJson and STG defined in \sphinxstyleemphasis{AttrJson}, a json object computed by \DUrole{xref,std,std-ref}{AttrJson\_compute\_json}
+The nodes of the diagram represent states that can reach the exact same subset of \sphinxstyleemphasis{AttrJson}.
 Edges indicate the existence of a transition between two nodes in the respective commitment sets.
 Edges are labeled by the number of states of the source set that can reach the target set and,
 if \sphinxstyleemphasis{EdgeData} is true, additionally by the size of the border.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Attractors} (json): attractors data
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see \DUrole{xref,std,std-ref}{AttrJson\_compute\_json}
 
 \item {} 
 \sphinxstyleemphasis{FnameImage} (str): generate image for diagram
@@ -6400,7 +6348,7 @@ if \sphinxstyleemphasis{EdgeData} is true, additionally by the size of the borde
 \sphinxstylestrong{example}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attrs} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attrs} \PYG{o}{=} \PYG{n}{AttrJson}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{Commitment}\PYG{o}{.}\PYG{n}{compute\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{)}
 \end{sphinxVerbatim}
 
@@ -6476,7 +6424,7 @@ The pieces of the chart represent states that can reach the exact same subset of
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{Diagram} (networkx.DiGraph): precomputed commitment diagram
+\sphinxstyleemphasis{Diagram} (networkx.DiGraph): commitment diagram, see {\hyperref[\detokenize{Commitment:commitment-compute-diagram}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_diagram}}}}
 
 \item {} 
 \sphinxstyleemphasis{FnameImage} (str): name of the output image
@@ -6761,45 +6709,9 @@ prop: subspace proposition
 \end{description}
 \end{quote}
 
-\item[{example:}] \leavevmode
-“primes”: \{..\}
-“update”: “asynchronous”
-“markers”: {[}“erk”, “raf”, “mek”{]}
-“phenotypes”: (tuple)
-\begin{quote}
-
-“name”: “Pheno A”
-“pattern”: “01-”
-“activated\_markers”: {[}“erk”{]}
-“inhibited\_markers”: {[}“raf”{]}
-“oscillating\_markers”: {[}“mek”{]}
-\begin{description}
-\item[{“steadystates”: (tuple)}] \leavevmode
-“str”: “101010101”
-“dict”: \{..\}
-“prop”: “erk\&…”
-
-\item[{“cyclicstates”: (tuple)}] \leavevmode
-“str”: “111100000”
-“dict”: \{..\}
-“prop”: “erk\&..”
-“mints”:
-\begin{quote}
-
-“str”: “1111—-”
-“dict”: \{..\}
-“prop”: “erk\&..”
-\end{quote}
-
-\item[{“condition”:}] \leavevmode
-“erk\&.. \textbar{} erk\&.. \textbar{} .. \textbar{} !erk\&..”
-
-\end{description}
-\end{quote}
-
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
-\sphinxstyleemphasis{AttrJson} (dict): attractor object, see todo: add \DUrole{xref,std,std-ref}{xxx}
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
 
 \item {} 
 \sphinxstyleemphasis{Markers} (list): list of names
@@ -6916,7 +6828,7 @@ Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\
 the \sphinxstyleemphasis{InitialStates} and \sphinxstyleemphasis{Update}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 \begin{description}
 \item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
 \item {} 
@@ -6975,7 +6887,7 @@ See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{st
 Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to check whether the \sphinxstyleemphasis{Specification} is true or false in the transition system defined by \sphinxstyleemphasis{Primes},
 the \sphinxstyleemphasis{InitialStates} and \sphinxstyleemphasis{Update}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 
 \begin{sphinxadmonition}{note}{Note:}
 \sphinxstyleemphasis{ConeOfInfluence} is not available when using counterexamples as it “messes” with the output.
@@ -7036,7 +6948,7 @@ See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{st
 Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to check whether the \sphinxstyleemphasis{CTLSpec} is true or false in the transition system defined by \sphinxstyleemphasis{Primes},
 the \sphinxstyleemphasis{InitialStates} and \sphinxstyleemphasis{Update}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 \begin{description}
 \item[{The accepting states are a dictionary with the following keywords:}] \leavevmode\begin{itemize}
 \item {} 
@@ -7125,7 +7037,7 @@ In that case the four values that involve the initial states are set to \sphinxt
 \phantomsection\label{\detokenize{ModelChecking:PyBoolNet.ModelChecking.check_smv}}\pysiglinewithargsret{\sphinxbfcode{check\_smv}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=True}, \emph{ConeOfInfluence=True}}{}
 Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} with the query defined in the \sphinxstyleemphasis{smv} file \sphinxstyleemphasis{FnameSMV}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 
 \begin{sphinxadmonition}{note}{Note:}
 It is currently required that \sphinxstyleemphasis{FnameSMV} contains a single LTL or CTL formula.
@@ -7176,7 +7088,7 @@ For future versions it is planned that {\hyperref[\detokenize{ModelChecking:chec
 \phantomsection\label{\detokenize{ModelChecking:PyBoolNet.ModelChecking.check_smv_with_counterexample}}\pysiglinewithargsret{\sphinxbfcode{check\_smv\_with\_counterexample}}{\emph{FnameSMV}, \emph{DynamicReorder=True}, \emph{DisableReachableStates=True}}{}
 Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} with the query defined in the \sphinxstyleemphasis{smv} file \sphinxstyleemphasis{FnameSMV}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 
 \begin{sphinxadmonition}{note}{Note:}
 It is currently required that \sphinxstyleemphasis{FnameSMV} contains a single LTL or CTL formula.
@@ -7227,7 +7139,7 @@ For future versions it is planned that {\hyperref[\detokenize{ModelChecking:chec
 Calls {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} with the query defined in the \sphinxstyleemphasis{smv} file \sphinxstyleemphasis{FnameSMV}.
 The remaining arguments are {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} options, see the manual at \sphinxurl{http://nusmv.fbk.eu} for details.
 
-See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.1}.
+See {\hyperref[\detokenize{ModelChecking:primes2smv}]{\sphinxcrossref{\DUrole{std,std-ref}{primes2smv}}}} and {\hyperref[\detokenize{Manual:sec-model-checking}]{\sphinxcrossref{\DUrole{std,std-ref}{Sec. 3.4}}}} for details on model checking with \sphinxstyleemphasis{PyBoolNet 2.2.2}.
 
 See {\hyperref[\detokenize{ModelChecking:check-primes-with-acceptingstates}]{\sphinxcrossref{\DUrole{std,std-ref}{check\_primes\_with\_acceptingstates}}}} for details regarding the returned \sphinxstyleemphasis{AcceptingStates} dictionary.
 
