@@ -43,32 +43,6 @@ def compute_json(AttrJson, Markers, FnameJson=None, Silent=False):
 					dict: subspace dict
 					prop: subspace proposition
 
-	example:
-		"primes": {..}
-		"update": "asynchronous"
-		"markers": ["erk", "raf", "mek"]
-		"phenotypes": (tuple)
-			"name": "Pheno A"
-			"pattern": "01-"
-			"activated_markers": ["erk"]
-			"inhibited_markers": ["raf"]
-			"oscillating_markers": ["mek"]
-
-			"steadystates": (tuple)
-				"str": "101010101"
-				"dict": {..}
-				"prop": "erk&..."
-			"cyclicstates": (tuple)
-				"str": "111100000"
-				"dict": {..}
-				"prop": "erk&.."
-				"mints":
-					"str": "1111----"
-					"dict": {..}
-					"prop": "erk&.."
-			"condition":
-				"erk&.. | erk&.. | .. | !erk&.."
-
 
 	**arguments**:
 		* *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
@@ -263,7 +237,7 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 				names.append(PhenosObj["phenotypes"][j]["name"])
 
 		stateformulas.sort()
-		names.sort()
+		names = tuple(sorted(names))
 
 
 		if not stateformulas:
@@ -355,13 +329,6 @@ def save_diagram(Diagram, Fname):
 
 	PyBoolNet.Utility.Misc.save_json_data(data, Fname)
 
-	return
-
-	with open(Fname, "w") as f:
-		f.writelines(data)
-
-	print("created {x}".format(x=Fname))
-
 
 def open_diagram(Fname):
 	"""
@@ -384,7 +351,12 @@ def open_diagram(Fname):
 
 	data = PyBoolNet.Utility.Misc.open_json_data(Fname)
 
-	return networkx.readwrite.json_graph.adjacency_graph(data)
+	diagram = networkx.readwrite.json_graph.adjacency_graph(data)
+
+	for x in diagram:
+		diagram.node[x]["names"] = tuple(diagram.node[x]["names"]) # lost in json conversion
+
+	return diagram
 
 
 def diagram2image(Diagram, FnameImage=None):
@@ -433,9 +405,14 @@ def diagram2image(Diagram, FnameImage=None):
 
 		if "fillcolor" in data:
 			image.node[node]["fillcolor"] = data["fillcolor"]
-
 		elif len(data["names"])==1:
 			image.node[node]["fillcolor"] = "cornflowerblue"
+
+		if "color" in data:
+			image.node[node]["color"] = data["color"]
+
+		if "penwidth" in data:
+			image.node[node]["penwidth"] = data["penwidth"]
 
 	for source, target, data in Diagram.edges(data=True):
 		image.add_edge(source, target)
@@ -491,32 +468,47 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 		>>> Phenotypes.create_piechart(diagram, "piechart.pdf")
 	"""
 
-	try:
-		import matplotlib.pyplot
-		success = True
 
-	except ImportError:
-		print("ERROR: can not import matplotlib.pyplot")
-		return
+	import matplotlib.pyplot
+	matplotlib.rcParams['hatch.linewidth'] = 4.0 	# special hatching for paper
+	matplotlib.rcParams['hatch.color'] = "#ff7c00"	# special hatching for paper
+
+	indeces = sorted(Diagram, key=lambda x: Diagram.node[x]["initaccepting_size"])
+	labels = ["\n".join(Diagram.node[x]["names"]) for x in indeces]
+	sizes  = [Diagram.node[x]["initaccepting_size"] for x in indeces]
+	total = sum(sizes)
+	is_small_network = total <= 1024
 
 	figure = matplotlib.pyplot.figure()
-
-	ids = sorted(Diagram, key=lambda x: len(Diagram.node[x]["names"]))
-	labels = ["\n".join(Diagram.node[x]["names"]) for x in ids]
-	sizes  = [Diagram.node[x]["initaccepting_size"] for x in ids]
-
 	if ColorMap:
-		colors = [ColorMap[x] for x in ids]
+		colors = [ColorMap[x] for x in indeces]
 	else:
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
+	for i,x in enumerate(indeces):
+		if "fillcolor" in Diagram.node[x]:
+			colors[i] = Diagram.node[x]["fillcolor"]
 
-	matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+	autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if is_small_network else '%.1f%%'
+	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=45)
+	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
+
+	for i, patch in enumerate(patches):
+		if "hatch" in Diagram.node[indeces[i]]:
+			patch.set_hatch(Diagram.node[indeces[i]]["hatch"]) #hatching = "//","||",'\\\\',"--",'+'
+			#patch.set_linewidth(3.)
+			#patch.set_linestyle("--")
+			#patch.set_fc("blue")
+			#patch.set_ec("black")
+			#print(patch.get_lw())
+		elif "fillcolor" in Diagram.node[indeces[i]]:
+			#if Diagram.node[indeces[i]]["fillcolor"]=="white":
+			patch.set_ec("black")
+
 	matplotlib.pyplot.axis('equal')
 
-	if Title:
-		matplotlib.pyplot.title(Title, y=1.08)
-	else:
-		matplotlib.pyplot.title('Phenotype Commitment Sets', y=1.08)
+	if Title==None:
+		Title = 'Phenotype Commitment Sets'
+	matplotlib.pyplot.title(Title, y=1.08)
 
 	matplotlib.pyplot.tight_layout()
 

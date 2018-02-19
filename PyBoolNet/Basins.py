@@ -28,8 +28,14 @@ CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 perc2str = PyBoolNet.Utility.Misc.perc2str
 
-BASIN_COLORS = ["#ddf2db", "#a0dcb5", "#2ba0c6"] # weak, strong, cycle-free
+BASIN_COLORS = ["#ddf2db", "#a0dcb5", "#2ba0c6"] # weak, strong, cycle-free (blue-green)
+BASIN_COLORS = ["#fee8c8", "#fdbb84", "#e34a33"] # weak, strong, cycle-free (reddish)
+BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"] # weak, strong, cycle-free (purple)
+
+
 PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"] # pastel19 color scheme
+PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
+PIE_COLORS = 10*[BASIN_COLORS[1]]
 
 def weak_basin(Primes, Update, Subspace, Minimize=False):
 	"""
@@ -233,7 +239,7 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
 		x["cyclefree_basin"] = cyclefree_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
 	if FnameBarplot:
-		create_barplot(AttrJson, FnameBarplot, Minimize, Title=None, Silent=Silent)
+		create_barplot(AttrJson, FnameBarplot, Title=None, Silent=Silent)
 
 	if FnamePiechart:
 		create_piechart(AttrJson, FnamePiechart, Title=None, Silent=Silent)
@@ -368,13 +374,16 @@ def create_piechart(AttrJson, FnameImage, Title=None, Silent=False):
 	else:
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(indeces)+1)) for x in range(len(indeces)+2)][1:-1]
 
-	colors.append("white") # for slice that represents "outside" states
+	colors.append(BASIN_COLORS[0]) # for slice that represents "outside" states
 
 	explode = [0]*len(indeces)+[.08]
 	labels = [Attrs[i]["mintrapspace"]["str"] for i in indeces] + [""]
 
-	autopct = lambda p: '{:.0f}'.format(p * total / 100) if is_small_network else "%1.1f%%"
-	matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
+	autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if is_small_network else "%1.1f%%"
+	stuff = matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
+	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
+	for i, patch in enumerate(patches):
+		patch.set_ec("black")
 
 	matplotlib.pyplot.axis('equal')
 
