@@ -25,15 +25,15 @@ Download the latest release from
 
    * http://github.com/hklarner/PyBoolNet/releases
 
-64bit and 32bit versions are available. We recommend to install the package using *pip*. If it is not already installed on your computer try::
+We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
-   $ sudo apt-get install python-pip
+   $ sudo apt install python-pip
 
 Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installation_graphviz>` and :ref:`ImageMagick <installation_imagemagick>` are installed::
 
-   $ sudo pip install networkx
-   $ sudo apt-get install graphviz
-   $ sudo apt-get install imagemagick
+   $ sudo pip install networkx==1.11
+   $ sudo apt install graphviz
+   $ sudo apt install imagemagick
 
 Install |software| with *pip*::
 
@@ -95,7 +95,7 @@ Install NetworkX_ with::
 
 or::
 
-   $ pip install networkx --user
+   $ pip install networkx==1.11 --user
 
 Download and install Graphviz_ and ImageMagick_ from
 
@@ -160,7 +160,7 @@ where ``<version>`` is the Python version you are using.
 
 To install NetworkX_ use *pip* again::
 
-   C:\> pip.exe install netwokrx
+   C:\> pip.exe install networkx==1.11
 
 To install Graphviz_ and ImageMagick_ download the respective executables from the home pages:
 
@@ -230,16 +230,16 @@ The package is available at:
 
 To install it on Linux using *pip* run::
 
-   $ sudo pip install networkx
+   $ sudo pip install networkx==1.11
 
 or::
 
-   $ pip install networkx --user
+   $ pip install networkx==1.11 --user
 
 if you do not have super user rights.
 
 .. note::
-   |software| is tested with NetworkX_ version 1.10 and older versions will almost surely not work.
+   |software| is tested with NetworkX_ version 1.11 and older versions of networkx as well as networkx 2.X will not work.
 
 
 .. _installation_bnettoprime:
@@ -299,7 +299,7 @@ The program *dot* is part of the graph visualization software Graphviz_ and avai
 It is required to generate drawings of interaction graphs and state transition graphs.
 To install it on Linux run::
 
-   $ sudo apt-get install graphviz
+   $ sudo apt install graphviz
 
 Make sure to check the paths in ``settings.cfg``.
 
@@ -313,7 +313,7 @@ The program *convert* is part of the ImageMagick_ software suite.
 It is required to generate animations of trajectories in the state transition graph.
 To install it on linux run::
 
-   $ sudo apt-get install ImageMagick
+   $ sudo apt install ImageMagick
 
 ImageMagick_ is available at
 
@@ -399,7 +399,7 @@ then a solution for linux is available at stackoverflow:
 
 The crucial command::
 
-   $ sudo apt-get install libreadline6:i386
+   $ sudo apt install libreadline6:i386
 
 
 permission denied
