@@ -1,6 +1,5 @@
 
 
-
 #### release notes for hotfix version 2.2.1 (January 2018)
 - **bugfix**: removed slowdown that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 

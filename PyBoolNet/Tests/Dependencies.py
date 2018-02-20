@@ -148,6 +148,7 @@ class TestImageMagick(unittest.TestCase):
 
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = proc.communicate()
+		out = out.decode()
 
 		#msg = "\nCall to convert resulted in return code %i."%proc.returncode
 		#msg+= '\ncommand: "%s"'%' '.join(cmd)
@@ -167,6 +168,7 @@ class TestEspresso(unittest.TestCase):
 
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = proc.communicate()
+		out = out.decode()
 
 		msg = out
 		msg+= '\nespresso did not respond with "Espresso Version"'
@@ -181,6 +183,7 @@ class TestEspresso(unittest.TestCase):
 
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = proc.communicate()
+		err = err.decode()
 
 		msg = '\neqntott did not respond with "usage:"'
 		msg+= '\ncommand: "%s"'%' '.join(cmd)

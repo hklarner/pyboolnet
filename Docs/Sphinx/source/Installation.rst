@@ -25,19 +25,19 @@ Download the latest release from
 
    * http://github.com/hklarner/PyBoolNet/releases
 
-64bit and 32bit versions are available. We recommend to install the package using *pip*. If it is not already installed on your computer try::
+We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
-   $ sudo apt-get install python-pip
+   $ sudo apt install python-pip
 
 Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installation_graphviz>` and :ref:`ImageMagick <installation_imagemagick>` are installed::
 
-   $ sudo pip install networkx
-   $ sudo apt-get install graphviz
-   $ sudo apt-get install imagemagick
+   $ sudo pip install networkx==1.11
+   $ sudo apt install graphviz
+   $ sudo apt install imagemagick
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.2_linux64.tar.gz
+   $ sudo pip install PyBoolNet-2.2.3_linux64.tar.gz
 
 which should place the package here::
 
@@ -45,14 +45,14 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.2.tar.gz --user
+   $ pip install PyBoolNet-2.2.3.tar.gz --user
 
 The package is likely going to be placed here::
 
    /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
-To install |software| using *Distutils* unpack *PyBoolNet-2.2.2.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.2.3.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -91,11 +91,11 @@ or if you do not have super user rights::
 
 Install NetworkX_ with::
 
-   $ sudo pip install networkx
+   $ sudo pip install networkx==1.11
 
 or::
 
-   $ pip install networkx --user
+   $ pip install networkx==1.11 --user
 
 Download and install Graphviz_ and ImageMagick_ from
 
@@ -104,7 +104,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.2_mac64.tar.gz
+   $ sudo pip install PyBoolNet-2.2.3_mac64.tar.gz
 
 which should place the package here::
 
@@ -112,7 +112,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.2.tar.gz --user
+   $ pip install PyBoolNet-2.2.3.tar.gz --user
 
 The package is likely going to be placed here::
 
@@ -145,7 +145,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.2.2_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.2.3_win64.tar.gz
 
 which should place the package here::
 
@@ -160,7 +160,7 @@ where ``<version>`` is the Python version you are using.
 
 To install NetworkX_ use *pip* again::
 
-   C:\> pip.exe install netwokrx
+   C:\> pip.exe install networkx==1.11
 
 To install Graphviz_ and ImageMagick_ download the respective executables from the home pages:
 
@@ -191,9 +191,11 @@ The file is a standard configuration file of ``name = value`` pairs. The default
 
    [Executables]
    nusmv           = ./NuSMV-a/NuSMVa_linux64
-   gringo          = ./gringo-4.4.0/gringo
-   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86_64-linux
+   gringo          = ./gringo-4.4.0/gringo_linux64
    bnet2prime      = ./BNetToPrime/BNetToPrime_linux64
+   clasp           = ./clasp-3.1.1/clasp-3.1.1-x86_64-linux
+   espresso        = ./espresso/espresso_linux64
+   eqntott         = ./eqntott/eqntott_linux64
    dot             = /usr/bin/dot
    neato           = /usr/bin/neato
    fdp             = /usr/bin/fdp
@@ -230,16 +232,16 @@ The package is available at:
 
 To install it on Linux using *pip* run::
 
-   $ sudo pip install networkx
+   $ sudo pip install networkx==1.11
 
 or::
 
-   $ pip install networkx --user
+   $ pip install networkx==1.11 --user
 
 if you do not have super user rights.
 
 .. note::
-   |software| is tested with NetworkX_ version 1.10 and older versions will almost surely not work.
+   |software| is tested with NetworkX_ version 1.11 and older versions of networkx as well as networkx 2.X will not work.
 
 
 .. _installation_bnettoprime:
@@ -299,7 +301,7 @@ The program *dot* is part of the graph visualization software Graphviz_ and avai
 It is required to generate drawings of interaction graphs and state transition graphs.
 To install it on Linux run::
 
-   $ sudo apt-get install graphviz
+   $ sudo apt install graphviz
 
 Make sure to check the paths in ``settings.cfg``.
 
@@ -313,7 +315,7 @@ The program *convert* is part of the ImageMagick_ software suite.
 It is required to generate animations of trajectories in the state transition graph.
 To install it on linux run::
 
-   $ sudo apt-get install ImageMagick
+   $ sudo apt install ImageMagick
 
 ImageMagick_ is available at
 
@@ -336,6 +338,29 @@ To install it on linux run::
 matplotlib_ is available at
 
    * http://matplotlib.org
+
+
+
+.. _installation_espresso:
+
+Espresso
+........
+
+Espresso is required for heuristic minimization Boolean expressions.
+For more information see
+
+	* http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer
+	
+
+.. _installation_eqntott:
+
+Eqntott
+.......
+
+Eqntott is required to converting Boolean expressions into the truth table format required by Espresso.
+For more information see
+
+	* https://code.google.com/archive/p/eqntott
 
 
 
@@ -399,7 +424,7 @@ then a solution for linux is available at stackoverflow:
 
 The crucial command::
 
-   $ sudo apt-get install libreadline6:i386
+   $ sudo apt install libreadline6:i386
 
 
 permission denied
