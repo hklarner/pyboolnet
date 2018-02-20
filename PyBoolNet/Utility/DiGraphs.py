@@ -248,7 +248,7 @@ def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
 	dotfile = digraph2dot(DiGraph, FnameDOT=None)
 
 	proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out, err = proc.communicate(input=dotfile)
+	out, err = proc.communicate(input=dotfile.encode())
 	proc.stdin.close()
 
 	if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):

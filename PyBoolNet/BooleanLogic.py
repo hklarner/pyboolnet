@@ -72,10 +72,10 @@ def _espresso_error(espresso, espresso_out, espresso_err):
 
 def run_eqntott(eqntott_cmd, eqntott_in):
 	eqntott = subprocess.Popen(eqntott_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	eqntott_out, eqntott_err = eqntott.communicate(input=eqntott_in)
+	eqntott_out, eqntott_err = eqntott.communicate(input=eqntott_in.encode())
 	eqntott.stdin.close()
 	_eqntott_error(eqntott, eqntott_out, eqntott_err)
-	return(eqntott_out)
+	return(eqntott_out.decode())
 
 
 def run_espresso(espresso_cmd, eqntott_out):
@@ -83,7 +83,7 @@ def run_espresso(espresso_cmd, eqntott_out):
 	espresso_out, espresso_err = espresso.communicate(input=eqntott_out.encode())
 	espresso.stdin.close()
 	_espresso_error(espresso, espresso_out, espresso_err)
-	return(espresso_out)
+	return(espresso_out.decode())
 
 
 def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exact=False, Reduce=False):
@@ -118,7 +118,7 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
 	if (os.path.isfile(Expression)):
 		with open(Expression, 'r') as fname:
 			Expression = fname.read()
-	assert(type(Expression) in [str,unicode])
+
 	forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
 	if not all(var not in Expression for var in forbidden):
 		print("ERROR: forbidden keyword in expression: %s"%Expression)

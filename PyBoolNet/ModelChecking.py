@@ -614,8 +614,11 @@ def _read_number(Line):
 	Line = Line.split(":")[1].strip()
 	if "e" in Line:
 		return float(Line)
+	elif sys.version_info > (3,):
+		return int(Line)
 	else:
 		return long(Line)
+
 
 def _read_formula(Line):
 	"""
@@ -638,7 +641,6 @@ def _read_formula(Line):
 		return "TRUE"
 
 	return formula
-
 
 
 def output2acceptingstates(NuSMVOutput):
