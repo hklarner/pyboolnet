@@ -30,7 +30,9 @@ COMMITMENT_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ff
 COMMITMENT_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
 COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"] # colorbrewer
 
+
 def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, Silent=False):
+	# :ref:`commitment_compute_diagram`
 	"""
  	Computes the commitment diagram for the AttrJson and STG defined in *AttrJson*, a json object computed by :ref:`AttrJson_compute_json`
 	The nodes of the diagram represent states that can reach the exact same subset of *AttrJson*.
@@ -145,6 +147,7 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 
 
 def save_diagram(Diagram, Fname):
+	# :ref:`commitment_save_diagram`
 	"""
 	todo: finish code
 	todo: add unit tests
@@ -170,22 +173,22 @@ def save_diagram(Diagram, Fname):
 
 
 def open_diagram(Fname):
+	# :ref:`commitment_open_diagram`
 	"""
-	todo: finish code
 	todo: add unit tests
 
-	description
+	Opens and returns a previously saved commitment diagram.
+	See also :ref:`commitment_compute_diagram`, :ref:`commitment_save_diagram`.
 
 	**arguments**:
-		* *arg* (type): description
+		* *Fname* (str): the file name
 
 	**returns**:
-		* *arg* (type): description
+		* *diagram* (networkx.DiGraph): the commitment diagram
 
 	**example**::
 
-		>>> open_diagram(..)
-		result
+		>>> diagram = open_diagram("raf_commitment.json")
 	"""
 
 	data = PyBoolNet.Utility.Misc.open_json_data(Fname)
@@ -420,9 +423,9 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 				#edge_label.append("EF: %s%%"%perc2str(perc))
 
 				if data["EF_size"] < Diagram.node[source]["size"]:
-					result.edge[source][target]["color"]="lightgray"
+					result.adj[source][target]["color"]="lightgray"
 
-			#result.edge[source][target]["label"] = "<%s>"%("<br/>".join(edge_label))
+			#result.adj[source][target]["label"] = "<%s>"%("<br/>".join(edge_label))
 
 
 	for x in Diagram.nodes():
@@ -604,13 +607,13 @@ def cartesian_product(Diagrams, Factor, EdgeData):
 
 				data = {}
 				basic_formula = ["(%s)"%g.node[x]["formula"] for x,g in zip(source,Diagrams) if not g==diagram]
-				data["EX_size"]	= factor * diagram.edge[s][t]["EX_size"]
-				formula = basic_formula + ["(%s)"%diagram.edge[s][t]["EX_formula"]]
+				data["EX_size"]	= factor * diagram.adj[s][t]["EX_size"]
+				formula = basic_formula + ["(%s)"%diagram.adj[s][t]["EX_formula"]]
 				data["EX_formula"]  = " & ".join(formula)
 
 				if EdgeData:
-					data["EF_size"]	 = factor * diagram.edge[s][t]["EF_size"]
-					formula = basic_formula + ["(%s)"%diagram.edge[s][t]["EF_formula"]]
+					data["EF_size"]	 = factor * diagram.adj[s][t]["EF_size"]
+					formula = basic_formula + ["(%s)"%diagram.adj[s][t]["EF_formula"]]
 					data["EF_formula"]  = " & ".join(formula)
 
 				target = tuple(x if not g==diagram else t for x,g in zip(source,Diagrams))
@@ -635,9 +638,9 @@ def diagrams_are_equal(Diagram1, Diagram2):
 		for x in g.nodes():
 			g.node[x].pop("formula")
 		for x,y in g.edges():
-			if "border_formula" in g.edge[x][y]:
-				g.edge[x][y].pop("border_formula")
-				g.edge[x][y].pop("finally_formula")
+			if "border_formula" in g.adj[x][y]:
+				g.adj[x][y].pop("border_formula")
+				g.adj[x][y].pop("finally_formula")
 
 	em = lambda x,y:x==y
 

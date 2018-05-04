@@ -468,14 +468,17 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 		>>> Phenotypes.create_piechart(diagram, "piechart.pdf")
 	"""
 
+	debug = True
 
 	import matplotlib.pyplot
 	matplotlib.rcParams['hatch.linewidth'] = 4.0 	# special hatching for paper
 	matplotlib.rcParams['hatch.color'] = "#ff7c00"	# special hatching for paper
 
 	indeces = sorted(Diagram, key=lambda x: Diagram.node[x]["initaccepting_size"])
-	labels = ["\n".join(Diagram.node[x]["names"]) for x in indeces]
+
+	labels = [", ".join(Diagram.node[x]["names"]) for x in indeces]
 	sizes  = [Diagram.node[x]["initaccepting_size"] for x in indeces]
+
 	total = sum(sizes)
 	is_small_network = total <= 1024
 
@@ -483,7 +486,9 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 	if ColorMap:
 		colors = [ColorMap[x] for x in indeces]
 	else:
+		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(4+1)) for x in range(len(Diagram)+2)][1:-1]
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
+
 	for i,x in enumerate(indeces):
 		if "fillcolor" in Diagram.node[x]:
 			colors[i] = Diagram.node[x]["fillcolor"]
@@ -491,6 +496,12 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 	autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if is_small_network else '%.1f%%'
 	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=45)
 	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
+
+	### delete me
+	patches, texts, autotexts = stuff
+	[ _.set_fontsize(15) for _ in texts ]
+	[ _.set_fontsize(15) for _ in autotexts ]
+
 
 	for i, patch in enumerate(patches):
 		if "hatch" in Diagram.node[indeces[i]]:
@@ -521,14 +532,35 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 
 if __name__=="__main__":
 
-	model = "remy_tumorigenesis_new"
-	markers = ["Proliferation", "Apoptosis_medium", "Apoptosis_high", "Growth_arrest"]
+	diagram = networkx.DiGraph()
+	diagram.add_node(0, initaccepting_size=2900, names=["GA"], fillcolor="#ff7c00")
+	diagram.add_node(1, initaccepting_size=5000, names=["A"], fillcolor="#919191")
+	diagram.add_node(2, initaccepting_size=600, names=["OscP/GA"], fillcolor="#c8fbc0", hatch="//", penwidth=3, color="#ff7c00")
+	diagram.add_node(3, initaccepting_size=1500, names=["P"], fillcolor="#c8fbc0")
+
+	create_piechart(diagram, FnameImage="remy_pie.svg", Title="", ColorMap=None, Silent=False)
 
 
-	primes = PyBoolNet.Repository.get_primes(model)
-	update = "asynchronous"
 
-	phenos = compute_json(primes, Update=update, Markers=markers, Silent=False)
-	PyBoolNet.pprint(phenos)
 
-	#compute_diagram(primes, Update=update, Phenotypes=phenos, FnameImage="phenotypes_%s.pdf"%model, Silent=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# end of file
