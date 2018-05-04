@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath('../../..'))
 
 # to test which PyBoolNet is installed (path to sources) uncomment:
 #import PyBoolNet
-#print PyBoolNet.version()
+#print(PyBoolNet.version())
 #raise Exception
 
 # -- General configuration ------------------------------------------------
