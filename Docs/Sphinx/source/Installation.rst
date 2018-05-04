@@ -11,7 +11,7 @@ Installation
 
 Python
 ------
-|software| was written in Python 2.7 but should be compatible with Python 3.
+|software| is now being developed in Python 3.5.2 but should be compatible with Python2.
 If you experience problems with your version of Python and |software| please contact |myemail| or
 post an issue on the project homepage at
 
@@ -31,13 +31,13 @@ We recommend to install the package using *pip*. If it is not already installed 
 
 Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installation_graphviz>` and :ref:`ImageMagick <installation_imagemagick>` are installed::
 
-   $ sudo pip install networkx==1.11
+   $ sudo pip3 install networkx
    $ sudo apt install graphviz
    $ sudo apt install imagemagick
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.3_linux64.tar.gz
+   $ sudo pip3 install PyBoolNet-2.2.4_linux64.tar.gz
 
 which should place the package here::
 
@@ -45,14 +45,14 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.3.tar.gz --user
+   $ pip3 install PyBoolNet-2.2.4.tar.gz --user
 
 The package is likely going to be placed here::
 
    /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
-To install |software| using *Distutils* unpack *PyBoolNet-2.2.3.tar.gz* into a temporary folder and run::
+To install |software| using *Distutils* unpack *PyBoolNet-2.2.4.tar.gz* into a temporary folder and run::
 
    $ sudo python setup.py install
 
@@ -70,7 +70,7 @@ You should now be able to import |software|::
 
 To remove |software| using *pip* run::
 
-      $ pip uninstall PyBoolNet
+      $ pip3 uninstall PyBoolNet
 
 If you do not have *pip*, all files must be removed manually.
 
@@ -91,11 +91,11 @@ or if you do not have super user rights::
 
 Install NetworkX_ with::
 
-   $ sudo pip install networkx==1.11
+   $ sudo pip3 install networkx
 
 or::
 
-   $ pip install networkx==1.11 --user
+   $ pip3 install networkx --user
 
 Download and install Graphviz_ and ImageMagick_ from
 
@@ -104,7 +104,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip install PyBoolNet-2.2.3_mac64.tar.gz
+   $ sudo pip3 install PyBoolNet-2.2.4_mac64.tar.gz
 
 which should place the package here::
 
@@ -112,7 +112,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip install PyBoolNet-2.2.3.tar.gz --user
+   $ pip3 install PyBoolNet-2.2.4.tar.gz --user
 
 The package is likely going to be placed here::
 
@@ -127,7 +127,7 @@ You should now be able to import |software|::
 
 To remove |software| using *pip* run::
 
-      $ pip uninstall PyBoolNet
+      $ pip3 uninstall PyBoolNet
 
 If you do not have *pip*, all files must be removed manually.
 
@@ -145,7 +145,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.2.3_win64.tar.gz
+   C:\> pip.exe install PyBoolNet-2.2.4_win64.tar.gz
 
 which should place the package here::
 
@@ -160,7 +160,7 @@ where ``<version>`` is the Python version you are using.
 
 To install NetworkX_ use *pip* again::
 
-   C:\> pip.exe install networkx==1.11
+   C:\> pip.exe install networkx
 
 To install Graphviz_ and ImageMagick_ download the respective executables from the home pages:
 
@@ -232,17 +232,13 @@ The package is available at:
 
 To install it on Linux using *pip* run::
 
-   $ sudo pip install networkx==1.11
+   $ sudo pip3 install networkx
 
 or::
 
-   $ pip install networkx==1.11 --user
+   $ pip3 install networkx --user
 
 if you do not have super user rights.
-
-.. note::
-   |software| is tested with NetworkX_ version 1.11 and older versions of networkx as well as networkx 2.X will not work.
-
 
 .. _installation_bnettoprime:
 
@@ -333,7 +329,7 @@ The package matplotlib is used to plot pie charts and bar plots and similiar gra
 for example in the function :ref:`create_barplot` and :ref:`basins_create_piechart` of the :ref:`Basins` module.
 To install it on linux run::
 
-   $ sudo pip install matplotlib
+   $ sudo pip3 install matplotlib
 
 matplotlib_ is available at
 
@@ -350,7 +346,7 @@ Espresso is required for heuristic minimization Boolean expressions.
 For more information see
 
 	* http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer
-	
+
 
 .. _installation_eqntott:
 

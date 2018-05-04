@@ -1,7 +1,7 @@
 
 
 from __future__ import absolute_import
-
+from __future__ import print_function
 
 import PyBoolNet.Attractors
 import PyBoolNet.Basins
@@ -26,7 +26,7 @@ import pprint as prettyprint
 
 
 def version():
-    return "2.2.3"
+    return "2.2.4"
 
 
 def pprint(X):

@@ -1,5 +1,25 @@
 
 
+## release notes for version 2.2.3 (February 2018)
+- bugfixes for Python3: encoding / decoding and long / int
+
+#### release notes for version 2.2.2 (February 2018)
+- **new Module** `Commitment` for the computation of commitment diagrams
+- **new Module** `Phenotypes` for the computation of phenotype diagrams
+- **bugfix** of encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository`
+- added function `Attractors.open_json(..)` to module `Attractors`
+- added function `Attractors.save_json(..)` to module `Attractors`
+- added function `Attractors.compute_json(..)` to module `Attractors`
+- the PyBoolNet git repository is now in "hard tab" format (tab instead of whitespace)
+- **refactored** `list_states_referenced_by_proposition(..)` as `enumerate_states(..)` for simplicity
+- **refactored** the module `AttractorDetection` as `Attractors` for simplicity
+- **refactored** the module `QueryPatterns` as `TemporalLogic` for clarity
+- **refactored** the module `BooleanExpressions` as `BooleanLogic` for clarity
+- adapted modules `Basins` and `ModelChecking` to handle Boolean variables that represent multi-valued variables (see van Ham encoding)
+- added `StateTransitionGraphs.size_state_space` to determine size of state spaces, taking into account only the admissible states of Boolean variables that represent multi-valued variables (see van Ham encoding)
+- added `StateTransitionGraphs.find_vanham_variables(..)` to detect variables that represent ternary variables
+
+
 #### release notes for hotfix version 2.2.1 (January 2018)
 - **bugfix**: removed slowdown that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 
