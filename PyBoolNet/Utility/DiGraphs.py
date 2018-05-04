@@ -173,7 +173,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
 			print("%s was not created."%FnameDot)
 		return
 
-	if not type(DiGraph.nodes()[0])==str:
+	if not type(list(DiGraph.nodes())[0])==str:
 		DiGraph = networkx.relabel_nodes(DiGraph, mapping = lambda x: str(x))
 
 	lines = ['digraph {']

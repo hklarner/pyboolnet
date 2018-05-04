@@ -1,4 +1,5 @@
 
+from __future__ import print_function
 
 import datetime
 import itertools
@@ -81,6 +82,8 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
 	assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
 	assert(Primes)
 
+	if not Silent: print("Attractors.compute_json(..)")
+
 	attrs = {}
 	attrs["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
 	attrs["update"] = Update
@@ -88,40 +91,48 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
 	mintspaces = PyBoolNet.AspSolver.trap_spaces(Primes, "min")
 
 	if CheckCompleteness:
-		is_complete = completeness(Primes, Update)
-		if is_complete:
+		if not Silent: print(" Attractors.completeness(..)", end="")
+		if completeness(Primes, Update):
 			attrs["is_complete"] = "yes"
 		else:
 			attrs["is_complete"] = "no"
+		if not Silent: print(" {x}".format(x=attrs["is_complete"]))
 	else:
 		attrs["is_complete"] = "unknown"
 
 
 	attrs["attractors"] = []
 
-	for mints in mintspaces:
+	for i,mints in enumerate(mintspaces):
 
 		mints_obj = {} # minimal trap space object
 		mints_obj["str"] = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, mints)
 		mints_obj["dict"] = mints
 		mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes, mints)
 
+		if not Silent: print(" working on minimal trapspace {i}/{n}: {m}".format(i=i+1, n=len(mintspaces), m=mints_obj["str"]))
+
 		if CheckUnivocality:
+			if not Silent: print("  Attractors.univocality(..)", end="")
 			if univocality(Primes, Update, mints):
 				mints_obj["is_univocal"] = "yes"
 			else:
 				mints_obj["is_univocal"] = "no"
+			if not Silent: print(" {x}".format(x=mints_obj["is_univocal"]))
 		else:
 			mints_obj["is_univocal"] = "unknown"
 
 		if CheckFaithfulness:
+			if not Silent: print("  Attractors.faithfulness(..)", end="")
 			if faithfulness(Primes, Update, mints):
 				mints_obj["is_faithful"] = "yes"
 			else:
 				mints_obj["is_faithful"] = "no"
+			if not Silent: print(" {x}".format(x=mints_obj["is_faithful"]))
 		else:
 			mints_obj["is_faithful"] = "unknown"
 
+		if not Silent: print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
 		state = find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState=mints)
 
 		state_obj = {} # attractor state object
@@ -845,11 +856,10 @@ def compute_attractors_tarjan(STG):
 	"""
 
 	condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
-
 	steadystates = []
 	cyclic = []
 	for scc in condensation_graph.nodes():
-		if not condensation_graph.successors(scc):
+		if not list(condensation_graph.successors(scc)):
 			if len(scc)==1:
 				steadystates.append(scc[0])
 			else:

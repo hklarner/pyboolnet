@@ -194,6 +194,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 		self.assertTrue(answer)
 		answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","1--")
 		self.assertTrue(answer)
+
 		answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,{"a":1,"b":1,"c":0},{"a":0})
 		self.assertFalse(answer)
 		answer = PyBoolNet.StateTransitionGraphs.state_is_in_subspace(primes,"110","0--")
@@ -298,7 +299,7 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
 		init = []
 		stg = PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous", InitialStates=init)
-		answer = stg.nodes()
+		answer = sorted(stg.nodes())
 		expected = []
 		msg = "\nexpected: "+str(expected)
 		msg+= "\ngot:	  "+str(answer)
@@ -415,7 +416,10 @@ class TestStateTransitionGraphs(unittest.TestCase):
 		bnet = "\n".join(bnet)
 		primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 		stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
+		PyBoolNet.StateTransitionGraphs.stg2image(stg, "junk.pdf")
 		steadystates, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
+		print(steadystates)
+		print(cyclic)
 
 		steady_expected = ["101"]
 		cyclic_expected = [set(["010","110"])]

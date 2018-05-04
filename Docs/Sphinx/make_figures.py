@@ -143,8 +143,8 @@ def run():
         igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes)
         print(igraph.nodes())
         print(igraph.edges())
-        print(igraph.edge["v3"]["v1"]["sign"])
-        print(igraph.edge["v1"]["v3"]["sign"])
+        print(igraph.adj["v3"]["v1"]["sign"])
+        print(igraph.adj["v1"]["v3"]["sign"])
 
         PyBoolNet.InteractionGraphs.igraph2image(igraph, "source/figure01.pdf")
 
@@ -158,8 +158,8 @@ def run():
         igraph.graph["node"]["color"] = "blue"
         igraph.node["v2"]["shape"] = "rpromoter"
         igraph.node["v2"]["color"] = "black"
-        igraph.edge["v3"]["v1"]["arrowhead"] = "inv"
-        igraph.edge["v3"]["v1"]["color"] = "red"
+        igraph.adj["v3"]["v1"]["arrowhead"] = "inv"
+        igraph.adj["v3"]["v1"]["color"] = "red"
         igraph.graph["splines"] = "ortho"
         igraph.graph["label"] = "Example 3: Interaction graph with attributes"
         igraph.graph["rankdir"] = "LR"
@@ -267,7 +267,7 @@ def run():
         update = "asynchronous"
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
         print(repr(stg))
-        print(stg.nodes()[0])
+        print(list(stg.nodes())[0])
         print(networkx.has_path(stg, "100", "111"))
         stg.graph["label"] = "Example 11: The STG of a positive circuit"
         stg.graph["rankdir"] = "LR"

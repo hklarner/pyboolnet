@@ -3,7 +3,7 @@
 
 
 
-.. |software| replace:: *PyBoolNet 2.2.3*
+.. |software| replace:: *PyBoolNet 2.2.4*
 .. |myemail| replace:: *hannes.klarner@fu-berlin.de*
 
 .. _BNetToPrime:  https://github.com/xstreck1/BNetToPrime
@@ -26,4 +26,4 @@
 .. _gringo:       http://potassco.sourceforge.net/#gringo
 .. _matplotlib:   http://matplotlib.org
 
-.. _networkx.has_path: https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html
+.. _networkx.has_path: https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.has_path.html#networkx.algorithms.shortest_paths.generic.has_path

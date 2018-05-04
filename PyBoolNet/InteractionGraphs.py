@@ -62,7 +62,7 @@ def primes2igraph(Primes):
 			['v1', 'v2', 'v3']
 			>>> igraph.edges()
 			[('v1', 'v1'), ('v1', 'v3'), ('v2', 'v3'), ('v3', 'v1')]
-			>>> igraph.edge["v1"]["v3"]["sign"]
+			>>> igraph.adj["v1"]["v3"]["sign"]
 			set([1, -1])
 	"""
 
@@ -342,14 +342,14 @@ def add_style_interactionsigns(IGraph):
 
 	for source, target, attr in sorted(IGraph.edges(data=True)):
 		if attr["sign"]==set([1,-1]):
-			IGraph.edge[source][target]["arrowhead"] = "dot"
-			IGraph.edge[source][target]["color"] = "dodgerblue"
+			IGraph.adj[source][target]["arrowhead"] = "dot"
+			IGraph.adj[source][target]["color"] = "dodgerblue"
 		elif attr["sign"]==set([-1]):
-			IGraph.edge[source][target]["arrowhead"] = "tee"
-			IGraph.edge[source][target]["color"] = "red"
+			IGraph.adj[source][target]["arrowhead"] = "tee"
+			IGraph.adj[source][target]["color"] = "red"
 		elif attr["sign"]==set([1]):
-			IGraph.edge[source][target]["arrowhead"] = "normal"
-			IGraph.edge[source][target]["color"] = "black"
+			IGraph.adj[source][target]["arrowhead"] = "normal"
+			IGraph.adj[source][target]["color"] = "black"
 
 
 def add_style_activities(IGraph, Activities, ColorActive="/paired10/5", ColorInactive="/paired10/1"):
@@ -392,7 +392,7 @@ def add_style_activities(IGraph, Activities, ColorActive="/paired10/5", ColorIna
 
 	for x,y in IGraph.edges():
 		if x in Activities or y in Activities:
-			IGraph.edge[x][y]["color"] = "gray"
+			IGraph.adj[x][y]["color"] = "gray"
 
 
 def add_style_inputs(IGraph):
@@ -467,7 +467,7 @@ def add_style_constants(IGraph):
 			IGraph.node[x]["fontname"] = "Times-Italic"
 
 			for y in IGraph.successors(x):
-				IGraph.edge[x][y]["color"] = "gray"
+				IGraph.adj[x][y]["color"] = "gray"
 
 
 
@@ -527,8 +527,8 @@ def add_style_path(IGraph, Path, Color):
 
 	if len(Path)>1:
 		for x,y in zip(Path[:-1],Path[1:]):
-			IGraph.edge[x][y]["color"]	 = Color
-			IGraph.edge[x][y]["penwidth"]  = "2"
+			IGraph.adj[x][y]["color"]	 = Color
+			IGraph.adj[x][y]["penwidth"]  = "2"
 
 
 def add_style_subgraphs(IGraph, Subgraphs):
