@@ -248,13 +248,13 @@ The nodes and edges of *igraph* can be accessed via the :ref:`installation_netwo
 The sign of an interaction is either either positive, negative or both.
 Signs are stored as the edge attribute *sign* and are accessible via the standard :ref:`installation_networkx` edge attribute syntax::
 
-   >>> igraph.edge["v3"]["v1"]["sign"]
+   >>> igraph.adj["v3"]["v1"]["sign"]
    set([1])
 
 Signs are implemented as Python sets and contain 1 if the interaction is positive and -1 if it is negative or both if the interaction is ambivalent,
 i.e., sometimes positive and sometimes negative::
 
-   >>> igraph.edge["v1"]["v3"]["sign"]
+   >>> igraph.adj["v1"]["v3"]["sign"]
    set([1, -1])
 
 To create a drawing of an interaction graph use the function :ref:`igraph2image`::
@@ -327,8 +327,8 @@ To change the appearance of specific nodes or edges, add attributes to the node 
 
    >>> igraph.node["v2"]["shape"] = "rpromoter"
    >>> igraph.node["v2"]["color"] = "black"
-   >>> igraph.edge["v3"]["v1"]["arrowhead"] = "inv"
-   >>> igraph.edge["v3"]["v1"]["color"] = "red"
+   >>> igraph.adj["v3"]["v1"]["arrowhead"] = "inv"
+   >>> igraph.adj["v3"]["v1"]["color"] = "red"
 
 In addition, *dot* graphs have general graph attributes, for example:
 
@@ -582,7 +582,7 @@ The nodes of an STG are string representations of states, e.g. *"110"*, see :ref
 You may use :ref:`state2str` to convert a state dictionary into a state string.
 They are vectors of activities, sorted by component names::
 
-   >>> stg.nodes()[0]
+   >>> list(stg.nodes())[0]
    '010'
 
 You may use :ref:`installation_networkx` functions on *stg*, for example networkx.has_path_::
@@ -985,7 +985,7 @@ To enumerate all possible input combinations of a given network use the function
    >>> create_variables(primes, {"v1": "input1 & input2"})
    >>> create_variables(primes, {"v2": "input1 | input2"})
    >>> for x in input_combintations:
-   ...     print x
+   ...     print(x)
    {'input1':0,'input2':0}
    {'input1':1,'input2':0}
    {'input1':0,'input2':1}
@@ -1194,7 +1194,7 @@ and *None* in case it is true (in which case no counterexample exists).
 Hence, a typical way to inspect a counterexample involves a Python if-statement::
 
    >>> if counterex:
-   ...     print " -> ".join(STGs.state2str(x) for x in counterex)
+   ...     print(" -> ".join(STGs.state2str(x) for x in counterex))
    100 -> 101 -> 100
 
 Here, :ref:`state2str` is a "pretty print" function contained in the module :ref:`StateTransitionGraphs`.
@@ -1375,7 +1375,7 @@ The correctness of this answer can be confirmed by enumerating all successors of
 by using :ref:`STGs.successors_asynchronous <successors_asynchronous>`::
 
    >>> for x in STGs.successors_asynchronous(primes, "101"):
-   ...     print x
+   ...     print(x)
    {'DNAdamage': 1, 'Proliferation': 0, 'GrowthFactor': 0}
 
 and checking that *Proliferation=0* for all of them.
@@ -1571,7 +1571,7 @@ As an example, consider the following network which has five trap spaces::
    >>> bnet = "\n".join(bnet)
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> tspaces = AspSolver.trap_spaces(primes, "all")
-   >>> print ", ".join(STGs.subspace2str(primes, x) for x in tspaces)
+   >>> print(", ".join(STGs.subspace2str(primes, x) for x in tspaces))
    ---, --1, 1-1, -00, 101
 
 The trap space ``---``, i.e., the full state space, is also called the trivial trap space.
@@ -1658,7 +1658,7 @@ As an example for computing attractors with this algorithm consider the followin
    >>> len(attractors)
    2
    >>> for A in attractors:
-   ...     print [STGs.state2str(x) for x in A]
+   ...     print([STGs.state2str(x) for x in A])
    ['101']
    ['010', '110']
 
@@ -1705,9 +1705,9 @@ Hence, :ref:`find_attractor_state_by_randomwalk_and_ctl` should always be encaps
 
    >>> try:
    ...     state = Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
-   ...     print STGs.state2str(state)
+   ...     print(STGs.state2str(state))
    ... except:
-   ...     print "did not find an attractor. try increasing the length or attempts parameters"
+   ...     print("did not find an attractor. try increasing the length or attempts parameters")
 
 
 basins of attraction
@@ -1793,9 +1793,9 @@ The functions :ref:`univocality` and :ref:`faithfulness` each require the primes
    >>> for x in mintspaces:
    ...     answer_univocal = Attractors.univocal(primes, update, x)
    ...     answer_faithful = Attractors.faithful(primes, update, x)
-   ...     print "min trap space:", STGs.subspace2str(primes, x)
-   ...     print "  is univocal:", answer_univocal
-   ...     print "  is faithful:", answer_faithful
+   ...     print("min trap space:", STGs.subspace2str(primes, x))
+   ...     print("  is univocal:", answer_univocal)
+   ...     print("  is faithful:", answer_faithful)
    min trap space: -10
      is univocal: True
      is faithful: True

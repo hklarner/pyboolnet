@@ -177,7 +177,7 @@ def stg2dot(STG, FnameDOT=None):
 		  >>> stg.graph["node"] = {"style":"filled", "color":"red"}
 		  >>> stg.graph["edge"] = {"arrowsize": 2.0}
 		  >>> stg.node["001000"]["fontsize"] = 20
-		  >>> stg.edge["001110"]["001010"]["style"] = "dotted"
+		  >>> stg.adj["001110"]["001010"]["style"] = "dotted"
 		  >>> stg2image(stg, "irma_stg.pdf")
 	"""
 
@@ -277,13 +277,13 @@ def add_style_tendencies(STG):
 		dec = any([source[x]+target[x]=="10" for x in range(len(source))])
 
 		if inc and dec:
-			STG.edge[source][target]["color"] = "dodgerblue"
+			STG.adj[source][target]["color"] = "dodgerblue"
 
 		if inc:
 			continue
 
 		if dec:
-			STG.edge[source][target]["color"] = "red"
+			STG.adj[source][target]["color"] = "red"
 
 
 def add_style_sccs(STG):
@@ -314,7 +314,7 @@ def add_style_sccs(STG):
 		subgraph.graph["color"] = "black"
 		subgraph.graph["fillcolor"] = "/greys9/%i"%col
 
-		if not condensation_graph.successors(scc):
+		if not list(condensation_graph.successors(scc)):
 			if len(scc)==1:
 				subgraph.graph["label"] = "steady state"
 			else:
@@ -497,8 +497,8 @@ def add_style_path(STG, Path, Color, Penwidth=3):
 
 	if len(Path)>1:
 		for x,y in zip(Path[:-1],Path[1:]):
-			STG.edge[x][y]["color"]	 = Color
-			STG.edge[x][y]["penwidth"]  = "%i"%Penwidth
+			STG.adj[x][y]["color"]	 = Color
+			STG.adj[x][y]["penwidth"]  = "%i"%Penwidth
 
 
 def add_style_default(Primes, STG):
@@ -1080,7 +1080,6 @@ def hamming_distance(Subspace1, Subspace2):
 	"""
 
 	return len([k for k,v in Subspace1.items() if k in Subspace2 and Subspace2[k]!=v])
-
 
 
 VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
