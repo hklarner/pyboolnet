@@ -384,7 +384,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
 
 	return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
-# todo: refactor: ternary -> multi-valued
+
 def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Silent=False):
 	"""
 	Creates a NuSMV_ file from Primes and additional parameters that specify the update strategy, the initial states and the temporal logic specification.
@@ -537,7 +537,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
 		lines+= ['']
 		lines+= ['-- adding van ham constraints for {k}-valued variables: {x}'.format(k=k, x=", ".join(vanham[k]))]
-		zipped = zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1])
+		zipped = list(zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1]))
 
 		for name in vanham[k]:
 			lines+= ['INIT {x} -> {y}'.format(x=name+x, y=name+y) for x,y in zipped]
