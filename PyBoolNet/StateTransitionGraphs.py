@@ -720,7 +720,6 @@ def random_walk(Primes, Update, InitialState, Length):
 	else:
 		assert(set(InitialState).issubset(set(Primes)))
 
-
 	if Update=='asynchronous':
 		transition = lambda current_state: random.choice(successors_asynchronous(Primes,current_state))
 
@@ -732,7 +731,7 @@ def random_walk(Primes, Update, InitialState, Length):
 
 	x = random_state(Primes, Subspace=InitialState)
 
-	Path = [dict(InitialState)]
+	Path = [x]
 	while len(Path)<Length:
 		Path.append(transition(Path[-1]))
 
