@@ -232,7 +232,7 @@ def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Style
 	if "sccs" in Styles:
 		add_style_sccs(stg)
 	if "mintrapspaces" in Styles:
-		add_style_mintrapspaces(stg)
+		add_style_mintrapspaces(Primes, stg)
 	if "anonymous" in Styles:
 		add_style_anonymous(stg)
 
