@@ -88,7 +88,7 @@ def digraph2dotlines(DiGraph, Indent=1):
 		value = DiGraph.graph["subgraphs"]
 		if value:
 			tree = subgraphs2tree(value)
-			roots = [x for x in tree.nodes() if not tree.predecessors(x)]
+			roots = [x for x in tree.nodes() if not list(tree.predecessors(x))]
 			for root in roots:
 				subnodes = list(networkx.descendants(tree,root))+[root]
 				subtree  = tree.subgraph(subnodes)
@@ -347,7 +347,7 @@ def tree2dotlines(Tree, Indent=1):
 	"""
 
 
-	roots = [x for x in Tree.nodes() if not Tree.predecessors(x)]
+	roots = [x for x in Tree.nodes() if not list(Tree.predecessors(x))]
 	assert(len(roots)==1)
 	root = roots[0]
 	assert(not "subgraphs" in root.graph)
