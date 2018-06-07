@@ -37,6 +37,7 @@ PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", 
 PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
 PIE_COLORS = 10*[BASIN_COLORS[1]]
 
+
 def weak_basin(Primes, Update, Subspace, Minimize=False):
 	"""
 	todo: add unit tests
@@ -45,7 +46,7 @@ def weak_basin(Primes, Update, Subspace, Minimize=False):
 
 	  **arguments**:
 		* *Primes*: prime implicants
-		* *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+		* *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 		* *Minimize* (bool): minimize the Boolean expressions
 		* *Subspace* (str/dict): a subspace
 
@@ -54,7 +55,7 @@ def weak_basin(Primes, Update, Subspace, Minimize=False):
 
 	  **example**::
 
-		>>> weak_basin(primes, update, True, "0---1")
+		>>> weak_basin(primes, update, "0---1", True)
 		{"size":	134,
 		"formula":	"Erk & !Raf | Mek",
 		"perc":		12.89338}
@@ -291,7 +292,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 
 	total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
 
-	indeces = range(len(Attrs))
+	indeces = list(range(len(Attrs)))
 	indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
 
 	y1 = [Attrs[i]["cyclefree_basin"][Yunit] for i in indeces]
@@ -299,7 +300,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 	y3 = [Attrs[i]["weak_basin"][Yunit]   - Attrs[i]["strong_basin"][Yunit]   for i in indeces]
 
 	N = len(y1)
-	x = range(N)
+	x = list(range(N))
 	width = 1/1.5
 
 	if not LabelsMap:
@@ -380,7 +381,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
 	strong = sum(x["strong_basin"]["size"] for x in Attrs)
 	outside = total - strong
 
-	indeces = range(len(Attrs))
+	indeces = list(range(len(Attrs)))
 	indeces.sort(key=lambda i: Attrs[i]["strong_basin"]["perc"], reverse=True)
 
 	figure = matplotlib.pyplot.figure()
