@@ -21,6 +21,7 @@ CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
 
+
 def energy(Primes, State):
 	"""
 	This integer valued energy function E for Boolean networks is decreasing with transitions.
@@ -208,7 +209,7 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
 def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Styles=[], LayoutEngine="dot"):
 	"""
 	A convenience function for drawing state transition graphs directly from the prime implicants.
-	*Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces"].
+	*Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces", "anonymous"].
 
 	**arguments**:
 		* *Primes*: prime implicants
@@ -232,7 +233,8 @@ def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Style
 		add_style_sccs(stg)
 	if "mintrapspaces" in Styles:
 		add_style_mintrapspaces(stg)
-
+	if "anonymous" in Styles:
+		add_style_anonymous(stg)
 
 	stg2image(stg, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=False)
 
