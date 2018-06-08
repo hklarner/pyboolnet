@@ -1,7 +1,16 @@
 
 
+## release notes for version 2.2.4 (February 2018)
+- started to refactor the unittests (split into several files)
+- PyBoolNet is now developed with Python3
+- PyBoolNet is now compatible with networkx2
+- continued work and tuning on Basins, Commitment and Phenotypes
+- fixed encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository` (using GINsim)
+
+
 ## release notes for version 2.2.3 (February 2018)
 - bugfixes for Python3: encoding / decoding and long / int
+
 
 #### release notes for version 2.2.2 (February 2018)
 - **new Module** `Commitment` for the computation of commitment diagrams

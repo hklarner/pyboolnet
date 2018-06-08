@@ -4,17 +4,17 @@
 
 InteractionGraphs
 =================
-   
-.. _primes2igraph: 
-  
+
+.. _primes2igraph:
+
 primes2igraph
 -------------
 
 .. autofunction:: PyBoolNet.InteractionGraphs.primes2igraph
 
 
-.. _igraph_copy: 
-  
+.. _igraph_copy:
+
 copy
 ----
 
@@ -39,7 +39,7 @@ find_minimal_autonomous_nodes
 
 
 
-.. _igraph2dot: 
+.. _igraph2dot:
 
 igraph2dot
 ----------
@@ -47,7 +47,7 @@ igraph2dot
 .. autofunction:: PyBoolNet.InteractionGraphs.igraph2dot
 
 
-.. _igraph2image: 
+.. _igraph2image:
 
 igraph2image
 ------------
@@ -55,7 +55,7 @@ igraph2image
 .. autofunction:: PyBoolNet.InteractionGraphs.igraph2image
 
 
-.. _create_image: 
+.. _igs_create_image:
 
 create_image
 ------------
@@ -156,6 +156,9 @@ activities2animation
 
 
 
+.. _local_igraph_of_state:
 
+local_igraph_of_state
+---------------------
 
-
+.. autofunction:: PyBoolNet.InteractionGraphs.local_igraph_of_state

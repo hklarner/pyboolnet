@@ -20,6 +20,7 @@ The project home page is https://github.com/hklarner/PyBoolNet.
 .. toctree::
 
    Installation
+   ManualQuick
    Manual
    Reference
    Bibliography

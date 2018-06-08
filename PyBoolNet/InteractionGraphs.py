@@ -39,7 +39,6 @@ def create_empty_igraph(Primes):
 	return igraph
 
 
-
 def primes2igraph(Primes):
 	"""
 	Creates the interaction graph from the prime implicants of a network.
@@ -89,7 +88,23 @@ def primes2igraph(Primes):
 
 def local_igraph_of_state(Primes, State):
 	"""
-	computes the local interaction graph of a state.
+	Computes the local interaction graph dF/dx of a state x.
+
+	**arguments**:
+		* *Primes*: prime implicants
+		* *State* (dict or str)
+
+	**returns**:
+		* *LocalIGraph* (networkx.DiGraph): the local interaction graph
+
+	**example**::
+
+			>>> primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+			>>> state = PyBoolNet.StateTransitionGraphs.random_state(primes)
+			>>> local_igraph = PyBoolNet.InteractionGraphs.local_igraph_of_state(primes, state)
+			>>> PyBoolNet.InteractionGraphs.add_style_interactionsigns(local_igraph)
+			>>> PyBoolNet.InteractionGraphs.igraph2image(local_igraph, "local_igraph.pdf")
+			created local_igraph.pdf
 	"""
 
 	if type(State)==str:
@@ -138,7 +153,6 @@ def local_igraph_of_states(Primes, States):
 				local_igraph.add_edge(i,j,sign=signs)
 
 	return local_igraph
-
 
 
 def copy(IGraph):
@@ -324,7 +338,6 @@ def add_style_anonymous(IGraph):
 		IGraph.node[x]["label"]=""
 
 
-
 def add_style_interactionsigns(IGraph):
 	"""
 	Sets attributes for the arrow head and edge color of interactions to indicate the interaction sign.
@@ -468,7 +481,6 @@ def add_style_constants(IGraph):
 
 			for y in IGraph.successors(x):
 				IGraph.adj[x][y]["color"] = "gray"
-
 
 
 def add_style_sccs(IGraph):

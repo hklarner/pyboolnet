@@ -384,7 +384,7 @@ def check_smv_with_acceptingstates(FnameSMV, DynamicReorder=True, ConeOfInfluenc
 
 	return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=True)
 
-# todo: refactor: ternary -> multi-valued
+
 def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Silent=False):
 	"""
 	Creates a NuSMV_ file from Primes and additional parameters that specify the update strategy, the initial states and the temporal logic specification.
@@ -537,7 +537,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
 		lines+= ['']
 		lines+= ['-- adding van ham constraints for {k}-valued variables: {x}'.format(k=k, x=", ".join(vanham[k]))]
-		zipped = zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1])
+		zipped = list(zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1]))
 
 		for name in vanham[k]:
 			lines+= ['INIT {x} -> {y}'.format(x=name+x, y=name+y) for x,y in zipped]
@@ -558,7 +558,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 		print('created %s'%FnameSMV)
 
 
-def output2counterexample( NuSMVOutput ):
+def output2counterexample(NuSMVOutput):
 	"""
 	Converts the output of a NuSMV call into a sequence of states that proves that the query is false.
 
@@ -590,7 +590,6 @@ def output2counterexample( NuSMVOutput ):
 		lines = [x for x in lines if x!=[]]
 
 		if lines:
-
 			if last_state:
 				state = last_state.copy()
 			else:
@@ -601,7 +600,7 @@ def output2counterexample( NuSMVOutput ):
 				assert(value in ['TRUE','FALSE'])
 				state[name] = 1 if value== 'TRUE' else 0
 
-			counterexample.append( state )
+			counterexample.append(state)
 			last_state = state
 
 	return tuple(counterexample)

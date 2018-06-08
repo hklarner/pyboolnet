@@ -1,5 +1,5 @@
 
-VERSION=2.2.4
+VERSION=2.2.5
 LOCALOS=linux64
 
 echo "creating manual"
@@ -46,5 +46,5 @@ echo
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/conf.py to $VERSION"
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/Substitutions.rst to $VERSION"
 echo "make sure you changed version in PyBoolNet/Docs/Sphinx/source/Installation.rst to $VERSION"
-echo "make sure you changed version in PyBoolNet/__inti__.py to $VERSION"
+echo "make sure you changed version in PyBoolNet/__init__.py to $VERSION"
 echo "make sure you changed version in setup.py to $VERSION"

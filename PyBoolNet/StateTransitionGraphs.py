@@ -21,6 +21,7 @@ CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
 
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
 
+
 def energy(Primes, State):
 	"""
 	This integer valued energy function E for Boolean networks is decreasing with transitions.
@@ -208,7 +209,7 @@ def stg2image(STG, FnameIMAGE, LayoutEngine="fdp", Silent=False):
 def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Styles=[], LayoutEngine="dot"):
 	"""
 	A convenience function for drawing state transition graphs directly from the prime implicants.
-	*Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces"].
+	*Styles* must be a sublist of ["tendencies", "sccs", "mintrapspaces", "anonymous"].
 
 	**arguments**:
 		* *Primes*: prime implicants
@@ -231,8 +232,9 @@ def create_image(Primes, Update, FnameIMAGE, InitialStates=lambda x: True, Style
 	if "sccs" in Styles:
 		add_style_sccs(stg)
 	if "mintrapspaces" in Styles:
-		add_style_mintrapspaces(stg)
-
+		add_style_mintrapspaces(Primes, stg)
+	if "anonymous" in Styles:
+		add_style_anonymous(stg)
 
 	stg2image(stg, FnameIMAGE, LayoutEngine=LayoutEngine, Silent=False)
 
@@ -718,7 +720,6 @@ def random_walk(Primes, Update, InitialState, Length):
 	else:
 		assert(set(InitialState).issubset(set(Primes)))
 
-
 	if Update=='asynchronous':
 		transition = lambda current_state: random.choice(successors_asynchronous(Primes,current_state))
 
@@ -730,7 +731,7 @@ def random_walk(Primes, Update, InitialState, Length):
 
 	x = random_state(Primes, Subspace=InitialState)
 
-	Path = [dict(InitialState)]
+	Path = [x]
 	while len(Path)<Length:
 		Path.append(transition(Path[-1]))
 
@@ -797,9 +798,7 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent
 
 	if not Silent:
 		print("best_first_reachability(..)")
-		print(" explored %i transitions, not path found."%len(seen))
-
-	return None
+		print(" explored %i transitions, no path found."%len(seen))
 
 
 def state2str(State):

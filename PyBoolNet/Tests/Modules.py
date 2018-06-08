@@ -416,10 +416,8 @@ class TestStateTransitionGraphs(unittest.TestCase):
 		bnet = "\n".join(bnet)
 		primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 		stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-		PyBoolNet.StateTransitionGraphs.stg2image(stg, "junk.pdf")
 		steadystates, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
-		print(steadystates)
-		print(cyclic)
+
 
 		steady_expected = ["101"]
 		cyclic_expected = [set(["010","110"])]
@@ -813,11 +811,11 @@ class TestAspSolver(unittest.TestCase):
 		answer   = set(PyBoolNet.AspSolver.trap_spaces(primes, "percolated", Representation="str"))
 
 		msg = "\nexpected: %i percolated tspaces"%len(expected)
-		msg+= "\ngot:	  %i percolated tspaces"%len(answer)
+		msg+= "\ngot:	   %i percolated tspaces"%len(answer)
 		self.assertTrue(len(expected)==len(answer),msg)
 
 		msg = "\nexpected: (e.g) %s"%expected.pop()
-		msg+= "\ngot:	  (e.g) %s"%answer.pop()
+		msg+= "\ngot:	   (e.g) %s"%answer.pop()
 		self.assertTrue(expected==answer,msg)
 
 

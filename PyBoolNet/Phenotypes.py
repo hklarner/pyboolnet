@@ -263,7 +263,9 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 			if not Silent:
 				print(" [{x}] = {y}".format(x=", ".join(names), y=data["initaccepting_size"]))
 
-			diagram.add_node(node_id, data)
+			diagram.add_node(node_id)
+			for key, value in data.items():
+				diagram.node[node_id][key] = value
 			node_id+= 1
 
 	# edges
@@ -287,7 +289,9 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 							"initaccepting_size":	accepting["INITACCEPTING_SIZE"],
 							"initaccepting":		accepting["INITACCEPTING"]}
 
-					diagram.add_edge(source, target, data)
+					diagram.add_edge(source, target)
+					for key, value in data.items():
+						diagram.edges[source, target][key] = value
 
 					if not Silent:
 						print(" [{x}] --{s}--> [{y}]".format(

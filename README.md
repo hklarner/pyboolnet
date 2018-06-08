@@ -19,17 +19,18 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 Do not try to install this git repository directly, see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16). Instead download the latest release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
 
 ```
-sudo pip3 install PyBoolNet-2.2.4_linux64.tar.gz
+sudo pip3 install PyBoolNet-2.2.5_linux64.tar.gz
 ```
 
 
-## release notes for version 2.2.4 (February 2018)
-- started to refactor the unittests (split into several files)
-- PyBoolNet is now developed with Python3
-- PyBoolNet is now compatible with networkx2
-- continued work and tuning on Basins, Commitment and Phenotypes
-- fixed encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository` (using GINsim)
-
+## release notes for version 2.2.5 (June 2018)
+- bugfix in create_piechart, affects python3
+- bugfix in Commitment.create_diagram caused by moving to networkx2
+- bugifx in Basins.create_barplot caused by range, affects python3
+- bugfix in ModelChecking.primes2smv for van ham init constraints, caused by zip, affects python3
+- bugfix in StateTransitionGraphs.random_walk
+- bugfix in StateTransitionGraphs.create_image: adding styles anonymous and mintrapspaces
+- bugfix in InteractionGraphs: drawing subgraphs, caused by moving to networkx2
 
 
 For older release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)

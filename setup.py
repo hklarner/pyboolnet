@@ -21,7 +21,7 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
     package_data_files.extend([os.path.join(root,x) for x in filenames])
 
 setup(name          = "PyBoolNet",
-      version       = "2.2.4",
+      version       = "2.2.5",
       description   = "Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
       author        = "Hannes Klarner",
       author_email  = "hannes.klarner@fu-berlin.de",

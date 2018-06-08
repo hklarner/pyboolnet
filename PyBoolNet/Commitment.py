@@ -227,12 +227,12 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
 		worst_case_nodes+= 2**len(attr)-1
 		states_covered = 0
-		specs = [PyBoolNet.TemporalLogic.subspace2proposition(Primes,x) for x in attr]
+		specs = [PyBoolNet.TemporalLogic.subspace2proposition(Primes, x) for x in attr]
 		vectors = len(attr)*[[0,1]]
 		vectors = list(itertools.product(*vectors))
 		random.shuffle(vectors)
 
-		combination_formula = PyBoolNet.TemporalLogic.subspace2proposition(Primes,combination)
+		combination_formula = PyBoolNet.TemporalLogic.subspace2proposition(Primes, combination)
 
 		if not Silent:
 			print("  input combination %i, worst case #nodes: %i"%(i,2**len(attr)-1))
@@ -261,12 +261,14 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 				answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 				counter_mc+=1
 
-				data = {"attractors":   [x for flag,x in zip(vector,attr) if flag],
+				data = {"attractors":   [x for flag,x in zip(vector, attr) if flag],
 						"size":		 	accepting["INITACCEPTING_SIZE"],
 						"formula":	  	accepting["INITACCEPTING"]}
 
 			if data["size"]>0:
-				diagram.add_node(node_id, data)
+				diagram.add_node(node_id)
+				for key, value in data.items():
+					diagram.node[node_id][key] = value
 				node_id+=1
 				states_covered+= data["size"]
 
@@ -318,7 +320,9 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 						data["EF_size"] = accepting["INITACCEPTING_SIZE"]
 						data["EF_formula"] = accepting["INITACCEPTING"]
 
-				diagram.add_edge(source, target, data)
+				diagram.add_edge(source, target)
+				for key, value in data.items():
+					diagram.edges[source, target][key] = value
 
 	if not Silent:
 		perc = "= %.2f%%"%(100.*diagram.size()/worst_case_edges) if worst_case_edges else ""
@@ -538,7 +542,11 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 		if "fillcolor" in Diagram.node[x]:
 			colors[i] = Diagram.node[x]["fillcolor"]
 
-	autopct = lambda p: '{:.0f}'.format(p * total / 100) if is_small_network else "%1.1f%%"
+	if is_small_network:
+		autopct = lambda p: '{:.0f}'.format(p * total / 100)
+	else:
+		autopct = lambda p: '{:1.1f}%'.format(p)
+
 	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
 	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
 	for i, patch in enumerate(patches):
@@ -597,7 +605,9 @@ def cartesian_product(Diagrams, Factor, EdgeData):
 
 		node = tuple(x for x,_ in product)
 
-		result.add_node(node, data)
+		result.add_node(node)
+		for key, value in data.items():
+			result.node[node][key] = value
 
 	# create edges
 	for source in result.nodes():
@@ -618,7 +628,9 @@ def cartesian_product(Diagrams, Factor, EdgeData):
 
 				target = tuple(x if not g==diagram else t for x,g in zip(source,Diagrams))
 
-				result.add_edge(source, target, data)
+				result.add_edge(source, target)
+				for key, value in data.items():
+					result.edges[source, target][key] = value
 
 	# relabel nodes
 	result = networkx.convert_node_labels_to_integers(result)
