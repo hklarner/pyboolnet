@@ -798,9 +798,7 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent
 
 	if not Silent:
 		print("best_first_reachability(..)")
-		print(" explored %i transitions, not path found."%len(seen))
-
-	return None
+		print(" explored %i transitions, no path found."%len(seen))
 
 
 def state2str(State):

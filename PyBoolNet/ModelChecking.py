@@ -558,7 +558,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 		print('created %s'%FnameSMV)
 
 
-def output2counterexample( NuSMVOutput ):
+def output2counterexample(NuSMVOutput):
 	"""
 	Converts the output of a NuSMV call into a sequence of states that proves that the query is false.
 
@@ -590,7 +590,6 @@ def output2counterexample( NuSMVOutput ):
 		lines = [x for x in lines if x!=[]]
 
 		if lines:
-
 			if last_state:
 				state = last_state.copy()
 			else:
@@ -601,7 +600,7 @@ def output2counterexample( NuSMVOutput ):
 				assert(value in ['TRUE','FALSE'])
 				state[name] = 1 if value== 'TRUE' else 0
 
-			counterexample.append( state )
+			counterexample.append(state)
 			last_state = state
 
 	return tuple(counterexample)
