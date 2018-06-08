@@ -542,7 +542,11 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 		if "fillcolor" in Diagram.node[x]:
 			colors[i] = Diagram.node[x]["fillcolor"]
 
-	autopct = lambda p: '{:.0f}'.format(p * total / 100) if is_small_network else "%1.1f%%"
+	if is_small_network:
+		autopct = lambda p: '{:.0f}'.format(p * total / 100)
+	else:
+		autopct = lambda p: '{:1.1f}%'.format(p)
+
 	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
 	patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
 	for i, patch in enumerate(patches):
