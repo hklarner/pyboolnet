@@ -4,8 +4,9 @@ import random
 import itertools
 import heapq
 import os
-import subprocess
 import networkx
+
+from typing import List
 
 import PyBoolNet.FileExchange
 import PyBoolNet.AspSolver
@@ -726,16 +727,81 @@ def random_walk(Primes, Update, InitialState, Length):
 	elif Update=='synchronous':
 		transition = lambda current_state: successor_synchronous(Primes,current_state)
 
-	elif Update=='mixed':
+	else:
+		# Update=='mixed':
 		transition = lambda current_state: random_successor_mixed(Primes,current_state)
 
 	x = random_state(Primes, Subspace=InitialState)
 
 	Path = [x]
-	while len(Path)<Length:
+	while len(Path) < Length:
 		Path.append(transition(Path[-1]))
 
 	return Path
+
+
+def list_reachable_states(primes: dict, update: str, initial_states: List[str], memory: int, silent: bool = False) -> List[str]:
+	"""
+	Performs a depth-first search in the transition system defined by *primes* and *update* to list all states that
+	are reachable from the *inital states*. *Memory* specifies the maximum number of states that can be kept in
+	memory as "already explored" before the algorithm terminates.
+
+	**arguments**:
+		* *primes*: prime implicants
+		* *update* (str): update strategy (either asynchronous or snchronous)
+		* *initial_states* (list of str): a list of initial states
+		* *memory* (int): maximal number of states memorized before search is stopped
+		* *silent* (bool): print infos to screen
+
+	**returns**:
+		* *reachable_states* (list of str): a list of all states explored
+
+	**example**::
+
+			>>> initial_states = ["1000", "1001"]
+			>>> update = "asynchronous"
+			>>> memory = 1000
+			>>> states = list_reachable_states(primes, update, initial_states, memory)
+			>>> print(len(states))
+			287
+	"""
+	
+	if not initial_states:
+		return []
+	
+	assert type(initial_states) == list, "initial states must be a list"
+	assert type(initial_states[0]) == str, "initial states must be in dict representation: {}".format(initial_states[0])
+	assert update in ['asynchronous', 'synchronous']
+	
+	if update == 'asynchronous':
+		transition_func = lambda state: successors_asynchronous(primes, state)
+	else:
+		transition_func = lambda state: [successor_synchronous(primes, state)]
+	
+	explored = set([])
+	stack = set(initial_states)
+	
+	memory_reached = False
+	counter = 0
+	while stack:
+		
+		state = stack.pop()
+		new_states = set([state2str(x) for x in transition_func(state)])
+		not_explored = new_states.difference(explored)
+		stack.update(not_explored)
+		explored.add(state2str(state))
+		counter += 1
+		
+		if len(explored) > memory:
+			memory_reached = True
+			break
+	
+	if not silent:
+		print('states explored: {}'.format(counter))
+		if memory_reached:
+			print('result incomplete. stack size at termination: {} increase memory parameter'.format(len(stack)))
+	
+	return explored
 
 
 def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent=False):
@@ -770,15 +836,15 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent
 			4
 	"""
 
-	if type(InitialSpace) == str: InitialSpace = subspace2dict(Primes,InitialSpace)
-	if type(GoalSpace) == str: GoalSpace = subspace2dict(Primes,GoalSpace)
+	if type(InitialSpace) == str: InitialSpace = subspace2dict(Primes, InitialSpace)
+	if type(GoalSpace) == str: GoalSpace = subspace2dict(Primes, GoalSpace)
 
 	xdict = random_state(Primes, Subspace=InitialSpace)
 	x = state2str(xdict)
 
 	fringe = []
-	seen  = set([])
-	heapq.heappush(fringe, (hamming_distance(xdict,GoalSpace), [x]))
+	seen = set([])
+	heapq.heappush(fringe, (hamming_distance(xdict, GoalSpace), [x]))
 	seen.add(x)
 
 	while fringe:
@@ -787,13 +853,13 @@ def best_first_reachability(Primes, InitialSpace, GoalSpace, Memory=1000, Silent
 			return path
 
 		x = path[-1]
-		for ydict in successors_asynchronous(Primes, state2dict(Primes,x)):
+		for ydict in successors_asynchronous(Primes, state2dict(Primes, x)):
 			y = state2str(ydict)
 			if y not in seen:
 				seen.add(y)
-				heapq.heappush(fringe, (hamming_distance(ydict,GoalSpace), path+[y]))
+				heapq.heappush(fringe, (hamming_distance(ydict, GoalSpace), path+[y]))
 
-		if len(seen)>Memory:
+		if len(seen) > Memory:
 			break
 
 	if not Silent:
@@ -1017,15 +1083,15 @@ def enumerate_states(Primes, Proposition):
 
 	assert("?" not in Primes)
 
-	Proposition = Proposition.replace("TRUE","1")
-	Proposition = Proposition.replace("FALSE","0")
+	Proposition = Proposition.replace("TRUE", "1")
+	Proposition = Proposition.replace("FALSE", "0")
 
 	bnet = "?, %s"%Proposition
 	newprimes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
 	states = set([])
 	for p in newprimes["?"][1]:
-		states.update(set(list_states_in_subspace(Primes,p)))
+		states.update(set(list_states_in_subspace(Primes, p)))
 
 	return list(states)
 
@@ -1084,6 +1150,7 @@ def hamming_distance(Subspace1, Subspace2):
 VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
 					  4: ["_level1", "_level2", "_level3"],
 					  5: ["_level1", "_level2", "_level3", "_level4"]}
+
 
 def find_vanham_variables(Primes):
 	"""
