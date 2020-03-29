@@ -22,6 +22,9 @@ Do not try to install this git repository directly, see [Issue #16](https://gith
 sudo pip3 install PyBoolNet-2.2.5_linux64.tar.gz
 ```
 
+## release notes for version 2.2.8 (March 2020)
+- bugfix binaries of eqntott for windows
+- adds detection of os when calling eqntott 
 
 ## release notes for version 2.2.5 (June 2018)
 - bugfix in create_piechart, affects python3

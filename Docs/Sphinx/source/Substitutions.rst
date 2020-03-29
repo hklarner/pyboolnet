@@ -3,7 +3,7 @@
 
 
 
-.. |software| replace:: *PyBoolNet 2.2.7*
+.. |software| replace:: *PyBoolNet 2.2.8*
 .. |myemail| replace:: *hannes.klarner@fu-berlin.de*
 
 .. _BNetToPrime:  https://github.com/xstreck1/BNetToPrime

@@ -23,10 +23,8 @@ import PyBoolNet.Tests
 import pprint as prettyprint
 
 
-
-
-def version():
-    return "2.2.7"
+def version() -> str:
+    return "2.2.8"
 
 
 def pprint(X):
