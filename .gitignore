@@ -20,4 +20,7 @@ Tutorials/Klarner2018/jobs.py
 Tutorials/*/*.json
 Tutorials/*/*.pdf
 
+.idea/
+requirements.txt
+
 MANIFEST
