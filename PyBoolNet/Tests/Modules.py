@@ -40,7 +40,7 @@ def run():
 
 
 	# old test setup
-	unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
+	unittest.main(verbosity=2, argv=[''], buffer=True, exit=False, module=__name__)
 
 	if os.path.isdir(FILES_OUT):
 		shutil.rmtree(FILES_OUT)

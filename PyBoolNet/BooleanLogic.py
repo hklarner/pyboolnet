@@ -7,13 +7,8 @@ import re
 
 from PyBoolNet.Utility.Misc import os_is_windows
 
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-BASE = os.path.normpath(BASE)
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-EQNTOTT_CMD = os.path.normpath(os.path.join(BASE, "Dependencies", config.get("Executables", "eqntott")))
-ESPRESSO_CMD = os.path.normpath(os.path.join(BASE, "Dependencies", config.get("Executables", "espresso")))
-
+EQNTOTT_CMD = PyBoolNet.Utility.Misc.find_command("eqntott")
+ESPRESSO_CMD = PyBoolNet.Utility.Misc.find_command("espresso")
 
 
 

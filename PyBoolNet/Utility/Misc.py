@@ -1,5 +1,5 @@
 
-
+import PyBoolNet
 import os
 
 try:
@@ -20,10 +20,40 @@ COLORS = ["dodgerblue3", "firebrick2", "chartreuse3", "gold1", "aquamarine2", "d
 UPDATES = ["synchronous", "asynchronous", "mixed"]
 GRAPHVIZ_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 
+BASE = os.path.join(os.path.dirname(PyBoolNet.__file__))
+def _load_cfg():
+    config = configparser.SafeConfigParser()
+    settings_file = os.path.join(BASE, "Dependencies", "settings.cfg")
+    if not os.path.exists(settings_file):
+        execs = {
+            "nusmv":"./NuSMV-2.6.0/bin/NuSMV",
+            "gringo":"./gringo-4.4.0-x86-linux/gringo",
+            "clasp":"./clasp-3.1.1/clasp-3.1.1-x86-linux",
+            "bnet2prime	= ./BNetToPrime/BNetToPrime",
+        }
+    else:
+        config.read(settings_file)
+        execs = { n:config.get("Executables", n) for n in config.options("Executables") }
+    
+    return execs
+EXECUTABLES = _load_cfg()
 
 def os_is_windows() -> bool:
     return os.name == 'nt'
 
+def find_command(name) -> str:
+    """
+    find the path to a command, in local dependencies or in the shared execution PATH
+    """
+    if name in EXECUTABLES:
+        cmd = EXECUTABLES[name]
+        if cmd.startswith(":"):
+            cmd = cmd[1:]
+        else:
+            cmd = os.path.normpath(os.path.join(BASE, "Dependencies", cmd))
+    else:
+        cmd = name
+    return cmd 
 
 def dicts_are_consistent(d1: dict, d2: dict) -> bool:
     """

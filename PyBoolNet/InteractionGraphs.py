@@ -10,12 +10,8 @@ import PyBoolNet.StateTransitionGraphs
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-BASE = os.path.normpath(BASE)
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
-CMD_CONVERT = os.path.join(BASE, "Dependencies", config.get("Executables", "convert"))
+CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
+CMD_CONVERT = PyBoolNet.Utility.Misc.find_command("convert")
 
 
 def dot2image(FnameDOT, FnameIMAGE):

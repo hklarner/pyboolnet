@@ -5,14 +5,8 @@ import datetime
 
 import PyBoolNet.Utility.Misc
 
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-
-CMD_GRINGO = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "gringo") ))
-CMD_CLASP  = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "clasp") ))
-
-
+CMD_GRINGO = PyBoolNet.Utility.Misc.find_command("gringo")
+CMD_CLASP  = PyBoolNet.Utility.Misc.find_command("clasp")
 
 
 def circuits(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):

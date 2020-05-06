@@ -7,11 +7,7 @@ import itertools
 
 import PyBoolNet.Utility.Misc
 
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
-BASE = os.path.normpath(BASE)
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-LAYOUT_ENGINES = {name:os.path.join(BASE, "Dependencies", config.get("Executables", name)) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
+LAYOUT_ENGINES = {name:PyBoolNet.Utility.Misc.find_command(name) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 
 
 
