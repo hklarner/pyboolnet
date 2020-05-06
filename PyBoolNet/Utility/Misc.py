@@ -29,7 +29,7 @@ def _load_cfg():
             "nusmv":"./NuSMV-2.6.0/bin/NuSMV",
             "gringo":"./gringo-4.4.0-x86-linux/gringo",
             "clasp":"./clasp-3.1.1/clasp-3.1.1-x86-linux",
-            "bnet2prime	= ./BNetToPrime/BNetToPrime",
+            "bnet2prime": "./BNetToPrime/BNetToPrime",
         }
     else:
         config.read(settings_file)
