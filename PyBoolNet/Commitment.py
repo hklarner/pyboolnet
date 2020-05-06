@@ -76,9 +76,9 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 		counter_mc = 0
 
 		diagram.add_node("0")
-		diagram.node["0"]["attractors"]	= Subspaces
-		diagram.node["0"]["size"]		= size_total
-		diagram.node["0"]["formula"]	= "TRUE"
+		diagram.nodes["0"]["attractors"]	= Subspaces
+		diagram.nodes["0"]["size"]		= size_total
+		diagram.nodes["0"]["formula"]	= "TRUE"
 
 	else:
 
@@ -120,14 +120,14 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 
 		nodes_sum = 0
 		for x in diagram.nodes():
-			projection = diagram.node[x]["attractors"]
-			diagram.node[x]["attractors"] = lift_attractors(Subspaces, projection)
-			nodes_sum+= diagram.node[x]["size"]
+			projection = diagram.nodes[x]["attractors"]
+			diagram.nodes[x]["attractors"] = lift_attractors(Subspaces, projection)
+			nodes_sum+= diagram.nodes[x]["size"]
 
 		if not nodes_sum==size_total:
 			print("WARNING: commitment diagram does not partition the state space, this may be due to rounding of large numbers.")
 
-		sorted_ids = sorted(diagram, key=lambda x: diagram.node[x]["formula"])
+		sorted_ids = sorted(diagram, key=lambda x: diagram.nodes[x]["formula"])
 		mapping = {x:str(sorted_ids.index(x)) for x in diagram}
 		networkx.relabel_nodes(diagram,mapping,copy=False)
 
@@ -266,7 +266,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 			if data["size"]>0:
 				diagram.add_node(node_id)
 				for key, value in data.items():
-					diagram.node[node_id][key] = value
+					diagram.nodes[node_id][key] = value
 				node_id+=1
 				states_covered+= data["size"]
 
@@ -392,7 +392,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 		result.add_node(node)
 
 		if len(data["attractors"])==1:
-			result.node[node]["fillcolor"] = "cornflowerblue"
+			result.nodes[node]["fillcolor"] = "cornflowerblue"
 
 			attr  = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,data["attractors"][0])
 			index = attractors.index(attr)+FirstIndex
@@ -406,7 +406,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
 
 		if "fillcolor" in data:
-			result.node[node]["fillcolor"] = data["fillcolor"]
+			result.nodes[node]["fillcolor"] = data["fillcolor"]
 
 
 
@@ -417,14 +417,14 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 			edge_label = []
 
 
-			#perc = 100.* data["EX_size"] / Diagram.node[source]["size"]
+			#perc = 100.* data["EX_size"] / Diagram.nodes[source]["size"]
 			#edge_label.append("EX: %s%%"%perc2str(perc))
 
 			if "EF_size" in data:
-				#perc = 100.* data["EF_size"] / Diagram.node[source]["size"]
+				#perc = 100.* data["EF_size"] / Diagram.nodes[source]["size"]
 				#edge_label.append("EF: %s%%"%perc2str(perc))
 
-				if data["EF_size"] < Diagram.node[source]["size"]:
+				if data["EF_size"] < Diagram.nodes[source]["size"]:
 					result.adj[source][target]["color"]="lightgray"
 
 			#result.adj[source][target]["label"] = "<%s>"%("<br/>".join(edge_label))
@@ -432,22 +432,22 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
 	for x in Diagram.nodes():
 		if is_small_network:
-			labels[x]["size"] = "states: {x}".format(x=Diagram.node[x]["size"])
+			labels[x]["size"] = "states: {x}".format(x=Diagram.nodes[x]["size"])
 		else:
-			perc = 100.* Diagram.node[x]["size"] / size_total
+			perc = 100.* Diagram.nodes[x]["size"] / size_total
 			labels[x]["size"] = "states: {x}%".format(x=perc2str(perc))
 
 	subgraphs = []
 	if StyleInputs:
 		for inputs in PyBoolNet.PrimeImplicants.input_combinations(Primes):
 			if not inputs: continue
-			nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.node[x]["attractors"][0])]
+			nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.nodes[x]["attractors"][0])]
 			label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,inputs)
 			subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
 
 
 			for x in nodes:
-				perc = 100.* Diagram.node[x]["size"] / size_per_input_combination
+				perc = 100.* Diagram.nodes[x]["size"] / size_per_input_combination
 				labels[x]["size"] = "states: %s%%"%perc2str(perc)
 
 
@@ -457,7 +457,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
 
 	for x in Diagram.nodes():
-		result.node[x]['label'] = "<%s>"%"<br/>".join(labels[x].values())
+		result.nodes[x]['label'] = "<%s>"%"<br/>".join(labels[x].values())
 
 	if StyleRanks:
 		if subgraphs:
@@ -520,14 +520,14 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 	total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
 	is_small_network = total <= 1024
 
-	indeces = sorted(Diagram, key=lambda x: len(Diagram.node[x]["attractors"]))
+	indeces = sorted(Diagram, key=lambda x: len(Diagram.nodes[x]["attractors"]))
 
 	labels = []
 	for x in indeces:
-		label = sorted(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,y) for y in Diagram.node[x]["attractors"])
+		label = sorted(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,y) for y in Diagram.nodes[x]["attractors"])
 		labels.append("\n".join(label))
 
-	sizes  = [Diagram.node[x]["size"] for x in indeces]
+	sizes  = [Diagram.nodes[x]["size"] for x in indeces]
 
 	figure = matplotlib.pyplot.figure()
 
@@ -537,8 +537,8 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
 
 	for i,x in enumerate(indeces):
-		if "fillcolor" in Diagram.node[x]:
-			colors[i] = Diagram.node[x]["fillcolor"]
+		if "fillcolor" in Diagram.nodes[x]:
+			colors[i] = Diagram.nodes[x]["fillcolor"]
 
 	if is_small_network:
 		autopct = lambda p: '{:.0f}'.format(p * total / 100)
@@ -605,16 +605,16 @@ def cartesian_product(Diagrams, Factor, EdgeData):
 
 		result.add_node(node)
 		for key, value in data.items():
-			result.node[node][key] = value
+			result.nodes[node][key] = value
 
 	# create edges
 	for source in result.nodes():
 		for s, diagram in zip(source, Diagrams):
-			factor = result.node[source]["size"] / diagram.node[s]["size"]
+			factor = result.nodes[source]["size"] / diagram.nodes[s]["size"]
 			for _, t, data in diagram.out_edges(s,data=True):
 
 				data = {}
-				basic_formula = ["(%s)"%g.node[x]["formula"] for x,g in zip(source,Diagrams) if not g==diagram]
+				basic_formula = ["(%s)"%g.nodes[x]["formula"] for x,g in zip(source,Diagrams) if not g==diagram]
 				data["EX_size"]	= factor * diagram.adj[s][t]["EX_size"]
 				formula = basic_formula + ["(%s)"%diagram.adj[s][t]["EX_formula"]]
 				data["EX_formula"]  = " & ".join(formula)
@@ -646,7 +646,7 @@ def diagrams_are_equal(Diagram1, Diagram2):
 
 	for g in [g1,g2]:
 		for x in g.nodes():
-			g.node[x].pop("formula")
+			g.nodes[x].pop("formula")
 		for x,y in g.edges():
 			if "border_formula" in g.adj[x][y]:
 				g.adj[x][y].pop("border_formula")

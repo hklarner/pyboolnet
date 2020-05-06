@@ -460,8 +460,8 @@ def digraph2condensationgraph(Digraph):
 		for source in networkx.ancestors(cgraph, target):
 			for p in networkx.all_simple_paths(cgraph, source, target):
 				depth = max(depth, len(p))
-		cgraph.node[target]["depth"] = depth
-		cgraph.node[target]["id"]	= ID
+		cgraph.nodes[target]["depth"] = depth
+		cgraph.nodes[target]["id"]    = ID
 
 	return cgraph
 
@@ -537,7 +537,7 @@ def ancestors(DiGraph, X):
 		return networkx.ancestors(DiGraph,X)
 	else:
 		# bugfix for networkx.ancestors (it doesn't recognize self-loops)
-		ancs = set([x for x in X if x in DiGraph.nodes_with_selfloops()])
+		ancs = set([x for x in X if x in networkx.nodes_with_selfloops(DiGraph)])
 		for x in X:
 			ancs.add(x)
 			ancs.update(networkx.ancestors(DiGraph,x))

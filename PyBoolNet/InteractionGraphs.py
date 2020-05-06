@@ -331,7 +331,7 @@ def add_style_anonymous(IGraph):
 	IGraph.graph["node"]["color"] = "black"
 
 	for x in IGraph.nodes():
-		IGraph.node[x]["label"]=""
+		IGraph.nodes[x]["label"]=""
 
 
 def add_style_interactionsigns(IGraph):
@@ -391,13 +391,13 @@ def add_style_activities(IGraph, Activities, ColorActive="/paired10/5", ColorIna
 		if name in Activities:
 			value = Activities[name]
 
-			IGraph.node[name]["color"] = "black"
+			IGraph.nodes[name]["color"] = "black"
 
 			if value == 0:
-				IGraph.node[name]["fillcolor"] = ColorInactive
+				IGraph.nodes[name]["fillcolor"] = ColorInactive
 
 			else:
-				IGraph.node[name]["fillcolor"] = ColorActive
+				IGraph.nodes[name]["fillcolor"] = ColorActive
 
 	for x,y in IGraph.edges():
 		if x in Activities or y in Activities:
@@ -471,9 +471,9 @@ def add_style_constants(IGraph):
 
 	for x in IGraph.nodes():
 		if not IGraph.predecessors(x):
-			IGraph.node[x]["shape"] = "plaintext"
-			IGraph.node[x]["fillcolor"] = "none"
-			IGraph.node[x]["fontname"] = "Times-Italic"
+			IGraph.nodes[x]["shape"] = "plaintext"
+			IGraph.nodes[x]["fillcolor"] = "none"
+			IGraph.nodes[x]["fontname"] = "Times-Italic"
 
 			for y in IGraph.successors(x):
 				IGraph.adj[x][y]["color"] = "gray"
@@ -498,7 +498,7 @@ def add_style_sccs(IGraph):
 	condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(IGraph)
 
 	for scc in condensation_graph.nodes():
-		depth = condensation_graph.node[scc]["depth"]
+		depth = condensation_graph.nodes[scc]["depth"]
 		col   = 2+(depth % 8)
 
 		subgraph = networkx.DiGraph()
@@ -531,7 +531,7 @@ def add_style_path(IGraph, Path, Color):
 	assert(all([x in names for x in Path]))
 
 	for x in Path:
-		IGraph.node[x]["color"] = Color
+		IGraph.nodes[x]["color"] = Color
 
 	if len(Path)>1:
 		for x,y in zip(Path[:-1],Path[1:]):
