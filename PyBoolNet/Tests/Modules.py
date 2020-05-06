@@ -1619,21 +1619,19 @@ class TestInteractionGraphs(unittest.TestCase):
 		primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
 		igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
-		fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.jpg")
+		fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.png")
 		PyBoolNet.InteractionGraphs.igraph2image(IGraph=igraph, FnameIMAGE=fname_out)
 		## no assertion ##
 
 	def test_dot2image(self):
 		fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.dot")
-		fname_out1 = os.path.join(FILES_OUT, "interactiongraphs_dot2image1.jpg")
+		fname_out1 = os.path.join(FILES_OUT, "interactiongraphs_dot2image1.png")
 		fname_out2 = os.path.join(FILES_OUT, "interactiongraphs_dot2image2.svg")
 		fname_out3 = os.path.join(FILES_OUT, "interactiongraphs_dot2image3.eps")
-		fname_out4 = os.path.join(FILES_OUT, "interactiongraphs_dot2image4.gif")
 
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out1)
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out2)
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out3)
-		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out4)
 		## no assertion ##
 
 	def test_styles(self):
