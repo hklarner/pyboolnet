@@ -265,7 +265,7 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 
 			diagram.add_node(node_id)
 			for key, value in data.items():
-				diagram.node[node_id][key] = value
+				diagram.nodes[node_id][key] = value
 			node_id+= 1
 
 	# edges
@@ -273,12 +273,12 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 		for target in diagram:
 			if source==target: continue
 
-			sourceset = set(diagram.node[source]["names"])
-			targetset = set(diagram.node[target]["names"])
+			sourceset = set(diagram.nodes[source]["names"])
+			targetset = set(diagram.nodes[target]["names"])
 
 			if targetset.issubset(sourceset):
-				init = "INIT {x}".format(x=diagram.node[source]["initaccepting"])
-				spec = "CTLSPEC EX({x})".format(x=diagram.node[target]["initaccepting"])
+				init = "INIT {x}".format(x=diagram.nodes[source]["initaccepting"])
+				spec = "CTLSPEC EX({x})".format(x=diagram.nodes[target]["initaccepting"])
 
 				answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 
@@ -295,9 +295,9 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
 
 					if not Silent:
 						print(" [{x}] --{s}--> [{y}]".format(
-							x=", ".join(diagram.node[source]["names"]),
+							x=", ".join(diagram.nodes[source]["names"]),
 							s=data["initaccepting_size"],
-							y=", ".join(diagram.node[target]["names"])))
+							y=", ".join(diagram.nodes[target]["names"])))
 
 
 	if FnameImage:
@@ -358,7 +358,7 @@ def open_diagram(Fname):
 	diagram = networkx.readwrite.json_graph.adjacency_graph(data)
 
 	for x in diagram:
-		diagram.node[x]["names"] = tuple(diagram.node[x]["names"]) # lost in json conversion
+		diagram.nodes[x]["names"] = tuple(diagram.nodes[x]["names"]) # lost in json conversion
 
 	return diagram
 
@@ -408,25 +408,25 @@ def diagram2image(Diagram, FnameImage=None):
 		labels[node]["head"] = "<br/>".join(head)
 
 		if "fillcolor" in data:
-			image.node[node]["fillcolor"] = data["fillcolor"]
+			image.nodes[node]["fillcolor"] = data["fillcolor"]
 		elif len(data["names"])==1:
-			image.node[node]["fillcolor"] = "cornflowerblue"
+			image.nodes[node]["fillcolor"] = "cornflowerblue"
 
 		if "color" in data:
-			image.node[node]["color"] = data["color"]
+			image.nodes[node]["color"] = data["color"]
 
 		if "penwidth" in data:
-			image.node[node]["penwidth"] = data["penwidth"]
+			image.nodes[node]["penwidth"] = data["penwidth"]
 
 	for source, target, data in Diagram.edges(data=True):
 		image.add_edge(source, target)
 
 	for x in Diagram.nodes():
-		perc = 100.* Diagram.node[x]["initaccepting_size"] / size_total
+		perc = 100.* Diagram.nodes[x]["initaccepting_size"] / size_total
 		labels[x]["initaccepting_size"] = "states: {x}%".format(x=PyBoolNet.Utility.Misc.perc2str(perc))
 
 	for x in Diagram.nodes():
-		image.node[x]['label'] = "<{x}>".format(x="<br/>".join(labels[x].values()))
+		image.nodes[x]['label'] = "<{x}>".format(x="<br/>".join(labels[x].values()))
 
 	ranks = {}
 	for node, data in Diagram.nodes(data=True):
@@ -478,10 +478,10 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 	matplotlib.rcParams['hatch.linewidth'] = 4.0 	# special hatching for paper
 	matplotlib.rcParams['hatch.color'] = "#ff7c00"	# special hatching for paper
 
-	indeces = sorted(Diagram, key=lambda x: Diagram.node[x]["initaccepting_size"])
+	indeces = sorted(Diagram, key=lambda x: Diagram.nodes[x]["initaccepting_size"])
 
-	labels = [", ".join(Diagram.node[x]["names"]) for x in indeces]
-	sizes  = [Diagram.node[x]["initaccepting_size"] for x in indeces]
+	labels = [", ".join(Diagram.nodes[x]["names"]) for x in indeces]
+	sizes  = [Diagram.nodes[x]["initaccepting_size"] for x in indeces]
 
 	total = sum(sizes)
 	is_small_network = total <= 1024
@@ -494,8 +494,8 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 		colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
 
 	for i,x in enumerate(indeces):
-		if "fillcolor" in Diagram.node[x]:
-			colors[i] = Diagram.node[x]["fillcolor"]
+		if "fillcolor" in Diagram.nodes[x]:
+			colors[i] = Diagram.nodes[x]["fillcolor"]
 
 	autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if is_small_network else '%.1f%%'
 	stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=45)
@@ -508,15 +508,15 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 
 
 	for i, patch in enumerate(patches):
-		if "hatch" in Diagram.node[indeces[i]]:
-			patch.set_hatch(Diagram.node[indeces[i]]["hatch"]) #hatching = "//","||",'\\\\',"--",'+'
+		if "hatch" in Diagram.nodes[indeces[i]]:
+			patch.set_hatch(Diagram.nodes[indeces[i]]["hatch"]) #hatching = "//","||",'\\\\',"--",'+'
 			#patch.set_linewidth(3.)
 			#patch.set_linestyle("--")
 			#patch.set_fc("blue")
 			#patch.set_ec("black")
 			#print(patch.get_lw())
-		elif "fillcolor" in Diagram.node[indeces[i]]:
-			#if Diagram.node[indeces[i]]["fillcolor"]=="white":
+		elif "fillcolor" in Diagram.nodes[indeces[i]]:
+			#if Diagram.nodes[indeces[i]]["fillcolor"]=="white":
 			patch.set_ec("black")
 
 	matplotlib.pyplot.axis('equal')

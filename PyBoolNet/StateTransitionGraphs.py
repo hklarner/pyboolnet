@@ -13,11 +13,7 @@ import PyBoolNet.AspSolver
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
-BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-BASE = os.path.normpath(BASE)
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
+CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
 
 
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
@@ -178,7 +174,7 @@ def stg2dot(STG, FnameDOT=None):
 		  >>> stg.graph["label"] = "IRMA Network - State Transition Graph"
 		  >>> stg.graph["node"] = {"style":"filled", "color":"red"}
 		  >>> stg.graph["edge"] = {"arrowsize": 2.0}
-		  >>> stg.node["001000"]["fontsize"] = 20
+		  >>> stg.nodes["001000"]["fontsize"] = 20
 		  >>> stg.adj["001110"]["001010"]["style"] = "dotted"
 		  >>> stg2image(stg, "irma_stg.pdf")
 	"""
@@ -308,7 +304,7 @@ def add_style_sccs(STG):
 
 	for i,scc in enumerate(condensation_graph.nodes()):
 		name = "cluster_%i"%i
-		depth = condensation_graph.node[scc]["depth"]
+		depth = condensation_graph.nodes[scc]["depth"]
 		col = 2+(depth % 8)
 
 		subgraph = networkx.DiGraph()
@@ -495,8 +491,8 @@ def add_style_path(STG, Path, Color, Penwidth=3):
 	Path = [state2str(x) if type(x)==dict else x for x in Path]
 
 	for x in Path:
-		STG.node[x]["color"] = Color
-		STG.node[x]["penwidth"]  = "%i"%Penwidth
+		STG.nodes[x]["color"] = Color
+		STG.nodes[x]["penwidth"]  = "%i"%Penwidth
 
 	if len(Path)>1:
 		for x,y in zip(Path[:-1],Path[1:]):
@@ -540,7 +536,7 @@ def add_style_anonymous(STG):
 	STG.graph["node"]["color"] = "none"
 
 	for x in STG:
-		STG.node[x]["label"] = ""
+		STG.nodes[x]["label"] = ""
 
 
 def successor_synchronous(Primes, State):
@@ -1262,9 +1258,9 @@ def stg2sccgraph(STG):
 
 	for node in graph.nodes():
 		lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
-		graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+		graph.nodes[node]["label"]="<%s>"%",<br/>".join(lines)
 		if len(node)>1 or STG.has_edge(node[0],node[0]):
-			graph.node[node]["fillcolor"] = "lightgray"
+			graph.nodes[node]["fillcolor"] = "lightgray"
 
 	return graph
 
@@ -1334,7 +1330,7 @@ def stg2condensationgraph(STG):
 
 	for node in graph.nodes():
 		lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
-		graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+		graph.nodes[node]["label"]="<%s>"%",<br/>".join(lines)
 
 	return graph
 
@@ -1439,7 +1435,7 @@ def stg2htg(STG):
 
 	for node in graph.nodes():
 		lines = [",".join(x) for x in PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(node)]
-		graph.node[node]["label"]="<%s>"%",<br/>".join(lines)
+		graph.nodes[node]["label"]="<%s>"%",<br/>".join(lines)
 
 	return graph
 

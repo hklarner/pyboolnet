@@ -22,9 +22,7 @@ import PyBoolNet.InteractionGraphs
 import PyBoolNet.PrimeImplicants
 import PyBoolNet.Utility
 
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-CMD_DOT = os.path.join(BASE, "Dependencies", config.get("Executables", "dot"))
+CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
 
 perc2str = PyBoolNet.Utility.Misc.perc2str
 

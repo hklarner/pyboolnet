@@ -11,11 +11,7 @@ import PyBoolNet.InteractionGraphs
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Utility.Misc
 
-BASE = os.path.join(os.path.dirname(__file__))
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "Dependencies", "settings.cfg"))
-
-CMD_BNET2PRIMES = os.path.normpath(os.path.join(BASE, "Dependencies", config.get("Executables", "bnet2prime")))
+CMD_BNET2PRIMES = PyBoolNet.Utility.Misc.find_command("bnet2prime")
 
 
 def _bnet2primes_error(proc, out, err, cmd):

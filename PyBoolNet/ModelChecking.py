@@ -11,9 +11,7 @@ import PyBoolNet
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read( os.path.join(BASE, "Dependencies", "settings.cfg") )
-CMD_NUSMV = os.path.normpath(os.path.join( BASE, "Dependencies", config.get("Executables", "nusmv") ))
+CMD_NUSMV = PyBoolNet.Utility.Misc.find_command("nusmv")
 
 fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
 with open(fname_nusmvkeywords) as f:
