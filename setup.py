@@ -1,6 +1,24 @@
-from distutils.core import setup
-
+from setuptools import setup
 import os
+from distutils.dir_util import copy_tree
+import platform
+
+
+# PyBoolNet dependencies
+this_os = platform.system()
+if this_os == "Linux":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
+elif this_os == "Darwin":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
+elif this_os == "Windows":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
+else:
+    # no idea if we could get here?
+    raise Exception 
+
+# copy dependencies to PyBoolNet/Dependencies
+copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
+
 
 package_data_files = []
 
@@ -20,7 +38,7 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 setup(name="PyBoolNet",
-      version="2.2.8",
+      version="2.2.8.a",
       description="Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
       author="Hannes Klarner",
       author_email="hannes.klarner@fu-berlin.de",
@@ -40,5 +58,5 @@ setup(name="PyBoolNet",
           "Natural Language :: English",
           "Topic :: Scientific/Engineering :: Bio-Informatics",
       ],
-      requires=['networkx (==1.11)'],
+      install_requires=['networkx (==1.11)']
       )
