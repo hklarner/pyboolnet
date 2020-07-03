@@ -19,12 +19,12 @@ For bug reports and feedback do not hesitate to open issues at [PyBoolNet issues
 To install directionly from this repository use:
 
 ```bash 
-pip install git+https://github.com/carissableker/PyBoolNet
+pip install git+https://github.com/hklarner/PyBoolNet
 ```
 To install a particular release, append the version number to the end of the github url with an `@`. E.g.: 
 
 ```bash 
-pip install git+https://github.com/carissableker/PyBoolNet@2.2.8.a
+pip install git+https://github.com/hklarne/PyBoolNet@2.2.8.a
 ```
 This will only work for realses past v2.2.8 (see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16)). Instead download the relevant release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
 
