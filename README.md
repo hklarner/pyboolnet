@@ -26,7 +26,7 @@ To install a particular release, append the version number to the end of the git
 ```bash 
 pip install git+https://github.com/hklarner/PyBoolNet@2.2.9
 ```
-This will only work for realses past v2.2.8 (see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16)). Instead download the relevant release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
+This will only work for releases past v2.2.8 (see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16)). Instead download the relevant release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
 
 ```
 sudo pip3 install PyBoolNet-2.2.5_linux64.tar.gz
