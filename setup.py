@@ -4,28 +4,28 @@ from distutils.dir_util import copy_tree
 import platform
 
 
-# PyBoolNet dependencies
-this_os = platform.system()
-if this_os == "Linux":
-    pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
-elif this_os == "Darwin":
-    pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
-elif this_os == "Windows":
-    pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
-else:
-    # no idea if we could get here?
-    raise Exception 
-
-# copy dependencies to PyBoolNet/Dependencies
-copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
-
-
 package_data_files = []
 
-# adding dependency files
-for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
-    root = root.replace('PyBoolNet/Dependencies', 'Dependencies')
-    package_data_files.extend([os.path.join(root, x) for x in filenames])
+if "CONDA_BUILD" not in os.environ:
+    # PyBoolNet dependencies
+    this_os = platform.system()
+    if this_os == "Linux":
+        pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
+    elif this_os == "Darwin":
+        pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
+    elif this_os == "Windows":
+        pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
+    else:
+        # no idea if we could get here?
+        raise Exception 
+
+    # copy dependencies to PyBoolNet/Dependencies
+    copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
+
+    # adding dependency files
+    for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
+        root = root.replace('PyBoolNet/Dependencies', 'Dependencies')
+        package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 # adding repository files
 for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
