@@ -35,10 +35,10 @@ Bibliography
 
 .. _Didier2011:
 
-	*Didier2011*:
-	Mapping multivalued onto Boolean dynamics.
-	G. Didier, E. Remy, and C. Chaouiya.
-	Journal of Theoretical Biology, 2011.
+    *Didier2011*:
+    Mapping multivalued onto Boolean dynamics.
+    G. Didier, E. Remy, and C. Chaouiya.
+    Journal of Theoretical Biology, 2011.
 
 .. _Dubrova2011:
 

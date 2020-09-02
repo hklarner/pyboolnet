@@ -135,7 +135,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     **arguments**:
        * *Primes*: prime implicants
        * *FnameBNET* (str): name of *bnet* file or *None* for the string of the file contents
-		* *Minimize* (bool): minimize the Boolean expressions
+        * *Minimize* (bool): minimize the Boolean expressions
        * *Header* (bool): whether to include the "targets, factors" header
 
     **returns**:

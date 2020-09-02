@@ -8,30 +8,30 @@ import PyBoolNet
 if __name__=="__main__":
 
 
-	# attractor computation with Tarjan
+    # attractor computation with Tarjan
 
-	primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
 
-	stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-	steady, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
-	print(steady)
-	print(cyclic)
-
-
-	# random walk attractor detection
-
-	state = PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
-	print(state)
+    stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
+    steady, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
+    print(steady)
+    print(cyclic)
 
 
-	# model checking based attractor detection
+    # random walk attractor detection
 
-	attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous", FnameJson="attrs.json")
+    state = PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+    print(state)
 
-	print(attrs["is_complete"])
-	for x in attrs["attractors"]:
-		print(x["is_steady"])
-		print(x["state"]["str"])
+
+    # model checking based attractor detection
+
+    attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous", FnameJson="attrs.json")
+
+    print(attrs["is_complete"])
+    for x in attrs["attractors"]:
+        print(x["is_steady"])
+        print(x["state"]["str"])
 
 
 

@@ -9,24 +9,24 @@ CMD_CLASP = PyBoolNet.Utility.Misc.find_command("clasp")
 
 def circuits(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):
     """
-	Computes minimal trap spaces but also distinguishes between nodes that are fixed due to being part of a circuit
-	and nodes that are fix due to percolation effects.
+    Computes minimal trap spaces but also distinguishes between nodes that are fixed due to being part of a circuit
+    and nodes that are fix due to percolation effects.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *MaxOutput*: maximum number of returned solutions
-		* *FnameASP* (str): file name or *None*
-		* *Representation* (str): either "str" or "dict", the representation of the trap spaces
+    **arguments**:
+        * *Primes*: prime implicants
+        * *MaxOutput*: maximum number of returned solutions
+        * *FnameASP* (str): file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
-	**returns**:
-		* *Circuits* (list): of tuples consisting of circuit nodes and percolation nodes
+    **returns**:
+        * *Circuits* (list): of tuples consisting of circuit nodes and percolation nodes
 
 
-	**example**::
+    **example**::
 
-		>>> circuits(primes)
-		[({'Mek': 0, 'Erk': 0},{'Raf': 1}),..]
-	"""
+        >>> circuits(primes)
+        [({'Mek': 0, 'Erk': 0},{'Raf': 1}),..]
+    """
     
     return potassco_handle(Primes, Type="circuits", Bounds=(0, "n"), Project=None, MaxOutput=MaxOutput,
                            FnameASP=FnameASP, Representation=Representation)
@@ -34,22 +34,22 @@ def circuits(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):
 
 def percolate_trapspace(Primes, Trapspace):
     """
-	Percolates the *Trapspace*.
-	Does not check whether *Trapspace* is really a trap space.
-	Instead, it creates constants from *Trapspace* and percolates the values.
+    Percolates the *Trapspace*.
+    Does not check whether *Trapspace* is really a trap space.
+    Instead, it creates constants from *Trapspace* and percolates the values.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *Trapspace*: a subspace
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Trapspace*: a subspace
 
-	**returns**:
-		* *Trapspace* (dict): the percolated trap space
+    **returns**:
+        * *Trapspace* (dict): the percolated trap space
 
-	**example**::
+    **example**::
 
-		>>> percolate_trapspace(primes, {'Mek': 0, 'Erk': 0})
-		{'Raf': 1, 'Mek': 0, 'Erk': 0}
-	"""
+        >>> percolate_trapspace(primes, {'Mek': 0, 'Erk': 0})
+        {'Raf': 1, 'Mek': 0, 'Erk': 0}
+    """
     
     primes = PyBoolNet.PrimeImplicants.create_constants(Primes, Trapspace, Copy=True)
     constants = PyBoolNet.PrimeImplicants.percolate_and_keep_constants(primes)
@@ -59,23 +59,23 @@ def percolate_trapspace(Primes, Trapspace):
 
 def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representation="dict"):
     """
-	Computes trap spaces that contain *State*.
+    Computes trap spaces that contain *State*.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *State* (dict): a state in dict format
-		* *Type* (str): either "min", "max", "all" or "percolated"
-		* *FnameASP* (str): file name or *None*
-		* *Representation* (str): either "str" or "dict", the representation of the trap spaces
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (dict): a state in dict format
+        * *Type* (str): either "min", "max", "all" or "percolated"
+        * *FnameASP* (str): file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
-	**returns**:
-		* either *TrapSpaces* (list): the trap spaces that contain *State* if *Type* is "max", "all" or "percolated"
-		* or *TrapSpace* (dict): the unique minimal trap space that contains *State* if *Type* is "min"
+    **returns**:
+        * either *TrapSpaces* (list): the trap spaces that contain *State* if *Type* is "max", "all" or "percolated"
+        * or *TrapSpace* (dict): the unique minimal trap space that contains *State* if *Type* is "min"
 
-	**example**::
+    **example**::
 
-		>>> trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
-	"""
+        >>> trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
+    """
     
     assert (len(Primes) == len(State))
     assert (type(State) in [dict, str])
@@ -86,9 +86,9 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
     active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, State)
     
     # note: Bounds=(1,"n") enforces at least one variable fixed.
-    #	   This is required for the subset maximal enumeration mode "--enum-mode=domRec --heuristic=Domain --dom-mod=3,16"
-    #	   Otherwise clasp returns "*** Warn : (clasp): domRec ignored: no domain atoms found!"
-    #	   Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE
+    #       This is required for the subset maximal enumeration mode "--enum-mode=domRec --heuristic=Domain --dom-mod=3,16"
+    #       Otherwise clasp returns "*** Warn : (clasp): domRec ignored: no domain atoms found!"
+    #       Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE
     
     tspaces = potassco_handle(active_primes, Type=Type, Bounds=(1, "n"), Project=[], MaxOutput=1000, FnameASP=FnameASP,
                               Representation=Representation)
@@ -120,59 +120,59 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
 
 def smallest_trapspace(Primes, State, Representation="dict"):
     """
-	Returns the (unique) smallest trap space that contains *State*.
-	Calls :ref:`trapspaces_that_contain_state`
+    Returns the (unique) smallest trap space that contains *State*.
+    Calls :ref:`trapspaces_that_contain_state`
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *State* (dict): a state in dict format
-		* *Representation* (str): either "str" or "dict", the representation of the trap spaces
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (dict): a state in dict format
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
-	**returns**:
-		* *TrapSpace* (dict): the unique minimal trap space that contains *State*
+    **returns**:
+        * *TrapSpace* (dict): the unique minimal trap space that contains *State*
 
-	**example**::
+    **example**::
 
-		>>> smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
-	"""
+        >>> smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
+    """
     
     return trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None, Representation=Representation)
 
 
 def trap_spaces(Primes, Type, MaxOutput=1000, FnameASP=None, Representation="dict"):
     """
-	Returns a list of trap spaces using the :ref:`installation_potassco` ASP solver, see :ref:`Gebser2011 <Gebser2011>`.
-	For a formal introcution to trap spaces and the ASP encoding that is used for their computation see :ref:`Klarner2015(a) <klarner2015trap>`.
+    Returns a list of trap spaces using the :ref:`installation_potassco` ASP solver, see :ref:`Gebser2011 <Gebser2011>`.
+    For a formal introcution to trap spaces and the ASP encoding that is used for their computation see :ref:`Klarner2015(a) <klarner2015trap>`.
 
-	The parameter *Type* must be one of *"max"*, *"min"*, *"all"* or *"percolated"* and
-	specifies whether subset minimal, subset maximal, all trap spaces or all percolated trap spaces should be returned.
+    The parameter *Type* must be one of *"max"*, *"min"*, *"all"* or *"percolated"* and
+    specifies whether subset minimal, subset maximal, all trap spaces or all percolated trap spaces should be returned.
 
-	.. warning::
-		The number of trap spaces is easily exponential in the number of components.
-		Use the safety parameter *MaxOutput* to control the number of returned solutions.
+    .. warning::
+        The number of trap spaces is easily exponential in the number of components.
+        Use the safety parameter *MaxOutput* to control the number of returned solutions.
 
-	To create the *asp* file for inspection or manual editing, pass a file name to *FnameASP*.
+    To create the *asp* file for inspection or manual editing, pass a file name to *FnameASP*.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *Type* (str): either *"max"*, *"min"*, *"all"* or *"percolated"*
-		* *MaxOutput* (int): maximal number of trap spaces to return
-		* *FnameASP* (str): name of *asp* file to create, or *None*
-		* *Representation* (str): either "str" or "dict", the representation of the trap spaces
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Type* (str): either *"max"*, *"min"*, *"all"* or *"percolated"*
+        * *MaxOutput* (int): maximal number of trap spaces to return
+        * *FnameASP* (str): name of *asp* file to create, or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
-	**returns**:
-		* *Subspaces* (list): the trap spaces
+    **returns**:
+        * *Subspaces* (list): the trap spaces
 
-	**example**::
+    **example**::
 
-		>>> bnet = ["x, !x | y | z",
-		...		 "y, !x&z | y&!z",
-		...		 "z, x&y | z"]
-		>>> bnet = "\\n".join(bnet)
-		>>> primes = FEX.bnet2primes(bnet)
-		>>> tspaces = TS.trap_spaces(primes, "all", Representation="str")
-		---, --1, 1-1, -00, 101
-	"""
+        >>> bnet = ["x, !x | y | z",
+        ...         "y, !x&z | y&!z",
+        ...         "z, x&y | z"]
+        >>> bnet = "\\n".join(bnet)
+        >>> primes = FEX.bnet2primes(bnet)
+        >>> tspaces = TS.trap_spaces(primes, "all", Representation="str")
+        ---, --1, 1-1, -00, 101
+    """
     
     # exclude trivial trap space {} for search of maximal trap spaces
     Bounds = None
@@ -185,23 +185,23 @@ def trap_spaces(Primes, Type, MaxOutput=1000, FnameASP=None, Representation="dic
 
 def steady_states(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):
     """
-	Returns steady states.
+    Returns steady states.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *MaxOutput* (int): maximal number of trap spaces to return
-		* *FnameASP*: file name or *None*
-		* *Representation* (str): either "str" or "dict", the representation of the trap spaces
+    **arguments**:
+        * *Primes*: prime implicants
+        * *MaxOutput* (int): maximal number of trap spaces to return
+        * *FnameASP*: file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
 
-	**returns**:
-		* *States* (list): the steady states
+    **returns**:
+        * *States* (list): the steady states
 
-	**example**::
+    **example**::
 
-		>>> steady = steady_states(primes)
-		>>> len(steady)
-		2
-	"""
+        >>> steady = steady_states(primes)
+        >>> len(steady)
+        2
+    """
     
     return potassco_handle(Primes, Type="all", Bounds=("n", "n"), Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
                            Representation=Representation)
@@ -209,35 +209,35 @@ def steady_states(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):
 
 def trap_spaces_bounded(Primes, Type, Bounds, MaxOutput=1000, FnameASP=None):
     """
-	Returns a list of bounded trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
-	See :ref:`trap_spaces <sec:trap_spaces>` for details of the parameters *Type*, *MaxOutput* and *FnameASP*.
-	The parameter *Bounds* is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
-	to those whose number of fixed variables are within the given range.
-	Example: ``Bounds=(5,8)`` instructs Potassco_ to consider only trap spaces with 5 to 8 fixed variables as feasible.
-	*Type* selects minimal, maximal or all trap spaces from the restricted set.
-	.. warning::
-		The *Bound* constraint is applied *before* selecting minimal or maximal trap spaces.
-		A trap space may therefore be minimal w.r.t. to certain bounds but not minimal in the unbounded sense.
+    Returns a list of bounded trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
+    See :ref:`trap_spaces <sec:trap_spaces>` for details of the parameters *Type*, *MaxOutput* and *FnameASP*.
+    The parameter *Bounds* is used to restrict the set of trap spaces from which maximal, minimal or all solutions are drawn
+    to those whose number of fixed variables are within the given range.
+    Example: ``Bounds=(5,8)`` instructs Potassco_ to consider only trap spaces with 5 to 8 fixed variables as feasible.
+    *Type* selects minimal, maximal or all trap spaces from the restricted set.
+    .. warning::
+        The *Bound* constraint is applied *before* selecting minimal or maximal trap spaces.
+        A trap space may therefore be minimal w.r.t. to certain bounds but not minimal in the unbounded sense.
 
-	Use ``"n"`` as a shortcut for "all variables", i.e., instead of ``len(Primes)``.
-	Example: Use ``Bounds=("n","n")`` to compute steady states.
-	Note that the parameter *Type* becomes irrelevant for ``Bounds=(x,y)`` with ``x=y``.
+    Use ``"n"`` as a shortcut for "all variables", i.e., instead of ``len(Primes)``.
+    Example: Use ``Bounds=("n","n")`` to compute steady states.
+    Note that the parameter *Type* becomes irrelevant for ``Bounds=(x,y)`` with ``x=y``.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *Type* in ``["max","min","all"]``: subset minimal, subset maximal or all solutions
-		* *Bounds* (tuple): the upper and lower bound for the number of fixed variables
-		* *MaxOutput* (int): maximal number of trap spaces to return
-		* *FnameASP*: file name or *None*
-	**returns**:
-		* list of trap spaces
-	**example**::
-		>>> tspaces = trap_spaces_bounded(primes, "min", (2,4))
-		>>> len(tspaces)
-		12
-		>>> tspaces[0]
-		{'TGFR':0,'FGFR':0}
-	"""
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Type* in ``["max","min","all"]``: subset minimal, subset maximal or all solutions
+        * *Bounds* (tuple): the upper and lower bound for the number of fixed variables
+        * *MaxOutput* (int): maximal number of trap spaces to return
+        * *FnameASP*: file name or *None*
+    **returns**:
+        * list of trap spaces
+    **example**::
+        >>> tspaces = trap_spaces_bounded(primes, "min", (2,4))
+        >>> len(tspaces)
+        12
+        >>> tspaces[0]
+        {'TGFR':0,'FGFR':0}
+    """
     
     return potassco_handle(Primes, Type, Bounds, Project=None, MaxOutput=MaxOutput, FnameASP=FnameASP,
                            Representation="dict")
@@ -245,25 +245,25 @@ def trap_spaces_bounded(Primes, Type, Bounds, MaxOutput=1000, FnameASP=None):
 
 def steady_states_projected(Primes, Project, MaxOutput=1000, FnameASP=None):
     """
-	Returns a list of projected steady states using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
+    Returns a list of projected steady states using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
 
-	**arguments**:
-		* *Primes*: prime implicants
-		* *Project*: list of names
-		* *MaxOutput* (int): maximal number of trap spaces to return
-		* *FnameASP*: file name or *None*
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Project*: list of names
+        * *MaxOutput* (int): maximal number of trap spaces to return
+        * *FnameASP*: file name or *None*
 
-	**returns**:
-		* *Activities* (list): projected steady states
+    **returns**:
+        * *Activities* (list): projected steady states
 
-	**example**::
+    **example**::
 
-		>>> psteady = steady_states_projected(primes, ["v1","v2"])
-		>>> len(psteady)
-		2
-		>>> psteady
-		[{"v1":1,"v2":0},{"v1":0,"v2":0}]
-	"""
+        >>> psteady = steady_states_projected(primes, ["v1","v2"])
+        >>> len(psteady)
+        2
+        >>> psteady
+        [{"v1":1,"v2":0},{"v1":0,"v2":0}]
+    """
     
     assert (set(Project).issubset(set(Primes.keys())))
     
@@ -273,42 +273,42 @@ def steady_states_projected(Primes, Project, MaxOutput=1000, FnameASP=None):
 
 def primes2asp(Primes, FnameASP, Bounds, Project, Type):
     """
-	Saves Primes as an *asp* file in the Potassco_ format intended for computing minimal and maximal trap spaces.
-	The homepage of the Potassco_ solving collection is http://potassco.sourceforge.net.
-	The *asp* file consists of data, the hyperarcs of the prime implicant graph,
-	and a problem description that includes the consistency, stability and non-emptiness conditions.
+    Saves Primes as an *asp* file in the Potassco_ format intended for computing minimal and maximal trap spaces.
+    The homepage of the Potassco_ solving collection is http://potassco.sourceforge.net.
+    The *asp* file consists of data, the hyperarcs of the prime implicant graph,
+    and a problem description that includes the consistency, stability and non-emptiness conditions.
 
-	There are four additional parameters that modify the problem:
+    There are four additional parameters that modify the problem:
 
-	*Bounds* must be either a tuple of integers *(a,b)* or *None*.
-	A tuple *(a,b)* uses Potassco_'s cardinality constraints to enforce that the number of fixed variables *x* of a trap space satisfies *a<=x<=b*.
-	*None* results in no bounds.
+    *Bounds* must be either a tuple of integers *(a,b)* or *None*.
+    A tuple *(a,b)* uses Potassco_'s cardinality constraints to enforce that the number of fixed variables *x* of a trap space satisfies *a<=x<=b*.
+    *None* results in no bounds.
 
-	*Project* must be either a list of names or *None*.
-	A list of names projects the solutions onto these variables using the meta command "#show" and the clasp parameter "--project".
-	Variables of *Project* that do not appear in *Primes* are ignored.
-	*None* results in no projection.
+    *Project* must be either a list of names or *None*.
+    A list of names projects the solutions onto these variables using the meta command "#show" and the clasp parameter "--project".
+    Variables of *Project* that do not appear in *Primes* are ignored.
+    *None* results in no projection.
 
-	*Type* specifies whether additional constraints should be enforced.
-	For example for computing circuits or percolated trap spaces.
-	Recognized values are 'circuits' and 'percolated', everything else will be ignored.
+    *Type* specifies whether additional constraints should be enforced.
+    For example for computing circuits or percolated trap spaces.
+    Recognized values are 'circuits' and 'percolated', everything else will be ignored.
 
-	**arguments**:
-	   * *Primes*: prime implicants
-	   * *FnameASP*: name of *ASP* file or None
-	   * *Bounds* (tuple): cardinality constraint for the number of fixed variables
-	   * *Project* (list): names to project to or *None* for no projection
-	   * *Type* (str): one of 'circuits' or 'percolated' or *None*
+    **arguments**:
+       * *Primes*: prime implicants
+       * *FnameASP*: name of *ASP* file or None
+       * *Bounds* (tuple): cardinality constraint for the number of fixed variables
+       * *Project* (list): names to project to or *None* for no projection
+       * *Type* (str): one of 'circuits' or 'percolated' or *None*
 
-	**returns**:
-	   * *FileASP* (str): file as string if not *FnameASP==None* and *None* otherwise
+    **returns**:
+       * *FileASP* (str): file as string if not *FnameASP==None* and *None* otherwise
 
-	**example**::
+    **example**::
 
-		  >>> primes2asp(primes, "mapk.asp", False, False)
-		  >>> primes2asp(primes, "mapk_bounded.asp", (20,30), False)
-		  >>> primes2asp(primes, "mapk_projected.asp", False, ['AKT','GADD45','FOS','SMAD'])
-	"""
+          >>> primes2asp(primes, "mapk.asp", False, False)
+          >>> primes2asp(primes, "mapk_bounded.asp", (20,30), False)
+          >>> primes2asp(primes, "mapk_projected.asp", False, ['AKT','GADD45','FOS','SMAD'])
+    """
     
     assert (type(FnameASP) == type(None) or type(FnameASP) == str)
     assert (type(Bounds) == type(None) or type(Bounds) == tuple)
@@ -403,8 +403,8 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
 
 def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Representation):
     """
-	Returns a list of trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
-	"""
+    Returns a list of trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
+    """
     
     DEBUG = 0
     
@@ -540,8 +540,8 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
 
 def Count(Spaces):
     """
-	returns tuples *(space, count)* where *count* states how often *space* occurs in *Spaces*.
-	"""
+    returns tuples *(space, count)* where *count* states how often *space* occurs in *Spaces*.
+    """
     
     dummy = [tuple(sorted(x.items())) for x in Spaces]
     unique = set(dummy)

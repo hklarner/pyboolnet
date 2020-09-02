@@ -11,5 +11,5 @@ import PyBoolNet.Tests.Phenotypes
 
 
 def run():
-	PyBoolNet.Tests.Dependencies.run()
-	PyBoolNet.Tests.Modules.run()
+    PyBoolNet.Tests.Dependencies.run()
+    PyBoolNet.Tests.Modules.run()

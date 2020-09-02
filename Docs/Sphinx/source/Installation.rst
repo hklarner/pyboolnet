@@ -345,7 +345,7 @@ Espresso
 Espresso is required for heuristic minimization Boolean expressions.
 For more information see
 
-	* http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer
+    * http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer
 
 
 .. _installation_eqntott:
@@ -356,7 +356,7 @@ Eqntott
 Eqntott is required to converting Boolean expressions into the truth table format required by Espresso.
 For more information see
 
-	* https://code.google.com/archive/p/eqntott
+    * https://code.google.com/archive/p/eqntott
 
 
 

@@ -8,22 +8,22 @@ import PyBoolNet
 if __name__=="__main__":
 
 
-	# compute minimal and maximal trap spaces
+    # compute minimal and maximal trap spaces
 
-	primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
-	mints = PyBoolNet.AspSolver.trap_spaces(primes, "min")
-	print(len(mints))
+    primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    mints = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+    print(len(mints))
 
-	maxts = PyBoolNet.AspSolver.trap_spaces(primes, "max")
-	print(len(maxts))
-	print(maxts)
+    maxts = PyBoolNet.AspSolver.trap_spaces(primes, "max")
+    print(len(maxts))
+    print(maxts)
 
 
-	# compute steady states using the ASP solver
+    # compute steady states using the ASP solver
 
-	steady = PyBoolNet.AspSolver.steady_states(primes)
-	print(len(steady))
-	
+    steady = PyBoolNet.AspSolver.steady_states(primes)
+    print(len(steady))
+    
 
 
 

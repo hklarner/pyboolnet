@@ -7,32 +7,32 @@ import PyBoolNet
 
 if __name__=="__main__":
 
-	# reading bnet files
+    # reading bnet files
 
-	bnet = """
-	v1,	!v1
-	v2,	1
-	v3,	v2 & (!v1 | v3)
-	"""
+    bnet = """
+    v1,    !v1
+    v2,    1
+    v3,    v2 & (!v1 | v3)
+    """
 
-	primes = PyBoolNet.FileExchange.bnet2primes(bnet)
+    primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
-	# finding nodes
+    # finding nodes
 
-	const = PyBoolNet.PrimeImplicants.find_constants(primes)
-	print(const)
+    const = PyBoolNet.PrimeImplicants.find_constants(primes)
+    print(const)
 
-	# modifying networks
+    # modifying networks
 
-	PyBoolNet.PrimeImplicants.create_variables(primes, {"v4": "v4 | v2"})
-	PyBoolNet.PrimeImplicants.create_variables(primes, {"v5": lambda v1,v2,v3: v1+v2+v3==1})
+    PyBoolNet.PrimeImplicants.create_variables(primes, {"v4": "v4 | v2"})
+    PyBoolNet.PrimeImplicants.create_variables(primes, {"v5": lambda v1,v2,v3: v1+v2+v3==1})
 
-	print(PyBoolNet.FileExchange.primes2bnet(primes))
+    print(PyBoolNet.FileExchange.primes2bnet(primes))
 
-	# reading from the repository
+    # reading from the repository
 
-	primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
-	print(PyBoolNet.FileExchange.primes2bnet(primes))
+    primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    print(PyBoolNet.FileExchange.primes2bnet(primes))
 
 
 
