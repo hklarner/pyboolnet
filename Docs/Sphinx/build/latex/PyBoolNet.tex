@@ -54,8 +54,8 @@
 \setcounter{tocdepth}{3}
 
 \title{PyBoolNet Documentation}
-\date{Mar 06, 2020}
-\release{2.2.7}
+\date{Sep 02, 2020}
+\release{2.2.9}
 \author{Hannes Klarner}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -66,11 +66,11 @@
 \maketitle
 \sphinxtableofcontents
 \phantomsection\label{\detokenize{index::doc}}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
 The project home page is \sphinxurl{https://github.com/hklarner/PyBoolNet}.
 
 \begin{sphinxadmonition}{note}{Note:}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} does not yet have any user friendly error messages.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} does not yet have any user friendly error messages.
 Please post questions, report bugs or suggest features in the issues section of the project’s homepage:
 \begin{itemize}
 \item {} 
@@ -89,8 +89,8 @@ or contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de}.
 
 \section{Python}
 \label{\detokenize{Installation:python}}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} is now being developed in Python 3.5.2 but should be compatible with Python2.
-If you experience problems with your version of Python and \sphinxstyleemphasis{PyBoolNet 2.2.7} please contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de} or
+\sphinxstyleemphasis{PyBoolNet 2.2.9} is now being developed in Python 3.6.9 but should be compatible with Python2.
+If you experience problems with your version of Python and \sphinxstyleemphasis{PyBoolNet 2.2.9} please contact \sphinxstyleemphasis{hannes.klarner@fu-berlin.de} or
 post an issue on the project homepage at
 \begin{itemize}
 \item {} 
@@ -122,10 +122,10 @@ Make sure that {\hyperref[\detokenize{Installation:installation-networkx}]{\sphi
 \PYGZdl{} sudo apt install imagemagick
 \end{sphinxVerbatim}
 
-Install \sphinxstyleemphasis{PyBoolNet 2.2.7} with \sphinxstyleemphasis{pip}:
+Install \sphinxstyleemphasis{PyBoolNet 2.2.9} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip3 install PyBoolNet\PYGZhy{}2.2.7\PYGZus{}linux64.tar.gz
+\PYGZdl{} sudo pip3 install PyBoolNet\PYGZhy{}2.2.9\PYGZus{}linux64.tar.gz
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -137,7 +137,7 @@ which should place the package here:
 Use the option \sphinxcode{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip3 install PyBoolNet\PYGZhy{}2.2.7.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip3 install PyBoolNet\PYGZhy{}2.2.9.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{sphinxVerbatim}
 
 The package is likely going to be placed here:
@@ -147,7 +147,7 @@ The package is likely going to be placed here:
 \end{sphinxVerbatim}
 
 where \sphinxcode{\textless{}user\textgreater{}} is the name you are logged in with (\sphinxcode{\$ whoami}) and \sphinxcode{\textless{}version\textgreater{}} is the Python version you are using.
-To install \sphinxstyleemphasis{PyBoolNet 2.2.7} using \sphinxstyleemphasis{Distutils} unpack \sphinxstyleemphasis{PyBoolNet-2.2.7.tar.gz} into a temporary folder and run:
+To install \sphinxstyleemphasis{PyBoolNet 2.2.9} using \sphinxstyleemphasis{Distutils} unpack \sphinxstyleemphasis{PyBoolNet-2.2.9.tar.gz} into a temporary folder and run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} sudo python setup.py install
@@ -161,14 +161,14 @@ again, using the \sphinxcode{-{-}user} flag if you do not have sudo rights:
 
 The locations should be the same as when installing with \sphinxstyleemphasis{pip}.
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.7}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.9}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.7} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.9} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip3 uninstall PyBoolNet
@@ -220,10 +220,10 @@ Download and install \sphinxhref{http://www.graphviz.org/}{Graphviz} and \sphinx
 
 \end{itemize}
 
-Install \sphinxstyleemphasis{PyBoolNet 2.2.7} with \sphinxstyleemphasis{pip}:
+Install \sphinxstyleemphasis{PyBoolNet 2.2.9} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} sudo pip3 install PyBoolNet\PYGZhy{}2.2.7\PYGZus{}mac64.tar.gz
+\PYGZdl{} sudo pip3 install PyBoolNet\PYGZhy{}2.2.9\PYGZus{}mac64.tar.gz
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -235,7 +235,7 @@ which should place the package here:
 Use the option \sphinxcode{-{-}user} (literally) if you do not have sudo rights:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} pip3 install PyBoolNet\PYGZhy{}2.2.7.tar.gz \PYGZhy{}\PYGZhy{}user
+\PYGZdl{} pip3 install PyBoolNet\PYGZhy{}2.2.9.tar.gz \PYGZhy{}\PYGZhy{}user
 \end{sphinxVerbatim}
 
 The package is likely going to be placed here:
@@ -246,14 +246,14 @@ The package is likely going to be placed here:
 
 where \sphinxcode{\textless{}user\textgreater{}} is the name you are logged in with (\sphinxcode{\$ whoami}) and \sphinxcode{\textless{}version\textgreater{}} is the Python version you are using.
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.7}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.9}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} python
 \PYGZgt{}\PYGZgt{}\PYGZgt{} import PyBoolNet
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.7} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.9} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} pip3 uninstall PyBoolNet
@@ -279,10 +279,10 @@ on
 
 \end{itemize}
 
-To install \sphinxstyleemphasis{PyBoolNet 2.2.7} with \sphinxstyleemphasis{pip}:
+To install \sphinxstyleemphasis{PyBoolNet 2.2.9} with \sphinxstyleemphasis{pip}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{install} \PYG{n}{PyBoolNet}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.2}\PYG{o}{.}\PYG{l+m+mi}{7}\PYG{n}{\PYGZus{}win64}\PYG{o}{.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
+\PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{install} \PYG{n}{PyBoolNet}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.2}\PYG{o}{.}\PYG{l+m+mi}{9}\PYG{n}{\PYGZus{}win64}\PYG{o}{.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
 \end{sphinxVerbatim}
 
 which should place the package here:
@@ -314,14 +314,14 @@ To install \sphinxhref{http://www.graphviz.org/}{Graphviz} and \sphinxhref{http:
 
 \end{itemize}
 
-You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.7}:
+You should now be able to import \sphinxstyleemphasis{PyBoolNet 2.2.9}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{python}
 \PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{o}{\PYGZgt{}} \PYG{k+kn}{import} \PYG{n+nn}{PyBoolNet}
 \end{sphinxVerbatim}
 
-To remove \sphinxstyleemphasis{PyBoolNet 2.2.7} using \sphinxstyleemphasis{pip} run:
+To remove \sphinxstyleemphasis{PyBoolNet 2.2.9} using \sphinxstyleemphasis{pip} run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{C}\PYG{p}{:}\PYGZbs{}\PYG{o}{\PYGZgt{}} \PYG{n}{pip}\PYG{o}{.}\PYG{n}{exe} \PYG{n}{uninstall} \PYG{n}{PyBoolNet}
@@ -332,8 +332,8 @@ If you do not have \sphinxstyleemphasis{pip}, all files must be removed manually
 
 \section{Dependencies}
 \label{\detokenize{Installation:dependencies}}
-Most of what \sphinxstyleemphasis{PyBoolNet 2.2.7} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called \sphinxcode{settings.cfg} and located in the folder \sphinxcode{Dependencies} of \sphinxstyleemphasis{PyBoolNet 2.2.7}.
+Most of what \sphinxstyleemphasis{PyBoolNet 2.2.9} does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
+The file that records the locations to third party binaries is called \sphinxcode{settings.cfg} and located in the folder \sphinxcode{Dependencies} of \sphinxstyleemphasis{PyBoolNet 2.2.9}.
 The default location is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -422,7 +422,7 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 \begin{sphinxadmonition}{note}{Note:}
 The development of the Potassco solving collection is active with frequent releases.
-\sphinxstyleemphasis{PyBoolNet 2.2.7} is tested with two specific versions, \sphinxhref{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \sphinxhref{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} is tested with two specific versions, \sphinxhref{https://sourceforge.net/projects/potassco/files/clasp/3.1.1}{clasp-3.1.1} and \sphinxhref{https://sourceforge.net/projects/potassco/files/gringo/4.4.0}{gringo-4.4.0} and we strongly recommend you use them because of syntax differences between versions.
 \end{sphinxadmonition}
 
 The binaries and source are available at:
@@ -439,11 +439,11 @@ The binaries and source are available at:
 \subsection{NuSMV}
 \label{\detokenize{Installation:nusmv}}\label{\detokenize{Installation:installation-nusmv}}
 \sphinxhref{http://nusmv.fbk.eu}{NuSMV} is a symbolic model checker that we use to decide LTL and CTL queries.
-\sphinxstyleemphasis{PyBoolNet 2.2.7} requires the extension \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} requires the extension \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a} for model checking with accepting states.
 It is included with every release and should work out of the box.
 
 \begin{sphinxadmonition}{note}{Note:}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} is tested with \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} is tested with \sphinxhref{https://github.com/hklarner/NuSMV-a}{NuSMV-a}, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
 \end{sphinxadmonition}
 
 Binaries and source available at:
@@ -539,7 +539,7 @@ For more information see
 \subsection{BoolNet}
 \label{\detokenize{Installation:boolnet}}\label{\detokenize{Installation:installation-boolnet}}
 \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet} is a library for \sphinxhref{https://www.r-project.org/}{R} that is used for the construction, simulation and analysis of Boolean networks, see {\hyperref[\detokenize{Bibliography:mussel2010}]{\sphinxcrossref{\DUrole{std,std-ref}{Müssel2010}}}}.
-It is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.7} but you need it if you want to convert \sphinxstyleemphasis{SBML-qual} files into \sphinxstyleemphasis{bnet} files.
+It is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.9} but you need it if you want to convert \sphinxstyleemphasis{SBML-qual} files into \sphinxstyleemphasis{bnet} files.
 To install it run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -559,7 +559,7 @@ select a CRAN mirror and wait for the download and installation to finish.
 \subsection{GINsim}
 \label{\detokenize{Installation:installation-ginsim}}\label{\detokenize{Installation:ginsim}}
 \sphinxhref{http://ginsim.org/home}{GINsim} is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see {\hyperref[\detokenize{Bibliography:chaouiya2012}]{\sphinxcrossref{\DUrole{std,std-ref}{Chaouiya2012}}}}.
-Like \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \sphinxhref{http://ginsim.org/home}{GINsim} is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.7} but it has a useful model repository. To convert \sphinxhref{http://ginsim.org/home}{GINsim} models you need to export them as \sphinxstyleemphasis{SBML-qual} files which can then be converted into \sphinxstyleemphasis{bnet} files using \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
+Like \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}, \sphinxhref{http://ginsim.org/home}{GINsim} is not a required dependency of \sphinxstyleemphasis{PyBoolNet 2.2.9} but it has a useful model repository. To convert \sphinxhref{http://ginsim.org/home}{GINsim} models you need to export them as \sphinxstyleemphasis{SBML-qual} files which can then be converted into \sphinxstyleemphasis{bnet} files using \sphinxhref{https://cran.r-project.org/web/packages/BoolNet/index.html}{BoolNet}.
 No installation required, just download the latest version (tested with version 2.9) and call:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -616,7 +616,7 @@ If you get \sphinxstyleemphasis{permission denied} erros like:
 \end{sphinxVerbatim}
 
 you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains \sphinxstyleemphasis{PyBoolNet 2.2.7} (see {\hyperref[\detokenize{Installation:installation-software}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation of PyBoolNet}}}} above) and run:
+Locate the directory that contains \sphinxstyleemphasis{PyBoolNet 2.2.9} (see {\hyperref[\detokenize{Installation:installation-software}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation of PyBoolNet}}}} above) and run:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 ../PyBoolNet\PYGZdl{} chmod \PYGZhy{}R 744 Dependencies/
@@ -1139,7 +1139,7 @@ The returned list states that \sphinxstyleemphasis{f1} has two 1-prime implicant
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
 
-It can be difficult to enumerate all prime implicants of a network and \sphinxstyleemphasis{PyBoolNet 2.2.7} uses the program {\hyperref[\detokenize{Installation:installation-bnettoprime}]{\sphinxcrossref{\DUrole{std,std-ref}{BNetToPrime}}}} to do it.
+It can be difficult to enumerate all prime implicants of a network and \sphinxstyleemphasis{PyBoolNet 2.2.9} uses the program {\hyperref[\detokenize{Installation:installation-bnettoprime}]{\sphinxcrossref{\DUrole{std,std-ref}{BNetToPrime}}}} to do it.
 As a user you define a network in terms of Boolean expressions, Python functions or you import it from other tools, like \sphinxhref{http://ginsim.org/home}{GINsim}.
 The steps in each case are explained in the following sections.
 
@@ -1393,7 +1393,7 @@ The result is shown in {\hyperref[\detokenize{Manual:figure01}]{\sphinxcrossref{
 
 \subsection{graph, node and edge attributes}
 \label{\detokenize{Manual:graph-node-and-edge-attributes}}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} generates a \sphinxstyleemphasis{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} generates a \sphinxstyleemphasis{dot} file from an interaction graph by inspecting all its edge, node and graph attributes.
 Attributes are just dictionaries that are attached to nodes, edges and the graph itself, see {\hyperref[\detokenize{Installation:installation-networkx}]{\sphinxcrossref{\DUrole{std,std-ref}{NetworkX}}}} for an introduction.
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
@@ -1527,7 +1527,7 @@ The result is shown in {\hyperref[\detokenize{Manual:figure02}]{\sphinxcrossref{
 
 \subsection{the interaction signs style}
 \label{\detokenize{Manual:the-interaction-signs-style}}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} has predefined styles for adding attributes to interaction graphs.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} has predefined styles for adding attributes to interaction graphs.
 The function {\hyperref[\detokenize{InteractionGraphs:add-style-interactionsigns}]{\sphinxcrossref{\DUrole{std,std-ref}{add\_style\_interactionsigns}}}} adds or overwrites color and arrowhead attributes to indicate whether an interaction is activating, inhibiting or both.
 Activating interactions are black with normal arrowheads,
 inhibiting interactions are red with blunt arrowhead and
@@ -2043,7 +2043,7 @@ To create the blinkers use the function {\hyperref[\detokenize{PrimeImplicants:c
 \PYG{g+go}{v4,   v2 \PYGZam{} v3 \textbar{} v1 \PYGZam{} v3}
 \end{sphinxVerbatim}
 
-Note that \sphinxstyleemphasis{PyBoolNet 2.2.7} modifies the primes object in place rather than creating and returning a modified copy.
+Note that \sphinxstyleemphasis{PyBoolNet 2.2.9} modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -2202,7 +2202,7 @@ To enumerate all possible input combinations of a given network use the function
 
 \section{Model Checking}
 \label{\detokenize{Manual:sec-model-checking}}\label{\detokenize{Manual:model-checking}}
-\sphinxstyleemphasis{PyBoolNet 2.2.7} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to decide model checking queries for Boolean networks.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} to decide model checking queries for Boolean networks.
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example {\hyperref[\detokenize{Bibliography:baier2008}]{\sphinxcrossref{\DUrole{std,std-ref}{Baier2008}}}}.
 
@@ -2226,7 +2226,7 @@ As an example, consider the following network:
 
 The state transition graph is shown in {\hyperref[\detokenize{Manual:figure17}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure below}}}}.
 
-When model checking, \sphinxstyleemphasis{PyBoolNet 2.2.7} translates state transition graphs into transition systems.
+When model checking, \sphinxstyleemphasis{PyBoolNet 2.2.9} translates state transition graphs into transition systems.
 The basic approach to doing so is shown in {\hyperref[\detokenize{Manual:figure17}]{\sphinxcrossref{\DUrole{std,std-ref}{the figure below}}}}.
 Here, each state string is replaced by a subset of atomic propositions.
 The subset is chosen to correspond with the state string, i.e.,
@@ -2266,7 +2266,7 @@ The transition system with the extended set of atomic propositions is shown in {
 \subsection{LTL model checking}
 \label{\detokenize{Manual:ltl-model-checking}}
 Apart from a transition system, a model checking problem requires a \sphinxstyleemphasis{temporal specification}.
-Since \sphinxstyleemphasis{PyBoolNet 2.2.7} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} for solving model checking problems, two specification languages are available:
+Since \sphinxstyleemphasis{PyBoolNet 2.2.9} uses {\hyperref[\detokenize{Installation:installation-nusmv}]{\sphinxcrossref{\DUrole{std,std-ref}{NuSMV}}}} for solving model checking problems, two specification languages are available:
 \sphinxstyleemphasis{linear time logic} (LTL) and \sphinxstyleemphasis{computational tree logic} (CTL).
 
 LTL specifications are statements about the sequence of events that are expressed in terms of atomic propositions and temporal operators.
@@ -2842,7 +2842,7 @@ The size of this set tells us that there are two states outside of the initial o
 \PYG{g+go}{5}
 \end{sphinxVerbatim}
 
-Note that \sphinxstyleemphasis{PyBoolNet 2.2.7} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+Note that \sphinxstyleemphasis{PyBoolNet 2.2.9} does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property \sphinxcode{EF(STEADYSTATE)}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -2874,7 +2874,7 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see {\hyperref[\detokenize{Bibliography:klarner2015trap}]{\sphinxcrossref{\DUrole{std,std-ref}{Klarner2015(a)}}}}.
 
-\sphinxstyleemphasis{PyBoolNet 2.2.7} uses the module {\hyperref[\detokenize{AspSolver:aspsolver}]{\sphinxcrossref{\DUrole{std,std-ref}{AspSolver}}}} and the function {\hyperref[\detokenize{AspSolver:trap-spaces}]{\sphinxcrossref{\DUrole{std,std-ref}{trap\_spaces}}}} to compute trap spaces.
+\sphinxstyleemphasis{PyBoolNet 2.2.9} uses the module {\hyperref[\detokenize{AspSolver:aspsolver}]{\sphinxcrossref{\DUrole{std,std-ref}{AspSolver}}}} and the function {\hyperref[\detokenize{AspSolver:trap-spaces}]{\sphinxcrossref{\DUrole{std,std-ref}{trap\_spaces}}}} to compute trap spaces.
 As an example, consider the following network which has five trap spaces:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -3519,28 +3519,352 @@ create\_piechart
 
 
 \subsection{diagram2image}
-\label{\detokenize{Phenotypes:diagram2image}}\label{\detokenize{Phenotypes:phenotypes-diagram2image}}
+\label{\detokenize{Phenotypes:diagram2image}}\label{\detokenize{Phenotypes:phenotypes-diagram2image}}\index{diagram2image() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.diagram2image}}\pysiglinewithargsret{\sphinxbfcode{diagram2image}}{\emph{Diagram}, \emph{FnameImage=None}}{}
+creates an image of the abstract commitment diagram.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Diagram} (networkx.DiGraph): a phenotype diagram
+
+\item {} 
+\sphinxstyleemphasis{FnameImage} (str): name of the diagram image
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{StyledDiagram} (networkx.DiGraph): the styled abstract commitment diagram
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram2image}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{diagram}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{diagram.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{create\_piechart}
-\label{\detokenize{Phenotypes:phenotypes-create-piechart}}\label{\detokenize{Phenotypes:create-piechart}}
+\label{\detokenize{Phenotypes:phenotypes-create-piechart}}\label{\detokenize{Phenotypes:create-piechart}}\index{create\_piechart() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.create_piechart}}\pysiglinewithargsret{\sphinxbfcode{create\_piechart}}{\emph{Diagram}, \emph{FnameImage}, \emph{Title=None}, \emph{ColorMap=None}, \emph{Silent=False}}{}
+creates the abstract commitment pie.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Diagram} (networkx.DiGraph): precomputed commitment diagram
+
+\item {} 
+\sphinxstyleemphasis{FnameImage} (str): name of the output image
+
+\item {} 
+\sphinxstyleemphasis{Title} (str): optional title of plot
+
+\item {} 
+\sphinxstyleemphasis{ColorMap} (dict): assignment of diagram nodes to colors for custom colors
+
+\item {} 
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{None}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{attrs} \PYG{o}{=} \PYG{n}{Attractors}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{update}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{phenos} \PYG{o}{=} \PYG{n}{Phenotypes}\PYG{o}{.}\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{,} \PYG{n}{markers}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{diagram} \PYG{o}{=} \PYG{n}{Phenotypes}\PYG{o}{.}\PYG{n}{create\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{phenos}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{Phenotypes}\PYG{o}{.}\PYG{n}{create\PYGZus{}piechart}\PYG{p}{(}\PYG{n}{diagram}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{piechart.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{compute\_diagram}
-\label{\detokenize{Phenotypes:phenotypes-compute-diagram}}\label{\detokenize{Phenotypes:compute-diagram}}
+\label{\detokenize{Phenotypes:phenotypes-compute-diagram}}\label{\detokenize{Phenotypes:compute-diagram}}\index{compute\_diagram() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.compute_diagram}}\pysiglinewithargsret{\sphinxbfcode{compute\_diagram}}{\emph{PhenosObj}, \emph{FnameJson=None}, \emph{FnameImage=None}, \emph{Silent=False}}{}
+todo: finish code
+todo: add unit tests
+
+computes the phenotype diagram from the phenotypes object obtained from {\hyperref[\detokenize{Phenotypes:phenotypes-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}.
+save the diagram as json data with \sphinxstyleemphasis{FnameJson}. useful for e.g. manually renaming nodes.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{PhenosObj} (dict): result of compute\_json(..)
+
+\item {} 
+\sphinxstyleemphasis{FnameJson} (str): save diagram as json
+
+\item {} 
+\sphinxstyleemphasis{FnameImage} (str): generate image for diagram
+
+\item {} 
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Diagram} (networkx.DiGraph): the phenotype diagram
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{phenos} \PYG{o}{=} \PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{attrobj}\PYG{p}{,} \PYG{n}{markers}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{compute\PYGZus{}diagram}\PYG{p}{(}\PYG{n}{phenos}\PYG{p}{,} \PYG{n}{FnameImage}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{phenos.pdf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{created phenos.pdf}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{save\_diagram}
-\label{\detokenize{Phenotypes:phenotypes-save-diagram}}\label{\detokenize{Phenotypes:save-diagram}}
+\label{\detokenize{Phenotypes:phenotypes-save-diagram}}\label{\detokenize{Phenotypes:save-diagram}}\index{save\_diagram() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.save_diagram}}\pysiglinewithargsret{\sphinxbfcode{save\_diagram}}{\emph{Diagram}, \emph{Fname}}{}
+todo: finish code
+todo: add unit tests
+
+description
+\begin{quote}
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\item {} 
+\sphinxstyleemphasis{arg} (type): description
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{arg} (type): description
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save\PYGZus{}diagram}\PYG{p}{(}\PYG{o}{.}\PYG{o}{.}\PYG{p}{)}
+\PYG{g+go}{result}
+\end{sphinxVerbatim}
+\end{quote}
+
+\end{fulllineitems}
+
+
 
 \subsection{open\_diagram}
-\label{\detokenize{Phenotypes:open-diagram}}\label{\detokenize{Phenotypes:phenotypes-open-diagram}}
+\label{\detokenize{Phenotypes:open-diagram}}\label{\detokenize{Phenotypes:phenotypes-open-diagram}}\index{open\_diagram() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.open_diagram}}\pysiglinewithargsret{\sphinxbfcode{open\_diagram}}{\emph{Fname}}{}
+todo: finish code
+todo: add unit tests
+
+description
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{arg} (type): description
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{arg} (type): description
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{open\PYGZus{}diagram}\PYG{p}{(}\PYG{o}{.}\PYG{o}{.}\PYG{p}{)}
+\PYG{g+go}{result}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{compute\_json}
-\label{\detokenize{Phenotypes:phenotypes-compute-json}}\label{\detokenize{Phenotypes:compute-json}}
+\label{\detokenize{Phenotypes:phenotypes-compute-json}}\label{\detokenize{Phenotypes:compute-json}}\index{compute\_json() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.compute_json}}\pysiglinewithargsret{\sphinxbfcode{compute\_json}}{\emph{AttrJson}, \emph{Markers}, \emph{FnameJson=None}, \emph{Silent=False}}{}
+todo: finish code
+todo: add unit tests
+
+Computes the phenotypes object for given \sphinxstyleemphasis{Markers}.
+\begin{description}
+\item[{structure:}] \leavevmode
+primes: dict
+update: str
+markers: tuple
+phenotypes: (tuple)
+\begin{quote}
+
+name: str
+pattern: str
+activated\_markers: list of markers
+inhibited\_markers: list of markers
+stateformula: disjunction over all state props
+\begin{description}
+\item[{states: (tuple)}] \leavevmode
+str: state string
+dict: state dict
+prop: state proposition
+is\_steady: bool
+is\_cyclic: bool
+\begin{description}
+\item[{mintrapspace:}] \leavevmode
+str: subspace string
+dict: subspace dict
+prop: subspace proposition
+
+\end{description}
+
+\end{description}
+\end{quote}
+
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{AttrJson} (dict): json attractor data, see {\hyperref[\detokenize{Attractors:attractors-compute-json}]{\sphinxcrossref{\DUrole{std,std-ref}{compute\_json}}}}
+
+\item {} 
+\sphinxstyleemphasis{Markers} (list): list of names
+
+\item {} 
+\sphinxstyleemphasis{Silent} (bool): print infos to screen
+
+\item {} 
+\sphinxstyleemphasis{FnameJson} (str): save phenotypes as json
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}::}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Phenotypes} (dict): the phenotypes data
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{markers} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{raf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{mek}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{,} \PYG{n}{markers}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{save\_json}
-\label{\detokenize{Phenotypes:phenotypes-save-json}}\label{\detokenize{Phenotypes:save-json}}
+\label{\detokenize{Phenotypes:phenotypes-save-json}}\label{\detokenize{Phenotypes:save-json}}\index{save\_json() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.save_json}}\pysiglinewithargsret{\sphinxbfcode{save\_json}}{\emph{PhenosObj}, \emph{Fname}, \emph{Silent=False}}{}
+todo: finish code
+todo: add unit tests, add to sphinx
+
+saves the phenotypes object as a JSON file.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{PhenoJson}: phenotypes data, see todo: add \DUrole{xref,std,std-ref}{xxx}
+
+\item {} 
+\sphinxstyleemphasis{Fname} (str): file name
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{None}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{compute\PYGZus{}json}\PYG{p}{(}\PYG{n}{attrs}\PYG{p}{,} \PYG{n}{markers}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save\PYGZus{}phenotype}\PYG{p}{(}\PYG{n}{phenos}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{pheno.json}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{created pheno.json}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{open\_json}
-\label{\detokenize{Phenotypes:phenotypes-open-json}}\label{\detokenize{Phenotypes:open-json}}
+\label{\detokenize{Phenotypes:phenotypes-open-json}}\label{\detokenize{Phenotypes:open-json}}\index{open\_json() (in module PyBoolNet.Phenotypes)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Phenotypes:PyBoolNet.Phenotypes.open_json}}\pysiglinewithargsret{\sphinxbfcode{open\_json}}{\emph{Fname}}{}
+todo: finish code
+todo: add unit tests, add to sphinx
+
+opens the phenotypes object, see todo: add \DUrole{xref,std,std-ref}{xxx}
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Fname} (str): file name
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{PhenoJson}: phenotypes data, see todo: add \DUrole{xref,std,std-ref}{xxx}
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{phenos} \PYG{o}{=} \PYG{n}{open\PYGZus{}json}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{pheno.json}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \section{ModelChecking}
 \label{\detokenize{ModelChecking::doc}}\label{\detokenize{ModelChecking:modelchecking}}\label{\detokenize{ModelChecking:id1}}
@@ -3618,13 +3942,109 @@ create\_piechart
 \label{\detokenize{QuineMcCluskey:quinemccluskey}}\label{\detokenize{QuineMcCluskey:networkx-has-path}}\label{\detokenize{QuineMcCluskey::doc}}\label{\detokenize{QuineMcCluskey:id1}}
 
 \subsection{functions2mindnf}
-\label{\detokenize{QuineMcCluskey:id2}}\label{\detokenize{QuineMcCluskey:functions2mindnf}}
+\label{\detokenize{QuineMcCluskey:id2}}\label{\detokenize{QuineMcCluskey:functions2mindnf}}\index{functions2mindnf() (in module PyBoolNet.QuineMcCluskey)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{QuineMcCluskey:PyBoolNet.QuineMcCluskey.functions2mindnf}}\pysiglinewithargsret{\sphinxbfcode{functions2mindnf}}{\emph{Functions}}{}
+Generates and returns a minimal \sphinxstyleemphasis{disjunctive normal form} (DNF) for the Boolean network represented by \sphinxstyleemphasis{Functions}.
+The algorithm uses {\hyperref[\detokenize{Bibliography:prekas2012}]{\sphinxcrossref{\DUrole{std,std-ref}{Prekas2012}}}}, a Python implementation of the Quine-McCluskey algorithm.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Functions} (dict): keys are component names and values are Boolean functions
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{MinDNF} (dict): keys are component names and values are minimal DNF expressions
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{funcs} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{k}{lambda} \PYG{n}{v1}\PYG{p}{,}\PYG{n}{v2}\PYG{p}{:} \PYG{n}{v1} \PYG{o+ow}{or} \PYG{o+ow}{not} \PYG{n}{v2}\PYG{p}{,}
+\PYG{g+gp}{... }         \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v2}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{k}{lambda}\PYG{p}{:} \PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf} \PYG{o}{=} \PYG{n}{functions2primes}\PYG{p}{(}\PYG{n}{funcs}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+\PYG{g+go}{((! v2) \textbar{} v1)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{functions2primes}
-\label{\detokenize{QuineMcCluskey:id3}}\label{\detokenize{QuineMcCluskey:functions2primes}}
+\label{\detokenize{QuineMcCluskey:id3}}\label{\detokenize{QuineMcCluskey:functions2primes}}\index{functions2primes() (in module PyBoolNet.QuineMcCluskey)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{QuineMcCluskey:PyBoolNet.QuineMcCluskey.functions2primes}}\pysiglinewithargsret{\sphinxbfcode{functions2primes}}{\emph{Functions}}{}
+Generates and returns the prime implicants of a Boolean network represented by \sphinxstyleemphasis{Functions}.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Functions} (dict): keys are component names and values are Boolean functions
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: primes implicants
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{funcs} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{k}{lambda} \PYG{n}{v1}\PYG{p}{,}\PYG{n}{v2}\PYG{p}{:} \PYG{n}{v1} \PYG{o+ow}{or} \PYG{o+ow}{not} \PYG{n}{v2}\PYG{p}{,}
+\PYG{g+gp}{... }         \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v2}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{k}{lambda} \PYG{n}{v1}\PYG{p}{,}\PYG{n}{v2}\PYG{p}{:} \PYG{n}{v1}\PYG{o}{+}\PYG{n}{v2}\PYG{o}{==}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes} \PYG{o}{=} \PYG{n}{functions2primes}\PYG{p}{(}\PYG{n}{funcs}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \subsection{primes2mindnf}
-\label{\detokenize{QuineMcCluskey:id4}}\label{\detokenize{QuineMcCluskey:primes2mindnf}}
+\label{\detokenize{QuineMcCluskey:id4}}\label{\detokenize{QuineMcCluskey:primes2mindnf}}\index{primes2mindnf() (in module PyBoolNet.QuineMcCluskey)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{QuineMcCluskey:PyBoolNet.QuineMcCluskey.primes2mindnf}}\pysiglinewithargsret{\sphinxbfcode{primes2mindnf}}{\emph{Primes}}{}
+Creates a minimal \sphinxstyleemphasis{disjunctive normal form} (DNF) expression for the Boolean network represented by \sphinxstyleemphasis{Primes}.
+The algorithm uses {\hyperref[\detokenize{Bibliography:prekas2012}]{\sphinxcrossref{\DUrole{std,std-ref}{Prekas2012}}}}, a Python implementation of the Quine-McCluskey algorithm.
+\begin{description}
+\item[{\sphinxstylestrong{arguments}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{Primes}: prime implicants
+
+\end{itemize}
+
+\item[{\sphinxstylestrong{returns}:}] \leavevmode\begin{itemize}
+\item {} 
+\sphinxstyleemphasis{MinDNF} (dict): keys are names and values are minimal DNF expressions
+
+\end{itemize}
+
+\end{description}
+
+\sphinxstylestrong{example}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{primes}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{g+go}{[\PYGZob{}\PYGZsq{}v1\PYGZsq{}:1,\PYGZsq{}v2\PYGZsq{}:0\PYGZcb{}]}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf} \PYG{o}{=} \PYG{n}{primes2mindnf}\PYG{p}{(}\PYG{n}{primes}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mindnf}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v1}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+\PYG{g+go}{((! v2) \textbar{} v1)}
+\end{sphinxVerbatim}
+
+\end{fulllineitems}
+
+
 
 \chapter{Bibliography}
 \label{\detokenize{Bibliography:bibliography}}\label{\detokenize{Bibliography::doc}}\phantomsection\label{\detokenize{Bibliography:arellano2011}}\begin{quote}

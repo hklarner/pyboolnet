@@ -9,9 +9,6 @@ import itertools
 import tempfile
 import shutil
 
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-sys.path.insert(0,BASE)
-
 import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
 import PyBoolNet.InteractionGraphs
@@ -24,10 +21,6 @@ import PyBoolNet.TemporalLogic
 import PyBoolNet.QuineMcCluskey
 import PyBoolNet.Repository
 import PyBoolNet.Utility
-
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "PyBoolNet", "Dependencies", "settings.cfg"))
-
 
 
 

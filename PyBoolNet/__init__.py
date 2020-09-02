@@ -24,9 +24,9 @@ import pprint as prettyprint
 
 
 def version() -> str:
-    return "2.2.8"
+    return "2.2.9"
 
 
-def pprint(X):
+def pprint(x):
     pp = prettyprint.PrettyPrinter(indent=4)
-    pp.pprint(X)
+    pp.pprint(x)

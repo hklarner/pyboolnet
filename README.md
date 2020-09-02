@@ -7,39 +7,23 @@ The accompanying paper was published with [Bioinformatics](https://academic.oup.
  * https://doi.org/10.1093/bioinformatics/btw682
 
 For the manual, a reference and tutorials see the [PyBoolNet manual](http://github.com/hklarner/PyBoolNet/releases).
+For attractor, basin and phenotype examples, browse the [model repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository).
 For report bugs, request features and give feedback at [PyBoolNet issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
 
-Please browse the PyBoolNet [model repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository) for attractor, basin and phenotype information of example networks.
-
 
 ## Installation
-Do not try to install this git repository directly, see [Issue #16](https://github.com/hklarner/PyBoolNet/issues/16).
-Instead download the latest release from https://github.com/hklarner/PyBoolNet/releases and use pip to install. For example:
+To install directly from this repository use:
 
+```bash 
+pip3 install git+https://github.com/hklarner/PyBoolNet
 ```
-sudo pip3 install PyBoolNet-2.2.5_linux64.tar.gz
+To install a particular release, append the version number to the end of the github url with an `@`. E.g.: 
+
+```bash 
+pip3 install git+https://github.com/hklarner/PyBoolNet@2.2.9
 ```
 
-## release notes for version 2.2.9 (September 2020)
-- adds Conda recipe [PR](https://github.com/hklarner/PyBoolNet/pull/38)
-- support installation from github [PR](https://github.com/hklarner/PyBoolNet/pull/37)
-- support for CoLoMoTo image [PR](https://github.com/hklarner/PyBoolNet/pull/35)
-
-## release notes for version 2.2.8 (March 2020)
-- bugfix binaries of eqntott for windows
-- adds detection of os when calling eqntott 
-
-## release notes for version 2.2.5 (June 2018)
-- bugfix in create_piechart, affects python3
-- bugfix in Commitment.create_diagram caused by moving to networkx2
-- bugifx in Basins.create_barplot caused by range, affects python3
-- bugfix in ModelChecking.primes2smv for van ham init constraints, caused by zip, affects python3
-- bugfix in StateTransitionGraphs.random_walk
-- bugfix in StateTransitionGraphs.create_image: adding styles anonymous and mintrapspaces
-- bugfix in InteractionGraphs: drawing subgraphs, caused by moving to networkx2
-
-
-For older release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
+For release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)

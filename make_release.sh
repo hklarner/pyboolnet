@@ -1,5 +1,5 @@
 
-VERSION=2.2.8
+VERSION=2.2.9
 LOCALOS=linux64
 
 echo "creating manual"
@@ -16,21 +16,21 @@ rm -rf PyBoolNet/Dependencies
 echo
 echo "Creating linux64 release"
 cp -ap Dependencies/linux64/. PyBoolNet/Dependencies
-python setup.py sdist
+python3 setup.py sdist
 mv dist/PyBoolNet-$VERSION.tar.gz dist/PyBoolNet-$VERSION\_linux64.tar.gz
 rm -rf PyBoolNet/Dependencies
 
 echo
 echo "Creating win64 release"
 cp -ap Dependencies/win64/. PyBoolNet/Dependencies
-python setup.py sdist
+python3 setup.py sdist
 mv dist/PyBoolNet-$VERSION.tar.gz dist/PyBoolNet-$VERSION\_win64.tar.gz
 rm -rf PyBoolNet/Dependencies
 
 echo
 echo "Creating mac64 release"
 cp -ap Dependencies/mac64/. PyBoolNet/Dependencies
-python setup.py sdist
+python3 setup.py sdist
 mv dist/PyBoolNet-$VERSION.tar.gz dist/PyBoolNet-$VERSION\_mac64.tar.gz
 rm -rf PyBoolNet/Dependencies
 

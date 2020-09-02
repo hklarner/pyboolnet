@@ -6,14 +6,8 @@ import sys
 import tempfile
 import shutil
 
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-sys.path.insert(0,BASE)
 
 import PyBoolNet.Commitment
-
-config = PyBoolNet.Utility.Misc.myconfigparser.SafeConfigParser()
-config.read(os.path.join(BASE, "PyBoolNet", "Dependencies", "settings.cfg"))
-
 
 
 def run():

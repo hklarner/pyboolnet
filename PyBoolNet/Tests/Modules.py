@@ -40,7 +40,7 @@ def run():
 
 
 	# old test setup
-	unittest.main(verbosity=2, buffer=True, exit=False, module=__name__)
+	unittest.main(verbosity=2, argv=[''], buffer=True, exit=False, module=__name__)
 
 	if os.path.isdir(FILES_OUT):
 		shutil.rmtree(FILES_OUT)
@@ -366,11 +366,11 @@ class TestStateTransitionGraphs(unittest.TestCase):
 		PyBoolNet.StateTransitionGraphs.stg2image(stg, fname_out3)
 
 
-		init = PyBoolNet.StateTransitionGraphs.random_state(Primes=primes)
+		init = PyBoolNet.StateTransitionGraphs.random_state(primes=primes)
 		walk = PyBoolNet.StateTransitionGraphs.random_walk(Primes=primes, Update="asynchronous", InitialState=init, Length=5)
 		stg = PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous")
 		PyBoolNet.StateTransitionGraphs.add_style_path(stg, walk, "red")
-		init = PyBoolNet.StateTransitionGraphs.random_state(Primes=primes)
+		init = PyBoolNet.StateTransitionGraphs.random_state(primes=primes)
 		walk = PyBoolNet.StateTransitionGraphs.random_walk(Primes=primes, Update="asynchronous", InitialState=init, Length=5)
 		PyBoolNet.StateTransitionGraphs.add_style_path(stg, walk, "blue")
 		PyBoolNet.StateTransitionGraphs.stg2image(stg, fname_out4)
@@ -380,8 +380,8 @@ class TestStateTransitionGraphs(unittest.TestCase):
 	def test_random_state(self):
 		fname_in  = os.path.join(FILES_IN,  "irma.primes")
 		primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
-		PyBoolNet.StateTransitionGraphs.random_state(Primes=primes)
-		PyBoolNet.StateTransitionGraphs.random_state(Primes=primes, Subspace="111-0-")
+		PyBoolNet.StateTransitionGraphs.random_state(primes=primes)
+		PyBoolNet.StateTransitionGraphs.random_state(primes=primes, subspace="111-0-")
 		# no assertion
 
 	def test_stg2sccgraph(self):
@@ -1619,21 +1619,19 @@ class TestInteractionGraphs(unittest.TestCase):
 		primes = PyBoolNet.FileExchange.read_primes(FnamePRIMES=fname_in)
 
 		igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes=primes)
-		fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.jpg")
+		fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.png")
 		PyBoolNet.InteractionGraphs.igraph2image(IGraph=igraph, FnameIMAGE=fname_out)
 		## no assertion ##
 
 	def test_dot2image(self):
 		fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.dot")
-		fname_out1 = os.path.join(FILES_OUT, "interactiongraphs_dot2image1.jpg")
+		fname_out1 = os.path.join(FILES_OUT, "interactiongraphs_dot2image1.png")
 		fname_out2 = os.path.join(FILES_OUT, "interactiongraphs_dot2image2.svg")
 		fname_out3 = os.path.join(FILES_OUT, "interactiongraphs_dot2image3.eps")
-		fname_out4 = os.path.join(FILES_OUT, "interactiongraphs_dot2image4.gif")
 
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out1)
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out2)
 		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out3)
-		PyBoolNet.InteractionGraphs.dot2image(FnameDOT=fname_in, FnameIMAGE=fname_out4)
 		## no assertion ##
 
 	def test_styles(self):

@@ -1,0 +1,35 @@
+{% set name = "pyboolnet" %}
+{% set version = "2.2.9" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  path: ../
+
+channels:
+  - colomoto
+
+build:
+  number: 0
+  noarch: python
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - bnettoprime
+    - clingo
+    - eqntott
+    - espresso-logic-minimizer
+    - networkx
+    - nusmv-a
+
+about:
+  home: https://github.com/hklarner/PyBoolNet
+  summary: 'Generation, modification and analysis of Boolean networks'
+
