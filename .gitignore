@@ -1,6 +1,8 @@
 *.pyc
 *~
+*.iml
 
+venv
 PyBoolNet/Tests/Files/**
 
 Docs/Sphinx/build/**
@@ -21,6 +23,5 @@ Tutorials/*/*.json
 Tutorials/*/*.pdf
 
 .idea/
-requirements.txt
 
 MANIFEST
