@@ -58,5 +58,5 @@ setup(name="PyBoolNet",
           "Natural Language :: English",
           "Topic :: Scientific/Engineering :: Bio-Informatics",
       ],
-      install_requires=['networkx (==1.11)']
+      install_requires=['networkx (==2.4)']
       )
