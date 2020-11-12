@@ -6,7 +6,7 @@ The accompanying paper was published with [Bioinformatics](https://academic.oup.
 
  * https://doi.org/10.1093/bioinformatics/btw682
 
-For the documentation and tutorials visit [pyboolnet.readthedocs.io](pyboolnet.readthedocs.io).
+For the documentation and tutorials visit [pyboolnet.readthedocs.io](https://pyboolnet.readthedocs.io/).
 For attractor, basin and phenotype examples, browse the [repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository).
 For report bugs, request features and give feedback at [issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
