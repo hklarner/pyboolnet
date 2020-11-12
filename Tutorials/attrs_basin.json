@@ -1,0 +1,404 @@
+{
+    "attractors": [
+        {
+            "cyclefree_basin": {
+                "formula": "!(TNF | (IKKa | (C3a | !(T2 & (CARP & (IAP | !(C8a)) | !CARP & (IAP)) | !T2 & (IAP | !(C8a))))))",
+                "perc": 8.59375,
+                "size": 352
+            },
+            "strong_basin": {
+                "formula": "!(TNF | (C3a | !(T2 & (CARP & (IAP | !(C8a)) | !CARP & (IAP)) | !T2 & (IAP | !(C8a)))))",
+                "perc": 17.1875,
+                "size": 704
+            },
+            "weak_basin": {
+                "formula": "!(TNF | !(NFkB | (NFkBnuc | ((IKKa | ((CARP | (IAP | !(C8a))) | !C3a)) | !IkB))))",
+                "perc": 49.8046875,
+                "size": 2040
+            },
+            "mintrapspace": {
+                "str": "000101010000",
+                "is_faithful": "yes",
+                "dict": {
+                    "IkB": 1,
+                    "FLIP": 0,
+                    "NFkB": 0,
+                    "A20a": 0,
+                    "NFkBnuc": 0,
+                    "CARP": 1,
+                    "T2": 0,
+                    "IKKa": 0,
+                    "C8a": 0,
+                    "TNF": 0,
+                    "C3a": 0,
+                    "IAP": 1
+                },
+                "prop": "!A20a&!C3a&!C8a&CARP&!FLIP&IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF",
+                "is_univocal": "yes"
+            },
+            "state": {
+                "str": "000101010000",
+                "dict": {
+                    "IkB": 1,
+                    "FLIP": 0,
+                    "NFkB": 0,
+                    "A20a": 0,
+                    "IKKa": 0,
+                    "CARP": 1,
+                    "T2": 0,
+                    "NFkBnuc": 0,
+                    "C8a": 0,
+                    "TNF": 0,
+                    "C3a": 0,
+                    "IAP": 1
+                },
+                "prop": "!A20a&!C3a&!C8a&CARP&!FLIP&IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            },
+            "is_cyclic": false,
+            "is_steady": true
+        },
+        {
+            "cyclefree_basin": {
+                "formula": "!(((CARP | (IAP | !(C8a))) | !C3a) | !TNF)",
+                "perc": 3.125,
+                "size": 128
+            },
+            "strong_basin": {
+                "formula": "TNF",
+                "perc": 50.0,
+                "size": 2048
+            },
+            "weak_basin": {
+                "formula": "TNF",
+                "perc": 50.0,
+                "size": 2048
+            },
+            "mintrapspace": {
+                "str": "-110-00----1",
+                "is_faithful": "yes",
+                "dict": {
+                    "CARP": 0,
+                    "IKKa": 0,
+                    "C8a": 1,
+                    "TNF": 1,
+                    "C3a": 1,
+                    "IAP": 0
+                },
+                "prop": "C3a&C8a&!CARP&!IAP&!IKKa&TNF",
+                "is_univocal": "yes"
+            },
+            "state": {
+                "str": "011000001011",
+                "dict": {
+                    "IkB": 0,
+                    "FLIP": 0,
+                    "NFkB": 1,
+                    "A20a": 0,
+                    "NFkBnuc": 0,
+                    "CARP": 0,
+                    "T2": 1,
+                    "IKKa": 0,
+                    "C8a": 1,
+                    "TNF": 1,
+                    "C3a": 1,
+                    "IAP": 0
+                },
+                "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&!IkB&NFkB&!NFkBnuc&T2&TNF"
+            },
+            "is_cyclic": true,
+            "is_steady": false
+        },
+        {
+            "cyclefree_basin": {
+                "formula": "!(TNF | (NFkB | (NFkBnuc | ((IKKa | ((CARP | (IAP | !(C8a))) | !C3a)) | !IkB))))",
+                "perc": 0.1953125,
+                "size": 8
+            },
+            "strong_basin": {
+                "formula": "!(TNF | (NFkB | (NFkBnuc | ((IKKa | ((CARP | (IAP | !(C8a))) | !C3a)) | !IkB))))",
+                "perc": 0.1953125,
+                "size": 8
+            },
+            "weak_basin": {
+                "formula": "!(TNF | !(C3a | !(T2 & (CARP & (IAP | !(C8a)) | !CARP & (IAP)) | !T2 & (IAP | !(C8a)))))",
+                "perc": 32.8125,
+                "size": 1344
+            },
+            "mintrapspace": {
+                "str": "011000010000",
+                "is_faithful": "yes",
+                "dict": {
+                    "IkB": 1,
+                    "FLIP": 0,
+                    "NFkB": 0,
+                    "A20a": 0,
+                    "NFkBnuc": 0,
+                    "CARP": 0,
+                    "T2": 0,
+                    "IKKa": 0,
+                    "C8a": 1,
+                    "TNF": 0,
+                    "C3a": 1,
+                    "IAP": 0
+                },
+                "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF",
+                "is_univocal": "yes"
+            },
+            "state": {
+                "str": "011000010000",
+                "dict": {
+                    "IkB": 1,
+                    "FLIP": 0,
+                    "NFkB": 0,
+                    "A20a": 0,
+                    "IKKa": 0,
+                    "CARP": 0,
+                    "T2": 0,
+                    "NFkBnuc": 0,
+                    "C8a": 1,
+                    "TNF": 0,
+                    "C3a": 1,
+                    "IAP": 0
+                },
+                "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
+            },
+            "is_cyclic": false,
+            "is_steady": true
+        }
+    ],
+    "update": "asynchronous",
+    "primes": {
+        "IkB": [
+            [
+                {
+                    "NFkBnuc": 0,
+                    "TNF": 1
+                },
+                {
+                    "IKKa": 1,
+                    "TNF": 1
+                },
+                {
+                    "IKKa": 1,
+                    "NFkBnuc": 0
+                }
+            ],
+            [
+                {
+                    "NFkBnuc": 1,
+                    "TNF": 0
+                },
+                {
+                    "IKKa": 0,
+                    "TNF": 0
+                },
+                {
+                    "IKKa": 0,
+                    "NFkBnuc": 1
+                }
+            ]
+        ],
+        "FLIP": [
+            [
+                {
+                    "NFkBnuc": 0
+                }
+            ],
+            [
+                {
+                    "NFkBnuc": 1
+                }
+            ]
+        ],
+        "NFkB": [
+            [
+                {
+                    "IkB": 1
+                }
+            ],
+            [
+                {
+                    "IkB": 0
+                }
+            ]
+        ],
+        "A20a": [
+            [
+                {
+                    "TNF": 0
+                },
+                {
+                    "NFkBnuc": 0
+                }
+            ],
+            [
+                {
+                    "NFkBnuc": 1,
+                    "TNF": 1
+                }
+            ]
+        ],
+        "IKKa": [
+            [
+                {
+                    "TNF": 0
+                },
+                {
+                    "C3a": 1
+                },
+                {
+                    "A20a": 1
+                }
+            ],
+            [
+                {
+                    "A20a": 0,
+                    "TNF": 1,
+                    "C3a": 0
+                }
+            ]
+        ],
+        "CARP": [
+            [
+                {
+                    "NFkBnuc": 0,
+                    "TNF": 1
+                },
+                {
+                    "TNF": 1,
+                    "C3a": 1
+                },
+                {
+                    "NFkB": 0,
+                    "C3a": 1
+                }
+            ],
+            [
+                {
+                    "NFkB": 1,
+                    "TNF": 0
+                },
+                {
+                    "TNF": 0,
+                    "C3a": 0
+                },
+                {
+                    "NFkBnuc": 1,
+                    "C3a": 0
+                }
+            ]
+        ],
+        "T2": [
+            [
+                {
+                    "TNF": 0
+                },
+                {
+                    "FLIP": 1
+                }
+            ],
+            [
+                {
+                    "FLIP": 0,
+                    "TNF": 1
+                }
+            ]
+        ],
+        "NFkBnuc": [
+            [
+                {
+                    "NFkB": 0
+                },
+                {
+                    "IkB": 1
+                }
+            ],
+            [
+                {
+                    "IkB": 0,
+                    "NFkB": 1
+                }
+            ]
+        ],
+        "C8a": [
+            [
+                {
+                    "T2": 0,
+                    "C3a": 0
+                },
+                {
+                    "CARP": 1
+                }
+            ],
+            [
+                {
+                    "CARP": 0,
+                    "T2": 1
+                },
+                {
+                    "CARP": 0,
+                    "C3a": 1
+                }
+            ]
+        ],
+        "TNF": [
+            [
+                {
+                    "TNF": 0
+                }
+            ],
+            [
+                {
+                    "TNF": 1
+                }
+            ]
+        ],
+        "C3a": [
+            [
+                {
+                    "IAP": 1
+                },
+                {
+                    "C8a": 0
+                }
+            ],
+            [
+                {
+                    "IAP": 0,
+                    "C8a": 1
+                }
+            ]
+        ],
+        "IAP": [
+            [
+                {
+                    "NFkBnuc": 0,
+                    "TNF": 1
+                },
+                {
+                    "TNF": 1,
+                    "C3a": 1
+                },
+                {
+                    "NFkBnuc": 0,
+                    "C3a": 1
+                }
+            ],
+            [
+                {
+                    "NFkBnuc": 1,
+                    "TNF": 0
+                },
+                {
+                    "TNF": 0,
+                    "C3a": 0
+                },
+                {
+                    "NFkBnuc": 1,
+                    "C3a": 0
+                }
+            ]
+        ]
+    },
+    "is_complete": "yes"
+}
