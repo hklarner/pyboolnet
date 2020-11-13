@@ -6,24 +6,35 @@ The accompanying paper was published with [Bioinformatics](https://academic.oup.
 
  * https://doi.org/10.1093/bioinformatics/btw682
 
-For the documentation and tutorials visit [pyboolnet.readthedocs.io](https://pyboolnet.readthedocs.io/).
-For attractor, basin and phenotype examples, browse the [repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository).
+
 For report bugs, request features and give feedback at [issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
 
+## Documentation
+The documentation and tutorials are hosted here:
+
+ * [https://pyboolnet.readthedocs.io/](https://pyboolnet.readthedocs.io/)
+
+## Model Repository
+For examples of attractors, basins and phenotypes, browse the model repository here:
+
+ * [PyBoolNet/Repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository)
 
 ## Installation
-To install directly from this repository use:
+To install the PyBoolNet master branch use:
 
 ```bash 
 pip3 install git+https://github.com/hklarner/PyBoolNet
 ```
-To install a particular release, append the version number to the end of the github url with an `@`. E.g.: 
+
+To install a tagged version use the `@`: 
 
 ```bash 
 pip3 install git+https://github.com/hklarner/PyBoolNet@2.2.9
 ```
 
-For release notes, see [RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
+For release notes, see
+ 
+ * [PyBoolNet/RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
