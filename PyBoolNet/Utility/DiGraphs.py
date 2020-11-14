@@ -16,7 +16,7 @@ def digraph2dotlines(DiGraph, Indent=1):
     Basic function to create *dot* lines from a *networkx.DiGraph*.
 
     **arguments**:
-        * *DiGraph* (*networkx.DiGraph*)
+        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
 
     **returns**:
         * list of *dot* lines
@@ -115,7 +115,7 @@ def digraph2dotlines(DiGraph, Indent=1):
         lines+= ['']
 
     # edge attributes
-    for source, target, attr in sorted(DiGraph.edges(data=True)):
+    for source, target, attr in DiGraph.edges(data=True):
 
         # sign is reserved for interaction signs
         attr = dict([x for x in attr.items() if not x[0]=="sign"])
@@ -151,7 +151,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
     Generates a *dot* file from *DiGraph* and saves it as *FnameDOT* or returns dot file as a string.
 
     **arguments**:
-        * *DiGraph*: networkx.DiGraph
+        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
         * *FnameDOT* (str): name of *dot* file or *None*
 
     **returns**:
@@ -226,6 +226,7 @@ def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
     Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
 
     **arguments**:
+        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
         * *FnameDOT*: name of input *dot* file
         * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *FnameIMAGE*: name of output file
