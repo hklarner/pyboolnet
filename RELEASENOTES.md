@@ -1,4 +1,7 @@
 
+## release notes for next version
+ - support for drawing multi-digraphs (by @nanls)
+
 
 ## release notes for version 2.2.9 (September 2020)
 - adds Conda recipe [PR](https://github.com/hklarner/PyBoolNet/pull/38)
