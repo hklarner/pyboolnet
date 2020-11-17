@@ -103,6 +103,10 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
     
     stg = networkx.DiGraph()
     
+    if len(Primes) == 0:
+        print("No Primes were given. Hence, the stg is empty.") 
+        return stg   
+
     if Update == "asynchronous":
         successors = lambda x: successors_asynchronous(Primes, x)
     if Update == "synchronous":
