@@ -1,6 +1,7 @@
 
 ## release notes for next version
- - support for drawing multi-digraphs (by @nanls)
+ - modified `primes2stg` to return empty stg if primes are empty (by @nanls)
+ - support for drawing multi-digraphs in `digraph2image`(by @nanls)
 
 
 ## release notes for version 2.2.9 (September 2020)
