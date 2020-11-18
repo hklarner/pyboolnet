@@ -22,6 +22,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
+      - name: set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x' 
+          architecture: 'x64' 
+      
       - name: display Python version
         run: python -c "import sys; print(sys.version)"
         
