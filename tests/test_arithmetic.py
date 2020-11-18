@@ -1,9 +1,10 @@
 
 
 import pytest
+import PyBoolNet
 
 
 def test_addition_works():
-    assert 1 + 1 == 2
+    assert 1 + 2 == 3
 
 
