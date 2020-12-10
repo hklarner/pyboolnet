@@ -672,7 +672,7 @@ def input_combinations(Primes, Format="dict"):
         else:
             for x in itertools.product(*len(inputs)*[[0,1]]):
                 x = dict(zip(inputs,x))
-                x = PyBoolNet.StateTransitionGraphs.subspace2str(primes,x)
+                x = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
                 yield x
 
     else:
