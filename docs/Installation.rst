@@ -6,9 +6,6 @@
 Installation
 ============
 
-Installation
-============
-
 Python
 ------
 |software| is now being developed in Python 3.6.9 but should be compatible with Python2.

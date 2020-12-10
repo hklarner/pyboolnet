@@ -1,5 +1,6 @@
 
 ## release notes for next version
+ - bugfix in `input_combinations` of `PrimeImplicants`, typo: `primes` -> `Primes` (by @leonardogian)
  - modified `primes2stg` to return empty stg if primes are empty (by @nanls)
  - support for drawing multi-digraphs in `digraph2image`(by @nanls)
 
