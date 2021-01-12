@@ -554,10 +554,14 @@ def successor_synchronous(Primes, State):
         * *Successor* (dict): the synchronous successor of *State*
 
     **example**::
-
+            >>> primes = {
+            'v1': [[{'v2': 0}], [{'v2': 1}]],
+            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
+            }
             >>> state = "100"
             >>> successor_synchronous(primes, state)
-            {'v1':0, 'v2':1, 'v3':1}
+            {'v1': 0, 'v2': 0, 'v3': 0}
     """
     
     if type(State) == str:
@@ -590,10 +594,14 @@ def successors_asynchronous(Primes, State):
         * *Successors* (list): the asynchronous successors of *State*
 
     **example**::
-
-            >>> state = "100"
+            >>> primes = {
+            'v1': [[{'v2': 0}], [{'v2': 1}]],
+            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
+            }
+            >>> state = "101"
             >>> successors_asynchronous(primes, state)
-            [{'v1':1, 'v2':1, 'v3':1},{'v1':0, 'v2':0, 'v3':1},{'v1':0, 'v2':1, 'v3':0}]
+            [{'v1': 0, 'v2': 0, 'v3': 1}, {'v1': 1, 'v2': 1, 'v3': 1}, {'v1': 1, 'v2': 0, 'v3': 0}]
     """
     
     if type(State) == str:
