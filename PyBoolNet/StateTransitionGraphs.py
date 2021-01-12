@@ -646,7 +646,7 @@ def random_successor_mixed(Primes, State):
     
     names = [x for x in target if target[x] != State[x]]
     k = random.randint(1, len(names))
-    successor = State.copy()
+    
     for name in random.sample(names, k):
         State[name] = target[name]
     
