@@ -240,6 +240,15 @@ class TestStateTransitionGraphs(unittest.TestCase):
         PyBoolNet.StateTransitionGraphs.random_successor_mixed(primes, state)
         # no assertion
 
+    def test_successors_mixed(self):
+        fname_in = os.path.join(FILES_IN, "randomnet.bnet")
+        fname_out = os.path.join(FILES_OUT, "randomnet.primes")
+        primes = PyBoolNet.FileExchange.bnet2primes(
+            BNET=fname_in, FnamePRIMES=fname_out)
+
+        state = dict([('Gene%i' % (i + 1), i % 2) for i in range(20)])
+        PyBoolNet.StateTransitionGraphs.successors_mixed(primes, state)
+        # no assertion
 
     def test_successors_asynchronous(self):
         fname_in  = os.path.join(FILES_IN,  "randomnet.bnet")

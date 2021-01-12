@@ -94,7 +94,8 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
         >>> stg = primes2stg(primes, update, init)
     """
     
-    assert (Update in ['asynchronous', 'synchronous'])  # MIXED has too many transitions to draw stg
+    if Update not in ['asynchronous', 'synchronous']:
+        print("The chosen update might lead to a very big STG")
     
     if len(Primes) > 15:
         print("The state transition graph will consist of up to 2**%i=%i states, depending on the InitialStates. " %
@@ -111,6 +112,8 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
         successors = lambda x: successors_asynchronous(Primes, x)
     if Update == "synchronous":
         successors = lambda x: [successor_synchronous(Primes, x)]
+    if Update == "mixed":
+        successors = lambda x: [successors_mixed(Primes, x)]
     
     names = sorted(Primes)
     space = len(names) * [[0, 1]]
@@ -618,6 +621,63 @@ def successors_asynchronous(Primes, State):
             successor[name] = target[name]
             successors.append(successor)
     
+    return successors
+
+
+def successors_mixed(Primes, State):
+    """
+    Returns the successors of *State* in the mixed transition system defined by *Primes*.
+    The mixed update contains the synchronous and asynchronous STGs
+    but it also allows transitions in which an arbitrary number of unstable components (but at least one) are updated.
+
+    .. note::
+        There are up to 2^n mixed successors for a state (n is the number of variables).
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *State* (str/dict): a state
+
+    **returns**:
+        * *Successors* (list): the mixed successors of *State*
+
+        **example**::
+            >>> primes = {
+            'v1': [[{'v2': 0}], [{'v2': 1}]],
+            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
+            }
+            >>> state = "010"
+            >>> successors_mixed(primes, state)
+            [{'v1': 1, 'v2': 1, 'v3': 0},
+             {'v1': 0, 'v2': 0, 'v3': 0},
+             {'v1': 0, 'v2': 1, 'v3': 1},
+             {'v1': 1, 'v2': 0, 'v3': 0},
+             {'v1': 1, 'v2': 1, 'v3': 1},
+             {'v1': 0, 'v2': 0, 'v3': 1},
+             {'v1': 1, 'v2': 0, 'v3': 1}]
+    """
+    if type(State) == str:
+        State = state2dict(Primes, State)
+
+    target = successor_synchronous(Primes, State)
+    if target == State:
+        return [target]
+
+    successors = []
+
+    diff = [x for x in target if target[x] != State[x]]
+    # non empty powersets:
+    combinations = itertools.chain.from_iterable(
+        itertools.combinations(diff, r)
+        for r in range(1, len(diff) + 1)
+    )
+
+    for combination in combinations:
+        successor = State.copy()
+        for name in combination:
+            successor[name] = target[name]
+        successors.append(successor)
+
     return successors
 
 
