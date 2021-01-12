@@ -636,7 +636,10 @@ def random_successor_mixed(Primes, State):
             >>> random_successor_mixed(primes, state)
             {'v1':1, 'v2':1, 'v3':1}
     """
-    
+
+    if type(State) == str:
+        State = state2dict(Primes, State)
+
     target = successor_synchronous(Primes, State)
     if target == State:
         return target
