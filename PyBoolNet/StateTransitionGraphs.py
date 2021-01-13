@@ -1,3 +1,5 @@
+
+
 import random
 import itertools
 import heapq
@@ -905,7 +907,7 @@ def states2str(Primes, States):
     **example**::
 
         >>> states = [{'v2':0, 'v1':1, 'v3':1},{'v2':0, 'v1':1, 'v3':0}]
-        >>> states2dict(primes, state)
+        >>> states2str(primes, state)
         ["101", "100"]
     """
     

@@ -1,10 +1,10 @@
 
+
 from __future__ import print_function
 
 import datetime
 import itertools
 import random
-import networkx
 
 import PyBoolNet.FileExchange
 import PyBoolNet.PrimeImplicants
@@ -235,6 +235,9 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
             >>> find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
             {'v1':1, 'v2':1, 'v3':1}
     """
+
+    if type(InitialState) == str:
+        InitialState = PyBoolNet.StateTransitionGraphs.state2dict(Primes=Primes, State=InitialState)
 
     assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
     assert(set(InitialState).issubset(set(Primes)))
