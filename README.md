@@ -38,3 +38,7 @@ pip3 install git+https://github.com/hklarner/PyBoolNet@2.2.9
 For release notes, see
  
  * [PyBoolNet/RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
+
+
+## Contributions
+If you want to contribute code to PyBoolNet, please send pull requests to the `develop` branch.
