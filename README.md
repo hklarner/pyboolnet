@@ -32,12 +32,17 @@ pip3 install git+https://github.com/hklarner/PyBoolNet
 To install a tagged version use the `@`: 
 
 ```bash 
-pip3 install git+https://github.com/hklarner/PyBoolNet@2.2.9
+pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0
 ```
 
 For release notes, see
  
  * [PyBoolNet/RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
+
+
+## Contributions
+- send pull requests to the `develop` branch
+- add tests to `PyBoolNet/tests/` (the other location, `PyBoolNet/PyBoolNet/Tests/` is deprecated)
 
 
 ## Contributions

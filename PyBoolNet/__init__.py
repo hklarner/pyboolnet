@@ -24,7 +24,7 @@ import pprint as prettyprint
 
 
 def version() -> str:
-    return "2.2.9"
+    return "2.3.0"
 
 
 def pprint(x):

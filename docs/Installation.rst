@@ -34,7 +34,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install PyBoolNet-2.2.9_linux64.tar.gz
+   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0
 
 which should place the package here::
 
@@ -42,22 +42,13 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install PyBoolNet-2.2.9.tar.gz --user
+   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0 --user
 
 The package is likely going to be placed here::
 
    /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
-To install |software| using *Distutils* unpack *PyBoolNet-2.2.9.tar.gz* into a temporary folder and run::
-
-   $ sudo python setup.py install
-
-again, using the ``--user`` flag if you do not have sudo rights::
-
-   $ python setup.py install --user
-
-The locations should be the same as when installing with *pip*.
 
 You should now be able to import |software|::
 
@@ -101,7 +92,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install PyBoolNet-2.2.9_mac64.tar.gz
+   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0
 
 which should place the package here::
 
@@ -109,7 +100,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install PyBoolNet-2.2.9.tar.gz --user
+   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0 --user
 
 The package is likely going to be placed here::
 
@@ -142,7 +133,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install PyBoolNet-2.2.9_win64.tar.gz
+   C:\> pip.exe install git+https://github.com/hklarner/PyBoolNet@2.3.0
 
 which should place the package here::
 

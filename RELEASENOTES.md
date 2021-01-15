@@ -1,5 +1,8 @@
 
-## release notes for next version
+## release notes for version 2.3.0 (January 2021)
+ - bugfix in `find_attractor_state_by_randomwalk_and_ctl` (by @etonello)
+ - adds `STGs.successors_mixed` (by @nanls)
+ - bugfix in `random_successor_mixed` (by @nanls)
  - added `STGs.successors_mixed` (by @nanls)
  - bugfix `random_successor_mixed` (by @nanls)
  - bugfix in `input_combinations` of `PrimeImplicants`, typo: `primes` -> `Primes` (by @leonardogian)
