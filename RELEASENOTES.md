@@ -43,7 +43,7 @@
 - bugfixes for Python3: encoding / decoding and long / int
 
 
-#### release notes for version 2.2.2 (February 2018)
+## release notes for version 2.2.2 (February 2018)
 - **new Module** `Commitment` for the computation of commitment diagrams
 - **new Module** `Phenotypes` for the computation of phenotype diagrams
 - **bugfix** of encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository`
@@ -60,11 +60,11 @@
 - added `StateTransitionGraphs.find_vanham_variables(..)` to detect variables that represent ternary variables
 
 
-#### release notes for hotfix version 2.2.1 (January 2018)
+## release notes for hotfix version 2.2.1 (January 2018)
 - **bugfix**: removed slowdown that was introduced by unnecessarily computing counterexamples in `AttractorDetection.completeness(..)`, `AttractorDetection.univocality(..)` and `AttractorDetection.faithfulness(..)`
 
 
-#### release notes for version 2.2.0 (November 2017)
+## release notes for version 2.2.0 (November 2017)
 - bugfix for linux dependencies, see [Issue17](https://github.com/hklarner/PyBoolNet/issues/17)
 - removed support for linux 32 bit
 - added module `BooleanExpressions` with `minimize_espresso(..)` (work by Sarah Nee)
@@ -88,7 +88,7 @@
 - renamed `subspace1_is_in_subspace2(..)` to `A_is_subspace_of_B(..)` for clarity
 
 
-#### release notes for version 2.1.1 (February 2017)
+## release notes for version 2.1.1 (February 2017)
 - added section `For Developers` to manual
 - refactored git repository so that all necessary files for building PyBoolNet are available on github
 - added functions `state_is_in_subspace` and `subspace1_is_in_subspace2` to `StateTransitionGraphs`
@@ -96,7 +96,7 @@
 - added argument `Copy` to `create_blinkers(..)`, `create_variables(..)`, `create_disjoint_union(..)`, `rename(..)`, `remove_variables(..)` and `remove_all_variables_except(..)` of module `PrimeImplicants`
 
 
-#### release notes for version 2.1 (September 2016)
+## release notes for version 2.1 (September 2016)
 - support for windows and macos
 - refactored `subspace2states` as `list_states_in_subspace` and `proposition2states` as `enumerate_states`
 - refactored function for state and subspace conversions to `state2str`, `state2dict`, `subspace2str`, `subspace2dict` and added basic asserts
@@ -107,7 +107,7 @@
 - bugfix absolute import for Python 3.x
 
 
-#### release notes for version 2.0 (August 2016)
+## release notes for version 2.0 (August 2016)
 - added functions `create_variables`, `create_disjoin_union` to module PIs
 - split function `percolate_constants` from module PIs into `percolate_and_keep_constants` and `percolate_and_remove_constants` for clarity
 - bugfix in `completeness_iterative` of module AD
@@ -126,5 +126,5 @@
 - added support for Python 2.x _and_ 3.x
 - added function `input_combinations` to module `PrimeImplicants`
 
-#### release notes for version 1.0 (February 2016)
+## release notes for version 1.0 (February 2016)
 - first official release
