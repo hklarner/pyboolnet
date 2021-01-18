@@ -17,7 +17,9 @@ if "CONDA_BUILD" not in os.environ:
         pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
     else:
         # no idea if we could get here?
-        raise Exception 
+        raise Exception
+
+    print(f"PyBoolNet dependency folder = {pyboolnet_dep_folder}")
 
     # copy dependencies to PyBoolNet/Dependencies
     copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
@@ -38,7 +40,7 @@ for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 setup(name="PyBoolNet",
-      version="2.2.9",
+      version="2.3.0",
       description="Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
       author="Hannes Klarner",
       author_email="hannes.klarner@fu-berlin.de",
