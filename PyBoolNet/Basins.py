@@ -2,37 +2,17 @@
 
 import os
 import sys
-import itertools
-import math
-import random
-import operator
-import functools
-import networkx
+
+import PyBoolNet
+from PyBoolNet.Utility.Misc import perc2str
 
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
 sys.path.append(BASE)
 
-import PyBoolNet.FileExchange
-import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalLogic
-import PyBoolNet.AspSolver
-import PyBoolNet.Attractors
-import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.InteractionGraphs
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.Utility
-
-CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
-
-perc2str = PyBoolNet.Utility.Misc.perc2str
-
-BASIN_COLORS = ["#ddf2db", "#a0dcb5", "#2ba0c6"] # weak, strong, cycle-free (blue-green)
-BASIN_COLORS = ["#fee8c8", "#fdbb84", "#e34a33"] # weak, strong, cycle-free (reddish)
-BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"] # weak, strong, cycle-free (purple)
-
-
-PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"] # pastel19 color scheme
-PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
+BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"]  # weak, strong, cycle-free (purple)
+PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"]
+PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"]
 PIE_COLORS = 10*[BASIN_COLORS[1]]
 
 
@@ -146,14 +126,14 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
     size = acc["INITACCEPTING_SIZE"]
     formula = acc["INITACCEPTING"]
 
-    if Minimize and formula not in ["TRUE","FALSE"]:
+    if Minimize and formula not in ["TRUE", "FALSE"]:
         formula = PyBoolNet.BooleanLogic.minimize_espresso(formula)
 
     size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
 
-    return {"size":    size,
+    return {"size": size,
             "formula": formula,
-            "perc":    100.* size / size_total}
+            "perc": 100. * size / size_total}
 
 
 def _default_basin(Primes):
@@ -212,13 +192,15 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
     Primes = AttrJson["primes"]
     Update = AttrJson["update"]
 
-    if not Silent: print("compute_basins(..)")
+    if not Silent:
+        print("compute_basins(..)")
+
     if not any([Weak, Strong, CycleFree]):
         if not Silent: print(" nothing to do. you should enable at least one of the parameters Weak, Strong, CycleFree.")
         return
 
     n = len(AttrJson["attractors"])
-    for i,x in enumerate(AttrJson["attractors"]):
+    for i, x in enumerate(AttrJson["attractors"]):
         if not Silent: print(" working on attractor {i}/{n}: {l}".format(i=i+1,n=n,l=x["state"]["str"]))
 
         if Weak:
