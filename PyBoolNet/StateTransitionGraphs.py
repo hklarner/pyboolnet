@@ -113,7 +113,7 @@ def primes2stg(Primes, Update, InitialStates=lambda x: True):
     if Update == "synchronous":
         successors = lambda x: [successor_synchronous(Primes, x)]
     if Update == "mixed":
-        successors = lambda x: [successors_mixed(Primes, x)]
+        successors = lambda x: successors_mixed(Primes, x)
     
     names = sorted(Primes)
     space = len(names) * [[0, 1]]

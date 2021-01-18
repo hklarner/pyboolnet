@@ -299,8 +299,10 @@ class TestStateTransitionGraphs(unittest.TestCase):
 
         PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous")
         PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous")
+        PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="mixed")
         PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="asynchronous", InitialStates=init)
         PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous", InitialStates=init)
+        PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="mixed", InitialStates=init)
 
         init = []
         stg = PyBoolNet.StateTransitionGraphs.primes2stg(Primes=primes, Update="synchronous", InitialStates=init)
