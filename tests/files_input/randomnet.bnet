@@ -1,0 +1,21 @@
+targets, factors
+Gene1, (!Gene4 & Gene10 & !Gene8 & !Gene18) | (Gene4 & !Gene10 & !Gene18) | (Gene4 & !Gene8 & Gene18) | (Gene4 & Gene8 & !Gene18) | (Gene4 & Gene10 & Gene18)
+Gene2, (!Gene13)
+Gene3, (!Gene4)
+Gene4, (!Gene6 & Gene12) | (Gene12 & Gene11)
+Gene5, (!Gene17 & !Gene6 & !Gene19) | (!Gene2 & !Gene6 & !Gene1 & Gene19) | (!Gene2 & Gene6 & !Gene1 & !Gene19) | (!Gene2 & !Gene17 & !Gene19) | (Gene17 & !Gene6 & Gene1 & Gene19) | (!Gene2 & Gene17 & !Gene1 & Gene19) | (Gene2 & !Gene6 & Gene1 & Gene19)
+Gene6, (!Gene6 & Gene1 & Gene11) | (Gene6 & !Gene17 & !Gene11) | (Gene6 & !Gene17 & !Gene1) | (Gene17 & Gene1 & Gene11)
+Gene7, (Gene10)
+Gene8, 0
+Gene9, (!Gene9 & !Gene18) | (!Gene9 & !Gene2) | (Gene2 & !Gene18) | (!Gene3 & Gene9 & Gene2) | (Gene3 & !Gene9) | (Gene3 & !Gene2 & Gene18)
+Gene10, (!Gene7)
+Gene11, 0
+Gene12, (!Gene17) | (Gene18)
+Gene13, (!Gene17 & !Gene19 & Gene13 & !Gene15) | (!Gene17 & !Gene19 & Gene13 & Gene2) | (!Gene17 & !Gene5 & Gene19 & !Gene13 & Gene15) | (!Gene17 & !Gene5 & Gene19 & Gene2) | (!Gene17 & Gene5 & !Gene19 & !Gene2 & !Gene15) | (!Gene17 & Gene19 & !Gene13 & Gene2 & Gene15) | (Gene17 & !Gene19 & !Gene13 & !Gene2 & Gene15) | (Gene17 & !Gene5 & !Gene13 & Gene2 & Gene15) | (Gene17 & Gene19 & !Gene13 & !Gene2 & !Gene15) | (Gene17 & Gene19 & Gene13 & !Gene2 & Gene15) | (!Gene5 & Gene19 & Gene13 & Gene2 & !Gene15) | (Gene5 & !Gene19 & Gene13 & Gene2 & !Gene15) | (Gene17 & Gene5 & Gene19 & !Gene13 & !Gene15) | (Gene17 & Gene5 & Gene19 & !Gene2 & !Gene15)
+Gene14, (!Gene8 & Gene2) | (Gene8 & !Gene2)
+Gene15, (Gene5 & !Gene4)
+Gene16, (!Gene19 & !Gene15) | (!Gene16) | (Gene19 & Gene15)
+Gene17, (!Gene16 & Gene6) | (!Gene19 & Gene9) | (Gene16 & !Gene6) | (Gene19 & !Gene9 & !Gene6) | (Gene9 & Gene6)
+Gene18, (!Gene1 & !Gene6) | (Gene18)
+Gene19, (!Gene2) | (Gene9)
+Gene20, (!Gene15 & Gene18)

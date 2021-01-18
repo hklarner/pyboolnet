@@ -2,6 +2,11 @@
 *~
 *.iml
 
+junk**
+dev**
+
+files_output
+
 venv
 PyBoolNet/Tests/Files/**
 

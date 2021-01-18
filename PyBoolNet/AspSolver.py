@@ -310,9 +310,9 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
           >>> primes2asp(primes, "mapk_projected.asp", False, ['AKT','GADD45','FOS','SMAD'])
     """
     
-    assert (type(FnameASP) == type(None) or type(FnameASP) == str)
-    assert (type(Bounds) == type(None) or type(Bounds) == tuple)
-    assert (type(Project) == type(None) or type(Project) == list)
+    assert FnameASP is None or type(FnameASP) == str
+    assert Bounds is None or type(Bounds) == tuple
+    assert Project is None or type(Project) == list
     
     if Project:
         Project = [x for x in Project if x in Primes]
@@ -377,8 +377,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
         lines += [':- %i {hit(V,S)}.' % (Bounds[1] + 1)]
     
     if Project:
-        lines += ['',
-                  '%% show projection (enforced by "Project=%s").' % (repr(sorted(Project)))]
+        lines += ['', '%% show projection (enforced by "Project=%s").' % (repr(sorted(Project)))]
         lines += ['#show.']
         lines += ['#show hit("{n}",S) : hit("{n}",S).'.format(n=name) for name in Project]
     
@@ -393,11 +392,12 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
                   '% show fixed nodes',
                   '#show hit/2.']
     
-    if FnameASP == None:
+    if FnameASP is None:
         return '\n'.join(lines)
     
     with open(FnameASP, 'w') as f:
         f.write('\n'.join(lines))
+
     print('created %s' % FnameASP)
 
 
@@ -408,31 +408,25 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
     
     DEBUG = 0
     
-    assert (Type in ['max', 'min', 'all', 'percolated', 'circuits'])
-    assert (Representation in ['str', 'dict'])
+    assert Type in ["max", "min", "all", "percolated", "circuits"]
+    assert Representation in ["str", "dict"]
     
-    # replaces shortcut "n" by len(Primes) in Bounds argument
     if Bounds:
         Bounds = tuple([len(Primes) if x == "n" else x for x in Bounds])
+
+    params_clasp = ["--project"]
     
-    # unique solutions w.r.t. show
-    params_clasp = []
+    if Type == "max":
+        params_clasp += ["--enum-mode=domRec", "--heuristic=Domain", "--dom-mod=5,16"]
+
+    elif Type == "min":
+        params_clasp += ["--enum-mode=domRec", "--heuristic=Domain", "--dom-mod=3,16"]
     
-    params_clasp += ['--project']
-    
-    if Type == 'max':
-        params_clasp += ['--enum-mode=domRec', '--heuristic=Domain', '--dom-mod=5,16']
-    # --enum-mode=domRec --heuristic=Domain --dom-mod=5,16
-    elif Type == 'min':
-        params_clasp += ['--enum-mode=domRec', '--heuristic=Domain', '--dom-mod=3,16']
-    # --enum-mode=domRec --heuristic=Domain --dom-mod=3,16
-    
-    Percolate = Type == "percolated"
     aspfile = primes2asp(Primes, FnameASP, Bounds, Project, Type)
     
     try:
         # pipe ASP file
-        if FnameASP == None:
+        if FnameASP is None:
             cmd_gringo = [CMD_GRINGO]
             proc_gringo = subprocess.Popen(cmd_gringo, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE)
@@ -464,22 +458,24 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
         print(aspfile)
         print(Ex)
         print("\nCall to gringo and / or clasp failed.")
-        if FnameASP != None:
-            print('\ncommand: "%s"' % ' '.join(cmd_gringo + ['|'] + cmd_clasp))
+        
+        if FnameASP is not None:
+            print('\ncommand: "%s"' % " ".join(cmd_gringo + ["|"] + cmd_clasp))
+        
         raise Ex
     
     if "ERROR" in error:
         print("\nCall to gringo and / or clasp failed.")
-        if FnameASP != None:
+        if FnameASP is not None:
             print('\nasp file: "%s"' % aspfile)
-        print('\ncommand: "%s"' % ' '.join(cmd_gringo + ['|'] + cmd_clasp))
+        print('\ncommand: "%s"' % " ".join(cmd_gringo + ["|"] + cmd_clasp))
         print('\nerror: "%s"' % error)
         raise Exception
     
     if DEBUG:
         print(aspfile)
-        print("cmd_gringo: %s" % ' '.join(cmd_gringo))
-        print("cmd_clasp:  %s" % ' '.join(cmd_clasp))
+        print("cmd_gringo: %s" % " ".join(cmd_gringo))
+        print("cmd_clasp:  %s" % " ".join(cmd_clasp))
         print("error:")
         print(error)
         print("output:")
@@ -492,18 +488,18 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
     # answers are assumed to be single lines after a line that
     # begins with 'Answer'
     
-    if Type == 'circuits':
+    if Type == "circuits":
         while lines and len(result) < MaxOutput:
             line = lines.pop(0)
             
-            if line[:6] == 'Answer':
+            if line[:6] == "Answer":
                 line = lines.pop(0)
                 
-                tspace = [x for x in line.split() if 'hit' in x]
-                tspace = [l[4:-1].split(',') for l in tspace]
-                tspace = [(l[0][1:-1], int(l[1])) for l in tspace]
+                tspace = [x for x in line.split() if "hit" in x]
+                tspace = [x[4:-1].split(",") for x in tspace]
+                tspace = [(x[0][1:-1], int(x[1])) for x in tspace]
                 
-                perc = [x[12:-2] for x in line.split() if 'perc' in x]
+                perc = [x[12:-2] for x in line.split() if "perc" in x]
                 perc = [x for x in tspace if x[0] in perc]
                 perc = dict(perc)
                 
@@ -511,16 +507,15 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
                 circ = dict(circ)
                 
                 result.append((circ, perc))
-    
-    
+
     else:
         while lines and len(result) < MaxOutput:
             line = lines.pop(0)
             
-            if line[:6] == 'Answer':
+            if line[:6] == "Answer":
                 line = lines.pop(0)
-                d = [l[4:-1].split(',') for l in line.split()]
-                d = [(l[0][1:-1], int(l[1])) for l in d]
+                d = [x[4:-1].split(",") for x in line.split()]
+                d = [(x[0][1:-1], int(x[1])) for x in d]
                 result.append(dict(d))
     
     if len(result) == MaxOutput:
@@ -530,7 +525,7 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
     if Representation == "str":
         subspace2str = PyBoolNet.StateTransitionGraphs.subspace2str
         
-        if Type == 'circuits':
+        if Type == "circuits":
             result = [(subspace2str(Primes, x), subspace2str(Primes, y)) for x, y in result]
         else:
             result = [subspace2str(Primes, x) for x in result]

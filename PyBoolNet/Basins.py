@@ -196,24 +196,26 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
         print("compute_basins(..)")
 
     if not any([Weak, Strong, CycleFree]):
-        if not Silent: print(" nothing to do. you should enable at least one of the parameters Weak, Strong, CycleFree.")
+        if not Silent:
+            print(" nothing to do. you should enable at least one of the parameters Weak, Strong, CycleFree.")
         return
 
     n = len(AttrJson["attractors"])
     for i, x in enumerate(AttrJson["attractors"]):
-        if not Silent: print(" working on attractor {i}/{n}: {l}".format(i=i+1,n=n,l=x["state"]["str"]))
+        if not Silent:
+            print(" working on attractor {i}/{n}: {l}".format(i=i+1,n=n,l=x["state"]["str"]))
 
         if Weak:
-            # weak basin
-            if not Silent: print("  weak_basin(..)")
+            if not Silent:
+                print("  weak_basin(..)")
             if n == 1:
                 x["weak_basin"] = _default_basin(Primes)
             else:
                 x["weak_basin"] = weak_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
         if Strong:
-        # strong basin
-            if not Silent: print("  strong_basin(..)")
+            if not Silent:
+                print("  strong_basin(..)")
             if n == 1:
                 x["strong_basin"] = _default_basin(Primes)
 
@@ -221,8 +223,8 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
                 x["strong_basin"] = strong_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
         if CycleFree:
-            # cycle-free basin
-            if not Silent: print("  cyclefree_basin(..)")
+            if not Silent:
+                print("  cyclefree_basin(..)")
             x["cyclefree_basin"] = cyclefree_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
 
     if FnameBarplot:
@@ -276,8 +278,8 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
     indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
 
     y1 = [Attrs[i]["cyclefree_basin"][Yunit] for i in indeces]
-    y2 = [Attrs[i]["strong_basin"][Yunit] - Attrs[i]["cyclefree_basin"][Yunit]  for i in indeces]
-    y3 = [Attrs[i]["weak_basin"][Yunit]   - Attrs[i]["strong_basin"][Yunit]   for i in indeces]
+    y2 = [Attrs[i]["strong_basin"][Yunit] - Attrs[i]["cyclefree_basin"][Yunit] for i in indeces]
+    y3 = [Attrs[i]["weak_basin"][Yunit] - Attrs[i]["strong_basin"][Yunit] for i in indeces]
 
     N = len(y1)
     x = list(range(N))
@@ -295,7 +297,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
     matplotlib.pyplot.xticks(range(len(labels)), labels, rotation=40, ha="right")
 
     if not Ymax:
-        Ymax = total if Yunit=="size" else 100
+        Ymax = total if Yunit == "size" else 100
 
     ylim = (0,Ymax)
     matplotlib.pyplot.ylim(ylim)

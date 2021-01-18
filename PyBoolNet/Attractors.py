@@ -6,14 +6,7 @@ import datetime
 import itertools
 import random
 
-import PyBoolNet.FileExchange
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.AspSolver
-import PyBoolNet.InteractionGraphs
-import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalLogic
-import PyBoolNet.Utility
+import PyBoolNet
 
 
 def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False):
@@ -99,7 +92,6 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
         if not Silent: print(" {x}".format(x=attrs["is_complete"]))
     else:
         attrs["is_complete"] = "unknown"
-
 
     attrs["attractors"] = []
 
@@ -337,8 +329,8 @@ def univocality(Primes, Update, Trapspace):
         True
     """
 
-    if type(Trapspace)==str:
-        Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
+    if type(Trapspace) == str:
+        Trapspace = PyBoolNet.StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
     # percolation
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
@@ -399,24 +391,24 @@ def faithfulness(Primes, Update, Trapspace):
         True
     """
 
-    if type(Trapspace)==str:
-        Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
+    if type(Trapspace) == str:
+        Trapspace = PyBoolNet.StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
     # trivial case: steady state
-    if len(Trapspace)==len(Primes):
+    if len(Trapspace) == len(Primes):
         return True
 
     # percolation
     primes = PyBoolNet.PrimeImplicants.copy(Primes)
     PyBoolNet.PrimeImplicants.create_constants(primes, Constants=Trapspace)
-    constants  = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    constants = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
 
     # trivial case: free variables fix due to percolation
-    if len(constants)>len(Trapspace):
+    if len(constants) > len(Trapspace):
         return False
 
     # faithfulness
-    spec = 'CTLSPEC AG(%s)'%PyBoolNet.TemporalLogic.EF_unsteady_states(primes)
+    spec = 'CTLSPEC AG(%s)' % PyBoolNet.TemporalLogic.EF_unsteady_states(primes)
     init = 'INIT TRUE'
     answer = PyBoolNet.ModelChecking.check_primes(primes, Update, init, spec)
 
