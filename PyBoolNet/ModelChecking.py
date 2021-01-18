@@ -420,7 +420,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
         * *Silent* (bool): print infos to screen
 
     **returns**:
-       * *FileSMV* (str): file as string or *None* if *FnameSMV==None*
+       * *FileSMV* (str): file as string or *None* if *FnameSMV is None*
        * raises *Exception* if *Primes* is the empty dictionary
 
     **example**::
@@ -546,7 +546,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     lines+= ['']
     lines+= [Specification]
 
-    if FnameSMV==None:
+    if FnameSMV is None:
         return '\n'.join(lines)
 
     with open(FnameSMV, 'w') as f:

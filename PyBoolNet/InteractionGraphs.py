@@ -182,7 +182,7 @@ def igraph2dot(IGraph, FnameDOT=None):
         * *FnameDOT* (str): name of *dot* file or *None*
 
     **returns**:
-        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+        * *FileDOT* (str): file as string if not *FnameDOT is None*, otherwise it returns *None*
 
     **example**::
 

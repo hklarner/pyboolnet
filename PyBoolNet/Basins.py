@@ -302,7 +302,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 
     matplotlib.pyplot.legend(handles = [h1,h2,h3], loc='upper right')
 
-    if Title==None:
+    if Title is None:
         Title = 'Basins of Attraction'
 
     matplotlib.pyplot.title(Title, y=1.08)
@@ -367,7 +367,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
     figure = matplotlib.pyplot.figure()
     sizes  = [Attrs[i]["strong_basin"]["size"] for i in indeces] + [outside]
 
-    if len(Attrs)<=9:
+    if len(Attrs) <= 9:
         colors = [PIE_COLORS[i] for i,x in enumerate(Attrs)]
     else:
         colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(indeces)+1)) for x in range(len(indeces)+2)][1:-1]
@@ -390,7 +390,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
 
     matplotlib.pyplot.axis('equal')
 
-    if Title==None:
+    if Title is None:
         Title = 'Strong Basins of Attraction'
 
     matplotlib.pyplot.title(Title, y=1.08)

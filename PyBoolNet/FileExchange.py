@@ -53,11 +53,11 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     """
 
     # input and output via filename
-    if os.path.isfile(BNET) and not FnamePRIMES==None:
+    if os.path.isfile(BNET) and FnamePRIMES is not None:
         FnameBNET = BNET
 
 
-        if FnamePRIMES!=None:
+        if FnamePRIMES is not None:
 
             cmd = [CMD_BNET2PRIMES, FnameBNET, FnamePRIMES]
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -72,7 +72,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via filename / output to stdout
-    elif os.path.isfile(BNET) and FnamePRIMES==None:
+    elif os.path.isfile(BNET) and FnamePRIMES is None:
         FnameBNET = BNET
 
         cmd = [CMD_BNET2PRIMES, FnameBNET]
@@ -88,7 +88,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via stdin / output to filename
-    elif not os.path.isfile(BNET) and not FnamePRIMES==None:
+    elif not os.path.isfile(BNET) and not FnamePRIMES is None:
 
         print("This is the only combination that is currently not possible.")
         print("Need to specify either a bnet file name or a json file name.")
@@ -107,7 +107,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
 
 
     # input via stdin / output to stdout
-    elif not os.path.isfile(BNET) and FnamePRIMES==None:
+    elif not os.path.isfile(BNET) and FnamePRIMES is None:
 
         cmd = [CMD_BNET2PRIMES]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -190,7 +190,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
                 lines+= [(name+',').ljust(width)+expression]
             lines+=['']
 
-    if FnameBNET==None:
+    if FnameBNET is None:
         return "\n".join(lines)
 
     with open(FnameBNET, 'w') as f:
@@ -333,7 +333,7 @@ def primes2bns(Primes, FnameBNS=None):
         lines+= ['']
 
     contents = '\n'.join(lines)
-    if FnameBNS==None:
+    if FnameBNS is None:
         return contents
     else:
         with open(FnameBNS, 'w') as f:

@@ -551,7 +551,7 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
         patch.set_ec("black")
     matplotlib.pyplot.axis('equal')
 
-    if Title==None:
+    if Title is None:
         Title = "Commitment Sets"
     matplotlib.pyplot.title(Title, y=1.08)
 

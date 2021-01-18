@@ -301,7 +301,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
        * *Type* (str): one of 'circuits' or 'percolated' or *None*
 
     **returns**:
-       * *FileASP* (str): file as string if not *FnameASP==None* and *None* otherwise
+       * *FileASP* (str): file as string if not *FnameASP is None* and *None* otherwise
 
     **example**::
 

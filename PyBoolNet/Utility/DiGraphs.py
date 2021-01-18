@@ -155,7 +155,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
         * *FnameDOT* (str): name of *dot* file or *None*
 
     **returns**:
-        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+        * *FileDOT* (str): file as string if not *FnameDOT is None*, otherwise it returns *None*
 
     **example**::
 
@@ -176,7 +176,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
     lines+= digraph2dotlines(DiGraph)
     lines += ['}']
 
-    if FnameDOT==None:
+    if FnameDOT is None:
         return '\n'.join(lines)
 
     with open(FnameDOT, 'w') as f:
