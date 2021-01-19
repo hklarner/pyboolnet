@@ -814,8 +814,7 @@ def random_walk(Primes, Update, InitialState, Length):
     return Path
 
 
-def list_reachable_states(primes: dict, update: str, initial_states: List[str], memory: int, silent: bool = False) -> \
-        List[str]:
+def list_reachable_states(primes: dict, update: str, initial_states: List[str], memory: int, silent: bool = False):
     """
     Performs a depth-first search in the transition system defined by *primes* and *update* to list all states that
     are reachable from the *inital states*. *Memory* specifies the maximum number of states that can be kept in
@@ -843,13 +842,17 @@ def list_reachable_states(primes: dict, update: str, initial_states: List[str], 
     
     if not initial_states:
         return []
+
+    if type(initial_states) in [dict, str]:
+        initial_states = [initial_states]
+
+    initial_states = [subspace2str(primes, x) for x in initial_states]
+
+    assert update in ["asynchronous", "synchronous"]
     
-    assert type(initial_states) == list, "initial states must be a list"
-    assert type(initial_states[0]) == str, "initial states must be in dict representation: {}".format(initial_states[0])
-    assert update in ['asynchronous', 'synchronous']
-    
-    if update == 'asynchronous':
+    if update == "asynchronous":
         transition_func = lambda state: successors_asynchronous(primes, state)
+
     else:
         transition_func = lambda state: [successor_synchronous(primes, state)]
     
@@ -872,9 +875,9 @@ def list_reachable_states(primes: dict, update: str, initial_states: List[str], 
             break
     
     if not silent:
-        print('states explored: {}'.format(counter))
+        print("states explored: {}".format(counter))
         if memory_reached:
-            print('result incomplete. stack size at termination: {} increase memory parameter'.format(len(stack)))
+            print("result incomplete. stack size at termination: {} increase memory parameter".format(len(stack)))
     
     return explored
 
