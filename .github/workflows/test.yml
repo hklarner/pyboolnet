@@ -38,6 +38,11 @@ jobs:
           cd /lib/x86_64-linux-gnu
           sudo ln -s libreadline.so.7.0 libreadline.so.6
 
+      - name: Install imagemagick and graphviz
+        run: |
+          sudo apt install graphviz
+          sudo apt install imagemagick
+
       - name: Test with pytest
         run: |
           cd /home/runner/work/PyBoolNet/PyBoolNet/
