@@ -34,7 +34,7 @@ jobs:
         run: python setup.py install
 
       - name: Install NuSMV dependency libreadline
-        run: sudo apt-get install libreadline6:i386
+        run: sudo apt-get install libreadline-dev
 
       - name: Test with pytest
         run: pytest
