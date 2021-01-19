@@ -33,9 +33,13 @@ jobs:
       - name: Install PyBoolNet
         run: python setup.py install
 
-      - name: Install NuSMV dependency libreadline
-        run: sudo apt-get install libreadline-dev
+      - name: Symlink libreadline7 to libreadline6
+        run: |
+          cd /lib/x86_64-linux-gnu
+          sudo ln -s libreadline.so.7.0 libreadline.so.6
 
       - name: Test with pytest
-        run: pytest
+        run: |
+          cd /home/runner/work/PyBoolNet/PyBoolNet/
+          pytest
 
