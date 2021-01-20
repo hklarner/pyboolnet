@@ -13,7 +13,7 @@ def test_ef_subspaces():
 def test_ef_unsteady():
     names = ["v1", "v2", "v3"]
     
-    assert PyBoolNet.TemporalLogic.EF_unsteady_states(names) == "EF(v1_unsteady) & EF(v2_unsteady) & EF(v3_unsteady)"
+    assert PyBoolNet.TemporalLogic.EF_unsteady_states(names) == "EF(!v1_STEADY) & EF(!v2_STEADY) & EF(!v3_STEADY)"
 
 
 def test_agef_subspaces():

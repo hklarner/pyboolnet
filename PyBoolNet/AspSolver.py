@@ -298,7 +298,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
        * *FnameASP*: name of *ASP* file or None
        * *Bounds* (tuple): cardinality constraint for the number of fixed variables
        * *Project* (list): names to project to or *None* for no projection
-       * *Type* (str): one of 'circuits' or 'percolated' or *None*
+       * *Type* (str): one of 'max', 'min', 'all', 'percolated', 'circuits' or *None*
 
     **returns**:
        * *FileASP* (str): file as string if not *FnameASP is None* and *None* otherwise
@@ -310,7 +310,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
           >>> primes2asp(primes, "mapk_projected.asp", False, ['AKT','GADD45','FOS','SMAD'])
     """
 
-    assert Type in [None, "circuits", "percolated"]
+    assert Type in [None, "max", "min", "all", "percolated", "circuits"]
     assert FnameASP is None or type(FnameASP) == str
     assert Bounds is None or type(Bounds) == tuple
     assert Project is None or type(Project) == list
