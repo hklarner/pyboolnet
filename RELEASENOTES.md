@@ -1,7 +1,8 @@
 
 
 ## release notes for next version
- - migrated all tests to pytest framework
+ - adds `selvaggio_emt` to repository, see http://ginsim.org/model/EMT_Selvaggio_etal
+ - migrated unit tests to pytest framework
  - bugfix in `STGs.successors_mixed` (by @nanls)
 
 
