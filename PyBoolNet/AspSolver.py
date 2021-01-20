@@ -309,7 +309,8 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
           >>> primes2asp(primes, "mapk_bounded.asp", (20,30), False)
           >>> primes2asp(primes, "mapk_projected.asp", False, ['AKT','GADD45','FOS','SMAD'])
     """
-    
+
+    assert Type in [None, "circuits", "percolated"]
     assert FnameASP is None or type(FnameASP) == str
     assert Bounds is None or type(Bounds) == tuple
     assert Project is None or type(Project) == list
