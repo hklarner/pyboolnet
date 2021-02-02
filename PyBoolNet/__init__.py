@@ -19,6 +19,7 @@ import PyBoolNet.Repository
 import PyBoolNet.Utility
 import PyBoolNet.BooleanLogic
 import PyBoolNet.Tests
+import PyBoolNet.generators
 
 import pprint as prettyprint
 
