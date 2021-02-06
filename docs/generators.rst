@@ -27,4 +27,28 @@ cycle_graph
 .. autofunction:: PyBoolNet.generators.cycle_graph
 
 
+.. random_truth_table_network:
+
+random_truth_table_network
+--------------------------
+
+.. autofunction:: PyBoolNet.generators.random_truth_table_network
+
+
+.. random_regular_network:
+
+random_regular_network
+----------------------
+
+.. autofunction:: PyBoolNet.generators.random_regular_network
+
+
+.. random_boolean_expression:
+
+random_boolean_expression
+-------------------------
+
+.. autofunction:: PyBoolNet.generators.random_boolean_expression
+
+
 

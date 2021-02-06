@@ -1,6 +1,12 @@
 
 
+import random
+from typing import List, Dict
+
 import networkx
+from pyeda.inter import truthtable, truthtable2expr, exprvar
+
+from PyBoolNet.FileExchange import bnet2primes
 
 
 def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:
@@ -110,3 +116,145 @@ def cycle_graph(n: int, edge_sign: int = 1) -> dict:
     return primes
 
 
+def random_truth_table_network(n: int, k: int, seed: int = 0) -> dict:
+    """
+    Creates a random netowrk with `n` components each with a random truthtable of `k` inputs.
+    The `seed` is used for the randomizer.
+    Use `0` to generate a random seed.
+
+    **arguments**:
+        * *n* (int): number of components
+        * *k* (int): inputs of each truthtable
+        * *seed* (int): the seed of the randomizer
+
+    **returns**:
+        * *primes* (dict): primes implicants
+
+    **example**::
+
+        >>> primes = random_truth_table_network(n=3, k=2)
+    """
+
+    assert n > 1
+    assert k < n
+    assert k < 10
+
+    if seed:
+        random.seed(seed)
+
+    names = [f"v{i}" for i in range(n)]
+
+    primes = {}
+    for v in names:
+        bnet = f"x, {random_boolean_expression(names=names, k=k)}"
+        primes[v] = bnet2primes(bnet)["x"]
+
+    return primes
+
+
+def _primes_of_conjunction(inputs: List[str], value: int) -> List[dict]:
+    return [{n: value for n in inputs}]
+
+
+def _primes_of_disjunction(inputs: List[str], value: int) -> List[dict]:
+    return [{n: value} for n in inputs]
+
+
+def random_regular_network(n: int, k: int, connector: str = "and", edge_sign: int = 1, seed: int = 0) -> dict:
+    """
+    Creates a random netowrk with `n` components each with a random truthtable of `k` inputs.
+    The `seed` is used for the randomizer.
+    Use `0` to generate a random seed.
+
+    **arguments**:
+        * *n* (int): number of components
+        * *k* (int): inputs of each truthtable
+        * *connector* (str): either `"and"` or `"or"`
+        * *edge_sign* (int): either `1` or `-1` for positive or negative edges
+        * *seed* (int): the seed of the randomizer
+
+    **returns**:
+        * *primes* (dict): primes implicants
+
+    **example**::
+
+        >>> primes = random_regular_network(n=3, k=2, connector="or")
+    """
+
+    assert n > 1
+    assert k < n
+    assert edge_sign in [1, -1]
+    assert connector in ["and", "or"]
+
+    if seed:
+        random.seed(seed)
+
+    names = [f"v{i}" for i in range(n)]
+
+    value1 = 1 if edge_sign == 1 else 0
+    value0 = 1 - value1
+    generator0 = _primes_of_disjunction if connector == "and" else _primes_of_conjunction
+    generator1 = _primes_of_conjunction if connector == "and" else _primes_of_disjunction
+
+    primes = {}
+    for v in names:
+        inputs = random.sample(population=names, k=k)
+        primes[v] = [generator0(inputs=inputs, value=value0), generator1(inputs=inputs, value=value1)]
+
+    return primes
+
+
+def _dnf2bnet(ast: tuple, name_map: Dict[int, str]) -> str:
+
+    assert ast[0] in ["lit", "or", "and"]
+
+    if ast[0] == "lit":
+        return name_map[ast[1]]
+
+    op = " | " if ast[0] == "or" else " & "
+
+    return op.join([f"{_dnf2bnet(x, name_map)}" for x in ast[1:]])
+
+
+def random_boolean_expression(names: List[str], k: int, seed: int = 0) -> str:
+    """
+    Creates a random Boolean expression by sampling `k` variables from `names` and filling a truth table randomly.
+    The expression is guaranteed to be non-constant but it may effectivly be dependent by less than `k` variables.
+
+    **arguments**:
+        * *names* (List[str]): components to sample from
+        * *k* (int): inputs to the expression
+        * *seed* (int): the seed of the randomizer
+
+    **returns**:
+        * *expression* (str): random expression in bnet format
+
+    **example**::
+
+        >>> primes = random_boolean_expression(names=list("abcdefgh"), k=4)
+    """
+
+    if seed:
+        random.seed(seed)
+
+    variables = list(map(exprvar, random.sample(population=names, k=k)))
+    name_map = dict([(v.uniqid, v.name) for v in variables] + [(-v.uniqid, "!" + v.name) for v in variables])
+    truth_table = "".join(random.choices(population="01", k=2**k))
+
+    for k in "01":
+        if k not in truth_table:
+            truth_table = k + truth_table[1:]
+
+    tt = truthtable(variables, truth_table)
+    expr = truthtable2expr(tt)
+    ast = expr.to_dnf().to_ast()
+    bnet = _dnf2bnet(ast, name_map)
+
+    return bnet
+
+
+if __name__ == "__main__":
+    from PyBoolNet.InteractionGraphs import create_image
+
+    primes = random_regular_network(10, 4, connector="and", edge_sign=-1)
+    create_image(primes, "junk.pdf", LayoutEngine="dot")

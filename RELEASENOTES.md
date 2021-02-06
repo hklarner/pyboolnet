@@ -1,6 +1,7 @@
 
 
 ## release notes for next version
+ - adds module `generators` for the generating Boolean networks
  - adds `selvaggio_emt` to repository, see http://ginsim.org/model/EMT_Selvaggio_etal
  - migrated unit tests to pytest framework
  - bugfix in `STGs.successors_mixed` (by @nanls)
