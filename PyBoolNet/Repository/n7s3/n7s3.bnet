@@ -1,4 +1,4 @@
-
+targets, factors
 # toy net with positive edges and three steady states:
 # A1=1111111
 # A2=0000111
