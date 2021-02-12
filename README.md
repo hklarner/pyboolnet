@@ -44,8 +44,5 @@ For release notes, see
 
 ## Contributions
 - send pull requests to the `develop` branch
-- add tests to `PyBoolNet/tests/` (the other location, `PyBoolNet/PyBoolNet/Tests/` is deprecated)
+- add tests to `PyBoolNet/tests/`
 
-
-## Contributions
-If you want to contribute code to PyBoolNet, please send pull requests to the `develop` branch.
