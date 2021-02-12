@@ -256,5 +256,14 @@ def random_boolean_expression(names: List[str], k: int, seed: int = 0) -> str:
 if __name__ == "__main__":
     from PyBoolNet.InteractionGraphs import create_image
 
-    primes = random_regular_network(10, 4, connector="and", edge_sign=-1)
-    create_image(primes, "junk.pdf", LayoutEngine="dot")
+    primes = random_regular_network(7, 3, connector="and", edge_sign=-1)
+    create_image(primes, "random_regular_network.png", LayoutEngine="dot")
+
+    primes = random_truth_table_network(7, 3)
+    create_image(primes, "random_truth_table_network.png", LayoutEngine="dot")
+
+    primes = cycle_graph(n=7, edge_sign=-1)
+    create_image(primes, "cycle_graph.png", LayoutEngine="dot")
+
+    primes = balanced_tree(height=3, branching_factor=2, edge_sign=1, loop_sign=-1)
+    create_image(primes, "balanced_tree.png", LayoutEngine="dot")
