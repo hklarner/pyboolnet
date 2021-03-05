@@ -140,3 +140,9 @@ def test_completeness():
     primes = PyBoolNet.FileExchange.bnet2primes(bnet)
 
     assert PyBoolNet.Attractors.completeness(primes, "synchronous")
+
+def test_completeness_maxoutput():
+    primes = PyBoolNet.Repository.get_primes("davidich_yeast")
+
+    assert PyBoolNet.Attractors.completeness(primes, "asynchronous", MaxOutput=10000)
+    assert not PyBoolNet.Attractors.completeness(primes, "asynchronous", MaxOutput=2)
