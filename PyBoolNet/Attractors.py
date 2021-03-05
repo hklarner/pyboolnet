@@ -621,7 +621,7 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
 
     constants_global = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
 
-    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min",MaxOutput=MaxOutput)   # line  1
+    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=MaxOutput)   # line  1
     if mintrapspaces==[{}]:             # line  2
         if ComputeCounterexample:
             return (True, None)
@@ -666,7 +666,7 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
             PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
 
             ## line 15: Q = MinTrapSpaces(U',F|U')
-            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min")
+            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min", MaxOutput=MaxOutput)
 
             ## line 16: phi = CompletenessQuery(Q)
             phi = PyBoolNet.TemporalLogic.EF_oneof_subspaces(primes_restricted, Q)
