@@ -680,9 +680,9 @@ def input_combinations(Primes, Format="dict"):
 
 
 
-def active_primes(Primes, State):
+def active_primes(Primes, Subspace):
     """
-    returns all primes that are active in, i.e., consistent with *State*.
+    returns all primes that are active in, i.e., consistent with *Subspace*.
     """
 
     active_primes = dict((name,[[],[]]) for name in Primes)
@@ -690,8 +690,12 @@ def active_primes(Primes, State):
     for name in Primes:
         for v in [0,1]:
             for p in Primes[name][v]:
-                if State[name]==v:
-                    if PyBoolNet.Utility.Misc.dicts_are_consistent(p,State):
-                        active_primes[name][v].append(dict(p))
+                if name in Subspace.keys():
+                    if Subspace[name]==v:
+                        if PyBoolNet.Utility.Misc.dicts_are_consistent(p,Subspace):
+                            active_primes[name][v].append(dict(p))
+                else:
+                    if PyBoolNet.Utility.Misc.dicts_are_consistent(p,Subspace):
+                            active_primes[name][v].append(dict(p))
 
     return active_primes

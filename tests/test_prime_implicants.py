@@ -243,4 +243,14 @@ def test_create_blinkers():
 
     assert PyBoolNet.PrimeImplicants.are_equal(expected, primes), str(primes)+" vs "+str(expected)
 
+def test_active_primes():
+    primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
+    subspace1 = {"A":1}
+    subspace2 = {'A': 1, 'B': 0, 'C': 1}
+    subspace3 = {} 
+    
+    assert PyBoolNet.PrimeImplicants.active_primes(primes,subspace1) == {"A": [[], [{"A": 1}]], "B": [[{"A": 1}], []], "C": [[{"B": 0}], [{"B": 1}]]}
+    assert PyBoolNet.PrimeImplicants.active_primes(primes,subspace2) == {"A": [[], [{"A": 1}]], "B": [[{"A": 1}], []], "C": [[], []]}
+    assert PyBoolNet.PrimeImplicants.active_primes(primes,subspace3) == primes
+
 
