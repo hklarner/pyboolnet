@@ -1,0 +1,66 @@
+
+
+# added to PyBoolNet: 2021, January
+# citation: Selvaggio, Gianluca, et al. "Hybrid Epithelial–Mesenchymal Phenotypes Are Controlled by Microenvironmental Factors." Cancer Research 80.11 (2020): 2407-2420.
+# created with GINsim 3.0.0b-SNAPSHOT and http://ginsim.org/model/EMT_Selvaggio_etal
+
+
+targets, factors
+DELTA,       DELTA
+ECM,         ECM
+EGF,         EGF
+FAT4_L,      FAT4_L
+HGF,         HGF
+IL6,         IL6
+ROS,         ROS
+RPTP_L,      RPTP_L
+TGFB,        TGFB
+WNT,         WNT
+
+AJ_b1,       AJ_b2&AJ_b1 | ECad
+AJ_b2,       ECad_AJ_b2&ECad_AJ_b1&ECad&AJ_b1
+AKT,         PI3K&ILK
+BCat,        HGFR | !GSK3B | !BCat_AJ
+BCat_AJ,     RPTP&!JNK&ECad_AJ_b1 | !JNK&!FAK_SRC_b1&ECad_AJ_b1
+CK1,         WNT
+CSL,         NOTCH&!DVL
+DVL,         YAP_TAZ&CK1
+ECad,        miR200&!ZEB&!SLUG | !ZEB&!SNAIL&!SLUG
+ECad_AJ_b1,  ECad_AJ_b2&ECad_AJ_b1 | RPTP&ECad | !FAK_SRC_b1&ECad
+ECad_AJ_b2,  RPTP&ECad_AJ_b1&ECad&BCat_AJ | !FAK_SRC_b1&ECad_AJ_b1&ECad&BCat_AJ
+EGFR,        !RPTP&ITG_AB&FAK_SRC_b2&FAK_SRC_b1 | TGFBR&!RPTP | !RPTP&EGF
+ERK,         MEK
+FAK_SRC_b1,  FAK_SRC_b2&FAK_SRC_b1 | ROS | ITG_AB | HGFR | EGFR
+FAK_SRC_b2,  ITG_AB&HGFR&FAK_SRC_b1&EGFR | ROS&ITG_AB&FAK_SRC_b1
+FAT4,        FAT4_L&!ERK
+FA_b1,       FA_b2&FA_b1 | PAK | FAK_SRC_b1
+FA_b2,       FA_b3&FA_b2&FA_b1 | PAK&FA_b1&FAK_SRC_b1
+FA_b3,       PAK&ITG_AB&FA_b2&FA_b1&FAK_SRC_b1
+GSK3B,       !ERK&!DVL&!AKT
+HGFR,        !RPTP&ITG_AB | !RPTP&HGF
+HIF1a,       STAT3&NFkB
+ILK,         PI3K&ITG_AB
+ITG_AB,      RAP1&ECM
+JAK,         IL6 | EGFR
+JNK,         TGFBR&!RPTP | !RPTP&ROS | !RPTP&FAK_SRC_b1
+LATS,        !PI3K&ECad_AJ_b2&ECad_AJ_b1&BCat_AJ | !PI3K&FAT4
+MEK,         RAF1
+NFkB,        TGFBR | ROS | CSL | AKT
+NOTCH,       DELTA
+PAK,         PI3K | FAK_SRC_b1
+PI3K,        RAS | FAK_SRC_b1
+RAF1,        RAS
+RAP1,        !p120_AJ&ECad_AJ_b2&ECad_AJ_b1 | FAK_SRC_b1
+RAS,         TGFBR | JAK | HGFR | FAK_SRC_b1 | EGFR
+RPTP,        RPTP_L&!ROS&!FAK_SRC_b2 | RPTP_L&!ROS&!FAK_SRC_b1
+SLUG,        !miR200&TCF_LEF&!GSK3B | !miR200&HIF1a&!GSK3B | !miR200&!GSK3B&ERK | !miR200&!GSK3B&CSL
+SMAD,        YAP_TAZ&TGFBR
+SNAIL,       STAT3&NFkB&JNK&HIF1a&ERK | PAK&NFkB&JNK&HIF1a&ERK | STAT3&NFkB&JNK&HIF1a&CSL | PAK&NFkB&JNK&HIF1a&CSL | STAT3&NFkB&HIF1a&ERK&CSL | PAK&NFkB&HIF1a&ERK&CSL | STAT3&JNK&HIF1a&ERK&CSL | PAK&JNK&HIF1a&ERK&CSL | !TCF_LEF&STAT3&NFkB&HIF1a | !TCF_LEF&PAK&NFkB&HIF1a | !TCF_LEF&STAT3&JNK&HIF1a | !TCF_LEF&PAK&JNK&HIF1a | !TCF_LEF&STAT3&HIF1a&ERK | !TCF_LEF&PAK&HIF1a&ERK | NFkB&JNK&!GSK3B&ERK | !TCF_LEF&STAT3&HIF1a&CSL | !TCF_LEF&PAK&HIF1a&CSL | NFkB&JNK&!GSK3B&CSL | NFkB&!GSK3B&ERK&CSL | JNK&!GSK3B&ERK&CSL | STAT3&SMAD&HIF1a | SMAD&PAK&HIF1a | !TCF_LEF&NFkB&!GSK3B | !TCF_LEF&JNK&!GSK3B | !TCF_LEF&!GSK3B&ERK | !TCF_LEF&!GSK3B&CSL | SMAD&!GSK3B
+STAT3,       JAK | FAK_SRC_b1
+TCF_LEF,     BCat
+TGFBR,       TGFB
+YAP_TAZ,     !LATS
+ZEB,         !miR200&SNAIL | !miR200&SLUG
+miR200,      !ZEB&!SNAIL
+p120_AJ,     p120_AJ&ECad_AJ_b2&ECad_AJ_b1&!CK1 | RAP1&ECad_AJ_b2&ECad_AJ_b1&!CK1
+

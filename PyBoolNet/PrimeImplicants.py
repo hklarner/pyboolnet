@@ -434,7 +434,7 @@ def remove_all_variables_except(Primes, Names, Copy=False):
 
     else:
         for name in list(Primes):
-            if not name in Names:
+            if name not in Names:
                 Primes.pop(name)
 
     if Copy:

@@ -520,7 +520,7 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 
     matplotlib.pyplot.axis('equal')
 
-    if Title==None:
+    if Title is None:
         Title = 'Phenotype Commitment Sets'
     matplotlib.pyplot.title(Title, y=1.08)
 

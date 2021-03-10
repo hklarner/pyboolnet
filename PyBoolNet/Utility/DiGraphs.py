@@ -10,7 +10,6 @@ import PyBoolNet.Utility.Misc
 LAYOUT_ENGINES = {name:PyBoolNet.Utility.Misc.find_command(name) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
 
 
-
 def digraph2dotlines(DiGraph, Indent=1):
     """
     Basic function to create *dot* lines from a *networkx.DiGraph*.
@@ -77,7 +76,8 @@ def digraph2dotlines(DiGraph, Indent=1):
 
         hit = True
 
-    if hit: lines+= ['']
+    if hit:
+        lines += ['']
 
     # handle for subgraphs
     if "subgraphs" in DiGraph.graph:
@@ -112,7 +112,7 @@ def digraph2dotlines(DiGraph, Indent=1):
             lines += [space+'"%s";'%node]
 
     if DiGraph.order()>0 and DiGraph.size()>0:
-        lines+= ['']
+        lines += ['']
 
     # edge attributes
     for source, target, attr in DiGraph.edges(data=True):
@@ -141,7 +141,7 @@ def digraph2dotlines(DiGraph, Indent=1):
             lines += [space+'"%s" -> "%s";'%(source,target)]
 
     if DiGraph.size()>0:
-        lines+= ['']
+        lines += ['']
 
     return lines
 
@@ -155,7 +155,7 @@ def digraph2dot(DiGraph, FnameDOT=None):
         * *FnameDOT* (str): name of *dot* file or *None*
 
     **returns**:
-        * *FileDOT* (str): file as string if not *FnameDOT==None*, otherwise it returns *None*
+        * *FileDOT* (str): file as string if not *FnameDOT is None*, otherwise it returns *None*
 
     **example**::
 
@@ -163,25 +163,26 @@ def digraph2dot(DiGraph, FnameDOT=None):
           >>> digraph2dot(digraph)
     """
 
-    if DiGraph.order()==0:
+    if DiGraph.order() == 0:
         print("DiGraph has no nodes.")
-        if FnameDOT!=None:
-            print("%s was not created."%FnameDot)
+        if FnameDOT is not None:
+            print("%s was not created." % FnameDOT)
         return
 
-    if not type(list(DiGraph.nodes())[0])==str:
-        DiGraph = networkx.relabel_nodes(DiGraph, mapping = lambda x: str(x))
+    if not type(list(DiGraph.nodes())[0]) == str:
+        DiGraph = networkx.relabel_nodes(DiGraph, mapping=lambda x: str(x))
 
     lines = ['digraph {']
-    lines+= digraph2dotlines(DiGraph)
+    lines += digraph2dotlines(DiGraph)
     lines += ['}']
 
-    if FnameDOT==None:
+    if FnameDOT is None:
         return '\n'.join(lines)
 
     with open(FnameDOT, 'w') as f:
         f.writelines('\n'.join(lines))
-    print("created %s"%FnameDOT)
+
+    print("created %s" % FnameDOT)
 
 
 def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
@@ -433,9 +434,9 @@ def digraph2condensationgraph(Digraph):
              (('Gal80',),('Cbf1','Swi5))]
     """
 
-    sccs = sorted([tuple(sorted(c)) for c in networkx.strongly_connected_components(Digraph)])
-    cascades = [c for c in sccs if (len(c)==1) and not Digraph.has_edge(c[0],c[0])]
-    noncascades = [c for c in sccs if c not in cascades]
+    sccs = sorted([tuple(sorted(scc)) for scc in networkx.strongly_connected_components(Digraph)])
+    cascades = [scc for scc in sccs if (len(scc) == 1) and not Digraph.has_edge(scc[0], scc[0])]
+    noncascades = [scc for scc in sccs if scc not in cascades]
 
     cgraph = networkx.DiGraph()
     cgraph.add_nodes_from(noncascades)
@@ -444,25 +445,28 @@ def digraph2condensationgraph(Digraph):
     # will use rgraph to decide if there is a cascade path between U and W (i.e. edge in cgraph)
     rgraph = networkx.DiGraph(Digraph.edges())
 
-    for U,W in itertools.product(noncascades,noncascades):
-        if U==W: continue
+    for U, W in itertools.product(noncascades,noncascades):
+        if U == W:
+            continue
 
         rgraph = Digraph.copy()
         for X in noncascades:
-            if not X==U and not X==W:
+            if not X == U and not X == W:
                 rgraph.remove_nodes_from(X)
 
         if has_path(rgraph, U, W):
-            cgraph.add_edge(U,W)
+            cgraph.add_edge(U, W)
 
     # annotate each node with its depth in the hierarchy and an integer ID
     for ID, target in enumerate(cgraph.nodes()):
         depth = 1
+
         for source in networkx.ancestors(cgraph, target):
             for p in networkx.all_simple_paths(cgraph, source, target):
                 depth = max(depth, len(p))
+
         cgraph.nodes[target]["depth"] = depth
-        cgraph.nodes[target]["id"]    = ID
+        cgraph.nodes[target]["id"] = ID
 
     return cgraph
 

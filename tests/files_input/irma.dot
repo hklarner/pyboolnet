@@ -1,0 +1,11 @@
+digraph InteractionGraph {
+
+    Ash1 -> Cbf1 [['sign={1}']];
+    Cbf1 -> Ash1 [['sign={1}']];
+    Gal4 -> Swi5 [['sign={-1}']];
+    Gal80 -> Gal4 [['sign={1}']];
+    Swi5 -> Gal4 [['sign={-1}']];
+    gal -> Ash1 [['sign={1}']];
+    gal -> Gal80 [['sign={-1}']];
+    gal -> gal [['sign={1}']];
+}
