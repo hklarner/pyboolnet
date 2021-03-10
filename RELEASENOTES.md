@@ -1,12 +1,12 @@
 
 
-## release notes for next version
+## release notes for version 2.31.0 (March 2021)
  - new requirement: pyeda
  - adds module `generators` for the generating Boolean networks
  - adds `selvaggio_emt` to repository, see http://ginsim.org/model/EMT_Selvaggio_etal
  - migrated unit tests to pytest framework
  - bugfix in `STGs.successors_mixed` (by @nanls)
-
+ - adds parameter `MaxOutput` to `Attractors.completeness` (by @Lauracf) [PR](https://github.com/hklarner/PyBoolNet/pull/63)
 
 ## release notes for version 2.3.0 (January 2021)
  - bugfix in `find_attractor_state_by_randomwalk_and_ctl` (by @etonello)
@@ -16,7 +16,7 @@
  - bugfix `random_successor_mixed` (by @nanls)
  - bugfix in `input_combinations` of `PrimeImplicants`, typo: `primes` -> `Primes` (by @leonardogian)
  - modified `primes2stg` to return empty stg if primes are empty (by @nanls)
- - support for drawing multi-digraphs in `digraph2image`(by @nanls)
+ - support for drawing multi -digraphs in `digraph2image`(by @nanls)
 
 
 ## release notes for version 2.2.9 (September 2020)
@@ -45,7 +45,7 @@
  - PyBoolNet is now developed with Python3
  - PyBoolNet is now compatible with networkx2
  - continued work and tuning on Basins, Commitment and Phenotypes
- - fixed encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository` (using GINsim)
+ - fixed encoding of mutli -valued variables in `remy_tumorigenesis.bnet` of the `Repository` (using GINsim)
 
 
 ## release notes for version 2.2.3 (February 2018)
@@ -55,7 +55,7 @@
 ## release notes for version 2.2.2 (February 2018)
  - **new Module** `Commitment` for the computation of commitment diagrams
  - **new Module** `Phenotypes` for the computation of phenotype diagrams
- - **bugfix** of encoding of mutli-valued variables in `remy_tumorigenesis.bnet` of the `Repository`
+ - **bugfix** of encoding of mutli -valued variables in `remy_tumorigenesis.bnet` of the `Repository`
  - added function `Attractors.open_json(..)` to module `Attractors`
  - added function `Attractors.save_json(..)` to module `Attractors`
  - added function `Attractors.compute_json(..)` to module `Attractors`
@@ -64,8 +64,8 @@
  - **refactored** the module `AttractorDetection` as `Attractors` for simplicity
  - **refactored** the module `QueryPatterns` as `TemporalLogic` for clarity
  - **refactored** the module `BooleanExpressions` as `BooleanLogic` for clarity
- - adapted modules `Basins` and `ModelChecking` to handle Boolean variables that represent multi-valued variables (see van Ham encoding)
- - added `StateTransitionGraphs.size_state_space` to determine size of state spaces, taking into account only the admissible states of Boolean variables that represent multi-valued variables (see van Ham encoding)
+ - adapted modules `Basins` and `ModelChecking` to handle Boolean variables that represent multi -valued variables (see van Ham encoding)
+ - added `StateTransitionGraphs.size_state_space` to determine size of state spaces, taking into account only the admissible states of Boolean variables that represent multi -valued variables (see van Ham encoding)
  - added `StateTransitionGraphs.find_vanham_variables(..)` to detect variables that represent ternary variables
 
 
@@ -85,11 +85,11 @@
  - renamed module `AttractorBasins` to `Basins`
  - added energy function `energy(..)` to `StateTransitionGraphs`
  - added pretty print function `pprint(..)` to `PyBoolNet`
- - bugfix in NuSMV-a for dynamic reordering (currently compiled only in 32bit)
- - bugfix in NuSMV-a for large numbers (currently compiled only in 32bit)
+ - bugfix in NuSMV -a for dynamic reordering (currently compiled only in 32bit)
+ - bugfix in NuSMV -a for large numbers (currently compiled only in 32bit)
  - removed parameter `Aggregate` from `TrapSpaces.trap_spaces(..)` and similar functions as it is rarely useful
  - added warning for accepting states bug (see issue [#14](http://github.com/hklarner/PyBoolNet/issues/14))
- - added T-Helper cell plasticity model of Wassim Abou-Jaoudé
+ - added T -Helper cell plasticity model of Wassim Abou -Jaoudé
  - improved formatting of `primes2bnet(..)` and `primes2mindnf(..)`
  - added parameter `Representation` and option `percolated` to parameter `Type` of `trap_spaces(..)`
  - implemented tempfile for functions `check_primes(..)`, `check_primes_with_counterexample(..)` and `check_primes_with_acceptingstates(..)` (bugfix for windows)
@@ -126,12 +126,12 @@
  - bugfix for the computation of the condensation graph
  - added the parameter `LayoutEngine` for drawing graphs. Possible engines: `dot,neato,fdp,sfdp,circo` and `twopi`
  - added functions for the `sccgraph`, the `condensationgraph` and the `HTG` to module STGs
- - now following the git model described in [nvie.com](http://nvie.com/posts/a-successful-git-branching-model/)
+ - now following the git model described in [nvie.com](http://nvie.com/posts/a -successful -git -branching -model/)
  - refactored `Utility.py` in `Utility\DiGraphs.py` and `Utility\Misc.py`
  - added documentation source to `Docs\Sphinx`
  - added `AttractorBasins.py`, a library for visualizing basins of attraction
- - added support for model checking with _accepting states_ via [NuSMV-a](https://github.com/hklarner/NuSMV-a)
- - added `Repository/`, a folder with pre-defined networks
+ - added support for model checking with _accepting states_ via [NuSMV -a](https://github.com/hklarner/NuSMV -a)
+ - added `Repository/`, a folder with pre -defined networks
  - added support for Python 2.x _and_ 3.x
  - added function `input_combinations` to module `PrimeImplicants`
 
