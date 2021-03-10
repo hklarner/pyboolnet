@@ -415,7 +415,7 @@ def faithfulness(Primes, Update, Trapspace):
     return answer
 
 
-def completeness(Primes, Update):
+def completeness(Primes, Update, MaxOutput=1000):
     """
     The ASP and CTL model checking based algorithm for deciding whether the minimal trap spaces of a network are complete.
     The algorithm is discussed in :ref:`Klarner2015(a) <klarner2015trap>`.
@@ -450,7 +450,7 @@ def completeness(Primes, Update):
             False
     """
 
-    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=False)
+    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=False, MaxOutput=MaxOutput)
 
 
 def univocality_with_counterexample(Primes, Update, Trapspace):
@@ -568,7 +568,7 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
         return False, attractor_state
 
 
-def completeness_with_counterexample(Primes, Update):
+def completeness_with_counterexample(Primes, Update, MaxOutput=1000):
     """
     Performs the same steps as :ref:`completeness` but also returns a counterexample which is *None* if it does not exist.
     A counterexample of a completeness test is a state that can not reach one of the minimal trap spaces of *Primes*.
@@ -590,10 +590,10 @@ def completeness_with_counterexample(Primes, Update):
             10010111101010100001100001011011111111
     """
 
-    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=True)
+    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=True, MaxOutput=MaxOutput)
 
 
-def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample):
+def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, MaxOutput=1000):
     """
     The iterative algorithm for deciding whether the minimal trap spaces are complete.
     The function is implemented by line-by-line following of the pseudo code algorithm given in
@@ -621,7 +621,7 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample):
 
     constants_global = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
 
-    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")   # line  1
+    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=MaxOutput)   # line  1
     if mintrapspaces==[{}]:             # line  2
         if ComputeCounterexample:
             return (True, None)
@@ -666,7 +666,7 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample):
             PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
 
             ## line 15: Q = MinTrapSpaces(U',F|U')
-            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min")
+            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min", MaxOutput=MaxOutput)
 
             ## line 16: phi = CompletenessQuery(Q)
             phi = PyBoolNet.TemporalLogic.EF_oneof_subspaces(primes_restricted, Q)
