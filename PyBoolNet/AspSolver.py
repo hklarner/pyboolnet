@@ -57,7 +57,7 @@ def percolate_trapspace(Primes, Trapspace):
     return constants
 
 
-def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representation="dict"):
+def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representation="dict", MaxOutput=1000):
     """
     Computes trap spaces that contain *State*.
 
@@ -67,30 +67,58 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
         * *Type* (str): either "min", "max", "all" or "percolated"
         * *FnameASP* (str): file name or *None*
         * *Representation* (str): either "str" or "dict", the representation of the trap spaces
+        * *MaxOutput*: maximum number of returned solutions
 
     **returns**:
-        * either *TrapSpaces* (list): the trap spaces that contain *State* if *Type* is "max", "all" or "percolated"
-        * or *TrapSpace* (dict): the unique minimal trap space that contains *State* if *Type* is "min"
+        * *TrapSpaces* (list): the trap spaces that contain *State*
 
     **example**::
 
         >>> trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
     """
+
+    return trapspaces_that_intersect_subspace(Primes=Primes, Subspace=State, Type=Type, FnameASP=FnameASP, Representation=Representation, MaxOutput=MaxOutput)
+
+
+def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Representation="dict", MaxOutput=1000):
+    """
+    Computes trap spaces that have non-empty intersection with *Subspace*
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Subspace* (dict): a subspace in dict format
+        * *Type* (str): either "min", "max", "all" or "percolated"
+        * *FnameASP* (str): file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
+        * *MaxOutput*: maximum number of returned solutions
+
+    **returns**:
+        * *TrapSpaces* (list): the trap spaces that have non-empty intersection with *Subspace*
+
+    **example**::
+
+        >>> trapspaces_that_intersect_subspace(primes, {"v1":1,"v2":0,"v3":0})
+    """
     
-    assert (len(Primes) == len(State))
-    assert (type(State) in [dict, str])
+    assert (len(Primes) >= len(Subspace))
+    assert (type(Subspace) in [dict, str])
     
-    if type(State) == str:
-        State = PyBoolNet.StateTransitionGraphs.state2dict(Primes, State)
+    if type(Subspace) == str:
+        Subspace = PyBoolNet.StateTransitionGraphs.subspace2dict(Primes, Subspace)
     
-    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, State)
+    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
     
     # note: Bounds=(1,"n") enforces at least one variable fixed.
     #       This is required for the subset maximal enumeration mode "--enum-mode=domRec --heuristic=Domain --dom-mod=3,16"
     #       Otherwise clasp returns "*** Warn : (clasp): domRec ignored: no domain atoms found!"
     #       Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE
     
-    tspaces = potassco_handle(active_primes, Type=Type, Bounds=(1, "n"), Project=[], MaxOutput=1000, FnameASP=FnameASP,
+    # exclude trivial trap space {} for search of maximal trap spaces
+    Bounds = None
+    if Type == "max":
+        Bounds = (1, "n")
+
+    tspaces = potassco_handle(active_primes, Type=Type, Bounds=Bounds, Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
                               Representation=Representation)
     
     if not tspaces:
@@ -101,19 +129,16 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
         if Representation == "str":
             answer = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, answer)
         
-        if Type != "min":
-            answer = [answer]
-        
-        return answer
+        return [answer]
     
-    if Type == "min":
+    if len(Subspace) == len(Primes) and Type == "min":
         if len(tspaces) > 1:
             print("the smallest trap space containing a state (or other space) must be unique!")
             print("found %i smallest tspaces." % len(tspaces))
             print(tspaces)
             raise Exception
         
-        return tspaces.pop()
+        return [tspaces.pop()]
     
     return tspaces
 

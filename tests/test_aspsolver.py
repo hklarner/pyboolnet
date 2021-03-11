@@ -29,12 +29,31 @@ def test_percolate_trapspace():
     assert PyBoolNet.AspSolver.percolate_trapspace(primes, {u"Raf": 1, u"Mek": 0, u"Erk": 0}) == {u"Raf": 1, u"Mek": 0, u"Erk": 0}
 
 
-def test_trap_spaces_that_contain_state():
+def test_trapspaces_that_contain_state():
     primes = PyBoolNet.Repository.get_primes("raf")
 
-    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "min", FnameASP=None) == {"Raf": 1, "Mek": 0, "Erk": 0}
-    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 0, "Mek": 1, "Erk": 1}, "min", FnameASP=None) == {"Mek": 1, "Erk": 1}
-    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 1, "Erk": 0}, "min", FnameASP=None) == {}
+    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "min", FnameASP=None) == [{"Raf": 1, "Mek": 0, "Erk": 0}]
+    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 0, "Mek": 1, "Erk": 1}, "min", FnameASP=None) == [{"Mek": 1, "Erk": 1}]
+    assert PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 1, "Erk": 0}, "min", FnameASP=None) == [{}]
+
+
+def test_trapspaces_that_contain_state_maxoutput():
+    primes = PyBoolNet.Repository.get_primes("raf")
+
+    answer = PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "all", MaxOutput=1)
+    
+    assert len(answer) == 1
+    assert answer[0] in PyBoolNet.AspSolver.trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "all", MaxOutput=1000)
+
+
+def test_trapspaces_that_intersect_subspace():
+    primes = PyBoolNet.Repository.get_primes("raf")
+
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "min") == [{"Raf": 1, "Mek": 0, "Erk": 0}]
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Erk": 0}, "min") == [{"Raf": 1, "Mek": 0, "Erk": 0}]
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Erk": 0}, "all") == [{}, {'Erk': 0, 'Mek': 0}, {'Erk': 0, 'Mek': 0, 'Raf': 1}]
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Erk": 0}, "max") == [{'Erk': 0, 'Mek': 0}]
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {}, "all") == [{}, {'Erk': 1, 'Mek': 1}, {'Erk': 0, 'Mek': 0}, {'Erk': 0, 'Mek': 0, 'Raf': 1}]
 
 
 def test_trap_spaces_piped1():
