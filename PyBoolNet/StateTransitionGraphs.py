@@ -43,7 +43,7 @@ def energy(Primes, State):
     """
     
     tspace = PyBoolNet.AspSolver.trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None,
-                                                               Representation="str")
+                                                               Representation="str")[0]
     energy = tspace.count('-')
     
     return energy
