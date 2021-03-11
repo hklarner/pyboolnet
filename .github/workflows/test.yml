@@ -33,8 +33,13 @@ jobs:
       - name: Install PyBoolNet
         run: python setup.py install
 
-      - name: Install libreadline6-dev
-        run: sudo apt-get install -qqy libreadline6-dev
+      - name: Install libreadline-dev
+        run: sudo apt-get install -qqy libreadline-dev
+
+      - name: Symlink libreadline8 to libreadline6
+        run: |
+          cd /lib/x86_64-linux-gnu
+          sudo ln -s libreadline.so.8.0 libreadline.so.6
 
       - name: Install imagemagick and graphviz
         run: |
