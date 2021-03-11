@@ -108,11 +108,6 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
     
     active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
     
-    # note: Bounds=(1,"n") enforces at least one variable fixed.
-    #       This is required for the subset maximal enumeration mode "--enum-mode=domRec --heuristic=Domain --dom-mod=3,16"
-    #       Otherwise clasp returns "*** Warn : (clasp): domRec ignored: no domain atoms found!"
-    #       Consequence: The trivial subspace is equivalent to the ASP problem being UNSATISFIABLE
-    
     # exclude trivial trap space {} for search of maximal trap spaces
     Bounds = None
     if Type == "max":
