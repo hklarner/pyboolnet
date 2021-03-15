@@ -34,7 +34,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0
+   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0
 
 which should place the package here::
 
@@ -42,7 +42,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0 --user
+   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0 --user
 
 The package is likely going to be placed here::
 
@@ -92,7 +92,7 @@ Download and install Graphviz_ and ImageMagick_ from
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0
+   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0
 
 which should place the package here::
 
@@ -100,7 +100,7 @@ which should place the package here::
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.3.0 --user
+   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0 --user
 
 The package is likely going to be placed here::
 
@@ -133,7 +133,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install git+https://github.com/hklarner/PyBoolNet@2.3.0
+   C:\> pip.exe install git+https://github.com/hklarner/PyBoolNet@2.31.0
 
 which should place the package here::
 

@@ -41,7 +41,7 @@ def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:
         primes[f"v{j}"] = [[{f"v{i}": 1-k}], [{f"v{i}": k}]]
 
     k = 1 if loop_sign == 1 else 0
-    primes[f"v0"] = [[{f"v0": 1 - k}], [{f"v0": k}]]
+    primes["v0"] = [[{"v0": 1 - k}], [{"v0": k}]]
 
     return primes
 
