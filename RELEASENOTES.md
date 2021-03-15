@@ -8,6 +8,7 @@
  - bugfix in `STGs.successors_mixed` (by @nanls)
  - adds parameter `MaxOutput` to `Attractors.completeness` (by @Lauracf) [PR](https://github.com/hklarner/PyBoolNet/pull/63)
 
+
 ## release notes for version 2.3.0 (January 2021)
  - bugfix in `find_attractor_state_by_randomwalk_and_ctl` (by @etonello)
  - adds `STGs.successors_mixed` (by @nanls)

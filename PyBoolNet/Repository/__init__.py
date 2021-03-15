@@ -93,7 +93,7 @@ def get_primes(Name):
 
     **example**::
 
-            >>> primes = get_primes("raf")
+        >>> primes = get_primes("raf")
     """
 
     path = os.path.join(BASE,Name,Name+".bnet")
@@ -102,7 +102,7 @@ def get_primes(Name):
         return PyBoolNet.FileExchange.bnet2primes(path)
 
     print(" %s does not exist"%path)
-    raise Exception
+    raise FileNotFoundError
 
 
 def get_attrs(Name, Update):
@@ -137,7 +137,7 @@ def get_attrs(Name, Update):
         return PyBoolNet.Attractors.open_json(path)
 
     print(" %s does not exist"%path)
-    raise Exception
+    raise FileNotFoundError
 
 
 def get_bnet(Fname):
