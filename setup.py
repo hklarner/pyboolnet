@@ -61,8 +61,8 @@ setup(name="PyBoolNet",
           "Topic :: Scientific/Engineering :: Bio-Informatics",
       ],
       install_requires=[
-          "networkx==2.4",
-          "matplotlib==3.3.3",
+          "networkx>=2.4",
+          "matplotlib>=3.3.3",
           "pytest",
           "pyeda==0.28.0"
       ]
