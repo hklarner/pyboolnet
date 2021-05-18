@@ -690,8 +690,8 @@ def active_primes(Primes, Subspace):
     for name in Primes:
         for v in [0,1]:
             for p in Primes[name][v]:
-                if name in Subspace.keys():
-                    if Subspace[name]==v:
+                if name in Subspace:
+                    if Subspace[name] == v:
                         if PyBoolNet.Utility.Misc.dicts_are_consistent(p,Subspace):
                             active_primes[name][v].append(dict(p))
                 else:

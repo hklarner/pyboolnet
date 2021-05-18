@@ -67,7 +67,7 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
         * *Type* (str): either "min", "max", "all" or "percolated"
         * *FnameASP* (str): file name or *None*
         * *Representation* (str): either "str" or "dict", the representation of the trap spaces
-        * *MaxOutput*: maximum number of returned solutions
+        * *MaxOutput* (int): maximum number of returned solutions
 
     **returns**:
         * *TrapSpaces* (list): the trap spaces that contain *State*
@@ -90,7 +90,7 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
         * *Type* (str): either "min", "max", "all" or "percolated"
         * *FnameASP* (str): file name or *None*
         * *Representation* (str): either "str" or "dict", the representation of the trap spaces
-        * *MaxOutput*: maximum number of returned solutions
+        * *MaxOutput* (int): maximum number of returned solutions
 
     **returns**:
         * *TrapSpaces* (list): the trap spaces that have non-empty intersection with *Subspace*
