@@ -9,50 +9,9 @@ import random
 import PyBoolNet
 
 
-def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False):
+def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False, MaxOutput=1000):
     """
-    todo: add unit tests
-
-    Computes the attractors object.
-
-    structure of attractor object:
-        primes: dict
-        update: str
-        is_complete: str
-
-        attractors: (tuple)
-            is_steady: bool
-            is_cyclic: bool
-            state:
-                str: state string
-                dict: state dict
-                prop: state proposition
-            mintrapspace:
-                str: subspace string
-                dict: subspace dict
-                prop: subspace proposition
-                is_univocal: str
-                is_faithful: str
-
-
-    example:
-        "primes": {..}
-        "update": "asynchronous"
-        "is_complete": "yes"
-        "attractors": (tuple)
-            "is_steady": False
-            "is_cyclic": True
-            "state":
-                "str": "001101"
-                "dict": {..}
-                "prop": "!v0&!v1..."
-            "mintrapspace":
-                "str": "00---1"
-                "dict": {..}
-                "prop": "!v0&!v1..."
-                "is_univocal": "unknown"
-                "is_faithful": "no"
-
+    computes all attractors of *Primes* including information about completeness, univocality, faithfulness
 
     **arguments**:
       * *Primes*: prime implicants
@@ -72,71 +31,80 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
       created attrs.json
     """
 
-    assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
-    assert(Primes)
+    assert Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES
+    assert Primes
 
-    if not Silent: print("Attractors.compute_json(..)")
+    if not Silent:
+        print("Attractors.compute_json(..)")
 
-    attrs = {}
+    attrs = dict()
     attrs["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
     attrs["update"] = Update
 
-    mintspaces = PyBoolNet.AspSolver.trap_spaces(Primes, "min")
+    min_tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=Primes, Type="min", MaxOutput=MaxOutput)
 
     if CheckCompleteness:
-        if not Silent: print(" Attractors.completeness(..)", end="")
+        if not Silent:
+            print(" Attractors.completeness(..)", end="")
         if completeness(Primes, Update):
             attrs["is_complete"] = "yes"
         else:
             attrs["is_complete"] = "no"
-        if not Silent: print(" {x}".format(x=attrs["is_complete"]))
+        if not Silent:
+            print(f" {attrs['is_complete']}")
     else:
         attrs["is_complete"] = "unknown"
 
     attrs["attractors"] = []
 
-    for i,mints in enumerate(mintspaces):
+    for i, mints in enumerate(min_tspaces):
 
-        mints_obj = {} # minimal trap space object
+        mints_obj = dict()
         mints_obj["str"] = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, mints)
         mints_obj["dict"] = mints
         mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes, mints)
 
-        if not Silent: print(" working on minimal trapspace {i}/{n}: {m}".format(i=i+1, n=len(mintspaces), m=mints_obj["str"]))
+        if not Silent:
+            print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}")
 
         if CheckUnivocality:
-            if not Silent: print("  Attractors.univocality(..)", end="")
+            if not Silent:
+                print("  Attractors.univocality(..)", end="")
             if univocality(Primes, Update, mints):
                 mints_obj["is_univocal"] = "yes"
             else:
                 mints_obj["is_univocal"] = "no"
-            if not Silent: print(" {x}".format(x=mints_obj["is_univocal"]))
+            if not Silent:
+                print(f" {mints_obj['is_univocal']}")
         else:
             mints_obj["is_univocal"] = "unknown"
 
         if CheckFaithfulness:
-            if not Silent: print("  Attractors.faithfulness(..)", end="")
+            if not Silent:
+                print("  Attractors.faithfulness(..)", end="")
             if faithfulness(Primes, Update, mints):
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
-            if not Silent: print(" {x}".format(x=mints_obj["is_faithful"]))
+            if not Silent:
+                print(f" {mints_obj['is_faithful']}")
         else:
             mints_obj["is_faithful"] = "unknown"
 
-        if not Silent: print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
+        if not Silent:
+            print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
         state = find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState=mints)
 
-        state_obj = {} # attractor state object
+        state_obj = dict()
         state_obj["str"] = PyBoolNet.StateTransitionGraphs.state2str(state)
         state_obj["dict"] = state
         state_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes, state)
 
-        attractor_obj = {}
+        attractor_obj = dict()
         attractor_obj["mintrapspace"] = mints_obj
         attractor_obj["state"] = state_obj
-        attractor_obj["is_steady"] = len(mints)==len(Primes)
-        attractor_obj["is_cyclic"] = len(mints)!=len(Primes)
+        attractor_obj["is_steady"] = len(mints) == len(Primes)
+        attractor_obj["is_cyclic"] = len(mints) != len(Primes)
 
         attrs["attractors"].append(attractor_obj)
 

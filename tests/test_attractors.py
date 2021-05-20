@@ -3,6 +3,7 @@
 import os
 
 import PyBoolNet
+from PyBoolNet.Attractors import compute_json
 
 FILES_IN = os.path.join(os.path.dirname(__file__), "files_input")
 FILES_OUT = os.path.join(os.path.dirname(__file__), "files_output")
@@ -141,8 +142,18 @@ def test_completeness():
 
     assert PyBoolNet.Attractors.completeness(primes, "synchronous")
 
+
 def test_completeness_maxoutput():
     primes = PyBoolNet.Repository.get_primes("davidich_yeast")
 
     assert PyBoolNet.Attractors.completeness(primes, "asynchronous", MaxOutput=10000)
     assert not PyBoolNet.Attractors.completeness(primes, "asynchronous", MaxOutput=2)
+
+
+def test_compute_json():
+    primes = PyBoolNet.Repository.get_primes("n5s3")
+    fname_json = os.path.join(FILES_OUT, "n5s3_attrs.json")
+    attrs = compute_json(Primes=primes, Update="asynchronous", FnameJson=fname_json, MaxOutput=2)
+
+    assert attrs
+
