@@ -35,7 +35,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
     assert Primes
 
     if not Silent:
-        print("Attractors.compute_json(..)")
+        print("Attractors.compute_json(..)", flush=True)
 
     attrs = dict()
     attrs["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
@@ -45,13 +45,13 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
 
     if CheckCompleteness:
         if not Silent:
-            print(" Attractors.completeness(..)", end="")
+            print(" Attractors.completeness(..)", end="", flush=True)
         if completeness(Primes, Update, MaxOutput=MaxOutput):
             attrs["is_complete"] = "yes"
         else:
             attrs["is_complete"] = "no"
         if not Silent:
-            print(f" {attrs['is_complete']}")
+            print(f" {attrs['is_complete']}", flush=True)
     else:
         attrs["is_complete"] = "unknown"
 
@@ -65,34 +65,34 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
         mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes=Primes, Subspace=mints)
 
         if not Silent:
-            print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}")
+            print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}", flush=True)
 
         if CheckUnivocality:
             if not Silent:
-                print("  Attractors.univocality(..)", end="")
+                print("  Attractors.univocality(..)", end="", flush=True)
             if univocality(Primes=Primes, Update=Update, Trapspace=mints):
                 mints_obj["is_univocal"] = "yes"
             else:
                 mints_obj["is_univocal"] = "no"
             if not Silent:
-                print(f" {mints_obj['is_univocal']}")
+                print(f" {mints_obj['is_univocal']}", flush=True)
         else:
             mints_obj["is_univocal"] = "unknown"
 
         if CheckFaithfulness:
             if not Silent:
-                print("  Attractors.faithfulness(..)", end="")
+                print("  Attractors.faithfulness(..)", end="", flush=True)
             if faithfulness(Primes=Primes, Update=Update, Trapspace=mints):
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
             if not Silent:
-                print(f" {mints_obj['is_faithful']}")
+                print(f" {mints_obj['is_faithful']}", flush=True)
         else:
             mints_obj["is_faithful"] = "unknown"
 
         if not Silent:
-            print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
+            print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)", flush=True)
         state = find_attractor_state_by_randomwalk_and_ctl(Primes=Primes, Update=Update, InitialState=mints)
 
         state_obj = dict()
