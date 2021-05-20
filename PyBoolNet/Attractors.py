@@ -46,7 +46,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
     if CheckCompleteness:
         if not Silent:
             print(" Attractors.completeness(..)", end="")
-        if completeness(Primes, Update):
+        if completeness(Primes, Update, MaxOutput=MaxOutput):
             attrs["is_complete"] = "yes"
         else:
             attrs["is_complete"] = "no"
@@ -60,9 +60,9 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
     for i, mints in enumerate(min_tspaces):
 
         mints_obj = dict()
-        mints_obj["str"] = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, mints)
+        mints_obj["str"] = PyBoolNet.StateTransitionGraphs.subspace2str(Primes=Primes, Subspace=mints)
         mints_obj["dict"] = mints
-        mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes, mints)
+        mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes=Primes, Subspace=mints)
 
         if not Silent:
             print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}")
@@ -70,7 +70,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
         if CheckUnivocality:
             if not Silent:
                 print("  Attractors.univocality(..)", end="")
-            if univocality(Primes, Update, mints):
+            if univocality(Primes=Primes, Update=Update, Trapspace=mints):
                 mints_obj["is_univocal"] = "yes"
             else:
                 mints_obj["is_univocal"] = "no"
@@ -82,7 +82,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
         if CheckFaithfulness:
             if not Silent:
                 print("  Attractors.faithfulness(..)", end="")
-            if faithfulness(Primes, Update, mints):
+            if faithfulness(Primes=Primes, Update=Update, Trapspace=mints):
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
@@ -93,7 +93,7 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
 
         if not Silent:
             print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
-        state = find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState=mints)
+        state = find_attractor_state_by_randomwalk_and_ctl(Primes=Primes, Update=Update, InitialState=mints)
 
         state_obj = dict()
         state_obj["str"] = PyBoolNet.StateTransitionGraphs.state2str(state)
