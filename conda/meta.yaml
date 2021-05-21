@@ -1,15 +1,17 @@
 {% set name = "pyboolnet" %}
-{% set version = "2.31" %}
+{% set setup_data = load_setup_py_data() %}
 
 package:
-  name: '{{ name|lower }}'
-  version: '{{ version }}'
+  name: {{ name|lower }}
+  version: {{ setup_data['version'] }}
 
 source:
   path: ../
 
 channels:
   - colomoto
+  - potassco
+  - conda-forge
 
 build:
   number: 0
