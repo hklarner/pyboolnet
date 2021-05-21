@@ -1,5 +1,5 @@
 {% set name = "pyboolnet" %}
-{% set version = "2.3.0" %}
+{% set version = "2.31" %}
 
 package:
   name: '{{ name|lower }}'

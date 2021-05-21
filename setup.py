@@ -6,28 +6,29 @@ import platform
 
 package_data_files = []
 
-if "CONDA_BUILD" not in os.environ:
-    # PyBoolNet dependencies
-    this_os = platform.system()
-    if this_os == "Linux":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
-    elif this_os == "Darwin":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
-    elif this_os == "Windows":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
-    else:
-        # no idea if we could get here?
-        raise Exception
+# Handle PyBoolNet dependencies per platform
+this_os = platform.system()
+if "CONDA_BUILD" in os.environ:
+    pyboolnet_dep_folder = os.path.join("Dependencies", "conda") 
+elif this_os == "Linux":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
+elif this_os == "Darwin":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
+elif this_os == "Windows":
+    pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
+else:
+    # no idea if we could get here?
+    raise Exception
 
-    print(f"PyBoolNet dependency folder = {pyboolnet_dep_folder}")
+print(f"PyBoolNet dependency folder = {pyboolnet_dep_folder}")
 
-    # copy dependencies to PyBoolNet/Dependencies
-    copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
+# copy dependencies to PyBoolNet/Dependencies
+copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
 
-    # adding dependency files
-    for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
-        root = root.replace('PyBoolNet/Dependencies', 'Dependencies')
-        package_data_files.extend([os.path.join(root, x) for x in filenames])
+# adding dependency files
+for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
+    root = root.replace('PyBoolNet/Dependencies', 'Dependencies')
+    package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 # adding repository files
 for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
