@@ -116,7 +116,8 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
 
     extra_lines = None
     if contained:
-        extra_lines = [ ':- not hit("%s",%s).\n' % (node,value) for node,value in Subspace.items() ]
+        extra_lines = [f':- not hit("{node}",{value}).' for node, value in Subspace.items()]
+        extra_lines += [""]
 
     tspaces = potassco_handle(active_primes, Type=Type, Bounds=Bounds, Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
                               Representation=Representation, extra_lines=extra_lines)
