@@ -55,6 +55,10 @@ def test_trapspaces_that_intersect_subspace():
     assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Erk": 0}, "max") == [{'Erk': 0, 'Mek': 0}]
     assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {}, "all") == [{}, {'Erk': 1, 'Mek': 1}, {'Erk': 0, 'Mek': 0}, {'Erk': 0, 'Mek': 0, 'Raf': 1}]
 
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Raf": 0}, "all") == [{}, {'Erk': 1, 'Mek': 1}, {'Erk': 0, 'Mek': 0}]
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Raf": 0}, "all", contained=True) == []
+    assert PyBoolNet.AspSolver.trapspaces_that_intersect_subspace(primes, {"Raf": 1}, "all", contained=True) == [{'Erk': 0, 'Mek': 0, 'Raf': 1}]
+
 
 def test_trap_spaces_piped1():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
