@@ -80,7 +80,7 @@ def trapspaces_that_contain_state(Primes, State, Type, FnameASP=None, Representa
     return trapspaces_that_intersect_subspace(Primes=Primes, Subspace=State, Type=Type, FnameASP=FnameASP, Representation=Representation, MaxOutput=MaxOutput)
 
 
-def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Representation="dict", MaxOutput=1000, contained=False):
+def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Representation="dict", MaxOutput=1000):
     """
     Computes trap spaces that have non-empty intersection with *Subspace*
 
@@ -91,7 +91,6 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
         * *FnameASP* (str): file name or *None*
         * *Representation* (str): either "str" or "dict", the representation of the trap spaces
         * *MaxOutput* (int): maximum number of returned solutions
-        * *contained (bool)*: if True, restrict to trap spaces fully included in the subspace
 
     **returns**:
         * *TrapSpaces* (list): the trap spaces that have non-empty intersection with *Subspace*
@@ -114,13 +113,8 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
     if Type == "max":
         Bounds = (1, "n")
 
-    extra_lines = None
-    if contained:
-        extra_lines = [f':- not hit("{node}",{value}).' for node, value in Subspace.items()]
-        extra_lines += [""]
-
     tspaces = potassco_handle(active_primes, Type=Type, Bounds=Bounds, Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
-                              Representation=Representation, extra_lines=extra_lines)
+                              Representation=Representation)
     
     if not tspaces:
         # ASP program is unsatisfiable
@@ -140,6 +134,47 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
             raise Exception
         
         return [tspaces.pop()]
+    
+    return tspaces
+
+
+def trapspaces_within_subspace(Primes, Subspace, Type, FnameASP=None, Representation="dict", MaxOutput=1000):
+    """
+    Computes trap spaces contained within *Subspace*
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Subspace* (dict): a subspace in dict format
+        * *Type* (str): either "min", "max", "all" or "percolated"
+        * *FnameASP* (str): file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
+        * *MaxOutput* (int): maximum number of returned solutions
+
+    **returns**:
+        * *TrapSpaces* (list): the trap spaces contained within *Subspace*
+
+    **example**::
+
+        >>> trapspaces_in_subspace(primes, {"v1":1,"v2":0,"v3":0})
+    """
+    
+    if not Subspace:
+        return trap_spaces(Primes, Type, MaxOutput=MaxOutput, FnameASP=FnameASP, Representation=Representation)
+    
+    assert (len(Primes) >= len(Subspace))
+    assert (type(Subspace) in [dict, str])
+    
+    if type(Subspace) == str:
+        Subspace = PyBoolNet.StateTransitionGraphs.subspace2dict(Primes, Subspace)
+    
+    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
+    Bounds = (len(Subspace), "n")
+
+    extra_lines = [f':- not hit("{node}",{value}).' for node, value in Subspace.items()]
+    extra_lines += [""]
+
+    tspaces = potassco_handle(active_primes, Type=Type, Bounds=Bounds, Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
+                              Representation=Representation, extra_lines=extra_lines)
     
     return tspaces
 
