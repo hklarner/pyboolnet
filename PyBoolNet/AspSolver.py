@@ -138,6 +138,47 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
     return tspaces
 
 
+def trapspaces_within_subspace(Primes, Subspace, Type, FnameASP=None, Representation="dict", MaxOutput=1000):
+    """
+    Computes trap spaces contained within *Subspace*
+
+    **arguments**:
+        * *Primes*: prime implicants
+        * *Subspace* (dict): a subspace in dict format
+        * *Type* (str): either "min", "max", "all" or "percolated"
+        * *FnameASP* (str): file name or *None*
+        * *Representation* (str): either "str" or "dict", the representation of the trap spaces
+        * *MaxOutput* (int): maximum number of returned solutions
+
+    **returns**:
+        * *TrapSpaces* (list): the trap spaces contained within *Subspace*
+
+    **example**::
+
+        >>> trapspaces_in_subspace(primes, {"v1":1,"v2":0,"v3":0})
+    """
+    
+    if not Subspace:
+        return trap_spaces(Primes, Type, MaxOutput=MaxOutput, FnameASP=FnameASP, Representation=Representation)
+    
+    assert (len(Primes) >= len(Subspace))
+    assert (type(Subspace) in [dict, str])
+    
+    if type(Subspace) == str:
+        Subspace = PyBoolNet.StateTransitionGraphs.subspace2dict(Primes, Subspace)
+    
+    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
+    Bounds = (len(Subspace), "n")
+
+    extra_lines = [f':- not hit("{node}",{value}).' for node, value in Subspace.items()]
+    extra_lines += [""]
+
+    tspaces = potassco_handle(active_primes, Type=Type, Bounds=Bounds, Project=[], MaxOutput=MaxOutput, FnameASP=FnameASP,
+                              Representation=Representation, extra_lines=extra_lines)
+    
+    return tspaces
+
+
 def smallest_trapspace(Primes, State, Representation="dict"):
     """
     Returns the (unique) smallest trap space that contains *State*.
@@ -291,7 +332,7 @@ def steady_states_projected(Primes, Project, MaxOutput=1000, FnameASP=None):
                            FnameASP=FnameASP, Representation="dict")
 
 
-def primes2asp(Primes, FnameASP, Bounds, Project, Type):
+def primes2asp(Primes, FnameASP, Bounds, Project, Type, extra_lines=None):
     """
     Saves Primes as an *asp* file in the Potassco_ format intended for computing minimal and maximal trap spaces.
     The homepage of the Potassco_ solving collection is http://potassco.sourceforge.net.
@@ -397,6 +438,9 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
             lines += [':- {hit(V,S)} %i.' % (Bounds[0] - 1)]
         lines += [':- %i {hit(V,S)}.' % (Bounds[1] + 1)]
     
+    if extra_lines:
+        lines += extra_lines
+    
     if Project:
         lines += ['', '%% show projection (enforced by "Project=%s").' % (repr(sorted(Project)))]
         lines += ['#show.']
@@ -422,7 +466,7 @@ def primes2asp(Primes, FnameASP, Bounds, Project, Type):
     print('created %s' % FnameASP)
 
 
-def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Representation):
+def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Representation, extra_lines=None):
     """
     Returns a list of trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
     """
@@ -443,7 +487,7 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
     elif Type == "min":
         params_clasp += ["--enum-mode=domRec", "--heuristic=Domain", "--dom-mod=3,16"]
     
-    aspfile = primes2asp(Primes, FnameASP, Bounds, Project, Type)
+    aspfile = primes2asp(Primes, FnameASP, Bounds, Project, Type, extra_lines=extra_lines)
     
     try:
         # pipe ASP file
