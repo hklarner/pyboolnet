@@ -6,7 +6,7 @@ from typing import List, Dict
 import networkx
 from pyeda.inter import truthtable, truthtable2expr, exprvar
 
-from PyBoolNet.FileExchange import bnet2primes
+from PyBoolNet.file_exchange import bnet2primes
 
 
 def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:
@@ -254,7 +254,7 @@ def random_boolean_expression(names: List[str], k: int, seed: int = 0) -> str:
 
 
 if __name__ == "__main__":
-    from PyBoolNet.InteractionGraphs import create_image
+    from PyBoolNet.interaction_graphs import create_image
 
     primes = random_regular_network(7, 3, connector="and", edge_sign=-1)
     create_image(primes, "random_regular_network.png", LayoutEngine="dot")

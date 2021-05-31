@@ -6,7 +6,7 @@ import math
 import os
 import networkx
 
-import PyBoolNet.StateTransitionGraphs
+import PyBoolNet.state_transition_graphs
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
@@ -104,11 +104,11 @@ def local_igraph_of_state(Primes, State):
     """
 
     if type(State)==str:
-        State = PyBoolNet.StateTransitionGraphs.state2dict(Primes, State)
+        State = PyBoolNet.state_transition_graphs.state2dict(Primes, State)
 
     local_igraph = create_empty_igraph(Primes)
 
-    F = lambda x: PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes, x)
+    F = lambda x: PyBoolNet.state_transition_graphs.successor_synchronous(Primes, x)
     x = State
 
     for i in Primes:
@@ -133,7 +133,7 @@ def local_igraph_of_states(Primes, States):
     computes the local interaction graph of a states.
     """
 
-    States = PyBoolNet.StateTransitionGraphs.states2dict(Primes, States)
+    States = PyBoolNet.state_transition_graphs.states2dict(Primes, States)
 
     local_igraph = create_empty_igraph(Primes)
 
@@ -383,7 +383,7 @@ def add_style_activities(IGraph, Activities, ColorActive="/paired10/5", ColorIna
 
     names = sorted(IGraph.nodes())
     if type(Activities)==str:
-        Activities = PyBoolNet.StateTransitionGraphs.subspace2dict(names, Activities)
+        Activities = PyBoolNet.state_transition_graphs.subspace2dict(names, Activities)
 
     for name in IGraph.nodes():
 

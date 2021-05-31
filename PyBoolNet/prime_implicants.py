@@ -1,8 +1,8 @@
 
 
-import PyBoolNet.FileExchange
-import PyBoolNet.QuineMcCluskey
-import PyBoolNet.InteractionGraphs
+import PyBoolNet.file_exchange
+import PyBoolNet.boolean_normal_forms
+import PyBoolNet.interaction_graphs
 import PyBoolNet.Utility.DiGraphs
 import PyBoolNet.Utility.Misc
 
@@ -113,7 +113,7 @@ def find_outputs(Primes):
         ['Proliferation','Apoptosis','GrowthArrest']
     """
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     outputs = [x for x in igraph if not igraph.successors(x)]
 
     return sorted(outputs)
@@ -305,9 +305,9 @@ def create_variables(Primes, UpdateFunctions, Copy=False):
         names.add(name)
         if type(function)==str:
             line = "%s, %s"%(name,function)
-            newprimes[name] = PyBoolNet.FileExchange.bnet2primes(line)[name]
+            newprimes[name] = PyBoolNet.file_exchange.bnet2primes(line)[name]
         else:
-            newprimes[name] = PyBoolNet.QuineMcCluskey.functions2primes({name:function})[name]
+            newprimes[name] = PyBoolNet.boolean_normal_forms.functions2primes({name:function})[name]
 
         for x in newprimes[name][1]:
             dependencies.update(set(x))
@@ -384,7 +384,7 @@ def remove_variables(Primes, Names, Copy=False):
     if Copy:
         Primes = copy(Primes)
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     hit = [x for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names) if x not in Names]
     if hit:
         print(" error: can not remove variables that are not closed under successor relation.")
@@ -425,7 +425,7 @@ def remove_all_variables_except(Primes, Names, Copy=False):
     if Copy:
         Primes = copy(Primes)
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, Names) if x not in Names]
     if hit:
         print(" error: can not remove variables that are not closed under predecessor relation.")
@@ -543,7 +543,7 @@ def substitute_and_remove(Primes, Names, Copy=False):
     assert(all(x in constants for x in Names))
     Names = dict((k,v) for k,v in constants.items() if k in Names)
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names):
         _substitute(Primes, x, Names)
 
@@ -577,7 +577,7 @@ def _percolation(Primes, RemoveConstants):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     constants  = find_constants(Primes)
     fringe = PyBoolNet.Utility.DiGraphs.successors(igraph, constants)
 
@@ -672,7 +672,7 @@ def input_combinations(Primes, Format="dict"):
         else:
             for x in itertools.product(*len(inputs)*[[0,1]]):
                 x = dict(zip(inputs,x))
-                x = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)
+                x = PyBoolNet.state_transition_graphs.subspace2str(Primes, x)
                 yield x
 
     else:

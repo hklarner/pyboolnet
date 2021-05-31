@@ -31,17 +31,17 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
       created attrs.json
     """
 
-    assert Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES
+    assert Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES
     assert Primes
 
     if not Silent:
         print("Attractors.compute_json(..)", flush=True)
 
     attrs = dict()
-    attrs["primes"] = PyBoolNet.PrimeImplicants.copy(Primes)
+    attrs["primes"] = PyBoolNet.prime_implicants.copy(Primes)
     attrs["update"] = Update
 
-    min_tspaces = PyBoolNet.AspSolver.trap_spaces(Primes=Primes, Type="min", MaxOutput=MaxOutput)
+    min_tspaces = PyBoolNet.trap_spaces.trap_spaces(Primes=Primes, Type="min", MaxOutput=MaxOutput)
 
     if CheckCompleteness:
         if not Silent:
@@ -60,9 +60,9 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
     for i, mints in enumerate(min_tspaces):
 
         mints_obj = dict()
-        mints_obj["str"] = PyBoolNet.StateTransitionGraphs.subspace2str(Primes=Primes, Subspace=mints)
+        mints_obj["str"] = PyBoolNet.state_transition_graphs.subspace2str(Primes=Primes, Subspace=mints)
         mints_obj["dict"] = mints
-        mints_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes=Primes, Subspace=mints)
+        mints_obj["prop"] = PyBoolNet.temporal_logic.subspace2proposition(Primes=Primes, Subspace=mints)
 
         if not Silent:
             print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}", flush=True)
@@ -96,9 +96,9 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
         state = find_attractor_state_by_randomwalk_and_ctl(Primes=Primes, Update=Update, InitialState=mints)
 
         state_obj = dict()
-        state_obj["str"] = PyBoolNet.StateTransitionGraphs.state2str(state)
+        state_obj["str"] = PyBoolNet.state_transition_graphs.state2str(state)
         state_obj["dict"] = state
-        state_obj["prop"] = PyBoolNet.TemporalLogic.subspace2proposition(Primes, state)
+        state_obj["prop"] = PyBoolNet.temporal_logic.subspace2proposition(Primes, state)
 
         attractor_obj = dict()
         attractor_obj["mintrapspace"] = mints_obj
@@ -197,9 +197,9 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
     """
 
     if type(InitialState) == str:
-        InitialState = PyBoolNet.StateTransitionGraphs.state2dict(Primes=Primes, State=InitialState)
+        InitialState = PyBoolNet.state_transition_graphs.state2dict(Primes=Primes, State=InitialState)
 
-    assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
+    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
     assert(set(InitialState).issubset(set(Primes)))
 
     # length heuristic
@@ -208,13 +208,13 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
 
     # transition function
     if Update=='asynchronous':
-        transition = lambda current_state: random.choice(PyBoolNet.StateTransitionGraphs.successors_asynchronous(Primes,current_state))
+        transition = lambda current_state: random.choice(PyBoolNet.state_transition_graphs.successors_asynchronous(Primes, current_state))
 
     elif Update=='synchronous':
-        transition = lambda current_state: PyBoolNet.StateTransitionGraphs.successor_synchronous(Primes,current_state)
+        transition = lambda current_state: PyBoolNet.state_transition_graphs.successor_synchronous(Primes, current_state)
 
     elif Update=='mixed':
-        transition = lambda current_state: PyBoolNet.StateTransitionGraphs.random_successor_mixed(Primes,current_state)
+        transition = lambda current_state: PyBoolNet.state_transition_graphs.random_successor_mixed(Primes, current_state)
 
     if not Silent:
         print("find_attractor_state_by_randomwalk_and_ctl(..)")
@@ -224,24 +224,24 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
     while trials < Attempts:
         if not Silent: print(" trial {i}".format(i=trials))
 
-        current_state = PyBoolNet.StateTransitionGraphs.random_state(Primes, InitialState)
-        if not Silent: print("  start: {x}".format(x=PyBoolNet.StateTransitionGraphs.state2str(current_state)))
+        current_state = PyBoolNet.state_transition_graphs.random_state(Primes, InitialState)
+        if not Silent: print("  start: {x}".format(x=PyBoolNet.state_transition_graphs.state2str(current_state)))
 
         transitions = 0
         while transitions < Length:
             current_state = transition(current_state)
             transitions+=1
 
-        if not Silent: print("  end:   {x}".format(x=PyBoolNet.StateTransitionGraphs.state2str(current_state)))
+        if not Silent: print("  end:   {x}".format(x=PyBoolNet.state_transition_graphs.state2str(current_state)))
 
-        spec = 'CTLSPEC ' + PyBoolNet.TemporalLogic.AGEF_oneof_subspaces(Primes, [current_state])
-        init = 'INIT ' + PyBoolNet.TemporalLogic.subspace2proposition(Primes, current_state)
+        spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.AGEF_oneof_subspaces(Primes, [current_state])
+        init = 'INIT ' + PyBoolNet.temporal_logic.subspace2proposition(Primes, current_state)
 
         # todo: remove. this is just for debugging
         # PyBoolNet.ModelChecking.primes2smv(Primes, Update, init, spec, FnameSMV="randomwalk.smv")
         # return
 
-        if PyBoolNet.ModelChecking.check_primes(Primes, Update, init, spec):
+        if PyBoolNet.model_checking.check_primes(Primes, Update, init, spec):
             if not Silent: print("  is attractor state")
 
             return current_state
@@ -298,12 +298,12 @@ def univocality(Primes, Update, Trapspace):
     """
 
     if type(Trapspace) == str:
-        Trapspace = PyBoolNet.StateTransitionGraphs.str2subspace(Primes, Trapspace)
+        Trapspace = PyBoolNet.state_transition_graphs.str2subspace(Primes, Trapspace)
 
     # percolation
-    primes = PyBoolNet.PrimeImplicants.copy(Primes)
-    PyBoolNet.PrimeImplicants.create_constants(primes, Constants=Trapspace)
-    PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    primes = PyBoolNet.prime_implicants.copy(Primes)
+    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
+    PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
 
     # trivial case: unique steady state
     if primes == {}:
@@ -313,9 +313,9 @@ def univocality(Primes, Update, Trapspace):
     attractor_state1 = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
 
     # univocality
-    spec = 'CTLSPEC ' + PyBoolNet.TemporalLogic.EF_oneof_subspaces(primes, [attractor_state1])
+    spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.EF_oneof_subspaces(primes, [attractor_state1])
     init = 'INIT TRUE'
-    answer = PyBoolNet.ModelChecking.check_primes(primes, Update, init, spec)
+    answer = PyBoolNet.model_checking.check_primes(primes, Update, init, spec)
 
     return answer
 
@@ -360,25 +360,25 @@ def faithfulness(Primes, Update, Trapspace):
     """
 
     if type(Trapspace) == str:
-        Trapspace = PyBoolNet.StateTransitionGraphs.str2subspace(Primes, Trapspace)
+        Trapspace = PyBoolNet.state_transition_graphs.str2subspace(Primes, Trapspace)
 
     # trivial case: steady state
     if len(Trapspace) == len(Primes):
         return True
 
     # percolation
-    primes = PyBoolNet.PrimeImplicants.copy(Primes)
-    PyBoolNet.PrimeImplicants.create_constants(primes, Constants=Trapspace)
-    constants = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    primes = PyBoolNet.prime_implicants.copy(Primes)
+    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
+    constants = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
 
     # trivial case: free variables fix due to percolation
     if len(constants) > len(Trapspace):
         return False
 
     # faithfulness
-    spec = 'CTLSPEC AG(%s)' % PyBoolNet.TemporalLogic.EF_unsteady_states(primes)
+    spec = 'CTLSPEC AG(%s)' % PyBoolNet.temporal_logic.EF_unsteady_states(primes)
     init = 'INIT TRUE'
-    answer = PyBoolNet.ModelChecking.check_primes(primes, Update, init, spec)
+    answer = PyBoolNet.model_checking.check_primes(primes, Update, init, spec)
 
     return answer
 
@@ -446,9 +446,9 @@ def univocality_with_counterexample(Primes, Update, Trapspace):
         Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
 
     # percolation
-    primes = PyBoolNet.PrimeImplicants.copy(Primes)
-    PyBoolNet.PrimeImplicants.create_constants(primes, Constants=Trapspace)
-    constants  = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    primes = PyBoolNet.prime_implicants.copy(Primes)
+    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
+    constants  = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
 
     # trivial case: constants = unique steady state
     if primes == {}:
@@ -458,9 +458,9 @@ def univocality_with_counterexample(Primes, Update, Trapspace):
     attractor_state1 = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
 
     # univocality
-    spec = 'CTLSPEC ' + PyBoolNet.TemporalLogic.EF_oneof_subspaces(primes, [attractor_state1])
+    spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.EF_oneof_subspaces(primes, [attractor_state1])
     init = 'INIT TRUE'
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes, Update, init, spec)
 
     # success
     if answer:
@@ -508,9 +508,9 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
         return True, None
 
     # percolation
-    primes = PyBoolNet.PrimeImplicants.copy(Primes)
-    PyBoolNet.PrimeImplicants.create_constants(primes, Constants=Trapspace)
-    constants  = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    primes = PyBoolNet.prime_implicants.copy(Primes)
+    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
+    constants  = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
 
     # trivial case: free variables fix due to percolation
     if len(constants)>len(Trapspace):
@@ -520,9 +520,9 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
         return False, attractor_state
 
     # faithfulness
-    spec = 'CTLSPEC AG(%s)'%PyBoolNet.TemporalLogic.EF_unsteady_states(primes)
+    spec = 'CTLSPEC AG(%s)'%PyBoolNet.temporal_logic.EF_unsteady_states(primes)
     init = 'INIT TRUE'
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, Update, init, spec)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes, Update, init, spec)
 
     # success
     if answer:
@@ -585,11 +585,11 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
             10010111101010100001100001011011111111
     """
 
-    primes = PyBoolNet.PrimeImplicants.copy(Primes)
+    primes = PyBoolNet.prime_implicants.copy(Primes)
 
-    constants_global = PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
+    constants_global = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
 
-    mintrapspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=MaxOutput)   # line  1
+    mintrapspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", MaxOutput=MaxOutput)   # line  1
     if mintrapspaces==[{}]:             # line  2
         if ComputeCounterexample:
             return (True, None)
@@ -601,11 +601,11 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
         p, W = currentset.pop()         # line  6 (p are constatns, W are variables already seen in search for minimal autonomous sets)
 
         ## line 7: primes_reduced = ReducedNetwork(V,F,p)
-        primes_reduced = PyBoolNet.PrimeImplicants.copy(primes)
-        PyBoolNet.PrimeImplicants.create_constants(primes_reduced, Constants=p)
+        primes_reduced = PyBoolNet.prime_implicants.copy(primes)
+        PyBoolNet.prime_implicants.create_constants(primes_reduced, Constants=p)
 
         ## line 8: cgraph = CondensationGraph(V_p,F_p)
-        igraph = PyBoolNet.InteractionGraphs.primes2igraph(primes_reduced)
+        igraph = PyBoolNet.interaction_graphs.primes2igraph(primes_reduced)
         cgraph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(igraph)
 
 
@@ -630,30 +630,30 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
             U_dash = PyBoolNet.Utility.DiGraphs.ancestors(igraph, U)
 
             ## line 14: primes_restricted = Restriction(V_p,F_p,U_dash)
-            primes_restricted = PyBoolNet.PrimeImplicants.copy(primes_reduced)
-            PyBoolNet.PrimeImplicants.remove_all_variables_except(primes_restricted, U_dash)
+            primes_restricted = PyBoolNet.prime_implicants.copy(primes_reduced)
+            PyBoolNet.prime_implicants.remove_all_variables_except(primes_restricted, U_dash)
 
             ## line 15: Q = MinTrapSpaces(U',F|U')
-            Q = PyBoolNet.AspSolver.trap_spaces(primes_restricted, "min", MaxOutput=MaxOutput)
+            Q = PyBoolNet.trap_spaces.trap_spaces(primes_restricted, "min", MaxOutput=MaxOutput)
 
             ## line 16: phi = CompletenessQuery(Q)
-            phi = PyBoolNet.TemporalLogic.EF_oneof_subspaces(primes_restricted, Q)
+            phi = PyBoolNet.temporal_logic.EF_oneof_subspaces(primes_restricted, Q)
 
             ## lines 17,18: answer = PyBoolNet.ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
             spec = "CTLSPEC %s"%phi
 
             if ComputeCounterexample:
-                answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
+                answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
                 if not answer:
                     downstream = [x for x in igraph if not x in U]
-                    arbitrary_state = PyBoolNet.StateTransitionGraphs.random_state(downstream)
+                    arbitrary_state = PyBoolNet.state_transition_graphs.random_state(downstream)
                     toplayer_state = counterex[-1]
                     counterex = PyBoolNet.Utility.Misc.merge_dicts([constants_global,p,toplayer_state,arbitrary_state])
 
                     return False, counterex
             else:
-                answer = PyBoolNet.ModelChecking.check_primes(primes_restricted, Update, init, spec)
+                answer = PyBoolNet.model_checking.check_primes(primes_restricted, Update, init, spec)
                 if not answer:
 
                     return False
@@ -669,9 +669,9 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
         for q in Intersection(refinement):
 
             ## line 22: q_tilde = Percolation(V,F,q)
-            dummy = PyBoolNet.PrimeImplicants.copy(primes)
-            PyBoolNet.PrimeImplicants.create_constants(dummy, Constants=q)
-            q_tilde = PyBoolNet.PrimeImplicants.percolate_and_keep_constants(dummy)
+            dummy = PyBoolNet.prime_implicants.copy(primes)
+            PyBoolNet.prime_implicants.create_constants(dummy, Constants=q)
+            q_tilde = PyBoolNet.prime_implicants.percolate_and_keep_constants(dummy)
 
             ## lines 23, 24
             if q_tilde not in mintrapspaces:
@@ -699,7 +699,7 @@ def create_attractor_report(Primes, FnameTXT=None):
          >>> create_attractor_report(primes, "report.txt")
     """
 
-    mints = PyBoolNet.AspSolver.trap_spaces(Primes, "min")
+    mints = PyBoolNet.trap_spaces.trap_spaces(Primes, "min")
     steady = sorted([x for x in mints if len(x)==len(Primes)])
     cyclic = sorted([x for x in mints if len(x)<len(Primes)])
 
@@ -717,7 +717,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ w*"-" +" | "]
 
     for x in steady:
-        lines+= ["| "+PyBoolNet.StateTransitionGraphs.subspace2str(Primes, x).ljust(w)+" |"]
+        lines+= ["| " + PyBoolNet.state_transition_graphs.subspace2str(Primes, x).ljust(w) + " |"]
     lines+= [""]
 
     width = max([len(Primes), 14])
@@ -736,7 +736,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
 
     for x in cyclic:
-        line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line =  "| "+ ("%s" % PyBoolNet.state_transition_graphs.subspace2str(Primes, x)).ljust(width)
         line+= " | "+ ("%s"%univocality(Primes, "asynchronous", x)).ljust(9)
         line+= " | "+ ("%s"%faithfulness(Primes, "asynchronous", x)).ljust(9)+" |"
         lines+= [line]
@@ -755,7 +755,7 @@ def create_attractor_report(Primes, FnameTXT=None):
         lines+= ["| "+ width*"-" +" | --------- | --------- |"]
 
     for x in cyclic:
-        line =  "| "+ ("%s"%PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x)).ljust(width)
+        line =  "| "+ ("%s" % PyBoolNet.state_transition_graphs.subspace2str(Primes, x)).ljust(width)
         line+= " | "+ ("%s"%univocality(Primes, "synchronous", x)).ljust(9)
         line+= " | "+ ("%s"%faithfulness(Primes, "synchronous", x)).ljust(9)+" |"
         lines+= [line]
@@ -763,7 +763,7 @@ def create_attractor_report(Primes, FnameTXT=None):
 
 
     bnet = []
-    for row in PyBoolNet.FileExchange.primes2bnet(Primes).split("\n"):
+    for row in PyBoolNet.file_exchange.primes2bnet(Primes).split("\n"):
         if not row.strip(): continue
         t, f = row.split(",")
         bnet.append((t.strip(),f.strip()))
@@ -867,9 +867,9 @@ def completeness_naive(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + PyBoolNet.TemporalLogic.EF_oneof_subspaces(Primes, TrapSpaces)
+    spec = "CTLSPEC " + PyBoolNet.temporal_logic.EF_oneof_subspaces(Primes, TrapSpaces)
     init = "INIT TRUE"
-    answer = PyBoolNet.ModelChecking.check_primes(Primes, Update, init, spec)
+    answer = PyBoolNet.model_checking.check_primes(Primes, Update, init, spec)
 
     return answer
 
@@ -911,9 +911,9 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + PyBoolNet.TemporalLogic.EF_oneof_subspaces(Primes, TrapSpaces)
+    spec = "CTLSPEC " + PyBoolNet.temporal_logic.EF_oneof_subspaces(Primes, TrapSpaces)
     init = "INIT TRUE"
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes, Update, init, spec)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(Primes, Update, init, spec)
 
     if counterex:
         counterex = counterex[-1]

@@ -3,23 +3,23 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import PyBoolNet.Attractors
-import PyBoolNet.Basins
-import PyBoolNet.Commitment
-import PyBoolNet.Phenotypes
-import PyBoolNet.FileExchange
-import PyBoolNet.InteractionGraphs
-import PyBoolNet.ModelChecking
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.QuineMcCluskey
-import PyBoolNet.StateTransitionGraphs
-import PyBoolNet.TemporalLogic
-import PyBoolNet.AspSolver
+import PyBoolNet.attractors
+import PyBoolNet.basins_of_attraction
+import PyBoolNet.commitment_diagrams
+import PyBoolNet.phenotypes
+import PyBoolNet.file_exchange
+import PyBoolNet.interaction_graphs
+import PyBoolNet.model_checking
+import PyBoolNet.prime_implicants
+import PyBoolNet.boolean_normal_forms
+import PyBoolNet.state_transition_graphs
+import PyBoolNet.temporal_logic
+import PyBoolNet.trap_spaces
 import PyBoolNet.Repository
 import PyBoolNet.Utility
-import PyBoolNet.BooleanLogic
+import PyBoolNet.boolean_logic
 import PyBoolNet.Tests
-import PyBoolNet.generators
+import PyBoolNet.network_generators
 
 import pprint as prettyprint
 

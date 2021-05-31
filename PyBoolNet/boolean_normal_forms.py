@@ -5,7 +5,7 @@ import ast
 import inspect
 import itertools
 
-import PyBoolNet.FileExchange
+import PyBoolNet.file_exchange
 
 BASE = os.path.join(os.path.dirname(__file__))
 fname_nusmvkeywords = os.path.join(BASE, "Dependencies", "nusmvkeywords.json")
@@ -88,7 +88,7 @@ def functions2primes(Functions):
     mindnf = functions2mindnf(Functions)
     lines = ["%s,\t\t%s"%x for x in mindnf.items()]
 
-    return PyBoolNet.FileExchange.bnet2primes(BNET='\n'.join(lines))
+    return PyBoolNet.file_exchange.bnet2primes(BNET='\n'.join(lines))
 
     
 def functions2mindnf(Functions):

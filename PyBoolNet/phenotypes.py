@@ -65,7 +65,7 @@ def compute_json(AttrJson, Markers, FnameJson=None, Silent=False):
     NAMES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-    primes = PyBoolNet.PrimeImplicants.copy(AttrJson["primes"])
+    primes = PyBoolNet.prime_implicants.copy(AttrJson["primes"])
 
     ignored = [x for x in Markers if x not in primes]
     Markers = [x for x in Markers if x in primes]
@@ -214,7 +214,7 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
     Primes = PhenosObj["primes"]
     Update = PhenosObj["update"]
 
-    assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
+    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
     assert(Primes)
 
     if not Silent:
@@ -250,7 +250,7 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
             spec = "CTLSPEC {x} & AG({y})".format(x=reach_all,y=reach_some)
 
         init = "INIT TRUE"
-        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 
         data = {"names":    names,
                 "init":        init,
@@ -279,7 +279,7 @@ def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
                 init = "INIT {x}".format(x=diagram.nodes[source]["initaccepting"])
                 spec = "CTLSPEC EX({x})".format(x=diagram.nodes[target]["initaccepting"])
 
-                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 
                 if accepting["INITACCEPTING_SIZE"]>0:
 
@@ -382,7 +382,7 @@ def diagram2image(Diagram, FnameImage=None):
 
     Primes = Diagram.graph["primes"]
 
-    size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
 
     image = networkx.DiGraph()
     image.graph["node"]  = {"shape":"rect","style":"filled","color":"none","fillcolor":"lightgray"}

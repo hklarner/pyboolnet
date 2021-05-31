@@ -12,21 +12,21 @@ if __name__=="__main__":
 
     primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
 
-    stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
-    steady, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
+    stg = PyBoolNet.state_transition_graphs.primes2stg(primes, "asynchronous")
+    steady, cyclic = PyBoolNet.attractors.compute_attractors_tarjan(stg)
     print(steady)
     print(cyclic)
 
 
     # random walk attractor detection
 
-    state = PyBoolNet.Attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
+    state = PyBoolNet.attractors.find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
     print(state)
 
 
     # model checking based attractor detection
 
-    attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous", FnameJson="attrs.json")
+    attrs = PyBoolNet.attractors.compute_json(primes, "asynchronous", FnameJson="attrs.json")
 
     print(attrs["is_complete"])
     for x in attrs["attractors"]:

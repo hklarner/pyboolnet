@@ -3,7 +3,7 @@ import os
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 
-import PyBoolNet.FileExchange
+import PyBoolNet.file_exchange
 
 
 
@@ -18,11 +18,11 @@ def print_info(MarkDown=False):
     data   = []
     for name in get_all_names():
         primes = get_primes(name)
-        tspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
+        tspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
 
         size          = str(len(primes))
-        inputs        = str(len(PyBoolNet.PrimeImplicants.find_inputs(primes)))
-        constants     = str(len(PyBoolNet.PrimeImplicants.find_constants(primes)))
+        inputs        = str(len(PyBoolNet.prime_implicants.find_inputs(primes)))
+        constants     = str(len(PyBoolNet.prime_implicants.find_constants(primes)))
         steady        = len([x for x in tspaces if len(x)==len(primes)])
         steady        = str(steady) + '+'*(steady==MAXOUTPUT)
         cyclic        = len([x for x in tspaces if len(x)<len(primes)])
@@ -99,7 +99,7 @@ def get_primes(Name):
     path = os.path.join(BASE,Name,Name+".bnet")
 
     if os.path.isfile(path):
-        return PyBoolNet.FileExchange.bnet2primes(path)
+        return PyBoolNet.file_exchange.bnet2primes(path)
 
     print(" %s does not exist"%path)
     raise FileNotFoundError
@@ -134,7 +134,7 @@ def get_attrs(Name, Update):
     path = os.path.join(BASE,Name,Name+"_attrs_"+ext)
 
     if os.path.isfile(path):
-        return PyBoolNet.Attractors.open_json(path)
+        return PyBoolNet.attractors.open_json(path)
 
     print(" %s does not exist"%path)
     raise FileNotFoundError

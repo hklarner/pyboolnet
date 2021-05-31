@@ -118,18 +118,18 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
         "perc":        12.89338}
     """
 
-    prop = PyBoolNet.TemporalLogic.subspace2proposition(Primes, Subspace)
+    prop = PyBoolNet.temporal_logic.subspace2proposition(Primes, Subspace)
     init = "INIT TRUE"
     spec = CTLpattern.format(x=prop)
-    ans, acc = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+    ans, acc = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
 
     size = acc["INITACCEPTING_SIZE"]
     formula = acc["INITACCEPTING"]
 
     if Minimize and formula not in ["TRUE", "FALSE"]:
-        formula = PyBoolNet.BooleanLogic.minimize_espresso(formula)
+        formula = PyBoolNet.boolean_logic.minimize_espresso(formula)
 
-    size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
 
     return {"size": size,
             "formula": formula,
@@ -155,7 +155,7 @@ def _default_basin(Primes):
         <result>
     """
 
-    size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
 
     return {"size":    size_total,
             "formula": "TRUE",
@@ -272,7 +272,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 
     if not Silent: print("Basins.create_barplot(..)")
 
-    total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
 
     indeces = list(range(len(Attrs)))
     indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
@@ -359,7 +359,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
 
     if not Silent: print("Basins.create_piechart(..)")
 
-    total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
     strong = sum(x["strong_basin"]["size"] for x in Attrs)
     outside = total - strong
 

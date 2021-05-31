@@ -15,24 +15,24 @@ if __name__=="__main__":
     v3,    v2 & (!v1 | v3)
     """
 
-    primes = PyBoolNet.FileExchange.bnet2primes(bnet)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet)
 
     # finding nodes
 
-    const = PyBoolNet.PrimeImplicants.find_constants(primes)
+    const = PyBoolNet.prime_implicants.find_constants(primes)
     print(const)
 
     # modifying networks
 
-    PyBoolNet.PrimeImplicants.create_variables(primes, {"v4": "v4 | v2"})
-    PyBoolNet.PrimeImplicants.create_variables(primes, {"v5": lambda v1,v2,v3: v1+v2+v3==1})
+    PyBoolNet.prime_implicants.create_variables(primes, {"v4": "v4 | v2"})
+    PyBoolNet.prime_implicants.create_variables(primes, {"v5": lambda v1, v2, v3: v1 + v2 + v3 == 1})
 
-    print(PyBoolNet.FileExchange.primes2bnet(primes))
+    print(PyBoolNet.file_exchange.primes2bnet(primes))
 
     # reading from the repository
 
     primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
-    print(PyBoolNet.FileExchange.primes2bnet(primes))
+    print(PyBoolNet.file_exchange.primes2bnet(primes))
 
 
 

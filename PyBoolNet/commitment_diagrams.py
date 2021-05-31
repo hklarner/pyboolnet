@@ -11,13 +11,13 @@ import networkx
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 sys.path.append(BASE)
 
-import PyBoolNet.StateTransitionGraphs
+import PyBoolNet.state_transition_graphs
 import PyBoolNet.Utility
-import PyBoolNet.ModelChecking
-import PyBoolNet.TemporalLogic
-import PyBoolNet.AspSolver
-import PyBoolNet.InteractionGraphs
-import PyBoolNet.PrimeImplicants
+import PyBoolNet.model_checking
+import PyBoolNet.temporal_logic
+import PyBoolNet.trap_spaces
+import PyBoolNet.interaction_graphs
+import PyBoolNet.prime_implicants
 
 
 CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
@@ -67,7 +67,7 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
     if not Silent:
         print("Commitment.compute_diagram(..)")
 
-    size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
 
     if len(Subspaces)==1:
         if not Silent:
@@ -82,8 +82,8 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 
     else:
 
-        igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
-        outdags = PyBoolNet.InteractionGraphs.find_outdag(igraph)
+        igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
+        outdags = PyBoolNet.interaction_graphs.find_outdag(igraph)
 
         attractor_nodes = [x for A in Subspaces for x in A]
         critical_nodes = PyBoolNet.Utility.DiGraphs.ancestors(igraph, attractor_nodes)
@@ -101,8 +101,8 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
         counter_mc = 0
         diagrams = []
         for component in components:
-            subprimes = PyBoolNet.PrimeImplicants.copy(Primes)
-            PyBoolNet.PrimeImplicants.remove_all_variables_except(subprimes, component)
+            subprimes = PyBoolNet.prime_implicants.copy(Primes)
+            PyBoolNet.prime_implicants.remove_all_variables_except(subprimes, component)
 
             attrs_projected = project_attractors(Subspaces, component)
 
@@ -201,16 +201,16 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
     Not meant for general use. Use compute_diagram(..) instead.
     """
 
-    assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
+    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
     assert(Primes)
 
     # create nodes
     counter_mc = 0
     node_id = 0
     worst_case_nodes = 0
-    inputs = PyBoolNet.PrimeImplicants.find_inputs(Primes)
+    inputs = PyBoolNet.prime_implicants.find_inputs(Primes)
 
-    states_per_case = PyBoolNet.StateTransitionGraphs.size_state_space(Primes, FixedInputs=True)
+    states_per_case = PyBoolNet.state_transition_graphs.size_state_space(Primes, FixedInputs=True)
 
     diagram = networkx.DiGraph()
 
@@ -219,18 +219,18 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
         print("  inputs: {x} ({y})".format(x=len(inputs), y=", ".join(inputs)))
         print("  combinations:  %i"%2**len(inputs))
 
-    for i, combination in enumerate(PyBoolNet.PrimeImplicants.input_combinations(Primes)):
+    for i, combination in enumerate(PyBoolNet.prime_implicants.input_combinations(Primes)):
 
-        attr = [x for x in Subspaces if PyBoolNet.StateTransitionGraphs.A_is_subspace_of_B(Primes, A=x, B=combination)]
+        attr = [x for x in Subspaces if PyBoolNet.state_transition_graphs.A_is_subspace_of_B(Primes, A=x, B=combination)]
 
         worst_case_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [PyBoolNet.TemporalLogic.subspace2proposition(Primes, x) for x in attr]
+        specs = [PyBoolNet.temporal_logic.subspace2proposition(Primes, x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
 
-        combination_formula = PyBoolNet.TemporalLogic.subspace2proposition(Primes, combination)
+        combination_formula = PyBoolNet.temporal_logic.subspace2proposition(Primes, combination)
 
         if not Silent:
             print("  input combination %i, worst case #nodes: %i"%(i,2**len(attr)-1))
@@ -256,7 +256,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
                 reach_some = " | ".join(reach)
                 spec = "CTLSPEC %s & AG(%s)"%(reach_all,reach_some)
 
-                answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                 counter_mc+=1
 
                 data = {"attractors":   [x for flag,x in zip(vector, attr) if flag],
@@ -296,7 +296,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
             init = "INIT %s"%source_data["formula"]
             spec = "CTLSPEC EX(%s)"%target_data["formula"]
-            answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+            answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
             counter_mc+=1
 
             data = {}
@@ -312,7 +312,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
                     else:
                         spec = "CTLSPEC E[%s U %s]"%(source_data["formula"],target_data["formula"])
-                        answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
                         counter_mc+=1
 
                         data["EF_size"] = accepting["INITACCEPTING_SIZE"]
@@ -361,8 +361,8 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
     Primes = Diagram.graph["primes"]
 
-    size_total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
-    size_per_input_combination = PyBoolNet.StateTransitionGraphs.size_state_space(Primes, FixedInputs=True)
+    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    size_per_input_combination = PyBoolNet.state_transition_graphs.size_state_space(Primes, FixedInputs=True)
     is_small_network = size_total <= 1024
 
     result = networkx.DiGraph()
@@ -376,7 +376,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
-    attractors = set(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x[0]) for x in attractors)
+    attractors = set(PyBoolNet.state_transition_graphs.subspace2str(Primes, x[0]) for x in attractors)
     attractors = sorted(attractors)
 
     labels = {}
@@ -394,12 +394,12 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
         if len(data["attractors"])==1:
             result.nodes[node]["fillcolor"] = "cornflowerblue"
 
-            attr  = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,data["attractors"][0])
+            attr  = PyBoolNet.state_transition_graphs.subspace2str(Primes, data["attractors"][0])
             index = attractors.index(attr)+FirstIndex
             labels[node]["head"] = 'A%i = <font face="Courier New">%s</font>'%(index,attr)
 
         else:
-            head = sorted("A%i"%(attractors.index(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,x))+FirstIndex) for x in data["attractors"])
+            head = sorted("A%i" % (attractors.index(PyBoolNet.state_transition_graphs.subspace2str(Primes, x)) + FirstIndex) for x in data["attractors"])
             head = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(head)
             head = [",".join(x) for x in head]
             labels[node]["head"] = "<br/>".join(head)
@@ -439,10 +439,10 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
     subgraphs = []
     if StyleInputs:
-        for inputs in PyBoolNet.PrimeImplicants.input_combinations(Primes):
+        for inputs in PyBoolNet.prime_implicants.input_combinations(Primes):
             if not inputs: continue
             nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.nodes[x]["attractors"][0])]
-            label = PyBoolNet.StateTransitionGraphs.subspace2str(Primes,inputs)
+            label = PyBoolNet.state_transition_graphs.subspace2str(Primes, inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
 
 
@@ -517,14 +517,14 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 
     Primes = Diagram.graph["primes"]
 
-    total = PyBoolNet.StateTransitionGraphs.size_state_space(Primes)
+    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
     is_small_network = total <= 1024
 
     indeces = sorted(Diagram, key=lambda x: len(Diagram.nodes[x]["attractors"]))
 
     labels = []
     for x in indeces:
-        label = sorted(PyBoolNet.StateTransitionGraphs.subspace2str(Primes,y) for y in Diagram.nodes[x]["attractors"])
+        label = sorted(PyBoolNet.state_transition_graphs.subspace2str(Primes, y) for y in Diagram.nodes[x]["attractors"])
         labels.append("\n".join(label))
 
     sizes  = [Diagram.nodes[x]["size"] for x in indeces]

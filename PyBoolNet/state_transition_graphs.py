@@ -7,8 +7,8 @@ import networkx
 
 from typing import List
 
-import PyBoolNet.FileExchange
-import PyBoolNet.AspSolver
+import PyBoolNet.file_exchange
+import PyBoolNet.trap_spaces
 import PyBoolNet.Utility.Misc
 import PyBoolNet.Utility.DiGraphs
 
@@ -42,8 +42,8 @@ def energy(Primes, State):
         0
     """
     
-    tspace = PyBoolNet.AspSolver.trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None,
-                                                               Representation="str")[0]
+    tspace = PyBoolNet.trap_spaces.trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None,
+                                                                 Representation="str")[0]
     energy = tspace.count('-')
     
     return energy
@@ -455,7 +455,7 @@ def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     names = sorted(Primes)
     states = STG.nodes()
     
-    for tspace in PyBoolNet.AspSolver.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.trap_spaces.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
         
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes, tspace) if x in states])
@@ -1165,7 +1165,7 @@ def enumerate_states(Primes, Proposition):
     Proposition = Proposition.replace("FALSE", "0")
     
     bnet = "?, %s" % Proposition
-    newprimes = PyBoolNet.FileExchange.bnet2primes(bnet)
+    newprimes = PyBoolNet.file_exchange.bnet2primes(bnet)
     
     states = set([])
     for p in newprimes["?"][1]:
@@ -1310,7 +1310,7 @@ def size_state_space(Primes, VanHam=True, FixedInputs=False):
         size = 2 ** len(Primes)
     
     if FixedInputs:
-        factor = 2 ** len(PyBoolNet.PrimeImplicants.find_inputs(Primes))
+        factor = 2 ** len(PyBoolNet.prime_implicants.find_inputs(Primes))
         size = size / factor
     
     return size

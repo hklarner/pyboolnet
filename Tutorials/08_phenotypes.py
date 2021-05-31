@@ -12,9 +12,9 @@ if __name__=="__main__":
 
     primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
     print(sorted(primes))
-    attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous")
+    attrs = PyBoolNet.attractors.compute_json(primes, "asynchronous")
     markers = ["WOX", "MGP"]
-    phenos = PyBoolNet.Phenotypes.compute_json(attrs, markers, FnameJson="phenos.json")
+    phenos = PyBoolNet.phenotypes.compute_json(attrs, markers, FnameJson="phenos.json")
 
 
     # inspect marker patterns
@@ -26,12 +26,12 @@ if __name__=="__main__":
 
     # draw diagram
 
-    diag = PyBoolNet.Phenotypes.compute_diagram(phenos, FnameImage="phenos_diagram.pdf")
+    diag = PyBoolNet.phenotypes.compute_diagram(phenos, FnameImage="phenos_diagram.pdf")
 
 
     # draw pie chart
 
-    PyBoolNet.Phenotypes.create_piechart(diag, FnameImage="phenos_piechart.pdf")
+    PyBoolNet.phenotypes.create_piechart(diag, FnameImage="phenos_piechart.pdf")
 
 
 

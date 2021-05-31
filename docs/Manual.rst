@@ -1812,7 +1812,7 @@ See :ref:`completeness` for details.
 
 Since :ref:`univocality` is based on detecting at least one attractor, via the random walk algorithm explained above,
 and since a counterexample to the univocality query contains information about additional attractors,
-there is a second function, called :ref:`univocality_with_counterexample`returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
+there is a second function, called :ref:`univocality_with_counterexample` returns a triplet consisting of the answer, an attractor state and a counterexample (if the trap space is not univocal),
 see :ref:`univocality` for details.
 The function :ref:`faithfulness_with_counterexample` returns a tuple that consists of the answer and a counterexample if it exists.
 

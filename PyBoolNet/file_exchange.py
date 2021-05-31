@@ -6,9 +6,9 @@ import os
 import ast
 import datetime
 
-import PyBoolNet.PrimeImplicants
-import PyBoolNet.InteractionGraphs
-import PyBoolNet.QuineMcCluskey
+import PyBoolNet.prime_implicants
+import PyBoolNet.interaction_graphs
+import PyBoolNet.boolean_normal_forms
 import PyBoolNet.Utility.Misc
 
 CMD_BNET2PRIMES = PyBoolNet.Utility.Misc.find_command("bnet2prime")
@@ -151,11 +151,11 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
 
     width = max([len(x) for x in Primes]) + 3
 
-    igraph = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
 
-    constants = sorted(PyBoolNet.PrimeImplicants.find_constants(Primes))
-    inputs = sorted(PyBoolNet.PrimeImplicants.find_inputs(Primes))
-    outdag = sorted(PyBoolNet.InteractionGraphs.find_outdag(igraph))
+    constants = sorted(PyBoolNet.prime_implicants.find_constants(Primes))
+    inputs = sorted(PyBoolNet.prime_implicants.find_inputs(Primes))
+    outdag = sorted(PyBoolNet.interaction_graphs.find_outdag(igraph))
 
     # correction, sind outdag components may also be constants
     outdag = [x for x in outdag if not x in constants]
@@ -171,7 +171,7 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
         lines+= ['targets, factors']
 
     if Minimize:
-        expressions = PyBoolNet.QuineMcCluskey.primes2mindnf(Primes)
+        expressions = PyBoolNet.boolean_normal_forms.primes2mindnf(Primes)
         for block in blocks:
             for name in block:
                 lines+= [(name+',').ljust(width)+expressions[name]]
@@ -180,9 +180,9 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     else:
         for block in blocks:
             for name in block:
-                if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
+                if Primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
                     expression = '1'
-                elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+                elif Primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
                     expression = '0'
                 else:
                     expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
@@ -256,11 +256,11 @@ def primes2genysis(Primes, FnameGENYSIS):
     lines = []
     for name in sorted(Primes):
 
-        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
+        if Primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
             lines+= [name+' -> '+name]
             lines+= ['^'+name+' -> '+name]
 
-        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+        elif Primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
             lines+= [name+' -| '+name]
             lines+= ['^'+name+' -| '+name]
 
@@ -301,7 +301,7 @@ def primes2bns(Primes, FnameBNS=None):
     lines = ['# '+', '.join(names_sorted),'']
     lines+= ['.v %i'%len(names_sorted),'']
 
-    ig = PyBoolNet.InteractionGraphs.primes2igraph(Primes)
+    ig = PyBoolNet.interaction_graphs.primes2igraph(Primes)
     for i, name in enumerate(names_sorted):
         i=i+1
         lines+= ['# %s'%name]
@@ -358,10 +358,10 @@ def primes2eqn(Primes, FnameEQN):
     lines = []
     for name in sorted(Primes):
 
-        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
+        if Primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
             lines+= [name+' := true;']
 
-        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+        elif Primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
             lines+= [name+' := false;']
 
         else:

@@ -14,13 +14,13 @@ if __name__=="__main__":
     spec = "CTLSPEC DNA_damage -> AG(EF(Apoptosis_medium))"
 
     #tournier_apoptosis
-    answer = PyBoolNet.ModelChecking.check_primes(primes, "asynchronous", init, spec)
+    answer = PyBoolNet.model_checking.check_primes(primes, "asynchronous", init, spec)
     print(answer)
 
 
     # model checking with accepting states
 
-    answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(primes, "asynchronous", init, spec)
+    answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, "asynchronous", init, spec)
     for key, value in accepting.items():
         print("{} = {}".format(key, value))
 
@@ -28,13 +28,13 @@ if __name__=="__main__":
     # model checking with counter examples
 
     spec = "CTLSPEC DNA_damage -> AG(EF(Proliferation))"
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(primes, "asynchronous", init, spec)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes, "asynchronous", init, spec)
     print(answer)
     if counterex:
         for state in counterex:
             print(state)
 
-        path = PyBoolNet.StateTransitionGraphs.best_first_reachability(primes, InitialSpace=state, GoalSpace={"Proliferation":1})
+        path = PyBoolNet.state_transition_graphs.best_first_reachability(primes, InitialSpace=state, GoalSpace={"Proliferation":1})
         
 
 

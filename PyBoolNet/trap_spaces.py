@@ -51,8 +51,8 @@ def percolate_trapspace(Primes, Trapspace):
         {'Raf': 1, 'Mek': 0, 'Erk': 0}
     """
     
-    primes = PyBoolNet.PrimeImplicants.create_constants(Primes, Trapspace, Copy=True)
-    constants = PyBoolNet.PrimeImplicants.percolate_and_keep_constants(primes)
+    primes = PyBoolNet.prime_implicants.create_constants(Primes, Trapspace, Copy=True)
+    constants = PyBoolNet.prime_implicants.percolate_and_keep_constants(primes)
     
     return constants
 
@@ -104,9 +104,9 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
     assert (type(Subspace) in [dict, str])
     
     if type(Subspace) == str:
-        Subspace = PyBoolNet.StateTransitionGraphs.subspace2dict(Primes, Subspace)
+        Subspace = PyBoolNet.state_transition_graphs.subspace2dict(Primes, Subspace)
     
-    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
+    active_primes = PyBoolNet.prime_implicants.active_primes(Primes, Subspace)
     
     # exclude trivial trap space {} for search of maximal trap spaces
     Bounds = None
@@ -122,7 +122,7 @@ def trapspaces_that_intersect_subspace(Primes, Subspace, Type, FnameASP=None, Re
         answer = {}
         
         if Representation == "str":
-            answer = PyBoolNet.StateTransitionGraphs.subspace2str(Primes, answer)
+            answer = PyBoolNet.state_transition_graphs.subspace2str(Primes, answer)
         
         return [answer]
     
@@ -165,9 +165,9 @@ def trapspaces_within_subspace(Primes, Subspace, Type, FnameASP=None, Representa
     assert (type(Subspace) in [dict, str])
     
     if type(Subspace) == str:
-        Subspace = PyBoolNet.StateTransitionGraphs.subspace2dict(Primes, Subspace)
+        Subspace = PyBoolNet.state_transition_graphs.subspace2dict(Primes, Subspace)
     
-    active_primes = PyBoolNet.PrimeImplicants.active_primes(Primes, Subspace)
+    active_primes = PyBoolNet.prime_implicants.active_primes(Primes, Subspace)
     Bounds = (len(Subspace), "n")
 
     extra_lines = [f':- not hit("{node}",{value}).' for node, value in Subspace.items()]
@@ -588,7 +588,7 @@ def potassco_handle(Primes, Type, Bounds, Project, MaxOutput, FnameASP, Represen
         print("Increase MaxOutput to find out.")
     
     if Representation == "str":
-        subspace2str = PyBoolNet.StateTransitionGraphs.subspace2str
+        subspace2str = PyBoolNet.state_transition_graphs.subspace2str
         
         if Type == "circuits":
             result = [(subspace2str(Primes, x), subspace2str(Primes, y)) for x, y in result]

@@ -433,7 +433,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     """
 
     assert(type(FnameSMV)==type(None) or type(FnameSMV)==str)
-    assert(Update in PyBoolNet.StateTransitionGraphs.UPDATE_STRATEGIES)
+    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
     assert(InitialStates[:5] == "INIT ")
     assert(Specification[:8] in ["CTLSPEC ", "LTLSPEC "])
 
@@ -493,14 +493,14 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     lines+= ['DEFINE']
     for name in names:
 
-        if Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_ON:
+        if Primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
             expression = 'TRUE'
 
-        elif Primes[name] == PyBoolNet.PrimeImplicants.CONSTANT_OFF:
+        elif Primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
             expression = 'FALSE'
 
         else:
-            expression = ' | '.join(PyBoolNet.TemporalLogic.subspace2proposition(Primes, x) for x in Primes[name][1])
+            expression = ' | '.join(PyBoolNet.temporal_logic.subspace2proposition(Primes, x) for x in Primes[name][1])
 
         lines+= ['\t%s_IMAGE := %s;'%(name, expression)]
 
@@ -527,7 +527,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
     lines+= ['','']
     lines+= [InitialStates]
 
-    vanham = PyBoolNet.StateTransitionGraphs.find_vanham_variables(Primes)
+    vanham = PyBoolNet.state_transition_graphs.find_vanham_variables(Primes)
 
     for k in vanham:
         if k==2: continue
@@ -535,7 +535,7 @@ def primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=None, Sile
 
         lines+= ['']
         lines+= ['-- adding van ham constraints for {k}-valued variables: {x}'.format(k=k, x=", ".join(vanham[k]))]
-        zipped = list(zip(PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.StateTransitionGraphs.VAN_HAM_EXTENSIONS[k][:-1]))
+        zipped = list(zip(PyBoolNet.state_transition_graphs.VAN_HAM_EXTENSIONS[k][1:], PyBoolNet.state_transition_graphs.VAN_HAM_EXTENSIONS[k][:-1]))
 
         for name in vanham[k]:
             lines+= ['INIT {x} -> {y}'.format(x=name+x, y=name+y) for x,y in zipped]
@@ -631,7 +631,7 @@ def _read_formula(Line):
     if formula in ["FALSE","TRUE"]:
         return formula
 
-    formula = PyBoolNet.BooleanLogic.minimize_espresso(formula)
+    formula = PyBoolNet.boolean_logic.minimize_espresso(formula)
     if formula == "0":
         return "FALSE"
     if formula == "1":

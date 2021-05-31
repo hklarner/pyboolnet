@@ -3,8 +3,8 @@
 import pytest
 import networkx
 
-from PyBoolNet.InteractionGraphs import primes2igraph
-from PyBoolNet.generators import path_graph, balanced_tree, cycle_graph
+from PyBoolNet.interaction_graphs import primes2igraph
+from PyBoolNet.network_generators import path_graph, balanced_tree, cycle_graph
 
 
 def assert_edge_signs_agree(ig: networkx.DiGraph, edge_sign: int, loop_sign: int):
