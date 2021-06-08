@@ -35,7 +35,7 @@ def create_empty_igraph(Primes):
     return igraph
 
 
-def primes2igraph(Primes):
+def primes2igraph(primes: dict) -> networkx.DiGraph:
     """
     Creates the interaction graph from the prime implicants of a network.
     Interaction graphs are implemented as :ref:`installation_networkx` digraph objects.
@@ -61,12 +61,12 @@ def primes2igraph(Primes):
             set([1, -1])
     """
 
-    igraph = create_empty_igraph(Primes)
+    igraph = create_empty_igraph(primes)
 
     edges = {}
-    for name in Primes:
+    for name in primes:
         igraph.add_node(name)
-        for term in Primes[name][1]:
+        for term in primes[name][1]:
             for k,v in term.items():
                 if v==0:
                     sign = -1

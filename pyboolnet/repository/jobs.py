@@ -14,10 +14,10 @@ def run():
     for name in ["tournier_apoptosis", "grieco_mapk", "remy_tumorigenesis", "dahlhaus_neuroplastoma"]:
         primes = PyBoolNet.Repository.get_primes(name)
         fname = os.path.join(name, name+"_attrs_sync.json")
-        PyBoolNet.attractors.compute_json(primes, Update="synchronous", FnameJson=fname)
+        PyBoolNet.attractors.compute_json(primes, update="synchronous", fname_json=fname)
 
         fname = os.path.join(name, name+"_attrs_mixed.json")
-        PyBoolNet.attractors.compute_json(primes, Update="mixed", FnameJson=fname)
+        PyBoolNet.attractors.compute_json(primes, update="mixed", fname_json=fname)
 
     return
 
@@ -39,7 +39,7 @@ def run():
         primes = PyBoolNet.file_exchange.bnet2primes(os.path.join(name, name + ".bnet"))
 
         fname = os.path.join(name, name+"_attrs.json")
-        attrs = PyBoolNet.attractors.compute_json(primes, Update="asynchronous", FnameJson=fname)
+        attrs = PyBoolNet.attractors.compute_json(primes, update="asynchronous", fname_json=fname)
 
         markers = PyBoolNet.prime_implicants.find_outputs(primes)
         if markers:

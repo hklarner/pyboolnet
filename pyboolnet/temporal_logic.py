@@ -1,5 +1,7 @@
 
 
+from typing import List
+
 import PyBoolNet.state_transition_graphs
 
 
@@ -33,7 +35,7 @@ def EF_nested_reachability(Primes, Subspaces):
     return result.replace("  &$","")
 
 
-def AGEF_oneof_subspaces(Primes, Subspaces):
+def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List[dict]) -> str:
     """
     Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given *Subspaces*.
 
@@ -59,15 +61,15 @@ def AGEF_oneof_subspaces(Primes, Subspaces):
         'AG(EF(!v1&!v2 | v2))'
     """
 
-    if Subspaces==[]:
-        return 'TRUE'
+    if sub_spaces == []:
+        return "TRUE"
 
-    Subspaces = [PyBoolNet.state_transition_graphs.subspace2dict(Primes, x) if type(x) == str else x for x in Subspaces]
+    sub_spaces = [PyBoolNet.state_transition_graphs.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
 
-    return 'AG('+ EF_oneof_subspaces(Primes, Subspaces) +')'
+    return 'AG(' + exists_finally_one_of_subspaces(primes, sub_spaces) + ')'
 
 
-def EF_oneof_subspaces(Primes, Subspaces):
+def exists_finally_one_of_subspaces(primes: dict, sub_spaces: List[dict]) -> str:
     """
     Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
 
@@ -80,19 +82,19 @@ def EF_oneof_subspaces(Primes, Subspaces):
     **example**::
 
         >>> subspaces = [{"v1":0,"v2":0}, "1-1--"]
-        >>> EF_oneof_subspaces(primes, subspaces)
+        >>> exists_finally_one_of_subspaces(primes, subspaces)
         'EF(!v1&!v2 | v1&v3)'
     """
 
-    if not Subspaces:
-        return 'TRUE'
+    if not sub_spaces:
+        return "TRUE"
 
-    Subspaces = [PyBoolNet.state_transition_graphs.subspace2dict(Primes, x) if type(x) == str else x for x in Subspaces]
+    sub_spaces = [PyBoolNet.state_transition_graphs.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
 
-    return 'EF('+ ' | '.join(subspace2proposition(Primes, x) for x in Subspaces) +')'
+    return 'EF(' + ' | '.join(subspace2proposition(primes, x) for x in sub_spaces) + ')'
 
 
-def EF_unsteady_states(Names):
+def exists_finally_unsteady_components(names: List[str]) -> str:
     """
     Constructs a CTL formula that queries whether for every variables v specified in *Names* there is a path to a state x in which v is unsteady.
 
@@ -109,19 +111,19 @@ def EF_unsteady_states(Names):
     **example**::
 
         >>> names = ["v1","v2"]
-        >>> EF_unsteady_states(names)
+        >>> exists_finally_unsteady_components(names)
         'EF(v1_steady!=0) & EF(v2_steady!=0))'
 
     """
 
-    Names = [x for x in Names if x.strip()]
-    if Names==[]:
+    names = [x for x in names if x.strip()]
+    if names==[]:
         return 'TRUE'
 
-    return ' & '.join(['EF(!%s_STEADY)'%x for x in Names])
+    return ' & '.join(['EF(!%s_STEADY)' % x for x in names])
 
 
-def subspace2proposition(Primes, Subspace):
+def subspace2proposition(primes: dict, sub_space: dict) -> str:
     """
     Constructs a CTL formula that is true in a state x if and only if x belongs to the given Subspace.
 
@@ -143,19 +145,18 @@ def subspace2proposition(Primes, Subspace):
         'INIT v1&!v2'
     """
 
-
-    if not Subspace or Subspace==len(Primes)*"-":
+    if not sub_space or sub_space==len(primes)* "-":
         return "TRUE"
 
-    if type(Subspace)==str:
-        Subspace = PyBoolNet.state_transition_graphs.subspace2dict(Primes, Subspace)
+    if type(sub_space)==str:
+        sub_space = PyBoolNet.state_transition_graphs.subspace2dict(primes, sub_space)
 
-    return '&'.join([name if value==1 else '!'+name for name,value in sorted(Subspace.items())])
+    return '&'.join([name if value==1 else '!'+name for name,value in sorted(sub_space.items())])
 
 
 if __name__=="__main__":
     primes = ["v1", "v2", "v3"]
     subspaces = [{}, {}, "--1", {"v2":0, "v1":0}, "1-1", "-0-"]
-    print(EF_oneof_subspaces(primes, subspaces))
+    print(exists_finally_one_of_subspaces(primes, subspaces))
     print(EF_all_unsteady(primes))
     print(EF_nested_reachability(primes, subspaces))

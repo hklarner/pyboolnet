@@ -1,29 +1,55 @@
 
 
-from __future__ import print_function
-
 import datetime
 import itertools
-import random
+import logging
+from functools import partial
+from typing import Optional, Union, List, Tuple
 
-import PyBoolNet
+from PyBoolNet.file_exchange import primes2bnet
+from PyBoolNet.Utility.Misc import open_json_data
+from PyBoolNet.Utility.Misc import save_json_data
+from PyBoolNet.prime_implicants import copy
+from PyBoolNet.state_transition_graphs import UPDATE_STRATEGIES
+from PyBoolNet.state_transition_graphs import random_state
+from PyBoolNet.state_transition_graphs import state2dict
+from PyBoolNet.state_transition_graphs import state2str
+from PyBoolNet.state_transition_graphs import subspace2str
+from PyBoolNet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
+from PyBoolNet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
+from PyBoolNet.temporal_logic import subspace2proposition
+from PyBoolNet.trap_spaces import trap_spaces
+from PyBoolNet.model_checking import check_primes
+from PyBoolNet.prime_implicants import create_constants
+from PyBoolNet.prime_implicants import percolate_and_remove_constants
+from PyBoolNet.temporal_logic import exists_finally_one_of_subspaces
+from PyBoolNet.temporal_logic import exists_finally_unsteady_components
+from PyBoolNet.interaction_graphs import primes2igraph
+from PyBoolNet.Utility.DiGraphs import digraph2condensationgraph
+from PyBoolNet.model_checking import check_primes_with_counterexample
+from PyBoolNet.Utility.Misc import merge_dicts
+from PyBoolNet.Utility.DiGraphs import ancestors
+from PyBoolNet.prime_implicants import remove_all_variables_except
+from PyBoolNet.state_transition_graphs import random_state
+from PyBoolNet.prime_implicants import percolate_and_keep_constants
+
+log = logging.getLogger(__file__)
 
 
-def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFaithfulness=True, CheckUnivocality=True, Silent=False, MaxOutput=1000):
+def compute_json(primes: dict, update: str, fname_json: Optional[str] = None, check_completeness: bool = True, check_faithfulness: bool = True, check_univocality: bool = True, max_output: int = 1000) -> dict:
     """
-    computes all attractors of *Primes* including information about completeness, univocality, faithfulness
+    computes all attractors of *primes* including information about completeness, univocality, faithfulness
 
     **arguments**:
-      * *Primes*: prime implicants
-      * *Update* (str): description
-      * *FnameJson* (str): description
-      * *CheckCompleteness* (bool): description
-      * *CheckFaithfulness* (bool): description
-      * *CheckUnivocality* (bool): description
-      * *Silent* (bool): print infos to screen
+      * *primes*: prime implicants
+      * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+      * *fname_json*: description
+      * *CheckCompleteness*: description
+      * *check_faithfulness*: description
+      * *check_univocality*: description
 
     **returns**:
-        * *AttrJson* (dict): json attractor data
+        * *attractors_json*: json attractor data
 
     **example**::
 
@@ -31,27 +57,24 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
       created attrs.json
     """
 
-    assert Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES
-    assert Primes
+    assert update in UPDATE_STRATEGIES
+    assert primes
 
-    if not Silent:
-        print("Attractors.compute_json(..)", flush=True)
+    log.info("attractors.compute_json(..)")
 
     attrs = dict()
-    attrs["primes"] = PyBoolNet.prime_implicants.copy(Primes)
-    attrs["update"] = Update
+    attrs["primes"] = copy(primes)
+    attrs["update"] = update
 
-    min_tspaces = PyBoolNet.trap_spaces.trap_spaces(Primes=Primes, Type="min", MaxOutput=MaxOutput)
+    min_tspaces = trap_spaces(primes=primes, option="min", max_output=max_output)
 
-    if CheckCompleteness:
-        if not Silent:
-            print(" Attractors.completeness(..)", end="", flush=True)
-        if completeness(Primes, Update, MaxOutput=MaxOutput):
+    if check_completeness:
+        log.info("attractors.completeness(..)")
+        if completeness(primes, update, max_output=max_output):
             attrs["is_complete"] = "yes"
         else:
             attrs["is_complete"] = "no"
-        if not Silent:
-            print(f" {attrs['is_complete']}", flush=True)
+        log.info(f" {attrs['is_complete']}")
     else:
         attrs["is_complete"] = "unknown"
 
@@ -60,74 +83,63 @@ def compute_json(Primes, Update, FnameJson=None, CheckCompleteness=True, CheckFa
     for i, mints in enumerate(min_tspaces):
 
         mints_obj = dict()
-        mints_obj["str"] = PyBoolNet.state_transition_graphs.subspace2str(Primes=Primes, Subspace=mints)
+        mints_obj["str"] = subspace2str(Primes=primes, Subspace=mints)
         mints_obj["dict"] = mints
-        mints_obj["prop"] = PyBoolNet.temporal_logic.subspace2proposition(Primes=Primes, Subspace=mints)
+        mints_obj["prop"] = subspace2proposition(primes=primes, sub_space=mints)
 
-        if not Silent:
-            print(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}", flush=True)
+        log.info(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}")
 
-        if CheckUnivocality:
-            if not Silent:
-                print("  Attractors.univocality(..)", end="", flush=True)
-            if univocality(Primes=Primes, Update=Update, Trapspace=mints):
+        if check_univocality:
+            log.info("attractors.univocality(..)")
+            if univocality(primes=primes, update=update, trap_space=mints):
                 mints_obj["is_univocal"] = "yes"
             else:
                 mints_obj["is_univocal"] = "no"
-            if not Silent:
-                print(f" {mints_obj['is_univocal']}", flush=True)
+            log.info(f" {mints_obj['is_univocal']}")
         else:
             mints_obj["is_univocal"] = "unknown"
 
-        if CheckFaithfulness:
-            if not Silent:
-                print("  Attractors.faithfulness(..)", end="", flush=True)
-            if faithfulness(Primes=Primes, Update=Update, Trapspace=mints):
+        if check_faithfulness:
+            log.info("attractors.faithfulness(..)")
+            if faithfulness(primes=primes, update=update, trap_space=mints):
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
-            if not Silent:
-                print(f" {mints_obj['is_faithful']}", flush=True)
+            log.info(f" {mints_obj['is_faithful']}")
         else:
             mints_obj["is_faithful"] = "unknown"
 
-        if not Silent:
-            print("  Attractors.find_attractor_state_by_randomwalk_and_ctl(..)", flush=True)
-        state = find_attractor_state_by_randomwalk_and_ctl(Primes=Primes, Update=Update, InitialState=mints)
+        log.info("attractors.find_attractor_state_by_randomwalk_and_ctl(..)")
+        state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update, initial_state=mints)
 
         state_obj = dict()
-        state_obj["str"] = PyBoolNet.state_transition_graphs.state2str(state)
+        state_obj["str"] = state2str(state)
         state_obj["dict"] = state
-        state_obj["prop"] = PyBoolNet.temporal_logic.subspace2proposition(Primes, state)
+        state_obj["prop"] = subspace2proposition(primes, state)
 
         attractor_obj = dict()
-        attractor_obj["mintrapspace"] = mints_obj
+        attractor_obj["min_trapspace"] = mints_obj
         attractor_obj["state"] = state_obj
-        attractor_obj["is_steady"] = len(mints) == len(Primes)
-        attractor_obj["is_cyclic"] = len(mints) != len(Primes)
+        attractor_obj["is_steady"] = len(mints) == len(primes)
+        attractor_obj["is_cyclic"] = len(mints) != len(primes)
 
         attrs["attractors"].append(attractor_obj)
 
     attrs["attractors"] = tuple(sorted(attrs["attractors"], key=lambda x: x["state"]["str"]))
 
-    if FnameJson:
-        save_json(attrs, FnameJson, Silent)
+    if fname_json:
+        write_attractors_json(attrs, fname_json)
 
     return attrs
 
 
-def save_json(AttrJson, FnameJson, Silent=False):
+def write_attractors_json(attractors_json: dict, fname_json: str):
     """
-    todo: add unit tests
-
     saves the attractor object as a JSON file.
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *FnameJson* (str): file name
-
-    **returns**:
-        * *None*
+        * *attractors_json*: json attractor data, see :ref:`attractors_compute_json`
+        * *fname_json*: file name
 
     **example**::
 
@@ -135,59 +147,56 @@ def save_json(AttrJson, FnameJson, Silent=False):
         created attrs.json
     """
 
-    PyBoolNet.Utility.Misc.save_json_data(AttrJson, FnameJson, Silent=Silent)
+    save_json_data(data=attractors_json, fname=fname_json)
 
 
-def open_json(Fname):
+def read_attractors_json(fname: str) -> dict:
     """
-    todo: add unit tests
-
-    opens the attractor object, see todo: add :ref:`xxx`
+    opens the attractor object
 
     **arguments**:
-        * *Fname* (str): file name
+        * *fname*: file name
 
     **returns**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
+        * *attractors_json*: json attractor data, see :ref:`attractors_compute_json`
 
     **example**::
 
-        >>> attrs = open_attractor("attrs.json")
+        >>> attrs = read_attractors_json("attrs.json")
     """
 
-    attrs = PyBoolNet.Utility.Misc.open_json_data(Fname)
+    attrs = open_json_data(fname=fname)
 
     return attrs
 
 
-def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, Length=0, Attempts=10, Silent=True):
+def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initial_state: Union[dict, str] = dict(), length: int = 0, attempts: int = 10) -> dict:
     """
     Attempts to find a state inside an attractor by the "long random walk" method,
     see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.2 for a formal definition.
-    The method generates a random walk of *Length* many states, starting from a state defined by *InitialState*.
-    If *InitialState* is a subspace then :ref:`random_state` will be used to draw a random state from inside it.
+    The method generates a random walk of *length* states, starting from a state defined by *initial_state*.
+    If *initial_state* is a subspace then :ref:`random_state` will be used to draw a random state from inside it.
     The function then uses CTL model checking, i.e., :ref:`check_primes <check_primes>`,
     to decide whether the last state of the random walk is inside an attractor.
     If so it is returned, otherwise the process is repeated.
     If no attractor state has been found after *Attempts* many trials an exception is raised.
 
     .. note::
-        The default value for length, namely *Length=0*, will be replaced by::
+        The default value for length, namely *length=0*, will be replaced by::
 
-            Length = 10*len(Primes)
+            length = 10*len(primes)
 
         which proved sufficiently large in our computer experiments.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *InitialState* (str / dict): an initial state or subspace
-        * *Length* (int): length of random walk
-        * *Attempts* (int): number of attempts before exception is raised
-        * *Silent* (bool): print infos to screen
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *initial_state*: an initial state or subspace
+        * *length*: length of random walk
+        * *attempts*: number of attempts before exception is raised
 
     **returns**:
-        * *State* (dict): a state that belongs to some attractor
+        * *attractor_state*: a state that belongs to some attractor
         * raises *Exception* if no attractor state is found
 
     **example**::
@@ -196,67 +205,61 @@ def find_attractor_state_by_randomwalk_and_ctl(Primes, Update, InitialState={}, 
             {'v1':1, 'v2':1, 'v3':1}
     """
 
-    if type(InitialState) == str:
-        InitialState = PyBoolNet.state_transition_graphs.state2dict(Primes=Primes, State=InitialState)
+    if type(initial_state) == str:
+        initial_state = state2dict(Primes=primes, State=initial_state)
 
-    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
-    assert(set(InitialState).issubset(set(Primes)))
+    assert update in UPDATE_STRATEGIES
+    assert set(initial_state).issubset(set(primes))
 
-    # length heuristic
-    if Length==0:
-        Length = 10*len(Primes)
+    if length == 0:
+        length = 10 * len(primes)
 
-    # transition function
-    if Update=='asynchronous':
-        transition = lambda current_state: random.choice(PyBoolNet.state_transition_graphs.successors_asynchronous(Primes, current_state))
+    if update == "asynchronous":
+        transition = partial(successors_asynchronous, primes)
 
-    elif Update=='synchronous':
-        transition = lambda current_state: PyBoolNet.state_transition_graphs.successor_synchronous(Primes, current_state)
+    elif update == "synchronous":
+        transition = partial(successor_synchronous, primes)
 
-    elif Update=='mixed':
-        transition = lambda current_state: PyBoolNet.state_transition_graphs.random_successor_mixed(Primes, current_state)
+    elif update == "mixed":
+        transition = partial(random_successor_mixed, primes)
+    else:
+        raise ValueError(f"unknown update strategy: update={update}")
 
-    if not Silent:
-        print("find_attractor_state_by_randomwalk_and_ctl(..)")
-        print(" len(Primes)={n}, Update={u}, Length={l}, Attempts={a}".format(n=len(Primes), u=Update, l=Length, a=Attempts))
+    log.info("find_attractor_state_by_randomwalk_and_ctl(..)")
+    log.info(f"len(primes)={len(primes)}, update={update}, length={length}, attempts={attempts}")
 
     trials = 0
-    while trials < Attempts:
-        if not Silent: print(" trial {i}".format(i=trials))
+    while trials < attempts:
+        log.info(f"trial {trials}")
 
-        current_state = PyBoolNet.state_transition_graphs.random_state(Primes, InitialState)
-        if not Silent: print("  start: {x}".format(x=PyBoolNet.state_transition_graphs.state2str(current_state)))
+        current_state = random_state(primes, initial_state)
+        log.info(f"start: {state2str(current_state)}")
 
         transitions = 0
-        while transitions < Length:
+        while transitions < length:
             current_state = transition(current_state)
-            transitions+=1
+            transitions += 1
 
-        if not Silent: print("  end:   {x}".format(x=PyBoolNet.state_transition_graphs.state2str(current_state)))
+        log.info(f"end: {state2str(current_state)}")
 
-        spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.AGEF_oneof_subspaces(Primes, [current_state])
-        init = 'INIT ' + PyBoolNet.temporal_logic.subspace2proposition(Primes, current_state)
+        formula = all_globally_exists_finally_one_of_sub_spaces(primes=primes, sub_spaces=[current_state])
+        spec = f"CTLSPEC {formula}"
+        init = f"INIT {subspace2proposition(primes=primes, sub_space=current_state)}"
 
-        # todo: remove. this is just for debugging
-        # PyBoolNet.ModelChecking.primes2smv(Primes, Update, init, spec, FnameSMV="randomwalk.smv")
-        # return
-
-        if PyBoolNet.model_checking.check_primes(Primes, Update, init, spec):
-            if not Silent: print("  is attractor state")
+        if check_primes(primes, update, init, spec):
+            log.info("is attractor state")
 
             return current_state
 
-        trials+=1
+        trials += 1
 
-
-    if not Silent:
-        print(" could not find attractor state.")
-        print(" increase Length or Attempts parameter.")
+    log.info("could not find attractor state.")
+    log.info("increase Length or Attempts parameter.")
 
     raise Exception
 
 
-def univocality(Primes, Update, Trapspace):
+def univocality(primes: dict, update: str, trap_space: dict) -> bool:
     """
     The model checking and random-walk-based method for deciding whether *Trapspace* is univocal,
     i.e., whether there is a unique attractor contained in it,
@@ -284,7 +287,7 @@ def univocality(Primes, Update, Trapspace):
     **arguments**:
         * *Primes*: prime implicants
         * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspace* (str / dict): a subspace
+        * *trap_space* (str / dict): a subspace
 
     **returns**:
         * *Answer* (bool): whether *Trapspace* is univocal in the STG defined by *Primes* and *Update*
@@ -297,30 +300,24 @@ def univocality(Primes, Update, Trapspace):
         True
     """
 
-    if type(Trapspace) == str:
-        Trapspace = PyBoolNet.state_transition_graphs.str2subspace(Primes, Trapspace)
+    primes = copy(primes=primes)
+    create_constants(primes=primes, constants=trap_space)
+    percolate_and_remove_constants(primes=primes)
 
-    # percolation
-    primes = PyBoolNet.prime_implicants.copy(Primes)
-    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
-    PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
-
-    # trivial case: unique steady state
     if primes == {}:
         return True
 
-    # find attractor state
-    attractor_state1 = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
+    attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
 
-    # univocality
-    spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.EF_oneof_subspaces(primes, [attractor_state1])
-    init = 'INIT TRUE'
-    answer = PyBoolNet.model_checking.check_primes(primes, Update, init, spec)
+    formula = exists_finally_one_of_subspaces(primes=primes, sub_spaces=[attractor_state])
+    spec = f"CTLSPEC {formula}"
+    init = "INIT TRUE"
+    answer = check_primes(primes=primes, update=update, init=init, spec=spec)
 
     return answer
 
 
-def faithfulness(Primes, Update, Trapspace):
+def faithfulness(primes: dict, update: str, trap_space: dict) -> bool:
     """
     The model checking approach for deciding whether *Trapspace* is faithful,
     i.e., whether all free variables oscillate in all of the attractors contained in it,
@@ -359,31 +356,25 @@ def faithfulness(Primes, Update, Trapspace):
         True
     """
 
-    if type(Trapspace) == str:
-        Trapspace = PyBoolNet.state_transition_graphs.str2subspace(Primes, Trapspace)
-
-    # trivial case: steady state
-    if len(Trapspace) == len(Primes):
+    if len(trap_space) == len(primes):
         return True
 
-    # percolation
-    primes = PyBoolNet.prime_implicants.copy(Primes)
-    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
-    constants = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
+    primes = copy(primes=primes)
+    create_constants(primes=primes, constants=trap_space)
+    constants = percolate_and_remove_constants(primes=primes)
 
-    # trivial case: free variables fix due to percolation
-    if len(constants) > len(Trapspace):
+    if len(constants) > len(trap_space):
         return False
 
-    # faithfulness
-    spec = 'CTLSPEC AG(%s)' % PyBoolNet.temporal_logic.EF_unsteady_states(primes)
-    init = 'INIT TRUE'
-    answer = PyBoolNet.model_checking.check_primes(primes, Update, init, spec)
+    formula = exists_finally_unsteady_components(names=list(primes))
+    spec = f"CTLSPEC AG({formula})"
+    init = "INIT TRUE"
+    answer = check_primes(primes=primes, update=update, init=init, spec=spec)
 
     return answer
 
 
-def completeness(Primes, Update, MaxOutput=1000):
+def completeness(primes: dict, update: str, max_output: int = 1000) -> bool:
     """
     The ASP and CTL model checking based algorithm for deciding whether the minimal trap spaces of a network are complete.
     The algorithm is discussed in :ref:`Klarner2015(a) <klarner2015trap>`.
@@ -418,10 +409,10 @@ def completeness(Primes, Update, MaxOutput=1000):
             False
     """
 
-    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=False, MaxOutput=MaxOutput)
+    return iterative_completeness_algorithm(primes=primes, update=update, compute_counterexample=False, max_output=max_output)
 
 
-def univocality_with_counterexample(Primes, Update, Trapspace):
+def univocality_with_counterexample(primes: dict, update: str, trap_space: dict) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`univocality` but also returns a counterexample which is *None* if it does not exist.
     A counterexample of a univocality test are two states that belong to different attractors.
@@ -442,43 +433,30 @@ def univocality_with_counterexample(Primes, Update, Trapspace):
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
 
-    if type(Trapspace)==str:
-        Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
+    primes = create_constants(primes=primes, constants=trap_space, in_place=True)
+    constants = percolate_and_remove_constants(primes=primes)
 
-    # percolation
-    primes = PyBoolNet.prime_implicants.copy(Primes)
-    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
-    constants  = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
-
-    # trivial case: constants = unique steady state
     if primes == {}:
         return True, None
 
-    # find attractor state
-    attractor_state1 = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
+    attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
+    spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, sub_spaces=[attractor_state])}"
+    init = "INIT TRUE"
+    answer, counterexample = check_primes_with_counterexample(primes=primes, update=update, init=init, spec=spec)
 
-    # univocality
-    spec = 'CTLSPEC ' + PyBoolNet.temporal_logic.EF_oneof_subspaces(primes, [attractor_state1])
-    init = 'INIT TRUE'
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes, Update, init, spec)
-
-    # success
     if answer:
         return True, None
 
-    # failure
     else:
-        attractor_state2 = find_attractor_state_by_randomwalk_and_ctl(primes, Update, counterex[-1])
+        attractor_state2 = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update, initial_state=counterexample[-1])
+        attractor_state2 = merge_dicts(dicts=[attractor_state2, constants])
+        attractor_state = merge_dicts(dicts=[attractor_state, constants])
+        counterexample = attractor_state, attractor_state2
 
-        # need to add constants to get original states
-        attractor_state2 = PyBoolNet.Utility.Misc.merge_dicts([attractor_state2,constants])
-        attractor_state1 = PyBoolNet.Utility.Misc.merge_dicts([attractor_state1,constants])
-        counterex = attractor_state1, attractor_state2
-
-        return False, counterex
+        return False, counterexample
 
 
-def faithfulness_with_counterexample(Primes, Update, Trapspace):
+def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`faithfulness` but also returns a counterexample which is *None* if it does not exist.
     A counterexample of a faithful test is a state that belongs to an attractor which has more fixed variables than there are in *Trapspace*.
@@ -500,43 +478,33 @@ def faithfulness_with_counterexample(Primes, Update, Trapspace):
         True
     """
 
-    if type(Trapspace)==str:
-        Trapspace=StateTransitionGraphs.str2subspace(Primes, Trapspace)
-
-    # trivial case: steady state
-    if len(Trapspace)==len(Primes):
+    if len(trap_space) == len(primes):
         return True, None
 
-    # percolation
-    primes = PyBoolNet.prime_implicants.copy(Primes)
-    PyBoolNet.prime_implicants.create_constants(primes, Constants=Trapspace)
-    constants  = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
+    primes = create_constants(primes, constants=trap_space, in_place=True)
+    constants = percolate_and_remove_constants(primes=primes)
 
-    # trivial case: free variables fix due to percolation
-    if len(constants)>len(Trapspace):
-        counterex = find_attractor_state_by_randomwalk_and_ctl(primes, Update)
-        attractor_state = PyBoolNet.Utility.Misc.merge_dicts([counterex, constants])
+    if len(constants) > len(trap_space):
+        counterexample = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
+        attractor_state = merge_dicts(dicts=[counterexample, constants])
 
         return False, attractor_state
 
-    # faithfulness
-    spec = 'CTLSPEC AG(%s)'%PyBoolNet.temporal_logic.EF_unsteady_states(primes)
-    init = 'INIT TRUE'
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes, Update, init, spec)
+    spec = f"CTLSPEC AG({exists_finally_unsteady_components(names=list(primes))})"
+    init = "INIT TRUE"
+    answer, counterexample = check_primes_with_counterexample(primes=primes, update=update, init=init, spec=spec)
 
-    # success
     if answer:
         return True, None
 
-    # failure
     else:
-        attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes, Update, counterex[-1])
-        attractor_state = PyBoolNet.Utility.Misc.merge_dicts([attractor_state, constants])
+        attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update, initial_state=counterexample[-1])
+        attractor_state = merge_dicts(dicts=[attractor_state, constants])
 
         return False, attractor_state
 
 
-def completeness_with_counterexample(Primes, Update, MaxOutput=1000):
+def completeness_with_counterexample(primes: dict, update: str, max_output: int = 1000) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`completeness` but also returns a counterexample which is *None* if it does not exist.
     A counterexample of a completeness test is a state that can not reach one of the minimal trap spaces of *Primes*.
@@ -558,14 +526,14 @@ def completeness_with_counterexample(Primes, Update, MaxOutput=1000):
             10010111101010100001100001011011111111
     """
 
-    return _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample=True, MaxOutput=MaxOutput)
+    return iterative_completeness_algorithm(primes=primes, update=update, compute_counterexample=True, max_output=max_output)
 
 
-def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, MaxOutput=1000):
+def iterative_completeness_algorithm(primes: dict, update: str, compute_counterexample: bool, max_output: int = 1000) -> Union[Tuple[bool, Optional[dict]], bool]:
     """
     The iterative algorithm for deciding whether the minimal trap spaces are complete.
     The function is implemented by line-by-line following of the pseudo code algorithm given in
-    "Approximating attractors of Boolean networks by iterative CTL model checking", Klarner and Siebert 2015. todo: add :ref:``
+    "Approximating attractors of Boolean networks by iterative CTL model checking", Klarner and Siebert 2015.
 
     **arguments**:
         * *Primes*: prime implicants
@@ -581,103 +549,77 @@ def _iterative_completeness_algorithm(Primes, Update, ComputeCounterexample, Max
             >>> answer, counterex = completeness_with_counterexample(primes, "asynchronous")
             >>> answer
             False
-            >>> STGs.state2str(counterex)
+            >>> STGs.state2str(counterexample)
             10010111101010100001100001011011111111
     """
 
-    primes = PyBoolNet.prime_implicants.copy(Primes)
+    primes = copy(primes=primes)
+    constants_global = percolate_and_remove_constants(primes=primes)
 
-    constants_global = PyBoolNet.prime_implicants.percolate_and_remove_constants(primes)
-
-    mintrapspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", MaxOutput=MaxOutput)   # line  1
-    if mintrapspaces==[{}]:             # line  2
-        if ComputeCounterexample:
-            return (True, None)
+    min_trap_spaces = trap_spaces(primes=primes, option="min", max_output=max_output)
+    if min_trap_spaces == [{}]:
+        if compute_counterexample:
+            return True, None
         else:
-            return True                 # line  3
+            return True
 
-    currentset = [({}, set([]))]        # line  4
-    while currentset:                   # line  5
-        p, W = currentset.pop()         # line  6 (p are constatns, W are variables already seen in search for minimal autonomous sets)
+    current_set = [({}, set([]))]
+    while current_set:
+        p, w = current_set.pop()
 
-        ## line 7: primes_reduced = ReducedNetwork(V,F,p)
-        primes_reduced = PyBoolNet.prime_implicants.copy(primes)
-        PyBoolNet.prime_implicants.create_constants(primes_reduced, Constants=p)
+        primes_reduced = copy(primes=primes)
+        create_constants(primes=primes_reduced, constants=p)
+        igraph = primes2igraph(primes=primes_reduced)
 
-        ## line 8: cgraph = CondensationGraph(V_p,F_p)
-        igraph = PyBoolNet.interaction_graphs.primes2igraph(primes_reduced)
-        cgraph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(igraph)
-
-
-        ## line 9: cgraph_dash = RemoveComponents(Z,->,W)
+        cgraph = digraph2condensationgraph(digraph=igraph)
         cgraph_dash = cgraph.copy()
+
         for U in cgraph.nodes():
-            if set(U).issubset(set(W)):
+            if set(U).issubset(set(w)):
                 cgraph_dash.remove_node(U)
 
-        ## line 10: W_dash = Copy(W)
-        W_dash = W.copy()
+        w_dash = w.copy()
+        refinement = []
+        top_layer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U) == 0]
 
-        ## line 11
-        refinement  = []
+        for U in top_layer:
+            u_dash = ancestors(igraph, U)
 
-        ## line 12: toplayer = TopLayer(Z',->)
-        toplayer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U)==0]
+            primes_restricted = copy(primes_reduced)
+            remove_all_variables_except(primes=primes_restricted, names=u_dash)
 
-        for U in toplayer:
+            q = trap_spaces(primes=primes_restricted, option="min", max_output=max_output)
 
-            ## line 13: U_dash = Above(V_p,F_p,U)
-            U_dash = PyBoolNet.Utility.DiGraphs.ancestors(igraph, U)
+            phi = exists_finally_one_of_subspaces(primes=primes_restricted, sub_spaces=q)
 
-            ## line 14: primes_restricted = Restriction(V_p,F_p,U_dash)
-            primes_restricted = PyBoolNet.prime_implicants.copy(primes_reduced)
-            PyBoolNet.prime_implicants.remove_all_variables_except(primes_restricted, U_dash)
-
-            ## line 15: Q = MinTrapSpaces(U',F|U')
-            Q = PyBoolNet.trap_spaces.trap_spaces(primes_restricted, "min", MaxOutput=MaxOutput)
-
-            ## line 16: phi = CompletenessQuery(Q)
-            phi = PyBoolNet.temporal_logic.EF_oneof_subspaces(primes_restricted, Q)
-
-            ## lines 17,18: answer = PyBoolNet.ModelChecking(S'_U, Update, phi)
             init = "INIT TRUE"
-            spec = "CTLSPEC %s"%phi
+            spec = f"CTLSPEC {phi}"
 
-            if ComputeCounterexample:
-                answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes_restricted, Update, init, spec)
+            if compute_counterexample:
+                answer, counterexample = check_primes_with_counterexample(primes=primes_restricted, update=update, init=init, spec=spec)
                 if not answer:
-                    downstream = [x for x in igraph if not x in U]
-                    arbitrary_state = PyBoolNet.state_transition_graphs.random_state(downstream)
-                    toplayer_state = counterex[-1]
-                    counterex = PyBoolNet.Utility.Misc.merge_dicts([constants_global,p,toplayer_state,arbitrary_state])
+                    downstream = [x for x in igraph if x not in U]
+                    arbitrary_state = random_state(downstream)
+                    top_layer_state = counterexample[-1]
+                    counterexample = merge_dicts([constants_global, p, top_layer_state, arbitrary_state])
 
-                    return False, counterex
+                    return False, counterexample
             else:
-                answer = PyBoolNet.model_checking.check_primes(primes_restricted, Update, init, spec)
+                answer = check_primes(primes=primes_restricted, update=update, init=init, spec=spec)
                 if not answer:
-
                     return False
 
-            ## line 19: Refinement.append(Intersection(p,Q))
-            ## Intersection(..) is defined below
-            refinement+= Intersection([p], Q)
+            refinement += Intersection([p], q)
+            w_dash.update(u_dash)
 
-            ## line 20: W_dash = SetUnion(W',U')
-            W_dash.update(U_dash)
-
-        ## line 21
         for q in Intersection(refinement):
+            dummy = create_constants(primes=primes, constants=q, in_place=True)
+            q_tilde = percolate_and_keep_constants(primes=dummy)
 
-            ## line 22: q_tilde = Percolation(V,F,q)
-            dummy = PyBoolNet.prime_implicants.copy(primes)
-            PyBoolNet.prime_implicants.create_constants(dummy, Constants=q)
-            q_tilde = PyBoolNet.prime_implicants.percolate_and_keep_constants(dummy)
+            if q_tilde not in min_trap_spaces:
+                current_set.append((q_tilde, w_dash))
 
-            ## lines 23, 24
-            if q_tilde not in mintrapspaces:
-                currentset.append((q_tilde, W_dash))
-
-    if ComputeCounterexample:
+    if compute_counterexample:
         return True, None
     else:
         return True
@@ -763,7 +705,8 @@ def create_attractor_report(Primes, FnameTXT=None):
 
 
     bnet = []
-    for row in PyBoolNet.file_exchange.primes2bnet(Primes).split("\n"):
+
+    for row in primes2bnet(primes=Primes).split("\n"):
         if not row.strip(): continue
         t, f = row.split(",")
         bnet.append((t.strip(),f.strip()))
@@ -818,7 +761,7 @@ def compute_attractors_tarjan(STG):
         [set(['111','110']), set(['001','011'])]
     """
 
-    condensation_graph = PyBoolNet.Utility.DiGraphs.digraph2condensationgraph(STG)
+    condensation_graph = digraph2condensationgraph(digraph=STG)
     steadystates = []
     cyclic = []
     for scc in condensation_graph.nodes():
@@ -867,9 +810,9 @@ def completeness_naive(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + PyBoolNet.temporal_logic.EF_oneof_subspaces(Primes, TrapSpaces)
+    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, sub_spaces=TrapSpaces)
     init = "INIT TRUE"
-    answer = PyBoolNet.model_checking.check_primes(Primes, Update, init, spec)
+    answer = check_primes(primes=Primes, update=Update, init=init, spec=spec)
 
     return answer
 
@@ -911,9 +854,9 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + PyBoolNet.temporal_logic.EF_oneof_subspaces(Primes, TrapSpaces)
+    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, sub_spaces=TrapSpaces)
     init = "INIT TRUE"
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(Primes, Update, init, spec)
+    answer, counterex = check_primes_with_counterexample(primes=Primes, update=Update, init=init, spec=spec)
 
     if counterex:
         counterex = counterex[-1]
@@ -921,7 +864,6 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
     return answer, counterex
 
 
-### auxillary functions
 def Intersection(*ListOfDicts):
     """
     each argument must be a list of subspaces (dicts)::
@@ -929,4 +871,4 @@ def Intersection(*ListOfDicts):
         >>> Intersection([{"v1":1}], [{"v1":0}, {"v2":1, "v3":0}])
     """
 
-    return [PyBoolNet.Utility.Misc.merge_dicts(x) for x in itertools.product(*ListOfDicts)]
+    return [merge_dicts(dicts=x) for x in itertools.product(*ListOfDicts)]

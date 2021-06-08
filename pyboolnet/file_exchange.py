@@ -1,10 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 
 import subprocess
 import os
 import ast
-import datetime
+from typing import Optional
 
 import PyBoolNet.prime_implicants
 import PyBoolNet.interaction_graphs
@@ -124,7 +123,7 @@ def bnet2primes( BNET, FnamePRIMES=None ):
     return primes
 
 
-def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
+def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, header: bool = False) -> Optional[str]:
     """
     Saves *Primes* as a *bnet* file, including the header *"targets, factors"* for compatibility with :ref:`installation_boolnet`.
     Without minimization, the resuting formulas are disjunctions of all prime implicants and may therefore be very long.
@@ -149,29 +148,29 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
           >>> expr = primes2bnet(primes, True)
     """
 
-    width = max([len(x) for x in Primes]) + 3
+    width = max([len(x) for x in primes]) + 3
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes)
 
-    constants = sorted(PyBoolNet.prime_implicants.find_constants(Primes))
-    inputs = sorted(PyBoolNet.prime_implicants.find_inputs(Primes))
+    constants = sorted(PyBoolNet.prime_implicants.find_constants(primes))
+    inputs = sorted(PyBoolNet.prime_implicants.find_inputs(primes))
     outdag = sorted(PyBoolNet.interaction_graphs.find_outdag(igraph))
 
     # correction, sind outdag components may also be constants
     outdag = [x for x in outdag if not x in constants]
 
-    body   = sorted(x for x in Primes if all(x not in X for X in [constants, inputs, outdag]))
+    body   = sorted(x for x in primes if all(x not in X for X in [constants, inputs, outdag]))
 
     blocks = [constants, inputs, body, outdag]
     blocks = [x for x in blocks if x]
-    assert(len(constants)+len(inputs)+len(body)+len(outdag)==len(Primes))
+    assert(len(constants) + len(inputs) + len(body) + len(outdag) == len(primes))
 
     lines = []
-    if Header:
+    if header:
         lines+= ['targets, factors']
 
-    if Minimize:
-        expressions = PyBoolNet.boolean_normal_forms.primes2mindnf(Primes)
+    if minimize:
+        expressions = PyBoolNet.boolean_normal_forms.primes2mindnf(primes)
         for block in blocks:
             for name in block:
                 lines+= [(name+',').ljust(width)+expressions[name]]
@@ -180,22 +179,22 @@ def primes2bnet(Primes, FnameBNET=None, Minimize=False, Header=False):
     else:
         for block in blocks:
             for name in block:
-                if Primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
+                if primes[name] == PyBoolNet.prime_implicants.CONSTANT_ON:
                     expression = '1'
-                elif Primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
+                elif primes[name] == PyBoolNet.prime_implicants.CONSTANT_OFF:
                     expression = '0'
                 else:
-                    expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in Primes[name][1]  ])
+                    expression = ' | '.join(['&'.join([x if term[x]==1 else '!'+x for x in term]) for term in primes[name][1]])
 
                 lines+= [(name+',').ljust(width)+expression]
             lines+=['']
 
-    if FnameBNET is None:
+    if fname_bnet is None:
         return "\n".join(lines)
 
-    with open(FnameBNET, 'w') as f:
+    with open(fname_bnet, 'w') as f:
         f.writelines('\n'.join(lines))
-    print('created %s'%FnameBNET)
+    print('created %s' % fname_bnet)
 
 
 def write_primes(Primes, FnamePRIMES):

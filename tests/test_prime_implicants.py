@@ -19,7 +19,7 @@ def test_remove_variables(copy):
 def test_remove_all_variables_except(copy):
 
     primes = PyBoolNet.file_exchange.bnet2primes("v1, v1 \n v2, v1")
-    x = PyBoolNet.prime_implicants.remove_all_variables_except(primes, ["v1"], Copy=copy)
+    x = PyBoolNet.prime_implicants.remove_all_variables_except(primes, ["v1"], in_place=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]]}
@@ -75,7 +75,7 @@ def test_remove_variables_except(copy):
     assert PyBoolNet.prime_implicants.are_equal(answer, primes)
 
     primes = PyBoolNet.file_exchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = PyBoolNet.prime_implicants.remove_all_variables_except(Primes=primes, Names=["B", "C"], Copy=copy)
+    x = PyBoolNet.prime_implicants.remove_all_variables_except(primes=primes, names=["B", "C"], in_place=copy)
     answer = x if copy else primes
 
     expected = PyBoolNet.file_exchange.bnet2primes("B, 0 \n C, 1")

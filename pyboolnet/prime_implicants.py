@@ -1,20 +1,19 @@
 
 
-import PyBoolNet.file_exchange
-import PyBoolNet.boolean_normal_forms
-import PyBoolNet.interaction_graphs
+import itertools
+from typing import List, Optional
+
 import PyBoolNet.Utility.DiGraphs
 import PyBoolNet.Utility.Misc
+import PyBoolNet.boolean_normal_forms
+import PyBoolNet.file_exchange
+import PyBoolNet.interaction_graphs
 
-import itertools
+CONSTANT_ON = [[], [{}]]
+CONSTANT_OFF = [[{}], []]
 
 
-# constant values
-CONSTANT_ON  = [[],[{}]]
-CONSTANT_OFF = [[{}],[]]
-
-
-def copy(Primes):
+def copy(primes: dict) -> dict:
     """
     Creates a copy of *Primes*.
 
@@ -30,11 +29,11 @@ def copy(Primes):
     """
 
     primes_new = {}
-    for name in Primes:
-        primes_new[name]=[[],[]]
+    for name in primes:
+        primes_new[name] = [[], []]
 
-        for value in [0,1]:
-            for prime in Primes[name][value]:
+        for value in [0, 1]:
+            for prime in primes[name][value]:
                 primes_new[name][value].append(dict(prime))
 
     return primes_new
@@ -145,7 +144,7 @@ def find_constants(Primes):
     return constants
 
 
-def create_constants(Primes, Constants, Copy=False):
+def create_constants(primes: dict, constants: dict, in_place: bool = True) -> dict:
     """
     Creates a constant in *Primes* for every name, value pair in *Constants*.
     Names that already exist in *Primes* are overwritten.
@@ -164,17 +163,17 @@ def create_constants(Primes, Constants, Copy=False):
         >>> create_constants(primes, {"p53":1, "p21":0})
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if in_place:
+        primes = copy(primes=primes)
 
-    for name, value in Constants.items():
+    for name, value in constants.items():
         if value:
-            Primes[name] = CONSTANT_ON
+            primes[name] = CONSTANT_ON
         else:
-            Primes[name] = CONSTANT_OFF
+            primes[name] = CONSTANT_OFF
 
-    if Copy:
-        return Primes
+    if in_place:
+        return primes
 
 
 def create_inputs(Primes, Names, Copy=False):
@@ -400,7 +399,7 @@ def remove_variables(Primes, Names, Copy=False):
 
 # todo: refactor: create_subnetwork_predecessor_invariance
 # add function is_predecessor_invariant_set(Primes, Names)
-def remove_all_variables_except(Primes, Names, Copy=False):
+def remove_all_variables_except(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
     Removes all variables except those in *Names* from *Primes*.
     Members of *Names* that are not in *Primes* are ignored.
@@ -422,23 +421,23 @@ def remove_all_variables_except(Primes, Names, Copy=False):
         >>> remove_all_variables_except(primes, names)
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if in_place:
+        primes = copy(primes=primes)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-    hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, Names) if x not in Names]
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes)
+    hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, names) if x not in names]
     if hit:
         print(" error: can not remove variables that are not closed under predecessor relation.")
         print("        these variables have predecessors outside the given set: %s"%hit)
         raise Exception
 
     else:
-        for name in list(Primes):
-            if name not in Names:
-                Primes.pop(name)
+        for name in list(primes):
+            if name not in names:
+                primes.pop(name)
 
-    if Copy:
-        return Primes
+    if in_place:
+        return primes
 
 
 def rename_variable(Primes, OldName, NewName, Copy=False):
@@ -556,8 +555,7 @@ def substitute_and_remove(Primes, Names, Copy=False):
         return Primes
 
 
-# todo:refactor: _handle_percolation(..)
-def _percolation(Primes, RemoveConstants):
+def percolation(primes: dict, remove_constants: bool) -> dict:
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Use *RemoveConstants* to determine whether constants should be kept in the remaining network or whether you want to remove them.
@@ -577,27 +575,29 @@ def _percolation(Primes, RemoveConstants):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-    constants  = find_constants(Primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes)
+    constants = find_constants(primes)
     fringe = PyBoolNet.Utility.DiGraphs.successors(igraph, constants)
 
     while fringe:
-        newconstants = {}
+        new_constants = {}
         for name in fringe:
-            _substitute(Primes, name, constants)
-            if   Primes[name] == CONSTANT_ON:  newconstants[name] = 1
-            elif Primes[name] == CONSTANT_OFF: newconstants[name] = 0
+            _substitute(primes, name, constants)
+            if primes[name] == CONSTANT_ON:
+                new_constants[name] = 1
+            elif primes[name] == CONSTANT_OFF:
+                new_constants[name] = 0
 
-        constants.update(newconstants)
-        fringe = set(PyBoolNet.Utility.DiGraphs.successors(igraph, newconstants)) - set(constants)
+        constants.update(new_constants)
+        fringe = set(PyBoolNet.Utility.DiGraphs.successors(igraph, new_constants)) - set(constants)
 
-    if RemoveConstants:
-        for name in constants: Primes.pop(name)
+    if remove_constants:
+        for name in constants: primes.pop(name)
 
     return constants
 
 
-def percolate_and_keep_constants(Primes):
+def percolate_and_keep_constants(primes: dict):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Keeps constants in the *Primes*.
@@ -615,10 +615,10 @@ def percolate_and_keep_constants(Primes):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    return _percolation( Primes, RemoveConstants=False )
+    return percolation(primes, remove_constants=False)
 
 
-def percolate_and_remove_constants(Primes):
+def percolate_and_remove_constants(primes: dict) -> dict:
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Removes constants from the *Primes*.
@@ -636,7 +636,7 @@ def percolate_and_remove_constants(Primes):
         {'Erk':0, 'Mapk':0, 'Raf':1}
     """
 
-    return _percolation(Primes, RemoveConstants=True)
+    return percolation(primes, remove_constants=True)
 
 
 def input_combinations(Primes, Format="dict"):

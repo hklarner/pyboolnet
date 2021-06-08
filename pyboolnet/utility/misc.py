@@ -1,45 +1,43 @@
 
-import PyBoolNet
+
+from typing import List
+import configparser
+import json
+import math
 import os
 
-try:
-    # Python 2.x
-    import ConfigParser as configparser
-
-except ImportError:
-    # Python 3.x
-    import configparser
-
-myconfigparser = configparser
-
-import math
-import json
+import PyBoolNet
 
 COLOR_MAP = {"red1": "#df3e47", "green1": "#4bb93f", "blue1": "#7463b3", "yellow1": "#eecf1a", "pink1": "#db42a6", "green2": "#4cbd38", "red2": "#df3d47", "yellow2": "#efce1a"}
 COLORS = ["dodgerblue3", "firebrick2", "chartreuse3", "gold1", "aquamarine2", "darkorchid2"]
 UPDATES = ["synchronous", "asynchronous", "mixed"]
 GRAPHVIZ_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
-
 BASE = os.path.join(os.path.dirname(PyBoolNet.__file__))
+
+
 def _load_cfg():
     config = configparser.SafeConfigParser()
     settings_file = os.path.join(BASE, "Dependencies", "settings.cfg")
+
     if not os.path.exists(settings_file):
-        execs = {
-            "nusmv":"./NuSMV-2.6.0/bin/NuSMV",
-            "gringo":"./gringo-4.4.0-x86-linux/gringo",
-            "clasp":"./clasp-3.1.1/clasp-3.1.1-x86-linux",
-            "bnet2prime": "./BNetToPrime/BNetToPrime",
-        }
+        execs = dict(
+            nusmv="./NuSMV-2.6.0/bin/NuSMV",
+            gringo="./gringo-4.4.0-x86-linux/gringo",
+            clasp="./clasp-3.1.1/clasp-3.1.1-x86-linux",
+            bnet2prime="./BNetToPrime/BNetToPrime")
     else:
         config.read(settings_file)
-        execs = { n:config.get("Executables", n) for n in config.options("Executables") }
+        execs = {n: config.get("Executables", n) for n in config.options("Executables")}
     
     return execs
+
+
 EXECUTABLES = _load_cfg()
+
 
 def os_is_windows() -> bool:
     return os.name == 'nt'
+
 
 def find_command(name) -> str:
     """
@@ -54,6 +52,7 @@ def find_command(name) -> str:
     else:
         cmd = name
     return cmd 
+
 
 def dicts_are_consistent(d1: dict, d2: dict) -> bool:
     """
@@ -82,14 +81,14 @@ def is_subdict(X, Y):
     return set(X.items()).issubset(set(Y.items()))
 
 
-def merge_dicts(Dicts):
+def merge_dicts(dicts: List[dict]):
     """
         creates a new dictionary that is updated by all members of *Dict* (shallow copies).
         return newdict.
         """
     
     newdict = {}
-    for dic in Dicts:
+    for dic in dicts:
         newdict.update(dic)
     
     return newdict
@@ -157,28 +156,25 @@ def perc2str(Perc):
     return i
 
 
-def save_json_data(Data, Fname, Silent=False):
+def save_json_data(data: dict, fname: str):
     """
     saves a dictionary of data using json package
 
     todo: add unit tests
     """
     
-    with open(Fname, "w") as f:
-        json.dump(obj=Data, fp=f, indent=4)
+    with open(fname, "w") as f:
+        json.dump(obj=data, fp=f, indent=4)
     
-    if not Silent:
-        print("created {x}".format(x=Fname))
+    log.info(f"created {fname}")
 
 
-def open_json_data(Fname):
+def open_json_data(fname: str) -> dict:
     """
     opens a dictionary of data using json package
-
-    todo: add unit tests
     """
     
-    with open(Fname, "r") as f:
+    with open(fname, "r") as f:
         data = json.load(fp=f)
     
     return data

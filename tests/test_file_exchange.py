@@ -93,8 +93,8 @@ def test_bnet2primes_a():
 def test_primes2bnet_b():
     fname = os.path.join(FILES_OUT, "fileexchange_primes2bnet.primes")
     primes = {"B": [[{}], []], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
-    PyBoolNet.file_exchange.primes2bnet(Primes=primes, FnameBNET=fname)
-    PyBoolNet.file_exchange.primes2bnet(Primes=primes, FnameBNET=fname, Minimize=True)
+    PyBoolNet.file_exchange.primes2bnet(primes=primes, fname_bnet=fname)
+    PyBoolNet.file_exchange.primes2bnet(primes=primes, fname_bnet=fname, minimize=True)
 
 
 def test_read_primes():

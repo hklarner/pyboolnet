@@ -5,7 +5,7 @@ import itertools
 import heapq
 import networkx
 
-from typing import List
+from typing import List, Union
 
 import PyBoolNet.file_exchange
 import PyBoolNet.trap_spaces
@@ -15,6 +15,9 @@ import PyBoolNet.Utility.DiGraphs
 CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
 
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
+VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
+                      4: ["_level1", "_level2", "_level3"],
+                      5: ["_level1", "_level2", "_level3", "_level4"]}
 
 
 def energy(Primes, State):
@@ -455,7 +458,7 @@ def add_style_mintrapspaces(Primes, STG, MaxOutput=100):
     names = sorted(Primes)
     states = STG.nodes()
     
-    for tspace in PyBoolNet.trap_spaces.trap_spaces(Primes, "min", MaxOutput=MaxOutput):
+    for tspace in PyBoolNet.trap_spaces.trap_spaces(Primes, "min", max_output=MaxOutput):
         
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(Primes, tspace) if x in states])
@@ -726,7 +729,7 @@ def random_successor_mixed(Primes, State):
     return successor
 
 
-def random_state(primes: dict, subspace={}):
+def random_state(primes: Union[dict, List[str]], subspace={}):
     """
     Generates a random state of the transition system defined by *Primes*.
     If *Subspace* is given then the state will be drawn from that subspace.
@@ -1225,11 +1228,6 @@ def hamming_distance(Subspace1, Subspace2):
     return len([k for k, v in Subspace1.items() if k in Subspace2 and Subspace2[k] != v])
 
 
-VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
-                      4: ["_level1", "_level2", "_level3"],
-                      5: ["_level1", "_level2", "_level3", "_level4"]}
-
-
 def find_vanham_variables(Primes):
     """
     Detects variables that represent multi-valued variables using the Van Ham encoding, see :ref:`Didier2011` for more details.
@@ -1316,9 +1314,6 @@ def size_state_space(Primes, VanHam=True, FixedInputs=False):
     return size
 
 
-################ The Strongly Connected Component Graph (SCC Graph) ################
-
-
 def stg2sccgraph(STG):
     """
     Computes the SCC graph of the *STG*. For a definition see Sec. 3.1 of :ref:`Tournier2009 <Tournier2009>`.
@@ -1388,9 +1383,6 @@ def sccgraph2image(SCCGraph, FnameIMAGE, LayoutEngine="dot", Silent=False):
     PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
 
-################ The Condensation Graph ################
-
-
 def stg2condensationgraph(STG):
     """
     Converts the *STG* into the condensation graph, for a definition see :ref:`Klarner2015(b) <klarner2015approx>`.
@@ -1456,8 +1448,6 @@ def condensationgraph2image(CGraph, FnameIMAGE, LayoutEngine="dot", Silent=False
     PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
     PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
-
-################ The Hierarchical Transition Graph (HTG) ################
 
 def stg2htg(STG):
     """
@@ -1561,8 +1551,6 @@ def htg2image(HTG, FnameIMAGE, LayoutEngine="dot", Silent=False):
     PyBoolNet.Utility.DiGraphs.convert_nodes_to_anonymous_strings(graph)
     PyBoolNet.Utility.DiGraphs.digraph2image(graph, FnameIMAGE, LayoutEngine, Silent)
 
-
-################ Operations on State Space ################
 
 def state_is_in_subspace(Primes, State, Subspace):
     """

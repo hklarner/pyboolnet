@@ -407,7 +407,7 @@ def digraph2sccgraph(Digraph):
     return sccgraph
 
 
-def digraph2condensationgraph(Digraph):
+def digraph2condensationgraph(digraph: networkx.DiGraph) -> networkx.DiGraph:
     """
     Creates the condensation graph from *Digraph*.
     The condensation graph is similar to the SCC graph but it replaces
@@ -434,8 +434,8 @@ def digraph2condensationgraph(Digraph):
              (('Gal80',),('Cbf1','Swi5))]
     """
 
-    sccs = sorted([tuple(sorted(scc)) for scc in networkx.strongly_connected_components(Digraph)])
-    cascades = [scc for scc in sccs if (len(scc) == 1) and not Digraph.has_edge(scc[0], scc[0])]
+    sccs = sorted([tuple(sorted(scc)) for scc in networkx.strongly_connected_components(digraph)])
+    cascades = [scc for scc in sccs if (len(scc) == 1) and not digraph.has_edge(scc[0], scc[0])]
     noncascades = [scc for scc in sccs if scc not in cascades]
 
     cgraph = networkx.DiGraph()
@@ -443,13 +443,13 @@ def digraph2condensationgraph(Digraph):
 
     # rgraph is a copy of Digraph with edges leaving noncascade components removed.
     # will use rgraph to decide if there is a cascade path between U and W (i.e. edge in cgraph)
-    rgraph = networkx.DiGraph(Digraph.edges())
+    rgraph = networkx.DiGraph(digraph.edges())
 
     for U, W in itertools.product(noncascades,noncascades):
         if U == W:
             continue
 
-        rgraph = Digraph.copy()
+        rgraph = digraph.copy()
         for X in noncascades:
             if not X == U and not X == W:
                 rgraph.remove_nodes_from(X)

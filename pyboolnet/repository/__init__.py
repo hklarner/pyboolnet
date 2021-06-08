@@ -18,7 +18,7 @@ def print_info(MarkDown=False):
     data   = []
     for name in get_all_names():
         primes = get_primes(name)
-        tspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", MaxOutput=MAXOUTPUT)
+        tspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", max_output=MAXOUTPUT)
 
         size          = str(len(primes))
         inputs        = str(len(PyBoolNet.prime_implicants.find_inputs(primes)))
@@ -134,7 +134,7 @@ def get_attrs(Name, Update):
     path = os.path.join(BASE,Name,Name+"_attrs_"+ext)
 
     if os.path.isfile(path):
-        return PyBoolNet.attractors.open_json(path)
+        return PyBoolNet.attractors.read_attractors_json(path)
 
     print(" %s does not exist"%path)
     raise FileNotFoundError

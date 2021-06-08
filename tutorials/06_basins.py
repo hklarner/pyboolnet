@@ -32,7 +32,7 @@ if __name__=="__main__":
     # to save the results and plot basins extend the attrs data
 
     PyBoolNet.basins_of_attraction.compute_basins(attrs)
-    PyBoolNet.attractors.save_json(attrs, "attrs_basin.json")
+    PyBoolNet.attractors.write_attractors_json(attrs, "attrs_basin.json")
     PyBoolNet.basins_of_attraction.create_barplot(attrs, "basin_barplot.pdf")
     PyBoolNet.basins_of_attraction.create_piechart(attrs, "basin_piechart.pdf")
 

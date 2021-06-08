@@ -146,14 +146,14 @@ def test_completeness():
 def test_completeness_maxoutput():
     primes = PyBoolNet.Repository.get_primes("davidich_yeast")
 
-    assert PyBoolNet.attractors.completeness(primes, "asynchronous", MaxOutput=10000)
-    assert not PyBoolNet.attractors.completeness(primes, "asynchronous", MaxOutput=2)
+    assert PyBoolNet.attractors.completeness(primes, "asynchronous", max_output=10000)
+    assert not PyBoolNet.attractors.completeness(primes, "asynchronous", max_output=2)
 
 
 def test_compute_json():
     primes = PyBoolNet.Repository.get_primes("n5s3")
     fname_json = os.path.join(FILES_OUT, "n5s3_attrs.json")
-    attrs = compute_json(Primes=primes, Update="asynchronous", FnameJson=fname_json, MaxOutput=2)
+    attrs = compute_json(primes=primes, update="asynchronous", fname_json=fname_json, max_output=2)
 
     assert attrs
 

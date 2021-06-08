@@ -1,3 +1,6 @@
+
+
+from typing import List, Union
 import datetime
 import subprocess
 
@@ -51,7 +54,7 @@ def percolate_trapspace(Primes, Trapspace):
         {'Raf': 1, 'Mek': 0, 'Erk': 0}
     """
     
-    primes = PyBoolNet.prime_implicants.create_constants(Primes, Trapspace, Copy=True)
+    primes = PyBoolNet.prime_implicants.create_constants(Primes, Trapspace, in_place=True)
     constants = PyBoolNet.prime_implicants.percolate_and_keep_constants(primes)
     
     return constants
@@ -159,7 +162,7 @@ def trapspaces_within_subspace(Primes, Subspace, Type, FnameASP=None, Representa
     """
     
     if not Subspace:
-        return trap_spaces(Primes, Type, MaxOutput=MaxOutput, FnameASP=FnameASP, Representation=Representation)
+        return trap_spaces(Primes, Type, max_output=MaxOutput, fname_asp=FnameASP, representation=Representation)
     
     assert (len(Primes) >= len(Subspace))
     assert (type(Subspace) in [dict, str])
@@ -200,7 +203,7 @@ def smallest_trapspace(Primes, State, Representation="dict"):
     return trapspaces_that_contain_state(Primes, State, Type="min", FnameASP=None, Representation=Representation)
 
 
-def trap_spaces(Primes, Type, MaxOutput=1000, FnameASP=None, Representation="dict"):
+def trap_spaces(primes: dict, option: str, max_output: int = 1000, fname_asp: str = None, representation: str = "dict") -> Union[List[dict], List[str]]:
     """
     Returns a list of trap spaces using the :ref:`installation_potassco` ASP solver, see :ref:`Gebser2011 <Gebser2011>`.
     For a formal introcution to trap spaces and the ASP encoding that is used for their computation see :ref:`Klarner2015(a) <klarner2015trap>`.
@@ -231,17 +234,17 @@ def trap_spaces(Primes, Type, MaxOutput=1000, FnameASP=None, Representation="dic
         ...         "z, x&y | z"]
         >>> bnet = "\\n".join(bnet)
         >>> primes = FEX.bnet2primes(bnet)
-        >>> tspaces = TS.trap_spaces(primes, "all", Representation="str")
+        >>> tspaces = TS.trap_spaces(primes, "all", representation="str")
         ---, --1, 1-1, -00, 101
     """
     
     # exclude trivial trap space {} for search of maximal trap spaces
     Bounds = None
-    if Type == "max":
+    if option == "max":
         Bounds = (1, "n")
     
-    return potassco_handle(Primes, Type, Bounds=Bounds, Project=None, MaxOutput=MaxOutput, FnameASP=FnameASP,
-                           Representation=Representation)
+    return potassco_handle(primes, option, Bounds=Bounds, Project=None, MaxOutput=max_output, FnameASP=fname_asp,
+                           Representation=representation)
 
 
 def steady_states(Primes, MaxOutput=1000, FnameASP=None, Representation="dict"):

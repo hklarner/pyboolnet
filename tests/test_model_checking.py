@@ -63,11 +63,11 @@ def test_check_primes_async():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(Primes=primes, Update="asynchronous",
-                                                                                  InitialStates="INIT !v1&v2&!v3",
-                                                                                  Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                  DynamicReorder=True,
-                                                                                  DisableReachableStates=False)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes=primes, update="asynchronous",
+                                                                                  init="INIT !v1&v2&!v3",
+                                                                                  spec="CTLSPEC AF(!v1&!v2&v3)",
+                                                                                  dynamic_reorder=True,
+                                                                                  disable_reachable_states=False)
 
     assert counterex == expected
 
@@ -77,11 +77,11 @@ def test_check_primes_sync():
               "v2": [[{"v3": 1}, {"v1": 0}], [{"v1": 1, "v3": 0}]],
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
 
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(Primes=primes, Update="synchronous",
-                                                                                  InitialStates="INIT !v1&v2&!v3",
-                                                                                  Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                  DynamicReorder=True,
-                                                                                  DisableReachableStates=False)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes=primes, update="synchronous",
+                                                                                  init="INIT !v1&v2&!v3",
+                                                                                  spec="CTLSPEC AF(!v1&!v2&v3)",
+                                                                                  dynamic_reorder=True,
+                                                                                  disable_reachable_states=False)
 
     assert counterex is None
 
@@ -92,10 +92,10 @@ def test_check_primes_mixed():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(Primes=primes, Update="mixed",
-                                                                                  InitialStates="INIT !v1&v2&!v3",
-                                                                                  Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                  DynamicReorder=True,
-                                                                                  DisableReachableStates=False)
+    answer, counterex = PyBoolNet.model_checking.check_primes_with_counterexample(primes=primes, update="mixed",
+                                                                                  init="INIT !v1&v2&!v3",
+                                                                                  spec="CTLSPEC AF(!v1&!v2&v3)",
+                                                                                  dynamic_reorder=True,
+                                                                                  disable_reachable_states=False)
 
     assert counterex == expected

@@ -56,7 +56,7 @@ def test_primes2igraph1():
     fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes()) + sorted(igraph.edges())
     expected = ["Ash1", "Cbf1", "Gal4", "Gal80", "Swi5", "gal", ("Ash1", "Cbf1"), ("Cbf1", "Ash1"), ("Gal4", "Swi5"),
                 ("Gal80", "Gal4"), ("Swi5", "Gal4"), ("gal", "Ash1"), ("gal", "Gal80"), ("gal", "gal")]
@@ -68,7 +68,7 @@ def test_primes2igraph2():
     fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("Ash1", {}), ("Cbf1", {}), ("Gal4", {}), ("Gal80", {}), ("Swi5", {}), ("gal", {}),
                 ("Ash1", "Cbf1", {"sign": {1}}), ("Cbf1", "Ash1", {"sign": {1}}), ("Gal4", "Swi5", {"sign": {-1}}),
@@ -81,7 +81,7 @@ def test_primes2igraph2():
 def test_primes2igraph3():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{}], []], "C": [[{"B": 0}], [{"B": 1}]]}
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("A", {}), ("B", {}), ("C", {}),
                 ("A", "A", {"sign": {1}}), ("B", "C", {"sign": {1}})]
@@ -93,7 +93,7 @@ def test_primes2igraph4():
     primes = {"A": [[{}], []], "B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 1}], [{"C": 0}]],
               "D": [[{"B": 0, "C": 0}, {"B": 1, "C": 1}], [{"B": 1, "C": 0}, {"B": 0, "C": 1}]]}
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("A", {}), ("B", {}), ("C", {}), ("D", {}), ("B", "B", {"sign": {1}}),
                 ("B", "D", {"sign": {1, -1}}), ("C", "C", {"sign": {-1}}), ("C", "D", {"sign": {1, -1}})]
@@ -106,7 +106,7 @@ def test_igraph2dot():
     fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2dot.dot")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out)
 
 
@@ -114,7 +114,7 @@ def test_igraph2dot_string():
     fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=None)
 
 
@@ -122,7 +122,7 @@ def test_igraph2image():
     fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.png")
     PyBoolNet.interaction_graphs.igraph2image(IGraph=igraph, FnameIMAGE=fname_out)
 
@@ -144,7 +144,7 @@ def test_styles():
     fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_interactionsigns.pdf")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     PyBoolNet.interaction_graphs.add_style_interactionsigns(IGraph=igraph)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
     PyBoolNet.interaction_graphs.dot2image(FnameDOT=fname_out_dot, FnameIMAGE=fname_out_pdf)
@@ -158,7 +158,7 @@ def test_styles():
     PyBoolNet.interaction_graphs.dot2image(FnameDOT=fname_out_dot, FnameIMAGE=fname_out_pdf)
     PyBoolNet.interaction_graphs.igraph2image(IGraph=igraph, FnameIMAGE=fname_out_pdf)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     activities = {"v1": 1, "v2": 0, "v3": 1, "v4": 1, "v5": 1, "v6": 0}
     PyBoolNet.interaction_graphs.add_style_activities(IGraph=igraph, Activities=activities)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
@@ -169,7 +169,7 @@ def test_styles():
     fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_sccs.pdf")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     PyBoolNet.interaction_graphs.add_style_sccs(IGraph=igraph)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)
     PyBoolNet.interaction_graphs.dot2image(FnameDOT=fname_out_dot, FnameIMAGE=fname_out_pdf)
@@ -178,7 +178,7 @@ def test_styles():
     fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_ioc.pdf")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     PyBoolNet.interaction_graphs.add_style_inputs(IGraph=igraph)
     PyBoolNet.interaction_graphs.add_style_constants(IGraph=igraph)
     PyBoolNet.interaction_graphs.add_style_outputs(IGraph=igraph)
@@ -189,7 +189,7 @@ def test_styles():
     fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_subgrapghs.dot")
     primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes=primes)
+    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes=primes)
     subgraphs = [(["v1", "v2"], {}), (["v3", "v4"], {"label": "jo"})]
     PyBoolNet.interaction_graphs.add_style_subgraphs(IGraph=igraph, Subgraphs=subgraphs)
     PyBoolNet.interaction_graphs.igraph2dot(IGraph=igraph, FnameDOT=fname_out_dot)

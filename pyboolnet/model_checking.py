@@ -1,17 +1,20 @@
 
 
-import os, sys
-import tempfile
-import subprocess
 import ast
 import datetime
+import os
+import subprocess
+import sys
+import tempfile
+import logging
 
 import PyBoolNet
-
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
 CMD_NUSMV = PyBoolNet.Utility.Misc.find_command("nusmv")
+
+log = logging.getLogger(__file__)
 
 fname_nusmvkeywords = os.path.join( BASE, "Dependencies", "nusmvkeywords.json" )
 with open(fname_nusmvkeywords) as f:
@@ -29,7 +32,7 @@ def print_warning_accstates_bug(Primes,CTLSpec):
         print("WARNING: accepting states bug might affect result, see http://github.com/hklarner/PyBoolNet/issues/14")
 
 
-def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True, Silent=True):
+def check_primes(primes: dict, update: str, init: str, spec: str, dynamic_reorder: bool = True, disable_reachable_states: bool = True, cone_of_influence: bool = True):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -63,23 +66,22 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     cmd = [CMD_NUSMV]
     cmd+= ['-dcx']
 
-    if DynamicReorder:
+    if dynamic_reorder:
         cmd+= ['-dynamic']
-    if DisableReachableStates:
+    if disable_reachable_states:
         cmd+= ['-df']
-    if ConeOfInfluence:
+    if cone_of_influence:
         cmd+= ['-coi']
 
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
-    if not Silent:
-        print("created %s"%tmpfname)
+    log.info("created %s"%tmpfname)
     tmpfile.close()
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
+    smvfile = primes2smv(primes, update, init, spec, FnameSMV=tmpfname, Silent=True)
 
     cmd+= [tmpfname]
     try:
-        if not Silent: print("cmd: %s"%' '.join(cmd))
+        log.info("cmd: %s"%' '.join(cmd))
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception:
         print("could not start process for nusmv")
@@ -95,7 +97,7 @@ def check_primes(Primes, Update, InitialStates, Specification, DynamicReorder=Tr
     return nusmv_handle(cmd, proc, out, err, DisableCounterExamples=True, AcceptingStates=False)
 
 
-def check_primes_with_counterexample(Primes, Update, InitialStates, Specification, DynamicReorder=True, DisableReachableStates=True, Silent=True):
+def check_primes_with_counterexample(primes: dict, update: str, init, spec, dynamic_reorder: bool = True, disable_reachable_states: bool = True):
     """
     Calls :ref:`installation_nusmv` to check whether the *Specification* is true or false in the transition system defined by *Primes*,
     the *InitialStates* and *Update*.
@@ -129,17 +131,16 @@ def check_primes_with_counterexample(Primes, Update, InitialStates, Specificatio
 
     cmd = [CMD_NUSMV]
 
-    if DynamicReorder:
+    if dynamic_reorder:
         cmd+= ['-dynamic']
-    if DisableReachableStates:
+    if disable_reachable_states:
         cmd+= ['-df']
 
     tmpfile = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmpfname = tmpfile.name
-    if not Silent:
-        print("created %s"%tmpfname)
+    log.info("created %s"%tmpfname)
     tmpfile.close()
-    smvfile = primes2smv(Primes, Update, InitialStates, Specification, FnameSMV=tmpfname, Silent=True)
+    smvfile = primes2smv(primes, update, init, spec, FnameSMV=tmpfname, Silent=True)
 
     cmd+= [tmpfname]
 
