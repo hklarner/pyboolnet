@@ -113,7 +113,7 @@ def find_outputs(Primes):
     """
 
     igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-    outputs = [x for x in igraph if not igraph.successors(x)]
+    outputs = [x for x in igraph.nodes() if not list(igraph.successors(x))]
 
     return sorted(outputs)
 

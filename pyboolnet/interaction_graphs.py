@@ -448,7 +448,7 @@ def add_style_outputs(IGraph):
           >>> add_style_outputs(igraph)
     """
 
-    outputs = [x for x in IGraph.nodes() if not IGraph.successors(x) or IGraph.successors(x)==[x]]
+    outputs = [x for x in IGraph.nodes() if not list(IGraph.successors(x))]
 
     if outputs:
         subgraph = networkx.DiGraph()
