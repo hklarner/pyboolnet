@@ -1,13 +1,18 @@
 
 
+import logging
+import sys
 import itertools
-from typing import List, Optional
+from typing import List, Optional, Dict, Union
 
-import PyBoolNet.Utility.DiGraphs
-import PyBoolNet.Utility.Misc
-import PyBoolNet.boolean_normal_forms
-import PyBoolNet.file_exchange
-import PyBoolNet.interaction_graphs
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.state_transition_graphs import subspace2str
+from pyboolnet.digraphs import successors, predecessors
+from pyboolnet.misc import dicts_are_consistent
+from pyboolnet.boolean_normal_forms import functions2primes
+from pyboolnet.file_exchange import bnet2primes
+
+log = logging.getLogger(__name__)
 
 CONSTANT_ON = [[], [{}]]
 CONSTANT_OFF = [[{}], []]
@@ -15,40 +20,40 @@ CONSTANT_OFF = [[{}], []]
 
 def copy(primes: dict) -> dict:
     """
-    Creates a copy of *Primes*.
+    Creates a copy of *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *PrimesNew* (dict): a copy of *Primes*
+        * *new_primes*: a copy of *primes*
 
     **example**::
 
-        >>> primes_new = copy(primes)
+        >>> new_primes = copy(primes)
     """
 
-    primes_new = {}
+    new_primes = {}
     for name in primes:
-        primes_new[name] = [[], []]
+        new_primes[name] = [[], []]
 
         for value in [0, 1]:
             for prime in primes[name][value]:
-                primes_new[name][value].append(dict(prime))
+                new_primes[name][value].append(dict(prime))
 
-    return primes_new
+    return new_primes
 
 
-def are_equal(Primes1, Primes2):
+def are_equal(primes1, primes2) -> bool:
     """
-    Tests whether *Primes1* and *Primes2* are equal.
-    The dictionary comparison *Primes1 == Primes2* does in general not work because the clauses of each may not be in the same order.
+    Tests whether *primes1* and *primes2* are equal.
+    The dictionary comparison *primes1 == primes2* does in general not work because the clauses of each may not be in the same order.
 
     **arguments**:
-        * *Primes1*, *Primes2*: prime implicants
+        * *primes1*, *primes2*: prime implicants
 
     **returns**:
-        * *Answer* (bool): whether *Primes1=Primes2*
+        * *answer*: whether *primes1 == primes2*
 
     **example**::
 
@@ -56,114 +61,108 @@ def are_equal(Primes1, Primes2):
         True
     """
 
-    if len(Primes1)!=len(Primes2):
+    if len(primes1) != len(primes2):
         return False
 
-    for name in Primes1:
-        if not name in Primes2:
+    for name in primes1:
+        if name not in primes2:
             return False
 
-        for value in [0,1]:
-            p1 = sorted([sorted(d.items()) for d in Primes1[name][value]])
-            p2 = sorted([sorted(d.items()) for d in Primes2[name][value]])
-            if not p1==p2:
+        for value in [0, 1]:
+            p1 = sorted([sorted(d.items()) for d in primes1[name][value]])
+            p2 = sorted([sorted(d.items()) for d in primes2[name][value]])
+            if not p1 == p2:
                 return False
 
     return True
 
 
-def find_inputs(Primes):
+def find_inputs(primes: dict) -> List[str]:
     """
     Finds all inputs in the network defined by *Primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *Names* (list): the names of the inputs
+        * *names*: the names of the inputs
 
     **example**::
 
         >>> find_inputs(primes)
-        ['DNA_damage','EGFR','FGFR3']
+        ["DNA_damage","EGFR","FGFR3"]
     """
 
-    inputs = []
-    for name in Primes:
-        if Primes[name][1]==[{name:1}]:
-            inputs.append(name)
-
-    return sorted(inputs)
+    return sorted(name for name in primes if primes[name][1] == [{name: 1}])
 
 
-def find_outputs(Primes):
+def find_outputs(primes: dict) -> List[str]:
     """
     Finds all outputs in the network defined by *Primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *Names* (list): the names of the outputs
+        * *names*: the names of the outputs
 
     **example**::
 
         >>> find_inputs(primes)
-        ['Proliferation','Apoptosis','GrowthArrest']
+        ["Proliferation","Apoptosis","GrowthArrest"]
     """
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
+    igraph = primes2igraph(primes)
     outputs = [x for x in igraph.nodes() if not list(igraph.successors(x))]
 
     return sorted(outputs)
 
 
-def find_constants(Primes):
+def find_constants(primes: dict) -> Dict[str, int]:
     """
-    Finds all constants in the network defined by *Primes*.
+    Finds all constants in the network defined by *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *Activities* (dict): the names and activities of constants
+        * *constants*: the names and activities of constants
 
     **example**::
 
         >>> find_constants(primes)
-        {'CGC':1,'IFNAR1':1,'IFNAR2':0,'IL4RA':1}
+        {"CGC":1,"IFNAR1":1,"IFNAR2":0,"IL4RA":1}
     """
 
     constants = {}
-    for name in Primes:
-        if Primes[name] == CONSTANT_ON:
+    for name in primes:
+        if primes[name] == CONSTANT_ON:
             constants[name] = 1
-        elif Primes[name] == CONSTANT_OFF:
+        elif primes[name] == CONSTANT_OFF:
             constants[name] = 0
 
     return constants
 
 
-def create_constants(primes: dict, constants: dict, in_place: bool = True) -> dict:
+def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = True) -> Optional[dict]:
     """
-    Creates a constant in *Primes* for every name, value pair in *Constants*.
-    Names that already exist in *Primes* are overwritten.
+    Creates a constant in *primes* for every name, value pair in *constants*.
+    Names that already exist in *primes* are overwritten.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Constants* (dict): names and values
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *constants*: names and values
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *copy ==True*
 
     **example**::
 
         >>> create_constants(primes, {"p53":1, "p21":0})
     """
 
-    if in_place:
+    if not in_place:
         primes = copy(primes=primes)
 
     for name, value in constants.items():
@@ -172,11 +171,11 @@ def create_constants(primes: dict, constants: dict, in_place: bool = True) -> di
         else:
             primes[name] = CONSTANT_OFF
 
-    if in_place:
+    if not in_place:
         return primes
 
 
-def create_inputs(Primes, Names, Copy=False):
+def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
     Creates an input for every member of *Names*.
     Variables that already exist in *Primes* are overwritten.
@@ -193,13 +192,12 @@ def create_inputs(Primes, Names, Copy=False):
             >>> create_inputs(primes, constants)
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Names* (list): variables to become constants
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *names*: variables to become constants
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
@@ -207,21 +205,21 @@ def create_inputs(Primes, Names, Copy=False):
         >>> create_inputs(primes, names)
     """
 
-    if Copy:
-        Primes = Copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    for name in Names:
-        Primes[name][0]=[{name:1}]
-        Primes[name][1]=[{name:0}]
+    for name in names:
+        primes[name][0] = [{name: 1}]
+        primes[name][1] = [{name: 0}]
 
-    if Copy:
-        return Primes
+    if not in_place:
+        return primes
 
 
-def create_blinkers(Primes, Names, Copy=False):
+def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
-    Creates a blinker for every member of *Names*.
-    Variables that alrerady exist in *Primes* are overwritten.
+    Creates a blinker for every member of *names*.
+    Variables that alrerady exist in *primes* are overwritten.
     A blinker is a variable with in-degree one and negative auto-regulation.
     Blinkers can therefore change their activity in every state of the transition system.
 
@@ -238,16 +236,15 @@ def create_blinkers(Primes, Names, Copy=False):
 
             >>> inputs = find_inputs(primes)
             >>> create_blinkers(primes, inputs)
-            >>> tspaces = TS.trap_spaces(primes, "min")
+            >>> tspaces = trap_spaces(primes, "min")
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Names* (list): variables to become blinkers
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *names*: variables to become blinkers
+        * *in_place*: change *Primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == True*
 
     **example**::
 
@@ -255,247 +252,238 @@ def create_blinkers(Primes, Names, Copy=False):
         >>> create_blinkers(primes, names)
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    for name in Names:
-        Primes[name][0]=[{name:1}]
-        Primes[name][1]=[{name:0}]
+    for name in names:
+        primes[name][0] = [{name:1}]
+        primes[name][1] = [{name:0}]
 
-    if Copy:
-        return Primes
+    if not in_place:
+        return primes
 
 
-def create_variables(Primes, UpdateFunctions, Copy=False):
+def create_variables(primes: dict, update_functions: Dict[str, Union[callable, str]], in_place: bool = True) -> Optional[dict]:
     """
-    Creates the variables defined in *UpdateFunctions* and add them to *Primes*.
-    Variables that already exist in *Primes* are overwritten.
+    Creates the variables defined in *update_functions* and add them to *primes*.
+    Variables that already exist in *primes* are overwritten.
     Raises an exception if the resulting primes contain undefined variables.
-    The *UpdateFunctions* are given as a dictionary of names and functions that are either a bnet string or a Python function.
+    The *update_functions* are given as a dictionary of names and functions that are either a bnet string or a Python callable.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *UpdateFunctions* (dict): a dictionary of names and update functions
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *update_functions*: a dictionary of names and update functions
+        * *in_place*: change *Primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
-        >>> primes = FileExchange.bnet2primes("A, A")
+        >>> primes = bnet2primes("A, A")
         >>> create_variables(primes, {"B": "A"})
         >>> create_variables(primes, {"C": lambda A, B: A and not B})
-        >>> FileExchange.primes2bnet(primes)
+        >>> primes2bnet(primes)
         A, A
         B, A
         C, A&!B
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    newprimes = {}
+    new_primes = {}
     dependencies = set([])
-    names = set(Primes)
+    names = set(primes)
 
-    for name, function in UpdateFunctions.items():
+    for name, function in update_functions.items():
         names.add(name)
-        if type(function)==str:
-            line = "%s, %s"%(name,function)
-            newprimes[name] = PyBoolNet.file_exchange.bnet2primes(line)[name]
+        if type(function) is str:
+            line = f"{name}, {function}"
+            new_primes[name] = bnet2primes(line)[name]
         else:
-            newprimes[name] = PyBoolNet.boolean_normal_forms.functions2primes({name:function})[name]
+            new_primes[name] = functions2primes({name: function})[name]
 
-        for x in newprimes[name][1]:
+        for x in new_primes[name][1]:
             dependencies.update(set(x))
 
     undefined = dependencies - names
     if undefined:
-        print(" error: can not add variables that are dependent on undefined variables.")
-        print("        these variables have undefined update functions: %s"%",".join(undefined))
-        raise Exception
+        log.error(f"can not add variables that depend on undefined variables: undefined={undefined}")
+        sys.exit()
 
-    Primes.update(newprimes)
+    primes.update(new_primes)
 
-    if Copy:
-        return Primes
+    if not in_place:
+        return primes
 
 
-def create_disjoint_union(Primes1, Primes2):
+def create_disjoint_union(primes1: dict, primes2: dict) -> dict:
     """
-    Creates a new primes dictionary that is the disjoint union of the networks represented by *Primes1* and *Primes2*.
-    Here, "disjoint" means that the names of *Primes1* and *Primes2* do not intersect.
+    Creates a new primes dictionary that is the disjoint union of the networks represented by *primes1* and *primes2*.
+    Here, "disjoint" means that the names of *primes1* and *primes2* must not intersect.
 
     **arguments**:
-        * *Primes1*: prime implicants
-        * *Primes2*: prime implicants
+        * *primes1*: prime implicants
+        * *primes2*: prime implicants
 
     **returns**:
-        * *NewPrimes*: the disjoint union of *Primes1* and *Primes2*
+        * *new_primes*: the disjoint union of *primes1* and *primes2*
 
     **example**::
 
         >>> primes1 = bnet2primes("A, B \\n B, A")
         >>> primes1 = bnet2primes("C, D \\n D, E")
-        >>> newprimes = create_disjoint_union(primes1, primes2)
-        >>> FileExchange.primes2bnet(newprimes)
+        >>> new_primes = create_disjoint_union(primes1, primes2)
+        >>> primes2bnet(new_primes)
         A, B
         B, A
         C, D
         D, E
     """
 
-    assert(not set(Primes1).intersection(set(Primes2)))
+    intersection = set(primes1).intersection(set(primes2))
+    if intersection:
+        log.error(f"cannot take disjoint union of primes: intersection={intersection}")
+        sys.exit()
 
-    newprimes = {}
-    newprimes.update(Primes1)
-    newprimes.update(Primes2)
+    new_primes = {}
+    new_primes.update(primes1)
+    new_primes.update(primes2)
 
-    return newprimes
+    return new_primes
 
 
-# todo: refactor: create_subnetwork_by_successor_invariance
-# add function is_successor_invariant_set(Primes, Names)
-def remove_variables(Primes, Names, Copy=False):
+def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
-    Removes all variables contained in *Names* from *Primes*.
-    Members of *Names* that are not in *Primes* are ignored.
-    Note that *Names* must be closed under the successors relation, i.e.,
+    Removes all variables contained in *names* from *primes*.
+    Members of *names* that are not in *primes* are ignored.
+    Note that *names* must be closed under the successors relation, i.e.,
     it must be a set of variables that contains all its successors.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Names* (list): the names of variables to remove
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *names*: the names of variables to remove
+        * *in_place*: change *Primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
-        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> names = ["PKC", "GADD45", "ELK1", "FOS"]
         >>> remove_variables(primes, names)
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-    hit = [x for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names) if x not in Names]
+    igraph = primes2igraph(primes)
+    hit = [x for x in successors(igraph, names) if x not in names]
     if hit:
-        print(" error: can not remove variables that are not closed under successor relation.")
-        print("        these variables have successors outside the given set: %s"%", ".join(hit))
-        raise Exception
+        log.error(f"can not remove variable that are not closed under successor operation: variables={hit}")
+        sys.exit()
     else:
-        for name in Names:
-            Primes.pop(name)
+        for name in names:
+            primes.pop(name)
 
-    if Copy:
-        return Primes
+    if not in_place:
+        return primes
 
 
-# todo: refactor: create_subnetwork_predecessor_invariance
-# add function is_predecessor_invariant_set(Primes, Names)
 def remove_all_variables_except(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
-    Removes all variables except those in *Names* from *Primes*.
-    Members of *Names* that are not in *Primes* are ignored.
-    Note that *Names* must be closed under the predecessors relation, i.e.,
+    Removes all variables except those in *names* from *primes*.
+    Members of *names* that are not in *primes* are ignored.
+    Note that *names* must be closed under the predecessors relation, i.e.,
     it must be a set of variables that contains all its predecessors.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Names* (list): the names of variables to keep
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *names*: the names of variables to keep
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
-        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> names = ["PKC", "GADD45", "ELK1", "FOS"]
         >>> remove_all_variables_except(primes, names)
     """
 
-    if in_place:
+    if not in_place:
         primes = copy(primes=primes)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes)
-    hit = [x for x in PyBoolNet.Utility.DiGraphs.predecessors(igraph, names) if x not in names]
+    igraph = primes2igraph(primes)
+    hit = [x for x in predecessors(igraph, names) if x not in names]
     if hit:
-        print(" error: can not remove variables that are not closed under predecessor relation.")
-        print("        these variables have predecessors outside the given set: %s"%hit)
-        raise Exception
+        log.error(f"cannot remove variables that are not closed under the predecessor operation: variables={hit}")
+        sys.exit()
 
     else:
         for name in list(primes):
             if name not in names:
                 primes.pop(name)
 
-    if in_place:
+    if not in_place:
         return primes
 
 
-def rename_variable(Primes, OldName, NewName, Copy=False):
+def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool = True) -> Optional[dict]:
     """
-    Renames a single component, i.e., replace every occurence of *OldName* with *NewName*.
-    Throws an exception if *NewName* is already contained in *Primes*.
+    Renames a single component, i.e., replace every occurence of *old_name* with *new_name*.
+    Throws an exception if *new_name* is already contained in *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *OldName* (str): the old name of the component
-        * *NewName* (str): the new name of the component
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *old_name*: the old name of the component
+        * *new_name*: the new name of the component
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
-        * *NewPrimes* if *Copy=True*
-        * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
-        >>> names = ["PKC","GADD45","ELK1","FOS"]
+        >>> names = ["PKC", "GADD45", "ELK1", "FOS"]
         >>> remove_all_variables_except(primes, names)
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    if OldName==NewName:
+    if old_name==new_name:
         return
 
-    if NewName in Primes:
-        print(" error: can not rename because %s already exists in primes."%NewName)
-        raise Exception
+    if new_name in primes:
+        log.error(f"cannot rename variable because name is already in use: name={new_name}")
+        sys.exit()
 
     else:
-        Primes[NewName] = Primes.pop(OldName)
-        for name in Primes:
+        primes[new_name] = primes.pop(old_name)
+        for name in primes:
             for value in [0,1]:
-                for prime in Primes[name][value]:
-                    if OldName in prime:
-                        prime[NewName] = prime.pop(OldName)
+                for prime in primes[name][value]:
+                    if old_name in prime:
+                        prime[new_name] = prime.pop(old_name)
 
-    if Copy:
-        return Primes
+    if not in_place:
+        return primes
 
 
-# todo: refactor: _percolation_step(..)
-def _substitute(Primes, Name, Constants):
+def _substitute(primes: dict, name: str, constants: Dict[str, int]):
     """
-    replaces the primes of *Name* by the ones obtained from substituting *Constants*.
+    replaces the primes of *name* by the ones obtained from substituting *constants*.
     """
 
-    for value in [0,1]:
-        newprimes = []
-        for prime in Primes[Name][value]:
+    for value in [0, 1]:
+        new_primes = []
+        for prime in primes[name][value]:
             consistent, inconsistent = [], []
-            for k in Constants:
+            for k in constants:
                 if k in prime:
-                    if prime[k]==Constants[k]:
+                    if prime[k]==constants[k]:
                         consistent.append(k)
                     else:
                         inconsistent.append(k)
@@ -505,79 +493,79 @@ def _substitute(Primes, Name, Constants):
             else:
                 for k in consistent: prime.pop(k)
                 if prime=={}:
-                    newprimes = [{}]
+                    new_primes = [{}]
                     break
-                elif prime not in newprimes:
-                    newprimes.append(prime)
+                elif prime not in new_primes:
+                    new_primes.append(prime)
 
-        Primes[Name][value] = newprimes
+        primes[name][value] = new_primes
 
-# todo: refactor: substitute(..)
-def substitute_and_remove(Primes, Names, Copy=False):
+
+def substitute_and_remove(primes, names, in_place: bool = True):
     """
-    Substitutes the values of all *Names* to its successors and then removes them.
-    Checks that *Names* are a subset of constants.
+    Substitutes the values of all *names* to its successors and then removes them.
+    Checks that *names* are a subset of constants.
     Note that the resulting primes may contain new constants.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Names* (list): variables to be substituted and removed
-        * *Copy* (bool): change *Primes* in place or copy and return
+        * *primes*: prime implicants
+        * *names*: variables to be substituted and removed
+        * *in_place*: change *Primes* in place or copy and return
 
     **returns**:
-        if *Copy==True*:
-            * *NewPrimes*
-        else:
-            * *None* else
+        * *new_primes* if *in_place == False*
 
     **example**::
 
         >>> substitute_and_remove(primes)
     """
 
-    if Copy:
-        Primes = copy(Primes)
+    if not in_place:
+        primes = copy(primes)
 
-    constants = find_constants(Primes)
-    assert(all(x in constants for x in Names))
-    Names = dict((k,v) for k,v in constants.items() if k in Names)
+    constants = find_constants(primes)
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-    for x in PyBoolNet.Utility.DiGraphs.successors(igraph, Names):
-        _substitute(Primes, x, Names)
+    not_in_constants = [x for x in names if x not in constants]
+    if not_in_constants:
+        log.error(f"cannot substitute and remove non-constant components: names={not_in_constants}")
+        sys.exit()
 
-    for x in Names:
-        Primes.pop(x)
+    names = {k: v for k, v in constants.items() if k in names}
 
-    print("removed " + ", ".join(Names))
+    igraph = primes2igraph(primes)
+    for x in successors(igraph, names):
+        _substitute(primes, x, names)
 
-    if Copy:
-        return Primes
+    for x in names:
+        primes.pop(x)
+
+    if not in_place:
+        return primes
 
 
-def percolation(primes: dict, remove_constants: bool) -> dict:
+def percolation(primes: dict, remove_constants: bool) -> Dict[str, int]:
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
-    Use *RemoveConstants* to determine whether constants should be kept in the remaining network or whether you want to remove them.
+    Use *remove_constants* to determine whether constants should be kept in the remaining network or whether you want to remove them.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *RemoveConstants* (bool): whether constants should be kept
+        * *primes*: prime implicants
+        * *remove_constants*: whether constants should be kept
 
     **returns**:
-        * *Activities* (dict): names and values of variables that became constants due to the percolation
+        * *constants*: names and values of variables that became constants due to the percolation
 
     **example**::
 
         >>> percolate_constants(primes)
         >>> constants = percolate_constants(primes, True)
         >>> constants
-        {'Erk':0, 'Mapk':0, 'Raf':1}
+        {"Erk":0, "Mapk":0, "Raf":1}
     """
 
-    igraph = PyBoolNet.interaction_graphs.primes2igraph(primes)
+    igraph = primes2igraph(primes)
     constants = find_constants(primes)
-    fringe = PyBoolNet.Utility.DiGraphs.successors(igraph, constants)
+    fringe = successors(igraph, constants)
 
     while fringe:
         new_constants = {}
@@ -589,7 +577,7 @@ def percolation(primes: dict, remove_constants: bool) -> dict:
                 new_constants[name] = 0
 
         constants.update(new_constants)
-        fringe = set(PyBoolNet.Utility.DiGraphs.successors(igraph, new_constants)) - set(constants)
+        fringe = set(successors(igraph, new_constants)) - set(constants)
 
     if remove_constants:
         for name in constants: primes.pop(name)
@@ -600,56 +588,56 @@ def percolation(primes: dict, remove_constants: bool) -> dict:
 def percolate_and_keep_constants(primes: dict):
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
-    Keeps constants in the *Primes*.
+    Keeps constants in the *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *Constants* (dict): names and values of the constants
+        * *constants*: names and values of the constants
 
     **example**::
 
         >>> constants = percolate_and_keep_constants(primes)
         >>> constants
-        {'Erk':0, 'Mapk':0, 'Raf':1}
+        {"Erk":0, "Mapk":0, "Raf":1}
     """
 
     return percolation(primes, remove_constants=False)
 
 
-def percolate_and_remove_constants(primes: dict) -> dict:
+def percolate_and_remove_constants(primes: dict) -> Dict[str, int]:
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
-    Removes constants from the *Primes*.
+    Removes constants from the *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
 
     **returns**:
-        * *Constants* (dict): names and values of the constants
+        * *constants*: names and values of the constants
 
     **example**::
 
         >>> constants = percolate_and_remove_constants(primes)
         >>> constants
-        {'Erk':0, 'Mapk':0, 'Raf':1}
+        {"Erk":0, "Mapk":0, "Raf":1}
     """
 
     return percolation(primes, remove_constants=True)
 
 
-def input_combinations(Primes, Format="dict"):
+def input_combinations(primes: dict, format: str = "dict") -> Union[List[str], List[dict]]:
     """
-    A generator for all possible input combinations of *Primes*.
+    A generator for all possible input combinations of *primes*.
     Returns the empty dictionary if there are no inputs.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Format* (str): format of returned subspaces, "str" or "dict"
+        * *primes*: prime implicants
+        * *format*: format of returned subspaces, "str" or "dict"
 
     **returns**:
-        * *Subspaces* (str / dict): input combination in desired format
+        * *subspaces*: input combination in desired format
 
     **example**::
 
@@ -660,42 +648,43 @@ def input_combinations(Primes, Format="dict"):
         1--1--
     """
 
-    assert(Format in ["str", "dict"])
+    if not format in ["str", "dict"]:
+        log.error(f"format must be in ['str', 'dict']: format={format}")
+        sys.exit()
 
-    inputs = find_inputs(Primes)
+    inputs = find_inputs(primes)
 
+    subspaces = []
     if inputs:
-        if Format=="dict":
+        if format == "dict":
             for x in itertools.product(*len(inputs)*[[0,1]]):
-                yield dict(zip(inputs,x))
+                subspaces.append(dict(zip(inputs,x)))
 
         else:
             for x in itertools.product(*len(inputs)*[[0,1]]):
                 x = dict(zip(inputs,x))
-                x = PyBoolNet.state_transition_graphs.subspace2str(Primes, x)
-                yield x
+                x = subspace2str(primes, x)
+                subspaces.append(x)
 
-    else:
-        yield {}
-
+    return subspaces
 
 
-def active_primes(Primes, Subspace):
+def active_primes(primes: dict, subspace: Dict[str, int]) -> Dict[str, List[List[dict]]]:
     """
-    returns all primes that are active in, i.e., consistent with *Subspace*.
+    returns all primes that are active in, i.e., consistent with *subspace*.
     """
 
-    active_primes = dict((name,[[],[]]) for name in Primes)
+    active_primes = dict((name, [[], []]) for name in primes)
 
-    for name in Primes:
+    for name in primes:
         for v in [0,1]:
-            for p in Primes[name][v]:
-                if name in Subspace:
-                    if Subspace[name] == v:
-                        if PyBoolNet.Utility.Misc.dicts_are_consistent(p,Subspace):
+            for p in primes[name][v]:
+                if name in subspace:
+                    if subspace[name] == v:
+                        if dicts_are_consistent(p, subspace):
                             active_primes[name][v].append(dict(p))
                 else:
-                    if PyBoolNet.Utility.Misc.dicts_are_consistent(p,Subspace):
-                            active_primes[name][v].append(dict(p))
+                    if dicts_are_consistent(p, subspace):
+                        active_primes[name][v].append(dict(p))
 
     return active_primes

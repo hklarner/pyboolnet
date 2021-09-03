@@ -1,20 +1,11 @@
 
 
-## release notes for version 3.0.0 (June 2021)
- - renamed modules:
-    - Attractors -> attractors
-    - Basins -> basin_of_attraction
-    - Commitment -> commitment_diagrams
-    - FileExchange -> file_exchange
-    - InteractionGraphs -> interaction_graphs
-    - QuineMcCluskey -> boolean_normal_forms
-    - generators -> network_generators
-    - ModelChecking -> model_checking
-    - Phenotypes -> phenotypes
-    - PrimeImplicants -> prime_implicants
-    - StateTransitionGraphs -> state_transition_graphs
-    - TemporalLogic -> temporal_logic
-    - AspSolver -> trap_spaces
+## release notes for version 3.0.0 (September 2021)
+ - adds logging for control of output
+ - conforms to PEP-8 coding style
+ - uses type hints
+ - renamed modules
+ - adds release script for faster releases
     
 
 ## release notes for version 2.31.0 (March 2021)

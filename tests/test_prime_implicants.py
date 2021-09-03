@@ -9,7 +9,7 @@ import PyBoolNet
 def test_remove_variables(copy):
 
     primes = PyBoolNet.file_exchange.bnet2primes("v1, v1 \n v2, v1")
-    x = PyBoolNet.prime_implicants.remove_variables(primes, ["v2"], Copy=copy)
+    x = PyBoolNet.prime_implicants.remove_variables(primes, ["v2"], in_place=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]]}
@@ -59,7 +59,7 @@ def test_create_disjoint_union():
 def test_remove_variables(copy):
 
     primes = PyBoolNet.file_exchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = PyBoolNet.prime_implicants.remove_variables(primes, ["A", "B", "C"], Copy=copy)
+    x = PyBoolNet.prime_implicants.remove_variables(primes, ["A", "B", "C"], in_place=copy)
     answer = x if copy else primes
 
     assert PyBoolNet.prime_implicants.are_equal({}, answer)
@@ -69,7 +69,7 @@ def test_remove_variables(copy):
 def test_remove_variables_except(copy):
 
     primes = PyBoolNet.file_exchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = PyBoolNet.prime_implicants.remove_variables(Primes=primes, Names=[], Copy=copy)
+    x = PyBoolNet.prime_implicants.remove_variables(primes=primes, names=[], in_place=copy)
     answer = x if copy else primes
 
     assert PyBoolNet.prime_implicants.are_equal(answer, primes)
@@ -85,13 +85,13 @@ def test_remove_variables_except(copy):
     primes = PyBoolNet.file_exchange.bnet2primes("A, !C|B \n B, 0 \n C, 1")
 
     with pytest.raises(Exception):
-        PyBoolNet.prime_implicants.remove_variables(primes, ["B"], Copy=copy)
+        PyBoolNet.prime_implicants.remove_variables(primes, ["B"], in_place=copy)
 
 
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables1(copy):
     primes = PyBoolNet.file_exchange.bnet2primes("v1, v1 \n v2, v1")
-    x = PyBoolNet.prime_implicants.create_variables(primes, {"v1": "v2"}, Copy=copy)
+    x = PyBoolNet.prime_implicants.create_variables(primes, {"v1": "v2"}, in_place=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v2": 0}], [{"v2": 1}]], "v2": [[{"v1": 0}], [{"v1": 1}]]}
@@ -100,7 +100,7 @@ def test_create_variables1(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables2(copy):
     primes = PyBoolNet.file_exchange.bnet2primes("v1, v1 \n v2, v1")
-    x = PyBoolNet.prime_implicants.create_variables(primes, {"v1": lambda v2: not v2}, Copy=copy)
+    x = PyBoolNet.prime_implicants.create_variables(primes, {"v1": lambda v2: not v2}, in_place=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v2": 1}], [{"v2": 0}]], "v2": [[{"v1": 0}], [{"v1": 1}]]}
@@ -109,7 +109,7 @@ def test_create_variables2(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables3(copy):
     primes = PyBoolNet.file_exchange.bnet2primes("v1, v1 \n v2, v1")
-    x = PyBoolNet.prime_implicants.create_variables(primes, {"v3": "v2", "v4": lambda v3: v3}, Copy=copy)
+    x = PyBoolNet.prime_implicants.create_variables(primes, {"v3": "v2", "v4": lambda v3: v3}, in_place=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]],  "v2": [[{"v1": 0}], [{"v1": 1}]],  "v3": [[{"v2": 0}], [{"v2": 1}]],  "v4": [[{"v3": 0}], [{"v3": 1}]]} 
@@ -238,7 +238,7 @@ def test_percolation4b():
 
 def test_create_blinkers():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    PyBoolNet.prime_implicants.create_blinkers(Primes=primes, Names=["A"])
+    PyBoolNet.prime_implicants.create_blinkers(primes=primes, names=["A"])
     expected = primes = {"A": [[{"A": 1}], [{"A": 0}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
 
     assert PyBoolNet.prime_implicants.are_equal(expected, primes), str(primes) + " vs " + str(expected)

@@ -185,7 +185,7 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
     **example**::
 
         >>> primes = Repository.get_primes("raf")
-        >>> attrs = Attractors.compute_json(primes, update)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
         >>> compute_basins(attrs)
     """
 
@@ -256,7 +256,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 
     **example**::
 
-        >>> attrs = Attractors.compute_json(primes, update)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
         >>> compute_basins(attrs)
         >>> create_barplot(attrs, "barplot.pdf")
         created barplot.pdf
@@ -343,7 +343,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
 
     **example**::
 
-        >>> attrs = Attractors.compute_json(primes, update)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
         >>> compute_basins(attrs)
         >>> create_piechart(attrs, "piechart.pdf")
         created piechart.pdf

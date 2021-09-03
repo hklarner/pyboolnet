@@ -148,11 +148,11 @@ def digraph2dotlines(DiGraph, Indent=1):
 
 def digraph2dot(DiGraph, FnameDOT=None):
     """
-    Generates a *dot* file from *DiGraph* and saves it as *FnameDOT* or returns dot file as a string.
+    Generates a *dot* file from *DiGraph* and saves it as *fname_dot* or returns dot file as a string.
 
     **arguments**:
         * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
-        * *FnameDOT* (str): name of *dot* file or *None*
+        * *fname_dot* (str): name of *dot* file or *None*
 
     **returns**:
         * *FileDOT* (str): file as string if not *FnameDOT is None*, otherwise it returns *None*
@@ -185,52 +185,49 @@ def digraph2dot(DiGraph, FnameDOT=None):
     print("created %s" % FnameDOT)
 
 
-def dot2image(FnameDOT, FnameIMAGE, LayoutEngine):
+def dot2image(fname_dot: str, fname_image: str, layout_engine: str = "dot"):
     """
-    Creates an image file from a *dot* file using the Graphviz layout *LayoutEngine*.
+    Creates an image file from a *dot* file using the Graphviz layout *layout_engine*.
     The output format is detected automatically.
     Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
 
     **arguments**:
-        * *FnameDOT*: name of input *dot* file
-        * *FnameIMAGE*: name of output file
-        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
-
-    **returns**:
-        * *None*
+        * *fname_dot*: name of input *dot* file
+        * *fname_image*: name of output file
+        * *layout_engine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
 
     **example**::
 
           >>> dot2image("mapk.dot", "mapk.pdf")
     """
 
-    filetype = FnameIMAGE.split('.')[-1]
+    filetype = fname_image.split('.')[-1]
 
 
-    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, FnameDOT, "-o", FnameIMAGE]
+    cmd = [LAYOUT_ENGINES[layout_engine], "-T" + filetype, fname_dot, "-o", fname_image]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = proc.communicate()
 
-    if not (proc.returncode ==0) or not os.path.exists(FnameIMAGE):
+    if not (proc.returncode ==0) or not os.path.exists(fname_image):
         print(output)
         print(error)
-        print('"%s" finished with return code %i'%(LayoutEngine,proc.returncode))
+        print('"%s" finished with return code %i' % (layout_engine, proc.returncode))
         raise Exception
 
-    print("created %s"%FnameIMAGE)
+    print("created %s" % fname_image)
 
 
-def digraph2image(DiGraph, FnameIMAGE, LayoutEngine, Silent=False):
+def digraph2image(DiGraph, FnameIMAGE, LayoutEngine):
     """
-    Creates an image file from a *DiGraph* file using the Graphviz layout *LayoutEngine*.
+    Creates an image file from a *DiGraph* file using the Graphviz layout *layout_engine*.
     The output format is detected automatically.
     Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
 
     **arguments**:
         * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
-        * *FnameDOT*: name of input *dot* file
-        * *LayoutEngine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
-        * *FnameIMAGE*: name of output file
+        * *fname_dot*: name of input *dot* file
+        * *layout_engine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
+        * *fname_image*: name of output file
 
     **returns**:
         * *None*
@@ -514,7 +511,6 @@ def add_style_subgraphs(DiGraph, Subgraphs):
         if attr:
             subgraph.graph.update(attr)
 
-        # overwrite existing subgraphs
         for x in list(DiGraph.graph["subgraphs"]):
             if sorted(x.nodes()) == sorted(subgraph.nodes()):
                 DiGraph.graph["subgraphs"].remove(x)

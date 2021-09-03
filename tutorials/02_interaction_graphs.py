@@ -12,7 +12,7 @@ if __name__=="__main__":
     primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
     PyBoolNet.interaction_graphs.create_image(primes, "igraph.pdf")
 
-    PyBoolNet.interaction_graphs.create_image(primes, "igraph2.pdf", Styles=["anonymous", "sccs"])
+    PyBoolNet.interaction_graphs.create_image(primes, "igraph2.pdf", styles=["anonymous", "sccs"])
 
     # advances drawing
 

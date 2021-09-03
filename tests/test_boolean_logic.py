@@ -1,6 +1,5 @@
 
 
-import PyBoolNet
 
 
 def test_minimize_espresso1():

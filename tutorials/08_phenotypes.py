@@ -12,9 +12,9 @@ if __name__=="__main__":
 
     primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
     print(sorted(primes))
-    attrs = PyBoolNet.attractors.compute_json(primes, "asynchronous")
+    attrs = PyBoolNet.attractors.compute_attractor_json(primes, "asynchronous")
     markers = ["WOX", "MGP"]
-    phenos = PyBoolNet.phenotypes.compute_json(attrs, markers, FnameJson="phenos.json")
+    phenos = PyBoolNet.phenotypes.compute_attractor_json(attrs, markers, FnameJson="phenos.json")
 
 
     # inspect marker patterns

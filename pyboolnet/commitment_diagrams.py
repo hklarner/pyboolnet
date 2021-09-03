@@ -50,7 +50,7 @@ def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, S
 
     **example**::
 
-        >>> attrs = AttrJson.compute_json(primes, update)
+        >>> attrs = AttrJson.compute_attractor_json(primes, update)
         >>> diagram = Commitment.compute_diagram(attrs)
     """
 
@@ -353,7 +353,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
     **example**::
 
-        >>> attrs = Attractors.compute_json(primes, update)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
         >>> Commitment.compute_diagram(attrs)
         >>> diagram2image(diagram, "diagram.pdf")
         >>> diagram2image(diagram, "basins.pdf", "attractors.pdf")
@@ -507,7 +507,7 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
     **example**::
 
         >>> primes = Repository.get_primes("xiao_wnt5a")
-        >>> attrs = Attractors.compute_json(primes, update)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
         >>> diagram = compute_diagram(attrs)
         >>> create_piechart(diagram, "pie.pdf")
         created pie.pdf

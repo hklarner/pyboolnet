@@ -7,12 +7,9 @@ import networkx
 
 from typing import List, Union
 
-import PyBoolNet.file_exchange
-import PyBoolNet.trap_spaces
-import PyBoolNet.Utility.Misc
-import PyBoolNet.Utility.DiGraphs
+from pyboolnet.misc import find_command
 
-CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
+CMD_DOT = find_command("dot")
 
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
 VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],

@@ -1,23 +1,28 @@
 
 
+import logging
+import sys
 from typing import List
 import configparser
 import json
 import math
 import os
+import ast
 
-import PyBoolNet
+ROOT_DIR = os.path.join(os.path.dirname(__file__))
+EXECUTABLES = _load_cfg()
 
-COLOR_MAP = {"red1": "#df3e47", "green1": "#4bb93f", "blue1": "#7463b3", "yellow1": "#eecf1a", "pink1": "#db42a6", "green2": "#4cbd38", "red2": "#df3d47", "yellow2": "#efce1a"}
-COLORS = ["dodgerblue3", "firebrick2", "chartreuse3", "gold1", "aquamarine2", "darkorchid2"]
-UPDATES = ["synchronous", "asynchronous", "mixed"]
-GRAPHVIZ_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
-BASE = os.path.join(os.path.dirname(PyBoolNet.__file__))
+log = logging.getLogger(__name__)
+
+
+def read_txt_version() -> str:
+    with open("version.txt") as fp:
+        pass
 
 
 def _load_cfg():
     config = configparser.SafeConfigParser()
-    settings_file = os.path.join(BASE, "Dependencies", "settings.cfg")
+    settings_file = os.path.join(ROOT_DIR, "Dependencies", "settings.cfg")
 
     if not os.path.exists(settings_file):
         execs = dict(
@@ -28,15 +33,26 @@ def _load_cfg():
     else:
         config.read(settings_file)
         execs = {n: config.get("Executables", n) for n in config.options("Executables")}
-    
+
     return execs
-
-
-EXECUTABLES = _load_cfg()
 
 
 def os_is_windows() -> bool:
     return os.name == 'nt'
+
+
+def read_nusmv_keywords() -> List[str]:
+    fname = os.path.join(ROOT_DIR, "dependencies", "nusmvkeywords.json")
+    with open(fname) as fp:
+        return ast.literal_eval(fp.read())
+
+
+def read_nusmv_keywords_or_exit() -> List[str]:
+    try:
+        return read_nusmv_keywords()
+    except Exception as e:
+        log.error(f"could not read numsv keywords: exception={e}")
+        sys.exit()
 
 
 def find_command(name) -> str:
@@ -48,19 +64,19 @@ def find_command(name) -> str:
         if cmd.startswith(":"):
             cmd = cmd[1:]
         else:
-            cmd = os.path.normpath(os.path.join(BASE, "Dependencies", cmd))
+            cmd = os.path.normpath(os.path.join(ROOT_DIR, "Dependencies", cmd))
     else:
         cmd = name
-    return cmd 
+    return cmd
 
 
-def dicts_are_consistent(d1: dict, d2: dict) -> bool:
+def dicts_are_consistent(dict1: dict, dict2: dict) -> bool:
     """
     checks if all items whose keys are in (d1 and d2) are equal.
     returns bool.
     """
-    
-    return all(d1[k] == d2[k] for k in set(d1).intersection(set(d2)))
+
+    return all(dict1[k] == dict2[k] for k in set(dict1).intersection(set(dict2)))
 
 
 def is_supdict(X, Y):
@@ -195,7 +211,7 @@ def copy_json_data(Data):
 
         **example**::
 
-                >>> data = Attractors.compute_json(primes, update)
+                >>> data = Attractors.compute_attractor_json(primes, update)
                 >>> data2 = copy_json_data(data)
         """
     

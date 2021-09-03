@@ -3,58 +3,56 @@
 import datetime
 import itertools
 import logging
+import sys
 from functools import partial
-from typing import Optional, Union, List, Tuple
+from typing import Optional, Union, List, Tuple, Dict
 
-from PyBoolNet.file_exchange import primes2bnet
-from PyBoolNet.Utility.Misc import open_json_data
-from PyBoolNet.Utility.Misc import save_json_data
-from PyBoolNet.prime_implicants import copy
-from PyBoolNet.state_transition_graphs import UPDATE_STRATEGIES
-from PyBoolNet.state_transition_graphs import random_state
-from PyBoolNet.state_transition_graphs import state2dict
-from PyBoolNet.state_transition_graphs import state2str
-from PyBoolNet.state_transition_graphs import subspace2str
-from PyBoolNet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
-from PyBoolNet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
-from PyBoolNet.temporal_logic import subspace2proposition
-from PyBoolNet.trap_spaces import trap_spaces
-from PyBoolNet.model_checking import check_primes
-from PyBoolNet.prime_implicants import create_constants
-from PyBoolNet.prime_implicants import percolate_and_remove_constants
-from PyBoolNet.temporal_logic import exists_finally_one_of_subspaces
-from PyBoolNet.temporal_logic import exists_finally_unsteady_components
-from PyBoolNet.interaction_graphs import primes2igraph
-from PyBoolNet.Utility.DiGraphs import digraph2condensationgraph
-from PyBoolNet.model_checking import check_primes_with_counterexample
-from PyBoolNet.Utility.Misc import merge_dicts
-from PyBoolNet.Utility.DiGraphs import ancestors
-from PyBoolNet.prime_implicants import remove_all_variables_except
-from PyBoolNet.state_transition_graphs import random_state
-from PyBoolNet.prime_implicants import percolate_and_keep_constants
+from pyboolnet.file_exchange import primes2bnet
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.model_checking import check_primes
+from pyboolnet.model_checking import check_primes_with_counterexample
+from pyboolnet.prime_implicants import copy
+from pyboolnet.prime_implicants import create_constants
+from pyboolnet.prime_implicants import percolate_and_keep_constants
+from pyboolnet.prime_implicants import percolate_and_remove_constants
+from pyboolnet.prime_implicants import remove_all_variables_except
+from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
+from pyboolnet.state_transition_graphs import random_state
+from pyboolnet.state_transition_graphs import state2dict
+from pyboolnet.state_transition_graphs import state2str
+from pyboolnet.state_transition_graphs import subspace2str
+from pyboolnet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
+from pyboolnet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
+from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
+from pyboolnet.temporal_logic import exists_finally_unsteady_components
+from pyboolnet.temporal_logic import subspace2proposition
+from pyboolnet.trap_spaces import trap_spaces
+from pyboolnet.utility.digraphs import ancestors
+from pyboolnet.utility.digraphs import digraph2condensationgraph
+from pyboolnet.utility.misc import merge_dicts
+from pyboolnet.utility.misc import open_json_data
+from pyboolnet.utility.misc import save_json_data
 
 log = logging.getLogger(__file__)
 
 
-def compute_json(primes: dict, update: str, fname_json: Optional[str] = None, check_completeness: bool = True, check_faithfulness: bool = True, check_univocality: bool = True, max_output: int = 1000) -> dict:
+def compute_attractor_json(primes: dict, update: str, fname_json: Optional[str] = None, check_completeness: bool = True, check_faithfulness: bool = True, check_univocality: bool = True, max_output: int = 1000) -> dict:
     """
     computes all attractors of *primes* including information about completeness, univocality, faithfulness
 
     **arguments**:
       * *primes*: prime implicants
       * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-      * *fname_json*: description
-      * *CheckCompleteness*: description
-      * *check_faithfulness*: description
-      * *check_univocality*: description
+      * *fname_json*:
+      * *CheckCompleteness*:
+      * *check_faithfulness*:
+      * *check_univocality*:
 
     **returns**:
         * *attractors_json*: json attractor data
 
     **example**::
-
-      >>> attrs = compute_json(primes, update, "attrs.json")
-      created attrs.json
+      >>> attrs = compute_attractor_json(primes, update, "attrs.json")
     """
 
     assert update in UPDATE_STRATEGIES
@@ -142,9 +140,7 @@ def write_attractors_json(attractors_json: dict, fname_json: str):
         * *fname_json*: file name
 
     **example**::
-
         >>> save_attractor(attrs, "attrs.json")
-        created attrs.json
     """
 
     save_json_data(data=attractors_json, fname=fname_json)
@@ -161,7 +157,6 @@ def read_attractors_json(fname: str) -> dict:
         * *attractors_json*: json attractor data, see :ref:`attractors_compute_json`
 
     **example**::
-
         >>> attrs = read_attractors_json("attrs.json")
     """
 
@@ -170,7 +165,7 @@ def read_attractors_json(fname: str) -> dict:
     return attrs
 
 
-def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initial_state: Union[dict, str] = dict(), length: int = 0, attempts: int = 10) -> dict:
+def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initial_state: Union[dict, str] = {}, length: int = 0, attempts: int = 10) -> dict:
     """
     Attempts to find a state inside an attractor by the "long random walk" method,
     see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.2 for a formal definition.
@@ -200,9 +195,8 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
         * raises *Exception* if no attractor state is found
 
     **example**::
-
             >>> find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous")
-            {'v1':1, 'v2':1, 'v3':1}
+            {"v1": 1, "v2": 1, "v3": 1}
     """
 
     if type(initial_state) == str:
@@ -223,7 +217,8 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
     elif update == "mixed":
         transition = partial(random_successor_mixed, primes)
     else:
-        raise ValueError(f"unknown update strategy: update={update}")
+        log.error(f"unknown update strategy: update={update}")
+        sys.exit()
 
     log.info("find_attractor_state_by_randomwalk_and_ctl(..)")
     log.info(f"len(primes)={len(primes)}, update={update}, length={length}, attempts={attempts}")
@@ -248,7 +243,6 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
 
         if check_primes(primes, update, init, spec):
             log.info("is attractor state")
-
             return current_state
 
         trials += 1
@@ -259,16 +253,16 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
     raise Exception
 
 
-def univocality(primes: dict, update: str, trap_space: dict) -> bool:
+def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool:
     """
-    The model checking and random-walk-based method for deciding whether *Trapspace* is univocal,
+    The model checking and random-walk-based method for deciding whether *trap_space* is univocal,
     i.e., whether there is a unique attractor contained in it,
-    in the state transition graph defined by *Primes* and *Update*.
+    in the state transition graph defined by *primes* and *update*.
     The approach is described and discussed in :ref:`Klarner2015(a) <klarner2015trap>`.
-    The function performs two steps: first it searches for a state that belongs to an attractor inside of *Trapspace* using
+    The function performs two steps: first it searches for a state that belongs to an attractor inside of *trap_space* using
     the random-walk-approach and the function :ref:`random_walk <random_walk>`,
     then it uses CTL model checking, specifically the pattern :ref:`AGEF_oneof_subspaces <AGEF_oneof_subspaces>`,
-    to decide if the attractor is unique inside *Trapspace*.
+    to decide if the attractor is unique inside *trap_space*.
 
     .. note::
         In the (very unlikely) case that the random walk does not end in an attractor state an exception will be raised.
@@ -281,16 +275,16 @@ def univocality(primes: dict, update: str, trap_space: dict) -> bool:
         A typical use case is to decide whether a minimal trap space is univocal.
 
     .. note::
-        *Trapspace* is in fact not required to be a trap set, i.e., it may be an arbitrary subspace.
+        *trap_space* is in fact not required to be a trap set, i.e., it may be an arbitrary subspace.
         If it is an arbitrary subspace then the involved variables are artificially fixed to be constant.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *trap_space* (str / dict): a subspace
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *trap_space*: a subspace
 
     **returns**:
-        * *Answer* (bool): whether *Trapspace* is univocal in the STG defined by *Primes* and *Update*
+        * *answer* (bool): whether *trap_space* is univocal in the STG defined by *primes* and *update*
 
     **example**::
 
@@ -317,11 +311,11 @@ def univocality(primes: dict, update: str, trap_space: dict) -> bool:
     return answer
 
 
-def faithfulness(primes: dict, update: str, trap_space: dict) -> bool:
+def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> bool:
     """
-    The model checking approach for deciding whether *Trapspace* is faithful,
+    The model checking approach for deciding whether *trap_space* is faithful,
     i.e., whether all free variables oscillate in all of the attractors contained in it,
-    in the state transition graph defined by *Primes* and *Update*.
+    in the state transition graph defined by *primes* and *update*.
     The approach is described and discussed in :ref:`Klarner2015(a) <klarner2015trap>`.
     It is decided by a single CTL query of the pattern :ref:`EF_all_unsteady <EF_all_unsteady>`
     and the random-walk-approach of the function :ref:`random_walk <random_walk>`.
@@ -337,16 +331,16 @@ def faithfulness(primes: dict, update: str, trap_space: dict) -> bool:
         A typical use case is to decide whether a minimal trap space is faithful.
 
     .. note::
-        *Trapspace* is in fact not required to be a trap set, i.e., it may be an arbitrary subspace.
+        *trap_space* is in fact not required to be a trap set, i.e., it may be an arbitrary subspace.
         If it is an arbitrary subspace then the involved variables are artificially fixed to be constant.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspace* (str / dict): a subspace
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *trap_space*: a subspace
 
     **returns**:
-        * *Answer* (bool): whether *Trapspace* is faithful in the STG defined by *Primes* and *Update*
+        * *answer*: whether *trap_space* is faithful in the STG defined by *primes* and *update*
 
     **example**::
 
@@ -397,11 +391,11 @@ def completeness(primes: dict, update: str, max_output: int = 1000) -> bool:
         Each line that corresponds to a line of the pseudo code of Figure 3 in :ref:`Klarner2015(a) <klarner2015trap>` is marked by a comment.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **returns**:
-        * *Answer* (bool): whether *Subspaces* is complete in the STG defined by *Primes* and *Update*,
+        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
 
     **example**::
 
@@ -412,19 +406,19 @@ def completeness(primes: dict, update: str, max_output: int = 1000) -> bool:
     return iterative_completeness_algorithm(primes=primes, update=update, compute_counterexample=False, max_output=max_output)
 
 
-def univocality_with_counterexample(primes: dict, update: str, trap_space: dict) -> (bool, List[dict]):
+def univocality_with_counterexample(primes: dict, update: str, trap_space: Union[dict, str]) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`univocality` but also returns a counterexample which is *None* if it does not exist.
     A counterexample of a univocality test are two states that belong to different attractors.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspace* (str / dict): a subspace
+        * *primes*: prime implicants
+        * *update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *trap_space* (str / dict): a subspace
 
     **returns**:
-        * *Answer* (bool): whether *Trapspace* is univocal in the STG defined by *Primes* and *Update*
-        * *CounterExample* (dict): two states that belong to different attractors or *None* if no counterexample exists
+        * *answer*: whether *trap_space* is univocal in the STG defined by *primes* and *update*
+        * *counter_example*: two states that belong to different attractors or *None* if no counterexample exists
 
     **example**::
 
@@ -459,16 +453,16 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: dict)
 def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`faithfulness` but also returns a counterexample which is *None* if it does not exist.
-    A counterexample of a faithful test is a state that belongs to an attractor which has more fixed variables than there are in *Trapspace*.
+    A counterexample of a faithful test is a state that belongs to an attractor which has more fixed variables than there are in *trap_space*.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspace* (str / dict): a subspace
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *trap_space*: a subspace
 
     **returns**:
-        * *Answer* (bool): whether *Trapspace* is faithful in the STG defined by *Primes* and *Update*
-        * *CounterExample* (dict): a state that belongs to an attractor that does not oscillate in all free variables or *None* if no counterexample exists
+        * *answer*: whether *trap_space* is faithful in the STG defined by *primes* and *update*
+        * *counter_example*: a state that belongs to an attractor that does not oscillate in all free variables or *None* if no counterexample exists
 
     **example**::
 
@@ -507,15 +501,15 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
 def completeness_with_counterexample(primes: dict, update: str, max_output: int = 1000) -> (bool, List[dict]):
     """
     Performs the same steps as :ref:`completeness` but also returns a counterexample which is *None* if it does not exist.
-    A counterexample of a completeness test is a state that can not reach one of the minimal trap spaces of *Primes*.
+    A counterexample of a completeness test is a state that can not reach one of the minimal trap spaces of *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **returns**:
-        * *Answer* (bool): whether *Subspaces* is complete in the STG defined by *Primes* and *Update*,
-        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *Primes* or *None* if no counterexample exists
+        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
+        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
@@ -536,13 +530,13 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
     "Approximating attractors of Boolean networks by iterative CTL model checking", Klarner and Siebert 2015.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *ComputeCounterexample* (bool): whether to compute a counterexample
 
     **returns**:
-        * *Answer* (bool): whether *Subspaces* is complete in the STG defined by *Primes* and *Update*,
-        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *Primes* or *None* if no counterexample exists
+        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
+        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
@@ -625,107 +619,106 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
         return True
 
 
-# todo: refactor using AttrJson
-def create_attractor_report(Primes, FnameTXT=None):
+def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> str:
     """
-    Creates an attractor report for the network defined by *Primes*.
+    Creates an attractor report for the network defined by *primes*.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *FnameTXT* (str): the name of the report file or *None*
+        * *primes*: prime implicants
+        * *fname_txt*: the name of the report file or *None*
 
     **returns**:
-        * *FnameTXT* (str): *FnameTXT=None* or *None* if *FnameTXT* is given
+        * *txt*: attractor report as text
 
     **example**::
          >>> create_attractor_report(primes, "report.txt")
     """
 
-    mints = PyBoolNet.trap_spaces.trap_spaces(Primes, "min")
-    steady = sorted([x for x in mints if len(x)==len(Primes)])
-    cyclic = sorted([x for x in mints if len(x)<len(Primes)])
+    mints = trap_spaces(primes, "min")
+    steady = sorted([x for x in mints if len(x) == len(primes)])
+    cyclic = sorted([x for x in mints if len(x) < len(primes)])
+    w = max([12, len(primes)])
 
-    lines = ["",""]
-    lines+= ["### Attractor Report"]
-    lines+= [" * created on %s using PyBoolNet, see https://github.com/hklarner/PyBoolNet"%datetime.date.today().strftime('%d. %b. %Y')]
-    lines+= [""]
+    lines = ["", ""]
+    lines += ["### Attractor Report"]
+    lines += [f" * created on {datetime.date.today().strftime('%d. %b. %Y')} using PyBoolNet, see https://github.com/hklarner/PyBoolNet"]
+    lines += [""]
 
-    lines+= ["### Steady States"]
+    lines += ["### Steady States"]
     if not steady:
-        lines+= [" * there are no steady states"]
+        lines += [" * there are no steady states"]
     else:
-        w = max([12,len(Primes)])
-        lines+= ["| "+"steady state".ljust(w)+" |"]
-        lines+= ["| "+ w*"-" +" | "]
+        lines += ["| " + "steady state".ljust(w) + " |"]
+        lines += ["| " + w*"-" + " | "]
 
     for x in steady:
-        lines+= ["| " + PyBoolNet.state_transition_graphs.subspace2str(Primes, x).ljust(w) + " |"]
-    lines+= [""]
+        lines += ["| " + subspace2str(primes, x).ljust(w) + " |"]
 
-    width = max([len(Primes), 14])
-    spacer1 = lambda x: x.ljust(width)
-
-    lines+= ["### Asynchronous STG"]
-    answer = completeness(Primes, "asynchronous")
-    lines+= [" * completeness: %s"%answer]
+    lines += [""]
+    lines += ["### Asynchronous STG"]
+    answer = completeness(primes, "asynchronous")
+    lines += [f" * completeness: {answer}"]
 
     if not cyclic:
-        lines+= [" * there are only steady states"]
+        lines += [" * there are only steady states"]
     else:
-        lines+= [""]
-        line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
-        lines+= [line]
-        lines+= ["| "+ width*"-" +" | --------- | --------- |"]
+        lines += [""]
+        line = "| "+"trapspace".ljust(w) + " | univocal  | faithful  |"
+        lines += [line]
+        lines += ["| " + w*"-" + " | --------- | --------- |"]
 
     for x in cyclic:
-        line =  "| "+ ("%s" % PyBoolNet.state_transition_graphs.subspace2str(Primes, x)).ljust(width)
-        line+= " | "+ ("%s"%univocality(Primes, "asynchronous", x)).ljust(9)
-        line+= " | "+ ("%s"%faithfulness(Primes, "asynchronous", x)).ljust(9)+" |"
-        lines+= [line]
-    lines+=[""]
+        line = "| " + subspace2str(primes, x).ljust(w)
+        line += " | " + str(univocality(primes, "asynchronous", x)).ljust(9)
+        line += " | " + str(faithfulness(primes, "asynchronous", x)).ljust(9) + " |"
+        lines += [line]
 
-    lines+= ["### Synchronous STG"]
-    answer = completeness(Primes, "synchronous")
-    lines+= [" * completeness: %s"%answer]
+    lines += [""]
+
+    lines += ["### Synchronous STG"]
+    lines += [f" * completeness: {completeness(primes, 'synchronous')}"]
 
     if not cyclic:
-        lines+= [" * there are only steady states"]
+        lines += [" * there are only steady states"]
     else:
-        lines+= [""]
-        line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
-        lines+= [line]
-        lines+= ["| "+ width*"-" +" | --------- | --------- |"]
+        lines += [""]
+        line = "| " + "trapspace".ljust(w) + " | univocal  | faithful  |"
+        lines += [line]
+        lines += ["| " + w*"-" + "  | --------- | --------- |"]
 
     for x in cyclic:
-        line =  "| "+ ("%s" % PyBoolNet.state_transition_graphs.subspace2str(Primes, x)).ljust(width)
-        line+= " | "+ ("%s"%univocality(Primes, "synchronous", x)).ljust(9)
-        line+= " | "+ ("%s"%faithfulness(Primes, "synchronous", x)).ljust(9)+" |"
-        lines+= [line]
-    lines+=[""]
+        line = "| " + (subspace2str(primes, x)).ljust(w)
+        line += " | " + str(univocality(primes, "synchronous", x)).ljust(9)
+        line += " | " + str(faithfulness(primes, "synchronous", x)).ljust(9) + " |"
+        lines += [line]
 
+    lines += [""]
 
     bnet = []
 
-    for row in primes2bnet(primes=Primes).split("\n"):
-        if not row.strip(): continue
+    for row in primes2bnet(primes=primes).split("\n"):
+        row = row.strip()
+        if not row:
+            continue
+
         t, f = row.split(",")
-        bnet.append((t.strip(),f.strip()))
+        bnet.append((t.strip(), f.strip()))
 
-    t_width = max([7]+[len(x) for x,_ in bnet])
-    f_width = max([7]+[len(x) for _,x in bnet])
-    lines+= ["### Network"]
-    t,f = bnet.pop(0)
-    lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
-    lines+= ["| "+t_width*"-"+" | "+f_width*"-"+" |"]
-    for t,f in bnet:
-        lines+= ["| "+t.ljust(t_width)+" | "+f.ljust(f_width)+" |"]
+    t_width = max([7] + [len(x) for x, _ in bnet])
+    f_width = max([7] + [len(x) for _, x in bnet])
+    lines += ["### Network"]
+    t, f = bnet.pop(0)
+    lines += ["| " + t.ljust(t_width) + " | " + f.ljust(f_width) + " |"]
+    lines += ["| " + t_width*"-" + " | " + f_width * "-" + " |"]
+    for t, f in bnet:
+        lines += ["| " + t.ljust(t_width) + " | " + f.ljust(f_width) + " |"]
 
-    lines+=["",""]
+    lines += ["", ""]
 
-    if FnameTXT:
-        with open(FnameTXT, "w") as f:
+    if fname_txt:
+        with open(fname_txt, "w") as f:
             f.writelines("\n".join(lines))
-            print("created %s"%FnameTXT)
+            log.info(f"created {fname_txt}")
     else:
         return "\n".join(lines)
 
@@ -795,12 +788,12 @@ def completeness_naive(Primes, Update, TrapSpaces):
         If there are arbitrary subspaces then the semantics of the query is such that it checks whether each attractor *intersects* one of the subspaces.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *Trapspaces* (list): list of subspaces in string or dict representation
 
     **returns**:
-        * *Answer* (bool): whether *Subspaces* is complete in the STG defined by *Primes* and *Update*,
+        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
 
     **example**::
 
@@ -838,13 +831,13 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
         If there are arbitrary subspaces then the semantics of the query is such that it checks whether each attractor *intersects* one of the subspaces.
 
     **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *Trapspaces* (list): list of subspaces in string or dict representation
 
     **returns**:
-        * *Answer* (bool): whether *Subspaces* is complete in the STG defined by *Primes* and *Update*,
-        * *CounterExample* (dict): a state from which none of the *Subspaces* is reachable (if *Answer* is *False*)
+        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
+        * *counter_example*: a state from which none of the *Subspaces* is reachable (if *Answer* is *False*)
 
     **example**::
 

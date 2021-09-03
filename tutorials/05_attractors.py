@@ -26,7 +26,7 @@ if __name__=="__main__":
 
     # model checking based attractor detection
 
-    attrs = PyBoolNet.attractors.compute_json(primes, "asynchronous", fname_json="attrs.json")
+    attrs = PyBoolNet.attractors.compute_attractor_json(primes, "asynchronous", fname_json="attrs.json")
 
     print(attrs["is_complete"])
     for x in attrs["attractors"]:

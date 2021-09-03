@@ -20,7 +20,7 @@ def test_bnet2primes_operatorbinding():
     fname_in = os.path.join(FILES_IN,  "fileexchange_operatorbinding.bnet")
     fname_out = os.path.join(FILES_OUT, "fileexchange_operatorbinding.primes")
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
     names = "abcde"
     results = []
     for x in names:
@@ -35,7 +35,7 @@ def test_bnet2primes_results():
     fname_in = os.path.join(FILES_IN,  "fileexchange_feedback.bnet")
     fname_out = os.path.join(FILES_OUT, "fileexchange_feedback.primes")
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
     primes_expected = {"v1": [[{"v2": 0}], [{"v2": 1}]], "v2": [[{"v2": 0}, {"v1": 1}], [{"v1": 0, "v2": 1}]]}
 
     assert PyBoolNet.prime_implicants.are_equal(primes, primes_expected)
@@ -45,7 +45,7 @@ def test_bnet2primes_empty():
     fname_in = os.path.join(FILES_IN,  "fileexchange_empty.bnet")
     fname_out = os.path.join(FILES_OUT, "fileexchange_empty.primes")
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
     primes_expected = {}
 
     assert PyBoolNet.prime_implicants.are_equal(primes, primes_expected), str(primes)
@@ -55,7 +55,7 @@ def test_bnet2primes_missing_inputs():
     fname_in = os.path.join(FILES_IN,  "fileexchange_missing_inputs.bnet")
     fname_out = os.path.join(FILES_OUT, "fileexchange_missing_inputs.primes")
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
     primes_expected = {"B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
 
     assert PyBoolNet.prime_implicants.are_equal(primes, primes_expected), str(primes)
@@ -65,7 +65,7 @@ def test_bnet2primes_constants():
     fname_in = os.path.join(FILES_IN,  "fileexchange_constants.bnet")
     fname_out = os.path.join(FILES_OUT, "fileexchange_constants.primes")
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
     primes_expected = {"A": [[{}], []], "B": [[], [{}]]}
 
     assert PyBoolNet.prime_implicants.are_equal(primes, primes_expected), str(primes)
@@ -78,14 +78,14 @@ def test_bnet2primes_a():
 
     expected = {"A": [[{}], []], "B": [[], [{}]]}
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in)
     assert PyBoolNet.prime_implicants.are_equal(primes, expected)
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=file_in)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=file_in)
 
     assert PyBoolNet.prime_implicants.are_equal(primes, expected)
 
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     assert PyBoolNet.prime_implicants.are_equal(primes, expected)
 
@@ -100,7 +100,7 @@ def test_primes2bnet_b():
 def test_read_primes():
     fname = os.path.join(FILES_IN, "fileexchange_missing_inputs.primes")
 
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname)
     primes_expected = {"B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
     assert PyBoolNet.prime_implicants.are_equal(primes, primes_expected), str(primes)
 
@@ -109,8 +109,8 @@ def test_read_write_primes():
     fname = os.path.join(FILES_OUT, "fileexchange_read_write.primes")
 
     primes_write = {"B": [[{}], []], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
-    PyBoolNet.file_exchange.write_primes(Primes=primes_write, FnamePRIMES=fname)
-    primes_read = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname)
+    PyBoolNet.file_exchange.write_primes(primes=primes_write, fname_json=fname)
+    primes_read = PyBoolNet.file_exchange.read_primes(fname_json=fname)
 
     assert PyBoolNet.prime_implicants.are_equal(primes_read, primes_write)
 
@@ -118,13 +118,13 @@ def test_read_write_primes():
 def test_primes2genysis():
     fname = os.path.join(FILES_OUT, "fileexchange_primes2genysis.genysis")
     primes = {"B": [[{}], []], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
-    PyBoolNet.file_exchange.primes2genysis(Primes=primes, FnameGENYSIS=fname)
+    PyBoolNet.file_exchange.primes2genysis(primes=primes, fname_genysis=fname)
 
 
 def test_primes2bns():
     fname = os.path.join(FILES_OUT, "fileexchange_primes2bns.bns")
     primes = {"B": [[{}], []], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
-    PyBoolNet.file_exchange.primes2bns(Primes=primes, FnameBNS=fname)
+    PyBoolNet.file_exchange.primes2bns(primes=primes, fname_bns=fname)
 
 
 def test_primes2smv():

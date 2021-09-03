@@ -66,7 +66,7 @@ def test_trapspaces_within_subspace():
 
 def test_trap_spaces_piped1():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="min")
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -77,7 +77,7 @@ def test_trap_spaces_piped1():
 
 def test_trap_spaces_piped2():
     fname_in = os.path.join(FILES_IN, "trapspaces_tsfree.primes")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="min")
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -88,7 +88,7 @@ def test_trap_spaces_piped2():
 def test_trap_spaces_tsfree():
     fname_in = os.path.join(FILES_IN, "trapspaces_tsfree.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_min.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="min", fname_asp=fname_out)
 
@@ -96,7 +96,7 @@ def test_trap_spaces_tsfree():
 
     fname_in = os.path.join(FILES_IN, "trapspaces_tsfree.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_all.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="all", fname_asp=fname_out)
 
@@ -104,7 +104,7 @@ def test_trap_spaces_tsfree():
 
     fname_in = os.path.join(FILES_IN, "trapspaces_tsfree.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_tsfree_max.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="max", fname_asp=fname_out)
 
@@ -114,7 +114,7 @@ def test_trap_spaces_tsfree():
 def test_trap_spaces_positive_feedback_min():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_min.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="min", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -126,7 +126,7 @@ def test_trap_spaces_positive_feedback_min():
 def test_trap_spaces_positive_feedback_max():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_max.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="max", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -138,7 +138,7 @@ def test_trap_spaces_positive_feedback_max():
 def test_trap_spaces_positive_feedback_all():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_all.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces(primes=primes, option="all", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -149,7 +149,7 @@ def test_trap_spaces_positive_feedback_all():
 def test_trap_spaces_positive_feedback_bounds1():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds1.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces_bounded(Primes=primes, Type="all", Bounds=(1, 2), FnameASP=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
@@ -160,7 +160,7 @@ def test_trap_spaces_positive_feedback_bounds1():
 def test_trap_spaces_positive_feedback_bounds2():
     fname_in = os.path.join(FILES_IN, "trapspaces_posfeedback.primes")
     fname_out = os.path.join(FILES_OUT, "trapspaces_posfeedback_bounds2.asp")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     tspaces = PyBoolNet.trap_spaces.trap_spaces_bounded(Primes=primes, Type="max", Bounds=(0, 100), FnameASP=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))

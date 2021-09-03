@@ -465,8 +465,8 @@ def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False
 
     **example**::
 
-        >>> attrs = Attractors.compute_json(primes, update)
-        >>> phenos = Phenotypes.compute_json(attrs, markers)
+        >>> attrs = Attractors.compute_attractor_json(primes, update)
+        >>> phenos = Phenotypes.compute_attractor_json(attrs, markers)
         >>> diagram = Phenotypes.create_diagram(phenos)
         >>> Phenotypes.create_piechart(diagram, "piechart.pdf")
     """

@@ -114,7 +114,7 @@ def test_enumerate_states():
 def test_random_mixed_transition():
     fname_in = os.path.join(FILES_IN, "randomnet.bnet")
     fname_out = os.path.join(FILES_OUT, "randomnet.primes")
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     state = dict([("Gene%i" % (i+1), i % 2) for i in range(20)])
     PyBoolNet.state_transition_graphs.random_successor_mixed(primes, state)
@@ -123,7 +123,7 @@ def test_random_mixed_transition():
 def test_successors_mixed():
     fname_in = os.path.join(FILES_IN, "randomnet.bnet")
     fname_out = os.path.join(FILES_OUT, "randomnet.primes")
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     state = dict([("Gene%i" % (i + 1), i % 2) for i in range(20)])
     PyBoolNet.state_transition_graphs.successors_mixed(primes, state)
@@ -132,7 +132,7 @@ def test_successors_mixed():
 def test_successors_asynchronous():
     fname_in = os.path.join(FILES_IN, "randomnet.bnet")
     fname_out = os.path.join(FILES_OUT, "randomnet.primes")
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     state = dict([("Gene%i" % (i+1), i % 2) for i in range(20)])
     PyBoolNet.state_transition_graphs.successors_asynchronous(primes, state)
@@ -141,7 +141,7 @@ def test_successors_asynchronous():
 def test_successor_synchronous():
     fname_in = os.path.join(FILES_IN, "randomnet.bnet")
     fname_out = os.path.join(FILES_OUT, "randomnet.primes")
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     state = dict([("Gene%i" % (i+1), i % 2) for i in range(20)])
     PyBoolNet.state_transition_graphs.successor_synchronous(primes, state)
@@ -150,7 +150,7 @@ def test_successor_synchronous():
 def test_best_first_reachability():
     fname_in = os.path.join(FILES_IN, "randomnet.bnet")
     fname_out = os.path.join(FILES_OUT, "randomnet.primes")
-    primes = PyBoolNet.file_exchange.bnet2primes(BNET=fname_in, FnamePRIMES=fname_out)
+    primes = PyBoolNet.file_exchange.bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     initial_space = dict([("Gene%i" % (i+1), i % 2) for i in range(20)])
     goal_space = {"Gene2": 0, "Gene4": 0, "Gene6": 0, "Gene8": 0}
@@ -170,7 +170,7 @@ def test_state2str():
 def test_primes2stg():
     fname_in = os.path.join(FILES_IN, "irma.primes")
 
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
 
     def init(x):
         return x["Cbf1"] + x["Ash1"] + x["Gal80"] == 1
@@ -206,7 +206,7 @@ def test_stg2dot():
     fname_in = os.path.join(FILES_IN, "irma.primes")
     fname_out = os.path.join(FILES_OUT, "irma_stg.dot")
 
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
     stg = PyBoolNet.state_transition_graphs.primes2stg(Primes=primes, Update="asynchronous")
     PyBoolNet.state_transition_graphs.stg2dot(stg, fname_out)
 
@@ -217,7 +217,7 @@ def test_stg2image():
     fname_out2 = os.path.join(FILES_OUT, "irma_stg_tendencies_async.pdf")
     fname_out3 = os.path.join(FILES_OUT, "irma_stg_sccs_async.pdf")
 
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
     stg = PyBoolNet.state_transition_graphs.primes2stg(Primes=primes, Update="asynchronous")
     PyBoolNet.state_transition_graphs.stg2image(stg, fname_out1)
 
@@ -233,7 +233,7 @@ def test_stg2image():
     fname_out3 = os.path.join(FILES_OUT, "irma_stg_sccs_sync.pdf")
     fname_out4 = os.path.join(FILES_OUT, "irma_stg_path.pdf")
 
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
     stg = PyBoolNet.state_transition_graphs.primes2stg(Primes=primes, Update="synchronous")
     PyBoolNet.state_transition_graphs.stg2image(stg, fname_out1)
 
@@ -257,7 +257,7 @@ def test_stg2image():
 
 def test_random_state():
     fname_in = os.path.join(FILES_IN, "irma.primes")
-    primes = PyBoolNet.file_exchange.read_primes(FnamePRIMES=fname_in)
+    primes = PyBoolNet.file_exchange.read_primes(fname_json=fname_in)
     PyBoolNet.state_transition_graphs.random_state(primes=primes)
     PyBoolNet.state_transition_graphs.random_state(primes=primes, subspace="111-0-")
 

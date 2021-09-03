@@ -75,28 +75,28 @@ def get_all_names():
         ['arellano_rootstem', 'dahlhaus_neuroplastoma', ...]
     """
 
-    result = sorted([os.path.basename(subdir) for subdir, _, _ in os.walk(BASE) if not subdir==BASE and not "__" in subdir])
+    result = sorted([os.path.basename(subdir) for subdir, _, _ in os.walk(BASE) if subdir != BASE and "__" not in subdir])
 
     return result
 
 
-def get_primes(Name):
+def get_primes(name: str) -> dict:
     """
-    Returns the prime implicants of the network *Name* in the model repository.
+    Returns the prime implicants of the network *name* in the model repository.
     Run :ref:`get_all_names` to see all networks currently available.
 
     **arguments**:
-        * *Name* (str): name of network
+        * *name*: name of network
 
     **returns**:
-        * *Primes* (dict): the prime implicants
+        * *primes*: the prime implicants
 
     **example**::
 
         >>> primes = get_primes("raf")
     """
 
-    path = os.path.join(BASE,Name,Name+".bnet")
+    path = os.path.join(BASE, name, name + ".bnet")
 
     if os.path.isfile(path):
         return PyBoolNet.file_exchange.bnet2primes(path)
@@ -110,14 +110,14 @@ def get_attrs(Name, Update):
     todo: finish code
     todo: add unit tests
 
-    Returns the attractor data of the network *Name*.
+    Returns the attractor data of the network *name*.
 
     **arguments**:
-        * *Name* (str): name of network
+        * *name*: name of network
 
     **returns**:
-        * *Attrs* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Attrs*: json attractor data, see :ref:`attractors_compute_json`
+        * *Update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **example**::
 
@@ -146,10 +146,10 @@ def get_bnet(Fname):
     Run :ref:`get_all_names` to see all networks currently available.
 
     **arguments**:
-        * *Fname* (str): name of network
+        * *Fname*: name of network
 
     **returns**:
-        * *BNET* (str): the bnet file
+        * *BNET*: the bnet file
 
     **example**::
 
