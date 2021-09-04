@@ -1,16 +1,16 @@
 
 
+import itertools
 import logging
 import sys
-import itertools
 from typing import List, Optional, Dict, Union
 
-from pyboolnet.interaction_graphs import primes2igraph
-from pyboolnet.state_transition_graphs import subspace2str
-from pyboolnet.digraphs import successors, predecessors
-from pyboolnet.misc import dicts_are_consistent
 from pyboolnet.boolean_normal_forms import functions2primes
+from pyboolnet.digraphs import successors, predecessors
 from pyboolnet.file_exchange import bnet2primes
+from pyboolnet.helpers import dicts_are_consistent
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.state_space import subspace2str
 
 log = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ CONSTANT_ON = [[], [{}]]
 CONSTANT_OFF = [[{}], []]
 
 
-def copy(primes: dict) -> dict:
+def copy_primes(primes: dict) -> dict:
     """
     Creates a copy of *primes*.
 
@@ -30,7 +30,7 @@ def copy(primes: dict) -> dict:
 
     **example**::
 
-        >>> new_primes = copy(primes)
+        >>> new_primes = copy_primes(primes)
     """
 
     new_primes = {}
@@ -79,7 +79,7 @@ def are_equal(primes1, primes2) -> bool:
 
 def find_inputs(primes: dict) -> List[str]:
     """
-    Finds all inputs in the network defined by *Primes*.
+    Finds all inputs in the network defined by *primes*.
 
     **arguments**:
         * *primes*: prime implicants
@@ -98,7 +98,7 @@ def find_inputs(primes: dict) -> List[str]:
 
 def find_outputs(primes: dict) -> List[str]:
     """
-    Finds all outputs in the network defined by *Primes*.
+    Finds all outputs in the network defined by *primes*.
 
     **arguments**:
         * *primes*: prime implicants
@@ -163,7 +163,7 @@ def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = T
     """
 
     if not in_place:
-        primes = copy(primes=primes)
+        primes = copy_primes(primes=primes)
 
     for name, value in constants.items():
         if value:
@@ -178,7 +178,7 @@ def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = T
 def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
     Creates an input for every member of *Names*.
-    Variables that already exist in *Primes* are overwritten.
+    Variables that already exist in *primes* are overwritten.
 
     .. note::
         Suppose that a given network has constants, e.g.::
@@ -206,7 +206,7 @@ def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Opti
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     for name in names:
         primes[name][0] = [{name: 1}]
@@ -241,7 +241,7 @@ def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Op
     **arguments**:
         * *primes*: prime implicants
         * *names*: variables to become blinkers
-        * *in_place*: change *Primes* in place or copy and return
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
         * *new_primes* if *in_place == True*
@@ -253,7 +253,7 @@ def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Op
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     for name in names:
         primes[name][0] = [{name:1}]
@@ -273,7 +273,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
     **arguments**:
         * *primes*: prime implicants
         * *update_functions*: a dictionary of names and update functions
-        * *in_place*: change *Primes* in place or copy and return
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
         * *new_primes* if *in_place == False*
@@ -290,7 +290,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     new_primes = {}
     dependencies = set([])
@@ -364,7 +364,7 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
     **arguments**:
         * *primes*: prime implicants
         * *names*: the names of variables to remove
-        * *in_place*: change *Primes* in place or copy and return
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
         * *new_primes* if *in_place == False*
@@ -376,7 +376,7 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     igraph = primes2igraph(primes)
     hit = [x for x in successors(igraph, names) if x not in names]
@@ -413,7 +413,7 @@ def remove_all_variables_except(primes: dict, names: List[str], in_place: bool =
     """
 
     if not in_place:
-        primes = copy(primes=primes)
+        primes = copy_primes(primes=primes)
 
     igraph = primes2igraph(primes)
     hit = [x for x in predecessors(igraph, names) if x not in names]
@@ -451,7 +451,7 @@ def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool =
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     if old_name==new_name:
         return
@@ -510,7 +510,7 @@ def substitute_and_remove(primes, names, in_place: bool = True):
     **arguments**:
         * *primes*: prime implicants
         * *names*: variables to be substituted and removed
-        * *in_place*: change *Primes* in place or copy and return
+        * *in_place*: change *primes* in place or copy and return
 
     **returns**:
         * *new_primes* if *in_place == False*
@@ -521,7 +521,7 @@ def substitute_and_remove(primes, names, in_place: bool = True):
     """
 
     if not in_place:
-        primes = copy(primes)
+        primes = copy_primes(primes)
 
     constants = find_constants(primes)
 

@@ -11,57 +11,52 @@ from pyboolnet.file_exchange import primes2bnet
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.model_checking import check_primes
 from pyboolnet.model_checking import check_primes_with_counterexample
-from pyboolnet.prime_implicants import copy
+from pyboolnet.prime_implicants import copy_primes
 from pyboolnet.prime_implicants import create_constants
 from pyboolnet.prime_implicants import percolate_and_keep_constants
 from pyboolnet.prime_implicants import percolate_and_remove_constants
 from pyboolnet.prime_implicants import remove_all_variables_except
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
-from pyboolnet.state_transition_graphs import random_state
-from pyboolnet.state_transition_graphs import state2dict
-from pyboolnet.state_transition_graphs import state2str
-from pyboolnet.state_transition_graphs import subspace2str
+from pyboolnet.state_space import subspace2str, state2dict, state2str, random_state
 from pyboolnet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
 from pyboolnet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
 from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
 from pyboolnet.temporal_logic import exists_finally_unsteady_components
 from pyboolnet.temporal_logic import subspace2proposition
 from pyboolnet.trap_spaces import trap_spaces
-from pyboolnet.utility.digraphs import ancestors
-from pyboolnet.utility.digraphs import digraph2condensationgraph
-from pyboolnet.utility.misc import merge_dicts
-from pyboolnet.utility.misc import open_json_data
-from pyboolnet.utility.misc import save_json_data
+from pyboolnet.digraphs import ancestors
+from pyboolnet.digraphs import digraph2condensationgraph
+from pyboolnet.helpers import merge_dicts
+from pyboolnet.helpers import open_json_data
+from pyboolnet.helpers import save_json_data
 
 log = logging.getLogger(__file__)
 
 
-def compute_attractor_json(primes: dict, update: str, fname_json: Optional[str] = None, check_completeness: bool = True, check_faithfulness: bool = True, check_univocality: bool = True, max_output: int = 1000) -> dict:
+def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = None, check_completeness: bool = True, check_faithfulness: bool = True, check_univocality: bool = True, max_output: int = 1000) -> dict:
     """
     computes all attractors of *primes* including information about completeness, univocality, faithfulness
 
     **arguments**:
       * *primes*: prime implicants
       * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-      * *fname_json*:
-      * *CheckCompleteness*:
-      * *check_faithfulness*:
-      * *check_univocality*:
+      * *fname_json*: json file name to save result
+      * *check_completeness*: enable completeness check
+      * *check_faithfulness*: enable faithfulness check
+      * *check_univocality*: enable univocality check
 
     **returns**:
-        * *attractors_json*: json attractor data
+        * *attractors*: attractor data
 
     **example**::
-      >>> attrs = compute_attractor_json(primes, update, "attrs.json")
+      >>> attractors = compute_attractors(primes, update, "attrs.json")
     """
 
     assert update in UPDATE_STRATEGIES
     assert primes
 
-    log.info("attractors.compute_json(..)")
-
     attrs = dict()
-    attrs["primes"] = copy(primes)
+    attrs["primes"] = copy_primes(primes)
     attrs["update"] = update
 
     min_tspaces = trap_spaces(primes=primes, option="min", max_output=max_output)
@@ -81,7 +76,7 @@ def compute_attractor_json(primes: dict, update: str, fname_json: Optional[str] 
     for i, mints in enumerate(min_tspaces):
 
         mints_obj = dict()
-        mints_obj["str"] = subspace2str(Primes=primes, Subspace=mints)
+        mints_obj["str"] = subspace2str(primes=primes, subspace=mints)
         mints_obj["dict"] = mints
         mints_obj["prop"] = subspace2proposition(primes=primes, sub_space=mints)
 
@@ -200,7 +195,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
     """
 
     if type(initial_state) == str:
-        initial_state = state2dict(Primes=primes, State=initial_state)
+        initial_state = state2dict(primes=primes, state=initial_state)
 
     assert update in UPDATE_STRATEGIES
     assert set(initial_state).issubset(set(primes))
@@ -284,7 +279,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
         * *trap_space*: a subspace
 
     **returns**:
-        * *answer* (bool): whether *trap_space* is univocal in the STG defined by *primes* and *update*
+        * *answer*: whether *trap_space* is univocal in the STG defined by *primes* and *update*
 
     **example**::
 
@@ -294,7 +289,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
         True
     """
 
-    primes = copy(primes=primes)
+    primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
     percolate_and_remove_constants(primes=primes)
 
@@ -353,7 +348,7 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
     if len(trap_space) == len(primes):
         return True
 
-    primes = copy(primes=primes)
+    primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
     constants = percolate_and_remove_constants(primes=primes)
 
@@ -395,7 +390,7 @@ def completeness(primes: dict, update: str, max_output: int = 1000) -> bool:
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **returns**:
-        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
+        * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
 
     **example**::
 
@@ -413,8 +408,8 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
 
     **arguments**:
         * *primes*: prime implicants
-        * *update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *trap_space* (str / dict): a subspace
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *trap_space*: a subspace
 
     **returns**:
         * *answer*: whether *trap_space* is univocal in the STG defined by *primes* and *update*
@@ -508,15 +503,15 @@ def completeness_with_counterexample(primes: dict, update: str, max_output: int 
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **returns**:
-        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
-        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
+        * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
+        * *Counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
             >>> answer, counterex = completeness_with_counterexample(primes, "asynchronous")
             >>> answer
             False
-            >>> STGs.state2str(counterex)
+import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(counterex)
             10010111101010100001100001011011111111
     """
 
@@ -532,22 +527,22 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
     **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *ComputeCounterexample* (bool): whether to compute a counterexample
+        * *ComputeCounterexample*: whether to compute a counterexample
 
     **returns**:
-        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
-        * *Counterexample* (dict): a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
+        * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
+        * *Counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
             >>> answer, counterex = completeness_with_counterexample(primes, "asynchronous")
             >>> answer
             False
-            >>> STGs.state2str(counterexample)
+import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(counterexample)
             10010111101010100001100001011011111111
     """
 
-    primes = copy(primes=primes)
+    primes = copy_primes(primes=primes)
     constants_global = percolate_and_remove_constants(primes=primes)
 
     min_trap_spaces = trap_spaces(primes=primes, option="min", max_output=max_output)
@@ -561,7 +556,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
     while current_set:
         p, w = current_set.pop()
 
-        primes_reduced = copy(primes=primes)
+        primes_reduced = copy_primes(primes=primes)
         create_constants(primes=primes_reduced, constants=p)
         igraph = primes2igraph(primes=primes_reduced)
 
@@ -572,14 +567,14 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             if set(U).issubset(set(w)):
                 cgraph_dash.remove_node(U)
 
-        w_dash = w.copy()
+        w_dash = w.copy_primes()
         refinement = []
         top_layer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U) == 0]
 
         for U in top_layer:
             u_dash = ancestors(igraph, U)
 
-            primes_restricted = copy(primes_reduced)
+            primes_restricted = copy_primes(primes_reduced)
             remove_all_variables_except(primes=primes_restricted, names=u_dash)
 
             q = trap_spaces(primes=primes_restricted, option="min", max_output=max_output)
@@ -726,17 +721,17 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
 def compute_attractors_tarjan(STG):
     """
     Uses `networkx.strongly_connected_components <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly_connected.strongly_connected_components.html>`_
-    , i.e., Tarjan's algorithm with Nuutila's modifications, to compute the SCCs of *STG* and
+    , i.e., Tarjan's algorithm with Nuutila's modifications, to compute the SCCs of *stg* and
     `networkx.has_path <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.shortest_paths.generic.has_path.html>`_
     to decide whether a SCC is reachable from another.
     Returns the attractors as lists of states.
 
 
     **arguments**:
-        * *STG*: state transition graph
+        * *stg*: state transition graph
 
     **returns**:
-        * *SteadyStates* (list of str): the steady states
+        * *SteadyStates*: the steady states
         * *Cyclic* (list of sets of strs): the cyclic attractors
 
     **example**:
@@ -790,10 +785,10 @@ def completeness_naive(Primes, Update, TrapSpaces):
     **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspaces* (list): list of subspaces in string or dict representation
+        * *Trapspaces*: list of subspaces in string or dict representation
 
     **returns**:
-        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
+        * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
 
     **example**::
 
@@ -833,11 +828,11 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
     **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspaces* (list): list of subspaces in string or dict representation
+        * *Trapspaces*: list of subspaces in string or dict representation
 
     **returns**:
-        * *answer*: whether *Subspaces* is complete in the STG defined by *primes* and *update*,
-        * *counter_example*: a state from which none of the *Subspaces* is reachable (if *Answer* is *False*)
+        * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
+        * *counter_example*: a state from which none of the *subspaces* is reachable (if *answer* is *False*)
 
     **example**::
 

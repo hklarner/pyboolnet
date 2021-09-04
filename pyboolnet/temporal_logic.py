@@ -4,16 +4,18 @@ from typing import List
 
 import PyBoolNet.state_transition_graphs
 
+import pyboolnet.state_space
+
 
 def EF_nested_reachability(Primes, Subspaces):
     """
-    Constructs a CTL formula that queries whether there is a path that visits the given *Subspaces* in the order given.
+    Constructs a CTL formula that queries whether there is a path that visits the given *subspaces* in the order given.
 
     **arguments**:
-        * *Subspaces* (list): a list of subspaces
+        * *subspaces*: a list of subspaces
 
     **returns**:
-        * *CTLFormula* (str): the CTL formula
+        * *CTLFormula*: the CTL formula
 
     **example**::
 
@@ -25,7 +27,7 @@ def EF_nested_reachability(Primes, Subspaces):
     if Subspaces==[]:
         return 'TRUE'
 
-    Subspaces = [PyBoolNet.state_transition_graphs.subspace2dict(Primes, x) if type(x) == str else x for x in Subspaces]
+    Subspaces = [pyboolnet.state_space.subspace2dict(Primes, x) if type(x) == str else x for x in Subspaces]
 
     x = Subspaces.pop(0)
     result = "EF("+ subspace2proposition(Primes, x) +"  &$)"
@@ -37,11 +39,11 @@ def EF_nested_reachability(Primes, Subspaces):
 
 def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List[dict]) -> str:
     """
-    Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given *Subspaces*.
+    Constructs a CTL formula that queries whether there it is alsways possible to reach one of the given *subspaces*.
 
     .. note::
 
-        This query is equivalent to asking whether every attractor is inside one of the *Subspaces*.
+        This query is equivalent to asking whether every attractor is inside one of the *subspaces*.
 
     .. note::
 
@@ -49,10 +51,10 @@ def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List
         To find out pick arbitrary representative states x1, x2, ... xn for each attractor and call the function *AGEF_oneof_subspaces* with the argument *Subspaces = [x1, x2, ..., xn]*.
 
     **arguments**:
-        * *Subspaces*: a list of subspace
+        * *subspaces*: a list of subspace
 
     **returns**:
-        * *Formula* (str): the CTL formula
+        * *Formula*: the CTL formula
 
     **example**::
 
@@ -64,7 +66,7 @@ def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List
     if sub_spaces == []:
         return "TRUE"
 
-    sub_spaces = [PyBoolNet.state_transition_graphs.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
+    sub_spaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
 
     return 'AG(' + exists_finally_one_of_subspaces(primes, sub_spaces) + ')'
 
@@ -74,10 +76,10 @@ def exists_finally_one_of_subspaces(primes: dict, sub_spaces: List[dict]) -> str
     Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
 
     **arguments**:
-        * *Subspaces* (list): a list of subspaces
+        * *subspaces*: a list of subspaces
 
     **returns**:
-        * *Formula* (str): the CTL formula
+        * *Formula*: the CTL formula
 
     **example**::
 
@@ -89,7 +91,7 @@ def exists_finally_one_of_subspaces(primes: dict, sub_spaces: List[dict]) -> str
     if not sub_spaces:
         return "TRUE"
 
-    sub_spaces = [PyBoolNet.state_transition_graphs.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
+    sub_spaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
 
     return 'EF(' + ' | '.join(subspace2proposition(primes, x) for x in sub_spaces) + ')'
 
@@ -103,10 +105,10 @@ def exists_finally_unsteady_components(names: List[str]) -> str:
         Typically this query is used to find out if the variables given in *Names* are oscillating in a given attractor.
 
     **arguments**:
-        * *Names* (list): a list of names of variables
+        * *Names*: a list of names of variables
 
     **returns**:
-        * *Formula* (str): the CTL formula
+        * *Formula*: the CTL formula
 
     **example**::
 
@@ -132,10 +134,10 @@ def subspace2proposition(primes: dict, sub_space: dict) -> str:
         Typically this query is used to define INIT constraints from a given subspace.
 
     **arguments**:
-        * *Subspace* (str / dict): a subspace in string or dictionary representation
+        * *subspace*: a subspace in string or dictionary representation
 
     **returns**:
-        * *Proposition* (str): the proposition
+        * *proposition*: the proposition
 
     **example**::
 
@@ -149,7 +151,7 @@ def subspace2proposition(primes: dict, sub_space: dict) -> str:
         return "TRUE"
 
     if type(sub_space)==str:
-        sub_space = PyBoolNet.state_transition_graphs.subspace2dict(primes, sub_space)
+        sub_space = pyboolnet.state_space.subspace2dict(primes, sub_space)
 
     return '&'.join([name if value==1 else '!'+name for name,value in sorted(sub_space.items())])
 

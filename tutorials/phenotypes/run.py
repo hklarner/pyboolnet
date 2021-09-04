@@ -29,17 +29,17 @@ def run():
         attrs = PyBoolNet.attractors.read_attractors_json(fname_attrs)
     else:
         print("Computing attractors, this takes about 25 minutes. Results will be saved as {x}.".format(x=fname_attrs))
-        attrs = PyBoolNet.attractors.compute_attractor_json(primes, update="asynchronous", fname_json=fname_attrs)
+        attrs = PyBoolNet.attractors.compute_attractors(primes, update="asynchronous", fname_json=fname_attrs)
         # real    24m0.954s
         # user    23m54.158s
         # sys    0m7.109s
 
 
 
-    phenos = PyBoolNet.phenotypes.compute_attractor_json(attrs, markers, FnameJson=fname_phenos)
+    phenos = PyBoolNet.phenotypes.compute_attractors(attrs, markers, FnameJson=fname_phenos)
 
     print("Computing phenotype diagram, this takes about xxx minutes.")
-    PyBoolNet.phenotypes.compute_diagram(phenos, fname_diag)
+    PyBoolNet.phenotypes.compute_phenotype_diagram(phenos, fname_diag)
 
 
 if __name__=="__main__":

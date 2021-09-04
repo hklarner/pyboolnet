@@ -1,14 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 
-import PyBoolNet
-
-
-if __name__=="__main__":
-
-    # reading bnet files
-
+if __name__ == "__main__":
     bnet = """
     v1,    !v1
     v2,    1

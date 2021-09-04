@@ -1,12 +1,15 @@
 
 
+import logging
 import random
 from typing import List, Dict
 
 import networkx
 from pyeda.inter import truthtable, truthtable2expr, exprvar
 
-from PyBoolNet.file_exchange import bnet2primes
+from pyboolnet.file_exchange import bnet2primes
+
+log = logging.getLogger(__name__)
 
 
 def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:
@@ -16,12 +19,12 @@ def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:
     The self-loop of the root component is either positive or negative, depending on `loop_sign`.
 
     **arguments**:
-        * *n* (int): number of components
-        * *edge_sign* (int): either `1` or `-1` for positive or negative edges
-        * *loop_sign* (int): either `1` or `-1` for positive or negative self-loop of root component
+        * *n*: number of components
+        * *edge_sign*: either `1` or `-1` for positive or negative edges
+        * *loop_sign*: either `1` or `-1` for positive or negative self-loop of root component
 
     **returns**:
-        * *primes* (dict): primes implicants
+        * *primes*: primes implicants
 
     **example**::
 
@@ -53,13 +56,13 @@ def balanced_tree(height: int, branching_factor: int = 2, edge_sign: int = 1, lo
     The self-loop of the root component is either positive or negative, depending on `loop_sign`.
 
     **arguments**:
-        * *height* (int): height of tree
-        * *branching_factor* (int): branching factor of tree
-        * *edge_sign* (int): either `1` or `-1` for positive or negative edges
-        * *loop_sign* (int): either `1` or `-1` for positive or negative self-loop of first component
+        * *height*: height of tree
+        * *branching_factor*: branching factor of tree
+        * *edge_sign*: either `1` or `-1` for positive or negative edges
+        * *loop_sign*: either `1` or `-1` for positive or negative self-loop of first component
 
     **returns**:
-        * *primes* (dict): primes implicants
+        * *primes*: primes implicants
 
     **example**::
 
@@ -91,11 +94,11 @@ def cycle_graph(n: int, edge_sign: int = 1) -> dict:
     All edges are either positive or negative, depending on `edge_sign`.
 
     **arguments**:
-        * *n* (int): number of components
-        * *edge_sign* (int): either `1` or `-1` for positive or negative edges
+        * *n*: number of components
+        * *edge_sign*: either `1` or `-1` for positive or negative edges
 
     **returns**:
-        * *primes* (dict): primes implicants
+        * *primes*: primes implicants
 
     **example**::
 
@@ -123,12 +126,12 @@ def random_truth_table_network(n: int, k: int, seed: int = 0) -> dict:
     Use `0` to generate a random seed.
 
     **arguments**:
-        * *n* (int): number of components
-        * *k* (int): inputs of each truthtable
-        * *seed* (int): the seed of the randomizer
+        * *n*: number of components
+        * *k*: inputs of each truthtable
+        * *seed*: the seed of the randomizer
 
     **returns**:
-        * *primes* (dict): primes implicants
+        * *primes*: primes implicants
 
     **example**::
 
@@ -167,14 +170,14 @@ def random_regular_network(n: int, k: int, connector: str = "and", edge_sign: in
     Use `0` to generate a random seed.
 
     **arguments**:
-        * *n* (int): number of components
-        * *k* (int): inputs of each truthtable
-        * *connector* (str): either `"and"` or `"or"`
-        * *edge_sign* (int): either `1` or `-1` for positive or negative edges
-        * *seed* (int): the seed of the randomizer
+        * *n*: number of components
+        * *k*: inputs of each truthtable
+        * *connector*: either `"and"` or `"or"`
+        * *edge_sign*: either `1` or `-1` for positive or negative edges
+        * *seed*: the seed of the randomizer
 
     **returns**:
-        * *primes* (dict): primes implicants
+        * *primes*: primes implicants
 
     **example**::
 
@@ -223,11 +226,11 @@ def random_boolean_expression(names: List[str], k: int, seed: int = 0) -> str:
 
     **arguments**:
         * *names* (List[str]): components to sample from
-        * *k* (int): inputs to the expression
-        * *seed* (int): the seed of the randomizer
+        * *k*: inputs to the expression
+        * *seed*: the seed of the randomizer
 
     **returns**:
-        * *expression* (str): random expression in bnet format
+        * *expression*: random expression in bnet format
 
     **example**::
 
@@ -251,19 +254,3 @@ def random_boolean_expression(names: List[str], k: int, seed: int = 0) -> str:
     bnet = _dnf2bnet(ast, name_map)
 
     return bnet
-
-
-if __name__ == "__main__":
-    from PyBoolNet.interaction_graphs import create_image
-
-    primes = random_regular_network(7, 3, connector="and", edge_sign=-1)
-    create_image(primes, "random_regular_network.png", LayoutEngine="dot")
-
-    primes = random_truth_table_network(7, 3)
-    create_image(primes, "random_truth_table_network.png", LayoutEngine="dot")
-
-    primes = cycle_graph(n=7, edge_sign=-1)
-    create_image(primes, "cycle_graph.png", LayoutEngine="dot")
-
-    primes = balanced_tree(height=3, branching_factor=2, edge_sign=1, loop_sign=-1)
-    create_image(primes, "balanced_tree.png", LayoutEngine="dot")

@@ -1,23 +1,28 @@
 
-# -*- coding: utf-8 -*-
 
-
-import sys
-sys.path.insert(0,"/home/hannes/github/PyBoolNet")
-
+import logging
 import itertools
 import networkx
+from typing import Optional, List
 import networkx.readwrite.json_graph
-import PyBoolNet
+
+from pyboolnet.prime_implicants import copy_primes
+from pyboolnet.helpers import save_json_data, copy_json_data, open_json_data
+from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
+from pyboolnet.model_checking import check_primes_with_acceptingstates
+from pyboolnet.state_space import size_state_space
+from pyboolnet.helpers import divide_list_into_similar_length_lists
+from pyboolnet.helpers import perc2str
+from pyboolnet.digraphs import digraph2image
+
+LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+log = logging.getLogger(__name__)
 
 
-
-def compute_json(AttrJson, Markers, FnameJson=None, Silent=False):
+def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optional[str] = None) -> dict:
     """
-    todo: finish code
-    todo: add unit tests
-
-    Computes the phenotypes object for given *Markers*.
+    Computes the phenotypes object for given *markers*.
 
     structure:
         primes: dict
@@ -44,371 +49,274 @@ def compute_json(AttrJson, Markers, FnameJson=None, Silent=False):
 
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *Markers* (list): list of names
-        * *Silent* (bool): print infos to screen
-        * *FnameJson* (str): save phenotypes as json
+        * *attractors*: json attractor data, see :ref:`attractors_compute_json`
+        * *markers*: list of names
+        * *fname_json*: save phenotypes as json
 
     **returns**::
-        * *Phenotypes* (dict): the phenotypes data
+        * *phenotypes*: the phenotypes data
 
     **example**::
 
+        >>> attractors = compute_attractors(primes, update, "attractors.json")
         >>> markers = ["raf", "mek"]
-        >>> compute_json(primes, markers)
+        >>> compute_phenotypes(attractors, markers, "phenotypes.json")
     """
 
-    assert(AttrJson["is_complete"]=="yes")
-    assert(all(x["mintrapspace"]["is_univocal"] for x in AttrJson["attractors"]))
-    assert(all(x["mintrapspace"]["is_faithful"] for x in AttrJson["attractors"]))
+    assert attractors["is_complete"] == "yes"
+    assert all(x["mintrapspace"]["is_univocal"] for x in attractors["attractors"])
+    assert all(x["mintrapspace"]["is_faithful"] for x in attractors["attractors"])
 
-    NAMES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    primes = copy_primes(attractors["primes"])
 
+    ignored = [x for x in markers if x not in primes]
+    markers = [x for x in markers if x in primes]
 
-    primes = PyBoolNet.prime_implicants.copy(AttrJson["primes"])
+    if ignored:
+        log.info(f"ignored markers (they are not in primes): {', '.join(ignored)}")
 
-    ignored = [x for x in Markers if x not in primes]
-    Markers = [x for x in Markers if x in primes]
-
-    if not Silent:
-        print("compute_json(..)")
-        if ignored: print(" ignored markers (not in primes): {x}".format(x=", ".join(ignored)))
-
-    phenos = {}
-    phenos["primes"] = primes
-    phenos["update"] = AttrJson["update"]
-    phenos["markers"] = list(Markers)
-    phenos["phenotypes"] = []
+    phenos = {"primes": primes, "update": attractors["update"], "markers": list(markers), "phenotypes": []}
 
     seen_patterns = []
 
     i = 0
-    for attr in AttrJson["attractors"]:
+    for attr in attractors["attractors"]:
+        state = {
+            "str": str(attr["state"]["str"]),
+            "dict": dict(attr["state"]["dict"]),
+            "prop": str(attr["state"]["prop"]),
+            "is_steady": bool(attr["is_steady"]),
+            "is_cyclic": bool(attr["is_cyclic"]),
+            "mintrapspace": {
+                "str": str(attr["mintrapspace"]["str"]),
+                "dict": dict(attr["mintrapspace"]["dict"]),
+                "prop": str(attr["mintrapspace"]["prop"])
+            }}
 
-        # the phenotype pattern is fully determined by the minimal trap space of the attractor
-        pattern = "".join(str(attr["mintrapspace"]["dict"][x]) if x in attr["mintrapspace"]["dict"] else "-" for x in Markers)
+        pattern = "".join(str(attr["mintrapspace"]["dict"][x]) if x in attr["mintrapspace"]["dict"] else "-" for x in markers)
 
-        state = {}
-        state["str"] = str(attr["state"]["str"])
-        state["dict"] = dict(attr["state"]["dict"])
-        state["prop"] = str(attr["state"]["prop"])
-        state["is_steady"] = bool(attr["is_steady"])
-        state["is_cyclic"] = bool(attr["is_cyclic"])
-        state["mintrapspace"] = {}
-        state["mintrapspace"]["str"] = str(attr["mintrapspace"]["str"])
-        state["mintrapspace"]["dict"] = dict(attr["mintrapspace"]["dict"])
-        state["mintrapspace"]["prop"] = str(attr["mintrapspace"]["prop"])
-
-
-        # modify existing phenotype
         if pattern in seen_patterns:
-
             for pheno in phenos["phenotypes"]:
                 if pheno["pattern"] == pattern:
                     pheno["states"].append(state)
                     break
 
-        # create new phenotype
         else:
             seen_patterns.append(pattern)
-
             pheno = {}
-            if i<=26:
-                pheno["name"] = "Pheno %s"%"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i]
+            if i <= 26:
+                pheno["name"] = f"Pheno {LETTERS[i]}"
             else:
-                pheno["name"] = "Pheno %i"%i
-            i+=1
+                pheno["name"] = f"Pheno {i}"
 
+            i += 1
             pheno["pattern"] = pattern
-            pheno["activated_markers"] = sorted(x for x in Markers if (x,1) in attr["mintrapspace"]["dict"].items())
-            pheno["inhibited_markers"] = sorted(x for x in Markers if (x,0) in attr["mintrapspace"]["dict"].items())
-            pheno["oscillating_markers"] = sorted(x for x in Markers if x not in attr["mintrapspace"]["dict"])
+            pheno["activated_markers"] = sorted(x for x in markers if (x, 1) in attr["mintrapspace"]["dict"].items())
+            pheno["inhibited_markers"] = sorted(x for x in markers if (x, 0) in attr["mintrapspace"]["dict"].items())
+            pheno["oscillating_markers"] = sorted(x for x in markers if x not in attr["mintrapspace"]["dict"])
             pheno["states"] = [state]
-
             phenos["phenotypes"].append(pheno)
 
-
-
-    # create stateformulas
     for pheno in phenos["phenotypes"]:
         pheno["states"] = tuple(sorted(pheno["states"], key=lambda x: x["mintrapspace"]["str"]))
-        pheno["stateformula"] = "("+ " | ".join(x["prop"] for x in pheno["states"]) +")"
+        pheno["stateformula"] = f"({' | '.join(x['prop'] for x in pheno['states'])})"
 
-    if FnameJson:
-        save_json(phenos, FnameJson)
-
-    return phenos
-
-
-def save_json(PhenosObj, Fname, Silent=False):
-    """
-    todo: finish code
-    todo: add unit tests, add to sphinx
-
-    saves the phenotypes object as a JSON file.
-
-    **arguments**:
-      * *PhenoJson*: phenotypes data, see todo: add :ref:`xxx`
-      * *Fname* (str): file name
-
-    **returns**:
-      * *None*
-
-    **example**::
-
-        >>> compute_json(attrs, markers)
-        >>> save_phenotype(phenos, "pheno.json")
-        created pheno.json
-    """
-
-    PyBoolNet.Utility.Misc.save_json_data(PhenosObj, Fname, Silent=Silent)
-
-
-def open_json(Fname):
-    """
-    todo: finish code
-    todo: add unit tests, add to sphinx
-
-    opens the phenotypes object, see todo: add :ref:`xxx`
-
-    **arguments**:
-      * *Fname* (str): file name
-
-    **returns**:
-      * *PhenoJson*: phenotypes data, see todo: add :ref:`xxx`
-
-    **example**::
-
-      >>> phenos = open_json("pheno.json")
-    """
-
-    phenos = PyBoolNet.Utility.Misc.open_json_data(Fname)
+    if fname_json:
+        save_json_data(data=phenos, fname=fname_json)
+        log.info(f"created {fname_json}")
 
     return phenos
 
 
-def compute_diagram(PhenosObj, FnameJson=None, FnameImage=None, Silent=False):
+def compute_phenotype_diagram(phenotypes: dict, fname_json: Optional[str] = None, fname_image: Optional[str] = None):
     """
-    todo: finish code
-    todo: add unit tests
-
-    computes the phenotype diagram from the phenotypes object obtained from :ref:`phenotypes_compute_json`.
-    save the diagram as json data with *FnameJson*. useful for e.g. manually renaming nodes.
+    Computes the phenotype diagram from the phenotypes object obtained from :ref:`phenotypes_compute_json`.
+    save the diagram as json data with *fname_json*. useful for e.g. manually renaming nodes.
 
     **arguments**:
-        * *PhenosObj* (dict): result of compute_json(..)
-        * *FnameJson* (str): save diagram as json
-        * *FnameImage* (str): generate image for diagram
-        * *Silent* (bool): print infos to screen
+        * *phenotypes*: result of compute_json(..)
+        * *fname_json*: save diagram as json
+        * *fname_image*: generate image for diagram
 
     **returns**::
-        * *Diagram* (networkx.DiGraph): the phenotype diagram
+        * *diagram*: the phenotype diagram
 
     **example**::
 
-        >>> phenos = compute_json(attrobj, markers)
-        >>> compute_diagram(phenos, FnameImage="phenos.pdf")
+        >>> phenos = compute_phenotypes(attrobj, markers)
+        >>> compute_phenotype_diagram(phenos, fname_image="phenos.pdf")
         created phenos.pdf
     """
 
-    Primes = PhenosObj["primes"]
-    Update = PhenosObj["update"]
+    primes = phenotypes["primes"]
+    update = phenotypes["update"]
 
-    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
-    assert(Primes)
-
-    if not Silent:
-        print("Phenotypes.compute_diagram(..)")
+    assert update in UPDATE_STRATEGIES
+    assert primes
 
     diagram = networkx.DiGraph()
-    for key in PhenosObj:
-        diagram.graph[key] = PyBoolNet.Utility.Misc.copy_json_data(PhenosObj[key])
+    for key in phenotypes:
+        diagram.graph[key] = copy_json_data(phenotypes[key])
 
-    # nodes
     node_id = 0
-    Flags = [[0,1]]*len(PhenosObj["phenotypes"])
-    for i,flags in enumerate(itertools.product(*Flags)):
+    flags = [[0, 1]] * len(phenotypes["phenotypes"])
+    for i, flags in enumerate(itertools.product(*flags)):
 
-        stateformulas, names = [], []
+        state_formulas, names = [], []
         for j, flag in enumerate(flags):
             if flag:
-                stateformulas.append(PhenosObj["phenotypes"][j]["stateformula"])
-                names.append(PhenosObj["phenotypes"][j]["name"])
+                state_formulas.append(phenotypes["phenotypes"][j]["stateformula"])
+                names.append(phenotypes["phenotypes"][j]["name"])
 
-        stateformulas.sort()
+        state_formulas.sort()
         names = tuple(sorted(names))
 
-
-        if not stateformulas:
-            unreach = " & ".join("!EF({x})".format(x=x["stateformula"]) for x in PhenosObj["phenotypes"])
-            spec = "CTLSPEC {x}".format(x=unreach)
+        if not state_formulas:
+            unreachable = " & ".join(f"!EF({x['stateformula']})" for x in phenotypes["phenotypes"])
+            spec = f"CTLSPEC {unreachable}"
 
         else:
-            reach = ["EF({x})".format(x=x) for x in stateformulas]
-            reach_all  = " & ".join(reach)
+            reach = [f"EF({x})" for x in state_formulas]
+            reach_all = " & ".join(reach)
             reach_some = " | ".join(reach)
-            spec = "CTLSPEC {x} & AG({y})".format(x=reach_all,y=reach_some)
+            spec = f"CTLSPEC {reach_all} & AG({reach_some})"
 
         init = "INIT TRUE"
-        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+        answer, accepting = check_primes_with_acceptingstates(primes, update, init, spec)
 
-        data = {"names":    names,
-                "init":        init,
-                "spec":        spec,
-                "initaccepting_size":    accepting["INITACCEPTING_SIZE"],
-                "initaccepting":          accepting["INITACCEPTING"]}
+        data = {"names": names,
+                "init": init,
+                "spec": spec,
+                "initaccepting_size": accepting["INITACCEPTING_SIZE"],
+                "initaccepting": accepting["INITACCEPTING"]}
 
-        if data["initaccepting_size"]>0:
-            if not Silent:
-                print(" [{x}] = {y}".format(x=", ".join(names), y=data["initaccepting_size"]))
-
+        if data["initaccepting_size"] > 0:
+            log.info(f"[{', '.join(names)}] = {data['initaccepting_size']}")
             diagram.add_node(node_id)
+
             for key, value in data.items():
                 diagram.nodes[node_id][key] = value
-            node_id+= 1
 
-    # edges
+            node_id += 1
+
     for source in diagram:
         for target in diagram:
-            if source==target: continue
+            if source == target:
+                continue
 
-            sourceset = set(diagram.nodes[source]["names"])
-            targetset = set(diagram.nodes[target]["names"])
+            source_set = set(diagram.nodes[source]["names"])
+            target_set = set(diagram.nodes[target]["names"])
 
-            if targetset.issubset(sourceset):
-                init = "INIT {x}".format(x=diagram.nodes[source]["initaccepting"])
-                spec = "CTLSPEC EX({x})".format(x=diagram.nodes[target]["initaccepting"])
+            if target_set.issubset(source_set):
+                init = f"INIT {diagram.nodes[source]['initaccepting']}"
+                spec = f"CTLSPEC EX({diagram.nodes[target]['initaccepting']})"
+                answer, accepting = check_primes_with_acceptingstates(primes, update, init, spec)
 
-                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-
-                if accepting["INITACCEPTING_SIZE"]>0:
+                if accepting["INITACCEPTING_SIZE"] > 0:
 
                     data = {"init": init,
-                            "spec":    spec,
-                            "initaccepting_size":    accepting["INITACCEPTING_SIZE"],
-                            "initaccepting":        accepting["INITACCEPTING"]}
+                            "spec": spec,
+                            "initaccepting_size": accepting["INITACCEPTING_SIZE"],
+                            "initaccepting": accepting["INITACCEPTING"]}
 
                     diagram.add_edge(source, target)
                     for key, value in data.items():
                         diagram.edges[source, target][key] = value
 
-                    if not Silent:
-                        print(" [{x}] --{s}--> [{y}]".format(
-                            x=", ".join(diagram.nodes[source]["names"]),
-                            s=data["initaccepting_size"],
-                            y=", ".join(diagram.nodes[target]["names"])))
+                    log.info(f"[{', '.join(diagram.nodes[source]['names'])}] --{data['initaccepting_size']}--> [{', '.join(diagram.nodes[target]['names'])}]")
 
+    if fname_image:
+        phenotype_diagram2image(diagram, fname_image)
 
-    if FnameImage:
-        diagram2image(diagram, FnameImage)
-
-    if FnameJson:
-        save_diagram(diagram, FnameJson)
+    if fname_json:
+        save_phenotype_diagram(diagram=diagram, fname_json=fname_json)
+        log.info(f"created {fname_json}")
 
     return diagram
 
 
-def save_diagram(Diagram, Fname):
+def save_phenotype_diagram(diagram: networkx.DiGraph, fname_json: str):
     """
-    todo: finish code
-    todo: add unit tests
-
-    description
+    Save the diagram as a json file.
 
       **arguments**:
-        * *Primes*: prime implicants
-        * *arg* (type): description
-
-      **returns**:
-        * *arg* (type): description
+        * *diagram*: prime implicants
+        * *fname_json*: json file name
 
       **example**::
 
-        >>> save_diagram(..)
-        result
+        >>> save_phenotype_diagram(diagram, "diagram.json")
     """
 
-    data = networkx.readwrite.json_graph.adjacency_data(Diagram)
+    data = networkx.readwrite.json_graph.adjacency_data(diagram)
+    save_json_data(data, fname_json)
 
-    PyBoolNet.Utility.Misc.save_json_data(data, Fname)
 
-
-def open_diagram(Fname):
+def open_phenotype_diagram(fname_json: str) -> networkx.DiGraph:
     """
-    todo: finish code
-    todo: add unit tests
-
-    description
+    Opens a phenotype diagram.
 
     **arguments**:
-        * *arg* (type): description
+        * *fname_json*: json file name
 
     **returns**:
-        * *arg* (type): description
+        * *phenotype_diagram*: the phenotype diagram
 
     **example**::
 
-        >>> open_diagram(..)
-        result
+        >>> open_phenotype_diagram("diagram.json")
     """
 
-    data = PyBoolNet.Utility.Misc.open_json_data(Fname)
-
+    data = open_json_data(fname_json)
     diagram = networkx.readwrite.json_graph.adjacency_graph(data)
 
     for x in diagram:
-        diagram.nodes[x]["names"] = tuple(diagram.nodes[x]["names"]) # lost in json conversion
+        diagram.nodes[x]["names"] = tuple(diagram.nodes[x]["names"])
 
     return diagram
 
 
-def diagram2image(Diagram, FnameImage=None):
+def phenotype_diagram2image(diagram: networkx.DiGraph, fname_image: Optional[str] = None):
     """
-    creates an image of the abstract commitment diagram.
+    Creates an image of the abstract commitment diagram.
 
     **arguments**:
-        * *Diagram* (networkx.DiGraph): a phenotype diagram
-        * *FnameImage* (str): name of the diagram image
+        * *diagram*: a phenotype diagram
+        * *fname_image*: name of the diagram image
 
     **returns**::
-        * *StyledDiagram* (networkx.DiGraph): the styled abstract commitment diagram
+        * *styled_diagram*: the styled abstract commitment diagram
 
     **example**::
 
-        >>> diagram2image(primes, diagram, "diagram.pdf")
+        >>> phenotype_diagram2image(primes, diagram, "diagram.pdf")
     """
 
-    assert(type(Diagram)==type(networkx.DiGraph()))
+    assert type(diagram) == type(networkx.DiGraph())
 
-    Primes = Diagram.graph["primes"]
-
-    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    primes = diagram.graph["primes"]
+    size_total = size_state_space(primes)
 
     image = networkx.DiGraph()
-    image.graph["node"]  = {"shape":"rect","style":"filled","color":"none","fillcolor":"lightgray"}
-    image.graph["edge"]  = {}
+    image.graph["node"] = {
+        "shape": "rect",
+        "style": "filled",
+        "color": "none",
+        "fillcolor": "lightgray"}
 
-
-
+    image.graph["edge"] = {}
     labels = {}
-    # "labels" is used for node labels
-    # keys:
-    # head = reachable attractors
-    # size = number of states
 
-
-    for node, data in Diagram.nodes(data=True):
-
+    for node, data in diagram.nodes(data=True):
         labels[node] = {}
         image.add_node(node)
-
-        head = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(data["names"])
+        head = divide_list_into_similar_length_lists(data["names"])
         head = [",".join(x) for x in head]
         labels[node]["head"] = "<br/>".join(head)
 
         if "fillcolor" in data:
             image.nodes[node]["fillcolor"] = data["fillcolor"]
-        elif len(data["names"])==1:
+        elif len(data["names"]) == 1:
             image.nodes[node]["fillcolor"] = "cornflowerblue"
 
         if "color" in data:
@@ -417,120 +325,99 @@ def diagram2image(Diagram, FnameImage=None):
         if "penwidth" in data:
             image.nodes[node]["penwidth"] = data["penwidth"]
 
-    for source, target, data in Diagram.edges(data=True):
+    for source, target, data in diagram.edges(data=True):
         image.add_edge(source, target)
 
-    for x in Diagram.nodes():
-        perc = 100.* Diagram.nodes[x]["initaccepting_size"] / size_total
-        labels[x]["initaccepting_size"] = "states: {x}%".format(x=PyBoolNet.Utility.Misc.perc2str(perc))
+    for x in diagram.nodes():
+        perc = 100. * diagram.nodes[x]["initaccepting_size"] / size_total
+        labels[x]["initaccepting_size"] = f"states: {perc2str(perc)}%"
 
-    for x in Diagram.nodes():
-        image.nodes[x]['label'] = "<{x}>".format(x="<br/>".join(labels[x].values()))
+    for x in diagram.nodes():
+        image.nodes[x]['label'] = f"<{'<br/>'.join(labels[x].values())}>"
 
     ranks = {}
-    for node, data in Diagram.nodes(data=True):
-
+    for node, data in diagram.nodes(data=True):
         x = len(data["names"])
-        if not x in ranks:
-            ranks[x]=[]
+        if x not in ranks:
+            ranks[x] = []
+
         ranks[x].append(node)
 
-    ranks=list(ranks.items())
-    ranks.sort(key=lambda x: x[0])
+    ranks = sorted(ranks.items(), key=lambda x: x[0])
 
-    for _,names in ranks:
-        names = ['"{x}"'.format(x=x) for x in names]
+    for _, names in ranks:
+        names = [f'"{x}"' for x in names]
         names = "; ".join(names)
-        image.graph["{rank = same; %s;}"%names]=""
+        image.graph["{rank = same; %s;}" % names] = ""
 
-    if FnameImage:
-        PyBoolNet.Utility.DiGraphs.digraph2image(image, FnameImage, LayoutEngine="dot")
+    if fname_image:
+        digraph2image(image, fname_image, layout_engine="dot")
 
     return image
 
 
-def create_piechart(Diagram, FnameImage, Title=None, ColorMap=None, Silent=False):
+def create_phenotypes_piechart(diagram: networkx.DiGraph, fname_image: str, title: Optional[str] = None, color_map: Optional[dict] = None):
     """
     creates the abstract commitment pie.
 
     **arguments**:
-        * *Diagram* (networkx.DiGraph): precomputed commitment diagram
-        * *FnameImage* (str): name of the output image
-        * *Title* (str): optional title of plot
-        * *ColorMap* (dict): assignment of diagram nodes to colors for custom colors
-        * *Silent* (bool): print infos to screen
-
-    **returns**::
-        * *None*
+        * *diagram*: a phenotype diagram
+        * *fname_image*: name of the output image
+        * *title*: optional title of plot
+        * *color_map*: assignment of diagram nodes to colors for custom colors
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
-        >>> phenos = Phenotypes.compute_attractor_json(attrs, markers)
-        >>> diagram = Phenotypes.create_diagram(phenos)
-        >>> Phenotypes.create_piechart(diagram, "piechart.pdf")
+        >>> attrs = compute_attractors(primes, update)
+        >>> phenos = compute_phenotypes(attrs, markers)
+        >>> diagram = compute_phenotype_diagram(phenos)
+        >>> create_phenotypes_piechart(diagram, "piechart.pdf")
     """
 
-    debug = True
-
     import matplotlib.pyplot
-    matplotlib.rcParams['hatch.linewidth'] = 4.0     # special hatching for paper
-    matplotlib.rcParams['hatch.color'] = "#ff7c00"    # special hatching for paper
 
-    indeces = sorted(Diagram, key=lambda x: Diagram.nodes[x]["initaccepting_size"])
+    matplotlib.rcParams['hatch.linewidth'] = 4.0
+    matplotlib.rcParams['hatch.color'] = "#ff7c00"
 
-    labels = [", ".join(Diagram.nodes[x]["names"]) for x in indeces]
-    sizes  = [Diagram.nodes[x]["initaccepting_size"] for x in indeces]
+    indices = sorted(diagram, key=lambda x: diagram.nodes[x]["initaccepting_size"])
+
+    labels = [", ".join(diagram.nodes[x]["names"]) for x in indices]
+    sizes = [diagram.nodes[x]["initaccepting_size"] for x in indices]
 
     total = sum(sizes)
     is_small_network = total <= 1024
 
     figure = matplotlib.pyplot.figure()
-    if ColorMap:
-        colors = [ColorMap[x] for x in indeces]
+    if color_map:
+        colors = [color_map[x] for x in indices]
     else:
-        colors = [matplotlib.pyplot.cm.rainbow(1.*x/(4+1)) for x in range(len(Diagram)+2)][1:-1]
-        colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(Diagram)+1)) for x in range(len(Diagram)+2)][1:-1]
+        colors = [matplotlib.pyplot.cm.rainbow(1. * x / (len(diagram) + 1)) for x in range(len(diagram) + 2)][1:-1]
 
-    for i,x in enumerate(indeces):
-        if "fillcolor" in Diagram.nodes[x]:
-            colors[i] = Diagram.nodes[x]["fillcolor"]
+    for i, x in enumerate(indices):
+        if "fillcolor" in diagram.nodes[x]:
+            colors[i] = diagram.nodes[x]["fillcolor"]
 
-    autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if is_small_network else '%.1f%%'
-    stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=45)
-    patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
-
-    ### delete me
-    patches, texts, autotexts = stuff
-    [ _.set_fontsize(15) for _ in texts ]
-    [ _.set_fontsize(15) for _ in autotexts ]
-
+    auto_percent = (lambda p: f"{p * total / 100:.0f}") if is_small_network else "%.1f%%"
+    stuff = matplotlib.pyplot.pie(sizes, explode=None, labels=labels, colors=colors, autopct=auto_percent, shadow=True, startangle=45)
+    patches = stuff[0]
 
     for i, patch in enumerate(patches):
-        if "hatch" in Diagram.nodes[indeces[i]]:
-            patch.set_hatch(Diagram.nodes[indeces[i]]["hatch"]) #hatching = "//","||",'\\\\',"--",'+'
-            #patch.set_linewidth(3.)
-            #patch.set_linestyle("--")
-            #patch.set_fc("blue")
-            #patch.set_ec("black")
-            #print(patch.get_lw())
-        elif "fillcolor" in Diagram.nodes[indeces[i]]:
-            #if Diagram.nodes[indeces[i]]["fillcolor"]=="white":
+        if "hatch" in diagram.nodes[indices[i]]:
+            patch.set_hatch(diagram.nodes[indices[i]]["hatch"])
+
+        elif "fillcolor" in diagram.nodes[indices[i]]:
             patch.set_ec("black")
 
-    matplotlib.pyplot.axis('equal')
+    matplotlib.pyplot.axis("equal")
 
-    if Title is None:
-        Title = 'Phenotype Commitment Sets'
-    matplotlib.pyplot.title(Title, y=1.08)
+    if title is None:
+        title = "Phenotype Commitment Sets"
 
+    matplotlib.pyplot.title(title, y=1.08)
     matplotlib.pyplot.tight_layout()
-
-    figure.savefig(FnameImage, bbox_inches='tight')
-    if not Silent: print("created %s"%FnameImage)
+    figure.savefig(fname_image, bbox_inches="tight")
     matplotlib.pyplot.close(figure)
-
-
+    log.info(f"created {fname_image}")
 
 
 if __name__=="__main__":
@@ -541,7 +428,7 @@ if __name__=="__main__":
     diagram.add_node(2, initaccepting_size=600, names=["OscP/GA"], fillcolor="#c8fbc0", hatch="//", penwidth=3, color="#ff7c00")
     diagram.add_node(3, initaccepting_size=1500, names=["P"], fillcolor="#c8fbc0")
 
-    create_piechart(diagram, FnameImage="remy_pie.svg", Title="", ColorMap=None, Silent=False)
+    create_phenotypes_piechart(diagram, fname_image="remy_pie.svg", title="", color_map=None, Silent=False)
 
 
 

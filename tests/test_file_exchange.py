@@ -131,11 +131,11 @@ def test_primes2smv():
     primes = {"vB": [[{}], []], "vC": [[{"vC": 0}], [{"vC": 1}]], "vA": [[{"vB": 0, "vC": 1}], [{"vC": 0}, {"vB": 1}]]}
 
     fname = os.path.join(FILES_OUT, "fileexchange_primes2smv_syn.smv")
-    PyBoolNet.model_checking.primes2smv(Primes=primes, FnameSMV=fname, Update="synchronous", InitialStates="INIT TRUE", Specification="CTLSPEC TRUE")
+    PyBoolNet.model_checking.primes2smv(primes=primes, fname_smv=fname, update="synchronous", initial_states="INIT TRUE", specification="CTLSPEC TRUE")
     fname = os.path.join(FILES_OUT, "fileexchange_primes2smv_async.smv")
-    PyBoolNet.model_checking.primes2smv(Primes=primes, FnameSMV=fname, Update="asynchronous", InitialStates="INIT TRUE", Specification="CTLSPEC TRUE")
+    PyBoolNet.model_checking.primes2smv(primes=primes, fname_smv=fname, update="asynchronous", initial_states="INIT TRUE", specification="CTLSPEC TRUE")
     fname = os.path.join(FILES_OUT, "fileexchange_primes2smv_mixed.smv")
-    PyBoolNet.model_checking.primes2smv(Primes=primes, FnameSMV=fname, Update="mixed", InitialStates="INIT TRUE", Specification="CTLSPEC TRUE")
+    PyBoolNet.model_checking.primes2smv(primes=primes, fname_smv=fname, update="mixed", initial_states="INIT TRUE", specification="CTLSPEC TRUE")
 
 
 @pytest.mark.parametrize("bounds", [None, (1, 2)])
@@ -145,5 +145,5 @@ def test_primes2asp(bounds, projection, type_):
     primes = {"B": [[{}], []], "C": [[{"C": 0}], [{"C": 1}]], "A": [[{"B": 0, "C": 1}], [{"C": 0}, {"B": 1}]]}
 
     fname = os.path.join(FILES_OUT, "fileexchange_primes2asp_case.asp")
-    PyBoolNet.trap_spaces.primes2asp(Primes=primes, FnameASP=fname, Bounds=bounds, Project=projection, Type=type_)
+    PyBoolNet.trap_spaces.primes2asp(primes=primes, fname_asp=fname, bounds=bounds, project=projection, type_=type_)
 

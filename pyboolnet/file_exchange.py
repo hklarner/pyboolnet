@@ -7,11 +7,10 @@ import ast
 import sys
 from typing import Optional
 
-from pyboolnet.interaction_graphs import primes2igraph
-
-from pyboolnet.misc import find_command
+from pyboolnet import find_command
 from pyboolnet.prime_implicants import find_constants, find_inputs
-from pyboolnet.interaction_graphs import find_outdag
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.digraphs import find_outdag
 from pyboolnet.boolean_normal_forms import primes2mindnf
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
 

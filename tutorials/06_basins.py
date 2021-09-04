@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-
-import PyBoolNet
 
 
 if __name__=="__main__":
@@ -11,7 +6,7 @@ if __name__=="__main__":
     # compute weak, strong and cycle-free basins
 
     primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
-    attrs = PyBoolNet.attractors.compute_attractor_json(primes, "asynchronous")
+    attrs = PyBoolNet.attractors.compute_attractors(primes, "asynchronous")
     state = attrs["attractors"][0]["state"]["str"]
     print(state)
 
@@ -34,7 +29,7 @@ if __name__=="__main__":
     PyBoolNet.basins_of_attraction.compute_basins(attrs)
     PyBoolNet.attractors.write_attractors_json(attrs, "attrs_basin.json")
     PyBoolNet.basins_of_attraction.create_barplot(attrs, "basin_barplot.pdf")
-    PyBoolNet.basins_of_attraction.create_piechart(attrs, "basin_piechart.pdf")
+    PyBoolNet.basins_of_attraction.create_phenotypes_piechart(attrs, "basin_piechart.pdf")
 
 
 

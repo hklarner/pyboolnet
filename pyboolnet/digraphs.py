@@ -1,32 +1,38 @@
 
 
+import sys
 import os
 import subprocess
 import networkx
 import itertools
+import logging
+from typing import Optional, List
 
-import PyBoolNet.Utility.Misc
-
-LAYOUT_ENGINES = {name:PyBoolNet.Utility.Misc.find_command(name) for name in ["dot","neato","fdp","sfdp","circo","twopi"]}
+from pyboolnet import find_command
 
 
-def digraph2dotlines(DiGraph, Indent=1):
+LAYOUT_ENGINES = {name: find_command(name) for name in ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]}
+
+log = logging.getLogger(__name__)
+
+
+def digraph2dotlines(digraph: networkx.DiGraph, indent: int = 1):
     """
     Basic function to create *dot* lines from a *networkx.DiGraph*.
 
     **arguments**:
-        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
+        * *digraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
 
     **returns**:
         * list of *dot* lines
     """
 
-    space = Indent*"  "
+    space = indent * "  "
     lines = []
 
     # fix cluster_ids for subgraphs
-    if "subgraphs" in DiGraph.graph:
-        for ID, subgraph in enumerate(DiGraph.graph["subgraphs"]):
+    if "subgraphs" in digraph.graph:
+        for ID, subgraph in enumerate(digraph.graph["subgraphs"]):
             subgraph.graph["cluster_id"] = ID
 
             if not "label" in subgraph.graph:
@@ -37,15 +43,15 @@ def digraph2dotlines(DiGraph, Indent=1):
     hit = False
     # node and edge defaults first
     for key in ["node", "edge"]:
-        if key in DiGraph.graph:
-            value = DiGraph.graph[key]
+        if key in digraph.graph:
+            value = digraph.graph[key]
             attr = ', '.join(['%s="%s"'%(str(x),str(y)) for x,y in value.items()])
             if attr:
                 lines+= [space+'%s [%s];'%(key,attr)]
             hit = False
 
     # general graph attributes
-    for key, value in sorted(DiGraph.graph.items()):
+    for key, value in sorted(digraph.graph.items()):
         # ignore because treated elsewhere
         key = key.strip()
         if key.lower() in ["subgraphs","cluster_id","node","edge"]:
@@ -54,25 +60,25 @@ def digraph2dotlines(DiGraph, Indent=1):
         # handle for keys that contain "{"
         # used for graph attributes of the from {rank = same; B; D; Y;}
         if "{" in key:
-            lines+= [space+key]
+            lines += [space+key]
 
         # handle for labels, i.e., the quotation mark problem
-        elif key=="label":
+        elif key == "label":
             value = value.strip()
             if value.startswith("<"):
-                lines+= [space+'label = %s;'%value]
-            elif value=="":
-                lines+= [space+'label = "";']
+                lines += [space+'label = %s;'%value]
+            elif value == "":
+                lines += [space+'label = "";']
                 # bugfix for inherited labels
                 # see: http://www.graphviz.org/content/cluster-and-graph-labels-bug
 
             elif value:
-                lines+= [space+'label = "%s"'%value.strip()]
+                lines += [space + 'label = "%s"'%value.strip()]
                 #lines+= [space+'label=<<B>%s</B>>;'%value.replace("&","&amp;")]
 
         # everything else is just passed on:
         else:
-            lines+= [space+'%s = "%s";'%(key,value)]
+            lines += [space + '%s = "%s";'%(key, value)]
 
         hit = True
 
@@ -80,45 +86,45 @@ def digraph2dotlines(DiGraph, Indent=1):
         lines += ['']
 
     # handle for subgraphs
-    if "subgraphs" in DiGraph.graph:
-        value = DiGraph.graph["subgraphs"]
+    if "subgraphs" in digraph.graph:
+        value = digraph.graph["subgraphs"]
         if value:
             tree = subgraphs2tree(value)
             roots = [x for x in tree.nodes() if not list(tree.predecessors(x))]
             for root in roots:
                 subnodes = list(networkx.descendants(tree,root))+[root]
-                subtree  = tree.subgraph(subnodes)
-                lines+= tree2dotlines(subtree, Indent)
+                subtree = tree.subgraph(subnodes)
+                lines += tree2dotlines(subtree, indent)
 
-            lines+= ['']
+            lines += ['']
 
     # node attributes
-    for node, attr in sorted(DiGraph.nodes(data=True)):
+    for node, attr in sorted(digraph.nodes(data=True)):
         if attr:
             values = []
             for k,v in attr.items():
 
                 # html style label attribute
                 if str(v).startswith("<"):
-                    values+=['%s=%s'%(k,v)]
+                    values += ['%s=%s' % (k, v)]
 
                 # normal attribute
                 else:
-                    values+=['%s="%s"'%(k,v)]
+                    values += ['%s="%s"' % (k,v)]
 
             values = ', '.join(values)
-            lines += [space+'"%s" [%s];'%(node, values)]
+            lines += [space+'"%s" [%s];' % (node, values)]
         else:
-            lines += [space+'"%s";'%node]
+            lines += [space+'"%s";' % node]
 
-    if DiGraph.order()>0 and DiGraph.size()>0:
+    if digraph.order() > 0 and digraph.size() > 0:
         lines += ['']
 
     # edge attributes
-    for source, target, attr in DiGraph.edges(data=True):
+    for source, target, attr in digraph.edges(data=True):
 
         # sign is reserved for interaction signs
-        attr = dict([x for x in attr.items() if not x[0]=="sign"])
+        attr = dict([x for x in attr.items() if not x[0] == "sign"])
 
         if attr:
             values = []
@@ -126,36 +132,36 @@ def digraph2dotlines(DiGraph, Indent=1):
 
                 # html style label attribute
                 if str(v).startswith("<"):
-                    values+=['%s=%s'%(k,v)]
+                    values += ['%s=%s' % (k, v)]
 
                 # normal attribute
                 else:
-                    values+=['%s="%s"'%(k,v)]
+                    values += ['%s="%s"' % (k, v)]
 
             values = ', '.join(values)
-            lines += [space+'"%s" -> "%s" [%s];'%(source,target,values)]
+            lines += [space+'"%s" -> "%s" [%s];' % (source, target, values)]
 
         else:
 
             # for edges without attributes
-            lines += [space+'"%s" -> "%s";'%(source,target)]
+            lines += [space+'"%s" -> "%s";' % (source, target)]
 
-    if DiGraph.size()>0:
+    if digraph.size() > 0:
         lines += ['']
 
     return lines
 
 
-def digraph2dot(DiGraph, FnameDOT=None):
+def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None):
     """
-    Generates a *dot* file from *DiGraph* and saves it as *fname_dot* or returns dot file as a string.
+    Generates a *dot* file from *digraph* and saves it as *fname_dot* or returns dot file as a string.
 
     **arguments**:
-        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
-        * *fname_dot* (str): name of *dot* file or *None*
+        * *digraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
+        * *fname_dot*: name of *dot* file or *None*
 
     **returns**:
-        * *FileDOT* (str): file as string if not *FnameDOT is None*, otherwise it returns *None*
+        * *text_dot*: file as string if not *FnameDOT is None*, otherwise it returns *None*
 
     **example**::
 
@@ -163,26 +169,24 @@ def digraph2dot(DiGraph, FnameDOT=None):
           >>> digraph2dot(digraph)
     """
 
-    if DiGraph.order() == 0:
-        print("DiGraph has no nodes.")
-        if FnameDOT is not None:
-            print("%s was not created." % FnameDOT)
+    if digraph.order() == 0:
+        log.warning("DiGraph has no nodes.")
         return
 
-    if not type(list(DiGraph.nodes())[0]) == str:
-        DiGraph = networkx.relabel_nodes(DiGraph, mapping=lambda x: str(x))
+    if not type(list(digraph.nodes())[0]) == str:
+        digraph = networkx.relabel_nodes(digraph, mapping=lambda x: str(x))
 
     lines = ['digraph {']
-    lines += digraph2dotlines(DiGraph)
+    lines += digraph2dotlines(digraph)
     lines += ['}']
 
-    if FnameDOT is None:
-        return '\n'.join(lines)
+    dot_text = "\n".join(lines)
 
-    with open(FnameDOT, 'w') as f:
-        f.writelines('\n'.join(lines))
+    with open(fname_dot, 'w') as f:
+        f.writelines(dot_text)
 
-    print("created %s" % FnameDOT)
+    log.info(f"created {fname_dot}")
+    return dot_text
 
 
 def dot2image(fname_dot: str, fname_image: str, layout_engine: str = "dot"):
@@ -203,81 +207,76 @@ def dot2image(fname_dot: str, fname_image: str, layout_engine: str = "dot"):
 
     filetype = fname_image.split('.')[-1]
 
-
     cmd = [LAYOUT_ENGINES[layout_engine], "-T" + filetype, fname_dot, "-o", fname_image]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = proc.communicate()
 
-    if not (proc.returncode ==0) or not os.path.exists(fname_image):
-        print(output)
-        print(error)
-        print('"%s" finished with return code %i' % (layout_engine, proc.returncode))
-        raise Exception
+    if not (proc.returncode == 0) or not os.path.exists(fname_image):
+        log.error(output)
+        log.error(error)
+        log.error(f'"{layout_engine}" finished with return code {proc.returncode}')
+        sys.exit()
 
     print("created %s" % fname_image)
 
 
-def digraph2image(DiGraph, FnameIMAGE, LayoutEngine):
+def digraph2image(digraph: networkx.DiGraph, fname_image: str, layout_engine: str):
     """
-    Creates an image file from a *DiGraph* file using the Graphviz layout *layout_engine*.
+    Creates an image file from a *digraph* file using the Graphviz layout *layout_engine*.
     The output format is detected automatically.
     Use e.g. ``dot -T?`` to find out which output formats are supported on your installation.
 
     **arguments**:
-        * *DiGraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
+        * *digraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
         * *fname_dot*: name of input *dot* file
         * *layout_engine*: one of "dot", "neato", "fdp", "sfdp", "circo", "twopi"
         * *fname_image*: name of output file
-
-    **returns**:
-        * *None*
 
     **example**::
 
           >>> dot2image("mapk.dot", "mapk.pdf")
     """
 
-    filetype = FnameIMAGE.split('.')[-1]
+    filetype = fname_image.split('.')[-1]
 
-    cmd = [LAYOUT_ENGINES[LayoutEngine], "-T"+filetype, "-o", FnameIMAGE]
-    dotfile = digraph2dot(DiGraph, FnameDOT=None)
+    cmd = [LAYOUT_ENGINES[layout_engine], "-T" + filetype, "-o", fname_image]
+    dotfile = digraph2dot(digraph, fname_dot=None)
 
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate(input=dotfile.encode())
     proc.stdin.close()
 
-    if not (proc.returncode == 0) or not os.path.exists(FnameIMAGE):
-        print(dotfile)
-        print(out)
-        print(err)
-        print('dot did not respond with return code 0')
-        print('command: %s'%' '.join(cmd))
-        raise Exception
+    if not (proc.returncode == 0) or not os.path.exists(fname_image):
+        log.error(dotfile)
+        log.error(out)
+        log.error(err)
+        log.error('dot did not respond with return code 0')
+        log.error(f"command: {' '.join(cmd)}")
+        sys.exit()
 
-    if not Silent:
-        print("created %s"%FnameIMAGE)
+    log.info(f"created {fname_image}")
 
 
-def subgraphs2tree(Subgraphs):
+def subgraphs2tree(subgraphs) -> networkx.DiGraph:
     """
-    Creates a tree (*networkx.DiGraph*) *G* from the list *Subgraphs* such that each node of *G* is a subgraph
+    Creates a tree (*networkx.DiGraph*) *G* from the list *subgraphs* such that each node of *G* is a subgraph
     and there is an edge from *x* to *y* if *x* is the smallest superset of *y*.
-    It is required that the node sets of any *x,y* of *Subgraphs* are either disjoint or one is a subset of the other.
-    The function throws an exception if there are *x,y* of *Subgraphs* that violate this condition.
+    It is required that the node sets of any *x,y* of *subgraphs* are either disjoint or one is a subset of the other.
+    The function throws an exception if there are *x,y* of *subgraphs* that violate this condition.
 
     This function is used to draw Graphviz_ subgraphs.
 
-    It is recommended that the digraphs in *Subgraphs* contain only unstyled nodes and no edges.
+    It is recommended that the digraphs in *subgraphs* contain only unstyled nodes and no edges.
     Use the original graph to style edges and nodes of the subgraph.
-    Use the digraphs in *Subgraphs* only to style the color and label of the subgraph.
+    Use the digraphs in *subgraphs* only to style the color and label of the subgraph.
 
     If you do node styles or edges to a subgraph, styles may be overwritten and duplicate edges may be introduced.
 
     **arguments**:
-        * *Subgraphs*: list of *networkx.DiGraphs*
+        * *subgraphs*: list of *networkx.DiGraphs*
 
     **returns**:
-        * (*networkx.DiGraph*): a tree that captures the "strictest inclusion" property
+        * *tree*: a tree that captures the "strictest inclusion" property
 
     **example**::
 
@@ -293,78 +292,75 @@ def subgraphs2tree(Subgraphs):
     """
 
     tree = networkx.DiGraph()
-    tree.add_nodes_from(Subgraphs)
+    tree.add_nodes_from(subgraphs)
 
-
-
-    for x in Subgraphs:
-        for y in Subgraphs:
-            if x==y: continue
+    for x in subgraphs:
+        for y in subgraphs:
+            if x == y:
+                continue
 
             if set(x.nodes()).issuperset(set(y.nodes())):
-                tree.add_edge(x,y)
+                tree.add_edge(x, y)
 
-
-    for x,y in tree.edges():
-
-        for path in networkx.all_simple_paths(tree,x,y):
-            if len(path)>2:
-                tree.remove_edge(x,y)
+    for x, y in tree.edges():
+        for path in networkx.all_simple_paths(tree, x, y):
+            if len(path) > 2:
+                tree.remove_edge(x, y)
                 break
 
-
     for node in tree.nodes():
-
         if "fillcolor" in node.graph and not "style" in node.graph:
             node.graph["style"] = "filled"
 
-        if not "fillcolor" in node.graph and not "style" in node.graph:
+        if "fillcolor" not in node.graph and "style" not in node.graph:
             node.graph["color"] = "black"
             node.graph["fillcolor"] = "/prgn10/6"
             node.graph["style"] = "filled"
 
-        if not "label" in node.graph:
+        if "label" not in node.graph:
             node.graph["label"] = ""
 
     return tree
 
 
-def tree2dotlines(Tree, Indent=1):
+def tree2dotlines(tree: networkx.DiGraph, indent: int = 1):
     """
-    Creates a list of *dot* lines from *Tree* which is obtained from the function *subgraphs2tree*.
+    Creates a list of *dot* lines from *tree* which is obtained from the function *subgraphs2tree*.
     Handles the nesting and *dot* properties.
 
     **arguments**:
-        * *Tree* (*networkx.DiGraph*): graph of subgraph obtained from *subgraphs2tree*
+        * *tree*: graph of subgraph obtained from *subgraphs2tree*
 
     **returns**:
         * list of *dot* lines
     """
 
-
-    roots = [x for x in Tree.nodes() if not list(Tree.predecessors(x))]
-    assert(len(roots)==1)
+    roots = [x for x in tree.nodes() if not list(tree.predecessors(x))]
+    
+    assert(len(roots) == 1)
+    
     root = roots[0]
-    assert(not "subgraphs" in root.graph)
+    
+    assert("subgraphs" not in root.graph)
+    
     cluster_id = root.graph["cluster_id"]
-    space = Indent*"  "
+    space = indent * "  "
 
     lines = []
-    lines+= [space+"subgraph cluster_%i {"%cluster_id]
-    lines+= [x for x in digraph2dotlines(DiGraph=root, Indent=Indent+1)]
+    lines += [space + "subgraph cluster_%i {" % cluster_id]
+    lines += [x for x in digraph2dotlines(digraph=root, indent=indent + 1)]
 
-    for successor in Tree.successors(root):
-        subnodes = list(networkx.descendants(Tree,successor))+[successor]
-        subtree  = Tree.subgraph(subnodes)
-        lines+= tree2dotlines(subtree, Indent=Indent+1)
+    for successor in tree.successors(root):
+        subnodes = list(networkx.descendants(tree, successor)) + [successor]
+        subtree = tree.subgraph(subnodes)
+        lines += tree2dotlines(subtree, indent=indent + 1)
 
-    lines+= [space+"}"]
-
+    lines += [space+"}"]
 
     return lines
 
 
-def digraph2sccgraph(Digraph):
+def digraph2sccgraph(digraph: networkx.DiGraph) -> networkx.DiGraph:
     """
     Creates the strongly connected component graph from the interaction graph.
     Each node consists of a tuple of names the make up that nodes SCC.
@@ -373,32 +369,33 @@ def digraph2sccgraph(Digraph):
     The graph has no additional data.
 
     **arguments**:
-        * *Digraph* (networkx.DiGraph): directed graph
+        * *digraph*: a directed graph
 
     **returns**:
-        * *(networkx.DiGraph)*: the SCC graph
+        * *scc_graph*: the scc graph
 
     **example**::
 
-            >>> sccgraph = digraph2sccgraph(igraph)
-            >>> sccgraph.nodes()
-            [('Ash1', 'Cbf1'), ('gal',), ('Gal80',), ('Gal4','Swi5)]
-            >>> sccgraph.edges()
-            [(('gal',), ('Ash1', 'Cbf1')), (('gal',), ('Gal80',)),
-             (('Gal80',),('Gal4','Swi5))]
+        >>> sccgraph = digraph2sccgraph(igraph)
+        >>> sccgraph.nodes()
+        [('Ash1', 'Cbf1'), ('gal',), ('Gal80',), ('Gal4','Swi5)]
+        >>> sccgraph.edges()
+        [(('gal',), ('Ash1', 'Cbf1')), (('gal',), ('Gal80',)),
+         (('Gal80',),('Gal4','Swi5))]
     """
 
-    sccs = sorted([tuple(sorted(c)) for c in networkx.strongly_connected_components(Digraph)])
+    sccs = sorted([tuple(sorted(c)) for c in networkx.strongly_connected_components(digraph)])
 
     sccgraph = networkx.DiGraph()
     sccgraph.add_nodes_from(sccs)
 
-    for U,W in itertools.product(sccs, sccs):
-        if U==W: continue # no self-loops in SCC graph
+    for U, W in itertools.product(sccs, sccs):
+        if U == W:
+            continue  # no self-loops in SCC graph
 
-        for u,w in itertools.product(U,W):
-            if Digraph.has_edge(u,w):
-                sccgraph.add_edge(U,W)
+        for u, w in itertools.product(U, W):
+            if digraph.has_edge(u, w):
+                sccgraph.add_edge(U, W)
                 break
 
     return sccgraph
@@ -406,7 +403,7 @@ def digraph2sccgraph(Digraph):
 
 def digraph2condensationgraph(digraph: networkx.DiGraph) -> networkx.DiGraph:
     """
-    Creates the condensation graph from *Digraph*.
+    Creates the condensation graph from *digraph*.
     The condensation graph is similar to the SCC graph but it replaces
     cascades between SCCs by single edges.
     Its nodes are therefore non-trivial SCCs or inputs.
@@ -416,19 +413,19 @@ def digraph2condensationgraph(digraph: networkx.DiGraph) -> networkx.DiGraph:
     The graph has no additional data.
 
     **arguments**:
-        * *Digraph* (networkx.DiGraph): directed graph
+        * *digraph*: directed graph
 
     **returns**:
-        * *(networkx.DiGraph)*: the condensation graph
+        * *condensation_graph*: the condensation graph
 
     **example**::
 
-            >>> cgraph = digraph2condensationgraph(igraph)
-            >>> cgraph.nodes()
-            [('Ash1', 'Cbf1'), ('Gal4',), ('Gal80',), ('Cbf1','Swi5)]
-            >>> cgraph.edges()
-            [(('Gal4',), ('Ash1', 'Cbf1')), (('Gal4',), ('Gal80',)),
-             (('Gal80',),('Cbf1','Swi5))]
+        >>> cgraph = digraph2condensationgraph(igraph)
+        >>> cgraph.nodes()
+        [('Ash1', 'Cbf1'), ('Gal4',), ('Gal80',), ('Cbf1','Swi5)]
+        >>> cgraph.edges()
+        [(('Gal4',), ('Ash1', 'Cbf1')), (('Gal4',), ('Gal80',)),
+         (('Gal80',),('Cbf1','Swi5))]
     """
 
     sccs = sorted([tuple(sorted(scc)) for scc in networkx.strongly_connected_components(digraph)])
@@ -468,22 +465,22 @@ def digraph2condensationgraph(digraph: networkx.DiGraph) -> networkx.DiGraph:
     return cgraph
 
 
-def add_style_subgraphs(DiGraph, Subgraphs):
+def add_style_subgraphs(digraph: networkx.DiGraph, subgraphs):
     """
-    Adds the subgraphs given in *Subgraphs* to *DiGraph* or overwrites them if they already exist.
+    Adds the subgraphs given in *subgraphs* to *digraph* or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
-    *Subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
+    *subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
     is a dictionary of subgraph attributes in *dot* format.
 
     .. note::
 
-        *Subgraphs* must satisfy the following property:
+        *subgraphs* must satisfy the following property:
         Any two subgraphs have either empty intersection or one is a subset of the other.
         The reason for this requirement is that *dot* can not draw intersecting subgraphs.
 
     **arguments**:
-        * *DiGraph*: directed graph
-        * *Subgraphs* (list): pairs of lists and subgraph attributes
+        * *digraph*: directed graph
+        * *subgraphs*: pairs of lists and subgraph attributes
 
     **example**:
 
@@ -493,17 +490,16 @@ def add_style_subgraphs(DiGraph, Subgraphs):
         >>> add_style_subgraphs(graph, subgraphs)
     """
 
+    if "subgraphs" not in digraph.graph:
+        digraph.graph["subgraphs"] = []
 
-    if not "subgraphs" in DiGraph.graph:
-        DiGraph.graph["subgraphs"] = []
-
-    for nodes, attr in Subgraphs:
+    for nodes, attr in subgraphs:
         if not nodes: continue
         for x in nodes:
-            if not x in DiGraph:
-                print(" error: subgraph nodes must belong to the digraph")
-                print(" this node does not exist: %s"%x)
-                raise Exception
+            if x not in digraph:
+                log.error(" error: subgraph nodes must belong to the digraph")
+                log.error(" this node does not exist: %s"%x)
+                sys.exit()
 
         subgraph = networkx.DiGraph()
         subgraph.graph["color"] = "none"
@@ -511,99 +507,136 @@ def add_style_subgraphs(DiGraph, Subgraphs):
         if attr:
             subgraph.graph.update(attr)
 
-        for x in list(DiGraph.graph["subgraphs"]):
+        for x in list(digraph.graph["subgraphs"]):
             if sorted(x.nodes()) == sorted(subgraph.nodes()):
-                DiGraph.graph["subgraphs"].remove(x)
+                digraph.graph["subgraphs"].remove(x)
 
-        DiGraph.graph["subgraphs"].append(subgraph)
+        digraph.graph["subgraphs"].append(subgraph)
 
 
-def convert_nodes_to_anonymous_strings(DiGraph):
+def convert_nodes_to_anonymous_strings(digraph: networkx.DiGraph):
     """
-    used to convert meaningful nodes into anonymous stringified integers for drawing.
-    """
-
-    mapping = {x:str(i) for i,x in enumerate(DiGraph.nodes())}
-    networkx.relabel_nodes(DiGraph, mapping, copy=False)
-
-
-## graph traversal and analysis ##
-
-def ancestors(DiGraph, X):
-    """
-    Return all nodes having a path to one of the nodes in X.
+    used to convert meaningful nodes into strings for drawing.
     """
 
-    if X in DiGraph:
-        return networkx.ancestors(DiGraph,X)
+    mapping = {x: str(i) for i, x in enumerate(digraph.nodes())}
+    networkx.relabel_nodes(digraph, mapping, copy=False)
+
+
+def ancestors(digraph: networkx.DiGraph, node_or_nodes):
+    """
+    Return all nodes having a path to one of the nodes in *node_or_nodes*.
+    """
+
+    if node_or_nodes in digraph:
+        return networkx.ancestors(digraph, node_or_nodes)
     else:
         # bugfix for networkx.ancestors (it doesn't recognize self-loops)
-        ancs = set([x for x in X if x in networkx.nodes_with_selfloops(DiGraph)])
-        for x in X:
-            ancs.add(x)
-            ancs.update(networkx.ancestors(DiGraph,x))
-        return ancs
+        ancestors = set([x for x in node_or_nodes if x in networkx.nodes_with_selfloops(digraph)])
+        for x in node_or_nodes:
+            ancestors.add(x)
+            ancestors.update(networkx.ancestors(digraph, x))
+        return ancestors
 
 
-def successors(DiGraph, X):
+def successors(digraph: networkx.DiGraph, node_or_nodes):
     """
     returns successors of a node or list of nodes
     """
 
-    if X in DiGraph:
-        return DiGraph.successors(X)
+    if node_or_nodes in digraph:
+        return digraph.successors(node_or_nodes)
     else:
-        sucs = set([])
-        for x in X: sucs.update(set(DiGraph.successors(x)))
-        return sorted(sucs)
+        successors = set([])
+        for x in node_or_nodes:
+            successors.update(set(digraph.successors(x)))
+        return sorted(successors)
 
 
-def predecessors(DiGraph, X):
+def predecessors(digraph: networkx.DiGraph, node_or_nodes):
     """
     returns successors of a node or the union of several nodes
     """
 
-    if X in DiGraph:
-        return DiGraph.predecessors(X)
+    if node_or_nodes in digraph:
+        return digraph.predecessors(node_or_nodes)
     else:
-        preds = set([])
-        for x in X: preds.update(set(DiGraph.predecessors(x)))
-        return sorted(preds)
+        predecessors = set([])
+        for x in node_or_nodes:
+            predecessors.update(set(digraph.predecessors(x)))
+        return sorted(predecessors)
 
 
-def has_path(DiGraph, X, Y):
-    assert("!s" not in DiGraph)
-    assert("!t" not in DiGraph)
+def has_path(digraph, from_node_or_nodes, to_node_or_nodes):
+    assert "!s" not in digraph
+    assert "!t" not in digraph
 
-    if X in DiGraph:
-        source = X
+    if from_node_or_nodes in digraph:
+        source = from_node_or_nodes
     else:
         source = "!s"
-        DiGraph.add_node("!s")
-        DiGraph.add_edges_from([("!s",x) for x in X])
+        digraph.add_node("!s")
+        digraph.add_edges_from([("!s", x) for x in from_node_or_nodes])
 
-    if Y in DiGraph:
-        target = Y
+    if to_node_or_nodes in digraph:
+        target = to_node_or_nodes
     else:
         target = "!t"
-        DiGraph.add_node("!t")
-        DiGraph.add_edges_from([(y,"!t") for y in Y])
+        digraph.add_node("!t")
+        digraph.add_edges_from([(y, "!t") for y in to_node_or_nodes])
 
-    answer = networkx.has_path(DiGraph, source, target)
-    for x in ["!s","!t"]:
-        if x in DiGraph: DiGraph.remove_node(x)
+    answer = networkx.has_path(digraph, source, target)
+    for x in ["!s", "!t"]:
+        if x in digraph:
+            digraph.remove_node(x)
 
     return answer
 
 
-def has_edge(DiGraph, X, Y):
+def has_edge(digraph, from_node_or_nodes, to_node_or_nodes):
 
-    if X in DiGraph: X = [X]
-    if Y in DiGraph: Y = [Y]
+    if from_node_or_nodes in digraph:
+        from_node_or_nodes = [from_node_or_nodes]
+    if to_node_or_nodes in digraph:
+        to_node_or_nodes = [to_node_or_nodes]
 
-    for x in X:
-        for y in Y:
-            if DiGraph.has_edge(x,y):
+    for x in from_node_or_nodes:
+        for y in to_node_or_nodes:
+            if digraph.has_edge(x, y):
                 return True
 
     return False
+
+
+def find_outdag(igraph: networkx.DiGraph) -> List[str]:
+    """
+    Finds the maximal directed acyclic subgraph that is closed under the successors operation.
+    Essentially, these components are the "output cascades" which can be exploited by various algorithms, e.g.
+    the computation of basins of attraction.
+
+    **arguments**:
+        * *igraph*: interaction graph
+
+    **returns**:
+        * *names*: the outdag
+
+    **example**::
+
+        >>> find_outdag(igraph)
+        ["v7", "v8", "v9"]
+    """
+
+    graph = igraph.copy()
+    sccs = networkx.strongly_connected_components(graph)
+    sccs = [list(x) for x in sccs]
+    candidates = [scc[0] for scc in sccs if len(scc) == 1]
+    candidates = [x for x in candidates if not graph.has_edge(x, x)]
+    sccs = [scc for scc in sccs if len(scc) > 1 or graph.has_edge(scc[0], scc[0])]
+
+    graph.add_node("!")
+    for scc in sccs:
+        graph.add_edge(scc[0], "!")
+
+    outdag = [x for x in candidates if not networkx.has_path(graph, x, "!")]
+
+    return outdag

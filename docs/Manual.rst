@@ -1471,6 +1471,36 @@ Note also that since *specQ2* is false we can ask :ref:`installation_nusmv` to g
 an initial state that does not satisfy *specQ2*, i.e., a state that satisfies Q2.
 Counterexamples of existential queries are therefore often also called *witnesses*.
 
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
    >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
    >>> state = counterex[0]
    >>> STGs.state2str(state)
@@ -1823,6 +1853,84 @@ The resulting STG is shown in :ref:`the figure below <figure28>`.
 
 Its STG contains two cyclic attractors and its minimal trap space ``---`` contains two cyclic attractors and it therefore not univocal.
 
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
    >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
    ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
    ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
@@ -1845,7 +1953,11 @@ Its STG contains two cyclic attractors and its minimal trap space ``---`` contai
 
    WRONG FIGURE! The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
 
-   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+import pyboolnet.state_space   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+   ['---']
+   >>> STGs.add_style_subspaces(stg, mintspaces)
+   >>> stg.graph["label"] = "Example 26: An STG whose minimal trap space '---' is not univocal"
    >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
    ['---']
    >>> STGs.add_style_subspaces(stg, mintspaces)

@@ -6,6 +6,8 @@ import sys
 import PyBoolNet
 from PyBoolNet.Utility.Misc import perc2str
 
+import pyboolnet.state_space
+
 BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
 sys.path.append(BASE)
@@ -20,16 +22,16 @@ def weak_basin(Primes, Update, Subspace, Minimize=False):
     """
     todo: add unit tests
 
-    Computes the weak basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
+    Computes the weak basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
       **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str): the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize* (bool): minimize the Boolean expressions
-        * *Subspace* (str/dict): a subspace
+        * *primes*: prime implicants
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Minimize*: minimize the Boolean expressions
+        * *subspace*: a subspace
 
       **returns**:
-        * *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
@@ -46,16 +48,16 @@ def strong_basin(Primes, Update, Subspace, Minimize=False):
     """
     todo: add unit tests
 
-    Computes the strong basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
+    Computes the strong basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
       **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize* (bool): minimize the Boolean expressions
-        * *Subspace* (str/dict): a subspace
+        * *primes*: prime implicants
+        * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Minimize*: minimize the Boolean expressions
+        * *subspace*: a subspace
 
       **returns**:
-        * *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
@@ -72,16 +74,16 @@ def cyclefree_basin(Primes, Update, Subspace, Minimize=False):
     """
     todo: add unit tests
 
-    Computes the cycle-free basin of *Subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
+    Computes the cycle-free basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
       **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize* (bool): minimize the Boolean expressions
-        * *Subspace* (str/dict): a subspace
+        * *primes*: prime implicants
+        * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Minimize*: minimize the Boolean expressions
+        * *subspace*: a subspace
 
       **returns**:
-        * *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
@@ -101,14 +103,14 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
     The handle for :ref:`weak_basin`, :ref:`strong_basin` and :ref:`cyclefree_basin`.
 
       **arguments**:
-        * *Primes*: prime implicants
-        * *Update* (str):  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize* (bool): minimize the Boolean expressions
-        * *Subspace* (str/dict): a subspace
-        * *CTLpattern* (str):
+        * *primes*: prime implicants
+        * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *Minimize*: minimize the Boolean expressions
+        * *subspace*: a subspace
+        * *CTLpattern*:
 
       **returns**:
-        * *Basin* (dict): with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
@@ -129,7 +131,7 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
     if Minimize and formula not in ["TRUE", "FALSE"]:
         formula = PyBoolNet.boolean_logic.minimize_espresso(formula)
 
-    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    size_total = pyboolnet.state_space.size_state_space(Primes)
 
     return {"size": size,
             "formula": formula,
@@ -143,7 +145,7 @@ def _default_basin(Primes):
     <description>
 
       **arguments**:
-        * *Primes*: prime implicants
+        * *primes*: prime implicants
         * *<arg>* (<type>): <description>
 
       **returns**:
@@ -155,7 +157,7 @@ def _default_basin(Primes):
         <result>
     """
 
-    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    size_total = pyboolnet.state_space.size_state_space(Primes)
 
     return {"size":    size_total,
             "formula": "TRUE",
@@ -166,18 +168,17 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
     """
     todo: add unit tests
 
-    Extends *AttrJson* with basin of attraction.
+    Extends *attractors* with basin of attraction.
     Use *FnameBarplot* and *FnamePiechart* to create plots of the basins, see :ref:`create_barplot` and :ref:`basins_create_piechart`.
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *Weak* (bool): compute weak basins
-        * *Strong* (bool): compute strong basins
-        * *CycleFree* (bool): compute cycle-free basins
-        * *FnameBarplot* (str): file name of bar plot
-        * *FnamePiechart* (str): file name of pie chart
-        * *Minimize* (bool): minimize the Boolean expressions
-        * *Silent* (bool): print infos to screen
+        * *attractors*: json attractor data, see :ref:`attractors_compute_json`
+        * *Weak*: compute weak basins
+        * *Strong*: compute strong basins
+        * *CycleFree*: compute cycle-free basins
+        * *FnameBarplot*: file name of bar plot
+        * *FnamePiechart*: file name of pie chart
+        * *Minimize*: minimize the Boolean expressions
 
     **returns**::
         * *None*
@@ -185,7 +186,7 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
     **example**::
 
         >>> primes = Repository.get_primes("raf")
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
+        >>> attrs = Attractors.compute_attractors(primes, update)
         >>> compute_basins(attrs)
     """
 
@@ -238,25 +239,24 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
     """
     todo: add unit tests
 
-    Creates a bar plot of the basins of attraction specified in *AttrJson*.
-    Requires that *AttrJson* has been extended with basins information by :ref:`compute_basins`.
+    Creates a bar plot of the basins of attraction specified in *attractors*.
+    Requires that *attractors* has been extended with basins information by :ref:`compute_basins`.
     Requires https://matplotlib.org.
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *FnameImage* (str): create image for bar plot
-        * *Title* (str): optional title of plot
-        * *Yunit* (str): "perc" for percentage of state space and "size" for number of states
-        * *Ymax* (int): y axis limit
+        * *attractors*: json attractor data, see :ref:`attractors_compute_json`
+        * *fname_image*: create image for bar plot
+        * *title*: optional title of plot
+        * *Yunit*: "perc" for percentage of state space and "size" for number of states
+        * *Ymax*: y axis limit
         * *LabelsMap* (function): a map from minimal trap space dictionary of attractor to label str
-        * *Silent* (bool): print infos to screen
 
     **returns**:
         * *None*
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
+        >>> attrs = Attractors.compute_attractors(primes, update)
         >>> compute_basins(attrs)
         >>> create_barplot(attrs, "barplot.pdf")
         created barplot.pdf
@@ -272,7 +272,7 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
 
     if not Silent: print("Basins.create_barplot(..)")
 
-    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    total = pyboolnet.state_space.size_state_space(Primes)
 
     indeces = list(range(len(Attrs)))
     indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
@@ -326,24 +326,23 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
     todo: add cycle-free subset to plot using pairs of similar colours
     todo: add unit tests
 
-    Creates a pie chart of the basins of attraction specified in *AttrJson*.
-    Requires that *AttrJson* has been extended with basins information by :ref:`compute_basins`.
+    Creates a pie chart of the basins of attraction specified in *attractors*.
+    Requires that *attractors* has been extended with basins information by :ref:`compute_basins`.
     Requires https://matplotlib.org.
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`attractors_compute_json`
-        * *FnameImage* (str): create image for pie chart
-        * *Title* (str): optional title of plot
-        * *Yunit* (str): "perc" for percentage of state space and "size" for number of states
+        * *attractors*: json attractor data, see :ref:`attractors_compute_json`
+        * *fname_image*: create image for pie chart
+        * *title*: optional title of plot
+        * *Yunit*: "perc" for percentage of state space and "size" for number of states
         * *LabelsMap* (function): a map from minimal trap space dictionary of attractor to label str
-        * *Silent* (bool): print infos to screen
 
     **returns**:
         * *None*
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
+        >>> attrs = Attractors.compute_attractors(primes, update)
         >>> compute_basins(attrs)
         >>> create_piechart(attrs, "piechart.pdf")
         created piechart.pdf
@@ -359,7 +358,7 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
 
     if not Silent: print("Basins.create_piechart(..)")
 
-    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    total = pyboolnet.state_space.size_state_space(Primes)
     strong = sum(x["strong_basin"]["size"] for x in Attrs)
     outside = total - strong
 

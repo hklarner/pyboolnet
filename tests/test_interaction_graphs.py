@@ -7,12 +7,12 @@ from pyboolnet.repository import get_primes
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.file_exchange import read_primes
 from pyboolnet.interaction_graphs import create_image, igraph2dot, igraph2image
-from pyboolnet.interaction_graphs import find_outdag, activities2animation
+from pyboolnet.interaction_graphs import activities2animation
 from pyboolnet.interaction_graphs import find_minimal_autonomous_nodes
 from pyboolnet.interaction_graphs import add_style_interactionsigns, add_style_activities
 from pyboolnet.interaction_graphs import add_style_constants, add_style_inputs, add_style_outputs
 from pyboolnet.interaction_graphs import add_style_sccs, add_style_subgraphs
-from pyboolnet.digraphs import dot2image
+from pyboolnet.digraphs import dot2image, find_outdag
 
 FILES_IN = os.path.join(os.path.dirname(__file__), "files_input")
 FILES_OUT = os.path.join(os.path.dirname(__file__), "files_output")

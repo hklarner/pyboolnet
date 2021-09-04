@@ -1,18 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 
-import PyBoolNet
+import pyboolnet.state_space
 
-
-if __name__=="__main__":
-
-    # basic drawing
-
+if __name__ == "__main__":
     primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
-    PyBoolNet.interaction_graphs.create_image(primes, "igraph.pdf")
+    PyBoolNet.interaction_graphs.create_stg_image(primes, "igraph.pdf")
 
-    PyBoolNet.interaction_graphs.create_image(primes, "igraph2.pdf", styles=["anonymous", "sccs"])
+    PyBoolNet.interaction_graphs.create_stg_image(primes, "igraph2.pdf", styles=["anonymous", "sccs"])
 
     # advances drawing
 
@@ -27,7 +21,7 @@ if __name__=="__main__":
 
     # local interaction graphs
 
-    state = PyBoolNet.state_transition_graphs.random_state(primes)
+    state = pyboolnet.state_space.random_state(primes)
     local_igraph = PyBoolNet.interaction_graphs.local_igraph_of_state(primes, state)
     PyBoolNet.interaction_graphs.add_style_interactionsigns(local_igraph)
     PyBoolNet.interaction_graphs.igraph2image(local_igraph, "local_igraph.pdf")

@@ -1,28 +1,28 @@
 
 
-import logging
-import sys
-from typing import List
+import ast
 import configparser
 import json
+import logging
 import math
 import os
-import ast
+import sys
+from typing import List
 
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
-EXECUTABLES = _load_cfg()
+
 
 log = logging.getLogger(__name__)
 
 
 def read_txt_version() -> str:
-    with open("version.txt") as fp:
-        pass
+    with open(os.path.join(ROOT_DIR, "version.txt"), "r") as fp:
+        return fp.read()
 
 
-def _load_cfg():
+def read_executables() -> dict:
     config = configparser.SafeConfigParser()
-    settings_file = os.path.join(ROOT_DIR, "Dependencies", "settings.cfg")
+    settings_file = os.path.join(ROOT_DIR, "dependencies", "settings.cfg")
 
     if not os.path.exists(settings_file):
         execs = dict(
@@ -38,7 +38,7 @@ def _load_cfg():
 
 
 def os_is_windows() -> bool:
-    return os.name == 'nt'
+    return os.name == "nt"
 
 
 def read_nusmv_keywords() -> List[str]:
@@ -51,69 +51,50 @@ def read_nusmv_keywords_or_exit() -> List[str]:
     try:
         return read_nusmv_keywords()
     except Exception as e:
-        log.error(f"could not read numsv keywords: exception={e}")
+        log.error(f"could not read NuSMV keywords: exception={e}")
         sys.exit()
-
-
-def find_command(name) -> str:
-    """
-    find the path to a command, in local dependencies or in the shared execution PATH
-    """
-    if name in EXECUTABLES:
-        cmd = EXECUTABLES[name]
-        if cmd.startswith(":"):
-            cmd = cmd[1:]
-        else:
-            cmd = os.path.normpath(os.path.join(ROOT_DIR, "Dependencies", cmd))
-    else:
-        cmd = name
-    return cmd
 
 
 def dicts_are_consistent(dict1: dict, dict2: dict) -> bool:
     """
     checks if all items whose keys are in (d1 and d2) are equal.
-    returns bool.
     """
 
     return all(dict1[k] == dict2[k] for k in set(dict1).intersection(set(dict2)))
 
 
-def is_supdict(X, Y):
+def dict_contains(this: dict, other: dict) -> bool:
     """
-    checks whether X contains Y, i.e., whether X is a "super-dictionary" of Y.
-    returns bool.
+    checks whether *this* dictionary contains the *other* dictionary.
     """
     
-    return set(X.items()).issuperset(set(Y.items()))
+    return set(this.items()).issuperset(set(other.items()))
 
 
-def is_subdict(X, Y):
+def dict_is_contained(this, other) -> bool:
     """
-        checks whether X is contained by Y, i.e., whether X is a "sub-dictionary" of Y.
-        returns bool.
-        """
-    
-    return set(X.items()).issubset(set(Y.items()))
-
-
-def merge_dicts(dicts: List[dict]):
+    checks whether X is contained by Y, i.e., whether X is a "sub-dictionary" of Y.
     """
-        creates a new dictionary that is updated by all members of *Dict* (shallow copies).
-        return newdict.
-        """
     
-    newdict = {}
+    return set(this.items()).issubset(set(other.items()))
+
+
+def merge_dicts(dicts: List[dict]) -> dict:
+    """
+    creates a new dictionary that is updated by all members of *dicts*.
+    """
+    
+    new_dict = {}
     for dic in dicts:
-        newdict.update(dic)
+        new_dict.update(dic)
     
-    return newdict
+    return new_dict
 
 
-def remove_d1_from_d2(d1, d2):
+def remove_d1_from_d2(d1: dict, d2: dict):
     """
-        removes all items from d1 that are also in d2 from d2.
-        """
+    removes all items from d1 that are also in d2 from d2.
+    """
     
     d2items = d2.items()
     for x in d1.items():
@@ -121,17 +102,15 @@ def remove_d1_from_d2(d1, d2):
             d2.pop(x[0])
 
 
-# auxillary to create graph labels that are as square as possible
-# used by e.g. stg2sccgraph / stg2condensationgraph / basin diagram
-def divide_list_into_similar_length_lists(List):
+def divide_list_into_similar_length_lists(elements: list) -> List[list]:
     """
-        used for drawing pretty labels.
-        """
+    used for drawing pretty labels.
+    """
     
-    width = sum(len(x) for x in List)
+    width = sum(len(x) for x in elements)
     width = math.sqrt(width)
-    
-    stack = list(List)
+
+    stack = list(elements)
     lists = []
     remaining = sum(map(len, stack))
     while remaining > width:
@@ -150,15 +129,16 @@ def divide_list_into_similar_length_lists(List):
     return lists
 
 
-def perc2str(Perc):
+def perc2str(perc: float) -> str:
     """
     converts a number into a nice string.
     Used for plotting the labels of quotient graphs, e.g. Commitment.diagram2image(..)
     """
     
-    res = "%.1f " % Perc
-    i, d = res.split('.')
+    res = f"{perc:.1f}"
+    i, d = res.split(".")
     remove = d[-1] == "0"
+    
     while remove:
         if len(d) > 1:
             d = d[: -1]
@@ -168,15 +148,13 @@ def perc2str(Perc):
             remove = False
     
     if d:
-        return i + '.' + d
+        return i + "." + d
     return i
 
 
 def save_json_data(data: dict, fname: str):
     """
-    saves a dictionary of data using json package
-
-    todo: add unit tests
+    Saves a dictionary of data using json package.
     """
     
     with open(fname, "w") as f:
@@ -187,7 +165,7 @@ def save_json_data(data: dict, fname: str):
 
 def open_json_data(fname: str) -> dict:
     """
-    opens a dictionary of data using json package
+    Opens a dictionary of data using json package.
     """
     
     with open(fname, "r") as f:
@@ -196,23 +174,25 @@ def open_json_data(fname: str) -> dict:
     return data
 
 
-def copy_json_data(Data):
+def copy_json_data(data: dict) -> dict:
     """
-        todo: finish code
-        todo: add unit tests
+    Creates a copy of a json data structure by conversion to string and back.
 
-        creates a copy of a json data structure by conversion to string and back.
+    **arguments**:
+        * *data*: json data
 
-        **arguments**:
-                * *Data* (json): json data
+    **returns**:
+        * *data_copy*: a copy of *data*
 
-        **returns**:
-                * *DataCopy* (json): a copy of *Data*
+    **example**::
 
-        **example**::
-
-                >>> data = Attractors.compute_attractor_json(primes, update)
-                >>> data2 = copy_json_data(data)
-        """
+        >>> data = Attractors.compute_attractors(primes, update)
+        >>> data2 = copy_json_data(data)
+    """
     
-    return json.loads(json.dumps(Data))
+    return json.loads(json.dumps(data))
+
+
+if __name__ == '__main__':
+    x = f"{1.124:.2f}"
+    pass

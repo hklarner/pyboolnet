@@ -17,6 +17,3 @@ def test_functions2primes():
 def test_functions2mindnf():
     functions = {"x": lambda x, y: x or y, "y": lambda x, z: not x and z, "z": lambda x, y, z: sum([x, y, z]) == 1}
     functions2mindnf(functions)
-
-
-

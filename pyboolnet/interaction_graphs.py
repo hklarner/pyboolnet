@@ -1,15 +1,15 @@
 import subprocess
-from typing import Union, List, Optional, Dict, Set
+from typing import Union, List, Optional, Set
 import os
 import sys
 import networkx
 import logging
 
-from pyboolnet.misc import find_command
-from pyboolnet.state_transition_graphs import states2dict
+from pyboolnet import find_command
 from pyboolnet.digraphs import digraph2dot, digraph2image, digraph2condensationgraph
 from pyboolnet.digraphs import add_style_subgraphs as digraphs_add_style_subgraphs
-from pyboolnet.state_transition_graphs import subspace2dict, successor_synchronous, state2dict
+from pyboolnet.state_transition_graphs import successor_synchronous
+from pyboolnet.state_space import subspace2dict, states2dict, state2dict
 
 CMD_DOT = find_command("dot")
 CMD_CONVERT = find_command("convert")
@@ -28,8 +28,14 @@ def create_empty_igraph(primes: dict) -> networkx.DiGraph:
     factor = 0.2
     width = factor * sum(len(x) for x in primes) / len(primes)
 
-    igraph.graph["node"] = {"style": "filled", "shape": "circle", "fixedsize": "true", "width": str(width),
-                            "color": "none", "fillcolor": "gray95"}
+    igraph.graph["node"] = {
+        "style": "filled",
+        "shape": "circle",
+        "fixedsize": "true",
+        "width": str(width),
+        "color": "none",
+        "fillcolor": "gray95"}
+
     igraph.graph["edge"] = {}
     igraph.graph["subgraphs"] = []
 
@@ -89,7 +95,7 @@ def local_igraph_of_state(primes: dict, state: Union[dict, str]) -> networkx.DiG
 
     **arguments**:
         * *primes*: prime implicants
-        * *State*: a state
+        * *state*: a state
 
     **returns**:
         * *local_igraph*: the local interaction graph
@@ -132,7 +138,7 @@ def local_igraph_of_state(primes: dict, state: Union[dict, str]) -> networkx.DiG
 
 def local_igraph_of_states(primes: dict, states: List[Union[str, dict]]):
     """
-    computes the local interaction graph of a states.
+    Computes the local interaction graph of a states.
     """
 
     states = states2dict(primes, states)
@@ -152,7 +158,7 @@ def local_igraph_of_states(primes: dict, states: List[Union[str, dict]]):
     return local_igraph
 
 
-def copy(igraph: networkx.DiGraph) -> networkx.DiGraph:
+def copy_ig(igraph: networkx.DiGraph) -> networkx.DiGraph:
     """
     Creates a copy of *igraph* including all *dot* attributes.
 
@@ -164,19 +170,19 @@ def copy(igraph: networkx.DiGraph) -> networkx.DiGraph:
 
     **example**::
 
-        >>> igraph2 = copy(igraph)
+        >>> igraph2 = copy_ig(igraph)
     """
 
     new_igraph = igraph.copy()
     if new_igraph.graph["subgraphs"]:
-        new_igraph.graph["subgraphs"] = [x.copy() for x in new_igraph.graph["subgraphs"]]
+        new_igraph.graph["subgraphs"] = [x.copy_primes() for x in new_igraph.graph["subgraphs"]]
 
     return new_igraph
 
 
 def igraph2dot(igraph: networkx.DiGraph, fname_dot: Optional[str] = None) -> str:
     """
-    Generates a *dot* file from *igraph* and saves it as *FnameDOT* or returns it as a string.
+    Generates a *dot* file from *igraph* and saves it as *fname_dot* or returns it as a string.
 
     **arguments**:
         * *igraph*: interaction graph
@@ -211,13 +217,13 @@ def igraph2image(igraph: networkx.DiGraph, fname_image: str, layout_engine="fdp"
           >>> igraph2image(igraph, "mapk_igraph.svg")
     """
 
-    digraph2image(igraph, fname_image, LayoutEngine=layout_engine)
+    digraph2image(igraph, fname_image, layout_engine=layout_engine)
 
 
 def create_image(primes: dict, fname_image: str, styles: List[str] = ["interactionsigns"], layout_engine: str = "fdp"):
     """
     A convenience function for drawing interaction graphs directly from the prime implicants.
-    *Styles* must be a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"].
+    *styles* must be a sublist of ["interactionsigns", "inputs", "outputs", "constants", "sccs", "anonymous"].
 
     **arguments**:
         * *primes*: prime implicants
@@ -251,40 +257,6 @@ def create_image(primes: dict, fname_image: str, styles: List[str] = ["interacti
         add_style_anonymous(igraph)
 
     igraph2image(igraph, fname_image, layout_engine=layout_engine)
-
-
-def find_outdag(igraph: networkx.DiGraph) -> List[str]:
-    """
-    Finds the maximal directed acyclic subgraph that is closed under the successors operation.
-    Essentially, these components are the "output cascades" which can be exploited by various algorithms, e.g.
-    the computation of basins of attraction.
-
-    **arguments**:
-        * *igraph*: interaction graph
-
-    **returns**:
-        * *names*: the outdag
-
-    **example**::
-
-        >>> find_outdag(igraph)
-        ["v7", "v8", "v9"]
-    """
-
-    graph = igraph.copy()
-    sccs = networkx.strongly_connected_components(graph)
-    sccs = [list(x) for x in sccs]
-    candidates = [scc[0] for scc in sccs if len(scc) == 1]
-    candidates = [x for x in candidates if not graph.has_edge(x, x)]
-    sccs = [scc for scc in sccs if len(scc) > 1 or graph.has_edge(scc[0], scc[0])]
-
-    graph.add_node("!")
-    for scc in sccs:
-        graph.add_edge(scc[0], "!")
-
-    outdag = [x for x in candidates if not networkx.has_path(graph, x, "!")]
-
-    return outdag
 
 
 def find_minimal_autonomous_nodes(igraph: networkx.DiGraph, core: Set[str]) -> List[Set[str]]:
@@ -365,8 +337,7 @@ def add_style_interactionsigns(igraph: networkx.DiGraph):
             igraph.adj[source][target]["color"] = "black"
 
 
-def add_style_activities(igraph: networkx.DiGraph, activities: Union[str, dict], color_active: str = "/paired10/5",
-                         color_inactive: str = "/paired10/1"):
+def add_style_activities(igraph: networkx.DiGraph, activities: Union[str, dict], color_active: str = "/paired10/5", color_inactive: str = "/paired10/1"):
     """
     Sets attributes for the color and fillcolor of nodes to indicate which variables are activated and which are inhibited in *Activities*.
     All activated or inhibited components get the attribute *"color"="black"*.
@@ -506,12 +477,12 @@ def add_style_sccs(igraph: networkx.DiGraph):
 
 def add_style_path(igraph: networkx.DiGraph, path: List[str], color: str):
     """
-    Sets the color of all nodes and edges involved in the given *Path* to *Color*.
+    Sets the color of all nodes and edges involved in the given *path* to *color*.
 
     **arguments**:
         * *igraph*: interaction graph
-        * *Path*: sequence of component names
-        * *Color*: color of the path
+        * *path*: sequence of component names
+        * *color*: color of the path
 
     **example**::
 
@@ -535,14 +506,14 @@ def add_style_path(igraph: networkx.DiGraph, path: List[str], color: str):
 
 def add_style_subgraphs(igraph: networkx.DiGraph, subgraphs):
     """
-    Adds the subgraphs given in *Subgraphs* to *igraph* - or overwrites them if they already exist.
+    Adds the subgraphs given in *subgraphs* to *igraph* - or overwrites them if they already exist.
     Nodes that belong to the same *dot* subgraph are contained in a rectangle and treated separately during layout computations.
-    *Subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
+    *subgraphs* must consist of tuples of the form *NodeList*, *Attributs* where *NodeList* is a list of graph nodes and *Attributes*
     is a dictionary of subgraph attributes in *dot* format.
 
     .. note::
 
-        *Subgraphs* must satisfy the following property:
+        *subgraphs* must satisfy the following property:
         Any two subgraphs have either empty intersection or one is a subset of the other.
         The reason for this requirement is that *dot* can not draw intersecting subgraphs.
 
@@ -602,8 +573,8 @@ def activities2animation(igraph: networkx.DiGraph, activities, fname_gif: str, f
     **arguments**:
         * *igraph*: interaction graph
         * *Activities*: sequence of activities
-        * *Delay* (int): number of 1/100s between each frame
-        * *Loop* (int): number of repetitions, use 0 for infinite
+        * *Delay*: number of 1/100s between each frame
+        * *Loop*: number of repetitions, use 0 for infinite
         * *FnameTMP*: name for temporary image files, use "*" to indicate counter
         * *FnameGIF*: name of the output *gif* file
 
@@ -620,7 +591,7 @@ def activities2animation(igraph: networkx.DiGraph, activities, fname_gif: str, f
 
     width = len(str(len(activities))) + 1
     for i, x in enumerate(activities):
-        dummy = copy(igraph)
+        dummy = copy_ig(igraph)
         add_style_activities(dummy, x)
         dummy.graph["label"] = "%i of %i" % (i + 1, len(activities))
         igraph2image(igraph=dummy, fname_image=fname_tmp.replace("*", '{i:0{w}d}'.format(i=i, w=width)))

@@ -67,7 +67,7 @@ def get_all_names():
     Returns the names of all models currently in the repository.
 
     **returns**:
-        * *Fnames* (list): model names
+        * *Fnames*: model names
 
     **example**::
 
@@ -117,7 +117,7 @@ def get_attrs(Name, Update):
 
     **returns**:
         * *Attrs*: json attractor data, see :ref:`attractors_compute_json`
-        * *Update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **example**::
 

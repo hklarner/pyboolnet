@@ -140,7 +140,7 @@ def test_input_combinations2():
 
 def test_copy():
     p1 = {"v1": [[{"v2": 0}], [{"v2": 1}]], "v2": [[{"v2": 0}, {"v1": 1}], [{"v1": 0, "v2": 1}]]}
-    p2 = PyBoolNet.prime_implicants.copy(p1)
+    p2 = PyBoolNet.prime_implicants.copy_primes(p1)
     p2["v1"] = [[{"v1": 0}], [{"v1": 1}]]
 
     assert p1 != p2
@@ -230,7 +230,7 @@ def test_percolation4a():
 
 def test_percolation4b():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    expected = PyBoolNet.prime_implicants.copy(primes)
+    expected = PyBoolNet.prime_implicants.copy_primes(primes)
     PyBoolNet.prime_implicants.percolate_and_keep_constants(primes)
 
     assert PyBoolNet.prime_implicants.are_equal(expected, primes), str(primes) + " vs " + str(expected)

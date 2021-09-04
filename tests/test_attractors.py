@@ -7,16 +7,14 @@ from pyboolnet.file_exchange import bnet2primes
 from pyboolnet.state_transition_graphs import primes2stg
 from pyboolnet.attractors import compute_attractors_tarjan
 from pyboolnet.attractors import find_attractor_state_by_randomwalk_and_ctl
-from pyboolnet.state_transition_graphs import state_is_in_subspace
+from pyboolnet.state_space import state_is_in_subspace, list_states_in_subspace, subspace2str, state2str
 from pyboolnet.state_transition_graphs import list_reachable_states
-from pyboolnet.state_transition_graphs import state2str
 from pyboolnet.attractors import univocality, univocality_with_counterexample
 from pyboolnet.attractors import faithfulness, faithfulness_with_counterexample
 from pyboolnet.attractors import completeness_naive, completeness, completeness_with_counterexample
-from pyboolnet.attractors import compute_attractor_json
+from pyboolnet.attractors import compute_attractors
 from pyboolnet.trap_spaces import trap_spaces
-from pyboolnet.state_transition_graphs import subspace2str, list_states_in_subspace
-from pyboolnet.utility.digraphs import has_path
+from pyboolnet.digraphs import has_path
 from pyboolnet.repository import get_primes
 
 
@@ -168,7 +166,7 @@ def test_completeness_maxoutput():
 def test_compute_json():
     primes = get_primes("n5s3")
     fname_json = os.path.join(FILES_OUT, "n5s3_attrs.json")
-    attrs = compute_attractor_json(primes=primes, update="asynchronous", fname_json=fname_json, max_output=2)
+    attrs = compute_attractors(primes=primes, update="asynchronous", fname_json=fname_json, max_output=2)
 
     assert attrs
 

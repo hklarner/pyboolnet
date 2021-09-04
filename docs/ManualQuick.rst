@@ -306,6 +306,14 @@ It extends the attrs data obtained from :ref:`compute_json`.
 
     >>> PyBoolNet.Basins.compute_basins(attrs)
     >>> PyBoolNet.Basins.create_barplot(attrs, "basin_barplot.pdf")
+    >>> PyBoolNet.Basins.create_phenotypes_piechart(attrs, "basin_piechart.pdf")
+
+    >>> PyBoolNet.Basins.compute_basins(attrs)
+    >>> PyBoolNet.Basins.create_barplot(attrs, "basin_barplot.pdf")
+    >>> PyBoolNet.Basins.create_phenotypes_piechart(attrs, "basin_piechart.pdf")
+
+    >>> PyBoolNet.Basins.compute_basins(attrs)
+    >>> PyBoolNet.Basins.create_barplot(attrs, "basin_barplot.pdf")
     >>> PyBoolNet.Basins.create_piechart(attrs, "basin_piechart.pdf")
 
 

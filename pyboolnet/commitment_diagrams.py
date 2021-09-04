@@ -1,216 +1,187 @@
 
 
 import os
-import sys
+import logging
 import itertools
 import random
 import operator
 import functools
 import networkx
+from typing import Optional
 
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-sys.path.append(BASE)
+import pyboolnet.state_space
+from pyboolnet import find_command
+from pyboolnet.helpers import perc2str
+from pyboolnet.prime_implicants import input_combinations
+from pyboolnet.state_space import size_state_space
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.digraphs import ancestors, find_outdag
+from pyboolnet.prime_implicants import copy_primes, remove_all_variables_except
+from pyboolnet.helpers import copy_json_data, save_json_data, open_json_data
 
-import PyBoolNet.state_transition_graphs
-import PyBoolNet.Utility
-import PyBoolNet.model_checking
-import PyBoolNet.temporal_logic
-import PyBoolNet.trap_spaces
-import PyBoolNet.interaction_graphs
-import PyBoolNet.prime_implicants
+CMD_DOT = find_command("dot")
+COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"]
 
-
-CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
-
-perc2str = PyBoolNet.Utility.Misc.perc2str
-
-COMMITMENT_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"] # pastel19 color scheme
-COMMITMENT_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"] # colorbrewer
-COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"] # colorbrewer
+log = logging.getLogger(__name__)
 
 
-def compute_diagram(AttrJson, FnameImage=None, FnameJson=None, EdgeData=False, Silent=False):
-    # :ref:`commitment_compute_diagram`
+def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = None, fname_json=None, edge_data=False) -> networkx.DiGraph:
     """
-     Computes the commitment diagram for the AttrJson and STG defined in *AttrJson*, a json object computed by :ref:`AttrJson_compute_json`
-    The nodes of the diagram represent states that can reach the exact same subset of *AttrJson*.
+     Computes the commitment diagram for the AttrJson and STG defined in *attractors*, a json object computed by :ref:`AttrJson_compute_json`
+    The nodes of the diagram represent states that can reach the exact same subset of *attractors*.
     Edges indicate the existence of a transition between two nodes in the respective commitment sets.
     Edges are labeled by the number of states of the source set that can reach the target set and,
     if *EdgeData* is true, additionally by the size of the border.
 
     **arguments**:
-        * *AttrJson* (dict): json attractor data, see :ref:`AttrJson_compute_json`
-        * *FnameImage* (str): generate image for diagram
-        * *FnameJson* (str): save diagram as json
-        * *EdgeData* (bool): toggles computation of additional edge data
-        * *Silent* (bool): print infos to screen
+        * *attractors*: json attractor data, see :ref:`AttrJson_compute_json`
+        * *fname_image*: generate image for diagram
+        * *fname_json*: save diagram as json
+        * *edge_data*: toggles computation of additional edge data
 
     **returns**::
-        * *Diagram* (netowrkx.DiGraph): the commitment diagram
+        * *diagram*: the commitment diagram
 
     **example**::
 
-        >>> attrs = AttrJson.compute_attractor_json(primes, update)
-        >>> diagram = Commitment.compute_diagram(attrs)
+        >>> attrs = attractors.compute_attractors(primes, update)
+        >>> diagram = Commitment.compute_phenotype_diagram(attrs)
     """
 
-    Primes = AttrJson["primes"]
-    Update = AttrJson["update"]
+    primes = attractors["primes"]
+    update = attractors["update"]
 
-    Subspaces = []
-    for x in AttrJson["attractors"]:
+    subspaces = []
+    for x in attractors["attractors"]:
         if x["mintrapspace"]["is_univocal"] and x["mintrapspace"]["is_faithful"]:
-            Subspaces.append(x["mintrapspace"]["dict"])
+            subspaces.append(x["mintrapspace"]["dict"])
         else:
-            Subspaces.append(x["state"]["dict"])
+            subspaces.append(x["state"]["dict"])
 
-    if not Silent:
-        print("Commitment.compute_diagram(..)")
+    log.info("Commitment.compute_diagram(..)")
 
-    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    size_total = size_state_space(primes)
 
-    if len(Subspaces)==1:
-        if not Silent:
-            print(" single attractor, trivial case.")
+    if len(subspaces)==1:
+        log.info(" single attractor, trivial case.")
         diagram = networkx.DiGraph()
         counter_mc = 0
 
         diagram.add_node("0")
-        diagram.nodes["0"]["attractors"]    = Subspaces
-        diagram.nodes["0"]["size"]        = size_total
-        diagram.nodes["0"]["formula"]    = "TRUE"
+        diagram.nodes["0"]["attractors"] = subspaces
+        diagram.nodes["0"]["size"] = size_total
+        diagram.nodes["0"]["formula"] = "TRUE"
 
     else:
+        igraph = primes2igraph(primes)
+        outdag = find_outdag(igraph)
 
-        igraph = PyBoolNet.interaction_graphs.primes2igraph(Primes)
-        outdags = PyBoolNet.interaction_graphs.find_outdag(igraph)
+        attractor_nodes = [x for A in subspaces for x in A]
+        critical_nodes = ancestors(igraph, attractor_nodes)
+        outdag = [x for x in outdag if x not in critical_nodes]
 
-        attractor_nodes = [x for A in Subspaces for x in A]
-        critical_nodes = PyBoolNet.Utility.DiGraphs.ancestors(igraph, attractor_nodes)
-        outdags = [x for x in outdags if not x in critical_nodes]
-
-        igraph.remove_nodes_from(outdags)
-        if not Silent:
-            print(" excluding the non-critical out-dag nodes %s"%outdags)
+        igraph.remove_nodes_from(outdag)
+        log.info(f"excluding the non-critical out-dag nodes {outdag}")
 
         components = networkx.connected_components(igraph.to_undirected())
         components = [list(x) for x in components]
-        if not Silent:
-            print(" working on %i connected component(s)"%len(components))
+        log.info(f"working on {len(components)} connected component(s)")
 
         counter_mc = 0
         diagrams = []
         for component in components:
-            subprimes = PyBoolNet.prime_implicants.copy(Primes)
-            PyBoolNet.prime_implicants.remove_all_variables_except(subprimes, component)
-
-            attrs_projected = project_attractors(Subspaces, component)
-
-            diagram, count = _compute_diagram_component(subprimes, Update, attrs_projected, EdgeData, Silent)
-            counter_mc+=count
-
+            sub_primes = copy_primes(primes)
+            remove_all_variables_except(sub_primes, component)
+            attrs_projected = project_attractors(subspaces, component)
+            diagram, count = _compute_diagram_component(sub_primes, update, attrs_projected, edge_data)
+            counter_mc += count
             diagrams.append(diagram)
 
-        factor = 2**len(outdags)
-        diagram = cartesian_product(diagrams, factor, EdgeData)
+        factor = 2**len(outdag)
+        diagram = cartesian_product(diagrams, factor, edge_data)
 
-        for x in AttrJson:
-            diagram.graph[x] = PyBoolNet.Utility.Misc.copy_json_data(AttrJson[x])
-
+        for x in attractors:
+            diagram.graph[x] = copy_json_data(attractors[x])
 
         nodes_sum = 0
         for x in diagram.nodes():
             projection = diagram.nodes[x]["attractors"]
-            diagram.nodes[x]["attractors"] = lift_attractors(Subspaces, projection)
-            nodes_sum+= diagram.nodes[x]["size"]
+            diagram.nodes[x]["attractors"] = lift_attractors(subspaces, projection)
+            nodes_sum += diagram.nodes[x]["size"]
 
-        if not nodes_sum==size_total:
-            print("WARNING: commitment diagram does not partition the state space, this may be due to rounding of large numbers.")
+        if not nodes_sum == size_total:
+            log.warning("commitment diagram does not partition the state space, this may be due to rounding of large numbers.")
 
         sorted_ids = sorted(diagram, key=lambda x: diagram.nodes[x]["formula"])
-        mapping = {x:str(sorted_ids.index(x)) for x in diagram}
-        networkx.relabel_nodes(diagram,mapping,copy=False)
+        mapping = {x: str(sorted_ids.index(x)) for x in diagram}
+        networkx.relabel_nodes(diagram, mapping, copy=False)
 
-    if not Silent:
-        print(" total executions of NuSMV: %i"%counter_mc)
+    log.info(f"total executions of NuSMV: {counter_mc}")
 
+    if fname_image:
+        diagram2image(diagram, FnameImage=fname_image, StyleInputs=True, StyleSplines="curved", StyleEdges=edge_data, StyleRanks=True, FirstIndex=1)
 
-    if FnameImage:
-        diagram2image(diagram, FnameImage=FnameImage, StyleInputs=True, StyleSplines="curved", StyleEdges=EdgeData, StyleRanks=True, FirstIndex=1)
-
-    if FnameJson:
-        save_diagram(diagram, FnameJson)
+    if fname_json:
+        save_commitment_diagram(diagram, fname_json)
 
     return diagram
 
 
-def save_diagram(Diagram, Fname):
-    # :ref:`commitment_save_diagram`
+def save_commitment_diagram(diagram: networkx.DiGraph, fname_json: str):
     """
-    todo: finish code
-    todo: add unit tests
-
-    description
-
-      **arguments**:
-        * *Primes*: prime implicants
-        * *arg* (type): description
-
-      **returns**:
-        * *arg* (type): description
-
-      **example**::
-
-        >>> save_diagram(..)
-        result
-    """
-
-    data = networkx.readwrite.json_graph.adjacency_data(Diagram)
-
-    PyBoolNet.Utility.Misc.save_json_data(data, Fname)
-
-
-def open_diagram(Fname):
-    # :ref:`commitment_open_diagram`
-    """
-    todo: add unit tests
-
-    Opens and returns a previously saved commitment diagram.
-    See also :ref:`commitment_compute_diagram`, :ref:`commitment_save_diagram`.
+    Saves a commitment diagram as a json file.
 
     **arguments**:
-        * *Fname* (str): the file name
-
-    **returns**:
-        * *diagram* (networkx.DiGraph): the commitment diagram
+        * *diagram*: a commitment diagram
+        * *fname_json*: json file name
 
     **example**::
 
-        >>> diagram = open_diagram("raf_commitment.json")
+        >>> save_commitment_diagram(diagram, "commitment_diagram.json")
     """
 
-    data = PyBoolNet.Utility.Misc.open_json_data(Fname)
+    data = networkx.readwrite.json_graph.adjacency_data(diagram)
+    save_json_data(data, fname_json)
+
+
+def open_commitment_diagram(fname_json: str) -> networkx.DiGraph:
+    """
+    Opens a commitment diagram json file.
+    See also :ref:`commitment_compute_diagram`, :ref:`commitment_save_diagram`.
+
+    **arguments**:
+        * *fname_json*: a json file name
+
+    **returns**:
+        * *diagram*: the commitment diagram
+
+    **example**::
+
+        >>> diagram = open_commitment_diagram("commitment_diagram.json")
+    """
+
+    data = open_json_data(fname_json)
     diagram = networkx.readwrite.json_graph.adjacency_graph(data)
 
     return diagram
 
 
-def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
+def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent):
     """
     Also computes the commitment diagram but without removing out-DAGs or considering connected components separately.
     Not meant for general use. Use compute_diagram(..) instead.
     """
 
     assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
-    assert(Primes)
+    assert(primes)
 
     # create nodes
     counter_mc = 0
     node_id = 0
     worst_case_nodes = 0
-    inputs = PyBoolNet.prime_implicants.find_inputs(Primes)
+    inputs = PyBoolNet.prime_implicants.find_inputs(primes)
 
-    states_per_case = PyBoolNet.state_transition_graphs.size_state_space(Primes, FixedInputs=True)
+    states_per_case = pyboolnet.state_space.size_state_space(primes, fixed_inputs=True)
 
     diagram = networkx.DiGraph()
 
@@ -219,18 +190,18 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
         print("  inputs: {x} ({y})".format(x=len(inputs), y=", ".join(inputs)))
         print("  combinations:  %i"%2**len(inputs))
 
-    for i, combination in enumerate(PyBoolNet.prime_implicants.input_combinations(Primes)):
+    for i, combination in enumerate(input_combinations(primes)):
 
-        attr = [x for x in Subspaces if PyBoolNet.state_transition_graphs.A_is_subspace_of_B(Primes, A=x, B=combination)]
+        attr = [x for x in Subspaces if pyboolnet.state_space.is_subspace(primes, this=x, other=combination)]
 
         worst_case_nodes+= 2**len(attr)-1
         states_covered = 0
-        specs = [PyBoolNet.temporal_logic.subspace2proposition(Primes, x) for x in attr]
+        specs = [PyBoolNet.temporal_logic.subspace2proposition(primes, x) for x in attr]
         vectors = len(attr)*[[0,1]]
         vectors = list(itertools.product(*vectors))
         random.shuffle(vectors)
 
-        combination_formula = PyBoolNet.temporal_logic.subspace2proposition(Primes, combination)
+        combination_formula = PyBoolNet.temporal_logic.subspace2proposition(primes, combination)
 
         if not Silent:
             print("  input combination %i, worst case #nodes: %i"%(i,2**len(attr)-1))
@@ -256,7 +227,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
                 reach_some = " | ".join(reach)
                 spec = "CTLSPEC %s & AG(%s)"%(reach_all,reach_some)
 
-                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
                 counter_mc+=1
 
                 data = {"attractors":   [x for flag,x in zip(vector, attr) if flag],
@@ -296,7 +267,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
             init = "INIT %s"%source_data["formula"]
             spec = "CTLSPEC EX(%s)"%target_data["formula"]
-            answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+            answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
             counter_mc+=1
 
             data = {}
@@ -312,7 +283,7 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
 
                     else:
                         spec = "CTLSPEC E[%s U %s]"%(source_data["formula"],target_data["formula"])
-                        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
+                        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
                         counter_mc+=1
 
                         data["EF_size"] = accepting["INITACCEPTING_SIZE"]
@@ -330,39 +301,37 @@ def _compute_diagram_component(Primes, Update, Subspaces, EdgeData, Silent):
     return diagram, counter_mc
 
 
-def diagram2image(Diagram, FnameImage, StyleInputs=True,
-                  StyleSplines="curved", StyleEdges=False, StyleRanks=True, FirstIndex=1, Silent=True):
+def diagram2image(Diagram, FnameImage, StyleInputs=True, StyleSplines="curved", StyleEdges=False, StyleRanks=True, FirstIndex=1, Silent=True):
     """
-    Creates the image file *FnameImage* for the basin diagram given by *Diagram*.
+    Creates the image file *fname_image* for the basin diagram given by *diagram*.
     The flag *StyleInputs* can be used to highlight which basins belong to which input combination.
     *StyleEdges* adds edge labels that indicate the size of the "border" (if *ComputeBorder* was enabled in :ref:`commitment_compute_diagram`)
     and the size of the states of the source basin that can reach the target basin.
 
     **arguments**:
-        * *Diagram* (networkx.DiGraph): a commitment diagram
-        * *FnameImage* (str): file name of image
-        * *StyleInputs* (bool): whether basins should be grouped by input combinations
-        * *StyleSplines* (str): dot style for edges, e.g. "curved", "line" or "ortho" for orthogonal edges
-        * *StyleEdges* (bool): whether edges should be size of border / reachable states
-        * *StyleRanks* (bool): style that places nodes with the same number of reachable attractors on the same rank (level)
-        * *FirstIndex* (int): first index of attractor names
-        * *Silent* (bool): print infos to screen
+        * *diagram*: a commitment diagram
+        * *fname_image*: file name of image
+        * *StyleInputs*: whether basins should be grouped by input combinations
+        * *StyleSplines*: dot style for edges, e.g. "curved", "line" or "ortho" for orthogonal edges
+        * *StyleEdges*: whether edges should be size of border / reachable states
+        * *StyleRanks*: style that places nodes with the same number of reachable attractors on the same rank (level)
+        * *FirstIndex*: first index of attractor names
 
     **returns**::
-        * *StyledDiagram* (networkx.DiGraph)
+        * *styled_diagram* (networkx.DiGraph)
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
-        >>> Commitment.compute_diagram(attrs)
+        >>> attrs = Attractors.compute_attractors(primes, update)
+        >>> Commitment.compute_phenotype_diagram(attrs)
         >>> diagram2image(diagram, "diagram.pdf")
         >>> diagram2image(diagram, "basins.pdf", "attractors.pdf")
     """
 
     Primes = Diagram.graph["primes"]
 
-    size_total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
-    size_per_input_combination = PyBoolNet.state_transition_graphs.size_state_space(Primes, FixedInputs=True)
+    size_total = pyboolnet.state_space.size_state_space(Primes)
+    size_per_input_combination = pyboolnet.state_space.size_state_space(Primes, fixed_inputs=True)
     is_small_network = size_total <= 1024
 
     result = networkx.DiGraph()
@@ -376,7 +345,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
-    attractors = set(PyBoolNet.state_transition_graphs.subspace2str(Primes, x[0]) for x in attractors)
+    attractors = set(pyboolnet.state_space.subspace2str(Primes, x[0]) for x in attractors)
     attractors = sorted(attractors)
 
     labels = {}
@@ -394,12 +363,12 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
         if len(data["attractors"])==1:
             result.nodes[node]["fillcolor"] = "cornflowerblue"
 
-            attr  = PyBoolNet.state_transition_graphs.subspace2str(Primes, data["attractors"][0])
+            attr  = pyboolnet.state_space.subspace2str(Primes, data["attractors"][0])
             index = attractors.index(attr)+FirstIndex
             labels[node]["head"] = 'A%i = <font face="Courier New">%s</font>'%(index,attr)
 
         else:
-            head = sorted("A%i" % (attractors.index(PyBoolNet.state_transition_graphs.subspace2str(Primes, x)) + FirstIndex) for x in data["attractors"])
+            head = sorted("A%i" % (attractors.index(pyboolnet.state_space.subspace2str(Primes, x)) + FirstIndex) for x in data["attractors"])
             head = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(head)
             head = [",".join(x) for x in head]
             labels[node]["head"] = "<br/>".join(head)
@@ -442,7 +411,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
         for inputs in PyBoolNet.prime_implicants.input_combinations(Primes):
             if not inputs: continue
             nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.nodes[x]["attractors"][0])]
-            label = PyBoolNet.state_transition_graphs.subspace2str(Primes, inputs)
+            label = pyboolnet.state_space.subspace2str(Primes, inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
 
 
@@ -484,7 +453,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True,
 
 
     if FnameImage:
-        PyBoolNet.Utility.DiGraphs.digraph2image(result, FnameImage, LayoutEngine="dot")
+        PyBoolNet.Utility.DiGraphs.digraph2image(result, FnameImage, layout_engine="dot")
 
     return result
 
@@ -495,11 +464,10 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
     The pieces of the chart represent states that can reach the exact same subset of *Attractors*.
 
     **arguments**:
-        * *Diagram* (networkx.DiGraph): commitment diagram, see :ref:`commitment_compute_diagram`
-        * *FnameImage* (str): name of the output image
-        * *ColorMap* (dict): assignment of diagram nodes to colors for custom colors
-        * *Silent* (bool): print infos to screen
-        * *Title* (str): optional title of plot
+        * *diagram*: commitment diagram, see :ref:`commitment_compute_diagram`
+        * *fname_image*: name of the output image
+        * *color_map*: assignment of diagram nodes to colors for custom colors
+        * *title*: optional title of plot
 
     **returns**::
         * *None*
@@ -507,8 +475,8 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
     **example**::
 
         >>> primes = Repository.get_primes("xiao_wnt5a")
-        >>> attrs = Attractors.compute_attractor_json(primes, update)
-        >>> diagram = compute_diagram(attrs)
+        >>> attrs = Attractors.compute_attractors(primes, update)
+        >>> diagram = compute_commitment_diagram(attrs)
         >>> create_piechart(diagram, "pie.pdf")
         created pie.pdf
     """
@@ -517,14 +485,14 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 
     Primes = Diagram.graph["primes"]
 
-    total = PyBoolNet.state_transition_graphs.size_state_space(Primes)
+    total = pyboolnet.state_space.size_state_space(Primes)
     is_small_network = total <= 1024
 
     indeces = sorted(Diagram, key=lambda x: len(Diagram.nodes[x]["attractors"]))
 
     labels = []
     for x in indeces:
-        label = sorted(PyBoolNet.state_transition_graphs.subspace2str(Primes, y) for y in Diagram.nodes[x]["attractors"])
+        label = sorted(pyboolnet.state_space.subspace2str(Primes, y) for y in Diagram.nodes[x]["attractors"])
         labels.append("\n".join(label))
 
     sizes  = [Diagram.nodes[x]["size"] for x in indeces]
@@ -641,8 +609,8 @@ def diagrams_are_equal(Diagram1, Diagram2):
     removes for formulas, which are different for naive / product diagrams.
     """
 
-    g1 = Diagram1.copy()
-    g2 = Diagram2.copy()
+    g1 = Diagram1.copy_primes()
+    g2 = Diagram2.copy_primes()
 
     for g in [g1,g2]:
         for x in g.nodes():

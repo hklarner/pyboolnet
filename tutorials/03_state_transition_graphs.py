@@ -1,24 +1,18 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 
 import PyBoolNet
 
 
-if __name__=="__main__":
-
-    # basic drawing
-
+if __name__ == "__main__":
     primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
-    PyBoolNet.state_transition_graphs.create_image(primes, "asynchronous", "stg.pdf")
-
-    PyBoolNet.state_transition_graphs.create_image(primes, "asynchronous", "stg2.pdf", InitialStates={"x4":0, "x5":0}, styles=["anonymous", "tendencies", "mintrapspaces"])
+    PyBoolNet.state_transition_graphs.create_stg_image(primes, "asynchronous", "stg.pdf")
+    PyBoolNet.state_transition_graphs.create_stg_image(primes, "asynchronous", "stg2.pdf", initial_states={"x4":0, "x5":0}, styles=["anonymous", "tendencies", "mintrapspaces"])
 
 
     # drawing paths
 
-    path = PyBoolNet.state_transition_graphs.random_walk(primes, "asynchronous", InitialState="--00---", Length=4)
-    stg = PyBoolNet.state_transition_graphs.primes2stg(primes, "asynchronous", InitialStates={"x4":0, "x5":0})
+    path = PyBoolNet.state_transition_graphs.random_walk(primes, "asynchronous", initial_state="--00---", length=4)
+    stg = PyBoolNet.state_transition_graphs.primes2stg(primes, "asynchronous", initial_states={"x4":0, "x5":0})
     PyBoolNet.state_transition_graphs.add_style_path(stg, path, color="red")
     PyBoolNet.state_transition_graphs.add_style_anonymous(stg)
     PyBoolNet.state_transition_graphs.stg2image(stg, "stg3.pdf")
@@ -44,7 +38,7 @@ if __name__=="__main__":
 
     X = "0--1-1-"
     Y = "1--0---"
-    path = PyBoolNet.state_transition_graphs.best_first_reachability(primes, InitialSpace=X, GoalSpace=Y)
+    path = PyBoolNet.state_transition_graphs.best_first_reachability(primes, initial_space=X, goal_space=Y)
     if path:
         for x in path:
             print(x)

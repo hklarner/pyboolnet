@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-
-import PyBoolNet
 
 
 if __name__=="__main__":
@@ -34,7 +29,7 @@ if __name__=="__main__":
         for state in counterex:
             print(state)
 
-        path = PyBoolNet.state_transition_graphs.best_first_reachability(primes, InitialSpace=state, GoalSpace={"Proliferation":1})
+        path = PyBoolNet.state_transition_graphs.best_first_reachability(primes, initial_space=state, goal_space={"Proliferation":1})
         
 
 
