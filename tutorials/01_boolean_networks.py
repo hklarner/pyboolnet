@@ -1,5 +1,10 @@
 
 
+from pyboolnet.file_exchange import bnet2primes, primes2bnet
+from pyboolnet.prime_implicants import find_constants, create_variables
+from pyboolnet.repository import get_primes
+
+
 if __name__ == "__main__":
     bnet = """
     v1,    !v1

@@ -30,7 +30,7 @@ def print_warning_accepting_states_bug(primes: dict, ctl_spec: str):
         log.warning("accepting states bug might affect this result, see http://github.com/hklarner/PyBoolNet/issues/14")
 
 
-def check_primes(primes: dict, update: str, init: str, spec: str, dynamic_reorder: bool = True, disable_reachable_states: bool = True, cone_of_influence: bool = True):
+def model_checking(primes: dict, update: str, init: str, spec: str, dynamic_reorder: bool = True, disable_reachable_states: bool = True, cone_of_influence: bool = True):
     """
     Calls :ref:`installation_nusmv` to check whether the *specification* is true or false in the transition system defined by *primes*,
     the *initial_states* and *update*.
@@ -55,7 +55,7 @@ def check_primes(primes: dict, update: str, init: str, spec: str, dynamic_reorde
         >>> init = "INIT TRUE"
         >>> update = "asynchronous"
         >>> spec = "CTLSPEC AF(EG(v1&!v2))"
-        >>> check_primes(primes, update, init, spec)
+        >>> model_checking(primes, update, init, spec)
         False
 
     """
@@ -93,7 +93,7 @@ def check_primes(primes: dict, update: str, init: str, spec: str, dynamic_reorde
     return nusmv_handle(cmd, proc, out, err, disable_counterexamples=True, accepting_states=False)
 
 
-def check_primes_with_counterexample(primes: dict, update: str, init, spec, dynamic_reorder: bool = True, disable_reachable_states: bool = True):
+def model_checking_with_counterexample(primes: dict, update: str, init, spec, dynamic_reorder: bool = True, disable_reachable_states: bool = True):
     """
     Calls :ref:`installation_nusmv` to check whether the *specification* is true or false in the transition system defined by *primes*,
     the *initial_states* and *update*.
@@ -119,7 +119,7 @@ def check_primes_with_counterexample(primes: dict, update: str, init, spec, dyna
         >>> init = "INIT TRUE"
         >>> update = "asynchronous"
         >>> spec = "CTLSPEC AF(EG(v1&!v2))"
-        >>> answer, counterex = check_primes_with_counterexample(primes, update, init, spec)
+        >>> answer, counterex = model_checking_with_counterexample(primes, update, init, spec)
         >>> counterex
          ({'v1':0,'v2':0},{'v1':1,'v2':0},{'v1':1,'v2':1})
     """
@@ -153,7 +153,7 @@ def check_primes_with_counterexample(primes: dict, update: str, init, spec, dyna
     return nusmv_handle(cmd, proc, out, err, disable_counterexamples=False, accepting_states=False)
 
 
-def check_primes_with_acceptingstates(primes: dict, update: str, initial_states, ctl_spec: str, dynamic_reorder: bool = True, cone_of_influence: bool = True):
+def model_checking_with_acceptingstates(primes: dict, update: str, initial_states, ctl_spec: str, dynamic_reorder: bool = True, cone_of_influence: bool = True):
     """
     Calls :ref:`installation_nusmv` to check whether the *ctl_spec* is true or false in the transition system defined by *primes*,
     the *initial_states* and *update*.
@@ -192,7 +192,7 @@ def check_primes_with_acceptingstates(primes: dict, update: str, initial_states,
         >>> init = "INIT TRUE"
         >>> update = "asynchronous"
         >>> spec = "CTLSPEC AF(EG(v1&!v2))"
-        >>> answer, accepting_states = check_primes_with_acceptingstates(primes, update, init, spec)
+        >>> answer, accepting_states = model_checking_with_acceptingstates(primes, update, init, spec)
         >>> accepting_states["INITACCEPTING"]
         'v1 | v3'
     """
@@ -579,7 +579,7 @@ def output2counterexample(nusmv_output: str):
 
             for line in lines:
                 name, value = line.split(" = ")
-                assert(value in ["TRUE", "FALSE"])
+                assert value in ["TRUE", "FALSE"]
                 state[name] = 1 if value== "TRUE" else 0
 
             counterexample.append(state)

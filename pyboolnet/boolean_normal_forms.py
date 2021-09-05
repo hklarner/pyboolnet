@@ -1,12 +1,12 @@
 
 
-import logging
-from typing import Dict, List
 import inspect
 import itertools
+import logging
+from typing import Dict, List
 
 from pyboolnet import NUSMV_KEYWORDS
-from pyboolnet.prime_implicants import bnet2primes
+from pyboolnet.file_exchange import bnet2primes
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ def primes2mindnf(primes: dict) -> Dict[str, str]:
                 if all([state[x] == prime[x] for x in prime]):
                     ones += [i]
                     
-        primes_tuples = [primedict2primetuple(x, inputs) for x in primes[name][1]]
+        primes_tuples = [prime_dict2prime_tuple(x, inputs) for x in primes[name][1]]
         quine = QM(list(reversed(inputs)))
         complexity, min_terms = quine.unate_cover(list(primes_tuples), ones)
         expressions[name] = quine.get_function(min_terms)
@@ -103,7 +103,7 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
         ((! v2) | v1)
     """
 
-    assert(all([inspect.isfunction(f) for f in functions.values()]))
+    assert all([inspect.isfunction(f) for f in functions.values()])
 
     names = functions.keys()
     
@@ -121,7 +121,7 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
 
         if not inputs:
             const = func()
-            assert(const in [0, 1, True, False])
+            assert const in [0, 1, True, False]
             expressions[name] = "1" if func() else "0"
             continue
 
@@ -152,11 +152,6 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
     return expressions
         
         
-
-
-
-#################################
-
 """
 Copyright (c) 2012 George Prekas <prekgeo@yahoo.com>
 
@@ -306,7 +301,7 @@ class QM:
         covers = []
         if len(chart) > 0:
             covers = [{i} for i in chart[0]]
-        for i in range(1,len(chart)):
+        for i in range(1, len(chart)):
             new_covers = []
             for cover in covers:
                 for prime_index in chart[i]:
@@ -389,7 +384,6 @@ class QM:
 
         return complexity
 
-
     def get_function(self, minterms):
         """
         Return in human readable form a sum of products function.
@@ -465,7 +459,7 @@ def merge(i, j):
     return i[0] & j[0], i[1]|y
 
 
-def primedict2primetuple(primes: dict, names: List[str]):
+def prime_dict2prime_tuple(primes: dict, names: List[str]):
     atoms = "".join(["1" if (x in primes and primes[x] == 1) else "0" for x in names])
     atoms = int(atoms,2)
     mask  = "".join(["1" if x not in primes else "0" for x in names])
@@ -474,10 +468,7 @@ def primedict2primetuple(primes: dict, names: List[str]):
     return atoms, mask
 
 
-
-
-
-if __name__=="__main__":
+if __name__ == "__main__":
     primes = {'A': [[{}], []], 'B': [[], [{}]], 'C': [[{'A': 1}, {'B': 0}], [{'A': 0, 'B': 1}]]}
     expressions = primes2mindnf(primes)
     print(expressions)

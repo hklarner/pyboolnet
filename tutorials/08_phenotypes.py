@@ -1,62 +1,35 @@
 
 
-if __name__=="__main__":
+from pyboolnet.phenotypes import compute_phenotypes, compute_phenotype_diagram, create_phenotypes_piechart
+from pyboolnet.attractors import compute_attractors
+from pyboolnet.repository import get_primes
 
 
+if __name__ == "__main__":
     # compute the commitment diagram
 
     primes = get_primes("arellano_rootstem")
     print(sorted(primes))
-    attrs = PyBoolNet.attractors.compute_attractors(primes, "asynchronous")
-    markers = ["WOX", "MGP"]
-    phenos = PyBoolNet.phenotypes.compute_attractors(attrs, markers, FnameJson="phenos.json")
 
+    attractors = compute_attractors(primes, "asynchronous")
+    markers = ["WOX", "MGP"]
+    phenotypes = compute_phenotypes(attractors, markers, fname_json="phenos.json")
 
     # inspect marker patterns
 
-    for pheno in phenos["phenotypes"]:
+    for pheno in phenotypes["phenotypes"]:
         print(pheno["name"])
         print(pheno["pattern"])
 
-
     # draw diagram
 
-    diag = PyBoolNet.phenotypes.compute_phenotype_diagram(phenos, fname_image="phenos_diagram.pdf")
-
+    diagram = compute_phenotype_diagram(phenotypes, fname_image="phenos_diagram.pdf")
 
     # draw pie chart
 
-    PyBoolNet.phenotypes.create_phenotypes_piechart(diag, fname_image="phenos_piechart.pdf")
+    create_phenotypes_piechart(diagram, fname_image="phenos_piechart.pdf")
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# end of file

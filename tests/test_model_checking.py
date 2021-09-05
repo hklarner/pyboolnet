@@ -1,7 +1,7 @@
 
 
-from pyboolnet.model_checking import check_smv, check_smv_with_counterexample, check_primes_with_counterexample
-from pyboolnet.model_checking import primes2smv, check_smv_with_acceptingstates, check_primes_with_acceptingstates
+from pyboolnet.model_checking import check_smv, check_smv_with_counterexample, model_checking_with_counterexample
+from pyboolnet.model_checking import primes2smv, check_smv_with_acceptingstates, model_checking_with_acceptingstates
 from pyboolnet.repository import get_primes
 from tests.helpers import get_tests_path_in, get_tests_path_out
 
@@ -18,7 +18,7 @@ def test_check_acceptingstates():
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
     assert accepting == expected
 
-    answer, accepting = check_primes_with_acceptingstates(primes, update, init, spec)
+    answer, accepting = model_checking_with_acceptingstates(primes, update, init, spec)
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
 
     assert accepting == expected
@@ -50,7 +50,7 @@ def test_check_primes_async():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterexample = check_primes_with_counterexample(
+    answer, counterexample = model_checking_with_counterexample(
         primes=primes, update="asynchronous",
         init="INIT !v1&v2&!v3",
         spec="CTLSPEC AF(!v1&!v2&v3)",
@@ -65,7 +65,7 @@ def test_check_primes_sync():
               "v2": [[{"v3": 1}, {"v1": 0}], [{"v1": 1, "v3": 0}]],
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
 
-    answer, counterexample = check_primes_with_counterexample(
+    answer, counterexample = model_checking_with_counterexample(
         primes=primes,
         update="synchronous",
         init="INIT !v1&v2&!v3",
@@ -82,7 +82,7 @@ def test_check_primes_mixed():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterexample = check_primes_with_counterexample(
+    answer, counterexample = model_checking_with_counterexample(
         primes=primes,
         update="mixed",
         init="INIT !v1&v2&!v3",

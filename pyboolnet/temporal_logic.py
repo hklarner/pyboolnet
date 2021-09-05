@@ -124,7 +124,7 @@ def exists_finally_unsteady_components(names: List[str]) -> str:
     return " & ".join([f"EF(!{x}_STEADY)" for x in names])
 
 
-def subspace2proposition(primes: dict, subspace: dict) -> str:
+def subspace2proposition(primes: dict, subspace: Union[dict, str]) -> str:
     """
     Constructs a CTL formula that is true in a state x if and only if x belongs to the given Subspace.
 

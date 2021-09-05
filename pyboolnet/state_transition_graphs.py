@@ -373,15 +373,15 @@ def add_style_subspaces(primes: dict, stg: networkx.DiGraph, subspaces):
         if type(x) is not dict and len(x) == 2 and type(x[1]) is dict:
             subspace, attr = x
             
-            if type(subspace) == str:
+            if type(subspace) is str:
                 subspace = subspace2dict(primes, subspace)
-            elif not type(subspace) == dict:
+            elif type(subspace) != dict:
                 raise Exception("Invalid Argument 'Subspaces'")
         
         else:
-            if type(x) == str:
+            if type(x) is str:
                 subspace = subspace2dict(primes, x)
-            elif type(x) == dict:
+            elif type(x) is dict:
                 subspace = x
             else:
                 raise Exception("Invalid Argument 'Subspaces'")

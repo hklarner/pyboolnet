@@ -2,59 +2,56 @@
 
 import subprocess
 import os
+import sys
+from typing import Optional, List
+
 import PyBoolNet
 import re
+import logging
 
 from PyBoolNet.Utility.Misc import os_is_windows
 
 EQNTOTT_CMD = PyBoolNet.Utility.Misc.find_command("eqntott")
 ESPRESSO_CMD = PyBoolNet.Utility.Misc.find_command("espresso")
+FORBIDDEN_SYMBOLS = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
+
+log = logging.getLogger(__name__)
 
 
-
-def are_mutually_exclusive(A, B, silent=True):
+def are_mutually_exclusive(this: str, other: str) -> bool:
     """
     uses minimize_espresso to compute whether A and B are mutually exclusive
     """
     
-    res = minimize_espresso("({A}) & ({B})".format(A=A, B=B))
-    if not silent:
-        print(res)
-    res = res == "0"
-    
-    return res
+    return minimize_espresso(f"({this}) & ({other})") == "0"
 
 
-def A_implies_B(A, B):
+def implies(this: str, other: str) -> bool:
     """
-    uses minimize_espresso to compute whether A implies B.
+    uses minimize_espresso to compute whether *this* implies *other*.
     """
     
-    res = minimize_espresso("!({B}) & ({A})".format(A=A, B=B))
-    res = res == "0"
-    
-    return res
+    return minimize_espresso(f"!({other}) & ({this})") == "0"
 
 
-def are_equivalent(A, B):
+def are_equivalent(this: str, other: str) -> bool:
     """
-    uses minimize_espresso to compute whether A and B are equivalent.
+    uses minimize_espresso to compute whether *this* and *other* are equivalent.
     """
     
-    res = A_implies_B(A, B) and A_implies_B(B, A)
-    
-    return res
+    return implies(this, other) and implies(other, this)
 
 
 def _eqntott_error(eqntott, eqntott_out, eqntott_err):
     """
     raises exception for eqntott
     """
-    if not (eqntott.returncode == 0):
-        print(eqntott_out)
-        print(eqntott_err)
-        print('\nCall to "eqntott" resulted in return code %i' % eqntott.returncode)
-        raise Exception
+
+    if eqntott.returncode != 0:
+        log.error(eqntott_out)
+        log.error(eqntott_err)
+        log.error(f"call to eqntott resulted in return code {eqntott.returncode}")
+        sys.exit()
 
 
 def _espresso_error(espresso, espresso_out, espresso_err):
@@ -62,47 +59,49 @@ def _espresso_error(espresso, espresso_out, espresso_err):
     raises exception for espresso
     """
     if not (espresso.returncode == 0):
-        print(espresso_out)
-        print(espresso_err)
-        print('\nCall to "espresso" resulted in return code %i' % espresso.returncode)
-        raise Exception
+        log.error(espresso_out)
+        log.error(espresso_err)
+        log.error(f"call to espresso resulted in return code {espresso.returncode}")
+        sys.exit()
 
 
-def run_eqntott(eqntott_cmd, eqntott_in):
+def run_eqntott(eqntott_cmd: List[str], eqntott_in: str) -> str:
     eqntott = subprocess.Popen(eqntott_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     eqntott_out, eqntott_err = eqntott.communicate(input=eqntott_in.encode())
     eqntott.stdin.close()
     _eqntott_error(eqntott, eqntott_out, eqntott_err)
+
     return eqntott_out.decode()
 
 
-def run_espresso(espresso_cmd, eqntott_out):
+def run_espresso(espresso_cmd: List[str], eqntott_out: str) -> str:
     espresso = subprocess.Popen(espresso_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     espresso_out, espresso_err = espresso.communicate(input=eqntott_out.encode())
     espresso.stdin.close()
     _espresso_error(espresso, espresso_out, espresso_err)
-    return (espresso_out.decode())
+
+    return espresso_out.decode()
 
 
-def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exact=False, Reduce=False):
+def minimize_espresso(expression: str, fname_out: Optional[str] = None, merge: bool = False, equiv: bool = False, exact: bool = False, reduce: bool = False) -> str:
     """
     Tries to minimize a given boolean expression utilizing the heuristic minimization algorithm
     `espresso <http://chmod755.tumblr.com/post/31417234230/espresso-heuristic-logic-minimizer>`_ and `eqntott <https://code.google.com/archive/p/eqntott/>`_ for its input preparation. Resulting expression is saved
-    in file if filename for output is specified. The argument *Expression* may be either the name
+    in file if filename for output is specified. The argument *expression* may be either the name
     of the input file containing the boolean expression or the string representing the expression
     itself. The input expression may not contain the following words: *False*, *FALSE*, *True*,
     *TRUE*, *Zero*, *ZERO*, *One*, *ONE*.
 
     **arguments**:
-       * *Expression*: name of file containing the expression or string contents of file
-       * *Outputfile*: name of the file to write the output to
-       * *Merge*: performs distance-1 merge on input, useful if very large
-       * *Equiv*: identifies equivalent output variables
-       * *Exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
-       * *Reduce*: eqntott tries to reduce the size of the truth table by merging minterms
+       * *expression*: name of file containing the expression or string contents of file
+       * *fname_out*: name of the file to write the output to
+       * *merge*: performs distance-1 merge on input, useful if very large
+       * *equiv*: identifies equivalent output variables
+       * *exact*: performs exact minimization algorithm, guarantees minimum number of product terms and heuristically minimizes number of literals, potentially expensive
+       * *reduce*: eqntott tries to reduce the size of the truth table by merging minterms
 
     **returns**:
-       * *Minimized*: minimized result
+       * *minimized_expression*: the minimized expression
 
     **example**::
 
@@ -112,75 +111,71 @@ def minimize_espresso(Expression, Outputfile=None, Merge=False, Equiv=False, Exa
           >>> minimized = minimize_boolean("(a & b) | a")
 
     """
-    # file input
-    if os.path.isfile(Expression):
-        with open(Expression, 'r') as fname:
-            Expression = fname.read()
+
+    if os.path.isfile(expression):
+        with open(expression, "r") as fname:
+            expression = fname.read()
+
+    if not all(var not in expression for var in FORBIDDEN_SYMBOLS):
+        log.error(f"forbidden keyword in expression: {expression}")
+        return expression
     
-    forbidden = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
-    if not all(var not in Expression for var in forbidden):
-        print("ERROR: forbidden keyword in expression: %s" % Expression)
-        return Expression
+    add_name = False
+    add_colon = False
+
+    if "=" not in expression:
+        expression = "Test = " + expression
+        add_name = True
+
+    if ";" not in expression:
+        expression = expression + ";"
+        add_colon = True
     
-    AddName = False
-    AddColon = False
-    if not ("=" in Expression):
-        Expression = "Test = " + Expression
-        AddName = True
-    if not (";" in Expression):
-        Expression = Expression + ";"
-        AddColon = True
+    eqntott_cmd = [EQNTOTT_CMD, "-f", "-l"]
+    espresso_cmd = [ESPRESSO_CMD, "-o", "eqntott"]
     
-    eqntott_cmd = [EQNTOTT_CMD, '-f', '-l']
-    espresso_cmd = [ESPRESSO_CMD, '-o', 'eqntott']
-    eqntott_in = None
-    espresso_out = ''
-    PLA_Name = 'Standard Input'
-    
-    if Merge:
-        espresso_cmd += ['-Dd1merge']
-    if Equiv:
-        espresso_cmd += ['-Dequiv']
-    if Exact:
-        espresso_cmd += ['-Dexact']
-    if Reduce:
-        eqntott_cmd += ['-r']
+    if merge:
+        espresso_cmd += ["-Dd1merge"]
+    if equiv:
+        espresso_cmd += ["-Dequiv"]
+    if exact:
+        espresso_cmd += ["-Dexact"]
+    if reduce:
+        eqntott_cmd += ["-r"]
     
     if not os_is_windows:
-        eqntott_cmd += ['/dev/stdin']
+        eqntott_cmd += ["/dev/stdin"]
         
-    eqntott_in = Expression
+    eqntott_in = expression
     eqntott_out = run_eqntott(eqntott_cmd, eqntott_in)
     
     if int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) != 0:
         espresso_out = run_espresso(espresso_cmd, eqntott_out)
-        espresso_out = re.sub(r'\.na .*\n', '', espresso_out)
+        espresso_out = re.sub(r'\.na .*\n', "", espresso_out)
         espresso_out = re.sub(r'\s', '', espresso_out)
-        espresso_out = espresso_out.replace('|', ' | ')
-        espresso_out = espresso_out.replace('=', ' = ')
-        espresso_out = espresso_out.replace('&', ' & ')
+        espresso_out = espresso_out.replace("|", " | ")
+        espresso_out = espresso_out.replace("=", " = ")
+        espresso_out = espresso_out.replace("&", " & ")
         if espresso_out == "Test = ();":
             espresso_out = "Test = 1;"
+
     elif int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) == 1:
         espresso_out = "1"
+
     elif int(re.search(r'\.p\s\d+', eqntott_out).group().strip(".p ")) == 0:
         espresso_out = "0"
+
     else:
-        espresso_out = Expression
+        espresso_out = expression
     
-    if AddName and "Test" in str(espresso_out):
-        espresso_out = espresso_out.replace('Test = ', '')
-    if AddColon and ";" in str(espresso_out):
-        espresso_out = espresso_out.replace(';', '')
+    if add_name and "Test" in espresso_out:
+        espresso_out = espresso_out.replace("Test = ", "")
+    if add_colon and ";" in espresso_out:
+        espresso_out = espresso_out.replace(";", "")
     
-    if Outputfile is None:
-        return (espresso_out)
-    else:
-        with open(Outputfile, 'w') as results:
+    if fname_out:
+        with open(fname_out, "w") as results:
             results.write(espresso_out)
+        log.info(f"created {fname_out}")
 
-
-if __name__ == "__main__":
-    print("some basic tests")
-    res = are_mutually_exclusive(A="x & !Y", B="Y")
-    print("OK" if res else "error")
+    return espresso_out

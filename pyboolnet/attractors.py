@@ -1,34 +1,36 @@
 
 
 import datetime
-import itertools
 import logging
 import sys
 from functools import partial
-from typing import Optional, Union, List, Tuple, Dict
+from itertools import product
+from typing import Optional, Union, List, Tuple
 
+import networkx
+
+from pyboolnet.digraphs import ancestors
+from pyboolnet.digraphs import digraph2condensationgraph
 from pyboolnet.file_exchange import primes2bnet
+from pyboolnet.helpers import merge_dicts
+from pyboolnet.helpers import open_json_data
+from pyboolnet.helpers import save_json_data
 from pyboolnet.interaction_graphs import primes2igraph
-from pyboolnet.model_checking import check_primes
-from pyboolnet.model_checking import check_primes_with_counterexample
+from pyboolnet.model_checking import model_checking
+from pyboolnet.model_checking import model_checking_with_counterexample
 from pyboolnet.prime_implicants import copy_primes
 from pyboolnet.prime_implicants import create_constants
 from pyboolnet.prime_implicants import percolate_and_keep_constants
 from pyboolnet.prime_implicants import percolate_and_remove_constants
 from pyboolnet.prime_implicants import remove_all_variables_except
-from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
 from pyboolnet.state_space import subspace2str, state2dict, state2str, random_state
+from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
 from pyboolnet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
 from pyboolnet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
 from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
 from pyboolnet.temporal_logic import exists_finally_unsteady_components
 from pyboolnet.temporal_logic import subspace2proposition
 from pyboolnet.trap_spaces import trap_spaces
-from pyboolnet.digraphs import ancestors
-from pyboolnet.digraphs import digraph2condensationgraph
-from pyboolnet.helpers import merge_dicts
-from pyboolnet.helpers import open_json_data
-from pyboolnet.helpers import save_json_data
 
 log = logging.getLogger(__file__)
 
@@ -49,29 +51,29 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
         * *attractors*: attractor data
 
     **example**::
-      >>> attractors = compute_attractors(primes, update, "attrs.json")
+      >>> attractors = compute_attractors(primes, update, "attractors.json")
     """
 
     assert update in UPDATE_STRATEGIES
     assert primes
 
-    attrs = dict()
-    attrs["primes"] = copy_primes(primes)
-    attrs["update"] = update
+    attractors = dict()
+    attractors["primes"] = copy_primes(primes)
+    attractors["update"] = update
 
     min_tspaces = trap_spaces(primes=primes, option="min", max_output=max_output)
 
     if check_completeness:
         log.info("attractors.completeness(..)")
         if completeness(primes, update, max_output=max_output):
-            attrs["is_complete"] = "yes"
+            attractors["is_complete"] = "yes"
         else:
-            attrs["is_complete"] = "no"
-        log.info(f" {attrs['is_complete']}")
+            attractors["is_complete"] = "no"
+        log.info(f" {attractors['is_complete']}")
     else:
-        attrs["is_complete"] = "unknown"
+        attractors["is_complete"] = "unknown"
 
-    attrs["attractors"] = []
+    attractors["attractors"] = []
 
     for i, mints in enumerate(min_tspaces):
 
@@ -116,29 +118,29 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
         attractor_obj["is_steady"] = len(mints) == len(primes)
         attractor_obj["is_cyclic"] = len(mints) != len(primes)
 
-        attrs["attractors"].append(attractor_obj)
+        attractors["attractors"].append(attractor_obj)
 
-    attrs["attractors"] = tuple(sorted(attrs["attractors"], key=lambda x: x["state"]["str"]))
+    attractors["attractors"] = tuple(sorted(attractors["attractors"], key=lambda x: x["state"]["str"]))
 
     if fname_json:
-        write_attractors_json(attrs, fname_json)
+        write_attractors_json(attractors, fname_json)
 
-    return attrs
+    return attractors
 
 
-def write_attractors_json(attractors_json: dict, fname_json: str):
+def write_attractors_json(attractors: dict, fname_json: str):
     """
     saves the attractor object as a JSON file.
 
     **arguments**:
-        * *attractors_json*: json attractor data, see :ref:`attractors_compute_json`
+        * *attractors*: json attractor data, see :ref:`attractors_compute_json`
         * *fname_json*: file name
 
     **example**::
-        >>> save_attractor(attrs, "attrs.json")
+        >>> save_attractor(attractors, "attractors.json")
     """
 
-    save_json_data(data=attractors_json, fname=fname_json)
+    save_json_data(data=attractors, fname=fname_json)
 
 
 def read_attractors_json(fname: str) -> dict:
@@ -149,15 +151,15 @@ def read_attractors_json(fname: str) -> dict:
         * *fname*: file name
 
     **returns**:
-        * *attractors_json*: json attractor data, see :ref:`attractors_compute_json`
+        * *attractors*: json attractor data, see :ref:`compute_attractors`
 
     **example**::
-        >>> attrs = read_attractors_json("attrs.json")
+        >>> attractors = read_attractors_json("attractors.json")
     """
 
-    attrs = open_json_data(fname=fname)
+    attractors = open_json_data(fname=fname)
 
-    return attrs
+    return attractors
 
 
 def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initial_state: Union[dict, str] = {}, length: int = 0, attempts: int = 10) -> dict:
@@ -236,7 +238,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
         spec = f"CTLSPEC {formula}"
         init = f"INIT {subspace2proposition(primes=primes, subspace=current_state)}"
 
-        if check_primes(primes, update, init, spec):
+        if model_checking(primes, update, init, spec):
             log.info("is attractor state")
             return current_state
 
@@ -245,7 +247,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
     log.info("could not find attractor state.")
     log.info("increase Length or Attempts parameter.")
 
-    raise Exception
+    sys.exit()
 
 
 def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool:
@@ -301,7 +303,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
     formula = exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])
     spec = f"CTLSPEC {formula}"
     init = "INIT TRUE"
-    answer = check_primes(primes=primes, update=update, init=init, spec=spec)
+    answer = model_checking(primes=primes, update=update, init=init, spec=spec)
 
     return answer
 
@@ -358,7 +360,7 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
     formula = exists_finally_unsteady_components(names=list(primes))
     spec = f"CTLSPEC AG({formula})"
     init = "INIT TRUE"
-    answer = check_primes(primes=primes, update=update, init=init, spec=spec)
+    answer = model_checking(primes=primes, update=update, init=init, spec=spec)
 
     return answer
 
@@ -431,7 +433,7 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
     attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
     spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])}"
     init = "INIT TRUE"
-    answer, counterexample = check_primes_with_counterexample(primes=primes, update=update, init=init, spec=spec)
+    answer, counterexample = model_checking_with_counterexample(primes=primes, update=update, init=init, spec=spec)
 
     if answer:
         return True, None
@@ -480,8 +482,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
         return False, attractor_state
 
     spec = f"CTLSPEC AG({exists_finally_unsteady_components(names=list(primes))})"
-    init = "INIT TRUE"
-    answer, counterexample = check_primes_with_counterexample(primes=primes, update=update, init=init, spec=spec)
+    answer, counterexample = model_checking_with_counterexample(primes=primes, update=update, init="INIT TRUE", spec=spec)
 
     if answer:
         return True, None
@@ -585,7 +586,7 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
             spec = f"CTLSPEC {phi}"
 
             if compute_counterexample:
-                answer, counterexample = check_primes_with_counterexample(primes=primes_restricted, update=update, init=init, spec=spec)
+                answer, counterexample = model_checking_with_counterexample(primes=primes_restricted, update=update, init=init, spec=spec)
                 if not answer:
                     downstream = [x for x in igraph if x not in U]
                     arbitrary_state = random_state(downstream)
@@ -594,14 +595,14 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
 
                     return False, counterexample
             else:
-                answer = check_primes(primes=primes_restricted, update=update, init=init, spec=spec)
+                answer = model_checking(primes=primes_restricted, update=update, init=init, spec=spec)
                 if not answer:
                     return False
 
-            refinement += Intersection([p], q)
+            refinement += intersection([p], q)
             w_dash.update(u_dash)
 
-        for q in Intersection(refinement):
+        for q in intersection(refinement):
             dummy = create_constants(primes=primes, constants=q, in_place=True)
             q_tilde = percolate_and_keep_constants(primes=dummy)
 
@@ -629,10 +630,10 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
          >>> create_attractor_report(primes, "report.txt")
     """
 
-    mints = trap_spaces(primes, "min")
-    steady = sorted([x for x in mints if len(x) == len(primes)])
-    cyclic = sorted([x for x in mints if len(x) < len(primes)])
-    w = max([12, len(primes)])
+    min_trap_spaces = trap_spaces(primes, "min")
+    steady = sorted(x for x in min_trap_spaces if len(x) == len(primes))
+    cyclic = sorted(x for x in min_trap_spaces if len(x) < len(primes))
+    width = max([12, len(primes)])
 
     lines = ["", ""]
     lines += ["### Attractor Report"]
@@ -643,11 +644,11 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
     if not steady:
         lines += [" * there are no steady states"]
     else:
-        lines += ["| " + "steady state".ljust(w) + " |"]
-        lines += ["| " + w*"-" + " | "]
+        lines += ["| " + "steady state".ljust(width) + " |"]
+        lines += ["| " + width * "-" + " | "]
 
     for x in steady:
-        lines += ["| " + subspace2str(primes, x).ljust(w) + " |"]
+        lines += ["| " + subspace2str(primes, x).ljust(width) + " |"]
 
     lines += [""]
     lines += ["### Asynchronous STG"]
@@ -658,12 +659,12 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
         lines += [" * there are only steady states"]
     else:
         lines += [""]
-        line = "| "+"trapspace".ljust(w) + " | univocal  | faithful  |"
+        line = "| "+"trapspace".ljust(width) + " | univocal  | faithful  |"
         lines += [line]
-        lines += ["| " + w*"-" + " | --------- | --------- |"]
+        lines += ["| " + width*"-" + " | --------- | --------- |"]
 
     for x in cyclic:
-        line = "| " + subspace2str(primes, x).ljust(w)
+        line = "| " + subspace2str(primes, x).ljust(width)
         line += " | " + str(univocality(primes, "asynchronous", x)).ljust(9)
         line += " | " + str(faithfulness(primes, "asynchronous", x)).ljust(9) + " |"
         lines += [line]
@@ -677,12 +678,12 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
         lines += [" * there are only steady states"]
     else:
         lines += [""]
-        line = "| " + "trapspace".ljust(w) + " | univocal  | faithful  |"
+        line = "| " + "trapspace".ljust(width) + " | univocal  | faithful  |"
         lines += [line]
-        lines += ["| " + w*"-" + "  | --------- | --------- |"]
+        lines += ["| " + width*"-" + "  | --------- | --------- |"]
 
     for x in cyclic:
-        line = "| " + (subspace2str(primes, x)).ljust(w)
+        line = "| " + (subspace2str(primes, x)).ljust(width)
         line += " | " + str(univocality(primes, "synchronous", x)).ljust(9)
         line += " | " + str(faithfulness(primes, "synchronous", x)).ljust(9) + " |"
         lines += [line]
@@ -709,16 +710,18 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
         lines += ["| " + t.ljust(t_width) + " | " + f.ljust(f_width) + " |"]
 
     lines += ["", ""]
+    text = "\n".join(lines)
 
     if fname_txt:
         with open(fname_txt, "w") as f:
-            f.writelines("\n".join(lines))
-            log.info(f"created {fname_txt}")
-    else:
-        return "\n".join(lines)
+            f.writelines(text)
+
+        log.info(f"created {fname_txt}")
+
+    return text
 
 
-def compute_attractors_tarjan(STG):
+def compute_attractors_tarjan(stg: networkx.DiGraph):
     """
     Uses `networkx.strongly_connected_components <https://networkx.github.io/documentation/latest/reference/generated/networkx.algorithms.components.strongly_connected.strongly_connected_components.html>`_
     , i.e., Tarjan's algorithm with Nuutila's modifications, to compute the SCCs of *stg* and
@@ -731,8 +734,8 @@ def compute_attractors_tarjan(STG):
         * *stg*: state transition graph
 
     **returns**:
-        * *SteadyStates*: the steady states
-        * *Cyclic* (list of sets of strs): the cyclic attractors
+        * *steady_states*: the steady states
+        * *cyclic_attractors*: the cyclic attractors
 
     **example**:
 
@@ -740,29 +743,29 @@ def compute_attractors_tarjan(STG):
         ...         "y, !x | !z",
         ...         "z, x&!y"]
         >>> bnet = "\\n".join(bnet)
-        >>> primes = FEX.bnet2primes(bnet)
-        >>> stg = STGs.primes2stg(primes, "asynchronous")
-        >>> steadystates, cyclic = STGs.compute_attractors_tarjan(stg)
-        >>> steadystates
-        ['101','000']
-        >>> cyclic
-        [set(['111','110']), set(['001','011'])]
+        >>> primes = bnet2primes(bnet)
+        >>> stg = primes2stg(primes, "asynchronous")
+        >>> steady_states, cyclic_attractors = compute_attractors_tarjan(stg)
+        >>> steady_states
+        ["101","000"]
+        >>> cyclic_attractors
+        [{"111", "110"}, {"001", "011"}]
     """
 
-    condensation_graph = digraph2condensationgraph(digraph=STG)
-    steadystates = []
+    condensation_graph = digraph2condensationgraph(digraph=stg)
+    steady_states = []
     cyclic = []
     for scc in condensation_graph.nodes():
         if not list(condensation_graph.successors(scc)):
-            if len(scc)==1:
-                steadystates.append(scc[0])
+            if len(scc) == 1:
+                steady_states.append(scc[0])
             else:
                 cyclic.append(set(scc))
 
-    return steadystates, cyclic
+    return steady_states, cyclic
 
 
-def completeness_naive(Primes, Update, TrapSpaces):
+def completeness_naive(primes, update, trap_spaces):
     """
     The naive approach to deciding whether *Trapspaces* is complete,
     i.e., whether there is no attractor outside of *Trapspaces*.
@@ -785,27 +788,25 @@ def completeness_naive(Primes, Update, TrapSpaces):
     **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Trapspaces*: list of subspaces in string or dict representation
+        * *trap_spaces*: list of subspaces in string or dict representation
 
     **returns**:
         * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
-        >>> answer, counterex = completeness_naive(primes, "asynchronous", mintspaces)
+        >>> min_trap_spaces = trap_spaces(primes, "min")
+        >>> answer, counterexample = completeness_naive(primes, "asynchronous", min_trap_spaces)
         >>> answer
         True
     """
 
-    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, subspaces=TrapSpaces)
-    init = "INIT TRUE"
-    answer = check_primes(primes=Primes, update=Update, init=init, spec=spec)
+    spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=trap_spaces)}"
 
-    return answer
+    return model_checking(primes=primes, update=update, init="INIT TRUE", spec=spec)
 
 
-def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
+def completeness_naive_with_counterexample(primes: dict, update: str, trap_spaces: List[Union[dict, str]]):
     """
     The naive approach to deciding whether *Trapspaces* is complete,
     i.e., whether there is no attractor outside of *Trapspaces*.
@@ -842,9 +843,9 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, subspaces=TrapSpaces)
+    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=primes, subspaces=trap_spaces)
     init = "INIT TRUE"
-    answer, counterex = check_primes_with_counterexample(primes=Primes, update=Update, init=init, spec=spec)
+    answer, counterex = model_checking_with_counterexample(primes=primes, update=update, init=init, spec=spec)
 
     if counterex:
         counterex = counterex[-1]
@@ -852,11 +853,11 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
     return answer, counterex
 
 
-def Intersection(*ListOfDicts):
+def intersection(*list_of_dicts):
     """
     each argument must be a list of subspaces (dicts)::
 
-        >>> Intersection([{"v1":1}], [{"v1":0}, {"v2":1, "v3":0}])
+        >>> intersection([{"v1":1}], [{"v1":0}, {"v2":1, "v3":0}])
     """
 
-    return [merge_dicts(dicts=x) for x in itertools.product(*ListOfDicts)]
+    return [merge_dicts(dicts=x) for x in product(*list_of_dicts)]

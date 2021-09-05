@@ -1501,6 +1501,76 @@ import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_count
    >>> pyboolnet.state_space.state2str(state)
    100
 
+   >>> notQ2, counterex = MC.model_checking_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
+   >>> notQ2, counterex = MC.model_checking_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> STGs.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
+import pyboolnet.state_space   >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
+   >>> state = counterex[0]
+   >>> pyboolnet.state_space.state2str(state)
+   100
+
    >>> notQ2, counterex = MC.check_primes_with_counterexample(primes, update, init, specQ2)
    >>> state = counterex[0]
    >>> STGs.state2str(state)

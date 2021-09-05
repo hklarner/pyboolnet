@@ -1,19 +1,18 @@
 
 
-import logging
-import subprocess
-import os
 import ast
+import logging
+import os
+import subprocess
 import sys
 from typing import Optional
 
 from pyboolnet import find_command
-from pyboolnet.prime_implicants import find_constants, find_inputs
-from pyboolnet.interaction_graphs import primes2igraph
-from pyboolnet.digraphs import find_outdag
 from pyboolnet.boolean_normal_forms import primes2mindnf
+from pyboolnet.digraphs import find_outdag
+from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
-
+from pyboolnet.prime_implicants import find_constants, find_inputs
 
 CMD_BNET2PRIMES = find_command("bnet2prime")
 
@@ -22,14 +21,14 @@ log = logging.getLogger(__name__)
 
 def _bnet2primes_error(proc, out, err, cmd):
     """
-    raises exception for bnet2primes
+    logs error for bnet2primes
     """
     if not proc.returncode == 0:
-        print(out)
-        print(err)
-        print('\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode)
-        print('Command: %s'%' '.join(cmd))
-        raise Exception
+        log.error(out)
+        log.error(err)
+        log.error('\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode)
+        log.error('Command: %s'%' '.join(cmd))
+        sys.exit()
 
 
 def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
@@ -44,18 +43,18 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         Requires the program :ref:`BNetToPrime <installation_bnettoprime>`.
 
     **arguments**:
-       * *bnet*: name of *bnet* file or string contents of file
-       * *fname_primes*: *None* or name of *json* file to save primes
+        * *bnet*: name of *bnet* file or string contents of file
+        * *fname_primes*: *None* or name of *json* file to save primes
 
     **returns**:
-       * *primes*: prime implicants
+        * *primes*: prime implicants
 
     **example**::
 
-          >>> primes = bnet2primes("mapk.bnet", "mapk.primes" )
-          >>> primes = bnet2primes("mapk.bnet")
-          >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek")
-          >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek", "mapk.primes")
+        >>> primes = bnet2primes("mapk.bnet", "mapk.primes" )
+        >>> primes = bnet2primes("mapk.bnet")
+        >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek")
+        >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek", "mapk.primes")
     """
 
     if os.path.isfile(bnet) and fname_primes is not None:
@@ -71,11 +70,11 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
             lines = f.read()
 
         primes = ast.literal_eval(lines)
+
         return primes
 
     elif os.path.isfile(bnet) and fname_primes is None:
         fname_bnet = bnet
-
         cmd = [CMD_BNET2PRIMES, fname_bnet]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate()
@@ -84,6 +83,7 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         out = out.replace("\x08", "")
         out = out.replace(" ", "")
         primes = ast.literal_eval(out)
+
         return primes
 
     elif not os.path.isfile(bnet) and fname_primes is not None:
@@ -100,8 +100,8 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         out = out.decode()
         out = out.replace("\x08", "")
         out = out.replace(" ", "")
-
         primes = ast.literal_eval(out)
+
         return primes
 
 
@@ -124,10 +124,10 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
 
     **example**::
 
-          >>> primes2bnet(primes, "mapk.bnet")
-          >>> primes2bnet(primes, "mapk.bnet", True)
-          >>> expr = primes2bnet(primes)
-          >>> expr = primes2bnet(primes, True)
+        >>> primes2bnet(primes, "mapk.bnet")
+        >>> primes2bnet(primes, "mapk.bnet", True)
+        >>> expr = primes2bnet(primes)
+        >>> expr = primes2bnet(primes, True)
     """
 
     width = max([len(x) for x in primes]) + 3

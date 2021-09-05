@@ -115,7 +115,7 @@ def get_attractors(name: str, update: str) -> dict:
 
     **example**::
 
-        >>> attrs = get_attractors("tournier_apoptosis", "asynchronous")
+        >>> attractors = get_attractors("tournier_apoptosis", "asynchronous")
     """
 
     if update == "asynchronous":
@@ -125,10 +125,10 @@ def get_attractors(name: str, update: str) -> dict:
     elif update == "mixed":
         ext = "mixed.json"
 
-    path = os.path.join(BASE, name, name + "_attrs_" + ext)
+    path = os.path.join(BASE, name, name + "_attractors_" + ext)
 
     if os.path.isfile(path):
-        return PyBoolNet.attractors.read_attractors_json(path)
+        return read_attractors_json(path)
 
     print(" %s does not exist"%path)
     raise FileNotFoundError

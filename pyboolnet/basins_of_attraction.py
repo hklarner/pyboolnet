@@ -1,27 +1,28 @@
 
 
-import os
-import sys
+import logging
+from typing import Union, Optional
 
-import PyBoolNet
-from PyBoolNet.Utility.Misc import perc2str
+import matplotlib.pyplot
 
 import pyboolnet.state_space
+import pyboolnet.state_space
 
-BASE = os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-CMD_DOT = PyBoolNet.Utility.Misc.find_command("dot")
-sys.path.append(BASE)
+from pyboolnet import find_command
+from pyboolnet.model_checking import subspace2proposition
+from pyboolnet.model_checking import model_checking_with_acceptingstates
+from pyboolnet.boolean_logic import minimize_espresso
+from pyboolnet.state_space import size_state_space
 
-BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"]  # weak, strong, cycle-free (purple)
-PIE_COLORS = ["#ffb3ae", "#aecce1", "#c8eac6", "#dfcae2", "#ffd8a8", "#ffffce", "#e6d7bd", "#e6d7bd", "#e6d7bd"]
+CMD_DOT = find_command("dot")
+BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"]
 PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"]
-PIE_COLORS = 10*[BASIN_COLORS[1]]
+
+log = logging.getLogger(__name__)
 
 
-def weak_basin(Primes, Update, Subspace, Minimize=False):
+def weak_basin(primes: dict, update: str, subspace: Union[dict, str] = {}, minimize: bool = False):
     """
-    todo: add unit tests
-
     Computes the weak basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
       **arguments**:
@@ -31,23 +32,21 @@ def weak_basin(Primes, Update, Subspace, Minimize=False):
         * *subspace*: a subspace
 
       **returns**:
-        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
         >>> weak_basin(primes, update, "0---1", True)
-        {"size":    134,
-        "formula":    "Erk & !Raf | Mek",
-        "perc":        12.89338}
+        {"size": 134,
+        "formula": "Erk & !Raf | Mek",
+        "perc": 12.89338}
     """
 
-    return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC EF({x})")
+    return _basin_handle(primes=primes, update=update, subspace=subspace, minimize=minimize, ctl_pattern="CTLSPEC EF({x})")
 
 
-def strong_basin(Primes, Update, Subspace, Minimize=False):
+def strong_basin(primes, update, subspace: Union[dict, str] = {}, minimize: bool = False):
     """
-    todo: add unit tests
-
     Computes the strong basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
       **arguments**:
@@ -57,7 +56,7 @@ def strong_basin(Primes, Update, Subspace, Minimize=False):
         * *subspace*: a subspace
 
       **returns**:
-        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        * *basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
 
       **example**::
 
@@ -67,107 +66,35 @@ def strong_basin(Primes, Update, Subspace, Minimize=False):
         "perc":        12.89338}
     """
 
-    return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC AG(EF({x}))")
+    return _basin_handle(primes, update, subspace, minimize, ctl_pattern="CTLSPEC AG(EF({x}))")
 
 
-def cyclefree_basin(Primes, Update, Subspace, Minimize=False):
+def cycle_free_basin(primes: dict, update: str, subspace: Union[dict, str] = {}, minimize: bool = False):
     """
-    todo: add unit tests
-
     Computes the cycle-free basin of *subspace* via the CTL query AG(EF(Subspace)), for details see :ref:`Klarner2018 <klarner2018>`.
 
-      **arguments**:
+        **arguments**:
         * *primes*: prime implicants
         * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
         * *minimize*: minimize the Boolean expressions
         * *subspace*: a subspace
+        
+        **returns**:
+        * *basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+        
+        **example**::
 
-      **returns**:
-        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
-
-      **example**::
-
-          >>> cyclefree_basin(primes, update, True, "0---1")
-        {"size":    134,
-        "formula":    "Erk & !Raf | Mek",
-        "perc":        12.89338}
+        >>> cycle_free_basin(primes, update, True, "0---1")
+            {"size": 134,
+            "formula": "Erk & !Raf | Mek",
+            "perc": 12.89338}
     """
 
-    return _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern="CTLSPEC AF({x})")
+    return _basin_handle(primes, update, subspace, minimize, ctl_pattern="CTLSPEC AF({x})")
 
 
-def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
+def compute_basins(attractors: dict, weak: bool = True, strong: bool = True, cycle_free: bool = True, fname_barplot: Optional[str] = None, fname_piechart: Optional[str] = None, minimize: bool = False) -> Optional[dict]:
     """
-    todo: add unit tests
-
-    The handle for :ref:`weak_basin`, :ref:`strong_basin` and :ref:`cyclefree_basin`.
-
-      **arguments**:
-        * *primes*: prime implicants
-        * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *minimize*: minimize the Boolean expressions
-        * *subspace*: a subspace
-        * *CTLpattern*:
-
-      **returns**:
-        * *Basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
-
-      **example**::
-
-        >>> _basin_handle(primes, update, True, "0---1", "CTLSPEC EF({x})")
-        {"size":    134,
-        "formula":    "Erk & !Raf | Mek",
-        "perc":        12.89338}
-    """
-
-    prop = PyBoolNet.temporal_logic.subspace2proposition(Primes, Subspace)
-    init = "INIT TRUE"
-    spec = CTLpattern.format(x=prop)
-    ans, acc = PyBoolNet.model_checking.check_primes_with_acceptingstates(Primes, Update, init, spec)
-
-    size = acc["INITACCEPTING_SIZE"]
-    formula = acc["INITACCEPTING"]
-
-    if Minimize and formula not in ["TRUE", "FALSE"]:
-        formula = minimize_espresso(formula)
-
-    size_total = pyboolnet.state_space.size_state_space(Primes)
-
-    return {"size": size,
-            "formula": formula,
-            "perc": 100. * size / size_total}
-
-
-def _default_basin(Primes):
-    """
-    todo: add unit tests
-
-    <description>
-
-      **arguments**:
-        * *primes*: prime implicants
-        * *<arg>* (<type>): <description>
-
-      **returns**:
-        * *<arg>* (<type>): <description>
-
-      **example**::
-
-        >>> (..)
-        <result>
-    """
-
-    size_total = pyboolnet.state_space.size_state_space(Primes)
-
-    return {"size":    size_total,
-            "formula": "TRUE",
-            "perc":    100.}
-
-
-def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplot=None, FnamePiechart=None, Minimize=False, Silent=False):
-    """
-    todo: add unit tests
-
     Extends *attractors* with basin of attraction.
     Use *FnameBarplot* and *FnamePiechart* to create plots of the basins, see :ref:`create_barplot` and :ref:`basins_create_piechart`.
 
@@ -180,65 +107,52 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
         * *FnamePiechart*: file name of pie chart
         * *minimize*: minimize the Boolean expressions
 
-    **returns**::
-        * *None*
-
     **example**::
 
-        >>> primes = Repository.get_primes("raf")
-        >>> attrs = Attractors.compute_attractors(primes, update)
-        >>> compute_basins(attrs)
+        >>> primes = get_primes("raf")
+        >>> attractors = compute_attractors(primes, update)
+        >>> compute_basins(attractors)
     """
 
-    Primes = AttrJson["primes"]
-    Update = AttrJson["update"]
+    primes = attractors["primes"]
+    update = attractors["update"]
 
-    if not Silent:
-        print("compute_basins(..)")
-
-    if not any([Weak, Strong, CycleFree]):
-        if not Silent:
-            print(" nothing to do. you should enable at least one of the parameters Weak, Strong, CycleFree.")
+    if not any([weak, strong, cycle_free]):
+        log.info("nothing to do. you should enable at least one of the parameters Weak, Strong, CycleFree.")
         return
 
-    n = len(AttrJson["attractors"])
-    for i, x in enumerate(AttrJson["attractors"]):
-        if not Silent:
-            print(" working on attractor {i}/{n}: {l}".format(i=i+1,n=n,l=x["state"]["str"]))
+    n = len(attractors["attractors"])
+    for i, x in enumerate(attractors["attractors"]):
+        log.info(f"working on attractor {i+1}/{n}: {x['state']['str']}")
 
-        if Weak:
-            if not Silent:
-                print("  weak_basin(..)")
+        if weak:
+            log.info("  weak_basin(..)")
             if n == 1:
-                x["weak_basin"] = _default_basin(Primes)
+                x["weak_basin"] = _default_basin(primes)
             else:
-                x["weak_basin"] = weak_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
+                x["weak_basin"] = weak_basin(primes, update, subspace=x["mintrapspace"]["dict"], minimize=minimize)
 
-        if Strong:
-            if not Silent:
-                print("  strong_basin(..)")
+        if strong:
+            log.info("  strong_basin(..)")
             if n == 1:
-                x["strong_basin"] = _default_basin(Primes)
+                x["strong_basin"] = _default_basin(primes)
 
             else:
-                x["strong_basin"] = strong_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
+                x["strong_basin"] = strong_basin(primes, update, subspace=x["mintrapspace"]["dict"], minimize=minimize)
 
-        if CycleFree:
-            if not Silent:
-                print("  cyclefree_basin(..)")
-            x["cyclefree_basin"] = cyclefree_basin(Primes, Update, Subspace=x["mintrapspace"]["dict"], Minimize=Minimize)
+        if cycle_free:
+            log.info("cycle_free_basin(..)")
+            x["cycle_free_basin"] = cycle_free_basin(primes, update, subspace=x["mintrapspace"]["dict"], minimize=minimize)
 
-    if FnameBarplot:
-        create_barplot(AttrJson, FnameBarplot, Title=None, Silent=Silent)
+    if fname_barplot:
+        create_basins_of_attraction_barplot(attractors, fname_barplot)
 
-    if FnamePiechart:
-        create_piechart(AttrJson, FnamePiechart, Title=None, Silent=Silent)
+    if fname_piechart:
+        create_basins_piechart(attractors, fname_piechart)
 
 
-def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, LabelsMap=None, Silent=False):
+def create_basins_of_attraction_barplot(attractors: dict, fname_image: str, title: str = None, y_unit: Optional[str] = "perc", y_max: Optional[str] = None, labels_map: Optional[callable] = None):
     """
-    todo: add unit tests
-
     Creates a bar plot of the basins of attraction specified in *attractors*.
     Requires that *attractors* has been extended with basins information by :ref:`compute_basins`.
     Requires https://matplotlib.org.
@@ -251,81 +165,72 @@ def create_barplot(AttrJson, FnameImage, Title=None, Yunit="perc", Ymax=None, La
         * *Ymax*: y axis limit
         * *LabelsMap* (function): a map from minimal trap space dictionary of attractor to label str
 
-    **returns**:
-        * *None*
-
     **example**::
 
-        >>> attrs = Attractors.compute_attractors(primes, update)
-        >>> compute_basins(attrs)
-        >>> create_barplot(attrs, "barplot.pdf")
+        >>> attractors = compute_attractors(primes, update)
+        >>> compute_basins(attractors)
+        >>> create_basins_of_attraction_barplot(attractors, "barplot.pdf")
         created barplot.pdf
     """
 
     import matplotlib.pyplot
 
-    Attrs = AttrJson["attractors"]
-    Primes = AttrJson["primes"]
+    attractors = attractors["attractors"]
+    primes = attractors["primes"]
 
-    assert(all(basin in x for basin in ["weak_basin", "strong_basin", "cyclefree_basin"] for x in Attrs))
-    assert(Yunit in ["perc", "size"])
+    assert all(basin in x for basin in ["weak_basin", "strong_basin", "cycle_free_basin"] for x in attractors)
+    assert y_unit in ["perc", "size"]
 
-    if not Silent: print("Basins.create_barplot(..)")
+    total = pyboolnet.state_space.size_state_space(primes)
 
-    total = pyboolnet.state_space.size_state_space(Primes)
+    indices = list(range(len(attractors)))
+    indices.sort(key=lambda i: attractors[i]["weak_basin"]["perc"], reverse=True)
 
-    indeces = list(range(len(Attrs)))
-    indeces.sort(key=lambda i: Attrs[i]["weak_basin"]["perc"], reverse=True)
+    y1 = [attractors[i]["cycle_free_basin"][y_unit] for i in indices]
+    y2 = [attractors[i]["strong_basin"][y_unit] - attractors[i]["cycle_free_basin"][y_unit] for i in indices]
+    y3 = [attractors[i]["weak_basin"][y_unit] - attractors[i]["strong_basin"][y_unit] for i in indices]
 
-    y1 = [Attrs[i]["cyclefree_basin"][Yunit] for i in indeces]
-    y2 = [Attrs[i]["strong_basin"][Yunit] - Attrs[i]["cyclefree_basin"][Yunit] for i in indeces]
-    y3 = [Attrs[i]["weak_basin"][Yunit] - Attrs[i]["strong_basin"][Yunit] for i in indeces]
+    n = len(y1)
+    x = list(range(n))
+    width = 1 / 1.5
 
-    N = len(y1)
-    x = list(range(N))
-    width = 1/1.5
-
-    if not LabelsMap:
-        labels = [Attrs[i]["mintrapspace"]["str"] for i in indeces]
+    if not labels_map:
+        labels = [attractors[i]["mintrapspace"]["str"] for i in indices]
     else:
-        labels = [LabelsMap(Attrs[i]["mintrapspace"]["dict"]) for i in indeces]
+        labels = [labels_map(attractors[i]["mintrapspace"]["dict"]) for i in indices]
 
     figure = matplotlib.pyplot.figure()
-    h3 = matplotlib.pyplot.bar(x, y1, width, color=BASIN_COLORS[2], align='center', label='cycle-free basin')
-    h2 = matplotlib.pyplot.bar(x, y2, width, bottom=y1, color=BASIN_COLORS[1], align='center', label='strong basin')
-    h1 = matplotlib.pyplot.bar(x, y3, width, bottom=[sum(x) for x in zip(y1,y2)], color=BASIN_COLORS[0], align='center', label='weak basin')
+    h3 = matplotlib.pyplot.bar(x, y1, width, color=BASIN_COLORS[2], align="center", label="cycle-free basin")
+    h2 = matplotlib.pyplot.bar(x, y2, width, bottom=y1, color=BASIN_COLORS[1], align="center", label="strong basin")
+    h1 = matplotlib.pyplot.bar(x, y3, width, bottom=[sum(x) for x in zip(y1, y2)], color=BASIN_COLORS[0], align="center", label="weak basin")
     matplotlib.pyplot.xticks(range(len(labels)), labels, rotation=40, ha="right")
 
-    if not Ymax:
-        Ymax = total if Yunit == "size" else 100
+    if not y_max:
+        y_max = total if y_unit == "size" else 100
 
-    ylim = (0,Ymax)
-    matplotlib.pyplot.ylim(ylim)
+    y_lim = (0, y_max)
+    matplotlib.pyplot.ylim(y_lim)
 
-    matplotlib.pyplot.legend(handles = [h1,h2,h3], loc='upper right')
+    matplotlib.pyplot.legend(handles=[h1, h2, h3], loc="upper right")
 
-    if Title is None:
-        Title = 'Basins of Attraction'
+    if not title:
+        title = "Basins of Attraction"
 
-    matplotlib.pyplot.title(Title, y=1.08)
+    matplotlib.pyplot.title(title, y=1.08)
 
-    ylabel = "number of states" if Yunit=="size" else "percent of state space"
-    matplotlib.pyplot.ylabel(ylabel)
-    matplotlib.pyplot.xlabel('attractors')
+    y_label = "number of states" if y_unit == "size" else "percent of state space"
+    matplotlib.pyplot.ylabel(y_label)
+    matplotlib.pyplot.xlabel("attractors")
     matplotlib.pyplot.tight_layout()
 
-    figure.savefig(FnameImage, bbox_inches='tight')
+    figure.savefig(fname_image, bbox_inches="tight")
     matplotlib.pyplot.close(figure)
 
-    if not Silent:
-        print("created {x}".format(x=FnameImage))
+    log.info(f"created {fname_image}")
 
 
-def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=None, Silent=False):
+def create_basins_piechart(attractors: dict, fname_image: str, title: Optional[str] = None, y_unit: Optional[str] = "perc", labels_map: Optional[callable] = None):
     """
-    todo: add cycle-free subset to plot using pairs of similar colours
-    todo: add unit tests
-
     Creates a pie chart of the basins of attraction specified in *attractors*.
     Requires that *attractors* has been extended with basins information by :ref:`compute_basins`.
     Requires https://matplotlib.org.
@@ -334,99 +239,126 @@ def create_piechart(AttrJson, FnameImage, Title=None, Yunit="perc", LabelsMap=No
         * *attractors*: json attractor data, see :ref:`attractors_compute_json`
         * *fname_image*: create image for pie chart
         * *title*: optional title of plot
-        * *Yunit*: "perc" for percentage of state space and "size" for number of states
-        * *LabelsMap* (function): a map from minimal trap space dictionary of attractor to label str
-
-    **returns**:
-        * *None*
+        * *y_unit*: "perc" for percentage of state space and "size" for number of states
+        * *labels_map*: a map from minimal trap space dictionary of attractor to label str
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractors(primes, update)
-        >>> compute_basins(attrs)
-        >>> create_piechart(attrs, "piechart.pdf")
+        >>> attractors = compute_attractors(primes, update)
+        >>> compute_basins(attractors)
+        >>> create_basins_piechart(attractors, "piechart.pdf")
         created piechart.pdf
     """
 
-    import matplotlib.pyplot
+    primes = attractors["primes"]
+    attractors = attractors["attractors"]
 
-    Primes = AttrJson["primes"]
-    Attrs = AttrJson["attractors"]
+    assert all(basin in x for basin in ["weak_basin", "strong_basin", "cycle_free_basin"] for x in attractors)
+    assert y_unit in ["perc", "size"]
 
-    assert(all(basin in x for basin in ["weak_basin", "strong_basin", "cyclefree_basin"] for x in Attrs))
-    assert(Yunit in ["perc", "size"])
-
-    if not Silent: print("Basins.create_piechart(..)")
-
-    total = pyboolnet.state_space.size_state_space(Primes)
-    strong = sum(x["strong_basin"]["size"] for x in Attrs)
+    total = pyboolnet.state_space.size_state_space(primes)
+    strong = sum(x["strong_basin"]["size"] for x in attractors)
     outside = total - strong
 
-    indeces = list(range(len(Attrs)))
-    indeces.sort(key=lambda i: Attrs[i]["strong_basin"]["perc"], reverse=True)
+    indices = list(range(len(attractors)))
+    indices.sort(key=lambda i: attractors[i]["strong_basin"]["perc"], reverse=True)
 
     figure = matplotlib.pyplot.figure()
-    sizes  = [Attrs[i]["strong_basin"]["size"] for i in indeces] + [outside]
+    sizes = [attractors[i]["strong_basin"]["size"] for i in indices] + [outside]
 
-    if len(Attrs) <= 9:
-        colors = [PIE_COLORS[i] for i,x in enumerate(Attrs)]
+    if len(attractors) <= 9:
+        colors = [PIE_COLORS[i] for i,x in enumerate(attractors)]
     else:
-        colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(indeces)+1)) for x in range(len(indeces)+2)][1:-1]
+        colors = [matplotlib.pyplot.cm.rainbow(1.*x/(len(indices)+1)) for x in range(len(indices)+2)][1:-1]
 
-    colors.append(BASIN_COLORS[0]) # for slice that represents "outside" states
+    colors.append(BASIN_COLORS[0])  # for slice that represents "outside" states
 
-    explode = [0]*len(indeces)+[.08]
+    explode = [0.0] * len(indices) + [.08]
 
-    if not LabelsMap:
-        labels = [Attrs[i]["mintrapspace"]["str"] for i in indeces] + [""]
+    if not labels_map:
+        labels = [attractors[i]["mintrapspace"]["str"] for i in indices] + [""]
     else:
-        labels = [LabelsMap(Attrs[i]["mintrapspace"]["dict"]) for i in indeces] + [""]
+        labels = [labels_map(attractors[i]["mintrapspace"]["dict"]) for i in indices] + [""]
 
-    autopct = (lambda p: '{:.0f}'.format(p * total / 100)) if Yunit=="size" else "%1.1f%%"
-    stuff = matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=autopct, shadow=True, startangle=140)
-    patches = stuff[0] # required because matplotlib.pyplot.pie returns variable number of things depending on autopct!!
+    auto_percent = (lambda p: '{:.0f}'.format(p * total / 100)) if y_unit == "size" else "%1.1f%%"
+    stuff = matplotlib.pyplot.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=auto_percent, shadow=True, startangle=140)
+    patches = stuff[0]
 
     for i, patch in enumerate(patches):
         patch.set_ec("black")
 
-    matplotlib.pyplot.axis('equal')
+    matplotlib.pyplot.axis("equal")
 
-    if Title is None:
-        Title = 'Strong Basins of Attraction'
+    if not title:
+        title = "Strong Basins of Attraction"
 
-    matplotlib.pyplot.title(Title, y=1.08)
+    matplotlib.pyplot.title(title, y=1.08)
     matplotlib.pyplot.tight_layout()
-    figure.savefig(FnameImage, bbox_inches='tight')
+    figure.savefig(fname_image, bbox_inches="tight")
     matplotlib.pyplot.close(figure)
 
-    if not Silent:
-        print("created %s"%FnameImage)
+    log.info(f"created {fname_image}")
 
 
+def _basin_handle(primes: dict, update: str, subspace: Union[dict, str], minimize: bool, ctl_pattern: str) -> dict:
+    """
+    The handle for :ref:`weak_basin`, :ref:`strong_basin` and :ref:`cycle_free_basin`.
+
+        **arguments**:
+        * *primes*: prime implicants
+        * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
+        * *minimize*: minimize the Boolean expressions
+        * *subspace*: a subspace
+        * *CTLpattern*:
+
+        **returns**:
+        * *basin*: with keys "size"=number of states, "formula"=state formula and "perc"=percentage of state space
+
+        **example**::
+
+            >>> _basin_handle(primes, update, True, "0---1", "CTLSPEC EF({x})")
+            {"size":134,
+            "formula": "Erk & !Raf | Mek",
+            "perc": 12.89338}
+    """
+
+    prop = subspace2proposition(primes, subspace)
+    init = "INIT TRUE"
+    spec = ctl_pattern.format(x=prop)
+    answer, accepting_states = model_checking_with_acceptingstates(primes, update, init, spec)
+
+    size = accepting_states["INITACCEPTING_SIZE"]
+    formula = accepting_states["INITACCEPTING"]
+
+    if minimize and formula not in ["TRUE", "FALSE"]:
+        formula = minimize_espresso(formula)
+
+    size_total = size_state_space(primes)
+
+    return {"size": size,
+            "formula": formula,
+            "perc": 100. * size / size_total}
 
 
+def _default_basin(primes: dict) -> dict:
+    """
+    <description>
 
+      **arguments**:
+        * *primes*: prime implicants
 
+      **returns**:
+        * *<arg>* (<type>): <description>
 
+      **example**::
 
+        >>> (..)
+        <result>
+    """
 
+    size_total = pyboolnet.state_space.size_state_space(primes)
 
+    return {"size": size_total,
+            "formula": "TRUE",
+            "perc": 100.}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# end of file

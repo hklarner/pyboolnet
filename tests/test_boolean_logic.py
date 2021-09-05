@@ -12,7 +12,7 @@ def test_minimize_espresso1():
 
     expression = "(a & b) | a"
     expected = "(a)"
-    answer = minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+    answer = minimize_espresso(expression, merge=True, equiv=True, exact=True, reduce=True)
     
     assert answer == expected
 
@@ -26,7 +26,7 @@ def test_minimize_espresso1():
 def test_minimize_espresso2():
     expression = "a | !a"
     expected = "1"
-    answer = minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+    answer = minimize_espresso(expression, merge=True, equiv=True, exact=True, reduce=True)
     
     assert answer == expected
 
@@ -34,7 +34,7 @@ def test_minimize_espresso2():
 def test_minimize_espresso3():
     expression = "a & !a&!a"
     expected = "0"
-    answer = minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+    answer = minimize_espresso(expression, merge=True, equiv=True, exact=True, reduce=True)
     
     assert answer == expected
 
@@ -42,7 +42,7 @@ def test_minimize_espresso3():
 def test_minimize_espresso4():
     expression = "a&b | a | !a"
     expected = "1"
-    answer = minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+    answer = minimize_espresso(expression, merge=True, equiv=True, exact=True, reduce=True)
     
     assert answer == expected
 
@@ -50,7 +50,7 @@ def test_minimize_espresso4():
 def test_minimize_espresso5():
     expression = "1&a"
     expected = "(a)"
-    answer = minimize_espresso(expression, Merge=True, Equiv=True, Exact=True, Reduce=True)
+    answer = minimize_espresso(expression, merge=True, equiv=True, exact=True, reduce=True)
     
     assert answer == expected
 

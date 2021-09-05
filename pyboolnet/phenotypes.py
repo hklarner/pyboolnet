@@ -9,7 +9,7 @@ import networkx.readwrite.json_graph
 from pyboolnet.prime_implicants import copy_primes
 from pyboolnet.helpers import save_json_data, copy_json_data, open_json_data
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
-from pyboolnet.model_checking import check_primes_with_acceptingstates
+from pyboolnet.model_checking import model_checking_with_acceptingstates
 from pyboolnet.state_space import size_state_space
 from pyboolnet.helpers import divide_list_into_similar_length_lists
 from pyboolnet.helpers import perc2str
@@ -182,7 +182,7 @@ def compute_phenotype_diagram(phenotypes: dict, fname_json: Optional[str] = None
             spec = f"CTLSPEC {reach_all} & AG({reach_some})"
 
         init = "INIT TRUE"
-        answer, accepting = check_primes_with_acceptingstates(primes, update, init, spec)
+        answer, accepting = model_checking_with_acceptingstates(primes, update, init, spec)
 
         data = {"names": names,
                 "init": init,
@@ -210,7 +210,7 @@ def compute_phenotype_diagram(phenotypes: dict, fname_json: Optional[str] = None
             if target_set.issubset(source_set):
                 init = f"INIT {diagram.nodes[source]['initaccepting']}"
                 spec = f"CTLSPEC EX({diagram.nodes[target]['initaccepting']})"
-                answer, accepting = check_primes_with_acceptingstates(primes, update, init, spec)
+                answer, accepting = model_checking_with_acceptingstates(primes, update, init, spec)
 
                 if accepting["INITACCEPTING_SIZE"] > 0:
 
@@ -368,8 +368,8 @@ def create_phenotypes_piechart(diagram: networkx.DiGraph, fname_image: str, titl
 
     **example**::
 
-        >>> attrs = compute_attractors(primes, update)
-        >>> phenos = compute_phenotypes(attrs, markers)
+        >>> attractors = compute_attractors(primes, update)
+        >>> phenos = compute_phenotypes(attractors, markers)
         >>> diagram = compute_phenotype_diagram(phenos)
         >>> create_phenotypes_piechart(diagram, "piechart.pdf")
     """

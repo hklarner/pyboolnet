@@ -44,8 +44,8 @@ def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = No
 
     **example**::
 
-        >>> attrs = attractors.compute_attractors(primes, update)
-        >>> diagram = Commitment.compute_phenotype_diagram(attrs)
+        >>> attractors = attractors.compute_attractors(primes, update)
+        >>> diagram = Commitment.compute_phenotype_diagram(attractors)
     """
 
     primes = attractors["primes"]
@@ -92,8 +92,8 @@ def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = No
         for component in components:
             sub_primes = copy_primes(primes)
             remove_all_variables_except(sub_primes, component)
-            attrs_projected = project_attractors(subspaces, component)
-            diagram, count = _compute_diagram_component(sub_primes, update, attrs_projected, edge_data)
+            attractors_projected = project_attractors(subspaces, component)
+            diagram, count = _compute_diagram_component(sub_primes, update, attractors_projected, edge_data)
             counter_mc += count
             diagrams.append(diagram)
 
@@ -172,8 +172,8 @@ def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent
     Not meant for general use. Use compute_diagram(..) instead.
     """
 
-    assert(Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES)
-    assert(primes)
+    assert Update in PyBoolNet.state_transition_graphs.UPDATE_STRATEGIES
+    assert primes
 
     # create nodes
     counter_mc = 0
@@ -227,7 +227,7 @@ def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent
                 reach_some = " | ".join(reach)
                 spec = "CTLSPEC %s & AG(%s)"%(reach_all,reach_some)
 
-                answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
+                answer, accepting = PyBoolNet.model_checking.model_checking_with_acceptingstates(primes, Update, init, spec)
                 counter_mc+=1
 
                 data = {"attractors":   [x for flag,x in zip(vector, attr) if flag],
@@ -267,7 +267,7 @@ def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent
 
             init = "INIT %s"%source_data["formula"]
             spec = "CTLSPEC EX(%s)"%target_data["formula"]
-            answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
+            answer, accepting = PyBoolNet.model_checking.model_checking_with_acceptingstates(primes, Update, init, spec)
             counter_mc+=1
 
             data = {}
@@ -283,7 +283,7 @@ def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent
 
                     else:
                         spec = "CTLSPEC E[%s U %s]"%(source_data["formula"],target_data["formula"])
-                        answer, accepting = PyBoolNet.model_checking.check_primes_with_acceptingstates(primes, Update, init, spec)
+                        answer, accepting = PyBoolNet.model_checking.model_checking_with_acceptingstates(primes, Update, init, spec)
                         counter_mc+=1
 
                         data["EF_size"] = accepting["INITACCEPTING_SIZE"]
@@ -322,8 +322,8 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True, StyleSplines="curved", 
 
     **example**::
 
-        >>> attrs = Attractors.compute_attractors(primes, update)
-        >>> Commitment.compute_phenotype_diagram(attrs)
+        >>> attractors = Attractors.compute_attractors(primes, update)
+        >>> Commitment.compute_phenotype_diagram(attractors)
         >>> diagram2image(diagram, "diagram.pdf")
         >>> diagram2image(diagram, "basins.pdf", "attractors.pdf")
     """
@@ -475,8 +475,8 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
     **example**::
 
         >>> primes = Repository.get_primes("xiao_wnt5a")
-        >>> attrs = Attractors.compute_attractors(primes, update)
-        >>> diagram = compute_commitment_diagram(attrs)
+        >>> attractors = Attractors.compute_attractors(primes, update)
+        >>> diagram = compute_commitment_diagram(attractors)
         >>> create_piechart(diagram, "pie.pdf")
         created pie.pdf
     """
@@ -564,10 +564,10 @@ def cartesian_product(Diagrams, Factor, EdgeData):
         data["size"] = functools.reduce(operator.mul,[x["size"] for _,x in product]) * Factor
         data["formula"] = " & ".join("(%s)"%x["formula"] for _,x in product)
 
-        attrs = [x["attractors"] for _,x in product]
-        attrs = list(itertools.product(*attrs))
-        attrs = [PyBoolNet.Utility.Misc.merge_dicts(x) for x in attrs]
-        data["attractors"] = attrs
+        attractors = [x["attractors"] for _, x in product]
+        attractors = list(itertools.product(*attractors))
+        attractors = [merge_dicts(x) for x in attractors]
+        data["attractors"] = attractors
 
         node = tuple(x for x,_ in product)
 

@@ -337,11 +337,11 @@ def tree2dotlines(tree: networkx.DiGraph, indent: int = 1):
 
     roots = [x for x in tree.nodes() if not list(tree.predecessors(x))]
     
-    assert(len(roots) == 1)
+    assert len(roots) == 1
     
     root = roots[0]
     
-    assert("subgraphs" not in root.graph)
+    assert "subgraphs" not in root.graph
     
     cluster_id = root.graph["cluster_id"]
     space = indent * "  "
