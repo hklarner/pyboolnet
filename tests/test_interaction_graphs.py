@@ -13,9 +13,7 @@ from pyboolnet.interaction_graphs import add_style_interactionsigns, add_style_a
 from pyboolnet.interaction_graphs import add_style_constants, add_style_inputs, add_style_outputs
 from pyboolnet.interaction_graphs import add_style_sccs, add_style_subgraphs
 from pyboolnet.digraphs import dot2image, find_outdag
-
-FILES_IN = os.path.join(os.path.dirname(__file__), "files_input")
-FILES_OUT = os.path.join(os.path.dirname(__file__), "files_output")
+from tests.helpers import get_tests_path_in, get_tests_path_out
 
 
 def test_find_minimal_autonomous_nodes():
@@ -28,7 +26,7 @@ def test_find_minimal_autonomous_nodes():
 
 
 def test_create_image():
-    fname = os.path.join(FILES_OUT, "interactiongraphs_create_image.pdf")
+    fname = get_tests_path_out(fname="interactiongraphs_create_image.pdf")
     primes = get_primes("raf")
     create_image(primes, fname)
 
@@ -42,9 +40,9 @@ def test_outdag():
 
 
 def test_activities2animation():
-    fname_in = os.path.join(FILES_IN,  "irma.primes")
-    fname_out1 = os.path.join(FILES_OUT, "irma*.png")
-    fname_out2 = os.path.join(FILES_OUT, "irma.gif")
+    fname_in = get_tests_path_in(fname="irma.primes")
+    fname_out1 = get_tests_path_out(fname="irma*.png")
+    fname_out2 = get_tests_path_out(fname="irma.gif")
     primes = read_primes(fname_json=fname_in)
     igraph = primes2igraph(primes)
 
@@ -61,9 +59,8 @@ def test_activities2animation():
 
 
 def test_primes2igraph1():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
+    fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes()) + sorted(igraph.edges())
     expected = ["Ash1", "Cbf1", "Gal4", "Gal80", "Swi5", "gal", ("Ash1", "Cbf1"), ("Cbf1", "Ash1"), ("Gal4", "Swi5"),
@@ -73,9 +70,8 @@ def test_primes2igraph1():
 
 
 def test_primes2igraph2():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
+    fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("Ash1", {}), ("Cbf1", {}), ("Gal4", {}), ("Gal80", {}), ("Swi5", {}), ("gal", {}),
@@ -88,7 +84,6 @@ def test_primes2igraph2():
 
 def test_primes2igraph3():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{}], []], "C": [[{"B": 0}], [{"B": 1}]]}
-
     igraph = primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("A", {}), ("B", {}), ("C", {}),
@@ -100,7 +95,6 @@ def test_primes2igraph3():
 def test_primes2igraph4():
     primes = {"A": [[{}], []], "B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 1}], [{"C": 0}]],
               "D": [[{"B": 0, "C": 0}, {"B": 1, "C": 1}], [{"B": 1, "C": 0}, {"B": 0, "C": 1}]]}
-
     igraph = primes2igraph(primes=primes)
     nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
     expected = [("A", {}), ("B", {}), ("C", {}), ("D", {}), ("B", "B", {"sign": {1}}),
@@ -110,56 +104,51 @@ def test_primes2igraph4():
 
 
 def test_igraph2dot():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
-    fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2dot.dot")
+    fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
+    fname_out = get_tests_path_out(fname="interactiongraphs_igraph2dot.dot")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
     igraph2dot(igraph=igraph, fname_dot=fname_out)
 
 
 def test_igraph2dot_string():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
+    fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
     igraph2dot(igraph=igraph, fname_dot=None)
 
 
 def test_igraph2image():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_irma.primes")
+    fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
-    fname_out = os.path.join(FILES_OUT, "interactiongraphs_igraph2image.png")
+    fname_out = get_tests_path_out(fname="interactiongraphs_igraph2image.png")
     igraph2image(igraph=igraph, fname_image=fname_out)
 
 
 def test_dot2image():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.dot")
-    fname_out1 = os.path.join(FILES_OUT, "interactiongraphs_dot2image1.png")
-    fname_out2 = os.path.join(FILES_OUT, "interactiongraphs_dot2image2.svg")
-    fname_out3 = os.path.join(FILES_OUT, "interactiongraphs_dot2image3.eps")
-
+    fname_in = get_tests_path_in(fname="interactiongraphs_topology.dot")
+    fname_out1 = get_tests_path_out(fname="interactiongraphs_dot2image1.png")
+    fname_out2 = get_tests_path_out(fname="interactiongraphs_dot2image2.svg")
+    fname_out3 = get_tests_path_out(fname="interactiongraphs_dot2image3.eps")
     dot2image(fname_dot=fname_in, fname_image=fname_out1)
     dot2image(fname_dot=fname_in, fname_image=fname_out2)
     dot2image(fname_dot=fname_in, fname_image=fname_out3)
 
 
 def test_styles():
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
-    fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_interactionsigns.dot")
-    fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_interactionsigns.pdf")
+    fname_in = get_tests_path_in(fname="interactiongraphs_topology.primes")
+    fname_out_dot = get_tests_path_out(fname="interactiongraphs_style_interactionsigns.dot")
+    fname_out_pdf = get_tests_path_out(fname="interactiongraphs_style_interactionsigns.pdf")
     primes = read_primes(fname_json=fname_in)
-
     igraph = primes2igraph(primes=primes)
     add_style_interactionsigns(igraph=igraph)
     igraph2dot(igraph=igraph, fname_dot=fname_out_dot)
     dot2image(fname_dot=fname_out_dot, fname_image=fname_out_pdf)
     igraph2image(igraph=igraph, fname_image=fname_out_pdf)
 
-    fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_activities.dot")
-    fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_activities.pdf")
+    fname_out_dot = get_tests_path_out(fname="interactiongraphs_style_activities.dot")
+    fname_out_pdf = get_tests_path_out(fname="interactiongraphs_style_activities.pdf")
 
     add_style_interactionsigns(igraph=igraph)
     igraph2dot(igraph=igraph, fname_dot=fname_out_dot)
@@ -172,9 +161,9 @@ def test_styles():
     igraph2dot(igraph=igraph, fname_dot=fname_out_dot)
     dot2image(fname_dot=fname_out_dot, fname_image=fname_out_pdf)
 
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
-    fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_sccs.dot")
-    fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_sccs.pdf")
+    fname_in = get_tests_path_in(fname="interactiongraphs_topology.primes")
+    fname_out_dot = get_tests_path_out(fname="interactiongraphs_style_sccs.dot")
+    fname_out_pdf = get_tests_path_out(fname="interactiongraphs_style_sccs.pdf")
     primes = read_primes(fname_json=fname_in)
 
     igraph = primes2igraph(primes=primes)
@@ -182,8 +171,8 @@ def test_styles():
     igraph2dot(igraph=igraph, fname_dot=fname_out_dot)
     dot2image(fname_dot=fname_out_dot, fname_image=fname_out_pdf)
 
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
-    fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_ioc.pdf")
+    fname_in = get_tests_path_in(fname="interactiongraphs_topology.primes")
+    fname_out_pdf = get_tests_path_out(fname="interactiongraphs_style_ioc.pdf")
     primes = read_primes(fname_json=fname_in)
 
     igraph = primes2igraph(primes=primes)
@@ -192,9 +181,9 @@ def test_styles():
     add_style_outputs(igraph=igraph)
     igraph2image(igraph=igraph, fname_image=fname_out_pdf)
 
-    fname_in = os.path.join(FILES_IN, "interactiongraphs_topology.primes")
-    fname_out_pdf = os.path.join(FILES_OUT, "interactiongraphs_style_subgrapghs.pdf")
-    fname_out_dot = os.path.join(FILES_OUT, "interactiongraphs_style_subgrapghs.dot")
+    fname_in = get_tests_path_in(fname="interactiongraphs_topology.primes")
+    fname_out_pdf = get_tests_path_out(fname="interactiongraphs_style_subgrapghs.pdf")
+    fname_out_dot = get_tests_path_out(fname="interactiongraphs_style_subgrapghs.dot")
     primes = read_primes(fname_json=fname_in)
 
     igraph = primes2igraph(primes=primes)

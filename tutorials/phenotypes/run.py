@@ -14,7 +14,7 @@ import PyBoolNet
 def run():
 
     name = "remy_tumorigenesis"
-    primes = PyBoolNet.Repository.get_primes(name)
+    primes = get_primes(name)
 
     update = "asynchronous"
     markers = ["Proliferation", "Growth_arrest", "Apoptosis_medium", "Apoptosis_high"]

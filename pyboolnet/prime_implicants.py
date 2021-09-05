@@ -44,7 +44,7 @@ def copy_primes(primes: dict) -> dict:
     return new_primes
 
 
-def are_equal(primes1, primes2) -> bool:
+def primes_are_equal(primes1, primes2) -> bool:
     """
     Tests whether *primes1* and *primes2* are equal.
     The dictionary comparison *primes1 == primes2* does in general not work because the clauses of each may not be in the same order.
@@ -57,7 +57,7 @@ def are_equal(primes1, primes2) -> bool:
 
     **example**::
 
-        >>> are_equal(primes1, primes2)
+        >>> primes_are_equal(primes1, primes2)
         True
     """
 
@@ -177,7 +177,7 @@ def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = T
 
 def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
     """
-    Creates an input for every member of *Names*.
+    Creates an input for every member of *names*.
     Variables that already exist in *primes* are overwritten.
 
     .. note::

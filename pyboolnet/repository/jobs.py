@@ -12,7 +12,7 @@ sys.path.insert(0, BASE)
 def run():
 
     for name in ["tournier_apoptosis", "grieco_mapk", "remy_tumorigenesis", "dahlhaus_neuroplastoma"]:
-        primes = PyBoolNet.Repository.get_primes(name)
+        primes = get_primes(name)
         fname = os.path.join(name, name+"_attrs_sync.json")
         PyBoolNet.attractors.compute_attractors(primes, update="synchronous", fname_json=fname)
 
@@ -28,7 +28,7 @@ def run():
         if name == "n12c5":
             continue  # takes forever to compute prime implicants
 
-        primes = PyBoolNet.file_exchange.bnet2primes(os.path.join(name, name + ".bnet"))
+        primes = bnet2primes(os.path.join(name, name + ".bnet"))
         fname = os.path.join(name, name+"_igraph.pdf")
         PyBoolNet.interaction_graphs.create_stg_image(primes, fname)
 
@@ -36,7 +36,7 @@ def run():
 
     for name in names:
 
-        primes = PyBoolNet.file_exchange.bnet2primes(os.path.join(name, name + ".bnet"))
+        primes = bnet2primes(os.path.join(name, name + ".bnet"))
 
         fname = os.path.join(name, name+"_attrs.json")
         attrs = PyBoolNet.attractors.compute_attractors(primes, update="asynchronous", fname_json=fname)

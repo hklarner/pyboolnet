@@ -1913,7 +1913,7 @@ import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
-   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+   >>> print [subspace2str(primes, x) for x in mintspaces]
 
    >>> STGs.add_style_sccs(stg)
    >>> STGs.add_style_subspaces(primes, stg, mintspaces)
@@ -1926,7 +1926,7 @@ import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
-   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+   >>> print [subspace2str(primes, x) for x in mintspaces]
 
    >>> STGs.add_style_sccs(stg)
    >>> STGs.add_style_subspaces(primes, stg, mintspaces)
@@ -1954,7 +1954,7 @@ import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2
    WRONG FIGURE! The state transition graph *"example25_stg.pdf"* in which the minimal trap space "---" is not univocal.
 
 import pyboolnet.state_space   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
-   >>> print [pyboolnet.state_space.subspace2str(primes, x) for x in mintspaces]
+   >>> print [subspace2str(primes, x) for x in mintspaces]
    ['---']
    >>> STGs.add_style_subspaces(stg, mintspaces)
    >>> stg.graph["label"] = "Example 26: An STG whose minimal trap space '---' is not univocal"

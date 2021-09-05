@@ -336,7 +336,7 @@ def steady_states_projected(primes: dict, project, max_output: int = 1000, fname
     return potassco_handle(primes, type_="all", bounds=("n", "n"), project=project, max_output=max_output, fname_asp=fname_asp, representation="dict")
 
 
-def primes2asp(primes: dict, fname_asp: str, bounds: tuple, project, type_: str, extra_lines: Optional[List[str]] = None):
+def primes2asp(primes: dict, fname_asp: str, bounds: Optional[tuple], project, type_: str, extra_lines: Optional[List[str]] = None):
     """
     Saves Primes as an *asp* file in the Potassco_ format intended for computing minimal and maximal trap spaces.
     The homepage of the Potassco_ solving collection is http://potassco.sourceforge.net.

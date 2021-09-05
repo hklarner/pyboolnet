@@ -1,14 +1,10 @@
 
 
-import os
-
+from pyboolnet.repository import get_primes
 from pyboolnet.state_space import is_subspace, enumerate_states
 from pyboolnet.state_space import size_state_space, state_is_in_subspace
-from pyboolnet.state_transition_graphs import find_vanham_variables, random_successor_mixed
 from pyboolnet.state_space import state2str, random_state
-from pyboolnet.repository import get_primes
-
-from tests.helpers import get_tests_path_in, get_tests_path_out
+from pyboolnet.state_transition_graphs import find_vanham_variables
 
 
 def test_find_vanham_variables():

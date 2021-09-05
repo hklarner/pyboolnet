@@ -16,14 +16,10 @@ from pyboolnet.attractors import compute_attractors
 from pyboolnet.trap_spaces import trap_spaces
 from pyboolnet.digraphs import has_path
 from pyboolnet.repository import get_primes
-
-
-FILES_IN = os.path.join(os.path.dirname(__file__), "files_input")
-FILES_OUT = os.path.join(os.path.dirname(__file__), "files_output")
+from tests.helpers import get_tests_path_in, get_tests_path_out
 
 
 def test_compute_attractors_tarjan():
-    
     bnet = "\n".join(["x, !x&y | z", "y, !x | !z", "z, x&!y"])
     primes = bnet2primes(bnet)
     stg = primes2stg(primes, "asynchronous")
@@ -34,8 +30,8 @@ def test_compute_attractors_tarjan():
 
 
 def test_find_attractor_state_by_randomwalk_and_ctl():
-    fname_in = os.path.join(FILES_IN, "randomnet.bnet")
-    fname_out = os.path.join(FILES_OUT, "randomnet.primes")
+    fname_in = get_tests_path_in(fname="randomnet.bnet")
+    fname_out = get_tests_path_out(fname="randomnet.primes")
     primes = bnet2primes(bnet=fname_in, fname_primes=fname_out)
 
     subspace = {"Gene1": 0, "Gene3": 0, "Gene5": 0, "Gene7": 0, "Gene9": 0}
@@ -48,7 +44,7 @@ def test_find_attractor_state_by_randomwalk_and_ctl():
     assert state_is_in_subspace(primes, x, mints)
 
     y = find_attractor_state_by_randomwalk_and_ctl(primes, "synchronous", subspace, length, attempts)
-    reachable = list_reachable_states(primes, "synchronous", y, 100)
+    reachable = list_reachable_states(primes, "synchronous", list(y), 100)
 
     assert state2str(y) in reachable
 
@@ -57,7 +53,6 @@ def test_find_attractor_state_by_randomwalk_and_ctl():
     
 
 def test_univocality():
-
     bnet = "\n".join(["v1, !v1&!v2 | v2&!v3", "v2, v1&v2", "v3, v2 | v3", "v4, 1"])
     primes = bnet2primes(bnet)
     univocality(primes, "asynchronous", {"v4": 1})
@@ -90,7 +85,6 @@ def test_univocality():
 
 
 def test_faithfulness():
-
     bnet = "\n".join(["v1, !v1&!v2 | !v2&!v3", "v2, !v1&!v2&v3 | v1&!v3", "v3, !v1&v3 | !v2"])
     primes = bnet2primes(bnet)
 
@@ -105,7 +99,6 @@ def test_faithfulness():
 
 
 def test_completeness_naive():
-
     bnet = "\n".join(["v1, v1 | v2&!v3", "v2, !v1&v2&v3", "v3, !v2&!v3 | v2&v3"])
     primes = bnet2primes(bnet)
 
@@ -156,7 +149,7 @@ def test_completeness():
     assert completeness(primes, "synchronous")
 
 
-def test_completeness_maxoutput():
+def test_completeness_max_output():
     primes = get_primes("davidich_yeast")
 
     assert completeness(primes, "asynchronous", max_output=10000)

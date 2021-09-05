@@ -1,13 +1,12 @@
 
 
-from typing import List
+from typing import List, Union
 
-import PyBoolNet.state_transition_graphs
 
 import pyboolnet.state_space
 
 
-def EF_nested_reachability(Primes, Subspaces):
+def exists_finally_nested_reachability(primes: dict, subspaces: List[Union[dict, str]]) -> str:
     """
     Constructs a CTL formula that queries whether there is a path that visits the given *subspaces* in the order given.
 
@@ -15,26 +14,26 @@ def EF_nested_reachability(Primes, Subspaces):
         * *subspaces*: a list of subspaces
 
     **returns**:
-        * *CTLFormula*: the CTL formula
+        * *ctl_formula*: the CTL formula
 
     **example**::
 
         >>> subspaces = ["1--", "-01"]
-        >>> EF_nested_reachability(subspaces)
-        'EF(v1&EF(!v2&v3))'
+        >>> exists_finally_nested_reachability(subspaces)
+        "EF(v1&EF(!v2&v3))"
     """
 
-    if Subspaces==[]:
-        return 'TRUE'
+    if not subspaces:
+        return "TRUE"
 
-    Subspaces = [pyboolnet.state_space.subspace2dict(Primes, x) if type(x) == str else x for x in Subspaces]
+    subspaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in subspaces]
+    x = subspaces.pop(0)
+    result = f"EF({subspace2proposition(primes, x)}  &$)"
 
-    x = Subspaces.pop(0)
-    result = "EF("+ subspace2proposition(Primes, x) +"  &$)"
-    for x in Subspaces:
-        result = result.replace("$", "EF("+ subspace2proposition(Primes, x) +"  &$)")
+    for x in subspaces:
+        result = result.replace("$", f"EF({subspace2proposition(primes, x)}  &$)")
 
-    return result.replace("  &$","")
+    return result.replace("  &$", "")
 
 
 def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List[dict]) -> str:
@@ -54,38 +53,13 @@ def all_globally_exists_finally_one_of_sub_spaces(primes: dict, sub_spaces: List
         * *subspaces*: a list of subspace
 
     **returns**:
-        * *Formula*: the CTL formula
+        * *formula*: the CTL formula
 
     **example**::
 
         >>> subspaces = [{"v1":0,"v2":0},{"v2":1}]
-        >>> AGEF_oscillation(subspaces)
-        'AG(EF(!v1&!v2 | v2))'
-    """
-
-    if sub_spaces == []:
-        return "TRUE"
-
-    sub_spaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
-
-    return 'AG(' + exists_finally_one_of_subspaces(primes, sub_spaces) + ')'
-
-
-def exists_finally_one_of_subspaces(primes: dict, sub_spaces: List[dict]) -> str:
-    """
-    Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
-
-    **arguments**:
-        * *subspaces*: a list of subspaces
-
-    **returns**:
-        * *Formula*: the CTL formula
-
-    **example**::
-
-        >>> subspaces = [{"v1":0,"v2":0}, "1-1--"]
-        >>> exists_finally_one_of_subspaces(primes, subspaces)
-        'EF(!v1&!v2 | v1&v3)'
+        >>> all_globally_exists_finally_one_of_sub_spaces(subspaces)
+        "AG(EF(!v1&!v2 | v2))"
     """
 
     if not sub_spaces:
@@ -93,39 +67,64 @@ def exists_finally_one_of_subspaces(primes: dict, sub_spaces: List[dict]) -> str
 
     sub_spaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in sub_spaces]
 
-    return 'EF(' + ' | '.join(subspace2proposition(primes, x) for x in sub_spaces) + ')'
+    return f"AG({exists_finally_one_of_subspaces(primes, sub_spaces)})"
+
+
+def exists_finally_one_of_subspaces(primes: dict, subspaces: List[Union[dict, str]]) -> str:
+    """
+    Constructs a CTL formula that queries whether there is a path that leads to one of the Subspaces.
+
+    **arguments**:
+        * *subspaces*: a list of subspaces
+
+    **returns**:
+        * *formula*: the CTL formula
+
+    **example**::
+
+        >>> subspaces = [{"v1":0,"v2":0}, "1-1--"]
+        >>> exists_finally_one_of_subspaces(primes, subspaces)
+        "EF(!v1&!v2 | v1&v3)"
+    """
+
+    if not subspaces:
+        return "TRUE"
+
+    subspaces = [pyboolnet.state_space.subspace2dict(primes, x) if type(x) == str else x for x in subspaces]
+
+    return f"EF({' | '.join(subspace2proposition(primes, x) for x in subspaces)})"
 
 
 def exists_finally_unsteady_components(names: List[str]) -> str:
     """
-    Constructs a CTL formula that queries whether for every variables v specified in *Names* there is a path to a state x in which v is unsteady.
+    Constructs a CTL formula that queries whether for every variables v specified in *names* there is a path to a state x in which v is unsteady.
 
     .. note::
 
-        Typically this query is used to find out if the variables given in *Names* are oscillating in a given attractor.
+        Typically this query is used to find out if the variables given in *names* are oscillating in a given attractor.
 
     **arguments**:
-        * *Names*: a list of names of variables
+        * *names*: a list of names of variables
 
     **returns**:
-        * *Formula*: the CTL formula
+        * *ctl_formula*: the CTL formula
 
     **example**::
 
         >>> names = ["v1","v2"]
         >>> exists_finally_unsteady_components(names)
-        'EF(v1_steady!=0) & EF(v2_steady!=0))'
+        "EF(v1_steady!=0) & EF(v2_steady!=0))"
 
     """
-
     names = [x for x in names if x.strip()]
-    if names==[]:
-        return 'TRUE'
 
-    return ' & '.join(['EF(!%s_STEADY)' % x for x in names])
+    if not names:
+        return "TRUE"
+
+    return " & ".join([f"EF(!{x}_STEADY)" for x in names])
 
 
-def subspace2proposition(primes: dict, sub_space: dict) -> str:
+def subspace2proposition(primes: dict, subspace: dict) -> str:
     """
     Constructs a CTL formula that is true in a state x if and only if x belongs to the given Subspace.
 
@@ -142,23 +141,16 @@ def subspace2proposition(primes: dict, sub_space: dict) -> str:
     **example**::
 
         >>> subspace = {"v1":0,"v2":1}
-        >>> init = "INIT " + subspace2proposition(subspace)
+        >>> init = f"INIT {subspace2proposition(subspace)}"
         >>> init
-        'INIT v1&!v2'
+        "INIT v1&!v2"
     """
 
-    if not sub_space or sub_space==len(primes)* "-":
+    if not subspace or subspace == len(primes) * "-":
         return "TRUE"
 
-    if type(sub_space)==str:
-        sub_space = pyboolnet.state_space.subspace2dict(primes, sub_space)
+    if type(subspace) is str:
+        subspace = pyboolnet.state_space.subspace2dict(primes, subspace)
 
-    return '&'.join([name if value==1 else '!'+name for name,value in sorted(sub_space.items())])
+    return "&".join([name if value == 1 else f"!{name}" for name, value in sorted(subspace.items())])
 
-
-if __name__=="__main__":
-    primes = ["v1", "v2", "v3"]
-    subspaces = [{}, {}, "--1", {"v2":0, "v1":0}, "1-1", "-0-"]
-    print(exists_finally_one_of_subspaces(primes, subspaces))
-    print(EF_all_unsteady(primes))
-    print(EF_nested_reachability(primes, subspaces))

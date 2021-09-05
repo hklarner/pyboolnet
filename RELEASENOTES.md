@@ -1,6 +1,7 @@
 
 
 ## release notes for version 3.0.0 (September 2021)
+ - adds pyboolnet command line tool
  - adds logging for control of output
  - conforms to PEP-8 coding style
  - uses type hints

@@ -901,7 +901,7 @@ def find_vanham_variables(primes: dict) -> Dict[int, List[str]]:
         * *primes*: prime implicants
 
     **returns**:
-        * *Names*: activity levels and names
+        * *names*: activity levels and names
 
     **example**::
 

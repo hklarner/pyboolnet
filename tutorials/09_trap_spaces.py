@@ -5,11 +5,11 @@ if __name__=="__main__":
 
     # compute minimal and maximal trap spaces
 
-    primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
-    mints = PyBoolNet.trap_spaces.trap_spaces(primes, "min")
+    primes = get_primes("remy_tumorigenesis")
+    mints = trap_spaces(primes, "min")
     print(len(mints))
 
-    maxts = PyBoolNet.trap_spaces.trap_spaces(primes, "max")
+    maxts = trap_spaces(primes, "max")
     print(len(maxts))
     print(maxts)
 

@@ -81,8 +81,8 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         out, err = proc.communicate()
         out = out.decode()
         _bnet2primes_error(proc, out, err, cmd)
-        out = out.replace('\x08', '')
-        out = out.replace(' ', '')
+        out = out.replace("\x08", "")
+        out = out.replace(" ", "")
         primes = ast.literal_eval(out)
         return primes
 
@@ -98,14 +98,14 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         proc.stdin.close()
         _bnet2primes_error(proc, out, err, cmd)
         out = out.decode()
-        out = out.replace('\x08', '')
-        out = out.replace(' ', '')
+        out = out.replace("\x08", "")
+        out = out.replace(" ", "")
 
         primes = ast.literal_eval(out)
         return primes
 
 
-def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, header: bool = False) -> Optional[str]:
+def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, header: bool = False) -> str:
     """
     Saves *primes* as a *bnet* file, including the header *"targets, factors"* for compatibility with :ref:`installation_boolnet`.
     Without minimization, the resuting formulas are disjunctions of all prime implicants and may therefore be very long.
@@ -114,13 +114,13 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
     will be used to minimize the number of clauses for each update function.
 
     **arguments**:
-       * *primes*: prime implicants
-       * *FnameBNET*: name of *bnet* file or *None* for the string of the file contents
-        * *Minimize*: minimize the Boolean expressions
-       * *Header*: whether to include the "targets, factors" header
+        * *primes*: prime implicants
+        * *fname_bnet*: name of *bnet* file or *None* for the string of the file contents
+        * *minimize*: minimize the Boolean expressions
+        * *header*: whether to include the "targets, factors" header
 
     **returns**:
-        * *bnet*:
+        * *text_bnet*: str contents of bnet file
 
     **example**::
 
@@ -131,19 +131,16 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
     """
 
     width = max([len(x) for x in primes]) + 3
-
     igraph = primes2igraph(primes)
-
     constants = sorted(find_constants(primes))
     inputs = sorted(find_inputs(primes))
     outdag = sorted(find_outdag(igraph))
     outdag = [x for x in outdag if x not in constants]
-
     body = sorted(x for x in primes if all(x not in X for X in [constants, inputs, outdag]))
     blocks = [constants, inputs, body, outdag]
     blocks = [x for x in blocks if x]
 
-    assert(len(constants) + len(inputs) + len(body) + len(outdag) == len(primes))
+    assert len(constants) + len(inputs) + len(body) + len(outdag) == len(primes)
 
     lines = []
     if header:
@@ -154,7 +151,7 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
         for block in blocks:
             for name in block:
                 lines += [(name+",").ljust(width)+expressions[name]]
-            lines += ['']
+            lines += [""]
 
     else:
         for block in blocks:
@@ -167,7 +164,7 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
                     expression = " | ".join(["&".join([x if term[x] == 1 else "!" + x for x in term]) for term in primes[name][1]])
 
                 lines += [(name+",").ljust(width)+expression]
-            lines += ['']
+            lines += [""]
 
     text = "\n".join(lines)
 

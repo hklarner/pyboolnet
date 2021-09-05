@@ -5,7 +5,7 @@ if __name__=="__main__":
 
     # attractor computation with Tarjan
 
-    primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    primes = get_primes("tournier_apoptosis")
 
     stg = PyBoolNet.state_transition_graphs.primes2stg(primes, "asynchronous")
     steady, cyclic = PyBoolNet.attractors.compute_attractors_tarjan(stg)

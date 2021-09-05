@@ -3,7 +3,7 @@
 import pyboolnet.state_space
 
 if __name__ == "__main__":
-    primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    primes = get_primes("remy_tumorigenesis")
     PyBoolNet.interaction_graphs.create_stg_image(primes, "igraph.pdf")
 
     PyBoolNet.interaction_graphs.create_stg_image(primes, "igraph2.pdf", styles=["anonymous", "sccs"])

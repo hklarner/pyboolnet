@@ -1,17 +1,14 @@
 
 
-import os
-
-import networkx
-import pytest
 from typing import List
 
-from pyboolnet.phenotypes import compute_phenotypes
-from pyboolnet.phenotypes import compute_phenotype_diagram
-from pyboolnet.phenotypes import save_phenotype_diagram, open_phenotype_diagram
-from pyboolnet.phenotypes import phenotype_diagram2image, compute_phenotypes
-from pyboolnet.phenotypes import create_phenotypes_piechart
+import pytest
+
 from pyboolnet.attractors import compute_attractors
+from pyboolnet.phenotypes import compute_phenotype_diagram
+from pyboolnet.phenotypes import create_phenotypes_piechart
+from pyboolnet.phenotypes import phenotype_diagram2image, compute_phenotypes
+from pyboolnet.phenotypes import save_phenotype_diagram, open_phenotype_diagram
 from pyboolnet.repository import get_primes
 from tests.helpers import get_tests_path_out
 

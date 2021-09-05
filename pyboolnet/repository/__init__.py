@@ -1,32 +1,29 @@
 
 import os
+
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
-
-import PyBoolNet.file_exchange
-
+MAX_OUTPUT = 100000
 
 
-def print_info(MarkDown=False):
+def print_info(markdown: bool = False):
     """
     prints repository info
     """
-
-    MAXOUTPUT = 100000
 
     header = [('name','size','inputs','constants','steady states','cyclic attractors (mints)')]
     data   = []
     for name in get_all_names():
         primes = get_primes(name)
-        tspaces = PyBoolNet.trap_spaces.trap_spaces(primes, "min", max_output=MAXOUTPUT)
+        tspaces = trap_spaces(primes, "min", max_output=MAX_OUTPUT)
 
         size          = str(len(primes))
-        inputs        = str(len(PyBoolNet.prime_implicants.find_inputs(primes)))
-        constants     = str(len(PyBoolNet.prime_implicants.find_constants(primes)))
+        inputs        = str(len(find_inputs(primes)))
+        constants     = str(len(find_constants(primes)))
         steady        = len([x for x in tspaces if len(x)==len(primes)])
-        steady        = str(steady) + '+'*(steady==MAXOUTPUT)
+        steady        = str(steady) + '+'*(steady == MAX_OUTPUT)
         cyclic        = len([x for x in tspaces if len(x)<len(primes)])
-        cyclic        = str(cyclic) + '+'*(steady==MAXOUTPUT)
+        cyclic        = str(cyclic) + '+'*(steady == MAX_OUTPUT)
 
         data.append((name,size,inputs,constants,steady,cyclic))
 
@@ -37,7 +34,7 @@ def print_info(MarkDown=False):
     for i in range(len(data[0])):
         width[i] = max(len(x[i]) for x in data) + 2
 
-    if MarkDown:
+    if markdown:
         header = '| ' + ' | '.join(x.ljust(width[i]) for i,x in enumerate(data[0])) + ' |'
         print(header)
         print('| ' + ' | '.join('-'*width[i] for i,x in enumerate(data[0])) + ' |')
@@ -99,39 +96,36 @@ def get_primes(name: str) -> dict:
     path = os.path.join(BASE, name, name + ".bnet")
 
     if os.path.isfile(path):
-        return PyBoolNet.file_exchange.bnet2primes(path)
+        return bnet2primes(path)
 
     print(" %s does not exist"%path)
     raise FileNotFoundError
 
 
-def get_attrs(Name, Update):
+def get_attractors(name: str, update: str) -> dict:
     """
-    todo: finish code
-    todo: add unit tests
-
     Returns the attractor data of the network *name*.
 
     **arguments**:
         * *name*: name of network
 
     **returns**:
-        * *Attrs*: json attractor data, see :ref:`attractors_compute_json`
+        * *attractors*: json attractor data, see :ref:`compute_attractors`
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
 
     **example**::
 
-        >>> attrs = get_attrs("tournier_apoptosis", "asynchronous")
+        >>> attrs = get_attractors("tournier_apoptosis", "asynchronous")
     """
 
-    if Update=="asynchronous":
+    if update == "asynchronous":
         ext = "async.json"
-    elif Update=="synchronous":
+    elif update == "synchronous":
         ext = "sync.json"
-    elif Update=="mixed":
+    elif update == "mixed":
         ext = "mixed.json"
 
-    path = os.path.join(BASE,Name,Name+"_attrs_"+ext)
+    path = os.path.join(BASE, name, name + "_attrs_" + ext)
 
     if os.path.isfile(path):
         return PyBoolNet.attractors.read_attractors_json(path)
@@ -140,16 +134,16 @@ def get_attrs(Name, Update):
     raise FileNotFoundError
 
 
-def get_bnet(Fname):
+def get_bnet(name: str) -> str:
     """
-    Fetches the bnet file as a string of the network *Fname* in the model repository.
+    Returns the bnet file contents of the network *name* as a string.
     Run :ref:`get_all_names` to see all networks currently available.
 
     **arguments**:
-        * *Fname*: name of network
+        * *name*: name of network
 
     **returns**:
-        * *BNET*: the bnet file
+        * *bnet*: the bnet file
 
     **example**::
 
@@ -157,12 +151,9 @@ def get_bnet(Fname):
             {'Raf': [[{'Raf': 1, 'Erk': 1}], [{'Raf': 0}, {'Erk': 0}]],...
     """
 
-    path = os.path.join(BASE,Fname,Fname+".bnet")
+    path = os.path.join(BASE, name, name + ".bnet")
     with open(path) as f:
         bnet = f.read()
 
     return bnet
 
-
-if __name__=="__main__":
-    print_info(MarkDown=True)

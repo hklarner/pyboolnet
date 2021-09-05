@@ -5,7 +5,7 @@ if __name__=="__main__":
 
     # compute weak, strong and cycle-free basins
 
-    primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    primes = get_primes("tournier_apoptosis")
     attrs = PyBoolNet.attractors.compute_attractors(primes, "asynchronous")
     state = attrs["attractors"][0]["state"]["str"]
     print(state)

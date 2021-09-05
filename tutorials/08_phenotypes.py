@@ -5,7 +5,7 @@ if __name__=="__main__":
 
     # compute the commitment diagram
 
-    primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
+    primes = get_primes("arellano_rootstem")
     print(sorted(primes))
     attrs = PyBoolNet.attractors.compute_attractors(primes, "asynchronous")
     markers = ["WOX", "MGP"]

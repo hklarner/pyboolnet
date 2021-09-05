@@ -179,7 +179,7 @@ def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent
     counter_mc = 0
     node_id = 0
     worst_case_nodes = 0
-    inputs = PyBoolNet.prime_implicants.find_inputs(primes)
+    inputs = find_inputs(primes)
 
     states_per_case = pyboolnet.state_space.size_state_space(primes, fixed_inputs=True)
 
@@ -345,7 +345,7 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True, StyleSplines="curved", 
 
     attractors = [x["attractors"] for _,x in Diagram.nodes(data=True)]
     attractors = [x for x in attractors if len(x)==1]
-    attractors = set(pyboolnet.state_space.subspace2str(Primes, x[0]) for x in attractors)
+    attractors = set(subspace2str(Primes, x[0]) for x in attractors)
     attractors = sorted(attractors)
 
     labels = {}
@@ -363,12 +363,12 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True, StyleSplines="curved", 
         if len(data["attractors"])==1:
             result.nodes[node]["fillcolor"] = "cornflowerblue"
 
-            attr  = pyboolnet.state_space.subspace2str(Primes, data["attractors"][0])
+            attr  = subspace2str(Primes, data["attractors"][0])
             index = attractors.index(attr)+FirstIndex
             labels[node]["head"] = 'A%i = <font face="Courier New">%s</font>'%(index,attr)
 
         else:
-            head = sorted("A%i" % (attractors.index(pyboolnet.state_space.subspace2str(Primes, x)) + FirstIndex) for x in data["attractors"])
+            head = sorted("A%i" % (attractors.index(subspace2str(Primes, x)) + FirstIndex) for x in data["attractors"])
             head = PyBoolNet.Utility.Misc.divide_list_into_similar_length_lists(head)
             head = [",".join(x) for x in head]
             labels[node]["head"] = "<br/>".join(head)
@@ -408,10 +408,10 @@ def diagram2image(Diagram, FnameImage, StyleInputs=True, StyleSplines="curved", 
 
     subgraphs = []
     if StyleInputs:
-        for inputs in PyBoolNet.prime_implicants.input_combinations(Primes):
+        for inputs in input_combinations(Primes):
             if not inputs: continue
-            nodes = [x for x in Diagram.nodes() if PyBoolNet.Utility.Misc.dicts_are_consistent(inputs,Diagram.nodes[x]["attractors"][0])]
-            label = pyboolnet.state_space.subspace2str(Primes, inputs)
+            nodes = [x for x in Diagram.nodes() if dicts_are_consistent(inputs,Diagram.nodes[x]["attractors"][0])]
+            label = subspace2str(Primes, inputs)
             subgraphs.append((nodes,{"label":"inputs: %s"%label, "color":"none", "fillcolor":"lightgray"}))
 
 
@@ -492,7 +492,7 @@ def create_piechart(Diagram, FnameImage, ColorMap=None, Silent=False, Title=None
 
     labels = []
     for x in indeces:
-        label = sorted(pyboolnet.state_space.subspace2str(Primes, y) for y in Diagram.nodes[x]["attractors"])
+        label = sorted(subspace2str(Primes, y) for y in Diagram.nodes[x]["attractors"])
         labels.append("\n".join(label))
 
     sizes  = [Diagram.nodes[x]["size"] for x in indeces]
@@ -546,7 +546,7 @@ def project_attractors(Attractors, Names):
 
 
 def lift_attractors(Attractors, Projection):
-    return [x for x in Attractors for y in Projection if PyBoolNet.Utility.Misc.dicts_are_consistent(x,y)]
+    return [x for x in Attractors for y in Projection if dicts_are_consistent(x,y)]
 
 
 def cartesian_product(Diagrams, Factor, EdgeData):

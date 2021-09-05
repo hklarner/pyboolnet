@@ -4,7 +4,7 @@ if __name__=="__main__":
 
     # basic model checking
 
-    primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    primes = get_primes("remy_tumorigenesis")
     init = "INIT TRUE"
     spec = "CTLSPEC DNA_damage -> AG(EF(Apoptosis_medium))"
 

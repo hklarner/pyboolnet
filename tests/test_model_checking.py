@@ -1,3 +1,5 @@
+
+
 from pyboolnet.model_checking import check_smv, check_smv_with_counterexample, check_primes_with_counterexample
 from pyboolnet.model_checking import primes2smv, check_smv_with_acceptingstates, check_primes_with_acceptingstates
 from pyboolnet.repository import get_primes
@@ -7,11 +9,9 @@ from tests.helpers import get_tests_path_in, get_tests_path_out
 def test_check_acceptingstates():
     fname_out = get_tests_path_out(fname="modelchecking_acceptingstates.smv")
     primes = get_primes(name="raf")
-
     spec = "CTLSPEC EF(!Erk&!Mek&Raf) &  EF(Erk&Mek&Raf)"
     init = "INIT TRUE"
     update = "asynchronous"
-
     primes2smv(primes, update, init, spec, fname_out)
     answer, accepting = check_smv_with_acceptingstates(fname_out)
 

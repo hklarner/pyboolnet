@@ -53,7 +53,7 @@ To browse it online, visit
 
 To access a network from the repository use the function :ref:`get_primes` of the module :ref:`Repository`::
 
-    >>> primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    >>> primes = get_primes("remy_tumorigenesis")
     >>> print(PyBoolNet.FileExchange.primes2bnet(primes))
     DNA_damage,         DNA_damage
     EGFR_stimulus,      EGFR_stimulus
@@ -73,7 +73,7 @@ Interaction Graphs
 ------------------
 The basic function for drawing interaction graphs is :ref:`igs_create_image` of the module :ref:`InteractionGraphs`::
 
-    >>> primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    >>> primes = get_primes("remy_tumorigenesis")
     >>> PyBoolNet.InteractionGraphs.create_image(primes, "igraph.pdf")
     created igraph.pdf
 
@@ -120,7 +120,7 @@ State  Transition Graphs
 ------------------------
 Drawing and styling state transition graphs is analogous to interaction graphs::
 
-    >>> primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
+    >>> primes = get_primes("xiao_wnt5a")
     >>> PyBoolNet.StateTransitionGraphs.create_image(primes, "asynchronous", "stg.pdf")
     created stg.pdf
 
@@ -143,7 +143,7 @@ A random walk ma be computed using :ref:`random_walk`::
 The module :ref:`StateTransitionGraphs` contains also functions to compute factor graphs in which the state space is partitioned into classes.
 The classical example is the SCC graph::
 
-    >>> primes = PyBoolNet.Repository.get_primes("randomnet_n7k3")
+    >>> primes = get_primes("randomnet_n7k3")
     >>> stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
     >>> scc_graph = PyBoolNet.StateTransitionGraphs.stg2sccgraph(stg)
     >>> PyBoolNet.StateTransitionGraphs.sccgraph2image(scc_graph, "scc_graph.pdf")
@@ -196,7 +196,7 @@ The basic function for LTL and CTL model checking is :ref:`check_primes` of the 
 The initial states and the specification must be given in NuSMV syntax.
 For LTL specs use the keyword `LTLSPEC`, for CTL specs use `CTLSPEC` and for initial states use `INIT`::
 
-    >>> primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    >>> primes = get_primes("remy_tumorigenesis")
     >>> init = "INIT TRUE"
     >>> spec = "CTLSPEC DNA_damage -> AG(EF(Apoptosis_medium))"
     >>> answer = PyBoolNet.ModelChecking.check_primes(primes, "asynchronous", init, spec)
@@ -240,7 +240,7 @@ Attractors
 The two basic functions for finding attractors are Tarjan's algorithm and the random walk algorithm.
 Tarjan's algorithm is exact but requires the full STG as input and is therefore limited to smaller networks::
 
-    >>> primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    >>> primes = get_primes("tournier_apoptosis")
     >>> stg = PyBoolNet.StateTransitionGraphs.primes2stg(primes, "asynchronous")
     >>> steady, cyclic = PyBoolNet.Attractors.compute_attractors_tarjan(stg)
     >>> steady
@@ -273,7 +273,7 @@ Basins
 ------
 To compute the weak, strong and cycle-free basins of a subspace use the functions :ref:`weak_basins`, :ref:`strong_basin` and :ref:`cyclefree_basin`::
 
-    >>> primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    >>> primes = get_primes("tournier_apoptosis")
     >>> attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous")
     >>> state = attrs["attractors"][0]["state"]["str"]
     >>> weak = PyBoolNet.Basins.weak_basin(primes, "asynchronous", state)
@@ -323,7 +323,7 @@ Commitment
 To compute the commitment diagram use the function :ref:`create_diagram` of the module :ref:`Commitment`.
 It requires the attractors data as input::
 
-    >>> primes = PyBoolNet.Repository.get_primes("tournier_apoptosis")
+    >>> primes = get_primes("tournier_apoptosis")
     >>> attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous")
     >>> diag = PyBoolNet.Commitment.compute_diagram(attrs)
 
@@ -338,7 +338,7 @@ Phenotypes
 
 To compute phenotypes you need the attractors data and define markers::
 
-    >>> primes = PyBoolNet.Repository.get_primes("arellano_rootstem")
+    >>> primes = get_primes("arellano_rootstem")
     >>> attrs = PyBoolNet.Attractors.compute_json(primes, "asynchronous")
     >>> markers = ["WOX", "MGP"]
     >>> phenos = PyBoolNet.Phenotypes.compute_json(attrs, markers)
@@ -367,7 +367,7 @@ Trap spaces
 
 The main function for computing minimal and maximal trap spaces is :ref:`trap_spaces`::
 
-    >>> primes = PyBoolNet.Repository.get_primes("remy_tumorigenesis")
+    >>> primes = get_primes("remy_tumorigenesis")
     >>> mints = PyBoolNet.AspSolver.trap_spaces(primes, "min")
     >>> len(mints)
     25

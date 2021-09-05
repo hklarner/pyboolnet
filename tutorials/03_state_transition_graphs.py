@@ -4,7 +4,7 @@ import PyBoolNet
 
 
 if __name__ == "__main__":
-    primes = PyBoolNet.Repository.get_primes("xiao_wnt5a")
+    primes = get_primes("xiao_wnt5a")
     PyBoolNet.state_transition_graphs.create_stg_image(primes, "asynchronous", "stg.pdf")
     PyBoolNet.state_transition_graphs.create_stg_image(primes, "asynchronous", "stg2.pdf", initial_states={"x4":0, "x5":0}, styles=["anonymous", "tendencies", "mintrapspaces"])
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     # drawing factor graphs
 
-    primes = PyBoolNet.Repository.get_primes("randomnet_n7k3")
+    primes = get_primes("randomnet_n7k3")
     stg = PyBoolNet.state_transition_graphs.primes2stg(primes, "asynchronous")
     scc_graph = PyBoolNet.state_transition_graphs.stg2sccgraph(stg)
     PyBoolNet.state_transition_graphs.sccgraph2image(scc_graph, "scc_graph.pdf")

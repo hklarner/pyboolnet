@@ -27,7 +27,7 @@ def weak_basin(Primes, Update, Subspace, Minimize=False):
       **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize*: minimize the Boolean expressions
+        * *minimize*: minimize the Boolean expressions
         * *subspace*: a subspace
 
       **returns**:
@@ -53,7 +53,7 @@ def strong_basin(Primes, Update, Subspace, Minimize=False):
       **arguments**:
         * *primes*: prime implicants
         * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize*: minimize the Boolean expressions
+        * *minimize*: minimize the Boolean expressions
         * *subspace*: a subspace
 
       **returns**:
@@ -79,7 +79,7 @@ def cyclefree_basin(Primes, Update, Subspace, Minimize=False):
       **arguments**:
         * *primes*: prime implicants
         * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize*: minimize the Boolean expressions
+        * *minimize*: minimize the Boolean expressions
         * *subspace*: a subspace
 
       **returns**:
@@ -105,7 +105,7 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
       **arguments**:
         * *primes*: prime implicants
         * *update*:  the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *Minimize*: minimize the Boolean expressions
+        * *minimize*: minimize the Boolean expressions
         * *subspace*: a subspace
         * *CTLpattern*:
 
@@ -129,7 +129,7 @@ def _basin_handle(Primes, Update, Subspace, Minimize, CTLpattern):
     formula = acc["INITACCEPTING"]
 
     if Minimize and formula not in ["TRUE", "FALSE"]:
-        formula = PyBoolNet.boolean_logic.minimize_espresso(formula)
+        formula = minimize_espresso(formula)
 
     size_total = pyboolnet.state_space.size_state_space(Primes)
 
@@ -178,7 +178,7 @@ def compute_basins(AttrJson, Weak=True, Strong=True, CycleFree=True, FnameBarplo
         * *CycleFree*: compute cycle-free basins
         * *FnameBarplot*: file name of bar plot
         * *FnamePiechart*: file name of pie chart
-        * *Minimize*: minimize the Boolean expressions
+        * *minimize*: minimize the Boolean expressions
 
     **returns**::
         * *None*

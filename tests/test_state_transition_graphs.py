@@ -2,21 +2,19 @@
 
 import os
 
-
+import pyboolnet.state_space
+from pyboolnet.file_exchange import bnet2primes, read_primes
 from pyboolnet.repository import get_primes
-from pyboolnet.state_transition_graphs import find_vanham_variables
-from pyboolnet.repository import get_primes
-from pyboolnet.state_transition_graphs import energy, primes2stg, best_first_reachability, stg2dot
-from pyboolnet.state_transition_graphs import random_successor_mixed, successor_synchronous, successors_mixed, successors_asynchronous
-from pyboolnet.state_transition_graphs import add_style_tendencies, stg2image, add_style_sccs
 from pyboolnet.state_space import random_state
+from pyboolnet.state_transition_graphs import add_style_tendencies, stg2image, add_style_sccs
+from pyboolnet.state_transition_graphs import condensationgraph2image, stg2condensationgraph
+from pyboolnet.state_transition_graphs import energy, primes2stg, best_first_reachability, stg2dot
+from pyboolnet.state_transition_graphs import find_vanham_variables
+from pyboolnet.state_transition_graphs import htg2image, stg2htg
+from pyboolnet.state_transition_graphs import random_successor_mixed, successor_synchronous, successors_mixed
+from pyboolnet.state_transition_graphs import successors_asynchronous
 from pyboolnet.state_transition_graphs import random_walk, add_style_path, stg2sccgraph
 from pyboolnet.state_transition_graphs import sccgraph2image
-from pyboolnet.state_transition_graphs import condensationgraph2image, stg2condensationgraph
-from pyboolnet.state_transition_graphs import htg2image, stg2htg
-
-from pyboolnet.file_exchange import bnet2primes, read_primes
-import pyboolnet.state_space
 from tests.helpers import get_tests_path_in, get_tests_path_out
 
 
@@ -30,7 +28,6 @@ def test_find_vanham_variables():
 
 def test_energy():
     primes = get_primes("raf")
-
     answer = energy(primes, "000")
     expected = 1
     
@@ -122,18 +119,18 @@ def test_primes2stg():
 
 
 def test_stg2dot():
-    fname_in = os.path.join(FILES_IN, "irma.primes")
-    fname_out = os.path.join(FILES_OUT, "irma_stg.dot")
+    fname_in = get_tests_path_in(fname="irma.primes")
+    fname_out = get_tests_path_out(fname="irma_stg.dot")
     primes = read_primes(fname_json=fname_in)
     stg = primes2stg(primes=primes, update="asynchronous")
     stg2dot(stg, fname_out)
 
 
 def test_stg2image():
-    fname_in = os.path.join(FILES_IN, "irma.primes")
-    fname_out1 = os.path.join(FILES_OUT, "irma_stg_async.pdf")
-    fname_out2 = os.path.join(FILES_OUT, "irma_stg_tendencies_async.pdf")
-    fname_out3 = os.path.join(FILES_OUT, "irma_stg_sccs_async.pdf")
+    fname_in = get_tests_path_in(fname="irma.primes")
+    fname_out1 = get_tests_path_out(fname="irma_stg_async.pdf")
+    fname_out2 = get_tests_path_out(fname="irma_stg_tendencies_async.pdf")
+    fname_out3 = get_tests_path_out(fname="irma_stg_sccs_async.pdf")
 
     primes = read_primes(fname_json=fname_in)
     stg = primes2stg(primes=primes, update="asynchronous")
@@ -146,10 +143,10 @@ def test_stg2image():
     add_style_sccs(stg)
     stg2image(stg, fname_out3)
 
-    fname_out1 = os.path.join(FILES_OUT, "irma_stg_sync.pdf")
-    fname_out2 = os.path.join(FILES_OUT, "irma_stg_tendencies_sync.pdf")
-    fname_out3 = os.path.join(FILES_OUT, "irma_stg_sccs_sync.pdf")
-    fname_out4 = os.path.join(FILES_OUT, "irma_stg_path.pdf")
+    fname_out1 = get_tests_path_out(fname="irma_stg_sync.pdf")
+    fname_out2 = get_tests_path_out(fname="irma_stg_tendencies_sync.pdf")
+    fname_out3 = get_tests_path_out(fname="irma_stg_sccs_sync.pdf")
+    fname_out4 = get_tests_path_out(fname="irma_stg_path.pdf")
 
     primes = read_primes(fname_json=fname_in)
     stg = primes2stg(primes=primes, update="synchronous")
@@ -174,14 +171,14 @@ def test_stg2image():
 
 
 def test_random_state():
-    fname_in = os.path.join(FILES_IN, "irma.primes")
+    fname_in = get_tests_path_in(fname="irma.primes")
     primes = read_primes(fname_json=fname_in)
     pyboolnet.state_space.random_state(primes=primes)
     pyboolnet.state_space.random_state(primes=primes, subspace="111-0-")
 
 
 def test_stg2sccgraph():
-    fname_out = os.path.join(FILES_OUT, "raf_sccgraph.pdf")
+    fname_out = get_tests_path_out(fname="raf_sccgraph.pdf")
     primes = get_primes("raf")
     stg = primes2stg(primes, "asynchronous")
     scc_graph = stg2sccgraph(stg)
@@ -189,7 +186,7 @@ def test_stg2sccgraph():
 
 
 def test_stg2condensationgraph():
-    fname_out = os.path.join(FILES_OUT, "raf_cgraph.pdf")
+    fname_out = get_tests_path_out(fname="raf_cgraph.pdf")
     primes = get_primes("raf")
     stg = primes2stg(primes, "asynchronous")
     cgraph = stg2condensationgraph(stg)
@@ -197,7 +194,7 @@ def test_stg2condensationgraph():
 
 
 def test_stg2htg():
-    fname_out = os.path.join(FILES_OUT, "raf_htg.pdf")
+    fname_out = get_tests_path_out(fname="raf_htg.pdf")
     primes = get_primes("raf")
     stg = primes2stg(primes, "asynchronous")
     htg = stg2htg(stg)

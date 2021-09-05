@@ -78,7 +78,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
         mints_obj = dict()
         mints_obj["str"] = subspace2str(primes=primes, subspace=mints)
         mints_obj["dict"] = mints
-        mints_obj["prop"] = subspace2proposition(primes=primes, sub_space=mints)
+        mints_obj["prop"] = subspace2proposition(primes=primes, subspace=mints)
 
         log.info(f" working on minimal trapspace {i+1}/{len(min_tspaces)}: {mints_obj['str']}")
 
@@ -234,7 +234,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
 
         formula = all_globally_exists_finally_one_of_sub_spaces(primes=primes, sub_spaces=[current_state])
         spec = f"CTLSPEC {formula}"
-        init = f"INIT {subspace2proposition(primes=primes, sub_space=current_state)}"
+        init = f"INIT {subspace2proposition(primes=primes, subspace=current_state)}"
 
         if check_primes(primes, update, init, spec):
             log.info("is attractor state")
@@ -298,7 +298,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
 
     attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
 
-    formula = exists_finally_one_of_subspaces(primes=primes, sub_spaces=[attractor_state])
+    formula = exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])
     spec = f"CTLSPEC {formula}"
     init = "INIT TRUE"
     answer = check_primes(primes=primes, update=update, init=init, spec=spec)
@@ -429,7 +429,7 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
         return True, None
 
     attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
-    spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, sub_spaces=[attractor_state])}"
+    spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])}"
     init = "INIT TRUE"
     answer, counterexample = check_primes_with_counterexample(primes=primes, update=update, init=init, spec=spec)
 
@@ -579,7 +579,7 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
 
             q = trap_spaces(primes=primes_restricted, option="min", max_output=max_output)
 
-            phi = exists_finally_one_of_subspaces(primes=primes_restricted, sub_spaces=q)
+            phi = exists_finally_one_of_subspaces(primes=primes_restricted, subspaces=q)
 
             init = "INIT TRUE"
             spec = f"CTLSPEC {phi}"
@@ -798,7 +798,7 @@ def completeness_naive(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, sub_spaces=TrapSpaces)
+    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, subspaces=TrapSpaces)
     init = "INIT TRUE"
     answer = check_primes(primes=Primes, update=Update, init=init, spec=spec)
 
@@ -842,7 +842,7 @@ def completeness_naive_with_counterexample(Primes, Update, TrapSpaces):
         True
     """
 
-    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, sub_spaces=TrapSpaces)
+    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=Primes, subspaces=TrapSpaces)
     init = "INIT TRUE"
     answer, counterex = check_primes_with_counterexample(primes=Primes, update=Update, init=init, spec=spec)
 
