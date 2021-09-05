@@ -147,7 +147,7 @@ def print_announcement(current_version: str, release_version: str):
     print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/LogicsSoftwareGmbH/VehicleRouting/compare/{current_version}...{release_version})")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(f"version according to git: {read_version_git()}")
     current_version = read_version_txt()
     print(f"version according to txt: {current_version}")

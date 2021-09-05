@@ -22,7 +22,7 @@ def read_txt_version() -> str:
 
 def read_executables() -> dict:
     config = configparser.SafeConfigParser()
-    settings_file = os.path.join(ROOT_DIR, "dependencies", "settings.cfg")
+    settings_file = os.path.join(ROOT_DIR, "binaries", "settings.cfg")
 
     if not os.path.exists(settings_file):
         execs = dict(
@@ -42,7 +42,7 @@ def os_is_windows() -> bool:
 
 
 def read_nusmv_keywords() -> List[str]:
-    fname = os.path.join(ROOT_DIR, "dependencies", "nusmvkeywords.json")
+    fname = os.path.join(ROOT_DIR, "binaries", "nusmvkeywords.json")
     with open(fname) as fp:
         return ast.literal_eval(fp.read())
 

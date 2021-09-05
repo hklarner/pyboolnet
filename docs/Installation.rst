@@ -170,10 +170,10 @@ Dependencies
 ------------
 
 Most of what |software| does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called ``settings.cfg`` and located in the folder ``Dependencies`` of |software|.
+The file that records the locations to third party binaries is called ``settings.cfg`` and located in the folder ``binaries`` of |software|.
 The default location is::
 
-   /usr/local/lib/python<version>/dist-packages/PyBoolNet/Dependencies/settings.cfg
+   /usr/local/lib/python<version>/dist-packages/pyboolnet/binaries/settings.cfg
 
 The file is a standard configuration file of ``name = value`` pairs. The default for Linux 64 bit is::
 
