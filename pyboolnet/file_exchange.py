@@ -5,10 +5,11 @@ import logging
 import os
 import subprocess
 import sys
-from typing import Optional
+from typing import Optional, Dict
 
 from pyboolnet import find_command
-from pyboolnet.boolean_normal_forms import primes2mindnf
+from pyboolnet.external.bnet2primes import bnet_file2primes, bnet_text2primes
+from pyboolnet.boolean_normal_forms import primes2mindnf, functions2mindnf
 from pyboolnet.digraphs import find_outdag
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
@@ -19,19 +20,7 @@ CMD_BNET2PRIMES = find_command("bnet2prime")
 log = logging.getLogger(__name__)
 
 
-def _bnet2primes_error(proc, out, err, cmd):
-    """
-    logs error for bnet2primes
-    """
-    if not proc.returncode == 0:
-        log.error(out)
-        log.error(err)
-        log.error('\nCall to "BNet2Prime" resulted in return code %i'%proc.returncode)
-        log.error('Command: %s'%' '.join(cmd))
-        sys.exit()
-
-
-def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
+def bnet2primes(bnet: str, fname_primes: Optional[str] = None) -> dict:
     """
     Generates and returns the prime implicants of a Boolean network in :ref:`installation_boolnet` format.
     The primes are saved as a *json* file if *FnamePRIMES* is given.
@@ -57,52 +46,12 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None):
         >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek", "mapk.primes")
     """
 
-    if os.path.isfile(bnet) and fname_primes is not None:
-        fname_bnet = bnet
-        cmd = [CMD_BNET2PRIMES, fname_bnet, fname_primes]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate()
-        out = out.decode()
-        _bnet2primes_error(proc, out, err, cmd)
-        log.info(f"created {fname_primes}")
+    primes = bnet_file2primes(fname_bnet=bnet) if os.path.isfile(bnet) else bnet_text2primes(bnet_text=bnet)
 
-        with open(fname_primes) as f:
-            lines = f.read()
+    if fname_primes and os.path.isfile(fname_primes):
+        write_primes(primes=primes, fname_json=fname_primes)
 
-        primes = ast.literal_eval(lines)
-
-        return primes
-
-    elif os.path.isfile(bnet) and fname_primes is None:
-        fname_bnet = bnet
-        cmd = [CMD_BNET2PRIMES, fname_bnet]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate()
-        out = out.decode()
-        _bnet2primes_error(proc, out, err, cmd)
-        out = out.replace("\x08", "")
-        out = out.replace(" ", "")
-        primes = ast.literal_eval(out)
-
-        return primes
-
-    elif not os.path.isfile(bnet) and fname_primes is not None:
-        log.info("This is the only combination that is currently not possible.")
-        log.info("Need to specify either a bnet file name or a json file name.")
-        sys.exit()
-
-    elif not os.path.isfile(bnet) and fname_primes is None:
-        cmd = [CMD_BNET2PRIMES]
-        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate(input=bnet.encode())
-        proc.stdin.close()
-        _bnet2primes_error(proc, out, err, cmd)
-        out = out.decode()
-        out = out.replace("\x08", "")
-        out = out.replace(" ", "")
-        primes = ast.literal_eval(out)
-
-        return primes
+    return primes
 
 
 def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, header: bool = False) -> str:
@@ -188,10 +137,12 @@ def write_primes(primes: dict, fname_json: str):
           >>> write_primes(primes, "mapk.primes")
     """
 
+    overwritten = os.path.isfile(fname_json)
+
     with open(fname_json, "w") as fp:
         fp.write(str(primes))
     
-    log.info(f"created {fname_json}")
+    log.info(f"created {fname_json}{' (overwritten)' if overwritten else ''}")
 
 
 def read_primes(fname_json: str) -> dict:

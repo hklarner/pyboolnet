@@ -1,14 +1,13 @@
 
 
-import subprocess
+import logging
 import os
+import re
+import subprocess
 import sys
 from typing import Optional, List
 
 import PyBoolNet
-import re
-import logging
-
 from PyBoolNet.Utility.Misc import os_is_windows
 
 EQNTOTT_CMD = PyBoolNet.Utility.Misc.find_command("eqntott")

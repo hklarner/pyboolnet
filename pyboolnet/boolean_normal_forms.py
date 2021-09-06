@@ -6,7 +6,7 @@ import logging
 from typing import Dict, List
 
 from pyboolnet import NUSMV_KEYWORDS
-from pyboolnet.file_exchange import bnet2primes
+from pyboolnet.external.bnet2primes import bnet_text2primes
 
 log = logging.getLogger(__name__)
 
@@ -60,30 +60,7 @@ def primes2mindnf(primes: dict) -> Dict[str, str]:
 
     return expressions
 
-    
-def functions2primes(functions: Dict[str, callable]) -> dict:
-    """
-    Generates and returns the prime implicants of a Boolean network represented by *functions*.
 
-    **arguments**:
-        * *functions*: keys are component names and values are Boolean functions
-
-    **returns**:
-        * *primes*: primes implicants
-
-    **example**:
-
-        >>> funcs = {"v1": lambda v1, v2: v1 or not v2,
-        ...          "v2": lambda v1, v2: v1 + v2 == 1}
-        >>> primes = functions2primes(funcs)
-    """
-    
-    mindnf = functions2mindnf(functions)
-    lines = [f"{name},\t\t{dnf}" for name, dnf in mindnf.items()]
-
-    return bnet2primes(bnet="\n".join(lines))
-
-    
 def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
     """
     Generates and returns a minimal *disjunctive normal form* (DNF) for the Boolean network represented by *functions*.
@@ -151,7 +128,30 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
 
     return expressions
         
-        
+
+def functions2primes(functions: Dict[str, callable]) -> dict:
+    """
+    Generates and returns the prime implicants of a Boolean network represented by *functions*.
+
+    **arguments**:
+        * *functions*: keys are component names and values are Boolean functions
+
+    **returns**:
+        * *primes*: primes implicants
+
+    **example**:
+
+        >>> funcs = {"v1": lambda v1, v2: v1 or not v2,
+        ...          "v2": lambda v1, v2: v1 + v2 == 1}
+        >>> primes = functions2primes(funcs)
+    """
+
+    mindnf = functions2mindnf(functions)
+    text = "\n".join([f"{name},\t\t{dnf}" for name, dnf in mindnf.items()])
+
+    return bnet_text2primes(bnet_text=text)
+
+
 """
 Copyright (c) 2012 George Prekas <prekgeo@yahoo.com>
 
@@ -171,9 +171,8 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-"""
 
-"""
+
 This class implements the Quine-McCluskey algorithm for minimization of boolean
 functions.
 

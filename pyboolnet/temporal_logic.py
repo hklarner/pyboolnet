@@ -2,7 +2,6 @@
 
 from typing import List, Union
 
-
 import pyboolnet.state_space
 
 

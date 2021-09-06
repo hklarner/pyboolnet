@@ -1,22 +1,49 @@
 
 
-import sys
-import os
-import subprocess
-import networkx
 import itertools
 import logging
+import os
+import subprocess
+import sys
 from typing import Optional, List
 
-from pyboolnet import find_command
+import networkx
 
+from pyboolnet import find_command
 
 LAYOUT_ENGINES = {name: find_command(name) for name in ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]}
 
 log = logging.getLogger(__name__)
 
 
-def digraph2dotlines(digraph: networkx.DiGraph, indent: int = 1):
+def _primes2signed_digraph(primes: dict) -> networkx.DiGraph:
+    """
+    Creates a signed interaction graph for primes.
+    The method is in this module to avoid circular imports between the modules prime_implicants and interaction_graphs.
+    """
+
+    digraph = networkx.DiGraph()
+
+    edges = {}
+    for name in primes:
+        digraph.add_node(name)
+        for term in primes[name][1]:
+            for k, v in term.items():
+                if v == 0:
+                    sign = -1
+                else:
+                    sign = +1
+                if not (k, name) in edges:
+                    edges[(k, name)] = set([])
+                edges[(k, name)].add(sign)
+
+    for k, name in edges:
+        digraph.add_edge(k, name, sign=edges[(k, name)])
+
+    return digraph
+
+
+def digraph2dot_lines(digraph: networkx.DiGraph, indent: int = 1):
     """
     Basic function to create *dot* lines from a *networkx.DiGraph*.
 
@@ -94,7 +121,7 @@ def digraph2dotlines(digraph: networkx.DiGraph, indent: int = 1):
             for root in roots:
                 subnodes = list(networkx.descendants(tree,root))+[root]
                 subtree = tree.subgraph(subnodes)
-                lines += tree2dotlines(subtree, indent)
+                lines += tree2dot_lines(subtree, indent)
 
             lines += ['']
 
@@ -177,7 +204,7 @@ def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None):
         digraph = networkx.relabel_nodes(digraph, mapping=lambda x: str(x))
 
     lines = ['digraph {']
-    lines += digraph2dotlines(digraph)
+    lines += digraph2dot_lines(digraph)
     lines += ['}']
 
     dot_text = "\n".join(lines)
@@ -323,7 +350,7 @@ def subgraphs2tree(subgraphs) -> networkx.DiGraph:
     return tree
 
 
-def tree2dotlines(tree: networkx.DiGraph, indent: int = 1):
+def tree2dot_lines(tree: networkx.DiGraph, indent: int = 1):
     """
     Creates a list of *dot* lines from *tree* which is obtained from the function *subgraphs2tree*.
     Handles the nesting and *dot* properties.
@@ -348,12 +375,12 @@ def tree2dotlines(tree: networkx.DiGraph, indent: int = 1):
 
     lines = []
     lines += [space + "subgraph cluster_%i {" % cluster_id]
-    lines += [x for x in digraph2dotlines(digraph=root, indent=indent + 1)]
+    lines += [x for x in digraph2dot_lines(digraph=root, indent=indent + 1)]
 
     for successor in tree.successors(root):
         subnodes = list(networkx.descendants(tree, successor)) + [successor]
         subtree = tree.subgraph(subnodes)
-        lines += tree2dotlines(subtree, indent=indent + 1)
+        lines += tree2dot_lines(subtree, indent=indent + 1)
 
     lines += [space+"}"]
 

@@ -1,8 +1,8 @@
 
 
+import logging
 import os
 import sys
-import logging
 
 from pyboolnet.helpers import read_nusmv_keywords_or_exit, read_executables
 from pyboolnet.version import read_version_txt
@@ -19,6 +19,8 @@ GRAPHVIZ_LAYOUT_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
 EXECUTABLES = read_executables()
 
+log = logging.getLogger(__name__)
+
 
 def find_command(name: str) -> str:
     """
@@ -32,5 +34,6 @@ def find_command(name: str) -> str:
         else:
             cmd = os.path.normpath(os.path.join(ROOT_DIR, "binaries", cmd))
     else:
+        log.warning(f"unknown command: {name}")
         cmd = name
     return cmd

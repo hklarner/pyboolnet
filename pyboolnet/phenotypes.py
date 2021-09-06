@@ -1,19 +1,20 @@
 
 
-import logging
 import itertools
-import networkx
+import logging
 from typing import Optional, List
+
+import networkx
 import networkx.readwrite.json_graph
 
-from pyboolnet.prime_implicants import copy_primes
-from pyboolnet.helpers import save_json_data, copy_json_data, open_json_data
-from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
-from pyboolnet.model_checking import model_checking_with_acceptingstates
-from pyboolnet.state_space import size_state_space
+from pyboolnet.digraphs import digraph2image
 from pyboolnet.helpers import divide_list_into_similar_length_lists
 from pyboolnet.helpers import perc2str
-from pyboolnet.digraphs import digraph2image
+from pyboolnet.helpers import save_json_data, copy_json_data, open_json_data
+from pyboolnet.model_checking import model_checking_with_acceptingstates
+from pyboolnet.prime_implicants import copy_primes
+from pyboolnet.state_space import size_state_space
+from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
 
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 

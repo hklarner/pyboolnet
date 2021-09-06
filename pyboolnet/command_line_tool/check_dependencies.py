@@ -3,13 +3,13 @@
 import logging
 import subprocess
 
-from pyboolnet import find_command
 from pyboolnet import GRAPHVIZ_LAYOUT_ENGINES
+from pyboolnet import find_command
 
 log = logging.getLogger(__name__)
 
 
-def check_all_binaries():
+def check_all_dependencies():
     check_gringo_responds()
     check_clasp_responds()
     check_nusmv_responds()
@@ -165,4 +165,4 @@ def check_eqntott_responds():
 
 
 if __name__ == '__main__':
-    check_all_binaries()
+    check_all_dependencies()

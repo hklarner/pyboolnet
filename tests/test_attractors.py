@@ -35,10 +35,10 @@ def test_find_attractor_state_by_randomwalk_and_ctl():
     length = 200
     attempts = 10
 
-    mints = {"Gene1": 1, "Gene11": 0, "Gene12": 1, "Gene13": 0, "Gene14": 1, "Gene15": 0, "Gene16": 1, "Gene17": 1, "Gene18": 1, "Gene19": 0, "Gene2": 1, "Gene20": 1, "Gene3": 0, "Gene4": 1, "Gene5": 0, "Gene6": 0, "Gene8": 0, "Gene9": 0}
+    min_trap_spaces = {"Gene1": 1, "Gene11": 0, "Gene12": 1, "Gene13": 0, "Gene14": 1, "Gene15": 0, "Gene16": 1, "Gene17": 1, "Gene18": 1, "Gene19": 0, "Gene2": 1, "Gene20": 1, "Gene3": 0, "Gene4": 1, "Gene5": 0, "Gene6": 0, "Gene8": 0, "Gene9": 0}
 
     x = find_attractor_state_by_randomwalk_and_ctl(primes, "asynchronous", subspace, length, attempts)
-    assert state_is_in_subspace(primes, x, mints)
+    assert state_is_in_subspace(primes, x, min_trap_spaces)
 
     y = find_attractor_state_by_randomwalk_and_ctl(primes, "synchronous", subspace, length, attempts)
     reachable = list_reachable_states(primes, "synchronous", list(y), 100)
@@ -46,7 +46,7 @@ def test_find_attractor_state_by_randomwalk_and_ctl():
     assert state2str(y) in reachable
 
     z = find_attractor_state_by_randomwalk_and_ctl(primes, "mixed", subspace, length, attempts)
-    assert state_is_in_subspace(primes, z, mints)
+    assert state_is_in_subspace(primes, z, min_trap_spaces)
     
 
 def test_univocality():

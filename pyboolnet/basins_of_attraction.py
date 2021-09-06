@@ -7,11 +7,10 @@ import matplotlib.pyplot
 
 import pyboolnet.state_space
 import pyboolnet.state_space
-
 from pyboolnet import find_command
-from pyboolnet.model_checking import subspace2proposition
-from pyboolnet.model_checking import model_checking_with_acceptingstates
 from pyboolnet.boolean_logic import minimize_espresso
+from pyboolnet.model_checking import model_checking_with_acceptingstates
+from pyboolnet.model_checking import subspace2proposition
 from pyboolnet.state_space import size_state_space
 
 CMD_DOT = find_command("dot")

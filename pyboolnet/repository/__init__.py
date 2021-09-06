@@ -1,5 +1,11 @@
 
+
 import os
+from typing import List
+
+from pyboolnet.trap_spaces import trap_spaces
+from pyboolnet.prime_implicants import find_inputs, find_constants, find_outputs
+from pyboolnet.file_exchange import bnet2primes
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -11,21 +17,21 @@ def print_info(markdown: bool = False):
     prints repository info
     """
 
-    header = [('name','size','inputs','constants','steady states','cyclic attractors (mints)')]
-    data   = []
+    header = [("name", "size", "inputs", "constants", "steady states", "cyclic attractors (mints)")]
+    data = []
     for name in get_all_names():
         primes = get_primes(name)
         tspaces = trap_spaces(primes, "min", max_output=MAX_OUTPUT)
 
-        size          = str(len(primes))
-        inputs        = str(len(find_inputs(primes)))
-        constants     = str(len(find_constants(primes)))
-        steady        = len([x for x in tspaces if len(x)==len(primes)])
-        steady        = str(steady) + '+'*(steady == MAX_OUTPUT)
-        cyclic        = len([x for x in tspaces if len(x)<len(primes)])
-        cyclic        = str(cyclic) + '+'*(steady == MAX_OUTPUT)
+        size = str(len(primes))
+        inputs = str(len(find_inputs(primes)))
+        constants = str(len(find_constants(primes)))
+        steady = len([x for x in tspaces if len(x) == len(primes)])
+        steady = str(steady) + '+'*(steady == MAX_OUTPUT)
+        cyclic = len([x for x in tspaces if len(x) < len(primes)])
+        cyclic = str(cyclic) + '+'*(steady == MAX_OUTPUT)
 
-        data.append((name,size,inputs,constants,steady,cyclic))
+        data.append((name, size, inputs, constants, steady, cyclic))
 
     data.sort(key=lambda x: int(x[1]))
     data = header + data
@@ -35,13 +41,13 @@ def print_info(markdown: bool = False):
         width[i] = max(len(x[i]) for x in data) + 2
 
     if markdown:
-        header = '| ' + ' | '.join(x.ljust(width[i]) for i,x in enumerate(data[0])) + ' |'
+        header = '| ' + ' | '.join(x.ljust(width[i]) for i, x in enumerate(data[0])) + ' |'
         print(header)
-        print('| ' + ' | '.join('-'*width[i] for i,x in enumerate(data[0])) + ' |')
+        print('| ' + ' | '.join('-'*width[i] for i, x in enumerate(data[0])) + ' |')
 
         body   = data[1:]
         for row in body:
-            print('| ' + ' | '.join(x.ljust(width[i]) for i,x in enumerate(row)) + ' |')
+            print('| ' + ' | '.join(x.ljust(width[i]) for i, x in enumerate(row)) + ' |')
 
     else:
         for row in data:
@@ -59,7 +65,7 @@ def names_with_fast_analysis():
     return result
 
 
-def get_all_names():
+def get_all_names() -> List[str]:
     """
     Returns the names of all models currently in the repository.
 

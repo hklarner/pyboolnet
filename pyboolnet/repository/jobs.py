@@ -1,13 +1,5 @@
-
-
-import sys
-import os
-
-
 from pyboolnet.file_exchange import bnet2primes
 from pyboolnet.repository import get_primes
-from pyboolnet.attractors import compute_attractors
-
 
 if __name__ == "__main__":
 

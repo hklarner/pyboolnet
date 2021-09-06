@@ -1,31 +1,27 @@
 
 
-import logging
-from typing import Optional
-import random
-import itertools
 import heapq
+import itertools
+import logging
+import random
+from typing import List, Union
+from typing import Optional
+
 import networkx
 
-from typing import List, Union, Dict
-
 from pyboolnet import find_command
-from pyboolnet.state_space import hamming_distance, list_states_in_subspace
-from pyboolnet.state_space import subspace2dict, subspace2str, state2dict, state2str, random_state
-from pyboolnet.trap_spaces import trapspaces_that_contain_state
-from pyboolnet.digraphs import digraph2dot
-from pyboolnet.digraphs import digraph2condensationgraph
-from pyboolnet.trap_spaces import trap_spaces
 from pyboolnet.digraphs import convert_nodes_to_anonymous_strings, digraph2image
+from pyboolnet.digraphs import digraph2condensationgraph
+from pyboolnet.digraphs import digraph2dot
 from pyboolnet.digraphs import has_edge, has_path, successors, digraph2sccgraph
 from pyboolnet.helpers import divide_list_into_similar_length_lists
-from tests.helpers import get_tests_path_in, get_tests_path_out
+from pyboolnet.state_space import hamming_distance, list_states_in_subspace
+from pyboolnet.state_space import subspace2dict, subspace2str, state2dict, state2str, random_state
+from pyboolnet.trap_spaces import trap_spaces
+from pyboolnet.trap_spaces import trapspaces_that_contain_state
 
 CMD_DOT = find_command("dot")
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
-VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
-                      4: ["_level1", "_level2", "_level3"],
-                      5: ["_level1", "_level2", "_level3", "_level4"]}
 
 log = logging.getLogger(__name__)
 
@@ -316,26 +312,26 @@ def add_style_sccs(stg: networkx.DiGraph):
         depth = condensation_graph.nodes[scc]["depth"]
         col = 2 + (depth % 8)
     
-    subgraph = networkx.DiGraph()
-    subgraph.add_nodes_from(scc)
-    subgraph.graph["style"] = "filled"
-    subgraph.graph["color"] = "black"
-    subgraph.graph["fillcolor"] = f"/greys9/{col}"
-    
-    if not list(condensation_graph.successors(scc)):
-        if len(scc) == 1:
-            subgraph.graph["label"] = "steady state"
-        else:
-            subgraph.graph["label"] = "cyclic attractor"
-    
-    if not stg.graph["subgraphs"]:
-        stg.graph["subgraphs"] = []
-    
-    for x in list(stg.graph["subgraphs"]):
-        if sorted(x.nodes()) == sorted(subgraph.nodes()):
-            stg.graph["subgraphs"].remove(x)
-    
-    stg.graph["subgraphs"].append(subgraph)
+        subgraph = networkx.DiGraph()
+        subgraph.add_nodes_from(scc)
+        subgraph.graph["style"] = "filled"
+        subgraph.graph["color"] = "black"
+        subgraph.graph["fillcolor"] = f"/greys9/{col}"
+
+        if not list(condensation_graph.successors(scc)):
+            if len(scc) == 1:
+                subgraph.graph["label"] = "steady state"
+            else:
+                subgraph.graph["label"] = "cyclic attractor"
+
+        if not stg.graph["subgraphs"]:
+            stg.graph["subgraphs"] = []
+
+        for x in list(stg.graph["subgraphs"]):
+            if sorted(x.nodes()) == sorted(subgraph.nodes()):
+                stg.graph["subgraphs"].remove(x)
+
+        stg.graph["subgraphs"].append(subgraph)
 
 
 def add_style_subspaces(primes: dict, stg: networkx.DiGraph, subspaces):
@@ -430,7 +426,7 @@ def add_style_subgraphs(stg: networkx.DiGraph, subgraphs):
 
 def add_style_mintrapspaces(primes: dict, stg: networkx.DiGraph, max_output: int = 100):
     """
-    A convenience function that combines :ref:`add_style_subspaces` and :ref:`AspSolver.trap_spaces <trap_spaces>`.
+    A convenience function that combines :ref:`add_style_subspaces` and :ref:`trap_spaces <trap_spaces>`.
     It adds a *dot* subgraphs for every minimal trap space to *stg* - subgraphs that already exist are overwritten.
 
     **arguments**:
@@ -460,7 +456,6 @@ def add_style_mintrapspaces(primes: dict, stg: networkx.DiGraph, max_output: int
         if not stg.graph["subgraphs"]:
             stg.graph["subgraphs"] = []
         
-        # overwrite existing subgraphs
         for x in list(stg.graph["subgraphs"]):
             if sorted(x.nodes()) == sorted(subgraph.nodes()):
                 stg.graph["subgraphs"].remove(x)
@@ -486,7 +481,7 @@ def add_style_path(stg: networkx.DiGraph, path: Union[List[str], List[dict]], co
     
     assert path is not None
     
-    path = [state2str(x) if type(x) is dict else x for x in path]
+    path = [state2str(x) for x in path]
     
     for x in path:
         stg.nodes[x]["color"] = color
@@ -550,14 +545,14 @@ def successor_synchronous(primes: dict, state: Union[dict, str]) -> dict:
         * *successor*: the synchronous successor of *state*
 
     **example**::
-            >>> primes = {
-            'v1': [[{'v2': 0}], [{'v2': 1}]],
-            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
-            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
-            }
-            >>> state = "100"
-            >>> successor_synchronous(primes, state)
-            {'v1': 0, 'v2': 0, 'v3': 0}
+        >>> primes = {
+        'v1': [[{'v2': 0}], [{'v2': 1}]],
+        'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+        'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
+        }
+        >>> state = "100"
+        >>> successor_synchronous(primes, state)
+        {'v1': 0, 'v2': 0, 'v3': 0}
     """
     
     if type(state) is str:
@@ -572,6 +567,7 @@ def successor_synchronous(primes: dict, state: Union[dict, str]) -> dict:
             for prime in primes[name][value]:
                 if stop:
                     break
+
                 if all([state[d] == v for d, v in prime.items()]):
                     successor[name] = value
                     stop = True
@@ -592,14 +588,13 @@ def successors_asynchronous(primes: dict, state: Union[dict, str]) -> List[dict]
         * *successors*: the asynchronous successors of *state*
 
     **example**::
-            >>> primes = {
-            'v1': [[{'v2': 0}], [{'v2': 1}]],
-            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
-            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
-            }
-            >>> state = "101"
-            >>> successors_asynchronous(primes, state)
-            [{'v1': 0, 'v2': 0, 'v3': 1}, {'v1': 1, 'v2': 1, 'v3': 1}, {'v1': 1, 'v2': 0, 'v3': 0}]
+        >>> primes = {
+        'v1': [[{'v2': 0}], [{'v2': 1}]],
+        'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+        'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]}
+        >>> state = "101"
+        >>> successors_asynchronous(primes, state)
+        [{'v1': 0, 'v2': 0, 'v3': 1}, {'v1': 1, 'v2': 1, 'v3': 1}, {'v1': 1, 'v2': 0, 'v3': 0}]
     """
     
     if type(state) is str:
@@ -635,21 +630,21 @@ def successors_mixed(primes: dict, state: Union[dict, str]) -> List[dict]:
     **returns**:
         * *successors*: the mixed successors of *state*
 
-        **example**::
-            >>> primes = {
-            'v1': [[{'v2': 0}], [{'v2': 1}]],
-            'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
-            'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
-            }
-            >>> state = "010"
-            >>> successors_mixed(primes, state)
-            [{'v1': 1, 'v2': 1, 'v3': 0},
-             {'v1': 0, 'v2': 0, 'v3': 0},
-             {'v1': 0, 'v2': 1, 'v3': 1},
-             {'v1': 1, 'v2': 0, 'v3': 0},
-             {'v1': 1, 'v2': 1, 'v3': 1},
-             {'v1': 0, 'v2': 0, 'v3': 1},
-             {'v1': 1, 'v2': 0, 'v3': 1}]
+    **example**::
+        >>> primes = {
+        'v1': [[{'v2': 0}], [{'v2': 1}]],
+        'v2': [[{'v3': 0}, {'v1': 0}], [{'v1': 1, 'v3': 1}]],
+        'v3': [[{'v1': 1, 'v2': 0}], [{'v2': 1}, {'v1': 0}]]
+        }
+        >>> state = "010"
+        >>> successors_mixed(primes, state)
+        [{'v1': 1, 'v2': 1, 'v3': 0},
+         {'v1': 0, 'v2': 0, 'v3': 0},
+         {'v1': 0, 'v2': 1, 'v3': 1},
+         {'v1': 1, 'v2': 0, 'v3': 0},
+         {'v1': 1, 'v2': 1, 'v3': 1},
+         {'v1': 0, 'v2': 0, 'v3': 1},
+         {'v1': 1, 'v2': 0, 'v3': 1}]
     """
     if type(state) == str:
         state = state2dict(primes, state)
@@ -691,9 +686,9 @@ def random_successor_mixed(primes: dict, state: Union[dict, str]) -> dict:
 
     **example**::
 
-            >>> state = "100"
-            >>> random_successor_mixed(primes, state)
-            {'v1':1, 'v2':1, 'v3':1}
+        >>> state = "100"
+        >>> random_successor_mixed(primes, state)
+        {'v1':1, 'v2':1, 'v3':1}
     """
 
     if type(state) is str:
@@ -888,48 +883,6 @@ def best_first_reachability(primes: dict, initial_space: Union[str, dict], goal_
             break
 
     log.info(f"explored {len(seen)} transitions, no path found.")
-
-
-def find_vanham_variables(primes: dict) -> Dict[int, List[str]]:
-    """
-    Detects variables that represent multi-valued variables using the Van Ham encoding, see :ref:`Didier2011` for more details.
-    E.g. three-valued variables x are encoded via two Boolean variables x_medium and x_high.
-    This function is used for example by :ref:`ModelChecking.primes2smv <primes2smv>` to add
-    INIT constraints to the smv file that forbid all states that are not admissible, e.g. in which "!x_medium & x_high" is true.
-
-    **arguments**:
-        * *primes*: prime implicants
-
-    **returns**:
-        * *names*: activity levels and names
-
-    **example**::
-
-        >>> find_vanham_variables(primes)
-        {2: ['E2F1', 'ATM'],
-         3: ['ERK'],
-         4: [],
-         5: []}
-    """
-    
-    seen_base = []
-    seen_names = []
-    vanham = {}
-    
-    for val in sorted(VAN_HAM_EXTENSIONS, reverse=True):
-        post = VAN_HAM_EXTENSIONS[val][0]
-        base = [x.replace(post, "") for x in primes if x.endswith(post)]
-        base = [x for x in base if x not in seen_base]
-        base = [x for x in base if all(x + y in primes for y in VAN_HAM_EXTENSIONS[val])]
-        names = [x + y for x in base for y in VAN_HAM_EXTENSIONS[val]]
-        
-        vanham[val] = sorted(base)
-        seen_base.extend(base)
-        seen_names.extend(names)
-    
-    vanham[2] = sorted(x for x in primes if x not in seen_names)
-    
-    return vanham
 
 
 def stg2sccgraph(stg: networkx.DiGraph) -> networkx.DiGraph:

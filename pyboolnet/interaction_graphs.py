@@ -1,15 +1,19 @@
-import subprocess
-from typing import Union, List, Optional, Set
-import os
-import sys
-import networkx
+
+
 import logging
+import os
+import subprocess
+import sys
+from typing import Union, List, Optional, Set
+
+import networkx
 
 from pyboolnet import find_command
-from pyboolnet.digraphs import digraph2dot, digraph2image, digraph2condensationgraph
 from pyboolnet.digraphs import add_style_subgraphs as digraphs_add_style_subgraphs
-from pyboolnet.state_transition_graphs import successor_synchronous
+from pyboolnet.digraphs import digraph2dot, digraph2image, digraph2condensationgraph
+from pyboolnet.digraphs import _primes2signed_digraph
 from pyboolnet.state_space import subspace2dict, states2dict, state2dict
+from pyboolnet.state_transition_graphs import successor_synchronous
 
 CMD_DOT = find_command("dot")
 CMD_CONVERT = find_command("convert")
@@ -23,11 +27,10 @@ def create_empty_igraph(primes: dict) -> networkx.DiGraph:
     creates an empty igraph with default attributes
     """
 
-    igraph = networkx.DiGraph()
-
     factor = 0.2
     width = factor * sum(len(x) for x in primes) / len(primes)
 
+    igraph = networkx.DiGraph()
     igraph.graph["node"] = {
         "style": "filled",
         "shape": "circle",
@@ -35,7 +38,6 @@ def create_empty_igraph(primes: dict) -> networkx.DiGraph:
         "width": str(width),
         "color": "none",
         "fillcolor": "gray95"}
-
     igraph.graph["edge"] = {}
     igraph.graph["subgraphs"] = []
 
@@ -69,22 +71,10 @@ def primes2igraph(primes: dict) -> networkx.DiGraph:
     """
 
     igraph = create_empty_igraph(primes)
+    digraph = _primes2signed_digraph(primes)
 
-    edges = {}
-    for name in primes:
-        igraph.add_node(name)
-        for term in primes[name][1]:
-            for k, v in term.items():
-                if v == 0:
-                    sign = -1
-                else:
-                    sign = +1
-                if not (k, name) in edges:
-                    edges[(k, name)] = set([])
-                edges[(k, name)].add(sign)
-
-    for k, name in edges:
-        igraph.add_edge(k, name, sign=edges[(k, name)])
+    for s, t, data in digraph.edges(data=True):
+        igraph.add_edge(s, t, sign=data["sign"])
 
     return igraph
 

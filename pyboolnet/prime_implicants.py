@@ -7,9 +7,9 @@ from typing import List, Optional, Dict, Union
 
 from pyboolnet.boolean_normal_forms import functions2primes
 from pyboolnet.digraphs import successors, predecessors
-from pyboolnet.file_exchange import bnet2primes
+from pyboolnet.digraphs import _primes2signed_digraph
+from pyboolnet.external.bnet2primes import bnet_text2primes
 from pyboolnet.helpers import dicts_are_consistent
-from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.state_space import subspace2str
 
 log = logging.getLogger(__name__)
@@ -112,8 +112,8 @@ def find_outputs(primes: dict) -> List[str]:
         ["Proliferation","Apoptosis","GrowthArrest"]
     """
 
-    igraph = primes2igraph(primes)
-    outputs = [x for x in igraph.nodes() if not list(igraph.successors(x))]
+    digraph = _primes2signed_digraph(primes)
+    outputs = [x for x in digraph.nodes() if not list(digraph.successors(x))]
 
     return sorted(outputs)
 
@@ -299,8 +299,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
     for name, function in update_functions.items():
         names.add(name)
         if type(function) is str:
-            line = f"{name}, {function}"
-            new_primes[name] = bnet2primes(line)[name]
+            new_primes[name] = bnet_text2primes(bnet_text=f"{name}, {function}")[name]
         else:
             new_primes[name] = functions2primes({name: function})[name]
 
@@ -333,9 +332,9 @@ def create_disjoint_union(primes1: dict, primes2: dict) -> dict:
     **example**::
 
         >>> primes1 = bnet2primes("A, B \\n B, A")
-        >>> primes1 = bnet2primes("C, D \\n D, E")
-        >>> new_primes = create_disjoint_union(primes1, primes2)
-        >>> primes2bnet(new_primes)
+        >>> primes2 = bnet2primes("C, D \\n D, E")
+        >>> primes = create_disjoint_union(primes1, primes2)
+        >>> primes2bnet(primes)
         A, B
         B, A
         C, D
@@ -378,8 +377,8 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
     if not in_place:
         primes = copy_primes(primes)
 
-    igraph = primes2igraph(primes)
-    hit = [x for x in successors(igraph, names) if x not in names]
+    digraph = _primes2signed_digraph(primes)
+    hit = [x for x in successors(digraph=digraph, node_or_nodes=names) if x not in names]
     if hit:
         log.error(f"can not remove variable that are not closed under successor operation: variables={hit}")
         sys.exit()
@@ -415,8 +414,8 @@ def remove_all_variables_except(primes: dict, names: List[str], in_place: bool =
     if not in_place:
         primes = copy_primes(primes=primes)
 
-    igraph = primes2igraph(primes)
-    hit = [x for x in predecessors(igraph, names) if x not in names]
+    digraph = _primes2signed_digraph(primes)
+    hit = [x for x in predecessors(digraph=digraph, node_or_nodes=names) if x not in names]
     if hit:
         log.error(f"cannot remove variables that are not closed under the predecessor operation: variables={hit}")
         sys.exit()
@@ -532,8 +531,8 @@ def substitute_and_remove(primes, names, in_place: bool = True):
 
     names = {k: v for k, v in constants.items() if k in names}
 
-    igraph = primes2igraph(primes)
-    for x in successors(igraph, names):
+    digraph = _primes2signed_digraph(primes)
+    for x in successors(digraph=digraph, node_or_nodes=names):
         _substitute(primes, x, names)
 
     for x in names:
@@ -557,15 +556,15 @@ def percolation(primes: dict, remove_constants: bool) -> Dict[str, int]:
 
     **example**::
 
-        >>> percolate_constants(primes)
-        >>> constants = percolate_constants(primes, True)
+        >>> percolation(primes)
+        >>> constants = percolation(primes, True)
         >>> constants
         {"Erk":0, "Mapk":0, "Raf":1}
     """
 
-    igraph = primes2igraph(primes)
+    digraph = _primes2signed_digraph(primes)
     constants = find_constants(primes)
-    fringe = successors(igraph, constants)
+    fringe = successors(digraph=digraph, node_or_nodes=constants)
 
     while fringe:
         new_constants = {}
@@ -577,15 +576,16 @@ def percolation(primes: dict, remove_constants: bool) -> Dict[str, int]:
                 new_constants[name] = 0
 
         constants.update(new_constants)
-        fringe = set(successors(igraph, new_constants)) - set(constants)
+        fringe = set(successors(digraph=digraph, node_or_nodes=new_constants)) - set(constants)
 
     if remove_constants:
-        for name in constants: primes.pop(name)
+        for name in constants:
+            primes.pop(name)
 
     return constants
 
 
-def percolate_and_keep_constants(primes: dict):
+def percolate_and_keep_constants(primes: dict) -> Dict[str, int]:
     """
     Percolates the values of constants, see :ref:`Klarner2015(b) <klarner2015approx>` Sec. 3.1 for a formal definition.
     Keeps constants in the *primes*.

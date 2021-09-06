@@ -1,10 +1,56 @@
+
+
 import itertools
 import random
-from typing import Union, List
+from typing import Union, List, Dict
 
-from pyboolnet.file_exchange import bnet2primes
-from pyboolnet.prime_implicants import find_inputs
-from pyboolnet.state_transition_graphs import find_vanham_variables
+from pyboolnet.external.bnet2primes import bnet_text2primes
+
+VAN_HAM_EXTENSIONS = {3: ["_medium", "_high"],
+                      4: ["_level1", "_level2", "_level3"],
+                      5: ["_level1", "_level2", "_level3", "_level4"]}
+
+
+def find_vanham_variables(primes: dict) -> Dict[int, List[str]]:
+    """
+    Detects variables that represent multi-valued variables using the Van Ham encoding, see :ref:`Didier2011` for more details.
+    E.g. three-valued variables x are encoded via two Boolean variables x_medium and x_high.
+    This function is used for example by :ref:`ModelChecking.primes2smv <primes2smv>` to add
+    INIT constraints to the smv file that forbid all states that are not admissible, e.g. in which "!x_medium & x_high" is true.
+
+    **arguments**:
+        * *primes*: prime implicants
+
+    **returns**:
+        * *names*: activity levels and names
+
+    **example**::
+
+        >>> find_vanham_variables(primes)
+        {2: ['E2F1', 'ATM'],
+         3: ['ERK'],
+         4: [],
+         5: []}
+    """
+
+    seen_base = []
+    seen_names = []
+    vanham = {}
+
+    for val in sorted(VAN_HAM_EXTENSIONS, reverse=True):
+        post = VAN_HAM_EXTENSIONS[val][0]
+        base = [x.replace(post, "") for x in primes if x.endswith(post)]
+        base = [x for x in base if x not in seen_base]
+        base = [x for x in base if all(x + y in primes for y in VAN_HAM_EXTENSIONS[val])]
+        names = [x + y for x in base for y in VAN_HAM_EXTENSIONS[val]]
+
+        vanham[val] = sorted(base)
+        seen_base.extend(base)
+        seen_names.extend(names)
+
+    vanham[2] = sorted(x for x in primes if x not in seen_names)
+
+    return vanham
 
 
 def state_is_in_subspace(primes: dict, state: Union[str, dict], subspace: Union[str, dict]) -> bool:
@@ -153,10 +199,19 @@ def size_state_space(primes: dict, van_ham: bool = True, fixed_inputs: bool = Fa
         size = 2 ** len(primes)
 
     if fixed_inputs:
-        factor = 2 ** len(find_inputs(primes))
+        factor = 2 ** len(_find_inputs(primes))
         size = size / factor
 
     return size
+
+
+def _find_inputs(primes: dict) -> List[str]:
+    """
+    A copy of pyboolnet.prime_implicants.find_inputs.
+    Required to break circular import.
+    """
+
+    return sorted(name for name in primes if primes[name][1] == [{name: 1}])
 
 
 def enumerate_states(primes: dict, proposition: str):
@@ -180,16 +235,14 @@ def enumerate_states(primes: dict, proposition: str):
 
         >>> prop = "!Erk | (Raf & Mek)"
         >>> enumerate_states(primes,prop)[0]
-        '010'
+        "010"
     """
 
     assert "?" not in primes
 
     proposition = proposition.replace("TRUE", "1")
     proposition = proposition.replace("FALSE", "0")
-
-    bnet = "?, %s" % proposition
-    new_primes = bnet2primes(bnet)
+    new_primes = bnet_text2primes(bnet_text=f"?, {proposition}")
 
     states = set([])
     for p in new_primes["?"][1]:
@@ -360,7 +413,7 @@ def states2str(primes: dict, states: List[dict]) -> List[str]:
     return [state2str(x) for x in states]
 
 
-def state2str(state: dict) -> str:
+def state2str(state: Union[dict, str]) -> str:
     """
     Converts the dictionary representation of a state into the string representation of a state.
     If *state* is already of type string it is simply returned.
@@ -381,7 +434,7 @@ def state2str(state: dict) -> str:
     if type(state) is str:
         return state
 
-    return ''.join([str(state[x]) for x in sorted(state)])
+    return "".join([str(state[x]) for x in sorted(state)])
 
 
 def random_state(primes: dict, subspace: Union[dict, str] = {}) -> dict:

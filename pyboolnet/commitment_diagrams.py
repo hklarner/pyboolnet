@@ -1,23 +1,23 @@
 
 
-import os
-import logging
-import itertools
-import random
-import operator
 import functools
-import networkx
+import itertools
+import logging
+import operator
+import random
 from typing import Optional
+
+import networkx
 
 import pyboolnet.state_space
 from pyboolnet import find_command
+from pyboolnet.digraphs import ancestors, find_outdag
+from pyboolnet.helpers import copy_json_data, save_json_data, open_json_data
 from pyboolnet.helpers import perc2str
+from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.prime_implicants import copy_primes, remove_all_variables_except
 from pyboolnet.prime_implicants import input_combinations
 from pyboolnet.state_space import size_state_space
-from pyboolnet.interaction_graphs import primes2igraph
-from pyboolnet.digraphs import ancestors, find_outdag
-from pyboolnet.prime_implicants import copy_primes, remove_all_variables_except
-from pyboolnet.helpers import copy_json_data, save_json_data, open_json_data
 
 CMD_DOT = find_command("dot")
 COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"]

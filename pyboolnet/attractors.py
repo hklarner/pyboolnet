@@ -303,7 +303,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
     formula = exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])
     spec = f"CTLSPEC {formula}"
     init = "INIT TRUE"
-    answer = model_checking(primes=primes, update=update, init=init, spec=spec)
+    answer = model_checking(primes=primes, update=update, initial_states=init, specification=spec)
 
     return answer
 
@@ -360,7 +360,7 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
     formula = exists_finally_unsteady_components(names=list(primes))
     spec = f"CTLSPEC AG({formula})"
     init = "INIT TRUE"
-    answer = model_checking(primes=primes, update=update, init=init, spec=spec)
+    answer = model_checking(primes=primes, update=update, initial_states=init, specification=spec)
 
     return answer
 
@@ -472,7 +472,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
     if len(trap_space) == len(primes):
         return True, None
 
-    primes = create_constants(primes, constants=trap_space, in_place=True)
+    primes = create_constants(primes, constants=trap_space, in_place=False)
     constants = percolate_and_remove_constants(primes=primes)
 
     if len(constants) > len(trap_space):
@@ -505,15 +505,15 @@ def completeness_with_counterexample(primes: dict, update: str, max_output: int 
 
     **returns**:
         * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
-        * *Counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
+        * *counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
-            >>> answer, counterex = completeness_with_counterexample(primes, "asynchronous")
-            >>> answer
-            False
-import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(counterex)
-            10010111101010100001100001011011111111
+        >>> answer, counterexample = completeness_with_counterexample(primes, "asynchronous")
+        >>> answer
+        False
+        >>> state2str(counterexample)
+        10010111101010100001100001011011111111
     """
 
     return iterative_completeness_algorithm(primes=primes, update=update, compute_counterexample=True, max_output=max_output)
@@ -528,19 +528,19 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
     **arguments**:
         * *primes*: prime implicants
         * *update*: the update strategy, one of *"asynchronous"*, *"synchronous"*, *"mixed"*
-        * *ComputeCounterexample*: whether to compute a counterexample
+        * *compute_counterexample*: whether to compute a counterexample
 
     **returns**:
         * *answer*: whether *subspaces* is complete in the STG defined by *primes* and *update*,
-        * *Counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
+        * *counterexample*: a state that can not reach one of the minimal trap spaces of *primes* or *None* if no counterexample exists
 
     **example**::
 
-            >>> answer, counterex = completeness_with_counterexample(primes, "asynchronous")
-            >>> answer
-            False
-import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(counterexample)
-            10010111101010100001100001011011111111
+        >>> answer, counterexample = completeness_with_counterexample(primes, "asynchronous")
+        >>> answer
+        False
+        >>> state2str(counterexample)
+        10010111101010100001100001011011111111
     """
 
     primes = copy_primes(primes=primes)
@@ -556,7 +556,6 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
     current_set = [({}, set([]))]
     while current_set:
         p, w = current_set.pop()
-
         primes_reduced = copy_primes(primes=primes)
         create_constants(primes=primes_reduced, constants=p)
         igraph = primes2igraph(primes=primes_reduced)
@@ -568,7 +567,7 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
             if set(U).issubset(set(w)):
                 cgraph_dash.remove_node(U)
 
-        w_dash = w.copy_primes()
+        w_dash = w.copy()
         refinement = []
         top_layer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U) == 0]
 
@@ -595,7 +594,7 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
 
                     return False, counterexample
             else:
-                answer = model_checking(primes=primes_restricted, update=update, init=init, spec=spec)
+                answer = model_checking(primes=primes_restricted, update=update, initial_states=init, specification=spec)
                 if not answer:
                     return False
 
@@ -603,7 +602,7 @@ import pyboolnet.state_space            >>> pyboolnet.state_space.state2str(coun
             w_dash.update(u_dash)
 
         for q in intersection(refinement):
-            dummy = create_constants(primes=primes, constants=q, in_place=True)
+            dummy = create_constants(primes=primes, constants=q, in_place=False)
             q_tilde = percolate_and_keep_constants(primes=dummy)
 
             if q_tilde not in min_trap_spaces:
@@ -803,7 +802,7 @@ def completeness_naive(primes, update, trap_spaces):
 
     spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=trap_spaces)}"
 
-    return model_checking(primes=primes, update=update, init="INIT TRUE", spec=spec)
+    return model_checking(primes=primes, update=update, initial_states="INIT TRUE", specification=spec)
 
 
 def completeness_naive_with_counterexample(primes: dict, update: str, trap_spaces: List[Union[dict, str]]):
