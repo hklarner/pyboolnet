@@ -41,7 +41,7 @@ def test_find_attractor_state_by_randomwalk_and_ctl():
     assert state_is_in_subspace(primes, x, min_trap_spaces)
 
     y = find_attractor_state_by_randomwalk_and_ctl(primes, "synchronous", subspace, length, attempts)
-    reachable = list_reachable_states(primes, "synchronous", list(y), 100)
+    reachable = list_reachable_states(primes, "synchronous", y, 100)
 
     assert state2str(y) in reachable
 
@@ -156,7 +156,7 @@ def test_completeness_max_output():
 def test_compute_json():
     primes = get_primes("n5s3")
     fname = get_tests_path_out(fname="n5s3_attrs.json")
-    attrs = compute_attractors(primes=primes, update="asynchronous", fname_json=fname, max_output=2)
+    attractors = compute_attractors(primes=primes, update="asynchronous", fname_json=fname, max_output=2)
 
-    assert attrs
+    assert attractors
 

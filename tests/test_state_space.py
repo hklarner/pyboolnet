@@ -4,7 +4,7 @@ from pyboolnet.repository import get_primes
 from pyboolnet.state_space import is_subspace, enumerate_states
 from pyboolnet.state_space import size_state_space, state_is_in_subspace
 from pyboolnet.state_space import state2str, random_state
-from pyboolnet.state_transition_graphs import find_vanham_variables
+from pyboolnet.state_space import find_vanham_variables
 
 
 def test_find_vanham_variables():
@@ -98,6 +98,6 @@ def test_state2str():
 
 def test_random_state():
     primes = get_primes(name="n6s1c2")
-    random_state(primes=primes)
-    random_state(primes=primes, subspace="111-0-")
+    assert type(random_state(primes=primes)) is dict
+    assert type(random_state(primes=primes, subspace="111-0-")) is dict
 

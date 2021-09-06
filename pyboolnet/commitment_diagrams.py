@@ -166,7 +166,7 @@ def open_commitment_diagram(fname_json: str) -> networkx.DiGraph:
     return diagram
 
 
-def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData, Silent):
+def _compute_diagram_component(primes: dict, Update, Subspaces, EdgeData):
     """
     Also computes the commitment diagram but without removing out-DAGs or considering connected components separately.
     Not meant for general use. Use compute_diagram(..) instead.

@@ -17,7 +17,6 @@ from pyboolnet.helpers import open_json_data
 from pyboolnet.helpers import save_json_data
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.model_checking import model_checking
-from pyboolnet.model_checking import model_checking_with_counterexample
 from pyboolnet.prime_implicants import copy_primes
 from pyboolnet.prime_implicants import create_constants
 from pyboolnet.prime_implicants import percolate_and_keep_constants
@@ -25,7 +24,7 @@ from pyboolnet.prime_implicants import percolate_and_remove_constants
 from pyboolnet.prime_implicants import remove_all_variables_except
 from pyboolnet.state_space import subspace2str, state2dict, state2str, random_state
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
-from pyboolnet.state_transition_graphs import successors_asynchronous, successor_synchronous, random_successor_mixed
+from pyboolnet.state_transition_graphs import random_successor_asynchronous, successor_synchronous, random_successor_mixed
 from pyboolnet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
 from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
 from pyboolnet.temporal_logic import exists_finally_unsteady_components
@@ -206,7 +205,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
         length = 10 * len(primes)
 
     if update == "asynchronous":
-        transition = partial(successors_asynchronous, primes)
+        transition = partial(random_successor_asynchronous, primes)
 
     elif update == "synchronous":
         transition = partial(successor_synchronous, primes)
@@ -285,7 +284,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+        >>> mintspaces = trap_spaces(primes, "min")
         >>> x = mintrapspaces[0]
         >>> univocality(primes, "asynchronous", x)
         True
@@ -341,7 +340,7 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+        >>> mintspaces = trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)
         True
@@ -419,12 +418,12 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+        >>> mintspaces = trap_spaces(primes, "min")
         >>> trapspace = mintrapspaces[0]
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
 
-    primes = create_constants(primes=primes, constants=trap_space, in_place=True)
+    primes = create_constants(primes=primes, constants=trap_space, in_place=False)
     constants = percolate_and_remove_constants(primes=primes)
 
     if primes == {}:
@@ -433,7 +432,7 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
     attractor_state = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
     spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=[attractor_state])}"
     init = "INIT TRUE"
-    answer, counterexample = model_checking_with_counterexample(primes=primes, update=update, init=init, spec=spec)
+    answer, counterexample = model_checking(primes=primes, update=update, initial_states=init, specification=spec, enable_counterexample=True)
 
     if answer:
         return True, None
@@ -463,7 +462,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
+        >>> mintspaces = trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)
         True
@@ -482,7 +481,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
         return False, attractor_state
 
     spec = f"CTLSPEC AG({exists_finally_unsteady_components(names=list(primes))})"
-    answer, counterexample = model_checking_with_counterexample(primes=primes, update=update, init="INIT TRUE", spec=spec)
+    answer, counterexample = model_checking(primes=primes, update=update, initial_states="INIT TRUE", specification=spec, enable_counterexample=True)
 
     if answer:
         return True, None
@@ -585,7 +584,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             spec = f"CTLSPEC {phi}"
 
             if compute_counterexample:
-                answer, counterexample = model_checking_with_counterexample(primes=primes_restricted, update=update, init=init, spec=spec)
+                answer, counterexample = model_checking(primes=primes_restricted, update=update, initial_states=init, specification=spec, enable_counterexample=True)
                 if not answer:
                     downstream = [x for x in igraph if x not in U]
                     arbitrary_state = random_state(downstream)
@@ -836,20 +835,20 @@ def completeness_naive_with_counterexample(primes: dict, update: str, trap_space
 
     **example**::
 
-        >>> mintspaces = PyBoolNet.AspSolver.trap_spaces(primes, "min")
-        >>> answer, counterex = completeness_naive(primes, "asynchronous", mintspaces)
+        >>> mintspaces = trap_spaces(primes, "min")
+        >>> answer, counterexample = completeness_naive(primes, "asynchronous", mintspaces)
         >>> answer
         True
     """
 
-    spec = "CTLSPEC " + exists_finally_one_of_subspaces(primes=primes, subspaces=trap_spaces)
+    spec = f"CTLSPEC {exists_finally_one_of_subspaces(primes=primes, subspaces=trap_spaces)}"
     init = "INIT TRUE"
-    answer, counterex = model_checking_with_counterexample(primes=primes, update=update, init=init, spec=spec)
+    answer, counterexample = model_checking(primes=primes, update=update, initial_states=init, specification=spec, enable_counterexample=True)
 
-    if counterex:
-        counterex = counterex[-1]
+    if counterexample:
+        counterexample = counterexample[-1]
 
-    return answer, counterex
+    return answer, counterexample
 
 
 def intersection(*list_of_dicts):

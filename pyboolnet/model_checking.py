@@ -373,10 +373,9 @@ def _read_counterexample(nusmv_output: str) -> Optional[List[dict]]:
 
     counterexample = []
     last_state = False
-
     blocks = nusmv_output.split("Trace Type: Counterexample")[1]
-
     blocks = blocks.split("-> ")
+
     for block in blocks:
         lines = block.split("\n")
         lines = [x.strip() for x in lines]
@@ -401,7 +400,7 @@ def _read_counterexample(nusmv_output: str) -> Optional[List[dict]]:
             counterexample.append(state)
             last_state = state
 
-    return tuple(counterexample)
+    return counterexample
 
 
 def _read_number(line: str):

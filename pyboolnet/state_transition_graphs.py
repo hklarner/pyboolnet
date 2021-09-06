@@ -708,6 +708,21 @@ def random_successor_mixed(primes: dict, state: Union[dict, str]) -> dict:
     return successor
 
 
+def random_successor_asynchronous(primes: dict, state: Union[dict, str]) -> dict:
+    """
+    Returns a random asynchronous successor of *state* in the transition system defined by *primes*.
+
+    **arguments**:
+        * *primes*: prime implicants
+        * *state*: a state
+
+    **returns**:
+        * *successor*: a random asynchronous successor of *state*
+    """
+
+    return random.choice(successors_asynchronous(primes, state))
+
+
 def random_walk(primes: dict, update: str, initial_state: Union[dict, str], length: int):
     """
     Returns a random walk of *length* many states in the transition system defined by *primes* and *update*
