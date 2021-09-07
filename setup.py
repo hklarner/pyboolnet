@@ -4,12 +4,11 @@ import os
 import platform
 import sys
 from distutils.dir_util import copy_tree
-
 from setuptools import setup
 
 from pyboolnet import VERSION
 
-package_data_files = []
+PACKAGE_DATA_FILES = []
 THIS_OS = platform.system()
 
 if "CONDA_BUILD" in os.environ:
@@ -24,35 +23,38 @@ else:
     print(f"the operating system is not recognized: os={THIS_OS}")
     sys.exit()
 
-print(f"pyboolnet dependency folder:  pyboolnet_dep_folder={pyboolnet_dep_folder}")
+print(f"pyboolnet dependency folder:  {pyboolnet_dep_folder}")
 
-copy_tree(pyboolnet_dep_folder, os.path.join("pyboolnet", "binaries"))
-
+source = pyboolnet_dep_folder
+destination = os.path.join("pyboolnet", "binaries")
+copy_tree(src=source, dst=destination)
+print(f"copy_tree: source={pyboolnet_dep_folder}, destination={destination}")
 
 for root, _, filenames in os.walk("pyboolnet/binaries"):
     root = root.replace("pyboolnet/binaries", "binaries")
-    package_data_files.extend([os.path.join(root, x) for x in filenames])
+    PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
 
 for root, _, filenames in os.walk("pyboolnet/repository"):
     root = root.replace("pyboolnet/repository", "repository")
-    package_data_files.extend([os.path.join(root, x) for x in filenames])
+    PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
-
-for root, _, filenames in os.walk("pyboolnet/tests/files/input"):
-    root = root.replace("pyboolnet/Tests", "Tests")
-    package_data_files.extend([os.path.join(root, x) for x in filenames])
+print("package_data_files:")
+for x in PACKAGE_DATA_FILES:
+    print(x)
 
 setup(
     name="pyboolnet",
     version=VERSION,
-    description="Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
+    description="Python Toolbox for the generation, manipulation and analysis of Boolean networks.",
     author="Hannes Klarner",
     author_email="hannes.klarner@fu-berlin.de",
-    url="https://github.com/hklarner/PyBoolNet",
-    package_data={
-        "pyboolnet": package_data_files,
-        "": ['version.txt']},
+    url="https://github.com/hklarner/pyboolnet",
+    package_data={"pyboolnet": PACKAGE_DATA_FILES, "": ['version.txt']},
+    packages=[
+        "pyboolnet",
+        "pyboolnet.command_line_tool",
+        "pyboolnet.command_line_tool.commands"],
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
