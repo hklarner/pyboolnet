@@ -33,7 +33,7 @@ To install a tagged version use the `@`:
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/pyboolnet@2.31.0
+pip3 install git+https://github.com/hklarner/pyboolnet@3.0.0
 ```
 
 For release notes, see
@@ -49,7 +49,7 @@ $ pyboolnet -h
 
 
 ## Migration guide
-The migration guide for PyBoolNet2 to pyboolnet3 is here:
+The migration guide for PyBoolNet 2.x to pyboolnet 3.x is here:
 
  * [pyboolnet/MIGRATION_GUIDE.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE.md)
 
