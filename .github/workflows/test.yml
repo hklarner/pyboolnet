@@ -30,7 +30,7 @@ jobs:
           pip install pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Install PyBoolNet
+      - name: Install pyboolnet
         run: python setup.py install
 
       - name: Install libreadline-dev
@@ -48,6 +48,6 @@ jobs:
 
       - name: Test with pytest
         run: |
-          cd /home/runner/work/PyBoolNet/PyBoolNet/
+          cd /home/runner/work/pyboolnet/pyboolnet/
           pytest
 
