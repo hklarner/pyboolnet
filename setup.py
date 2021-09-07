@@ -1,69 +1,73 @@
-from setuptools import setup
-import os
-from distutils.dir_util import copy_tree
-import platform
 
+
+import os
+import platform
+import sys
+from distutils.dir_util import copy_tree
+
+from setuptools import setup
+
+from pyboolnet import VERSION
 
 package_data_files = []
+THIS_OS = platform.system()
 
-if "CONDA_BUILD" not in os.environ:
-    # PyBoolNet dependencies
-    this_os = platform.system()
-    if this_os == "Linux":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "linux64") 
-    elif this_os == "Darwin":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "mac64") 
-    elif this_os == "Windows":
-        pyboolnet_dep_folder = os.path.join("Dependencies", "win64") 
-    else:
-        # no idea if we could get here?
-        raise Exception
+if "CONDA_BUILD" in os.environ:
+    pyboolnet_dep_folder = os.path.join("binaries", "conda")
+elif THIS_OS == "Linux":
+    pyboolnet_dep_folder = os.path.join("binaries", "linux64")
+elif THIS_OS == "Darwin":
+    pyboolnet_dep_folder = os.path.join("binaries", "mac64")
+elif THIS_OS == "Windows":
+    pyboolnet_dep_folder = os.path.join("binaries", "win64")
+else:
+    print(f"the operating system is not recognized: os={THIS_OS}")
+    sys.exit()
 
-    print(f"PyBoolNet dependency folder = {pyboolnet_dep_folder}")
+print(f"pyboolnet dependency folder:  pyboolnet_dep_folder={pyboolnet_dep_folder}")
 
-    # copy dependencies to PyBoolNet/Dependencies
-    copy_tree(pyboolnet_dep_folder, os.path.join("PyBoolNet", "Dependencies"))
+copy_tree(pyboolnet_dep_folder, os.path.join("pyboolnet", "binaries"))
 
-    # adding dependency files
-    for root, dirnames, filenames in os.walk('PyBoolNet/Dependencies'):
-        root = root.replace('PyBoolNet/Dependencies', 'Dependencies')
-        package_data_files.extend([os.path.join(root, x) for x in filenames])
 
-# adding repository files
-for root, dirnames, filenames in os.walk('PyBoolNet/Repository'):
-    root = root.replace('PyBoolNet/Repository', 'Repository')
+for root, _, filenames in os.walk("pyboolnet/binaries"):
+    root = root.replace("pyboolnet/binaries", "binaries")
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
-# adding test files
-for root, dirnames, filenames in os.walk('PyBoolNet/Tests/Files/Input'):
-    root = root.replace('PyBoolNet/Tests', 'Tests')
+
+for root, _, filenames in os.walk("pyboolnet/repository"):
+    root = root.replace("pyboolnet/repository", "repository")
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
-setup(name="PyBoolNet",
-      version="2.31.0",
-      description="Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
-      author="Hannes Klarner",
-      author_email="hannes.klarner@fu-berlin.de",
-      url="https://github.com/hklarner/PyBoolNet",
-      packages=["PyBoolNet",
-                "PyBoolNet.Tests",
-                "PyBoolNet.Utility",
-                "PyBoolNet.Repository",
-                ],
-      package_data={'PyBoolNet': package_data_files},
 
-      classifiers=[
-          "Programming Language :: Python",
-          "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
-          "Development Status :: 3 - Alpha",
-          "Intended Audience :: Science/Research",
-          "Natural Language :: English",
-          "Topic :: Scientific/Engineering :: Bio-Informatics",
-      ],
-      install_requires=[
-          "networkx==2.4",
-          "matplotlib==3.3.3",
-          "pytest",
-          "pyeda==0.28.0"
-      ]
-      )
+for root, _, filenames in os.walk("pyboolnet/tests/files/input"):
+    root = root.replace("pyboolnet/Tests", "Tests")
+    package_data_files.extend([os.path.join(root, x) for x in filenames])
+
+setup(
+    name="pyboolnet",
+    version=VERSION,
+    description="Python Toolbox for the Generation, Manipulation and Analysis of Boolean Networks.",
+    author="Hannes Klarner",
+    author_email="hannes.klarner@fu-berlin.de",
+    url="https://github.com/hklarner/PyBoolNet",
+    package_data={
+        "pyboolnet": package_data_files,
+        "": ['version.txt']},
+    include_package_data=True,
+    classifiers=[
+        "Programming Language :: Python",
+        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Science/Research",
+        "Natural Language :: English",
+        "Topic :: Scientific/Engineering :: Bio-Informatics"],
+    install_requires=[
+        "networkx>=2.4",
+        "matplotlib>=3.3.3",
+        "pytest",
+        "pyeda==0.28.0",
+        "click==8.0.1"],
+    entry_points="""
+        [console_scripts]
+        pyboolnet=pyboolnet.command_line_tool.main:main
+        """)
