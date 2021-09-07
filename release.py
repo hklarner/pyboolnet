@@ -46,17 +46,6 @@ def pytest_is_happy() -> bool:
     return result.returncode == 0
 
 
-def autodoc_is_happy() -> bool:
-    print("running autodoc ..")
-    command = ["python3", "autodoc/autodoc.py"]
-
-    result = subprocess_run(command=command)
-    print(f"autodoc is happy: {'OK' if result.returncode == 0 else 'FAIL'}")
-    print_process_output(command=command, process=result)
-
-    return result.returncode == 0
-
-
 def read_release_version():
     if len(sys.argv) > 1:
         release_version = sys.argv[1]
@@ -161,9 +150,6 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if not pytest_is_happy():
-        sys.exit(1)
-
-    if not autodoc_is_happy():
         sys.exit(1)
 
     if not bake_release_version_into_code(release_version=release_version):
