@@ -12,7 +12,7 @@ PyBoolNet/Tests/Files/**
 
 Docs/Sphinx/build/**
 
-PyBoolNet/Dependencies/**
+PyBoolNet/binaries/**
 
 Docs/Sphinx/merge_figure17-crop.pdf
 Docs/Sphinx/merge_figure17.aux

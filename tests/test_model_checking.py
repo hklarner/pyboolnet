@@ -1,60 +1,43 @@
 
-import os
 
-import PyBoolNet
-
-
-FILES_IN = os.path.join(os.path.dirname(__file__), "files_input")
-FILES_OUT = os.path.join(os.path.dirname(__file__), "files_output")
+from pyboolnet.model_checking import model_checking, model_checking_smv_file
+from pyboolnet.model_checking import primes2smv
+from pyboolnet.repository import get_primes
+from tests.helpers import get_tests_path_in, get_tests_path_out
 
 
-def test_accepting_states():
-    bnet = """
-    Erk, Raf&Mek | Mek&Erk
-    Mek, Raf&Mek | Erk
-    Raf, !Raf | !Erk
-    """
-
-    fname_out = os.path.join(FILES_OUT, "modelchecking_acceptingstates.smv")
-    primes = PyBoolNet.FileExchange.bnet2primes(bnet)
-
+def test_check_acceptingstates():
+    fname_out = get_tests_path_out(fname="modelchecking_acceptingstates.smv")
+    primes = get_primes(name="raf")
     spec = "CTLSPEC EF(!Erk&!Mek&Raf) &  EF(Erk&Mek&Raf)"
     init = "INIT TRUE"
     update = "asynchronous"
-
-    PyBoolNet.ModelChecking.primes2smv(primes, update, init, spec, fname_out)
-    answer, accepting = PyBoolNet.ModelChecking.check_smv_with_acceptingstates(fname_out)
+    primes2smv(primes, update, init, spec, fname_out)
+    answer, accepting_states = model_checking_smv_file(fname_out, enable_accepting_states=True)
 
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
+    assert accepting_states == expected
 
-    assert accepting == expected
-
-    answer, accepting = PyBoolNet.ModelChecking.check_primes_with_acceptingstates(primes, update, init, spec)
+    answer, accepting_states = model_checking(primes, update, init, spec, enable_accepting_states=True)
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
 
-    assert accepting == expected
+    assert accepting_states == expected
 
 
 def test_check_smv_true():
-    fname_in = os.path.join(FILES_IN,  "modelchecking_check_smv_true.smv")
-
-    assert PyBoolNet.ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True)
+    assert model_checking_smv_file(fname_smv=get_tests_path_in(fname="modelchecking_check_smv_true.smv"))
 
 
 def test_check_smv_false():
-    fname_in = os.path.join(FILES_IN,  "modelchecking_check_smv_false.smv")
-
-    assert not PyBoolNet.ModelChecking.check_smv(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True, ConeOfInfluence=True)
+    assert not model_checking_smv_file(fname_smv=get_tests_path_in(fname="modelchecking_check_smv_false.smv"))
 
 
 def test_check_smv_counterexample():
-    fname_in = os.path.join(FILES_IN,  "modelchecking_check_smv_counterexample.smv")
-
-    answer, counterex = PyBoolNet.ModelChecking.check_smv_with_counterexample(FnameSMV=fname_in, DynamicReorder=True, DisableReachableStates=True)
-
+    fname_in = get_tests_path_in(fname="modelchecking_check_smv_counterexample.smv")
+    answer, counterexample = model_checking_smv_file(fname_smv=fname_in, enable_counterexample=True)
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    assert counterex == expected
+    assert counterexample == expected
 
 
 def test_check_primes_async():
@@ -63,13 +46,15 @@ def test_check_primes_async():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes=primes, Update="asynchronous",
-                                                                                 InitialStates="INIT !v1&v2&!v3",
-                                                                                 Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                 DynamicReorder=True,
-                                                                                 DisableReachableStates=False)
+    answer, counterexample = model_checking(
+        primes=primes, update="asynchronous",
+        initial_states="INIT !v1&v2&!v3",
+        specification="CTLSPEC AF(!v1&!v2&v3)",
+        dynamic_reorder=True,
+        disable_reachable_states=False,
+        enable_counterexample=True)
 
-    assert counterex == expected
+    assert counterexample == expected
 
 
 def test_check_primes_sync():
@@ -77,13 +62,15 @@ def test_check_primes_sync():
               "v2": [[{"v3": 1}, {"v1": 0}], [{"v1": 1, "v3": 0}]],
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
 
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes=primes, Update="synchronous",
-                                                                                 InitialStates="INIT !v1&v2&!v3",
-                                                                                 Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                 DynamicReorder=True,
-                                                                                 DisableReachableStates=False)
+    answer, counterexample = model_checking(
+        primes=primes, update="synchronous",
+        initial_states="INIT !v1&v2&!v3",
+        specification="CTLSPEC AF(!v1&!v2&v3)",
+        dynamic_reorder=True,
+        disable_reachable_states=False,
+        enable_counterexample=True)
 
-    assert counterex is None
+    assert counterexample is None
 
 
 def test_check_primes_mixed():
@@ -92,10 +79,32 @@ def test_check_primes_mixed():
               "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
     expected = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
 
-    answer, counterex = PyBoolNet.ModelChecking.check_primes_with_counterexample(Primes=primes, Update="mixed",
-                                                                                 InitialStates="INIT !v1&v2&!v3",
-                                                                                 Specification="CTLSPEC AF(!v1&!v2&v3)",
-                                                                                 DynamicReorder=True,
-                                                                                 DisableReachableStates=False)
+    answer, counterexample = model_checking(
+        primes=primes, update="mixed",
+        initial_states="INIT !v1&v2&!v3",
+        specification="CTLSPEC AF(!v1&!v2&v3)",
+        dynamic_reorder=True,
+        disable_reachable_states=False,
+        enable_counterexample=True)
 
-    assert counterex == expected
+    assert counterexample == expected
+
+
+def test_counterexample_and_accepting_states():
+    primes = {"v1": [[{"v1": 0, "v3": 1}, {"v1": 0, "v2": 1}], [{"v2": 0, "v3": 0}, {"v1": 1}]],
+              "v2": [[{"v3": 1}, {"v1": 0}], [{"v1": 1, "v3": 0}]],
+              "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
+    expected_counterexample = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
+    expected_accepting_states = {"ACCEPTING": "!(v1 | !(v3))", "ACCEPTING_SIZE": 2, "INIT": "!(v1 | ((v3) | !v2))", "INITACCEPTING": "FALSE", "INITACCEPTING_SIZE": 0, "INIT_SIZE": 1}
+
+    answer, counterexample, accepting_states = model_checking(
+        primes=primes, update="mixed",
+        initial_states="INIT !v1&v2&!v3",
+        specification="CTLSPEC AF(!v1&!v2&v3)",
+        dynamic_reorder=True,
+        disable_reachable_states=False,
+        enable_counterexample=True,
+        enable_accepting_states=True)
+
+    assert counterexample == expected_counterexample
+    assert accepting_states == expected_accepting_states

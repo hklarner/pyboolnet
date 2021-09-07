@@ -1,11 +1,10 @@
 
 
-## About PyBoolNet
-PyBoolNet is a Python package for the generation, modification and analysis of Boolean networks.
+## About pyboolnet
+pyboolnet is a Python package for the generation, modification and analysis of Boolean networks.
 The accompanying paper was published with [Bioinformatics](https://academic.oup.com/bioinformatics) and is available at
 
  * https://doi.org/10.1093/bioinformatics/btw682
-
 
 For report bugs, request features and give feedback at [issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
@@ -17,32 +16,43 @@ The documentation and tutorials are hosted here:
 
  * [https://pyboolnet.readthedocs.io/](https://pyboolnet.readthedocs.io/)
 
-## Model Repository
+## Model repository
 For examples of attractors, basins and phenotypes, browse the model repository here:
 
- * [PyBoolNet/Repository](https://github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository)
+ * [pyboolnet/repository](https://github.com/hklarner/pyboolnet/tree/master/pyboolnet/repository)
 
 ## Installation
-To install the PyBoolNet master branch use:
+To install the pyboolnet master branch use:
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/PyBoolNet
+pip3 install git+https://github.com/hklarner/pyboolnet
 ```
 
 To install a tagged version use the `@`: 
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0
+pip3 install git+https://github.com/hklarner/pyboolnet@2.31.0
 ```
 
 For release notes, see
- 
- * [PyBoolNet/RELEASENOTES.md](https://github.com/hklarner/PyBoolNet/blob/master/RELEASENOTES.md)
 
+ * [pyboolnet/releasenotes.md](https://github.com/hklarner/pyboolnet/blob/master/RELEASENOTES.md)
+ 
+## Command line tool
+```
+$ pyboolnet -h
+```
+
+ * [pyboolnet/repository](https://github.com/hklarner/pyboolnet/tree/master/pyboolnet/repository)
+
+
+## Migration guide from 2 to 3
+
+ * [pyboolnet/MIGRATION_GUIDE_2_to_3.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE_2_to_3.md)
 
 ## Contributions
 - send pull requests to the `develop` branch
-- add tests to `PyBoolNet/tests/`
+- add tests to `pyboolnet/tests/`
 

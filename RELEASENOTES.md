@@ -1,5 +1,14 @@
 
 
+## release notes for version 3.0.0 (September 2021)
+ - adds pyboolnet command line tool
+ - adds logging for control of output
+ - conforms to PEP-8 coding style
+ - uses type hints
+ - renamed modules
+ - adds release script for faster releases
+    
+
 ## release notes for version 2.31.0 (March 2021)
  - new requirement: pyeda
  - adds module `generators` for the generating Boolean networks
