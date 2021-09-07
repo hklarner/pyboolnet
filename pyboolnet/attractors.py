@@ -30,6 +30,9 @@ from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
 from pyboolnet.temporal_logic import exists_finally_unsteady_components
 from pyboolnet.temporal_logic import subspace2proposition
 from pyboolnet.trap_spaces import trap_spaces
+from pyboolnet.version import read_version_txt
+
+VERSION = read_version_txt()
 
 log = logging.getLogger(__file__)
 
@@ -635,7 +638,7 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
 
     lines = ["", ""]
     lines += ["### Attractor Report"]
-    lines += [f" * created on {datetime.date.today().strftime('%d. %b. %Y')} using PyBoolNet, see https://github.com/hklarner/PyBoolNet"]
+    lines += [f" * created on {datetime.date.today().strftime('%d. %b. %Y')} using pyboolnet {VERSION}, see https://github.com/hklarner/pyboolnet"]
     lines += [""]
 
     lines += ["### Steady States"]

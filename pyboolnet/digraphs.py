@@ -179,16 +179,16 @@ def digraph2dot_lines(digraph: networkx.DiGraph, indent: int = 1):
     return lines
 
 
-def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None):
+def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None) -> Optional[str]:
     """
     Generates a *dot* file from *digraph* and saves it as *fname_dot* or returns dot file as a string.
 
     **arguments**:
-        * *digraph* (*networkx.DiGraph* or *networkx.MultiDiGraph*)
+        * *digraph*: a digraph
         * *fname_dot*: name of *dot* file or *None*
 
     **returns**:
-        * *text_dot*: file as string if not *FnameDOT is None*, otherwise it returns *None*
+        * *text_dot*: file as string if not *fname_dot is None*, otherwise it returns *None*
 
     **example**::
 
@@ -269,7 +269,7 @@ def digraph2image(digraph: networkx.DiGraph, fname_image: str, layout_engine: st
     filetype = fname_image.split('.')[-1]
 
     cmd = [LAYOUT_ENGINES[layout_engine], "-T" + filetype, "-o", fname_image]
-    dotfile = digraph2dot(digraph, fname_dot=None)
+    dotfile = digraph2dot(digraph)
 
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate(input=dotfile.encode())

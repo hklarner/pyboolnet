@@ -654,18 +654,19 @@ def input_combinations(primes: dict, format: str = "dict") -> Union[List[str], L
         sys.exit()
 
     inputs = find_inputs(primes)
+    if not inputs:
+        return [{}]
 
     subspaces = []
-    if inputs:
-        if format == "dict":
-            for x in itertools.product(*len(inputs) * [[0, 1]]):
-                subspaces.append(dict(zip(inputs, x)))
+    if format == "dict":
+        for x in itertools.product(*len(inputs) * [[0, 1]]):
+            subspaces.append(dict(zip(inputs, x)))
 
-        else:
-            for x in itertools.product(*len(inputs) * [[0, 1]]):
-                x = dict(zip(inputs, x))
-                x = subspace2str(primes, x)
-                subspaces.append(x)
+    else:
+        for x in itertools.product(*len(inputs) * [[0, 1]]):
+            x = dict(zip(inputs, x))
+            x = subspace2str(primes, x)
+            subspaces.append(x)
 
     return subspaces
 

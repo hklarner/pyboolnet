@@ -7,11 +7,11 @@ import subprocess
 import sys
 from typing import Optional, List
 
-import PyBoolNet
-from PyBoolNet.Utility.Misc import os_is_windows
+from pyboolnet import find_command
+from pyboolnet.helpers import os_is_windows
 
-EQNTOTT_CMD = PyBoolNet.Utility.Misc.find_command("eqntott")
-ESPRESSO_CMD = PyBoolNet.Utility.Misc.find_command("espresso")
+EQNTOTT_CMD = find_command("eqntott")
+ESPRESSO_CMD = find_command("espresso")
 FORBIDDEN_SYMBOLS = ["False", "FALSE", "True", "TRUE", "Zero", "ZERO", "One", "ONE"]
 
 log = logging.getLogger(__name__)
@@ -104,11 +104,10 @@ def minimize_espresso(expression: str, fname_out: Optional[str] = None, merge: b
 
     **example**::
 
-          >>> minimized = minimize_boolean("bool_function.txt", "minimized_function.txt" )
-          >>> minimized = minimize_boolean("var = (a & b) | a;")
-          >>> minimized = minimize_boolean("var = 1")
-          >>> minimized = minimize_boolean("(a & b) | a")
-
+          >>> minimize_espresso("bool_function.txt", "minimized_function.txt" )
+          >>> minimize_espresso("var = (a & b) | a;")
+          >>> minimize_espresso("var = 1")
+          >>> minimize_espresso("(a & b) | a")
     """
 
     if os.path.isfile(expression):

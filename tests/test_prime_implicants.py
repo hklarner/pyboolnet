@@ -134,7 +134,7 @@ def test_input_combinations1():
 def test_input_combinations2():
     primes = bnet2primes("v1, v2 \n v2, v1")
 
-    assert list(input_combinations(primes)) == []
+    assert list(input_combinations(primes)) == [{}]
 
 
 def test_copy():
