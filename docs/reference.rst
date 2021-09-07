@@ -4,6 +4,10 @@ Reference
 =========
 
 
-.. toctree::
+.. autosummary::
+    :toctree: modules
 
-    module_prime_implicants
+    pyboolnet.prime_implicants
+    pyboolnet.interaction_graphs
+
+

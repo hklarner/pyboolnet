@@ -48,9 +48,11 @@ $ pyboolnet -h
  * [pyboolnet/repository](https://github.com/hklarner/pyboolnet/tree/master/pyboolnet/repository)
 
 
-## Migration guide from 2 to 3
+## Migration guide
+The migration guide for PyBoolNet2 to pyboolnet3 is here:
 
- * [pyboolnet/MIGRATION_GUIDE_2_to_3.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE_2_to_3.md)
+ * [pyboolnet/MIGRATION_GUIDE.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE.md)
+
 
 ## Contributions
 - send pull requests to the `develop` branch
