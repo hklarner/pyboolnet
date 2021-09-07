@@ -59,7 +59,7 @@ def percolate_trapspace(primes: dict, trap_space: dict):
         {'Raf': 1, 'Mek': 0, 'Erk': 0}
     """
     
-    primes = create_constants(primes, trap_space, in_place=True)
+    primes = create_constants(primes, trap_space, copy=True)
     constants = percolate_and_keep_constants(primes)
     
     return constants

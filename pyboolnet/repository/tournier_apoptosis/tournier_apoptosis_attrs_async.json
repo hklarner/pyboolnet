@@ -20,7 +20,7 @@
                 "str": "000101010000", 
                 "prop": "!A20a&!C3a&!C8a&CARP&!FLIP&IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "T2": 0, 
@@ -62,7 +62,7 @@
                 "str": "011000010000", 
                 "prop": "!A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&!NFkB&!NFkBnuc&!T2&!TNF"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "T2": 0, 
@@ -104,7 +104,7 @@
                 "str": "111000011101", 
                 "prop": "A20a&C3a&C8a&!CARP&!FLIP&!IAP&!IKKa&IkB&NFkB&NFkBnuc&!T2&TNF"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "CARP": 0, 

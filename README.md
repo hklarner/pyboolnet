@@ -6,7 +6,6 @@ The accompanying paper was published with [Bioinformatics](https://academic.oup.
 
  * https://doi.org/10.1093/bioinformatics/btw682
 
-
 For report bugs, request features and give feedback at [issues](http://github.com/hklarner/PyBoolNet/issues) or contact
 
  * hannes.klarner@fu-berlin.de (developer)
@@ -38,7 +37,7 @@ pip3 install git+https://github.com/hklarner/pyboolnet@2.31.0
 ```
 
 For release notes, see
- 
+
  * [pyboolnet/releasenotes.md](https://github.com/hklarner/pyboolnet/blob/master/RELEASENOTES.md)
  
 ## Command line tool
@@ -47,6 +46,11 @@ $ pyboolnet -h
 ```
 
  * [pyboolnet/repository](https://github.com/hklarner/pyboolnet/tree/master/pyboolnet/repository)
+
+
+## Migration guide from 2 to 3
+
+ * [pyboolnet/MIGRATION_GUIDE_2_to_3.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE_2_to_3.md)
 
 ## Contributions
 - send pull requests to the `develop` branch

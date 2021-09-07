@@ -144,7 +144,7 @@ def find_constants(primes: dict) -> Dict[str, int]:
     return constants
 
 
-def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = True) -> Optional[dict]:
+def create_constants(primes: dict, constants: Dict[str, int], copy: bool = False) -> Optional[dict]:
     """
     Creates a constant in *primes* for every name, value pair in *constants*.
     Names that already exist in *primes* are overwritten.
@@ -155,14 +155,14 @@ def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = T
         * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *copy ==True*
+        * *new_primes* if *copy == True*
 
     **example**::
 
         >>> create_constants(primes, {"p53":1, "p21":0})
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes=primes)
 
     for name, value in constants.items():
@@ -171,11 +171,11 @@ def create_constants(primes: dict, constants: Dict[str, int], in_place: bool = T
         else:
             primes[name] = CONSTANT_OFF
 
-    if not in_place:
+    if copy:
         return primes
 
 
-def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
+def create_inputs(primes: dict, names: List[str], copy: bool = False) -> Optional[dict]:
     """
     Creates an input for every member of *names*.
     Variables that already exist in *primes* are overwritten.
@@ -194,10 +194,10 @@ def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Opti
     **arguments**:
         * *primes*: prime implicants
         * *names*: variables to become constants
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -205,18 +205,18 @@ def create_inputs(primes: dict, names: List[str], in_place: bool = True) -> Opti
         >>> create_inputs(primes, names)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     for name in names:
         primes[name][0] = [{name: 1}]
         primes[name][1] = [{name: 0}]
 
-    if not in_place:
+    if copy:
         return primes
 
 
-def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
+def create_blinkers(primes: dict, names: List[str], copy: bool = False) -> Optional[dict]:
     """
     Creates a blinker for every member of *names*.
     Variables that alrerady exist in *primes* are overwritten.
@@ -241,10 +241,10 @@ def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Op
     **arguments**:
         * *primes*: prime implicants
         * *names*: variables to become blinkers
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == True*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -252,18 +252,18 @@ def create_blinkers(primes: dict, names: List[str], in_place: bool = True) -> Op
         >>> create_blinkers(primes, names)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     for name in names:
         primes[name][0] = [{name:1}]
         primes[name][1] = [{name:0}]
 
-    if not in_place:
+    if copy:
         return primes
 
 
-def create_variables(primes: dict, update_functions: Dict[str, Union[callable, str]], in_place: bool = True) -> Optional[dict]:
+def create_variables(primes: dict, update_functions: Dict[str, Union[callable, str]], copy: bool = False) -> Optional[dict]:
     """
     Creates the variables defined in *update_functions* and add them to *primes*.
     Variables that already exist in *primes* are overwritten.
@@ -273,10 +273,10 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
     **arguments**:
         * *primes*: prime implicants
         * *update_functions*: a dictionary of names and update functions
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -289,7 +289,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
         C, A&!B
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     new_primes = {}
@@ -313,7 +313,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
 
     primes.update(new_primes)
 
-    if not in_place:
+    if copy:
         return primes
 
 
@@ -353,7 +353,7 @@ def create_disjoint_union(primes1: dict, primes2: dict) -> dict:
     return new_primes
 
 
-def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
+def remove_variables(primes: dict, names: List[str], copy: bool = False) -> Optional[dict]:
     """
     Removes all variables contained in *names* from *primes*.
     Members of *names* that are not in *primes* are ignored.
@@ -363,10 +363,10 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
     **arguments**:
         * *primes*: prime implicants
         * *names*: the names of variables to remove
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -374,7 +374,7 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
         >>> remove_variables(primes, names)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     digraph = _primes2signed_digraph(primes)
@@ -386,11 +386,11 @@ def remove_variables(primes: dict, names: List[str], in_place: bool = True) -> O
         for name in names:
             primes.pop(name)
 
-    if not in_place:
+    if copy:
         return primes
 
 
-def remove_all_variables_except(primes: dict, names: List[str], in_place: bool = True) -> Optional[dict]:
+def remove_all_variables_except(primes: dict, names: List[str], copy: bool = False) -> Optional[dict]:
     """
     Removes all variables except those in *names* from *primes*.
     Members of *names* that are not in *primes* are ignored.
@@ -400,10 +400,10 @@ def remove_all_variables_except(primes: dict, names: List[str], in_place: bool =
     **arguments**:
         * *primes*: prime implicants
         * *names*: the names of variables to keep
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -411,11 +411,12 @@ def remove_all_variables_except(primes: dict, names: List[str], in_place: bool =
         >>> remove_all_variables_except(primes, names)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes=primes)
 
     digraph = _primes2signed_digraph(primes)
     hit = [x for x in predecessors(digraph=digraph, node_or_nodes=names) if x not in names]
+
     if hit:
         log.error(f"cannot remove variables that are not closed under the predecessor operation: variables={hit}")
         sys.exit()
@@ -425,11 +426,11 @@ def remove_all_variables_except(primes: dict, names: List[str], in_place: bool =
             if name not in names:
                 primes.pop(name)
 
-    if not in_place:
+    if copy:
         return primes
 
 
-def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool = True) -> Optional[dict]:
+def rename_variable(primes: dict, old_name: str, new_name: str, copy: bool = False) -> Optional[dict]:
     """
     Renames a single component, i.e., replace every occurence of *old_name* with *new_name*.
     Throws an exception if *new_name* is already contained in *primes*.
@@ -438,10 +439,10 @@ def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool =
         * *primes*: prime implicants
         * *old_name*: the old name of the component
         * *new_name*: the new name of the component
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
@@ -449,7 +450,7 @@ def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool =
         >>> remove_all_variables_except(primes, names)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     if old_name==new_name:
@@ -467,7 +468,7 @@ def rename_variable(primes: dict, old_name: str, new_name: str, in_place: bool =
                     if old_name in prime:
                         prime[new_name] = prime.pop(old_name)
 
-    if not in_place:
+    if copy:
         return primes
 
 
@@ -500,7 +501,7 @@ def _substitute(primes: dict, name: str, constants: Dict[str, int]):
         primes[name][value] = new_primes
 
 
-def substitute_and_remove(primes, names, in_place: bool = True):
+def substitute_and_remove(primes, names, copy: bool = False):
     """
     Substitutes the values of all *names* to its successors and then removes them.
     Checks that *names* are a subset of constants.
@@ -509,17 +510,17 @@ def substitute_and_remove(primes, names, in_place: bool = True):
     **arguments**:
         * *primes*: prime implicants
         * *names*: variables to be substituted and removed
-        * *in_place*: change *primes* in place or copy and return
+        * *copy*: change *primes* in place or copy and return
 
     **returns**:
-        * *new_primes* if *in_place == False*
+        * *new_primes* if *copy == True*
 
     **example**::
 
         >>> substitute_and_remove(primes)
     """
 
-    if not in_place:
+    if copy:
         primes = copy_primes(primes)
 
     constants = find_constants(primes)
@@ -538,7 +539,7 @@ def substitute_and_remove(primes, names, in_place: bool = True):
     for x in names:
         primes.pop(x)
 
-    if not in_place:
+    if copy:
         return primes
 
 
@@ -648,7 +649,7 @@ def input_combinations(primes: dict, format: str = "dict") -> Union[List[str], L
         1--1--
     """
 
-    if not format in ["str", "dict"]:
+    if format not in ["str", "dict"]:
         log.error(f"format must be in ['str', 'dict']: format={format}")
         sys.exit()
 
@@ -657,12 +658,12 @@ def input_combinations(primes: dict, format: str = "dict") -> Union[List[str], L
     subspaces = []
     if inputs:
         if format == "dict":
-            for x in itertools.product(*len(inputs)*[[0,1]]):
-                subspaces.append(dict(zip(inputs,x)))
+            for x in itertools.product(*len(inputs) * [[0, 1]]):
+                subspaces.append(dict(zip(inputs, x)))
 
         else:
-            for x in itertools.product(*len(inputs)*[[0,1]]):
-                x = dict(zip(inputs,x))
+            for x in itertools.product(*len(inputs) * [[0, 1]]):
+                x = dict(zip(inputs, x))
                 x = subspace2str(primes, x)
                 subspaces.append(x)
 

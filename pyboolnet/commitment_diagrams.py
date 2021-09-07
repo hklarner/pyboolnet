@@ -53,8 +53,8 @@ def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = No
 
     subspaces = []
     for x in attractors["attractors"]:
-        if x["mintrapspace"]["is_univocal"] and x["mintrapspace"]["is_faithful"]:
-            subspaces.append(x["mintrapspace"]["dict"])
+        if x["min_trap_space"]["is_univocal"] and x["min_trap_space"]["is_faithful"]:
+            subspaces.append(x["min_trap_space"]["dict"])
         else:
             subspaces.append(x["state"]["dict"])
 

@@ -13,15 +13,15 @@ def test_check_acceptingstates():
     init = "INIT TRUE"
     update = "asynchronous"
     primes2smv(primes, update, init, spec, fname_out)
-    answer, accepting = model_checking_smv_file(fname_out, enable_accepting_states=True)
+    answer, accepting_states = model_checking_smv_file(fname_out, enable_accepting_states=True)
 
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
-    assert accepting == expected
+    assert accepting_states == expected
 
-    answer, accepting = model_checking(primes, update, init, spec, enable_accepting_states=True)
+    answer, accepting_states = model_checking(primes, update, init, spec, enable_accepting_states=True)
     expected = {"ACCEPTING_SIZE": 3, "INIT": "TRUE", "INIT_SIZE": 8, "INITACCEPTING_SIZE": 3, "INITACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))", "ACCEPTING": "!(Erk & (Mek) | !Erk & ((Raf) | !Mek))"}
 
-    assert accepting == expected
+    assert accepting_states == expected
 
 
 def test_check_smv_true():
@@ -88,3 +88,23 @@ def test_check_primes_mixed():
         enable_counterexample=True)
 
     assert counterexample == expected
+
+
+def test_counterexample_and_accepting_states():
+    primes = {"v1": [[{"v1": 0, "v3": 1}, {"v1": 0, "v2": 1}], [{"v2": 0, "v3": 0}, {"v1": 1}]],
+              "v2": [[{"v3": 1}, {"v1": 0}], [{"v1": 1, "v3": 0}]],
+              "v3": [[{"v1": 1, "v2": 0, "v3": 0}], [{"v3": 1}, {"v2": 1}, {"v1": 0}]]}
+    expected_counterexample = ({"v1": 0, "v2": 1, "v3": 0}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}, {"v1": 1, "v2": 0, "v3": 1})
+    expected_accepting_states = {"ACCEPTING": "!(v1 | !(v3))", "ACCEPTING_SIZE": 2, "INIT": "!(v1 | ((v3) | !v2))", "INITACCEPTING": "FALSE", "INITACCEPTING_SIZE": 0, "INIT_SIZE": 1}
+
+    answer, counterexample, accepting_states = model_checking(
+        primes=primes, update="mixed",
+        initial_states="INIT !v1&v2&!v3",
+        specification="CTLSPEC AF(!v1&!v2&v3)",
+        dynamic_reorder=True,
+        disable_reachable_states=False,
+        enable_counterexample=True,
+        enable_accepting_states=True)
+
+    assert counterexample == expected_counterexample
+    assert accepting_states == expected_accepting_states

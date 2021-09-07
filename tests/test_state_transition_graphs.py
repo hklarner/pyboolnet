@@ -1,20 +1,18 @@
 
 
-import os
-
 import pyboolnet.state_space
 from pyboolnet.file_exchange import bnet2primes, read_primes
 from pyboolnet.repository import get_primes
+from pyboolnet.state_space import find_vanham_variables
 from pyboolnet.state_space import random_state
 from pyboolnet.state_transition_graphs import add_style_tendencies, stg2image, add_style_sccs
 from pyboolnet.state_transition_graphs import condensationgraph2image, stg2condensationgraph
 from pyboolnet.state_transition_graphs import energy, primes2stg, best_first_reachability, stg2dot
-from pyboolnet.state_transition_graphs import find_vanham_variables
 from pyboolnet.state_transition_graphs import htg2image, stg2htg
 from pyboolnet.state_transition_graphs import random_successor_mixed, successor_synchronous, successors_mixed
-from pyboolnet.state_transition_graphs import successors_asynchronous
 from pyboolnet.state_transition_graphs import random_walk, add_style_path, stg2sccgraph
 from pyboolnet.state_transition_graphs import sccgraph2image
+from pyboolnet.state_transition_graphs import successors_asynchronous
 from tests.helpers import get_tests_path_in, get_tests_path_out
 
 

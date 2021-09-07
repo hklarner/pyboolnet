@@ -31,7 +31,7 @@
                 "str": "00010000000000011100010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -95,7 +95,7 @@
                 "str": "00010000000000011110010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -159,7 +159,7 @@
                 "str": "00010000000010011100010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -223,7 +223,7 @@
                 "str": "00010000000010011110010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -287,7 +287,7 @@
                 "str": "00010000010000011100010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -351,7 +351,7 @@
                 "str": "00010000010000011110010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -415,7 +415,7 @@
                 "str": "00010000010010011100010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -479,7 +479,7 @@
                 "str": "00010000010010011110010", 
                 "prop": "!AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -543,7 +543,7 @@
                 "str": "01100001000111100010101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -599,7 +599,7 @@
                 "str": "01100001110101100010101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&GSK3B&!GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -655,7 +655,7 @@
                 "str": "01100101101101100001101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -711,7 +711,7 @@
                 "str": "01101000110111100000101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -767,7 +767,7 @@
                 "str": "01101101101111100001101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -823,7 +823,7 @@
                 "str": "01111100101101100011101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -879,7 +879,7 @@
                 "str": "01111100111111100011101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -935,7 +935,7 @@
                 "str": "01111101111101100001101", 
                 "prop": "!AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -991,7 +991,7 @@
                 "str": "10010000000000011100010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1055,7 +1055,7 @@
                 "str": "10010000000000011110010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1119,7 +1119,7 @@
                 "str": "10010000000010011100010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1183,7 +1183,7 @@
                 "str": "10010000000010011110010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&!GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1247,7 +1247,7 @@
                 "str": "10010000010000011100010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1311,7 +1311,7 @@
                 "str": "10010000010000011110010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&!MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1375,7 +1375,7 @@
                 "str": "10010000010010011100010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&!STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1439,7 +1439,7 @@
                 "str": "10010000010010011110010", 
                 "prop": "AJUBA&!AURKAActive&!AURKAPresent&BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&!MT&MTCanAct&!NEDD9&!PLK1&PP1&PP2A&STMN&STMNCanAct&!SpindleAssembly&!TPX2&WEE1&!hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "AURKAPresent": 0, 
@@ -1503,7 +1503,7 @@
                 "str": "11100000010111100010101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&!GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1559,7 +1559,7 @@
                 "str": "11100000011101100010101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&!CDC25B&!CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&!ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1615,7 +1615,7 @@
                 "str": "11101110101111100001101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&!BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1671,7 +1671,7 @@
                 "str": "11111100111101100001101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1727,7 +1727,7 @@
                 "str": "11111100111111100000101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&!CentrosomeMat&!Cytokinesis&ENSA&GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1783,7 +1783,7 @@
                 "str": "11111110101101100001101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&!STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1839,7 +1839,7 @@
                 "str": "11111110101101100010101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&!MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&!SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 
@@ -1895,7 +1895,7 @@
                 "str": "11111110101111100011101", 
                 "prop": "AJUBA&AURKAActive&AURKAPresent&BORA&CDC25B&CDK1CCNBComplex&CentrosomeMat&!Cytokinesis&ENSA&!GSK3B&GWL_MASTL&MT&MTCanAct&NEDD9&PLK1&!PP1&!PP2A&!STMN&STMNCanAct&SpindleAssembly&TPX2&!WEE1&hCPEB"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "NEDD9": 1, 

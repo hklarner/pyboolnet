@@ -61,7 +61,7 @@
                 "str": "00000000000000000000000000000000000000000000000000000", 
                 "prop": "!AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&!GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&!MDM2&!MEK1_2&!MSK&!MTK1&!MYC&!PDK1&!PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -185,7 +185,7 @@
                 "str": "01101010100100001011111111001111100110110110101111110", 
                 "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -309,7 +309,7 @@
                 "str": "01101010100100101011111111001111100110110110101111110", 
                 "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -433,7 +433,7 @@
                 "str": "01101010101100001011111111001111100110110110101111110", 
                 "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -557,7 +557,7 @@
                 "str": "01101010101100101011111111001111100110110110101111110", 
                 "prop": "!AKT&AP1&ATF2&!ATM&Apoptosis&!BCL2&CREB&!DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&!TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -681,7 +681,7 @@
                 "str": "01111011100100001001011101001110000110000000010011110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&!GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&!PDK1&!PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -805,7 +805,7 @@
                 "str": "01111011100100001011011101001111100110000000010011110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -929,7 +929,7 @@
                 "str": "01111011100100001011111111001111100110110110111111110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -1053,7 +1053,7 @@
                 "str": "01111011100100101011111111001111100110110110111111110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -1177,7 +1177,7 @@
                 "str": "01111011100101101011011101001111100110100000010011110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&!MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -1292,7 +1292,7 @@
                 "str": "01111011101100001011011111001111100110000000010011110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -1408,7 +1408,7 @@
                 "str": "01111011101100001011111111001111100110110110111111110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -1532,7 +1532,7 @@
                 "str": "01111011101100101011011111001111110110110000010011110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&!GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&TAOK&!TGFBR&!TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -1646,7 +1646,7 @@
                 "str": "01111011101100101011111111001111100110110110111111110", 
                 "prop": "!AKT&AP1&ATF2&ATM&Apoptosis&!BCL2&CREB&DNA_damage&DUSP1&!EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&FOXO3&!FRS2&GAB1&GADD45&GRB2&Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&MTK1&MYC&PDK1&PI3K&!PKC&!PLCG&PPP2CA&PTEN&!Proliferation&RAF&RAS&!RSK&SMAD&SOS&!SPRY&TAK1&TAOK&TGFBR&TGFBR_stimulus&p14&p21&p38&p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 1, 
@@ -1770,7 +1770,7 @@
                 "str": "10000000000000000010000000100001100000000000000000000", 
                 "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&!ELK1&!ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&!JNK&!JUN&!MAP3K1_3&!MAX1&MDM2&!MEK1_2&!MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&!p38&!p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -1894,7 +1894,7 @@
                 "str": "10000110111100100010100011001011101100010010000010100", 
                 "prop": "AKT&!AP1&!ATF2&!ATM&!Apoptosis&BCL2&CREB&!DNA_damage&DUSP1&EGFR&EGFR_stimulus&ELK1&!ERK&!FGFR3&FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&GRB2&!Growth_Arrest&!JNK&!JUN&MAP3K1_3&MAX1&!MDM2&!MEK1_2&MSK&!MTK1&MYC&PDK1&PI3K&!PKC&PLCG&PPP2CA&!PTEN&!Proliferation&!RAF&RAS&!RSK&!SMAD&SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&p14&!p21&p38&!p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -1977,7 +1977,7 @@
                 "str": "10100000001010000010100010111001100000010010000000100", 
                 "prop": "AKT&!AP1&ATF2&!ATM&!Apoptosis&!BCL2&!CREB&!DNA_damage&!DUSP1&!EGFR&EGFR_stimulus&!ELK1&ERK&!FGFR3&!FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&GRB2&!Growth_Arrest&!JNK&!JUN&MAP3K1_3&!MAX1&MDM2&MEK1_2&MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&!PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&RAS&!RSK&!SMAD&SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&p38&!p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 
@@ -2062,7 +2062,7 @@
                 "str": "11100010000101100010001111101001101000000000000000100", 
                 "prop": "AKT&AP1&ATF2&!ATM&!Apoptosis&!BCL2&CREB&!DNA_damage&!DUSP1&!EGFR&!EGFR_stimulus&ELK1&!ERK&FGFR3&FGFR3_stimulus&!FOS&!FOXO3&!FRS2&GAB1&!GADD45&!GRB2&!Growth_Arrest&JNK&JUN&MAP3K1_3&MAX1&MDM2&!MEK1_2&MSK&!MTK1&!MYC&PDK1&PI3K&!PKC&PLCG&!PPP2CA&!PTEN&!Proliferation&!RAF&!RAS&!RSK&!SMAD&!SOS&!SPRY&!TAK1&!TAOK&!TGFBR&!TGFBR_stimulus&!p14&!p21&p38&!p53&!p70"
             }, 
-            "mintrapspace": {
+            "min_trap_space": {
                 "is_faithful": "yes", 
                 "dict": {
                     "TAK1": 0, 

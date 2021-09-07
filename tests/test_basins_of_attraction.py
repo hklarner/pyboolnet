@@ -43,13 +43,15 @@ def test_compute_basins():
 def test_create_basins_of_attraction_barplot():
     primes = get_primes("n5s3")
     attractors = compute_attractors(primes, update="asynchronous")
-    fname_image = get_tests_path_out(fname="basins_of_attraction_barplot")
+    compute_basins(attractors)
+    fname_image = get_tests_path_out(fname="basins_of_attraction_barplot.pdf")
     create_basins_of_attraction_barplot(attractors, fname_image=fname_image)
 
 
 def test_create_basins_piechart():
     primes = get_primes("n5s3")
     attractors = compute_attractors(primes, update="asynchronous")
+    compute_basins(attractors)
     fname_image = get_tests_path_out(fname="basins_piechart")
     create_basins_piechart(attractors, fname_image=fname_image)
 

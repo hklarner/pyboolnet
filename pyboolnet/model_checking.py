@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 import tempfile
-from typing import List, Optional
+from typing import Tuple, Optional
 
 from pyboolnet import find_command, NUSMV_KEYWORDS
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
@@ -164,8 +164,7 @@ def model_checking_smv_file(
             log.error(f"nusmv output not recognized: cmd={cmd_text}, output={output}, error={error}")
             sys.exit()
     else:
-        log.error(
-            f"nusmv did not respond with return code 0: cmd={cmd_text}, return_code={process.returncode} output={output}, error={error}")
+        log.error(f"nusmv did not respond with return code 0: cmd={cmd_text}, return_code={process.returncode} output={output}, error={error}")
         sys.exit()
 
     if not enable_counterexample and not enable_accepting_states:
@@ -178,10 +177,10 @@ def model_checking_smv_file(
         result.append(counterexample)
 
     if enable_accepting_states:
-        accepting = _read_accepting_states(nusmv_output=output)
-        result.append(accepting)
+        accepting_states = _read_accepting_states(nusmv_output=output)
+        result.append(accepting_states)
 
-    return tuple(result)
+    return result
 
 
 def primes2smv(primes: dict, update: str, initial_states, specification: str, fname_smv: Optional[str] = None) -> str:
@@ -355,7 +354,7 @@ def primes2smv(primes: dict, update: str, initial_states, specification: str, fn
     return text_smv
 
 
-def _read_counterexample(nusmv_output: str) -> Optional[List[dict]]:
+def _read_counterexample(nusmv_output: str) -> Optional[Tuple[dict, ...]]:
     """
     Converts the output of a NuSMV call into a sequence of states that proves that the query is false.
 
@@ -400,7 +399,7 @@ def _read_counterexample(nusmv_output: str) -> Optional[List[dict]]:
             counterexample.append(state)
             last_state = state
 
-    return counterexample
+    return tuple(counterexample)
 
 
 def _read_number(line: str):

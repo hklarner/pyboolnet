@@ -45,7 +45,6 @@ def test_activities2animation():
     fname_out2 = get_tests_path_out(fname="irma.gif")
     primes = read_primes(fname_json=fname_in)
     igraph = primes2igraph(primes)
-
     activities = [{"gal": 0, "Cbf1": 1, "Gal80": 1, "Ash1": 0, "Gal4": 0, "Swi5": 1},
                   {"gal": 1, "Cbf1": 1, "Gal80": 1, "Ash1": 0, "Gal4": 0, "Swi5": 1},
                   {"gal": 1, "Cbf1": 0, "Gal80": 1, "Ash1": 0, "Gal4": 0, "Swi5": 1},
@@ -62,45 +61,59 @@ def test_primes2igraph1():
     fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
     igraph = primes2igraph(primes=primes)
-    nodes_edges = sorted(igraph.nodes()) + sorted(igraph.edges())
-    expected = ["Ash1", "Cbf1", "Gal4", "Gal80", "Swi5", "gal", ("Ash1", "Cbf1"), ("Cbf1", "Ash1"), ("Gal4", "Swi5"),
-                ("Gal80", "Gal4"), ("Swi5", "Gal4"), ("gal", "Ash1"), ("gal", "Gal80"), ("gal", "gal")]
 
-    assert nodes_edges == expected
+    nodes = sorted(igraph.nodes())
+    expected_nodes = ["Ash1", "Cbf1", "Gal4", "Gal80", "Swi5", "gal"]
+    assert nodes == expected_nodes
+
+    edges = sorted(igraph.edges())
+    expected_edges = [("Ash1", "Cbf1"), ("Cbf1", "Ash1"), ("Gal4", "Swi5"), ("Gal80", "Gal4"), ("Swi5", "Gal4"), ("gal", "Ash1"), ("gal", "Gal80"), ("gal", "gal")]
+    assert edges == expected_edges
 
 
 def test_primes2igraph2():
     fname_in = get_tests_path_in(fname="interactiongraphs_irma.primes")
     primes = read_primes(fname_json=fname_in)
     igraph = primes2igraph(primes=primes)
-    nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
-    expected = [("Ash1", {}), ("Cbf1", {}), ("Gal4", {}), ("Gal80", {}), ("Swi5", {}), ("gal", {}),
-                ("Ash1", "Cbf1", {"sign": {1}}), ("Cbf1", "Ash1", {"sign": {1}}), ("Gal4", "Swi5", {"sign": {-1}}),
-                ("Gal80", "Gal4", {"sign": {1}}), ("Swi5", "Gal4", {"sign": {-1}}), ("gal", "Ash1", {"sign": {1}}),
-                ("gal", "Gal80", {"sign": {-1}}), ("gal", "gal", {"sign": {1}})]
 
-    assert nodes_edges == expected
+    nodes = sorted(igraph.nodes(data=True))
+    expected_nodes = [("Ash1", {}), ("Cbf1", {}), ("Gal4", {}), ("Gal80", {}), ("Swi5", {}), ("gal", {})]
+    assert nodes == expected_nodes
+
+    edges = sorted(igraph.edges(data=True))
+    expected_edges = [
+        ("Ash1", "Cbf1", {"sign": {1}}), ("Cbf1", "Ash1", {"sign": {1}}), ("Gal4", "Swi5", {"sign": {-1}}),
+        ("Gal80", "Gal4", {"sign": {1}}), ("Swi5", "Gal4", {"sign": {-1}}), ("gal", "Ash1", {"sign": {1}}),
+        ("gal", "Gal80", {"sign": {-1}}), ("gal", "gal", {"sign": {1}})]
+    assert edges == expected_edges
 
 
 def test_primes2igraph3():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{}], []], "C": [[{"B": 0}], [{"B": 1}]]}
     igraph = primes2igraph(primes=primes)
-    nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
-    expected = [("A", {}), ("B", {}), ("C", {}),
-                ("A", "A", {"sign": {1}}), ("B", "C", {"sign": {1}})]
 
-    assert nodes_edges == expected, sorted(igraph.nodes(data=True))+sorted(igraph.edges(data=True))
+    nodes = sorted(igraph.nodes(data=True))
+    expected_nodes = [("A", {}), ("B", {}), ("C", {})]
+    assert nodes == expected_nodes
+
+    edges = sorted(igraph.edges(data=True))
+    expected_edges = [("A", "A", {"sign": {1}}), ("B", "C", {"sign": {1}})]
+    assert edges == expected_edges
 
 
 def test_primes2igraph4():
-    primes = {"A": [[{}], []], "B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 1}], [{"C": 0}]],
-              "D": [[{"B": 0, "C": 0}, {"B": 1, "C": 1}], [{"B": 1, "C": 0}, {"B": 0, "C": 1}]]}
+    primes = {
+        "A": [[{}], []], "B": [[{"B": 0}], [{"B": 1}]], "C": [[{"C": 1}], [{"C": 0}]],
+        "D": [[{"B": 0, "C": 0}, {"B": 1, "C": 1}], [{"B": 1, "C": 0}, {"B": 0, "C": 1}]]}
     igraph = primes2igraph(primes=primes)
-    nodes_edges = sorted(igraph.nodes(data=True)) + sorted(igraph.edges(data=True))
-    expected = [("A", {}), ("B", {}), ("C", {}), ("D", {}), ("B", "B", {"sign": {1}}),
-                ("B", "D", {"sign": {1, -1}}), ("C", "C", {"sign": {-1}}), ("C", "D", {"sign": {1, -1}})]
 
-    assert nodes_edges == expected, sorted(igraph.nodes(data=True))+sorted(igraph.edges(data=True))
+    nodes = sorted(igraph.nodes(data=True))
+    expected_nodes = [("A", {}), ("B", {}), ("C", {}), ("D", {})]
+    assert nodes == expected_nodes
+
+    edges = sorted(igraph.edges(data=True))
+    expected_edges = [("B", "B", {"sign": {1}}), ("B", "D", {"sign": {1, -1}}), ("C", "C", {"sign": {-1}}), ("C", "D", {"sign": {1, -1}})]
+    assert edges == expected_edges
 
 
 def test_igraph2dot():

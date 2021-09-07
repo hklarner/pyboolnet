@@ -3,11 +3,11 @@
 import pytest
 
 from pyboolnet.file_exchange import primes2eqn, primes2bnet, read_primes, write_primes
-from pyboolnet.file_exchange import primes2genysis, primes2bns
+from pyboolnet.file_exchange import primes2genysis, primes2bns, bnet2primes
 from pyboolnet.model_checking import primes2smv
-from pyboolnet.prime_implicants import bnet2primes, primes_are_equal
+from pyboolnet.prime_implicants import primes_are_equal
 from pyboolnet.repository import get_primes
-from pyboolnet.trap_spaces import primes2asp
+from pyboolnet.external.potassco import primes2asp
 from tests.helpers import get_tests_path_in, get_tests_path_out
 
 

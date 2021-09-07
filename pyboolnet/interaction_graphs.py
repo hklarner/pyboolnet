@@ -73,6 +73,9 @@ def primes2igraph(primes: dict) -> networkx.DiGraph:
     igraph = create_empty_igraph(primes)
     digraph = _primes2signed_digraph(primes)
 
+    for node in digraph:
+        igraph.add_node(node)
+
     for s, t, data in digraph.edges(data=True):
         igraph.add_edge(s, t, sign=data["sign"])
 

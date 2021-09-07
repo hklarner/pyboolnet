@@ -6,8 +6,7 @@ import sys
 
 from pyboolnet.helpers import read_nusmv_keywords_or_exit, read_executables
 from pyboolnet.version import read_version_txt
-
-logging.basicConfig(format="%(levelname)s %(message)s", stream=sys.stdout, level=logging.INFO)
+from pyboolnet.logger import ColorFormatter
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 VERSION = read_version_txt()
@@ -19,6 +18,7 @@ GRAPHVIZ_LAYOUT_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
 EXECUTABLES = read_executables()
 
+logging.basicConfig(format="%(levelname)s %(message)s", stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
@@ -34,6 +34,9 @@ def find_command(name: str) -> str:
         else:
             cmd = os.path.normpath(os.path.join(ROOT_DIR, "binaries", cmd))
     else:
-        log.warning(f"unknown command: {name}")
+        log.warning(f"unknown command: name={name}")
         cmd = name
+
+    log.info(f"you called find_command: name={name}")
+
     return cmd

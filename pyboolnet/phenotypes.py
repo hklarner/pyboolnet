@@ -65,8 +65,8 @@ def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optiona
     """
 
     assert attractors["is_complete"] == "yes"
-    assert all(x["mintrapspace"]["is_univocal"] for x in attractors["attractors"])
-    assert all(x["mintrapspace"]["is_faithful"] for x in attractors["attractors"])
+    assert all(x["min_trap_space"]["is_univocal"] for x in attractors["attractors"])
+    assert all(x["min_trap_space"]["is_faithful"] for x in attractors["attractors"])
 
     primes = copy_primes(attractors["primes"])
 
@@ -88,13 +88,13 @@ def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optiona
             "prop": str(attr["state"]["prop"]),
             "is_steady": bool(attr["is_steady"]),
             "is_cyclic": bool(attr["is_cyclic"]),
-            "mintrapspace": {
-                "str": str(attr["mintrapspace"]["str"]),
-                "dict": dict(attr["mintrapspace"]["dict"]),
-                "prop": str(attr["mintrapspace"]["prop"])
+            "min_trap_space": {
+                "str": str(attr["min_trap_space"]["str"]),
+                "dict": dict(attr["min_trap_space"]["dict"]),
+                "prop": str(attr["min_trap_space"]["prop"])
             }}
 
-        pattern = "".join(str(attr["mintrapspace"]["dict"][x]) if x in attr["mintrapspace"]["dict"] else "-" for x in markers)
+        pattern = "".join(str(attr["min_trap_space"]["dict"][x]) if x in attr["min_trap_space"]["dict"] else "-" for x in markers)
 
         if pattern in seen_patterns:
             for pheno in phenos["phenotypes"]:
@@ -112,14 +112,14 @@ def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optiona
 
             i += 1
             pheno["pattern"] = pattern
-            pheno["activated_markers"] = sorted(x for x in markers if (x, 1) in attr["mintrapspace"]["dict"].items())
-            pheno["inhibited_markers"] = sorted(x for x in markers if (x, 0) in attr["mintrapspace"]["dict"].items())
-            pheno["oscillating_markers"] = sorted(x for x in markers if x not in attr["mintrapspace"]["dict"])
+            pheno["activated_markers"] = sorted(x for x in markers if (x, 1) in attr["min_trap_space"]["dict"].items())
+            pheno["inhibited_markers"] = sorted(x for x in markers if (x, 0) in attr["min_trap_space"]["dict"].items())
+            pheno["oscillating_markers"] = sorted(x for x in markers if x not in attr["min_trap_space"]["dict"])
             pheno["states"] = [state]
             phenos["phenotypes"].append(pheno)
 
     for pheno in phenos["phenotypes"]:
-        pheno["states"] = tuple(sorted(pheno["states"], key=lambda x: x["mintrapspace"]["str"]))
+        pheno["states"] = tuple(sorted(pheno["states"], key=lambda x: x["min_trap_space"]["str"]))
         pheno["stateformula"] = f"({' | '.join(x['prop'] for x in pheno['states'])})"
 
     if fname_json:

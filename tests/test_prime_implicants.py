@@ -15,7 +15,7 @@ from pyboolnet.prime_implicants import create_blinkers, active_primes
 @pytest.mark.parametrize("copy", [True, False])
 def test_remove_variables(copy):
     primes = bnet2primes("v1, v1 \n v2, v1")
-    x = remove_variables(primes, ["v2"], in_place=copy)
+    x = remove_variables(primes, ["v2"], copy=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]]}
@@ -24,17 +24,17 @@ def test_remove_variables(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_remove_all_variables_except(copy):
     primes = bnet2primes("v1, v1 \n v2, v1")
-    x = remove_all_variables_except(primes, ["v1"], in_place=copy)
+    x = remove_all_variables_except(primes, ["v1"], copy=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]]}
 
 
-@pytest.mark.parametrize("in_place", [True, False])
-def test_rename(in_place):
+@pytest.mark.parametrize("copy", [True, False])
+def test_rename(copy):
     primes = get_primes("raf")
-    x = rename_variable(primes, "Raf", "Raf23", in_place=in_place)
-    answer = x if not in_place else primes
+    x = rename_variable(primes, "Raf", "Raf23", copy=copy)
+    answer = x if copy else primes
     expected = {"Raf23": [[{"Raf23": 1, "Erk": 1}], [{"Raf23": 0}, {"Erk": 0}]], "Mek": [[{"Raf23": 0, "Erk": 0}, {"Mek": 0, "Erk": 0}], [{"Mek": 1, "Raf23": 1}, {"Erk": 1}]], "Erk": [[{"Raf23": 0, "Erk": 0}, {"Mek": 0}], [{"Mek": 1, "Raf23": 1}, {"Mek": 1, "Erk": 1}]]}
 
     assert answer == expected
@@ -54,14 +54,14 @@ def test_create_disjoint_union():
     primes1 = bnet2primes("A, B \n B, !A")
     primes2 = bnet2primes("C, B \n D, C")
 
-    with pytest.raises(Exception):
+    with pytest.raises(SystemExit):
         create_disjoint_union(primes1, primes2)
 
 
 @pytest.mark.parametrize("copy", [True, False])
 def test_remove_variables(copy):
     primes = bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = remove_variables(primes, ["A", "B", "C"], in_place=copy)
+    x = remove_variables(primes, ["A", "B", "C"], copy=copy)
     answer = x if copy else primes
 
     assert primes_are_equal({}, answer)
@@ -70,13 +70,13 @@ def test_remove_variables(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_remove_variables_except(copy):
     primes = bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = remove_variables(primes=primes, names=[], in_place=copy)
+    x = remove_variables(primes=primes, names=[], copy=copy)
     answer = x if copy else primes
 
     assert primes_are_equal(answer, primes)
 
     primes = bnet2primes("A, !C|B \n B, 0 \n C, 1")
-    x = remove_all_variables_except(primes=primes, names=["B", "C"], in_place=copy)
+    x = remove_all_variables_except(primes=primes, names=["B", "C"], copy=copy)
     answer = x if copy else primes
     expected = bnet2primes("B, 0 \n C, 1")
 
@@ -84,14 +84,14 @@ def test_remove_variables_except(copy):
 
     primes = bnet2primes("A, !C|B \n B, 0 \n C, 1")
 
-    with pytest.raises(Exception):
-        remove_variables(primes, ["B"], in_place=copy)
+    with pytest.raises(SystemExit):
+        remove_variables(primes, ["B"], copy=copy)
 
 
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables1(copy):
     primes = bnet2primes("v1, v1 \n v2, v1")
-    x = create_variables(primes, {"v1": "v2"}, in_place=copy)
+    x = create_variables(primes, {"v1": "v2"}, copy=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v2": 0}], [{"v2": 1}]], "v2": [[{"v1": 0}], [{"v1": 1}]]}
@@ -100,7 +100,7 @@ def test_create_variables1(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables2(copy):
     primes = bnet2primes("v1, v1 \n v2, v1")
-    x = create_variables(primes, {"v1": lambda v2: not v2}, in_place=copy)
+    x = create_variables(primes, {"v1": lambda v2: not v2}, copy=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v2": 1}], [{"v2": 0}]], "v2": [[{"v1": 0}], [{"v1": 1}]]}
@@ -109,7 +109,7 @@ def test_create_variables2(copy):
 @pytest.mark.parametrize("copy", [True, False])
 def test_create_variables3(copy):
     primes = bnet2primes("v1, v1 \n v2, v1")
-    x = create_variables(primes, {"v3": "v2", "v4": lambda v3: v3}, in_place=copy)
+    x = create_variables(primes, {"v3": "v2", "v4": lambda v3: v3}, copy=copy)
     answer = x if copy else primes
 
     assert answer == {"v1": [[{"v1": 0}], [{"v1": 1}]],  "v2": [[{"v1": 0}], [{"v1": 1}]],  "v3": [[{"v2": 0}], [{"v2": 1}]],  "v4": [[{"v3": 0}], [{"v3": 1}]]} 
@@ -117,7 +117,7 @@ def test_create_variables3(copy):
 
 def test_create_variables4():
     primes = bnet2primes("v1, v1 \n v2, v1")
-    with pytest.raises(Exception):
+    with pytest.raises(SystemExit):
         create_variables(primes, {"v3": "v4"})
 
 
@@ -134,7 +134,7 @@ def test_input_combinations1():
 def test_input_combinations2():
     primes = bnet2primes("v1, v2 \n v2, v1")
 
-    assert list(input_combinations(primes)) == [{}]
+    assert list(input_combinations(primes)) == []
 
 
 def test_copy():

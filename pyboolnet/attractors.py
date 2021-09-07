@@ -112,7 +112,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
         state_obj["prop"] = subspace2proposition(primes, state)
 
         attractor_obj = dict()
-        attractor_obj["min_trapspace"] = mints_obj
+        attractor_obj["min_trap_space"] = mints_obj
         attractor_obj["state"] = state_obj
         attractor_obj["is_steady"] = len(mints) == len(primes)
         attractor_obj["is_cyclic"] = len(mints) != len(primes)
@@ -423,7 +423,7 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
 
-    primes = create_constants(primes=primes, constants=trap_space, in_place=False)
+    primes = create_constants(primes=primes, constants=trap_space, copy=True)
     constants = percolate_and_remove_constants(primes=primes)
 
     if primes == {}:
@@ -471,7 +471,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
     if len(trap_space) == len(primes):
         return True, None
 
-    primes = create_constants(primes, constants=trap_space, in_place=False)
+    primes = create_constants(primes, constants=trap_space, copy=True)
     constants = percolate_and_remove_constants(primes=primes)
 
     if len(constants) > len(trap_space):
@@ -601,7 +601,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             w_dash.update(u_dash)
 
         for q in intersection(refinement):
-            dummy = create_constants(primes=primes, constants=q, in_place=False)
+            dummy = create_constants(primes=primes, constants=q, copy=True)
             q_tilde = percolate_and_keep_constants(primes=dummy)
 
             if q_tilde not in min_trap_spaces:

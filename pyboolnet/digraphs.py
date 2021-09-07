@@ -197,22 +197,24 @@ def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None):
     """
 
     if digraph.order() == 0:
-        log.warning("DiGraph has no nodes.")
+        log.warning("digraph has no nodes.")
         return
 
     if not type(list(digraph.nodes())[0]) == str:
         digraph = networkx.relabel_nodes(digraph, mapping=lambda x: str(x))
 
-    lines = ['digraph {']
+    lines = ["digraph {"]
     lines += digraph2dot_lines(digraph)
-    lines += ['}']
+    lines += ["}"]
 
     dot_text = "\n".join(lines)
 
-    with open(fname_dot, 'w') as f:
-        f.writelines(dot_text)
+    if fname_dot:
+        with open(fname_dot, "w") as f:
+            f.writelines(dot_text)
 
     log.info(f"created {fname_dot}")
+
     return dot_text
 
 
