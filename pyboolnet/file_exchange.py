@@ -117,9 +117,10 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
 
     text = "\n".join(lines)
 
-    with open(fname_bnet, "w") as fp:
-        fp.writelines(text)
-        log.info(f"created {fname_bnet}")
+    if fname_bnet:
+        with open(fname_bnet, "w") as fp:
+            fp.writelines(text)
+            log.info(f"created {fname_bnet}")
     
     return text
 

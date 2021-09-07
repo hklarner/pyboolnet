@@ -37,6 +37,4 @@ def find_command(name: str) -> str:
         log.warning(f"unknown command: name={name}")
         cmd = name
 
-    log.info(f"you called find_command: name={name}")
-
     return cmd
