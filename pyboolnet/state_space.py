@@ -84,7 +84,7 @@ def state_is_in_subspace(primes: dict, state: Union[str, dict], subspace: Union[
     return True
 
 
-def is_subspace(primes, this, other) -> bool:
+def is_subspace(primes: dict, this: Union[dict, str], other: [dict, str]) -> bool:
     """
     Checks whether *this* is a subspace of *other*.
 
@@ -111,13 +111,13 @@ def is_subspace(primes, this, other) -> bool:
     return set(this.items()).issuperset(set(other.items()))
 
 
-def hamming_distance(subspace1: dict, subspace2: dict) -> int:
+def hamming_distance(this: dict, other: dict) -> int:
     """
     Returns the Hamming distance between to subspaces.
     Variables that are free in either subspace are ignored.
 
     **arguments**:
-        * *subspace1, subspace2*: subspaces in dictionary representation
+        * *this, other*: subspaces in dictionary representation
 
     **returns**:
         * *distance*: the distance between *Subspace1* and *Subspace2*
@@ -130,35 +130,45 @@ def hamming_distance(subspace1: dict, subspace2: dict) -> int:
         0
     """
 
-    return len([k for k, v in subspace1.items() if k in subspace2 and subspace2[k] != v])
+    return len([k for k, v in this.items() if k in other and other[k] != v])
 
 
-def bounding_box(primes: dict, subspaces):
+def bounding_box(primes: dict, subspaces: List[Union[dict, str]]) -> Dict[str, int]:
     """
-    returns the smallest subspaces that contains all *subspaces*
+    Returns the smallest subspace that contains the union of *subspaces*.
+
+    **arguments**:
+        * *primes*: prime implicants
+
+    **returns**:
+        * *box*: the smallest subspace that contains the union of *subspaces*
+
+    **example**:
+
+        >>> subspaces = [{"v1": 0, "v2": 0}, {"v1": 1, "v2": 0})]
+        >>> bounding_box(primes, subspaces)
+        {"v2": 0}
     """
 
-    names = sorted(primes)
     seen = set([])
-    result = {}
+    box = {}
 
-    for x in subspaces:
-        if type(x) is str:
-            assert len(x) == len(names)
-            x = dict(zip(names, map(int, x)))
+    for subspace in subspaces:
+        if type(subspace) is str:
+            subspace = subspace2dict(primes, subspace)
 
-        for name in x:
+        for name in subspace:
             if name in seen:
                 continue
 
-            if name in result:
-                if result[name] != x[name]:
+            if name in box:
+                if box[name] != subspace[name]:
                     seen.add(name)
-                    result.pop(name)
+                    box.pop(name)
             else:
-                result[name] = x[name]
+                box[name] = subspace[name]
 
-    return result
+    return box
 
 
 def size_state_space(primes: dict, van_ham: bool = True, fixed_inputs: bool = False):
