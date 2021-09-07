@@ -11,7 +11,7 @@ The following is a list of all networks available in |software|.
 The motivation for the repository is to make it easier to share networks by referring to a fixed file, to gather analysis results and provide a benchmark set for analysis tools.
 Further information about the repository can be found at:
 
-   https://github.com/hklarner/PyBoolNet/tree/master/Repository
+   https://github.com/hklarner/pyboolnet/tree/master/repository
 
 arellano_rootstem
 -----------------
@@ -155,7 +155,7 @@ xiao_wnt5a
 get_all_names
 -------------
 
-.. autofunction:: Repository.get_all_names
+.. autofunction:: repository.get_all_names
 
 
 .. _get_primes:
@@ -163,7 +163,7 @@ get_all_names
 get_primes
 ----------
 
-.. autofunction:: Repository.get_primes
+.. autofunction:: repository.get_primes
 
 
 .. _get_bnet:
@@ -171,4 +171,4 @@ get_primes
 get_bnet
 --------
 
-.. autofunction:: Repository.get_bnet
+.. autofunction:: repository.get_bnet

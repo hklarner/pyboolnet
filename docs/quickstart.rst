@@ -49,7 +49,7 @@ Convert to primes back to the BNET format using :ref:`primes2bnet`::
 PyBoolNet has its own network repository.
 To browse it online, visit
 
-* github.com/hklarner/PyBoolNet/tree/master/PyBoolNet/Repository
+* github.com/hklarner/pyboolnet/tree/master/pyboolnet/Repository
 
 To access a network from the repository use the function :ref:`get_primes` of the module :ref:`Repository`::
 
@@ -66,7 +66,7 @@ To access a network from the repository use the function :ref:`get_primes` of th
 Read the references for :ref:`FileExchange` and :ref:`PrimeImplicants` for more on this topic.
 For a tutorial script on this topic see `01_boolean_networks.py` in the tutorials folder at
 
-* github.com/hklarner/PyBoolNet/tree/master/Tutorials
+* github.com/hklarner/pyboolnet/tree/master/Tutorials
 
 
 Interaction Graphs
@@ -111,7 +111,7 @@ To compute the local interaction graph use :ref:`local_igraph_of_state` of  :ref
 Read the references for :ref:`InteractionGraphs` for more on this topic.
 For a tutorial script on this topic see `02_interaction_graphs.py` in the tutorials folder at
 
-* github.com/hklarner/PyBoolNet/tree/master/Tutorials
+* github.com/hklarner/pyboolnet/tree/master/Tutorials
 
 
 
@@ -185,7 +185,7 @@ Finally, you may compute the integer-valued energy of a state, based on "frozen 
 Read the references for :ref:`StateTransitionGraphs` for more on this topic.
 For a tutorial script on this topic see `03_state_transition_graphs.py` in the tutorials folder at
 
-* github.com/hklarner/PyBoolNet/tree/master/Tutorials
+* github.com/hklarner/pyboolnet/tree/master/Tutorials
 
 
 
@@ -231,7 +231,7 @@ Finally, the function :ref:`check_primes_with_counterexample` returns a CTL or L
 Read the references for :ref:`StateTransitionGraphs` for more on this topic.
 For a tutorial script on this topic see `04_model_checking.py` in the tutorials folder at
 
-* github.com/hklarner/PyBoolNet/tree/master/Tutorials
+* github.com/hklarner/pyboolnet/tree/master/Tutorials
 
 
 Attractors

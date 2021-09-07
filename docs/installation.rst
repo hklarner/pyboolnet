@@ -8,57 +8,53 @@ Installation
 
 Python
 ------
-|software| is now being developed in Python 3.6.9 but should be compatible with Python2.
+|software| is now being developed in Python 3.8 and is not compatible with Python2.
 If you experience problems with your version of Python and |software| please contact |myemail| or
 post an issue on the project homepage at
 
-   * http://github.com/hklarner/PyBoolNet/issues
+   * http://github.com/hklarner/pyboolnet/issues
 
 
 Linux
 -----
 
-Download the latest release from
-
-   * http://github.com/hklarner/PyBoolNet/releases
-
 We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
-   $ sudo apt install python-pip
+   $ apt install python-pip
 
 Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installation_graphviz>` and :ref:`ImageMagick <installation_imagemagick>` are installed::
 
-   $ sudo pip3 install networkx
-   $ sudo apt install graphviz
-   $ sudo apt install imagemagick
+   $ pip3 install networkx
+   $ apt install graphviz
+   $ apt install imagemagick
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0
+   $ pip3 install git+https://github.com/hklarner/pyboolnet
 
 which should place the package here::
 
-   /usr/local/lib/python<version>/dist-packages/PyBoolNet
+   /usr/local/lib/python<version>/dist-packages/pyboolnet
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0 --user
+   $ pip3 install git+https://github.com/hklarner/pyboolnet --user
 
 The package is likely going to be placed here::
 
-   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
+   /home/<user>/.local/lib/python<version>/dist-packages/pyboolnet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
 
 You should now be able to import |software|::
 
    $ python
-   >>> import PyBoolNet
+   >>> import pyboolnet
 
 
 To remove |software| using *pip* run::
 
-      $ pip3 uninstall PyBoolNet
+      $ pip3 uninstall pyboolnet
 
 If you do not have *pip*, all files must be removed manually.
 
@@ -67,55 +63,48 @@ Mac OS
 ------
 Download the latest release from
 
-   * http://github.com/hklarner/PyBoolNet/releases
+   * http://github.com/hklarner/pyboolnet/releases
 
 We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
-   $ sudo easy_install pip
+   $ easy_install pip
 
 or if you do not have super user rights::
 
    $ easy_install --user pip
 
-Install NetworkX_ with::
-
-   $ sudo pip3 install networkx
-
-or::
-
-   $ pip3 install networkx --user
 
 Download and install Graphviz_ and ImageMagick_ from
 
-   * http://www.graphviz.org/Download.php
+   * http://www.graphviz.org/download.php
    * http://www.imagemagick.org/script/binary-releases.php
 
 Install |software| with *pip*::
 
-   $ sudo pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0
+   $ pip3 install git+https://github.com/hklarner/pyboolnet
 
 which should place the package here::
 
-   /usr/local/lib/python<version>/dist-packages/PyBoolNet
+   /usr/local/lib/python<version>/dist-packages/pyboolnet
 
 Use the option ``--user`` (literally) if you do not have sudo rights::
 
-   $ pip3 install git+https://github.com/hklarner/PyBoolNet@2.31.0 --user
+   $ pip3 install git+https://github.com/hklarner/pyboolnet --user
 
 The package is likely going to be placed here::
 
-   /home/<user>/.local/lib/python<version>/dist-packages/PyBoolNet
+   /home/<user>/.local/lib/python<version>/dist-packages/pyboolnet
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
 
 You should now be able to import |software|::
 
    $ python
-   >>> import PyBoolNet
+   >>> import pyboolnet
 
 To remove |software| using *pip* run::
 
-      $ pip3 uninstall PyBoolNet
+      $ pip3 uninstall pyboolnet
 
 If you do not have *pip*, all files must be removed manually.
 
@@ -124,7 +113,7 @@ Windows
 -------
 Download the latest release from
 
-   * http://github.com/hklarner/PyBoolNet/releases
+   * http://github.com/hklarner/pyboolnet/releases
 
 We recommend to install the package using *pip*. If it is not already shipped with your Python version follow the instructions
 on
@@ -133,7 +122,7 @@ on
 
 To install |software| with *pip*::
 
-   C:\> pip.exe install git+https://github.com/hklarner/PyBoolNet@2.31.0
+   C:\> pip.exe install git+https://github.com/hklarner/pyboolnet
 
 which should place the package here::
 
@@ -202,7 +191,7 @@ To test whether the dependencies work correctly, run::
 
 If you get fails or errors, read :ref:`Troubleshooting <installation_troubleshooting>` and the issues section of the homepage:
 
-   * http://github.com/hklarner/PyBoolNet/issues
+   * http://github.com/hklarner/pyboolnet/issues
 
 where you can also post issues. Also, do not hesitate to contact me at |myemail|.
 
@@ -220,7 +209,7 @@ The package is available at:
 
 To install it on Linux using *pip* run::
 
-   $ sudo pip3 install networkx
+   $ pip3 install networkx
 
 or::
 
@@ -285,7 +274,7 @@ The program *dot* is part of the graph visualization software Graphviz_ and avai
 It is required to generate drawings of interaction graphs and state transition graphs.
 To install it on Linux run::
 
-   $ sudo apt install graphviz
+   $ apt install graphviz
 
 Make sure to check the paths in ``settings.cfg``.
 
@@ -299,7 +288,7 @@ The program *convert* is part of the ImageMagick_ software suite.
 It is required to generate animations of trajectories in the state transition graph.
 To install it on linux run::
 
-   $ sudo apt install ImageMagick
+   $ apt install ImageMagick
 
 ImageMagick_ is available at
 
@@ -317,7 +306,7 @@ The package matplotlib is used to plot pie charts and bar plots and similiar gra
 for example in the function :ref:`create_barplot` and :ref:`basins_create_piechart` of the :ref:`Basins` module.
 To install it on linux run::
 
-   $ sudo pip3 install matplotlib
+   $ pip3 install matplotlib
 
 matplotlib_ is available at
 
@@ -359,7 +348,7 @@ BoolNet_ is a library for R_ that is used for the construction, simulation and a
 It is not a required dependency of |software| but you need it if you want to convert *SBML-qual* files into *bnet* files.
 To install it run::
 
-   $ sudo R
+   $ R
    > install.packages("BoolNet")
 
 select a CRAN mirror and wait for the download and installation to finish.
@@ -391,7 +380,7 @@ Troubleshooting
 
 For questions that are not listed here please contact |myemail| or post an issue on the project homepage at
 
-   * http://github.com/hklarner/PyBoolNet/issues
+   * http://github.com/hklarner/pyboolnet/issues
 
 
 libreadline.so.6
@@ -408,7 +397,7 @@ then a solution for linux is available at stackoverflow:
 
 The crucial command::
 
-   $ sudo apt install libreadline6:i386
+   $ apt install libreadline6:i386
 
 
 permission denied
@@ -430,7 +419,7 @@ no such file or directory
 
 If you get *No such file or directory* errors you might have installed the wrong package for your OS. In particular check whether you are on 32 bit or 64 bit Linux and download the respective files from:
 
-   * http://github.com/hklarner/PyBoolNet/releases
+   * http://github.com/hklarner/pyboolnet/releases
 
 
 .. include:: Substitutions.rst

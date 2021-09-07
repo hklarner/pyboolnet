@@ -5,11 +5,15 @@ import random
 from typing import List, Dict
 
 import networkx
-from pyeda.inter import truthtable, truthtable2expr, exprvar
 
 from pyboolnet.file_exchange import bnet2primes
 
 log = logging.getLogger(__name__)
+
+try:
+    from pyeda.inter import truthtable, truthtable2expr, exprvar
+except ImportError:
+    log.warning(f"failed to import pyeda: network_generators.random_boolean_expression is not available")
 
 
 def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:

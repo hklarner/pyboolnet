@@ -29,17 +29,17 @@ print(f"pyboolnet dependency folder:  pyboolnet_dep_folder={pyboolnet_dep_folder
 copy_tree(pyboolnet_dep_folder, os.path.join("pyboolnet", "binaries"))
 
 
-for root, dirnames, filenames in os.walk("pyboolnet/binaries"):
+for root, _, filenames in os.walk("pyboolnet/binaries"):
     root = root.replace("pyboolnet/binaries", "binaries")
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 
-for root, dirnames, filenames in os.walk("pyboolnet/repository"):
+for root, _, filenames in os.walk("pyboolnet/repository"):
     root = root.replace("pyboolnet/repository", "repository")
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
 
-for root, dirnames, filenames in os.walk("pyboolnet/tests/files/input"):
+for root, _, filenames in os.walk("pyboolnet/tests/files/input"):
     root = root.replace("pyboolnet/Tests", "Tests")
     package_data_files.extend([os.path.join(root, x) for x in filenames])
 
