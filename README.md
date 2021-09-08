@@ -43,6 +43,7 @@ For release notes, see
 ## Command line tool
 ```
 $ pyboolnet -h
+$ pyboolnet --trap-spaces --type min grieco_mapk.bnet
 ```
 
 

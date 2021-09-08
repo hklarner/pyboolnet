@@ -28,6 +28,16 @@ def test_percolate_trapspace():
     assert percolate_trapspace(primes, {u"Raf": 1, u"Mek": 0, u"Erk": 0}) == {u"Raf": 1, u"Mek": 0, u"Erk": 0}
 
 
+def test_known_trap_spaces_for_mapk():
+    primes = get_primes("grieco_mapk")
+
+    tspaces = trap_spaces(primes, type_="min")
+    assert len(tspaces) == 18
+
+    tspaces = trap_spaces(primes, type_="max")
+    assert len(tspaces) == 9
+
+
 def test_trapspaces_that_contain_state():
     primes = get_primes("raf")
 
@@ -36,7 +46,7 @@ def test_trapspaces_that_contain_state():
     assert trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 1, "Erk": 0}, "min", fname_asp=None) == [{}]
 
 
-def test_trapspaces_that_contain_state_maxoutput():
+def test_trapspaces_that_contain_state_max_output():
     primes = get_primes("raf")
     answer = trapspaces_that_contain_state(primes, {"Raf": 1, "Mek": 0, "Erk": 0}, "all", max_output=1)
     
@@ -65,7 +75,7 @@ def test_trapspaces_within_subspace():
 def test_trap_spaces_piped1():
     fname_in = get_tests_path_in(fname="trapspaces_posfeedback.primes")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="min")
+    tspaces = trap_spaces(primes=primes, type_="min")
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
     expected = [{"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}]
 
@@ -75,7 +85,7 @@ def test_trap_spaces_piped1():
 def test_trap_spaces_piped2():
     fname_in = get_tests_path_in(fname="trapspaces_tsfree.primes")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="min")
+    tspaces = trap_spaces(primes=primes, type_="min")
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
 
     assert tspaces == [{}]
@@ -85,21 +95,21 @@ def test_trap_spaces_tsfree():
     fname_in = get_tests_path_in(fname="trapspaces_tsfree.primes")
     fname_out = get_tests_path_out(fname="trapspaces_tsfree_min.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="min", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="min", fname_asp=fname_out)
 
     assert tspaces == [{}]
 
     fname_in = get_tests_path_in(fname="trapspaces_tsfree.primes")
     fname_out = get_tests_path_out(fname="trapspaces_tsfree_all.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="all", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="all", fname_asp=fname_out)
 
     assert tspaces == [{}]
 
     fname_in = get_tests_path_in(fname="trapspaces_tsfree.primes")
     fname_out = get_tests_path_out(fname="trapspaces_tsfree_max.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="max", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="max", fname_asp=fname_out)
 
     assert tspaces == []
 
@@ -108,7 +118,7 @@ def test_trap_spaces_positive_feedback_min():
     fname_in = get_tests_path_in(fname="trapspaces_posfeedback.primes")
     fname_out = get_tests_path_out(fname="trapspaces_posfeedback_min.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="min", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="min", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
     expected = [{"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}]
 
@@ -119,7 +129,7 @@ def test_trap_spaces_positive_feedback_max():
     fname_in = get_tests_path_in(fname="trapspaces_posfeedback.primes")
     fname_out = get_tests_path_out(fname="trapspaces_posfeedback_max.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="max", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="max", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
     expected = [{"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}]
 
@@ -130,7 +140,7 @@ def test_trap_spaces_positive_feedback_all():
     fname_in = get_tests_path_in(fname="trapspaces_posfeedback.primes")
     fname_out = get_tests_path_out(fname="trapspaces_posfeedback_all.asp")
     primes = read_primes(fname_json=fname_in)
-    tspaces = trap_spaces(primes=primes, option="all", fname_asp=fname_out)
+    tspaces = trap_spaces(primes=primes, type_="all", fname_asp=fname_out)
     tspaces.sort(key=lambda x: tuple(sorted(x.items())))
 
     assert tspaces == [{}, {"v1": 0, "v2": 0, "v3": 0}, {"v1": 1, "v2": 1, "v3": 1}]

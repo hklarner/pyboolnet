@@ -3,6 +3,7 @@
 import click
 
 from pyboolnet.command_line_tool.commands.check_dependencies import check_dependencies
+from pyboolnet.command_line_tool.commands.trap_spaces import command_trap_spaces
 from pyboolnet.version import read_version_txt
 
 
@@ -12,3 +13,4 @@ def main():
 
 
 main.add_command(check_dependencies)
+main.add_command(command_trap_spaces)
