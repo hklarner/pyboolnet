@@ -34,7 +34,6 @@ def find_command(name: str) -> str:
         else:
             cmd = os.path.normpath(os.path.join(ROOT_DIR, "binaries", cmd))
     else:
-        log.warning(f"unknown command: name={name}")
         cmd = name
 
     return cmd
