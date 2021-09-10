@@ -18,6 +18,8 @@ GRAPHVIZ_LAYOUT_ENGINES = ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
 EXECUTABLES = read_executables()
 
+os.environ["LD_LIBRARY_PATH"] += os.path.join(ROOT, "binaries")
+
 logging.basicConfig(format="%(levelname)s %(message)s", stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 

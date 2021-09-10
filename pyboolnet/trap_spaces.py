@@ -333,3 +333,11 @@ def steady_states_projected(primes: dict, project: List[str] = [], max_output: i
     
     return potassco_handle(primes, type_="all", bounds=("n", "n"), project=project, max_output=max_output, fname_asp=fname_asp, representation="dict")
 
+
+if __name__ == '__main__':
+    from pyboolnet.repository import get_primes
+    from pyboolnet.external.potassco import primes2asp
+
+    primes = get_primes("raf")
+    asp_text = primes2asp(primes, "", None, None, type_="min")
+    print(asp_text)

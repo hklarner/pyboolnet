@@ -39,6 +39,14 @@ pip3 install git+https://github.com/hklarner/pyboolnet@3.0.3
 For release notes, see
 
  * [pyboolnet/releasenotes.md](https://github.com/hklarner/pyboolnet/blob/master/RELEASENOTES.md)
+
+
+## Requirements
+clasp and gringo need to be on installed:
+```
+apt install clasp
+apt install gringo
+```
  
 ## Command line tool
 ```

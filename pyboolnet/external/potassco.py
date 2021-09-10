@@ -183,8 +183,8 @@ def primes2asp(primes: dict, fname_asp: str, bounds: Optional[tuple], project, t
     if project:
         project = [x for x in project if x in primes]
 
-    lines = [f"%% created on {datetime.now().strftime('%d. %b. %Y')} using PyBoolNet",
-             "% PyBoolNet is available at https://github.com/hklarner/PyBoolNet",
+    lines = [f"%% created on {datetime.now().strftime('%d. %b. %Y')} using pyboolnet",
+             "% pyboolnet is available at https://github.com/hklarner/pyboolnet",
              "",
              '% encoding of prime implicants as hyper-arcs that consist of a unique "target" and (possibly) several "sources".',
              '% "target" and "source" are triplets that consist of a variable name, an activity and a unique arc-identifier. ',

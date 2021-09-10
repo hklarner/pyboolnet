@@ -71,7 +71,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
             attractors["is_complete"] = "yes"
         else:
             attractors["is_complete"] = "no"
-        log.info(f" {attractors['is_complete']}")
+        log.info(f"{attractors['is_complete']}")
     else:
         attractors["is_complete"] = "unknown"
 
@@ -102,7 +102,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
-            log.info(f" {mints_obj['is_faithful']}")
+            log.info(f"{mints_obj['is_faithful']}")
         else:
             mints_obj["is_faithful"] = "unknown"
 
