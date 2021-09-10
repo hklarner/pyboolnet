@@ -1,7 +1,6 @@
 
 
 from pyboolnet.model_checking import model_checking
-from pyboolnet.model_checking import model_checking_with_counterexample, model_checking_with_acceptingstates
 from pyboolnet.repository import get_primes
 from pyboolnet.state_transition_graphs import best_first_reachability
 
@@ -21,14 +20,14 @@ if __name__=="__main__":
 
     # model checking with accepting states
 
-    answer, accepting = model_checking_with_acceptingstates(primes, "asynchronous", init, spec)
-    for key, value in accepting.items():
+    answer, accepting_states = model_checking(primes, "asynchronous", init, spec, enable_accepting_states=True)
+    for key, value in accepting_states.items():
         print(f"{key} = {value}")
 
     # model checking with counter examples
 
     spec = "CTLSPEC DNA_damage -> AG(EF(Proliferation))"
-    answer, counterexample = model_checking_with_counterexample(primes, "asynchronous", init, spec)
+    answer, counterexample = model_checking(primes, "asynchronous", init, spec, enable_counterexample=True)
     print(answer)
     if counterexample:
         for state in counterexample:

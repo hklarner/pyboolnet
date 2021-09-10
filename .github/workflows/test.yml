@@ -33,6 +33,12 @@ jobs:
       - name: Install pyboolnet
         run: python setup.py install
 
+      - name: Install clasp
+        run: sudo apt-get install clasp
+
+      - name: Install gringo
+        run: sudo apt-get install gringo
+
       - name: Install libreadline-dev
         run: sudo apt-get install -qqy libreadline-dev
 

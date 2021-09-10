@@ -16,7 +16,7 @@ CMD_CLASP = find_command("clasp")
 log = logging.getLogger(__name__)
 
 
-def potassco_handle(primes: dict, type_: str, bounds: tuple, project, max_output: int, fname_asp: str, representation: str, extra_lines=None):
+def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str], max_output: int, fname_asp: str, representation: str, extra_lines=None):
     """
     Returns a list of trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
     """
@@ -43,7 +43,7 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project, max_output
     asp_text = primes2asp(primes=primes, fname_asp=fname_asp, bounds=bounds, project=project, type_=type_, extra_lines=extra_lines)
 
     try:
-        if fname_asp is None:
+        if not fname_asp:
             cmd_gringo = [CMD_GRINGO]
             proc_gringo = subprocess.Popen(cmd_gringo, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             cmd_clasp = [CMD_CLASP, f"--models={max_output}"] + params_clasp
@@ -183,8 +183,8 @@ def primes2asp(primes: dict, fname_asp: str, bounds: Optional[tuple], project, t
     if project:
         project = [x for x in project if x in primes]
 
-    lines = [f"%% created on {datetime.now().strftime('%d. %b. %Y')} using PyBoolNet",
-             "% PyBoolNet is available at https://github.com/hklarner/PyBoolNet",
+    lines = [f"%% created on {datetime.now().strftime('%d. %b. %Y')} using pyboolnet",
+             "% pyboolnet is available at https://github.com/hklarner/pyboolnet",
              "",
              '% encoding of prime implicants as hyper-arcs that consist of a unique "target" and (possibly) several "sources".',
              '% "target" and "source" are triplets that consist of a variable name, an activity and a unique arc-identifier. ',

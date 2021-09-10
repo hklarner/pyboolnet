@@ -6,7 +6,7 @@ The accompanying paper was published with [Bioinformatics](https://academic.oup.
 
  * https://doi.org/10.1093/bioinformatics/btw682
 
-For report bugs, request features and give feedback at [issues](http://github.com/hklarner/PyBoolNet/issues) or contact
+For report bugs, request features and give feedback at [issues](http://github.com/hklarner/pyboolnet/issues) or contact
 
  * hannes.klarner@fu-berlin.de (developer)
  * heike.siebert@fu-berlin.de
@@ -33,19 +33,26 @@ To install a tagged version use the `@`:
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/pyboolnet@3.0.0
+pip3 install git+https://github.com/hklarner/pyboolnet@3.0.3
 ```
 
 For release notes, see
 
  * [pyboolnet/releasenotes.md](https://github.com/hklarner/pyboolnet/blob/master/RELEASENOTES.md)
+
+
+## Requirements
+clasp and gringo need to be on installed:
+```
+apt install clasp
+apt install gringo
+```
  
 ## Command line tool
 ```
 $ pyboolnet -h
+$ pyboolnet --trap-spaces --type min grieco_mapk.bnet
 ```
-
- * [pyboolnet/repository](https://github.com/hklarner/pyboolnet/tree/master/pyboolnet/repository)
 
 
 ## Migration guide

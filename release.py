@@ -61,9 +61,8 @@ def read_release_message():
     return input()
 
 
-def create_release_commit(version: str, message: str) -> bool:
+def create_release_commit_or_exit(version: str, message: str) -> bool:
     command = ["git", "commit", "-a", "-m", f"release {version}" + (f": {message}" if message else "")]
-
     result = subprocess_run(command=command)
     print(f"creating release commit: {'OK' if result.returncode == 0 else 'FAIL'}")
     print_process_output(command=command, process=result)
@@ -136,6 +135,18 @@ def print_announcement(current_version: str, release_version: str):
     print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/LogicsSoftwareGmbH/VehicleRouting/compare/{current_version}...{release_version})")
 
 
+def update_readme_md(current_version: str, release_version: str):
+    with open("README.md", "r") as fp:
+        text = fp.read()
+
+    text = text.replace(current_version, release_version)
+
+    with open("README.md", "w") as fp:
+        fp.write(text)
+
+    print("replaced version string in README.md: OK")
+
+
 if __name__ == "__main__":
     print(f"version according to git: {read_version_git()}")
     current_version = read_version_txt()
@@ -155,7 +166,9 @@ if __name__ == "__main__":
     if not bake_release_version_into_code(release_version=release_version):
         sys.exit(1)
 
-    if not create_release_commit(version=release_version, message=release_message):
+    update_readme_md(current_version=current_version, release_version=release_version)
+
+    if not create_release_commit_or_exit(version=release_version, message=release_message):
         reset_version_and_exit(reset_version=current_version)
 
     if not create_release_tag(tag=release_version):

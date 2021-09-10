@@ -53,6 +53,7 @@ setup(
     package_data={"pyboolnet": PACKAGE_DATA_FILES, "": ['version.txt']},
     packages=[
         "pyboolnet",
+        "pyboolnet.external",
         "pyboolnet.command_line_tool",
         "pyboolnet.command_line_tool.commands"],
     include_package_data=True,

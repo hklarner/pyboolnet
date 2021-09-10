@@ -63,7 +63,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
     attractors["primes"] = copy_primes(primes)
     attractors["update"] = update
 
-    min_tspaces = trap_spaces(primes=primes, option="min", max_output=max_output)
+    min_tspaces = trap_spaces(primes=primes, type_="min", max_output=max_output)
 
     if check_completeness:
         log.info("attractors.completeness(..)")
@@ -71,7 +71,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
             attractors["is_complete"] = "yes"
         else:
             attractors["is_complete"] = "no"
-        log.info(f" {attractors['is_complete']}")
+        log.info(f"{attractors['is_complete']}")
     else:
         attractors["is_complete"] = "unknown"
 
@@ -102,7 +102,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
                 mints_obj["is_faithful"] = "yes"
             else:
                 mints_obj["is_faithful"] = "no"
-            log.info(f" {mints_obj['is_faithful']}")
+            log.info(f"{mints_obj['is_faithful']}")
         else:
             mints_obj["is_faithful"] = "unknown"
 
@@ -548,7 +548,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
     primes = copy_primes(primes=primes)
     constants_global = percolate_and_remove_constants(primes=primes)
 
-    min_trap_spaces = trap_spaces(primes=primes, option="min", max_output=max_output)
+    min_trap_spaces = trap_spaces(primes=primes, type_="min", max_output=max_output)
     if min_trap_spaces == [{}]:
         if compute_counterexample:
             return True, None
@@ -579,7 +579,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             primes_restricted = copy_primes(primes_reduced)
             remove_all_variables_except(primes=primes_restricted, names=u_dash)
 
-            q = trap_spaces(primes=primes_restricted, option="min", max_output=max_output)
+            q = trap_spaces(primes=primes_restricted, type_="min", max_output=max_output)
 
             phi = exists_finally_one_of_subspaces(primes=primes_restricted, subspaces=q)
 

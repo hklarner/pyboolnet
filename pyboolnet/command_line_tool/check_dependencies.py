@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 def check_all_dependencies():
     check_gringo_responds()
     check_clasp_responds()
+    check_trap_space_computation_works()
     check_nusmv_responds()
     check_bnet2primes_responds()
     check_layout_engines()
