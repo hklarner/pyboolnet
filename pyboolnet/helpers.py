@@ -9,6 +9,7 @@ import os
 import sys
 from typing import List
 
+
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
 
 
@@ -193,6 +194,19 @@ def copy_json_data(data: dict) -> dict:
     return json.loads(json.dumps(data))
 
 
+def get_env_with_libreadline6_on_ld_library_path() -> dict:
+    env = os.environ.copy()
+
+    if "LD_LIBRARY_PATH" not in env:
+        env["LD_LIBRARY_PATH"] = ""
+    else:
+        env["LD_LIBRARY_PATH"] += os.pathsep
+
+    env["LD_LIBRARY_PATH"] += os.path.join(ROOT_DIR, "binaries", "NuSMV-a")
+
+    return env
+
+
 if __name__ == '__main__':
-    x = f"{1.124:.2f}"
-    pass
+    x = get_env_with_libreadline6_on_ld_library_path()
+    print(x)
