@@ -9,6 +9,7 @@ import tempfile
 from typing import Tuple, Optional
 
 from pyboolnet import find_command, NUSMV_KEYWORDS
+from pyboolnet.helpers import get_env_with_libreadline6_on_ld_library_path
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
 from pyboolnet.state_space import VAN_HAM_EXTENSIONS, find_vanham_variables
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
@@ -147,7 +148,8 @@ def model_checking_smv_file(
 
     cmd += [fname_smv]
     cmd_text = " ".join(cmd)
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    env = get_env_with_libreadline6_on_ld_library_path()
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
     output, error = process.communicate()
     output = output.decode()
 
