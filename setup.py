@@ -4,7 +4,7 @@ import os
 import platform
 import sys
 from distutils.dir_util import copy_tree
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from pyboolnet import VERSION
 
@@ -51,11 +51,7 @@ setup(
     author_email="hannes.klarner@fu-berlin.de",
     url="https://github.com/hklarner/pyboolnet",
     package_data={"pyboolnet": PACKAGE_DATA_FILES, "": ['version.txt']},
-    packages=[
-        "pyboolnet",
-        "pyboolnet.external",
-        "pyboolnet.command_line_tool",
-        "pyboolnet.command_line_tool.commands"],
+    packages=find_packages(),
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
