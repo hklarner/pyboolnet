@@ -1,0 +1,37 @@
+
+
+# added to PyBoolNet: 2021, October
+# citation: Calzone, Laurence et al. "Mathematical Modelling of Cell-Fate Decision in Response to Death Receptor Engagement." PLoS Computational Biology (2010). 6(3):e1000702.
+# created with GINsim, http://ginsim.org/node/227
+
+
+targets, factors
+FADD,       FADD
+FASL,       FASL
+TNF,        TNF
+
+ATP,        !MPT
+Apoptosis,  CASP3
+BAX,        CASP8&!BCL2
+BCL2,       NFkB
+CASP3,      !XIAP&apoptosome
+CASP8,      !DISC_TNF&!DISC_FAS&CASP3&!cFLIP | !DISC_TNF&DISC_FAS&!cFLIP | DISC_TNF&!cFLIP
+Cyt_c,      MOMP
+DISC_FAS,   FASL&FADD
+DISC_TNF,   TNFR&FADD
+IKK,        RIP1ub
+MOMP,       !BAX&MPT | BAX
+MPT,        !BCL2&ROS
+NFkB,       IKK&!CASP3
+NonACD,     !ATP
+RIP1,       !TNFR&DISC_FAS&!CASP8 | TNFR&!CASP8
+RIP1K,      RIP1
+RIP1ub,     RIP1&cIAP
+ROS,        !RIP1K&!NFkB&MPT | RIP1K&!NFkB
+SMAC,       MOMP
+Survival,   NFkB
+TNFR,       TNF
+XIAP,       NFkB&!SMAC
+apoptosome, ATP&Cyt_c&!XIAP
+cFLIP,      NFkB
+cIAP,       !NFkB&!SMAC&cIAP | NFkB&!SMAC

@@ -1,0 +1,68 @@
+
+
+# added to PyBoolNet: 2021, October
+# citation: Zhang, Ranran et al. "Network model of survival signaling in large granular lymphocyte leukemia". PNAS, 2008. 105(42) 16308-16313.
+# created with GINsim, http://ginsim.org/node/87 
+
+
+targets, factors
+A20,           NFkB&!Apoptosis
+Apoptosis,     !Caspase&Apoptosis | Caspase
+BID,           !BclxL&!GZMB&Caspase&!MCL1&!Apoptosis | !BclxL&GZMB&!MCL1&!Apoptosis
+BclxL,         !GZMB&!NFkB&!BID&!DISC&STAT3&!Apoptosis | !GZMB&NFkB&!BID&!DISC&!Apoptosis
+CD45,          CD45
+CREB,          IFNg&ERK&!Apoptosis
+CTLA4,         TCR&!Apoptosis
+Caspase,       !GZMB&!IAP&!BID&DISC&!Apoptosis | !GZMB&!IAP&BID&!DISC&TRADD&!Apoptosis | !GZMB&!IAP&BID&DISC&!Apoptosis | !GZMB&IAP&DISC&!Apoptosis | GZMB&!IAP&!BID&DISC&!Apoptosis | GZMB&!IAP&BID&!Apoptosis | GZMB&IAP&DISC&!Apoptosis
+Ceramide,      Fas&!S1P&!Apoptosis
+Cyt_sign,      FYN&!Apoptosis
+DISC,          FasT&!FLIP&!Ceramide&Fas&!Apoptosis | FasT&!FLIP&Ceramide&!Apoptosis | FasT&FLIP&!Ceramide&Fas&IL2&!Apoptosis | FasT&FLIP&Ceramide&!Apoptosis
+ERK,           PI3K&MEK&!Apoptosis
+FLIP,          !IFNg&NFkB&!DISC&!Apoptosis | IFNg&!NFkB&CREB&!DISC&!Apoptosis | IFNg&NFkB&!DISC&!Apoptosis
+FYN,           !IL2RB&TCR&!Apoptosis | IL2RB&!Apoptosis
+Fas,           FasT&FasL&!sFas&!Apoptosis
+FasL,          !NFAT&!NFkB&!ERK&STAT3&!Apoptosis | !NFAT&!NFkB&ERK&!Apoptosis | !NFAT&NFkB&!Apoptosis | NFAT&!Apoptosis
+FasT,          NFkB&!Apoptosis
+GAP,           !PDGFR&RAS&!IL2&!Apoptosis&!IL15 | PDGFR&!GAP&RAS&!IL2&!Apoptosis&!IL15 | PDGFR&GAP&!IL2&!Apoptosis&!IL15
+GPCR,          S1P&!Apoptosis
+GRB2,          !ZAP70&IL2RB&!Apoptosis | ZAP70&!Apoptosis
+GZMB,          !IFNg&Tbet&!Apoptosis | IFNg&!CREB&Tbet&!Apoptosis | IFNg&CREB&!Apoptosis
+IAP,           NFkB&!BID&!Apoptosis
+IFNg,          IFNgT&!SMAD&!P2&!IL2&!Apoptosis&!Stimuli&IL15 | IFNgT&!SMAD&!P2&!IL2&!Apoptosis&Stimuli | IFNgT&!SMAD&!P2&IL2&!Apoptosis
+IFNgT,         !NFAT&!Tbet&STAT3&!Apoptosis | !NFAT&Tbet&!Apoptosis | NFAT&!Apoptosis
+IL15,          IL15
+IL2,           !NFAT&!NFkB&!Tbet&STAT3&!Apoptosis | !NFAT&NFkB&!Tbet&!Apoptosis | NFAT&!Tbet&!Apoptosis
+IL2RA,         !IL2RA&IL2RAT&IL2&!Apoptosis
+IL2RAT,        !NFkB&STAT3&IL2&!Apoptosis | NFkB&IL2&!Apoptosis
+IL2RB,         IL2RBT&!IL2&!Apoptosis&IL15 | IL2RBT&IL2&!Apoptosis
+IL2RBT,        ERK&Tbet&!Apoptosis
+JAK,           !IFNg&!IL2RB&!IL2RA&RANTES&!SOCS&!Apoptosis&!CD45 | !IFNg&!IL2RB&IL2RA&!SOCS&!Apoptosis&!CD45 | !IFNg&IL2RB&!SOCS&!Apoptosis&!CD45 | IFNg&!SOCS&!Apoptosis&!CD45
+LCK,           !ZAP70&!IL2RB&!TCR&!Apoptosis&CD45 | !ZAP70&!IL2RB&TCR&!Apoptosis | !ZAP70&IL2RB&!Apoptosis | ZAP70&!Apoptosis&CD45
+MCL1,          NFkB&PI3K&IL2RB&STAT3&!Apoptosis
+MEK,           RAS&!Apoptosis
+NFAT,          PI3K&!Apoptosis
+NFkB,          !TPL2&!FLIP&PI3K&!Apoptosis | !TPL2&FLIP&!IAP&PI3K&!Apoptosis | !TPL2&FLIP&IAP&!PI3K&TRADD&!Apoptosis | !TPL2&FLIP&IAP&PI3K&!Apoptosis | TPL2&!Apoptosis
+P2,            !IFNg&P2&!Apoptosis&!Stimuli2 | IFNg&!Apoptosis&!Stimuli2
+P27,           STAT3&!Apoptosis
+PDGF,          PDGF
+PDGFR,         !S1P&!Apoptosis&PDGF | S1P&!Apoptosis
+PI3K,          !PDGFR&RAS&!Apoptosis | PDGFR&!Apoptosis
+PLCG1,         !PDGFR&GRB2&!Apoptosis | PDGFR&!Apoptosis
+Proliferation, !P27&STAT3&!Apoptosis
+RANTES,        NFkB&!Apoptosis
+RAS,           !GAP&!GRB2&PLCG1&!Apoptosis | !GAP&GRB2&!Apoptosis
+S1P,           !Ceramide&SPHK1&!Apoptosis
+SMAD,          GPCR&!Apoptosis
+SOCS,          !IL2&JAK&!Apoptosis&!IL15
+SPHK1,         PDGFR&!Apoptosis
+STAT3,         JAK&!Apoptosis
+Stimuli,       Stimuli
+Stimuli2,      Stimuli2
+TAX,           TAX
+TCR,           !CTLA4&!Apoptosis&Stimuli
+TNF,           NFkB&!Apoptosis
+TPL2,          !TNF&!Apoptosis&TAX | TNF&!PI3K&!Apoptosis&TAX | TNF&PI3K&!Apoptosis
+TRADD,         !IAP&TNF&!A20&!Apoptosis
+Tbet,          !Tbet&JAK&!Apoptosis | Tbet&!Apoptosis
+ZAP70,         LCK&!FYN&!Apoptosis
+sFas,          FasT&!Apoptosis
