@@ -1,0 +1,70 @@
+
+
+# added to PyBoolNet: 2021, October
+# citation original network: Zhang, Ranran et al. "Network model of survival signaling in large granular lymphocyte leukemia". PNAS, 2008. 105(42) 16308-16313.
+# modified by removing the Apoptosis outgoing interactions
+# citation modified network: Zañudo and Albert. "Cell Fate Reprogramming by Control of Intracellular Network Dynamics". (2015) PLOS Computational Biology 11(4): e1004193. 
+
+
+targets, factors
+PDGF, PDGF
+IL15, IL15
+Stimuli, Stimuli
+Stimuli2, Stimuli2
+CD45, CD45
+TAX, TAX
+
+CTLA4, TCR
+TCR,  Stimuli & !CTLA4
+PDGFR, S1P | PDGF
+FYN,  TCR | IL2RB
+Cytoskeleton_signaling,  FYN
+LCK, CD45 | ((TCR | IL2RB) & !ZAP70)
+ZAP70,  LCK & !FYN
+GRB2,  IL2RB | ZAP70
+PLCG1, GRB2 | PDGFR
+RAS, (GRB2 | PLCG1) & !GAP
+GAP, (RAS | (PDGFR & GAP)) & !(IL15 | IL2) 
+MEK, RAS
+ERK, MEK & PI3K
+PI3K, PDGFR | RAS
+NFKB, (TPL2 | PI3K) | (FLIP & TRADD & IAP)
+NFAT, PI3K
+RANTES, NFKB
+IL2, (NFKB | STAT3 | NFAT) & !TBET
+IL2RBT, ERK & TBET
+IL2RB, IL2RBT & (IL2 | IL15)
+IL2RAT, IL2 & (STAT3 | NFKB)
+IL2RA, (IL2 & IL2RAT) & !IL2RA
+JAK, (IL2RA | IL2RB | RANTES | IFNG) & !(SOCS | CD45)
+SOCS, JAK & !(IL2 | IL15)
+STAT3, JAK
+P27, STAT3
+Proliferation, STAT3 & !P27
+TBET, JAK | TBET
+CREB, ERK & IFNG
+IFNGT, TBET | STAT3 | NFAT
+IFNG, ((IL2 | IL15 | Stimuli) & IFNGT) & !(SMAD | P2)
+P2, (IFNG | P2) & !Stimuli2
+GZMB, (CREB & IFNG) | TBET
+TPL2, TAX | (PI3K & TNF)
+TNF, NFKB
+TRADD, TNF & !(IAP | A20)
+FasL, STAT3 | NFKB | NFAT | ERK
+FasT, NFKB
+Fas, (FasT & FasL) & !sFas
+sFas, FasT & S1P
+Ceramide, Fas & !S1P
+DISC, FasT & ((Fas & IL2) | Ceramide | (Fas & !FLIP))
+Caspase, (((TRADD | GZMB) & BID) & !IAP) | DISC
+FLIP, (NFKB | (CREB & IFNG)) & !DISC
+A20, NFKB
+BID, (Caspase | GZMB) & !(BclxL | MCL1) 
+IAP, NFKB & !BID
+BclxL, (NFKB | STAT3) & !(BID | GZMB | DISC)
+MCL1, (IL2RB & STAT3 & NFKB & PI3K) & !DISC
+Apoptosis, Caspase
+GPCR, S1P
+SMAD, GPCR
+SPHK1, PDGFR
+S1P, SPHK1 & !Ceramide
