@@ -64,7 +64,6 @@ setup(
         "networkx>=2.4",
         "matplotlib>=3.3.3",
         "pytest",
-        "pyeda==0.28.0",
         "click==8.0.1"],
     entry_points="""
         [console_scripts]

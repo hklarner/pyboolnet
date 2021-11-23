@@ -2,7 +2,6 @@
 
 from pyboolnet.file_exchange import read_primes, bnet2primes
 from pyboolnet.repository import get_primes
-from pyboolnet.state_space import subspace2str
 from pyboolnet.trap_spaces import trapspaces_that_contain_state
 from pyboolnet.trap_spaces import steady_states_projected
 from pyboolnet.trap_spaces import trap_spaces, trapspaces_that_intersect_subspace
