@@ -40,28 +40,6 @@ def circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, repres
     return potassco_handle(primes, type_="circuits", bounds=(0, "n"), project=None, max_output=max_output, fname_asp=fname_asp, representation=representation)
 
 
-def percolate_trapspace(primes: dict, trap_space: dict):
-    """
-    Percolates the *trap_space*.
-    Does not check whether *trap_space* is really a trap space.
-    Instead, it creates constants from *trap_space* and percolates the values.
-
-    **arguments**:
-        * *primes*: prime implicants
-        * *trap_space*: a subspace
-
-    **returns**:
-        * *trap_space*: the percolated trap space
-
-    **example**::
-
-        >>> percolate_trapspace(primes, {'Mek': 0, 'Erk': 0})
-        {'Raf': 1, 'Mek': 0, 'Erk': 0}
-    """
-
-    return find_constants(primes=percolate(primes=primes, add_constants=trap_space, copy=True))
-
-
 def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
     """
     Computes trap spaces that contain *state*.

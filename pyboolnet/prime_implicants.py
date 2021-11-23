@@ -567,8 +567,7 @@ def remove_all_constants(primes: dict, copy: bool = False) -> Optional[dict]:
 
 def update_primes(primes: dict, name: str, constants: dict, copy: bool = False) -> Optional[dict]:
     """
-    Applies the *constants* to the component *name* of *primes*.
-    Updates the primes of the component *name* given the *constants* and returns the new prime implicants.
+    Updates the primes of the component *name* given the *constants*.
 
     **arguments**:
         * *primes*: prime implicants
@@ -620,13 +619,13 @@ def update_primes(primes: dict, name: str, constants: dict, copy: bool = False) 
 
 def percolate(primes: dict, add_constants: Optional[Dict[str, int]] = None, remove_constants: bool = False, max_iterations: Optional[int] = None, copy: bool = False) -> Optional[dict]:
     """
-    Detects constants in primes and percolates their values in *primes*.
-    Does not remove any components from *primes*.
+    Detects constants in *primes* and percolates their values.
 
     **arguments**:
         * *primes*: prime implicants
-        * *max_iterations*: max number of percolation steps
-        * *remove_constants*: whether to remove all constants
+        * *max_iterations*: max number of components to fix during percolation
+        * *add_constants*: create new constants before percolation
+        * *remove_constants*: remove constants after percolation
         * *copy*: change *primes* in place or copy and return
 
     **returns**:
