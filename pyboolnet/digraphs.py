@@ -5,7 +5,7 @@ import logging
 import os
 import subprocess
 import sys
-from typing import Optional, List
+from typing import Optional, List, Union, Iterable
 
 import networkx
 
@@ -552,7 +552,7 @@ def convert_nodes_to_anonymous_strings(digraph: networkx.DiGraph):
     networkx.relabel_nodes(digraph, mapping, copy=False)
 
 
-def ancestors(digraph: networkx.DiGraph, node_or_nodes):
+def find_ancestors(digraph: networkx.DiGraph, node_or_nodes):
     """
     Return all nodes having a path to one of the nodes in *node_or_nodes*.
     """
@@ -568,21 +568,23 @@ def ancestors(digraph: networkx.DiGraph, node_or_nodes):
         return ancestors
 
 
-def successors(digraph: networkx.DiGraph, node_or_nodes):
+def find_successors(digraph: networkx.DiGraph, node_or_nodes: Union[str, Iterable[str]]) -> List[str]:
     """
     returns successors of a node or list of nodes
     """
 
     if node_or_nodes in digraph:
         return digraph.successors(node_or_nodes)
+
     else:
         successors = set([])
         for x in node_or_nodes:
             successors.update(set(digraph.successors(x)))
+
         return sorted(successors)
 
 
-def predecessors(digraph: networkx.DiGraph, node_or_nodes):
+def find_predecessors(digraph: networkx.DiGraph, node_or_nodes):
     """
     returns successors of a node or the union of several nodes
     """

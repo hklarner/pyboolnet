@@ -7,7 +7,7 @@ from typing import List, Union, Optional
 from pyboolnet import find_command
 from pyboolnet.external.potassco import potassco_handle
 from pyboolnet.prime_implicants import active_primes
-from pyboolnet.prime_implicants import create_constants, percolate_and_keep_constants
+from pyboolnet.prime_implicants import find_constants, percolate
 from pyboolnet.state_space import subspace2dict, subspace2str
 
 CMD_GRINGO = find_command("gringo")
@@ -58,11 +58,8 @@ def percolate_trapspace(primes: dict, trap_space: dict):
         >>> percolate_trapspace(primes, {'Mek': 0, 'Erk': 0})
         {'Raf': 1, 'Mek': 0, 'Erk': 0}
     """
-    
-    primes = create_constants(primes, trap_space, copy=True)
-    constants = percolate_and_keep_constants(primes)
-    
-    return constants
+
+    return find_constants(primes=percolate(primes=primes, add_constants=trap_space, copy=True))
 
 
 def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):

@@ -6,10 +6,11 @@ from pyboolnet.file_exchange import bnet2primes
 from pyboolnet.repository import get_primes
 from pyboolnet.prime_implicants import remove_variables, remove_all_variables_except, rename_variable
 from pyboolnet.prime_implicants import create_disjoint_union, primes_are_equal, create_variables
-from pyboolnet.prime_implicants import input_combinations, copy_primes
+from pyboolnet.prime_implicants import list_input_combinations, copy_primes
 from pyboolnet.prime_implicants import find_inputs, find_constants
-from pyboolnet.prime_implicants import percolate_and_remove_constants, percolate_and_keep_constants
+from pyboolnet.prime_implicants import update_primes
 from pyboolnet.prime_implicants import create_blinkers, active_primes
+from pyboolnet.prime_implicants import percolate
 
 
 @pytest.mark.parametrize("copy", [True, False])
@@ -125,7 +126,7 @@ def test_input_combinations1():
     primes = bnet2primes("input1, input1 \n input2, input2")
     expected = [{"input1": 0, "input2": 0}, {"input1": 0, "input2": 1}, {"input1": 1, "input2": 0}, {"input1": 1, "input2": 1}]
     expected.sort(key=lambda x: tuple(sorted(x.items())))
-    answer = list(input_combinations(primes))
+    answer = list(list_input_combinations(primes))
     answer.sort(key=lambda x: tuple(sorted(x.items())))
 
     assert answer == expected
@@ -134,7 +135,7 @@ def test_input_combinations1():
 def test_input_combinations2():
     primes = bnet2primes("v1, v2 \n v2, v1")
 
-    assert list(input_combinations(primes)) == [{}]
+    assert list(list_input_combinations(primes)) == [{}]
 
 
 def test_copy():
@@ -166,22 +167,21 @@ def test_equal():
 
 def test_percolation():
     primes = bnet2primes("A, 0 \n B, A")
-    assert percolate_and_keep_constants(primes) == {"A": 0, "B": 0}
 
-    primes = bnet2primes("A, 0 \n B, A")
-    assert percolate_and_remove_constants(primes) == {"A": 0, "B": 0}
+    assert find_constants(primes=percolate(primes, copy=True)) == {"A": 0, "B": 0}
+    assert percolate(primes, copy=True, remove_constants=True) == {}
 
 
 def test_percolation1a():
     primes = {"A": [[{}], []], "B": [[{}], []], "C": [[{"A": 1}, {"B": 0}], [{"A": 0, "B": 1}]]}
-    percolate_and_remove_constants(primes)
+    percolate(primes, remove_constants=True)
 
     assert primes_are_equal({}, primes)
 
 
 def test_percolation1b():
     primes = {"A": [[{}], []], "B": [[{}], []], "C": [[{"A": 1}, {"B": 0}], [{"A": 0, "B": 1}]]}
-    percolate_and_keep_constants(primes)
+    percolate(primes)
     expected = {"A": [[{}], []], "B": [[{}], []], "C": [[{}], []]}
 
     assert primes_are_equal(expected, primes)
@@ -189,14 +189,14 @@ def test_percolation1b():
 
 def test_percolation2a():
     primes = {"A": [[{}], []], "B": [[], [{}]], "C": [[{"A": 1}, {"B": 0}], [{"A": 0, "B": 1}]]}
-    percolate_and_remove_constants(primes)
+    percolate(primes, remove_constants=True)
 
     assert primes_are_equal({}, primes)
 
 
 def test_percolation2b():
     primes = {"A": [[{}], []], "B": [[], [{}]], "C": [[{"A": 1}, {"B": 0}], [{"A": 0, "B": 1}]]}
-    percolate_and_keep_constants(primes)
+    percolate(primes)
     expected = {"A": [[{}], []], "B": [[], [{}]], "C": [[], [{}]]}
 
     assert primes_are_equal(expected, primes)
@@ -204,14 +204,14 @@ def test_percolation2b():
 
 def test_percolation3a():
     primes = {"A": [[{}], []], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    percolate_and_remove_constants(primes)
+    percolate(primes, remove_constants=True)
 
     assert primes_are_equal({}, primes)
 
 
 def test_percolation3b():
     primes = {"A": [[{}], []], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    percolate_and_keep_constants(primes)
+    percolate(primes)
     expected = {"A": [[{}], []], "B": [[], [{}]], "C": [[], [{}]]}
 
     assert primes_are_equal(expected, primes)
@@ -219,18 +219,32 @@ def test_percolation3b():
 
 def test_percolation4a():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    percolate_and_remove_constants(primes)
+    percolate(primes, remove_constants=True)
     expected = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
 
-    assert primes_are_equal(expected, primes), str(primes) + " vs " + str(expected)
+    assert primes_are_equal(expected, primes)
 
 
 def test_percolation4b():
     primes = {"A": [[{"A": 0}], [{"A": 1}]], "B": [[{"A": 1}], [{"A": 0}]], "C": [[{"B": 0}], [{"B": 1}]]}
-    expected = copy_primes(primes)
-    percolate_and_keep_constants(primes)
 
-    assert primes_are_equal(expected, primes), str(primes) + " vs " + str(expected)
+    assert primes_are_equal(percolate(primes, copy=True), primes)
+
+
+def test_percolation5():
+    primes = bnet2primes(bnet="""
+        x1, 1
+        x2, (x1 & x2) | (x1 & !x3) | (x3 & !x1 & !x2)
+        x3, (x1 & !x3) | (x2 & x3 & !x1)
+    """)
+    percolate(primes=primes, remove_constants=True)
+
+    primes_expected = bnet2primes(bnet="""
+        x2, (x2) | (!x3)
+        x3, (!x3)
+    """)
+
+    assert primes_are_equal(primes_expected, primes)
 
 
 def test_create_blinkers():
@@ -252,3 +266,27 @@ def test_active_primes():
     assert active_primes(primes, subspace3) == primes
 
 
+def test_apply_constants_1():
+    primes = bnet2primes("""
+    A, A
+    B, B
+    x, A & B
+    expected, B
+    """)
+    constants = {"A": 1}
+    update_primes(primes=primes, name="x", constants=constants)
+
+    assert primes["x"] == primes["expected"]
+
+
+def test_apply_constants_2():
+    primes = bnet2primes("""
+    A, A
+    B, B
+    x, A & B
+    expected, 0
+    """)
+    constants = {"A": 1, "B": 0}
+    update_primes(primes=primes, name="x", constants=constants)
+
+    assert primes["x"] == primes["expected"]
