@@ -6,7 +6,7 @@ from tests.helpers import get_tests_path_in
 
 def test_bnet_text2primes():
     bnet_text = "\n".join(["v1, v2", "v2, !v1&(v1|v2)"])
-    bnet_text2primes(bnet_text=bnet_text)
+    bnet_text2primes(text=bnet_text)
 
 
 def test_bnet_file2primes():

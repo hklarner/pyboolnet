@@ -69,6 +69,8 @@ def test_univocality():
     assert example[1] in expected
     assert len(example) == 2
 
+
+def test_univocality2():
     bnet = "\n".join(["v1, !v1&!v2 | !v3", "v2, v1&v2", "v3, v1&v3 | v2", "v4, 0"])
     primes = bnet2primes(bnet)
 
@@ -76,6 +78,11 @@ def test_univocality():
 
     assert example is None
 
+
+def test_univocality3():
+    bnet = "\n".join(["v1, !v1&!v2 | !v3", "v2, v1&v2", "v3, v1&v3 | v2", "v4, 0"])
+    primes = bnet2primes(bnet)
+    tspace = {"v1": 0}
     answer = univocality(primes, "asynchronous", tspace)
 
     assert answer

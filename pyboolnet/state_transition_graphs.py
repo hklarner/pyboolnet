@@ -13,7 +13,7 @@ from pyboolnet import find_command
 from pyboolnet.digraphs import convert_nodes_to_anonymous_strings, digraph2image
 from pyboolnet.digraphs import digraph2condensationgraph
 from pyboolnet.digraphs import digraph2dot
-from pyboolnet.digraphs import has_edge, has_path, successors, digraph2sccgraph
+from pyboolnet.digraphs import has_edge, has_path, find_successors, digraph2sccgraph
 from pyboolnet.helpers import divide_list_into_similar_length_lists
 from pyboolnet.state_space import hamming_distance, list_states_in_subspace
 from pyboolnet.state_space import subspace2dict, subspace2str, state2dict, state2str, random_state
@@ -1058,7 +1058,7 @@ def stg2htg(stg: networkx.DiGraph):
         x = tuple(sorted(x))
         if len(x) > 1 or stg.has_edge(x[0], x[0]):
             sccs.append(x)
-            suc = successors(stg, x)
+            suc = find_successors(stg, x)
             if set(suc) == set(x):
                 attractors.append(x)
         else:

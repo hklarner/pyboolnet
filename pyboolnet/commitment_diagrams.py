@@ -11,23 +11,28 @@ import networkx
 
 import pyboolnet.state_space
 from pyboolnet import find_command
-from pyboolnet.digraphs import ancestors, find_outdag
+from pyboolnet.digraphs import add_style_subgraphs, digraph2image
+from pyboolnet.digraphs import find_ancestors, find_outdag
 from pyboolnet.helpers import copy_json_data, save_json_data, open_json_data
-from pyboolnet.helpers import perc2str, divide_list_into_similar_length_lists
 from pyboolnet.helpers import dicts_are_consistent, merge_dicts
+from pyboolnet.helpers import perc2str, divide_list_into_similar_length_lists
 from pyboolnet.interaction_graphs import primes2igraph
+from pyboolnet.model_checking import model_checking
 from pyboolnet.prime_implicants import copy_primes, remove_all_variables_except
-from pyboolnet.prime_implicants import input_combinations, find_inputs
+from pyboolnet.prime_implicants import list_input_combinations, find_inputs
 from pyboolnet.state_space import size_state_space, subspace2str
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
 from pyboolnet.temporal_logic import subspace2proposition
-from pyboolnet.model_checking import model_checking
-from pyboolnet.digraphs import add_style_subgraphs, digraph2image
 
 CMD_DOT = find_command("dot")
 COMMITMENT_COLORS = ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"]
 
 log = logging.getLogger(__name__)
+
+try:
+    import matplotlib.pyplot
+except ImportError:
+    log.warning(f"failed to import matplotlib: try to run 'pip3 install matplotlib>=3.3.3'.")
 
 
 def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = None, fname_json=None, edge_data=False) -> networkx.DiGraph:
@@ -82,7 +87,7 @@ def compute_commitment_diagram(attractors: dict, fname_image: Optional[str] = No
         outdag = find_outdag(igraph)
 
         attractor_nodes = [x for A in subspaces for x in A]
-        critical_nodes = ancestors(igraph, attractor_nodes)
+        critical_nodes = find_ancestors(igraph, attractor_nodes)
         outdag = [x for x in outdag if x not in critical_nodes]
 
         igraph.remove_nodes_from(outdag)
@@ -192,7 +197,7 @@ def _compute_diagram_component(primes: dict, update: str, subspaces, edge_data: 
     log.info(f"inputs: {len(inputs)} ({', '.join(inputs)})")
     log.info(f"combinations:  {2**len(inputs)}")
 
-    for i, combination in enumerate(input_combinations(primes)):
+    for i, combination in enumerate(list_input_combinations(primes)):
         attr = [x for x in subspaces if pyboolnet.state_space.is_subspace(primes, this=x, other=combination)]
         worst_case_nodes += 2 ** len(attr) - 1
         states_covered = 0
@@ -393,7 +398,7 @@ def commitment_diagram2image(
 
     subgraphs = []
     if style_inputs:
-        for inputs in input_combinations(primes):
+        for inputs in list_input_combinations(primes):
             if not inputs:
                 continue
 
@@ -461,8 +466,6 @@ def create_commitment_piechart(diagram: networkx.DiGraph, fname_image: str, colo
         >>> diagram = compute_commitment_diagram(attractors)
         >>> create_commitment_piechart(diagram, "commitment_piechart.pdf")
     """
-
-    import matplotlib.pyplot
 
     primes = diagram.graph["primes"]
     total = pyboolnet.state_space.size_state_space(primes)

@@ -2,30 +2,11 @@
 
 from pyboolnet.file_exchange import read_primes, bnet2primes
 from pyboolnet.repository import get_primes
-from pyboolnet.state_space import subspace2str
-from pyboolnet.trap_spaces import percolate_trapspace, trapspaces_that_contain_state
+from pyboolnet.trap_spaces import trapspaces_that_contain_state
 from pyboolnet.trap_spaces import steady_states_projected
 from pyboolnet.trap_spaces import trap_spaces, trapspaces_that_intersect_subspace
 from pyboolnet.trap_spaces import trapspaces_within_subspace, trap_spaces_bounded
 from tests.helpers import get_tests_path_in, get_tests_path_out
-
-
-def test_percolated_trap_spaces():
-    primes = get_primes("arellano_rootstem")
-    all_trap_spaces = trap_spaces(primes, "all", max_output=200)
-    expected = set(subspace2str(primes, percolate_trapspace(primes, x)) for x in all_trap_spaces)
-    answer = set(trap_spaces(primes, "percolated", representation="str"))
-
-    assert len(expected) == len(answer)
-    assert expected == answer
-
-
-def test_percolate_trapspace():
-    primes = get_primes("raf")
-
-    assert percolate_trapspace(primes, {"Mek": 0, "Erk": 0}) == {"Raf": 1, "Mek": 0, "Erk": 0}
-    assert percolate_trapspace(primes, {}) == {}
-    assert percolate_trapspace(primes, {u"Raf": 1, u"Mek": 0, u"Erk": 0}) == {u"Raf": 1, u"Mek": 0, u"Erk": 0}
 
 
 def test_known_trap_spaces_for_mapk():

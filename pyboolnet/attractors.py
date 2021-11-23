@@ -9,7 +9,7 @@ from typing import Optional, Union, List, Tuple
 
 import networkx
 
-from pyboolnet.digraphs import ancestors
+from pyboolnet.digraphs import find_ancestors
 from pyboolnet.digraphs import digraph2condensationgraph
 from pyboolnet.file_exchange import primes2bnet
 from pyboolnet.helpers import merge_dicts
@@ -18,9 +18,8 @@ from pyboolnet.helpers import save_json_data
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.model_checking import model_checking
 from pyboolnet.prime_implicants import copy_primes
-from pyboolnet.prime_implicants import create_constants
-from pyboolnet.prime_implicants import percolate_and_keep_constants
-from pyboolnet.prime_implicants import percolate_and_remove_constants
+from pyboolnet.prime_implicants import create_constants, find_constants
+from pyboolnet.prime_implicants import percolate, remove_all_constants
 from pyboolnet.prime_implicants import remove_all_variables_except
 from pyboolnet.state_space import subspace2str, state2dict, state2str, random_state
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
@@ -295,7 +294,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
 
     primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
-    percolate_and_remove_constants(primes=primes)
+    percolate(primes=primes, remove_constants=True)
 
     if primes == {}:
         return True
@@ -354,7 +353,8 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
 
     primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
-    constants = percolate_and_remove_constants(primes=primes)
+    percolate(primes=primes, remove_constants=True)
+    constants = find_constants(primes=primes)
 
     if len(constants) > len(trap_space):
         return False
@@ -426,8 +426,9 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
 
-    primes = create_constants(primes=primes, constants=trap_space, copy=True)
-    constants = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, add_constants=trap_space, copy=True)
+    constants = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
     if primes == {}:
         return True, None
@@ -474,8 +475,9 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
     if len(trap_space) == len(primes):
         return True, None
 
-    primes = create_constants(primes, constants=trap_space, copy=True)
-    constants = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, add_constants=trap_space, copy=True)
+    constants = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
     if len(constants) > len(trap_space):
         counterexample = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
@@ -545,8 +547,9 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
         10010111101010100001100001011011111111
     """
 
-    primes = copy_primes(primes=primes)
-    constants_global = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, copy=True)
+    constants_global = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
     min_trap_spaces = trap_spaces(primes=primes, type_="min", max_output=max_output)
     if min_trap_spaces == [{}]:
@@ -574,7 +577,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
         top_layer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U) == 0]
 
         for U in top_layer:
-            u_dash = ancestors(igraph, U)
+            u_dash = find_ancestors(igraph, U)
 
             primes_restricted = copy_primes(primes_reduced)
             remove_all_variables_except(primes=primes_restricted, names=u_dash)
@@ -604,8 +607,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             w_dash.update(u_dash)
 
         for q in intersection(refinement):
-            dummy = create_constants(primes=primes, constants=q, copy=True)
-            q_tilde = percolate_and_keep_constants(primes=dummy)
+            q_tilde = find_constants(primes=percolate(primes=primes, add_constants=q, copy=True))
 
             if q_tilde not in min_trap_spaces:
                 current_set.append((q_tilde, w_dash))

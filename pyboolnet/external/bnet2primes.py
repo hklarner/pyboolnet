@@ -13,12 +13,12 @@ CMD_BNET2PRIMES = find_command(name="bnet2prime")
 log = logging.getLogger(__name__)
 
 
-def bnet_text2primes(bnet_text: str) -> dict:
+def bnet_text2primes(text: str) -> dict:
     """
     Calls bnet2primes on a bnet text and returns prime implicants.
 
     **arguments**:
-        * *bnet_text*: contents of a *bnet* file
+        * *text*: contents of a *bnet* file
 
     **returns**:
         * *primes*: prime implicants
@@ -26,7 +26,7 @@ def bnet_text2primes(bnet_text: str) -> dict:
 
     cmd = [CMD_BNET2PRIMES]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate(input=bnet_text.encode())
+    out, err = proc.communicate(input=text.encode())
     proc.stdin.close()
 
     if not proc.returncode == 0:
@@ -62,8 +62,8 @@ def bnet_file2primes(fname_bnet: str) -> dict:
     out = out.decode()
 
     if not proc.returncode == 0:
-        log.error(f"failed to run bnet2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
-        return
+        log.error(f"failed to run bnet_file2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
+        sys.exit()
 
     out = out.replace("\x08", "")
     out = out.replace(" ", "")

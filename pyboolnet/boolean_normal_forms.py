@@ -11,6 +11,25 @@ from pyboolnet.external.bnet2primes import bnet_text2primes
 log = logging.getLogger(__name__)
 
 
+def get_dnf(one_implicants: List[dict]) -> str:
+    """
+    Returns a disjunctive normal form for *name* by converting each prime implicant into a conjunction.
+
+    **arguments**:
+        * *one_implicants*: the 1-implicants of a component
+
+    **returns**:
+        * *dnf*: the dnf of *one_implicants*
+
+    **example**:
+
+        >>> get_dnf(primes["MEK"][1])
+        RAF&ERK | TGF
+    """
+
+    return " | ".join([" & ".join([k if implicant[k] == 1 else "!" + k for k in implicant]) for implicant in one_implicants])
+
+
 def primes2mindnf(primes: dict) -> Dict[str, str]:
     """
     Creates a minimal *disjunctive normal form* (DNF) expression for the Boolean network represented by *primes*.
@@ -149,7 +168,7 @@ def functions2primes(functions: Dict[str, callable]) -> dict:
     mindnf = functions2mindnf(functions)
     text = "\n".join([f"{name},\t\t{dnf}" for name, dnf in mindnf.items()])
 
-    return bnet_text2primes(bnet_text=text)
+    return bnet_text2primes(text=text)
 
 
 """

@@ -3,13 +3,11 @@
 import ast
 import logging
 import os
-import subprocess
-import sys
-from typing import Optional, Dict
+from typing import Optional
 
 from pyboolnet import find_command
 from pyboolnet.external.bnet2primes import bnet_file2primes, bnet_text2primes
-from pyboolnet.boolean_normal_forms import primes2mindnf, functions2mindnf
+from pyboolnet.boolean_normal_forms import primes2mindnf, get_dnf
 from pyboolnet.digraphs import find_outdag
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.prime_implicants import CONSTANT_ON, CONSTANT_OFF
@@ -22,14 +20,16 @@ log = logging.getLogger(__name__)
 
 def bnet2primes(bnet: str, fname_primes: Optional[str] = None) -> dict:
     """
-    Generates and returns the prime implicants of a Boolean network in :ref:`installation_boolnet` format.
-    The primes are saved as a *json* file if *FnamePRIMES* is given.
+    Generates and returns the prime implicants of a Boolean network in **boolnet** format.
+    The primes are saved as a *json* file if *fname_primes* is given.
     The argument *bnet* may be either the name of a *bnet* file or a string containing the file contents.
-    Use the function :ref:`FileExchange.read_primes <read_primes>` to open a previously saved *json* file.
+    Use the function `read_primes` to open a previously saved *json* file.
 
-    .. note::
+    .. example of boolnet format::
 
-        Requires the program :ref:`BNetToPrime <installation_bnettoprime>`.
+        Erk,  Erk & Mek | Mek & Raf
+        Mek,  Erk | Mek & Raf
+        Raf,  !Erk | !Raf
 
     **arguments**:
         * *bnet*: name of *bnet* file or string contents of file
@@ -46,7 +46,7 @@ def bnet2primes(bnet: str, fname_primes: Optional[str] = None) -> dict:
         >>> primes = bnet2primes("Erk, !Mek \\n Raf, Ras & Mek", "mapk.primes")
     """
 
-    primes = bnet_file2primes(fname_bnet=bnet) if os.path.isfile(bnet) else bnet_text2primes(bnet_text=bnet)
+    primes = bnet_file2primes(fname_bnet=bnet) if os.path.isfile(bnet) else bnet_text2primes(text=bnet)
 
     if fname_primes and os.path.isfile(fname_primes):
         write_primes(primes=primes, fname_json=fname_primes)
@@ -99,20 +99,14 @@ def primes2bnet(primes: dict, fname_bnet: str = None, minimize: bool = False, he
         expressions = primes2mindnf(primes)
         for block in blocks:
             for name in block:
-                lines += [(name+",").ljust(width)+expressions[name]]
+                lines += [f"{name + ',': <{width}} {expressions[name]}"]
             lines += [""]
 
     else:
         for block in blocks:
             for name in block:
-                if primes[name] == CONSTANT_ON:
-                    expression = "1"
-                elif primes[name] == CONSTANT_OFF:
-                    expression = "0"
-                else:
-                    expression = " | ".join(["&".join([x if term[x] == 1 else "!" + x for x in term]) for term in primes[name][1]])
-
-                lines += [(name+",").ljust(width)+expression]
+                expression = get_dnf(one_implicants=primes[name][1])
+                lines += [f"{name+',': <{width}} {expression}"]
             lines += [""]
 
     text = "\n".join(lines)
