@@ -176,8 +176,6 @@ def create_basins_of_attraction_barplot(attractors: dict, fname_image: str, titl
         created barplot.pdf
     """
 
-    import matplotlib.pyplot
-
     attractors_tuple = attractors["attractors"]
     primes = attractors["primes"]
 
