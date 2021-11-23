@@ -62,7 +62,6 @@ setup(
         "Topic :: Scientific/Engineering :: Bio-Informatics"],
     install_requires=[
         "networkx>=2.4",
-        "matplotlib>=3.3.3",
         "pytest",
         "click==8.0.1"],
     entry_points="""
