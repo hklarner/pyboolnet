@@ -17,8 +17,8 @@ from pyboolnet.digraphs import has_edge, has_path, find_successors, digraph2sccg
 from pyboolnet.helpers import divide_list_into_similar_length_lists
 from pyboolnet.state_space import hamming_distance, list_states_in_subspace
 from pyboolnet.state_space import subspace2dict, subspace2str, state2dict, state2str, random_state
-from pyboolnet.trap_spaces import trap_spaces
-from pyboolnet.trap_spaces import trapspaces_that_contain_state
+from pyboolnet.trap_spaces import compute_trap_spaces
+from pyboolnet.trap_spaces import compute_trapspaces_that_contain_state
 
 CMD_DOT = find_command("dot")
 UPDATE_STRATEGIES = ["asynchronous", "synchronous", "mixed"]
@@ -51,7 +51,7 @@ def energy(primes: dict, state) -> int:
         0
     """
     
-    tspace = trapspaces_that_contain_state(primes, state, type_="min", fname_asp=None, representation="str")[0]
+    tspace = compute_trapspaces_that_contain_state(primes, state, type_="min", fname_asp=None, representation="str")[0]
     energy = tspace.count('-')
     
     return energy
@@ -441,7 +441,7 @@ def add_style_mintrapspaces(primes: dict, stg: networkx.DiGraph, max_output: int
 
     states = stg.nodes()
     
-    for tspace in trap_spaces(primes, "min", max_output=max_output):
+    for tspace in compute_trap_spaces(primes, "min", max_output=max_output):
         subgraph = networkx.DiGraph()
         subgraph.add_nodes_from([x for x in list_states_in_subspace(primes, tspace) if x in states])
         if not subgraph.nodes():
