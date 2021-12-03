@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 try:
     from pyeda.inter import truthtable, truthtable2expr, exprvar
 except ImportError:
-    log.warning(f"failed to import pyeda: network_generators.random_boolean_expression is not available")
+    log.warning(f"failed to import pyeda: network_generators.random_boolean_expression is not available. Try to run 'pip3 install pyeda>=0.28.0'")
 
 
 def path_graph(n: int, edge_sign: int = 1, loop_sign: int = 1) -> dict:

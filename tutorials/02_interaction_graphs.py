@@ -2,9 +2,8 @@
 
 import pyboolnet.state_space
 from pyboolnet.interaction_graphs import primes2igraph, igraph2image, local_igraph_of_state, add_style_interactionsigns
-from pyboolnet.state_transition_graphs import create_stg_image
 from pyboolnet.repository import get_primes
-
+from pyboolnet.state_transition_graphs import create_stg_image
 
 if __name__ == "__main__":
     primes = get_primes("remy_tumorigenesis")
@@ -64,4 +63,4 @@ if __name__ == "__main__":
 
 
 
-# end of file
+

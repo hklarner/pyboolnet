@@ -8,8 +8,8 @@ Installation
 
 Python
 ------
-|software| is now being developed in Python 3.8 and is not compatible with Python2.
-If you experience problems with your version of Python and |software| please contact |myemail| or
+*pyboolnet* is now being developed in Python 3.8 and is not compatible with Python2.
+If you experience problems with your version of Python and *pyboolnet* please contact *hannes.klarner@fu-berlin.de* or
 post an issue on the project homepage at
 
    * http://github.com/hklarner/pyboolnet/issues
@@ -28,7 +28,7 @@ Make sure that :ref:`NetworkX <installation_networkx>`, :ref:`Graphviz <installa
    $ apt install graphviz
    $ apt install imagemagick
 
-Install |software| with *pip*::
+Install *pyboolnet* with *pip*::
 
    $ pip3 install git+https://github.com/hklarner/pyboolnet
 
@@ -46,13 +46,13 @@ The package is likely going to be placed here::
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
 
-You should now be able to import |software|::
+You should now be able to import *pyboolnet*::
 
    $ python
    >>> import pyboolnet
 
 
-To remove |software| using *pip* run::
+To remove *pyboolnet* using *pip* run::
 
       $ pip3 uninstall pyboolnet
 
@@ -79,7 +79,7 @@ Download and install Graphviz_ and ImageMagick_ from
    * http://www.graphviz.org/download.php
    * http://www.imagemagick.org/script/binary-releases.php
 
-Install |software| with *pip*::
+Install *pyboolnet* with *pip*::
 
    $ pip3 install git+https://github.com/hklarner/pyboolnet
 
@@ -97,12 +97,12 @@ The package is likely going to be placed here::
 
 where ``<user>`` is the name you are logged in with (``$ whoami``) and ``<version>`` is the Python version you are using.
 
-You should now be able to import |software|::
+You should now be able to import *pyboolnet*::
 
    $ python
    >>> import pyboolnet
 
-To remove |software| using *pip* run::
+To remove *pyboolnet* using *pip* run::
 
       $ pip3 uninstall pyboolnet
 
@@ -120,7 +120,7 @@ on
 
    * http://pip.pypa.io/en/latest/installing
 
-To install |software| with *pip*::
+To install *pyboolnet* with *pip*::
 
    C:\> pip.exe install git+https://github.com/hklarner/pyboolnet
 
@@ -144,12 +144,12 @@ To install Graphviz_ and ImageMagick_ download the respective executables from t
    * http://www.graphviz.org/Download_windows.php
    * http://www.imagemagick.org/script/binary-releases.php#windows
 
-You should now be able to import |software|::
+You should now be able to import *pyboolnet*::
 
    C:\> python
    >>> import PyBoolNet
 
-To remove |software| using *pip* run::
+To remove *pyboolnet* using *pip* run::
 
       C:\> pip.exe uninstall PyBoolNet
 
@@ -158,8 +158,8 @@ If you do not have *pip*, all files must be removed manually.
 Dependencies
 ------------
 
-Most of what |software| does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
-The file that records the locations to third party binaries is called ``settings.cfg`` and located in the folder ``binaries`` of |software|.
+Most of what *pyboolnet* does is written in pure Python but some crucial tasks, for example solving ASP problems or deciding CTL queries, are done using third party software.
+The file that records the locations to third party binaries is called ``settings.cfg`` and located in the folder ``binaries`` of *pyboolnet*.
 The default location is::
 
    /usr/local/lib/python<version>/dist-packages/pyboolnet/binaries/settings.cfg
@@ -193,7 +193,7 @@ If you get fails or errors, read :ref:`Troubleshooting <installation_troubleshoo
 
    * http://github.com/hklarner/pyboolnet/issues
 
-where you can also post issues. Also, do not hesitate to contact me at |myemail|.
+where you can also post issues. Also, do not hesitate to contact me at *hannes.klarner@fu-berlin.de*.
 
 
 .. _installation_networkx:
@@ -237,7 +237,7 @@ They are necessary to compute trap spaces by means of stable and consistent arc 
 
 .. note::
    The development of the Potassco solving collection is active with frequent releases.
-   |software| is tested with two specific versions, clasp-3.1.1_ and gringo-4.4.0_ and we strongly recommend you use them because of syntax differences between versions.
+   *pyboolnet* is tested with two specific versions, clasp-3.1.1_ and gringo-4.4.0_ and we strongly recommend you use them because of syntax differences between versions.
 
 The binaries and source are available at:
 
@@ -251,11 +251,11 @@ NuSMV
 .....
 
 NuSMV_ is a symbolic model checker that we use to decide LTL and CTL queries.
-|software| requires the extension NuSMV-a_ for model checking with accepting states.
+*pyboolnet* requires the extension NuSMV-a_ for model checking with accepting states.
 It is included with every release and should work out of the box.
 
 .. note::
-   |software| is tested with NuSMV-a_, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
+   *pyboolnet* is tested with NuSMV-a_, an extension of NuSMV 2.6.0. If you do not need to compute accepting states you may use the regular NuSMV 2.6.0.
 
 Binaries and source available at:
 
@@ -345,7 +345,7 @@ Related Software
 BoolNet
 .......
 BoolNet_ is a library for R_ that is used for the construction, simulation and analysis of Boolean networks, see :ref:`Müssel2010 <Müssel2010>`.
-It is not a required dependency of |software| but you need it if you want to convert *SBML-qual* files into *bnet* files.
+It is not a required dependency of *pyboolnet* but you need it if you want to convert *SBML-qual* files into *bnet* files.
 To install it run::
 
    $ R
@@ -363,7 +363,7 @@ GINsim
 ......
 
 GINsim_ is a Java program for the construction and analysis of qualitative regulatory and signaling networks, see :ref:`Chaouiya2012 <Chaouiya2012>`.
-Like BoolNet_, GINsim_ is not a required dependency of |software| but it has a useful model repository. To convert GINsim_ models you need to export them as *SBML-qual* files which can then be converted into *bnet* files using BoolNet_.
+Like BoolNet_, GINsim_ is not a required dependency of *pyboolnet* but it has a useful model repository. To convert GINsim_ models you need to export them as *SBML-qual* files which can then be converted into *bnet* files using BoolNet_.
 No installation required, just download the latest version (tested with version 2.9) and call::
 
    $ java -jar GINsim-2.9.3.jar
@@ -378,7 +378,7 @@ GINsim_ is available at
 Troubleshooting
 ---------------
 
-For questions that are not listed here please contact |myemail| or post an issue on the project homepage at
+For questions that are not listed here please contact *hannes.klarner@fu-berlin.de* or post an issue on the project homepage at
 
    * http://github.com/hklarner/pyboolnet/issues
 
@@ -407,7 +407,7 @@ If you get *permission denied* erros like::
    OSError: [Errno 13] Permission denied
 
 you might have to change the mode of the files to make sure that they are executable.
-Locate the directory that contains |Software| (see :ref:`Installation of PyBoolNet <installation_software>` above) and run::
+Locate the directory that contains *pyboolnet* (see :ref:`Installation of PyBoolNet <installation_software>` above) and run::
 
    ../PyBoolNet$ chmod -R 744 Dependencies/
    ../PyBoolNet$ chmod -R +x Dependencies/
@@ -422,4 +422,4 @@ If you get *No such file or directory* errors you might have installed the wrong
    * http://github.com/hklarner/pyboolnet/releases
 
 
-.. include:: Substitutions.rst
+.. include:: substitutions.rst

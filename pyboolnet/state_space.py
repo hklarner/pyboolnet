@@ -252,7 +252,7 @@ def enumerate_states(primes: dict, proposition: str):
 
     proposition = proposition.replace("TRUE", "1")
     proposition = proposition.replace("FALSE", "0")
-    new_primes = bnet_text2primes(bnet_text=f"?, {proposition}")
+    new_primes = bnet_text2primes(text=f"?, {proposition}")
 
     states = set([])
     for p in new_primes["?"][1]:

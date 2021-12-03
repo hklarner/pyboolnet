@@ -142,4 +142,4 @@ Bibliography
 
 
 
-.. include:: Substitutions.rst
+.. include:: substitutions.rst

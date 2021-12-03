@@ -4,8 +4,6 @@ import logging
 import sys
 from typing import Union, Optional
 
-import matplotlib.pyplot
-
 import pyboolnet.state_space
 import pyboolnet.state_space
 from pyboolnet import find_command
@@ -19,6 +17,11 @@ BASIN_COLORS = ["#efedf5", "#bcbddc", "#756bb1"]
 PIE_COLORS = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a" "#ffff99"]
 
 log = logging.getLogger(__name__)
+
+try:
+    import matplotlib.pyplot
+except ImportError:
+    log.warning(f"failed to import matplotlib: try to run 'pip3 install matplotlib>=3.3.3'.")
 
 
 def weak_basin(primes: dict, update: str, subspace: Union[dict, str] = {}, minimize: bool = False):
@@ -172,8 +175,6 @@ def create_basins_of_attraction_barplot(attractors: dict, fname_image: str, titl
         >>> create_basins_of_attraction_barplot(attractors, "barplot.pdf")
         created barplot.pdf
     """
-
-    import matplotlib.pyplot
 
     attractors_tuple = attractors["attractors"]
     primes = attractors["primes"]

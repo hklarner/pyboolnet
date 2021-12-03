@@ -1,5 +1,3 @@
-
-
 prime_implicants
 ================
 

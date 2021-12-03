@@ -20,6 +20,11 @@ LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 log = logging.getLogger(__name__)
 
+try:
+    import matplotlib.pyplot
+except ImportError:
+    log.warning(f"failed to import matplotlib: try to run 'pip3 install matplotlib>=3.3.3'.")
+
 
 def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optional[str] = None) -> dict:
     """
@@ -375,8 +380,6 @@ def create_phenotypes_piechart(diagram: networkx.DiGraph, fname_image: str, titl
         >>> create_phenotypes_piechart(diagram, "piechart.pdf")
     """
 
-    import matplotlib.pyplot
-
     matplotlib.rcParams['hatch.linewidth'] = 4.0
     matplotlib.rcParams['hatch.color'] = "#ff7c00"
 
@@ -454,4 +457,4 @@ if __name__=="__main__":
 
 
 
-# end of file
+

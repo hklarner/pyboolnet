@@ -1,11 +1,11 @@
 
 
-from pyboolnet.state_transition_graphs import energy, random_walk, add_style_path, add_style_anonymous, stg2image, primes2stg
-from pyboolnet.state_transition_graphs import stg2sccgraph, stg2condensationgraph, best_first_reachability
-from pyboolnet.state_transition_graphs import sccgraph2image
-from pyboolnet.state_transition_graphs import create_stg_image
 from pyboolnet.repository import get_primes
-
+from pyboolnet.state_transition_graphs import create_stg_image
+from pyboolnet.state_transition_graphs import energy, random_walk, add_style_path, add_style_anonymous, stg2image, \
+    primes2stg
+from pyboolnet.state_transition_graphs import sccgraph2image
+from pyboolnet.state_transition_graphs import stg2sccgraph, stg2condensationgraph, best_first_reachability
 
 if __name__ == "__main__":
     primes = get_primes("xiao_wnt5a")
@@ -77,4 +77,4 @@ if __name__ == "__main__":
 
 
 
-# end of file
+

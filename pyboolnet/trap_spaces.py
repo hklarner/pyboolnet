@@ -2,12 +2,11 @@
 
 import logging
 import sys
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict
 
 from pyboolnet import find_command
 from pyboolnet.external.potassco import potassco_handle
 from pyboolnet.prime_implicants import active_primes
-from pyboolnet.prime_implicants import create_constants, percolate_and_keep_constants
 from pyboolnet.state_space import subspace2dict, subspace2str
 
 CMD_GRINGO = find_command("gringo")
@@ -16,7 +15,32 @@ CMD_CLASP = find_command("clasp")
 log = logging.getLogger(__name__)
 
 
-def circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, representation: str = "dict"):
+def is_trap_space(primes: dict, subspace: Dict[str, int]) -> bool:
+    """
+    Tests whether *subspace* is a trap space in *primes*.
+
+    **arguments**:
+        * *primes*: prime implicants
+        * *subspace*: a subspace
+
+    **returns**:
+        * *result: whether *subspace* is a trap space
+
+    **example**::
+
+        >>> is_trap_space(primes=primes, subspace={'RAF':1, 'ERK':0, 'MEK':1})
+        True
+    """
+
+    subspace_items = set(subspace.items())
+    for name, value in subspace_items:
+        if not any(set(p.items()).issubset(subspace_items) for p in primes[name][value]):
+            return False
+
+    return True
+
+
+def compute_circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, representation: str = "dict"):
     """
     Computes minimal trap spaces but also distinguishes between nodes that are fixed due to being part of a circuit
     and nodes that are fix due to percolation effects.
@@ -33,39 +57,14 @@ def circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, repres
 
     **example**::
 
-        >>> circuits(primes)
+        >>> compute_circuits(primes)
         [({'Mek': 0, 'Erk': 0},{'Raf': 1}),..]
     """
     
     return potassco_handle(primes, type_="circuits", bounds=(0, "n"), project=None, max_output=max_output, fname_asp=fname_asp, representation=representation)
 
 
-def percolate_trapspace(primes: dict, trap_space: dict):
-    """
-    Percolates the *trap_space*.
-    Does not check whether *trap_space* is really a trap space.
-    Instead, it creates constants from *trap_space* and percolates the values.
-
-    **arguments**:
-        * *primes*: prime implicants
-        * *trap_space*: a subspace
-
-    **returns**:
-        * *trap_space*: the percolated trap space
-
-    **example**::
-
-        >>> percolate_trapspace(primes, {'Mek': 0, 'Erk': 0})
-        {'Raf': 1, 'Mek': 0, 'Erk': 0}
-    """
-    
-    primes = create_constants(primes, trap_space, copy=True)
-    constants = percolate_and_keep_constants(primes)
-    
-    return constants
-
-
-def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
+def compute_trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
     """
     Computes trap spaces that contain *state*.
 
@@ -82,13 +81,13 @@ def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_a
 
     **example**::
 
-        >>> trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
+        >>> compute_trapspaces_that_contain_state(primes, {"v1":1,"v2":0,"v3":0})
     """
 
-    return trapspaces_that_intersect_subspace(primes=primes, subspace=state, type_=type_, fname_asp=fname_asp, representation=representation, max_output=max_output)
+    return compute_trapspaces_that_intersect_subspace(primes=primes, subspace=state, type_=type_, fname_asp=fname_asp, representation=representation, max_output=max_output)
 
 
-def trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000) -> List[dict]:
+def compute_trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000) -> List[dict]:
     """
     Computes trap spaces that have non-empty intersection with *subspace*
 
@@ -105,7 +104,7 @@ def trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str,
 
     **example**::
 
-        >>> trapspaces_that_intersect_subspace(primes, {"v1":1,"v2":0,"v3":0})
+        >>> compute_trapspaces_that_intersect_subspace(primes, {"v1":1,"v2":0,"v3":0})
     """
     
     assert (len(primes) >= len(subspace))
@@ -142,7 +141,7 @@ def trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str,
     return tspaces
 
 
-def trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000) -> Union[List[dict], List[str]]:
+def compute_trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000) -> Union[List[dict], List[str]]:
     """
     Computes trap spaces contained within *subspace*
 
@@ -163,7 +162,7 @@ def trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_a
     """
     
     if not subspace:
-        return trap_spaces(primes, type_, max_output=max_output, fname_asp=fname_asp, representation=representation)
+        return compute_trap_spaces(primes, type_, max_output=max_output, fname_asp=fname_asp, representation=representation)
     
     assert (len(primes) >= len(subspace))
     assert (type(subspace) in [dict, str])
@@ -182,7 +181,7 @@ def trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_a
     return tspaces
 
 
-def smallest_trapspace(primes: dict, state: dict, representation: str = "dict"):
+def compute_smallest_trapspace(primes: dict, state: dict, representation: str = "dict"):
     """
     Returns the (unique) smallest trap space that contains *state*.
     Calls :ref:`trapspaces_that_contain_state`
@@ -197,13 +196,13 @@ def smallest_trapspace(primes: dict, state: dict, representation: str = "dict"):
 
     **example**::
 
-        >>> smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
+        >>> compute_smallest_trapspace(primes, {"v1":1,"v2":0,"v3":0})
     """
     
-    return trapspaces_that_contain_state(primes, state, type_="min", fname_asp=None, representation=representation)
+    return compute_trapspaces_that_contain_state(primes, state, type_="min", fname_asp=None, representation=representation)
 
 
-def trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname_asp: str = None, representation: str = "dict") -> Union[List[dict], List[str]]:
+def compute_trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname_asp: str = None, representation: str = "dict") -> Union[List[dict], List[str]]:
     """
     Returns a list of trap spaces using the :ref:`installation_potassco` ASP solver, see :ref:`Gebser2011 <Gebser2011>`.
     For a formal introcution to trap spaces and the ASP encoding that is used for their computation see :ref:`Klarner2015(a) <klarner2015trap>`.
@@ -234,7 +233,7 @@ def trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname
         ...         "z, x&y | z"]
         >>> bnet = "\\n".join(bnet)
         >>> primes = bnet2primes(bnet)
-        >>> tspaces = trap_spaces(primes, "all", representation="str")
+        >>> tspaces = compute_trap_spaces(primes, "all", representation="str")
         ---, --1, 1-1, -00, 101
     """
     
@@ -246,7 +245,7 @@ def trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname
     return potassco_handle(primes, type_, bounds=bounds, project=[], max_output=max_output, fname_asp=fname_asp, representation=representation)
 
 
-def steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str] = None, representation: str = "dict") -> Union[List[dict], List[str]]:
+def compute_steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str] = None, representation: str = "dict") -> Union[List[dict], List[str]]:
     """
     Returns steady states.
 
@@ -261,7 +260,7 @@ def steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str]
 
     **example**::
 
-        >>> steady = steady_states(primes)
+        >>> steady = compute_steady_states(primes)
         >>> len(steady)
         2
     """
@@ -269,7 +268,7 @@ def steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str]
     return potassco_handle(primes, type_="all", bounds=("n", "n"), project=[], max_output=max_output, fname_asp=fname_asp, representation=representation)
 
 
-def trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int = 1000, fname_asp: Optional[str] = None):
+def compute_trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int = 1000, fname_asp: Optional[str] = None):
     """
     Returns a list of bounded trap spaces using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
     See :ref:`trap_spaces <sec:trap_spaces>` for details of the parameters *type_*, *max_output* and *fname_asp*.
@@ -294,7 +293,7 @@ def trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int
     **returns**:
         * list of trap spaces
     **example**::
-        >>> tspaces = trap_spaces_bounded(primes, "min", (2,4))
+        >>> tspaces = compute_trap_spaces_bounded(primes, "min", (2,4))
         >>> len(tspaces)
         12
         >>> tspaces[0]
@@ -304,7 +303,7 @@ def trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int
     return potassco_handle(primes, type_, bounds, project=None, max_output=max_output, fname_asp=fname_asp, representation="dict")
 
 
-def steady_states_projected(primes: dict, project: List[str] = [], max_output: int = 1000, fname_asp: Optional[str] = None):
+def compute_steady_states_projected(primes: dict, project: List[str] = [], max_output: int = 1000, fname_asp: Optional[str] = None):
     """
     Returns a list of projected steady states using the Potassco_ ASP solver :ref:`[Gebser2011]<Gebser2011>`.
 
@@ -319,10 +318,10 @@ def steady_states_projected(primes: dict, project: List[str] = [], max_output: i
 
     **example**::
 
-        >>> steady_states = steady_states_projected(primes, ["v1","v2"])
+        >>> steady_states = compute_steady_states_projected(primes, ["v1","v2"])
         >>> len(steady_states)
         2
-        >>> steady_states
+        >>> compute_steady_states
         [{"v1":1,"v2":0},{"v1":0,"v2":0}]
     """
 
@@ -332,6 +331,53 @@ def steady_states_projected(primes: dict, project: List[str] = [], max_output: i
         sys.exit()
     
     return potassco_handle(primes, type_="all", bounds=("n", "n"), project=project, max_output=max_output, fname_asp=fname_asp, representation="dict")
+
+
+# deprecated
+
+def circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, representation: str = "dict"):
+    print("WARNING: circuits is deprecated, use compute_circuits")
+    sys.exit(1)
+
+
+def trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname_asp: str = None, representation: str = "dict"):
+    print("WARNING: circuits is deprecated, use compute_trap_spaces")
+    sys.exit(1)
+
+
+def steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str] = None, representation: str = "dict"):
+    print("WARNING: steady_states is deprecated, use compute_steady_states")
+    sys.exit(1)
+
+
+def smallest_trapspace(primes: dict, state: dict, representation: str = "dict"):
+    print("WARNING: smallest_trapspace is deprecated, use compute_smallest_trapspace")
+    sys.exit(1)
+
+
+def trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int = 1000, fname_asp: Optional[str] = None):
+    print("WARNING: trap_spaces_bounded is deprecated, use compute_trap_spaces_bounded")
+    sys.exit(1)
+
+
+def steady_states_projected(primes: dict, project: List[str] = [], max_output: int = 1000, fname_asp: Optional[str] = None):
+    print("WARNING: steady_states_projected is deprecated, use compute_steady_states_projected")
+    sys.exit(1)
+
+
+def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
+    print("WARNING: trapspaces_that_contain_state is deprecated, use compute_trapspaces_that_contain_state")
+    sys.exit(1)
+
+
+def trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
+    print("WARNING: trapspaces_that_intersect_subspace is deprecated, use compute_trapspaces_that_intersect_subspace")
+    sys.exit(1)
+
+
+def trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
+    print("WARNING: trapspaces_within_subspace is deprecated, use compute_trapspaces_within_subspace")
+    sys.exit(1)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,18 @@
+
+
+# added to PyBoolNet: 2021, October
+# citation: Krumsiek, Jan et al. "Hierarchical Differentiation of Myeloid Progenitors Is Encoded in the Transcription Factor Network" (2011). PLoS ONE 6(8): e22649.
+
+
+targets, factors
+GATA2, GATA2 & (!(GATA1 & FOG1)) & (!PU1)
+GATA1, (GATA1 | GATA2 | Fli1) & (!PU1)
+FOG1, GATA1
+EKLF, GATA1 & (!Fli1)
+Fli1, GATA1 & (!EKLF)
+SCL, GATA1 & (!PU1)
+CEBPA, CEBPA & (!(GATA1 & FOG1 & SCL))
+PU1, (CEBPA | PU1) & (!(GATA1 | GATA2))
+cJun, PU1 & (!Gfi1)
+EgrNab, (PU1 & cJun) & (!Gfi1)
+Gfi1, CEBPA & (!EgrNab)

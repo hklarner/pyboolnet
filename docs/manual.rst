@@ -53,7 +53,7 @@ The returned list states that *f1* has two 1-prime implicants and each consists 
 Clauses are therefore represented by dictionaries whose keys are names of components and whose values are either 0 or 1,
 depending on whether the corresponding literal is negative or positive.
 
-It can be difficult to enumerate all prime implicants of a network and |software| uses the program :ref:`BNetToPrime <installation_bnettoprime>` to do it.
+It can be difficult to enumerate all prime implicants of a network and *pyboolnet* uses the program :ref:`BNetToPrime <installation_bnettoprime>` to do it.
 As a user you define a network in terms of Boolean expressions, Python functions or you import it from other tools, like GINsim_.
 The steps in each case are explained in the following sections.
 
@@ -276,7 +276,7 @@ The result is shown in :ref:`the figure below <figure01>`.
 graph, node and edge attributes
 *******************************
 
-|software| generates a *dot* file from an interaction graph by inspecting all its edge, node and graph attributes.
+*pyboolnet* generates a *dot* file from an interaction graph by inspecting all its edge, node and graph attributes.
 Attributes are just dictionaries that are attached to nodes, edges and the graph itself, see :ref:`installation_networkx` for an introduction.
 Use these attributes to change the appearance of the graph.
 The idea is that you either change the appearance of individual nodes and edges using node and edge attributes,
@@ -359,7 +359,7 @@ The result is shown in :ref:`the figure below <figure02>`.
 the interaction signs style
 ***************************
 
-|software| has predefined styles for adding attributes to interaction graphs.
+*pyboolnet* has predefined styles for adding attributes to interaction graphs.
 The function :ref:`add_style_interactionsigns` adds or overwrites color and arrowhead attributes to indicate whether an interaction is activating, inhibiting or both.
 Activating interactions are black with normal arrowheads,
 inhibiting interactions are red with blunt arrowhead and
@@ -858,7 +858,7 @@ To create the blinkers use the function :ref:`create_blinkers`::
    v3,   v1 & v2 & v3 & v4
    v4,   v2 & v3 | v1 & v3
 
-Note that |software| modifies the primes object in place rather than creating and returning a modified copy.
+Note that *pyboolnet* modifies the primes object in place rather than creating and returning a modified copy.
 If you want to keep the original primes and modify a copy you have to create the copy explicitly::
 
    >>> newprimes = PIs.copy(primes)
@@ -996,7 +996,7 @@ To enumerate all possible input combinations of a given network use the function
 
 Model Checking
 --------------
-|software| uses :ref:`installation_nusmv` to decide model checking queries for Boolean networks.
+*pyboolnet* uses :ref:`installation_nusmv` to decide model checking queries for Boolean networks.
 A model checking problem is defined by a transition system, its initial states and a temporal specification.
 For a formal introduction to model checking see for example :ref:`Baier2008 <Baier2008>`.
 
@@ -1017,7 +1017,7 @@ As an example, consider the following network::
 
 The state transition graph is shown in :ref:`the figure below <figure17>`.
 
-When model checking, |Software| translates state transition graphs into transition systems.
+When model checking, *pyboolnet* translates state transition graphs into transition systems.
 The basic approach to doing so is shown in :ref:`the figure below <figure17>`.
 Here, each state string is replaced by a subset of atomic propositions.
 The subset is chosen to correspond with the state string, i.e.,
@@ -1057,7 +1057,7 @@ The transition system with the extended set of atomic propositions is shown in :
 LTL model checking
 ******************
 Apart from a transition system, a model checking problem requires a *temporal specification*.
-Since |Software| uses :ref:`installation_nusmv` for solving model checking problems, two specification languages are available:
+Since *pyboolnet* uses :ref:`installation_nusmv` for solving model checking problems, two specification languages are available:
 *linear time logic* (LTL) and *computational tree logic* (CTL).
 
 LTL specifications are statements about the sequence of events that are expressed in terms of atomic propositions and temporal operators.
@@ -1634,7 +1634,7 @@ The size of this set tells us that there are two states outside of the initial o
    >>> accepting["ACCEPTING_SIZE"]
    5
 
-Note that |software| does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
+Note that *pyboolnet* does not currently support the manipulation of Boolean expression. They may however be used in subsequent queries.
 For example, we may query whether all initial states that satisfy the original spec also satisfy the property ``EF(STEADYSTATE)``::
 
    >>> prop = accepting["INITACCEPTING"]
@@ -1662,7 +1662,7 @@ and they can be computed efficiently for networks with hundreds of components.
 Intuitively, trap spaces can be seen as generalizations of steady states (note that steady states have the same three properties).
 For a formal introduction, an algorithm for computing trap spaces and a benchmark see :ref:`Klarner2015(a) <klarner2015trap>`.
 
-|Software| uses the module :ref:`AspSolver` and the function :ref:`trap_spaces` to compute trap spaces.
+*pyboolnet* uses the module :ref:`AspSolver` and the function :ref:`trap_spaces` to compute trap spaces.
 As an example, consider the following network which has five trap spaces::
 
    >>> bnet = ["x, !x | y | z",
@@ -1995,6 +1995,1644 @@ import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2
    >>> primes = FileExchange.bnet2primes(bnet)
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.compute_trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [STGs.subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> print [subspace2str(primes, x) for x in mintspaces]
+
+   >>> STGs.add_style_sccs(stg)
+   >>> STGs.add_style_subspaces(primes, stg, mintspaces)
+
+import pyboolnet.state_space   >>> bnet = ["v1, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3",
+   ...         "v2, !v1&!v2&!v3 | !v1&v2&v3 | v1&!v2&v3 | v1&v2&!v3",
+   ...         "v3, !v1&!v2&v3 | !v1&v2&!v3 | v1&!v2&!v3 | v1&v2&v3"]
+   >>> bnet = "\n".join(bnet)
+   >>> primes = FileExchange.bnet2primes(bnet)
+   >>> mintspaces = AspSolver.trap_spaces(primes, "min")
+   >>> stg = STGs.primes2stg(primes, "asynchronous")
    >>> mintspaces = AspSolver.trap_spaces(primes, "min")
    >>> print [subspace2str(primes, x) for x in mintspaces]
 
@@ -2036,4 +3674,4 @@ import pyboolnet.state_space   >>> mintspaces = AspSolver.trap_spaces(primes, "m
 
 
 
-.. include:: Substitutions.rst
+.. include:: substitutions.rst

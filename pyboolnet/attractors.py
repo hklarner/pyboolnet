@@ -9,8 +9,8 @@ from typing import Optional, Union, List, Tuple
 
 import networkx
 
-from pyboolnet.digraphs import ancestors
 from pyboolnet.digraphs import digraph2condensationgraph
+from pyboolnet.digraphs import find_ancestors
 from pyboolnet.file_exchange import primes2bnet
 from pyboolnet.helpers import merge_dicts
 from pyboolnet.helpers import open_json_data
@@ -18,18 +18,18 @@ from pyboolnet.helpers import save_json_data
 from pyboolnet.interaction_graphs import primes2igraph
 from pyboolnet.model_checking import model_checking
 from pyboolnet.prime_implicants import copy_primes
-from pyboolnet.prime_implicants import create_constants
-from pyboolnet.prime_implicants import percolate_and_keep_constants
-from pyboolnet.prime_implicants import percolate_and_remove_constants
+from pyboolnet.prime_implicants import create_constants, find_constants
+from pyboolnet.prime_implicants import percolate, remove_all_constants
 from pyboolnet.prime_implicants import remove_all_variables_except
 from pyboolnet.state_space import subspace2str, state2dict, state2str, random_state
 from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
-from pyboolnet.state_transition_graphs import random_successor_asynchronous, successor_synchronous, random_successor_mixed
+from pyboolnet.state_transition_graphs import random_successor_asynchronous, successor_synchronous, \
+    random_successor_mixed
 from pyboolnet.temporal_logic import all_globally_exists_finally_one_of_sub_spaces
 from pyboolnet.temporal_logic import exists_finally_one_of_subspaces
 from pyboolnet.temporal_logic import exists_finally_unsteady_components
 from pyboolnet.temporal_logic import subspace2proposition
-from pyboolnet.trap_spaces import trap_spaces
+from pyboolnet.trap_spaces import compute_trap_spaces
 from pyboolnet.version import read_version_txt
 
 VERSION = read_version_txt()
@@ -63,7 +63,7 @@ def compute_attractors(primes: dict, update: str, fname_json: Optional[str] = No
     attractors["primes"] = copy_primes(primes)
     attractors["update"] = update
 
-    min_tspaces = trap_spaces(primes=primes, type_="min", max_output=max_output)
+    min_tspaces = compute_trap_spaces(primes=primes, type_="min", max_output=max_output)
 
     if check_completeness:
         log.info("attractors.completeness(..)")
@@ -287,7 +287,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
 
     **example**::
 
-        >>> mintspaces = trap_spaces(primes, "min")
+        >>> mintspaces = compute_trap_spaces(primes, "min")
         >>> x = mintrapspaces[0]
         >>> univocality(primes, "asynchronous", x)
         True
@@ -295,7 +295,7 @@ def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool
 
     primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
-    percolate_and_remove_constants(primes=primes)
+    percolate(primes=primes, remove_constants=True)
 
     if primes == {}:
         return True
@@ -343,7 +343,7 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
 
     **example**::
 
-        >>> mintspaces = trap_spaces(primes, "min")
+        >>> mintspaces = compute_trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)
         True
@@ -354,7 +354,8 @@ def faithfulness(primes: dict, update: str, trap_space: Union[dict, str]) -> boo
 
     primes = copy_primes(primes=primes)
     create_constants(primes=primes, constants=trap_space)
-    constants = percolate_and_remove_constants(primes=primes)
+    percolate(primes=primes, remove_constants=True)
+    constants = find_constants(primes=primes)
 
     if len(constants) > len(trap_space):
         return False
@@ -421,13 +422,14 @@ def univocality_with_counterexample(primes: dict, update: str, trap_space: Union
 
     **example**::
 
-        >>> mintspaces = trap_spaces(primes, "min")
+        >>> mintspaces = compute_trap_spaces(primes, "min")
         >>> trapspace = mintrapspaces[0]
         >>> answer, counterex = univocality_with_counterexample(primes, trapspace, "asynchronous")
     """
 
-    primes = create_constants(primes=primes, constants=trap_space, copy=True)
-    constants = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, add_constants=trap_space, copy=True)
+    constants = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
     if primes == {}:
         return True, None
@@ -465,7 +467,7 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
 
     **example**::
 
-        >>> mintspaces = trap_spaces(primes, "min")
+        >>> mintspaces = compute_trap_spaces(primes, "min")
         >>> x = mintspaces[0]
         >>> faithfulness(primes, x)
         True
@@ -474,8 +476,9 @@ def faithfulness_with_counterexample(primes: dict, update: str, trap_space: dict
     if len(trap_space) == len(primes):
         return True, None
 
-    primes = create_constants(primes, constants=trap_space, copy=True)
-    constants = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, add_constants=trap_space, copy=True)
+    constants = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
     if len(constants) > len(trap_space):
         counterexample = find_attractor_state_by_randomwalk_and_ctl(primes=primes, update=update)
@@ -545,10 +548,11 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
         10010111101010100001100001011011111111
     """
 
-    primes = copy_primes(primes=primes)
-    constants_global = percolate_and_remove_constants(primes=primes)
+    primes = percolate(primes=primes, copy=True)
+    constants_global = find_constants(primes=primes)
+    remove_all_constants(primes=primes)
 
-    min_trap_spaces = trap_spaces(primes=primes, type_="min", max_output=max_output)
+    min_trap_spaces = compute_trap_spaces(primes=primes, type_="min", max_output=max_output)
     if min_trap_spaces == [{}]:
         if compute_counterexample:
             return True, None
@@ -574,12 +578,12 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
         top_layer = [U for U in cgraph_dash.nodes() if cgraph_dash.in_degree(U) == 0]
 
         for U in top_layer:
-            u_dash = ancestors(igraph, U)
+            u_dash = find_ancestors(igraph, U)
 
             primes_restricted = copy_primes(primes_reduced)
             remove_all_variables_except(primes=primes_restricted, names=u_dash)
 
-            q = trap_spaces(primes=primes_restricted, type_="min", max_output=max_output)
+            q = compute_trap_spaces(primes=primes_restricted, type_="min", max_output=max_output)
 
             phi = exists_finally_one_of_subspaces(primes=primes_restricted, subspaces=q)
 
@@ -604,8 +608,7 @@ def iterative_completeness_algorithm(primes: dict, update: str, compute_countere
             w_dash.update(u_dash)
 
         for q in intersection(refinement):
-            dummy = create_constants(primes=primes, constants=q, copy=True)
-            q_tilde = percolate_and_keep_constants(primes=dummy)
+            q_tilde = find_constants(primes=percolate(primes=primes, add_constants=q, copy=True))
 
             if q_tilde not in min_trap_spaces:
                 current_set.append((q_tilde, w_dash))
@@ -631,7 +634,7 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
          >>> create_attractor_report(primes, "report.txt")
     """
 
-    min_trap_spaces = trap_spaces(primes, "min")
+    min_trap_spaces = compute_trap_spaces(primes, "min")
     steady = sorted(x for x in min_trap_spaces if len(x) == len(primes))
     cyclic = sorted(x for x in min_trap_spaces if len(x) < len(primes))
     width = max([12, len(primes)])

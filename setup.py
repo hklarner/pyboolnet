@@ -4,6 +4,7 @@ import os
 import platform
 import sys
 from distutils.dir_util import copy_tree
+
 from setuptools import setup, find_packages
 
 from pyboolnet import VERSION
@@ -62,11 +63,9 @@ setup(
         "Topic :: Scientific/Engineering :: Bio-Informatics"],
     install_requires=[
         "networkx>=2.4",
-        "matplotlib>=3.3.3",
         "pytest",
-        "pyeda==0.28.0",
         "click==8.0.1"],
     entry_points="""
         [console_scripts]
-        pyboolnet=pyboolnet.command_line_tool.main:main
+        pyboolnet=pyboolnet.cli.main:main
         """)

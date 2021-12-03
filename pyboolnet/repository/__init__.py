@@ -3,9 +3,9 @@
 import os
 from typing import List
 
-from pyboolnet.trap_spaces import trap_spaces
-from pyboolnet.prime_implicants import find_inputs, find_constants, find_outputs
 from pyboolnet.file_exchange import bnet2primes
+from pyboolnet.prime_implicants import find_inputs, find_constants
+from pyboolnet.trap_spaces import compute_trap_spaces
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 BASE = os.path.normpath(BASE)
@@ -21,7 +21,7 @@ def print_info(markdown: bool = False):
     data = []
     for name in get_all_names():
         primes = get_primes(name)
-        tspaces = trap_spaces(primes, "min", max_output=MAX_OUTPUT)
+        tspaces = compute_trap_spaces(primes, "min", max_output=MAX_OUTPUT)
 
         size = str(len(primes))
         inputs = str(len(find_inputs(primes)))

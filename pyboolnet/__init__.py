@@ -6,7 +6,6 @@ import sys
 
 from pyboolnet.helpers import read_nusmv_keywords_or_exit, read_executables
 from pyboolnet.version import read_version_txt
-from pyboolnet.logger import ColorFormatter
 
 VERSION = read_version_txt()
 NUSMV_KEYWORDS = read_nusmv_keywords_or_exit()
