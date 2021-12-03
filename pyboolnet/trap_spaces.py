@@ -2,7 +2,7 @@
 
 import logging
 import sys
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict
 
 from pyboolnet import find_command
 from pyboolnet.external.potassco import potassco_handle
@@ -13,6 +13,31 @@ CMD_GRINGO = find_command("gringo")
 CMD_CLASP = find_command("clasp")
 
 log = logging.getLogger(__name__)
+
+
+def is_trap_space(primes: dict, subspace: Dict[str, int]) -> bool:
+    """
+    Tests whether *subspace* is a trap space in *primes*.
+
+    **arguments**:
+        * *primes*: prime implicants
+        * *subspace*: a subspace
+
+    **returns**:
+        * *result: whether *subspace* is a trap space
+
+    **example**::
+
+        >>> is_trap_space(primes=primes, subspace={'RAF':1, 'ERK':0, 'MEK':1})
+        True
+    """
+
+    subspace_items = set(subspace.items())
+    for name, value in subspace_items:
+        if not any(set(p.items()).issubset(subspace_items) for p in primes[name][value]):
+            return False
+
+    return True
 
 
 def compute_circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, representation: str = "dict"):
