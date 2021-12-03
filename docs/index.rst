@@ -1,4 +1,6 @@
 
+index
+=====
 
 *pyboolnet* is a Python package for the generation, manipulation and analysis of the interactions and state transitions of Boolean networks.
 The project home page is https://github.com/hklarner/pyboolnet.
