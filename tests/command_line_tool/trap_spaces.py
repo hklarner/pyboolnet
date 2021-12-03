@@ -3,7 +3,7 @@
 import pytest
 from click.testing import CliRunner
 
-from pyboolnet.command_line_tool.main import main
+from pyboolnet.cli.main import main
 
 
 @pytest.mark.parametrize("args", [

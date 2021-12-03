@@ -3,7 +3,7 @@
 import click
 from click import Command
 
-from pyboolnet.command_line_tool.helpers import compute_primes_or_exit
+from pyboolnet.cli.helpers import compute_primes_or_exit
 from pyboolnet.trap_spaces import compute_trap_spaces as compute_trap_spaces
 
 
