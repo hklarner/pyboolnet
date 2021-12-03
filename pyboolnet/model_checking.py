@@ -44,7 +44,7 @@ def model_checking(
     the *initial_states* and *update*.
     The remaining arguments are :ref:`installation_nusmv` options, see the manual at http://nusmv.fbk.eu for details.
 
-    See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with |Software|.
+    See :ref:`primes2smv` and :ref:`Sec. 3.4 <sec:model_checking>` for details on model checking with *pyboolnet*.
 
     The accepting states are a dictionary with the following keywords:
         * `INIT`: a Boolean expression for the initial states, or `None`, see note below

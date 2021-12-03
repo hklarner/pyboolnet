@@ -13,19 +13,14 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
-import shlex
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
 
-# to test which PyBoolNet is installed (path to sources) uncomment:
-#import PyBoolNet
-#print(PyBoolNet.version())
-#raise Exception
 from pyboolnet.version import read_version_txt
 
 # -- General configuration ------------------------------------------------
@@ -216,7 +211,7 @@ html_sidebars = {
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PyBoolNetdoc'
+htmlhelp_basename = 'pyboolnet'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -239,7 +234,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'pyboolnet_documentation.tex', 'pyboolnet documentation',
+  (master_doc, 'pyboolnet.tex', 'pyboolnet documentation',
    'Hannes Klarner', 'manual'),
 ]
 

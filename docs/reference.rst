@@ -3,11 +3,7 @@
 Reference
 =========
 
+.. toctree::
+    :glob:
 
-.. autosummary::
-    :toctree: modules
-
-    pyboolnet.prime_implicants
-    pyboolnet.interaction_graphs
-
-
+    modules/*

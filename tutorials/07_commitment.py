@@ -1,9 +1,8 @@
 
 
-from pyboolnet.phenotypes import phenotype_diagram2image, compute_phenotype_diagram, create_phenotypes_piechart
 from pyboolnet.attractors import compute_attractors
+from pyboolnet.phenotypes import phenotype_diagram2image, compute_phenotype_diagram, create_phenotypes_piechart
 from pyboolnet.repository import get_primes
-
 
 if __name__ == "__main__":
     # compute the commitment diagram
@@ -49,4 +48,4 @@ if __name__ == "__main__":
 
 
 
-# end of file
+
