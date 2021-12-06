@@ -213,7 +213,7 @@ def digraph2dot(digraph: networkx.DiGraph, fname_dot: Optional[str] = None) -> O
         with open(fname_dot, "w") as f:
             f.writelines(dot_text)
 
-    log.info(f"created {fname_dot}")
+        log.info(f"created {fname_dot}")
 
     return dot_text
 
