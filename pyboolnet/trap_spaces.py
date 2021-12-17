@@ -336,47 +336,47 @@ def compute_steady_states_projected(primes: dict, project: List[str] = [], max_o
 # deprecated
 
 def circuits(primes: dict, max_output: int = 1000, fname_asp: str = None, representation: str = "dict"):
-    print("WARNING: circuits is deprecated, use compute_circuits")
+    print("ERROR: circuits is removed, use compute_circuits")
     sys.exit(1)
 
 
 def trap_spaces(primes: dict, type_: str = "min", max_output: int = 10000, fname_asp: str = None, representation: str = "dict"):
-    print("WARNING: circuits is deprecated, use compute_trap_spaces")
+    print("ERROR: trap_spaces is removed, use compute_trap_spaces")
     sys.exit(1)
 
 
 def steady_states(primes: dict, max_output: int = 1000, fname_asp: Optional[str] = None, representation: str = "dict"):
-    print("WARNING: steady_states is deprecated, use compute_steady_states")
+    print("ERROR: steady_states is removed, use compute_steady_states")
     sys.exit(1)
 
 
 def smallest_trapspace(primes: dict, state: dict, representation: str = "dict"):
-    print("WARNING: smallest_trapspace is deprecated, use compute_smallest_trapspace")
+    print("ERROR: smallest_trapspace is removed, use compute_smallest_trapspace")
     sys.exit(1)
 
 
 def trap_spaces_bounded(primes: dict, type_: str, bounds: tuple, max_output: int = 1000, fname_asp: Optional[str] = None):
-    print("WARNING: trap_spaces_bounded is deprecated, use compute_trap_spaces_bounded")
+    print("ERROR: trap_spaces_bounded is removed, use compute_trap_spaces_bounded")
     sys.exit(1)
 
 
 def steady_states_projected(primes: dict, project: List[str] = [], max_output: int = 1000, fname_asp: Optional[str] = None):
-    print("WARNING: steady_states_projected is deprecated, use compute_steady_states_projected")
+    print("ERROR: steady_states_projected is removed, use compute_steady_states_projected")
     sys.exit(1)
 
 
 def trapspaces_that_contain_state(primes: dict, state: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
-    print("WARNING: trapspaces_that_contain_state is deprecated, use compute_trapspaces_that_contain_state")
+    print("ERROR: trapspaces_that_contain_state is removed, use compute_trapspaces_that_contain_state")
     sys.exit(1)
 
 
 def trapspaces_that_intersect_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
-    print("WARNING: trapspaces_that_intersect_subspace is deprecated, use compute_trapspaces_that_intersect_subspace")
+    print("ERROR: trapspaces_that_intersect_subspace is removed, use compute_trapspaces_that_intersect_subspace")
     sys.exit(1)
 
 
 def trapspaces_within_subspace(primes: dict, subspace: dict, type_: str, fname_asp: str = None, representation: str = "dict", max_output: int = 1000):
-    print("WARNING: trapspaces_within_subspace is deprecated, use compute_trapspaces_within_subspace")
+    print("ERROR: trapspaces_within_subspace is removed, use compute_trapspaces_within_subspace")
     sys.exit(1)
 
 
