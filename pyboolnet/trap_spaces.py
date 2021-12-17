@@ -134,7 +134,7 @@ def compute_trapspaces_that_intersect_subspace(primes: dict, subspace: dict, typ
             log.error("the smallest trap space containing a state (or other space) must be unique!")
             log.error(f"found {len(tspaces)} smallest tspaces.")
             log.error(tspaces)
-            sys.exit()
+            raise Exception
         
         return [tspaces.pop()]
     
@@ -328,7 +328,7 @@ def compute_steady_states_projected(primes: dict, project: List[str] = [], max_o
     unknown_names = set(project).difference(set(primes))
     if unknown_names:
         log.error(f"can not project steady states: unknown_names={unknown_names}")
-        sys.exit()
+        raise Exception
     
     return potassco_handle(primes, type_="all", bounds=("n", "n"), project=project, max_output=max_output, fname_asp=fname_asp, representation="dict")
 

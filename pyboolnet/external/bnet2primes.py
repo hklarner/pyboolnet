@@ -1,10 +1,9 @@
 
 
-import subprocess
 import ast
-import sys
-import os
 import logging
+import os
+import subprocess
 
 from pyboolnet import find_command
 
@@ -63,7 +62,7 @@ def bnet_file2primes(fname_bnet: str) -> dict:
 
     if not proc.returncode == 0:
         log.error(f"failed to run bnet_file2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
-        sys.exit()
+        raise Exception
 
     out = out.replace("\x08", "")
     out = out.replace(" ", "")

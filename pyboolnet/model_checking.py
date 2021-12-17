@@ -97,7 +97,7 @@ def model_checking(
 
     if enable_accepting_states and specification[:7] != "CTLSPEC":
         log.error(f"model checking with accepting states is only possible for CTL specifications: specification={specification}")
-        sys.exit()
+        raise Exception
 
     tmp_file = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
     tmp_fname = tmp_file.name
@@ -156,7 +156,7 @@ def model_checking_smv_file(
     if process.returncode == 0:
         if output.count("specification") > 1:
             log.error("SMV file contains more than one CTL or LTL specification.")
-            sys.exit()
+            raise Exception
 
         if "is false" in output:
             answer = False
@@ -164,10 +164,10 @@ def model_checking_smv_file(
             answer = True
         else:
             log.error(f"nusmv output not recognized: cmd={cmd_text}, output={output}, error={error}")
-            sys.exit()
+            raise Exception
     else:
         log.error(f"nusmv did not respond with return code 0: cmd={cmd_text}, return_code={process.returncode} output={output}, error={error}")
-        sys.exit()
+        raise Exception
 
     if not enable_counterexample and not enable_accepting_states:
         return answer
@@ -239,43 +239,43 @@ def primes2smv(primes: dict, update: str, initial_states, specification: str, fn
     if not primes:
         log.info('You are trying to create an SMV file for the empty Boolean network.')
         log.info('Raising an exception to force you to decide what you want to do with empty Boolean networks (e.g. via a try-except block).')
-        sys.exit()
+        raise Exception
 
     critical = [x for x in primes if len(x) == 1]
     if critical:
         log.info("NuSMV requires variables names of at least two characters.")
         log.info(f"The network contains the following single character variables names: {critical}")
-        sys.exit()
+        raise Exception
 
     critical = [x for x in primes if x.lower() == 'successors']
     if critical:
         log.info("Variable are not allowed to be called SUCCESSORS.")
         log.info(f"Please change the name of the following variable: {critical}")
-        sys.exit()
+        raise Exception
 
     critical = [x for x in primes if x.lower() == 'steadystate']
     if critical:
         log.info("Variable are not allowed to be called STEADYSTATE.")
         log.info(f"Please change the name of the following variable: {critical}")
-        sys.exit()
+        raise Exception
 
     critical = [x for x in primes if '_image' in x.lower()]
     if critical:
         log.info("Variable names that include _IMAGE are not allowed.")
         log.info(f"Please change the name of the following variable: {critical}")
-        sys.exit()
+        raise Exception
 
     critical = [x for x in primes if '_steady' in x.lower()]
     if critical:
         log.info("Variable names that include _STEADY are not allowed.")
         log.info(f"Please change the name of the following variable: {critical}")
-        sys.exit()
+        raise Exception
 
     keywords = [x for x in primes if x in NUSMV_KEYWORDS]
     if keywords:
         log.info("NuSMV keywords are not allowed as variable names.")
         log.info(f"The network contains the following variables names that are also NuSMV keywords: {keywords}")
-        sys.exit()
+        raise Exception
 
     names = sorted(primes)
     lines = [f"-- created on {datetime.date.today().strftime('%d. %b. %Y')} using PyBoolNet",

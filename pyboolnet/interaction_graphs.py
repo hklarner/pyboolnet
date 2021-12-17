@@ -3,15 +3,14 @@
 import logging
 import os
 import subprocess
-import sys
 from typing import Union, List, Optional, Set
 
 import networkx
 
 from pyboolnet import find_command
+from pyboolnet.digraphs import _primes2signed_digraph
 from pyboolnet.digraphs import add_style_subgraphs as digraphs_add_style_subgraphs
 from pyboolnet.digraphs import digraph2dot, digraph2image, digraph2condensationgraph
-from pyboolnet.digraphs import _primes2signed_digraph
 from pyboolnet.state_space import subspace2dict, states2dict, state2dict
 from pyboolnet.state_transition_graphs import successor_synchronous
 
@@ -232,7 +231,7 @@ def create_image(primes: dict, fname_image: str, styles: List[str] = ["interacti
     unknown_styles = set(styles).difference(STYLES_SET)
     if unknown_styles:
         log.error(f"cannot apply styles: unknown_styles={unknown_styles}")
-        sys.exit()
+        raise Exception
 
     igraph = primes2igraph(primes)
 
@@ -486,7 +485,7 @@ def add_style_path(igraph: networkx.DiGraph, path: List[str], color: str):
     unknown_names = [x for x in path if x not in igraph]
     if unknown_names:
         log.error(f"cannot draw path: unknown_names={unknown_names}")
-        sys.exit()
+        raise Exception
 
     for x in path:
         igraph.nodes[x]["color"] = color
@@ -595,7 +594,7 @@ def activities2animation(igraph: networkx.DiGraph, activities, fname_gif: str, f
 
     if not (proc.returncode == 0):
         log.error(f"could not create animation: error={error}, output={output}, return_code={proc.returncode}, cmd={' '.join(cmd)}")
-        sys.exit()
+        raise Exception
 
     for i in range(len(activities)):
         fname = fname_tmp.replace("*", "{i:0{w}d}".format(i=i, w=width))

@@ -4,7 +4,6 @@ import itertools
 import logging
 import os
 import subprocess
-import sys
 from typing import Optional, List, Union, Iterable
 
 import networkx
@@ -244,7 +243,7 @@ def dot2image(fname_dot: str, fname_image: str, layout_engine: str = "dot"):
         log.error(output)
         log.error(error)
         log.error(f'"{layout_engine}" finished with return code {proc.returncode}')
-        sys.exit()
+        raise Exception
 
     print("created %s" % fname_image)
 
@@ -281,7 +280,7 @@ def digraph2image(digraph: networkx.DiGraph, fname_image: str, layout_engine: st
         log.error(err)
         log.error('dot did not respond with return code 0')
         log.error(f"command: {' '.join(cmd)}")
-        sys.exit()
+        raise Exception
 
     log.info(f"created {fname_image}")
 
@@ -527,8 +526,8 @@ def add_style_subgraphs(digraph: networkx.DiGraph, subgraphs):
         for x in nodes:
             if x not in digraph:
                 log.error(" error: subgraph nodes must belong to the digraph")
-                log.error(" this node does not exist: %s"%x)
-                sys.exit()
+                log.error(" this node does not exist: %s" % x)
+                raise Exception
 
         subgraph = networkx.DiGraph()
         subgraph.graph["color"] = "none"
