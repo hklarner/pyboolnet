@@ -1,7 +1,6 @@
 
 
 import logging
-import sys
 from typing import Union, Optional
 
 import pyboolnet.state_space
@@ -182,11 +181,11 @@ def create_basins_of_attraction_barplot(attractors: dict, fname_image: str, titl
     basins_available = all(basin in x for basin in ["weak_basin", "strong_basin", "cycle_free_basin"] for x in attractors_tuple)
     if not basins_available:
         log.error(f"attractors object does not have basin attributes: use compute_basins to add basins attributes.")
-        sys.exit()
+        raise Exception
 
     if y_unit not in ["perc", "size"]:
         log.error(f"value error for y_unit: y_unit={y_unit}, admissible_values=['perc', 'size']")
-        sys.exit()
+        raise Exception
 
     total = pyboolnet.state_space.size_state_space(primes)
     indices = list(range(len(attractors_tuple)))

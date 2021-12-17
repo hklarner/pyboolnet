@@ -1,10 +1,7 @@
-
-
-import sys
 import logging
 import subprocess
-from typing import Optional, List
 from datetime import datetime
+from typing import Optional, List
 
 from pyboolnet import find_command
 from pyboolnet.state_space import subspace2str
@@ -23,11 +20,11 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
 
     if type_ not in TRAP_SPACE_TYPES:
         log.error(f"unknown trap space type: type={type_}")
-        sys.exit()
+        raise Exception
 
     if representation not in ["str", "dict"]:
         log.error(f"unknown trap space representation: representation={representation}")
-        sys.exit()
+        raise Exception
 
     if bounds:
         bounds = tuple([len(primes) if x == "n" else x for x in bounds])
@@ -74,7 +71,7 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
         if fname_asp:
             log.info(f"command: {' '.join(cmd_gringo + ['|'] + cmd_clasp)}")
 
-        sys.exit()
+        raise Exception
 
     if "ERROR" in error:
         log.error("call to gringo and / or clasp failed.")
@@ -82,7 +79,7 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
             log.error(f"asp file: {asp_text}")
         log.error(f"command: {' '.join(cmd_gringo + ['|'] + cmd_clasp)}")
         log.error(f"error: {error}")
-        sys.exit()
+        raise Exception
 
     log.debug(asp_text)
     log.debug(f"cmd_gringo={' '.join(cmd_gringo)}")

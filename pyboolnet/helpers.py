@@ -6,7 +6,6 @@ import json
 import logging
 import math
 import os
-import sys
 from typing import List
 
 
@@ -53,7 +52,7 @@ def read_nusmv_keywords_or_exit() -> List[str]:
         return read_nusmv_keywords()
     except Exception as e:
         log.error(f"could not read NuSMV keywords: exception={e}")
-        sys.exit()
+        raise Exception
 
 
 def dicts_are_consistent(dict1: dict, dict2: dict) -> bool:

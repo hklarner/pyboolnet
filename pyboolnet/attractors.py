@@ -2,7 +2,6 @@
 
 import datetime
 import logging
-import sys
 from functools import partial
 from itertools import product
 from typing import Optional, Union, List, Tuple
@@ -217,7 +216,7 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
         transition = partial(random_successor_mixed, primes)
     else:
         log.error(f"unknown update strategy: update={update}")
-        sys.exit()
+        raise Exception
 
     log.info("find_attractor_state_by_randomwalk_and_ctl(..)")
     log.info(f"len(primes)={len(primes)}, update={update}, length={length}, attempts={attempts}")
@@ -246,10 +245,8 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
 
         trials += 1
 
-    log.info("could not find attractor state.")
-    log.info("increase Length or Attempts parameter.")
-
-    sys.exit()
+    log.error("could not find attractor state: increase Length or Attempts parameter.")
+    raise Exception
 
 
 def univocality(primes: dict, update: str, trap_space: Union[dict, str]) -> bool:

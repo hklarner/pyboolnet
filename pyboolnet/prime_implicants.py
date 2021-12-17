@@ -2,7 +2,6 @@
 
 import itertools
 import logging
-import sys
 from typing import List, Optional, Dict, Union, Iterable
 
 from pyboolnet.boolean_normal_forms import functions2primes, get_dnf
@@ -386,7 +385,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
     undefined = dependencies - names
     if undefined:
         log.error(f"can not add variables that depend on undefined variables: undefined={undefined}")
-        sys.exit()
+        raise Exception
 
     primes.update(new_primes)
 
@@ -421,7 +420,7 @@ def create_disjoint_union(primes1: dict, primes2: dict) -> dict:
     intersection = set(primes1).intersection(set(primes2))
     if intersection:
         log.error(f"cannot take disjoint union of primes: intersection={intersection}")
-        sys.exit()
+        raise Exception
 
     new_primes = {}
     new_primes.update(primes1)
@@ -457,7 +456,7 @@ def remove_variables(primes: dict, names: Iterable[str], copy: bool = False) -> 
     hit = [x for x in find_successors(primes=primes, sources=names) if x not in names]
     if hit:
         log.error(f"can not remove variable that are not closed under successor operation: variables={hit}")
-        sys.exit()
+        raise Exception
     else:
         for name in names:
             primes.pop(name)
@@ -494,7 +493,7 @@ def remove_all_variables_except(primes: dict, names: Iterable[str], copy: bool =
 
     if hit:
         log.error(f"cannot remove variables that are not closed under the predecessor operation: variables={hit}")
-        sys.exit()
+        raise Exception
 
     else:
         for name in list(primes):
@@ -533,7 +532,7 @@ def rename_variable(primes: dict, old_name: str, new_name: str, copy: bool = Fal
 
     if new_name in primes:
         log.error(f"cannot rename variable because name is already in use: name={new_name}")
-        sys.exit()
+        raise Exception
 
     else:
         primes[new_name] = primes.pop(old_name)
@@ -687,7 +686,7 @@ def list_input_combinations(primes: dict, format: str = "dict") -> Union[List[st
 
     if format not in ["str", "dict"]:
         log.error(f"format must be in ['str', 'dict']: format={format}")
-        sys.exit()
+        raise Exception
 
     inputs = find_inputs(primes)
     if not inputs:

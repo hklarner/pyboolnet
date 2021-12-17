@@ -4,7 +4,6 @@ import logging
 import os
 import re
 import subprocess
-import sys
 from typing import Optional, List
 
 from pyboolnet import find_command
@@ -50,7 +49,7 @@ def _eqntott_error(eqntott, eqntott_out, eqntott_err):
         log.error(eqntott_out)
         log.error(eqntott_err)
         log.error(f"call to eqntott resulted in return code {eqntott.returncode}")
-        sys.exit()
+        raise Exception
 
 
 def _espresso_error(espresso, espresso_out, espresso_err):
@@ -61,7 +60,7 @@ def _espresso_error(espresso, espresso_out, espresso_err):
         log.error(espresso_out)
         log.error(espresso_err)
         log.error(f"call to espresso resulted in return code {espresso.returncode}")
-        sys.exit()
+        raise Exception
 
 
 def run_eqntott(eqntott_cmd: List[str], eqntott_in: str) -> str:
