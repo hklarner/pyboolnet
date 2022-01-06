@@ -3,14 +3,14 @@
 import pytest
 
 from pyboolnet.file_exchange import bnet2primes
-from pyboolnet.repository import get_primes
-from pyboolnet.prime_implicants import remove_variables, remove_all_variables_except, rename_variable
-from pyboolnet.prime_implicants import create_disjoint_union, primes_are_equal, create_variables
-from pyboolnet.prime_implicants import list_input_combinations, copy_primes
-from pyboolnet.prime_implicants import find_inputs, find_constants
-from pyboolnet.prime_implicants import update_primes
 from pyboolnet.prime_implicants import create_blinkers, active_primes
+from pyboolnet.prime_implicants import create_disjoint_union, primes_are_equal, create_variables
+from pyboolnet.prime_implicants import find_inputs, find_constants
+from pyboolnet.prime_implicants import list_input_combinations, copy_primes
 from pyboolnet.prime_implicants import percolate
+from pyboolnet.prime_implicants import remove_variables, remove_all_variables_except, rename_variable
+from pyboolnet.prime_implicants import update_primes
+from pyboolnet.repository import get_primes
 
 
 @pytest.mark.parametrize("copy", [True, False])
@@ -55,7 +55,7 @@ def test_create_disjoint_union():
     primes1 = bnet2primes("A, B \n B, !A")
     primes2 = bnet2primes("C, B \n D, C")
 
-    with pytest.raises(SystemExit):
+    with pytest.raises(Exception):
         create_disjoint_union(primes1, primes2)
 
 
@@ -85,7 +85,7 @@ def test_remove_variables_except(copy):
 
     primes = bnet2primes("A, !C|B \n B, 0 \n C, 1")
 
-    with pytest.raises(SystemExit):
+    with pytest.raises(Exception):
         remove_variables(primes, ["B"], copy=copy)
 
 
@@ -118,7 +118,7 @@ def test_create_variables3(copy):
 
 def test_create_variables4():
     primes = bnet2primes("v1, v1 \n v2, v1")
-    with pytest.raises(SystemExit):
+    with pytest.raises(Exception):
         create_variables(primes, {"v3": "v4"})
 
 
