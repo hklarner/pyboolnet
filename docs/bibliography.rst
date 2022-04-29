@@ -33,6 +33,14 @@ Bibliography
    E. Clarke, S. Jha, Y. Lu, and H. Veith.
    17th annual IEEE symposium on logic in computer science, 2002.
 
+.. _CifuentesFontanals2022:
+
+   *CifuentesFontanals2022*:
+   
+   Control in Boolean networks with model checking.
+   L. Cifuentes Fontanals, E. Tonello, and H. Siebert.
+   Frontiers in Applied Mathematics and Statistics, 2022.
+
 .. _Didier2011:
 
     *Didier2011*:
