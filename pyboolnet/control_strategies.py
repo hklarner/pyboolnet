@@ -1,10 +1,6 @@
-# This module contains the necessary functions for the control strategy identification methods described and discussed in
-# Cifuentes-Fontanals et al. (2022) Control in Boolean Networks With Model Checking.
-# :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>`
-
 import logging
 from itertools import combinations, product
-from typing import List
+from typing import List, Optional
 
 from pyboolnet.prime_implicants import find_inputs, find_constants, create_constants, percolate, remove_variables
 from pyboolnet.trap_spaces import compute_trap_spaces
@@ -84,7 +80,7 @@ def select_control_strategies_by_percolation(primes: dict, strategies: List[dict
         * *selected_strategies*: list of control strategies by direct percolation.
     """
 
-    selected_strategies = list()
+    selected_strategies = []
     for x in strategies:
         percolation = find_constants(primes=percolate(primes=primes, add_constants=x, copy=True))
         if any(is_included_in_subspace(percolation, subs) for subs in target):
@@ -181,7 +177,7 @@ def control_direct_percolation(primes: dict, candidate: dict, target: List[dict]
     return False
 
 
-def control_completeness(primes: dict, candidate: dict, target: dict, update: str) -> bool:
+def control_completeness(primes: dict, candidate: dict, target: dict, update: str) -> Optional[bool]:
     """
     Check whether the subspace *candidate* is a control strategy for *target* by the completeness approach,
     described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 3.2.
@@ -196,15 +192,15 @@ def control_completeness(primes: dict, candidate: dict, target: dict, update: st
         * True if the *candidate* is a control strategy by completeness for *target*, False otherwise.
     """
 
-    if type(target) == list:
-        log.info("The target must be a subspace.")
+    if type(target) != dict:
+        log.error("The target must be a subspace (dict).")
         return
 
     perc = find_constants(primes=percolate(primes=primes, add_constants=candidate, copy=True))
     new_primes = fix_components_and_reduce(primes, perc, keep_vars=list(target.keys()))
-    tsmin = compute_trap_spaces(new_primes, "min")
+    minimal_trap_spaces = compute_trap_spaces(new_primes, "min")
 
-    if not all(is_included_in_subspace(T, target) for T in tsmin):
+    if not all(is_included_in_subspace(T, target) for T in minimal_trap_spaces):
         return False
 
     if completeness(new_primes, update):
@@ -214,7 +210,7 @@ def control_completeness(primes: dict, candidate: dict, target: dict, update: st
     return False
 
 
-def control_model_checking(primes: dict, candidate: dict, target: List[dict], update: str, max_output_trapspaces: int = 10000000) -> bool:
+def control_model_checking(primes: dict, candidate: dict, target: List[dict], update: str, max_output_trapspaces: int = 10000000) -> Optional[bool]:
     """
     Check whether the subspace *candidate* is a control strategy for *target* using the model checking approach
     described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 4.3.
@@ -229,15 +225,15 @@ def control_model_checking(primes: dict, candidate: dict, target: List[dict], up
         * True if the *candidate* is a control strategy by completeness for *target*, False otherwise.
     """
 
-    if type(target) == dict:
-        log.info("The target must be a list of subspaces.")
+    if type(target) != list:
+        log.error("The target must be a list of subspaces.")
         return
 
     perc = find_constants(primes=percolate(primes=primes, add_constants=candidate, copy=True))
     new_primes = fix_components_and_reduce(primes, perc, keep_vars=list(set([item for subs in target for item in subs])))
-    tsmin = compute_trap_spaces(new_primes, "min", max_output=max_output_trapspaces)
+    minimal_trap_spaces = compute_trap_spaces(new_primes, "min", max_output=max_output_trapspaces)
 
-    if not control_is_valid_in_trap_spaces(new_primes, tsmin, target, update):
+    if not control_is_valid_in_trap_spaces(new_primes, minimal_trap_spaces, target, update):
         return False
 
     if run_control_query(new_primes, target, update):
@@ -281,15 +277,15 @@ def find_common_variables_in_control_strategies(primes: dict, target: List[dict]
         * Names and values that are constants in *primes* and are fixed to a different value in the *target*.
     """
 
-    inputs_consts_common_in_subs = find_necessary_interventions(primes, target)
-    consts = find_constants(primes)
-    right_consts = [x for x in consts if x in inputs_consts_common_in_subs.keys() and inputs_consts_common_in_subs[x] == consts[x]]
-    common_variables = dict((k, inputs_consts_common_in_subs[k]) for k in inputs_consts_common_in_subs.keys() if k not in right_consts)
+    common_inputs_and_constants_in_target = find_necessary_interventions(primes, target)
+    constants = find_constants(primes)
+    right_constants = [x for x in constants if x in common_inputs_and_constants_in_target.keys() and common_inputs_and_constants_in_target[x] == constants[x]]
+    common_variables = {k: common_inputs_and_constants_in_target[k] for k in common_inputs_and_constants_in_target.keys() if k not in right_constants}
 
     return common_variables
 
 
-def is_control_strategy(primes: dict, candidate: dict, target: List[dict], update: str, max_output: int = 1000000) -> bool:
+def is_control_strategy(primes: dict, candidate: dict, target: List[dict], update: str, max_output: int = 1000000) -> Optional[bool]:
     """
     Check whether the *candidate* subspace is a control strategy for the *target* subset,
     as defined in ref:`CifuentesFontanals2022 <CifuentesFontanals2022>`.
@@ -308,17 +304,17 @@ def is_control_strategy(primes: dict, candidate: dict, target: List[dict], updat
         >>> is_control_strategy(primes, {'v1': 1}, [{'v2': 0}, {'v3':1}], "asynchronous")
     """
 
-    if type(target) == dict:
-        log.info("The target must be a list of subspaces.")
+    if type(target) != list:
+        log.error("The target must be a list of subspaces.")
         return
 
     if control_direct_percolation(primes, candidate, target):
         return True
 
     new_primes = fix_components_and_reduce(primes, candidate, list(set([x for subs in target for x in subs])))
-    tsmin = compute_trap_spaces(new_primes, "min", max_output=max_output)
+    minimal_trap_spaces = compute_trap_spaces(new_primes, "min", max_output=max_output)
 
-    if not control_is_valid_in_trap_spaces(new_primes, tsmin, target, update):
+    if not control_is_valid_in_trap_spaces(new_primes, minimal_trap_spaces, target, update):
         return False
 
     answer = run_control_query(new_primes, target, update)
@@ -326,7 +322,7 @@ def is_control_strategy(primes: dict, candidate: dict, target: List[dict], updat
     return answer
 
 
-def compute_control_strategies_with_completeness(primes: dict, target: dict, update: str = "asynchronous", limit: int = 3, avoid_nodes: List[str] = None, starting_length: int = 0, previous_strategies: List[dict] = None, known_strategies: List[dict] = None) -> List[dict]:
+def compute_control_strategies_with_completeness(primes: dict, target: dict, update: str = "asynchronous", limit: int = 3, avoid_nodes: List[str] = None, starting_length: int = 0, known_strategies: List[dict] = None) -> Optional[List[dict]]:
     """
     Identify control strategies for the *target* subspace using the completeness approach
     described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 3.2.
@@ -337,11 +333,11 @@ def compute_control_strategies_with_completeness(primes: dict, target: dict, upd
         *update*: the type of update, either *"synchronous"*, *"asynchronous"* or *"mixed"*.
         *limit*: maximal size of the control strategies. Default value: 3.
         *starting_length*: minimum possible size of the control strategies. Default value: 0.
-        *previous_cs*: list of already identified control strategies. Default value: empty list.
+        *known_strategies*: list of already identified control strategies. Default value: empty list.
         *avoid_nodes*: list of nodes that cannot be part of any control strategy. Default value: empty list.
 
     **returns**:
-        * *cs_total*: list of control strategies for the *target* subspace obtained using completeness.
+        * *list_strategies*: list of control strategies for the *target* subspace obtained using completeness.
 
     **example**::
         >>> control_strategies_completeness(primes, {'v1': 1}, "asynchronous")
@@ -351,12 +347,11 @@ def compute_control_strategies_with_completeness(primes: dict, target: dict, upd
         log.error("The target must be a subspace.")
         return
 
-    previous_strategies = previous_strategies or []
     avoid_nodes = avoid_nodes or []
     known_strategies = known_strategies or []
 
     candidate_variables = [x for x in primes.keys() if x not in avoid_nodes]
-    cs_total = previous_strategies
+    list_strategies = known_strategies
     perc_true = known_strategies
     perc_false = []
 
@@ -377,30 +372,30 @@ def compute_control_strategies_with_completeness(primes: dict, target: dict, upd
                 candidate = dict(zip(vs, ss))
                 candidate.update(common_vars_in_cs)
 
-                if not any(is_included_in_subspace(candidate, x) for x in cs_total):
+                if not any(is_included_in_subspace(candidate, x) for x in list_strategies):
                     perc = find_constants(primes=percolate(primes=primes, add_constants=candidate, copy=True))
 
                     if perc in perc_true:
                         log.info(f"Intervention: {candidate}")
-                        cs_total.append(candidate)
+                        list_strategies.append(candidate)
 
                     elif perc not in perc_false:
 
                         if control_direct_percolation(primes, candidate, [target]):
                             perc_true.append(perc)
-                            cs_total.append(candidate)
+                            list_strategies.append(candidate)
 
                         elif control_completeness(primes, candidate, target, update):
                             perc_true.append(perc)
-                            cs_total.append(candidate)
+                            list_strategies.append(candidate)
 
                         else:
                             perc_false.append(perc)
 
-    return cs_total
+    return list_strategies
 
 
-def compute_control_strategies_with_model_checking(primes: dict, target: List[dict], update: str = "asynchronous", limit: int = 3, avoid_nodes: List[str] = None, max_output_trapspaces: int = 1000000, starting_length: int = 0, previous_strategies: List[dict] = None, known_strategies: List[dict] = None) -> List[dict]:
+def compute_control_strategies_with_model_checking(primes: dict, target: List[dict], update: str = "asynchronous", limit: int = 3, avoid_nodes: List[str] = None, max_output_trapspaces: int = 1000000, starting_length: int = 0, known_strategies: List[dict] = None) -> Optional[List[dict]]:
     """
     Identify all minimal control strategies for the *target* subset using the model checking approach
     described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 4.3.
@@ -411,11 +406,11 @@ def compute_control_strategies_with_model_checking(primes: dict, target: List[di
         *update*: the type of update, either *"synchronous"*, *"asynchronous"* or *"mixed"*
         *limit*: maximal size of the control strategies. Default value: 3.
         *starting_length*: minimum possible size of the control strategies. Default value: 0.
-        *previous_cs*: list of already identified control strategies. Default value: empty list.
+        *known_strategies*: list of already identified control strategies. Default value: empty list.
         *avoid_nodes*: list of nodes that cannot be part of the control strategies. Default value: empty list.
 
     **returns**:
-        * *cs_total*: list of control strategies (dict) of *subspace* obtained using completeness.
+        * *list_strategies*: list of control strategies (dict) of *subspace* obtained using completeness.
 
     **example**::
         >>> ultimate_control_multispace(primes, {'v1': 1}, "asynchronous")
@@ -426,11 +421,10 @@ def compute_control_strategies_with_model_checking(primes: dict, target: List[di
         log.error("The target must be a list.")
         return
 
-    previous_strategies = previous_strategies or []
     avoid_nodes = avoid_nodes or []
     known_strategies = known_strategies or []
 
-    cs_total = previous_strategies
+    list_strategies = known_strategies
     perc_true = known_strategies
     perc_false = []
 
@@ -451,24 +445,24 @@ def compute_control_strategies_with_model_checking(primes: dict, target: List[di
                 candidate = dict(zip(vs, ss))
                 candidate.update(common_vars_in_cs)
 
-                if not any(is_included_in_subspace(candidate, x) for x in cs_total):
+                if not any(is_included_in_subspace(candidate, x) for x in list_strategies):
                     perc = find_constants(primes=percolate(primes=primes, add_constants=candidate, copy=True))
 
                     if perc in perc_true:
                         log.info(f"Intervention: {candidate}")
-                        cs_total.append(candidate)
+                        list_strategies.append(candidate)
 
                     elif perc not in perc_false:
 
                         if control_direct_percolation(primes, candidate, target):
                             perc_true.append(perc)
-                            cs_total.append(candidate)
+                            list_strategies.append(candidate)
 
                         elif control_model_checking(primes, candidate, target, update):
                             perc_true.append(perc)
-                            cs_total.append(candidate)
+                            list_strategies.append(candidate)
 
                         else:
                             perc_false.append(perc)
 
-    return cs_total
+    return list_strategies

@@ -18,7 +18,6 @@ if __name__ == "__main__":
         update=update,
         limit=limit,
         starting_length=0,
-        previous_strategies=[],
         known_strategies=[],
         avoid_nodes=[])
 
