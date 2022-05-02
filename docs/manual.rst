@@ -3672,6 +3672,63 @@ import pyboolnet.state_space   >>> mintspaces = AspSolver.trap_spaces(primes, "m
    >>> stg.graph["label"] = "Example 26: An STG whose minimal trap space '---' is not univocal"
 
 
+Computing Control Strategies
+----------------------------
+
+The module `control_strategies.py` contains the necessary functions for the control strategy identification methods
+described and discussed in Cifuentes-Fontanals et al. (2022) Control in Boolean Networks With Model Checking
+:ref:`CifuentesFontanals2022 <CifuentesFontanals2022>`
+
+A *control strategy* for a target consists of a set of interventions that, by fixing the values of some components, ensure that
+the long term dynamics of the controlled system, that is, its attractors, belong to the desired target.
+The *target* can be a subspace or a subset, expressed as a dictionary or list of dictionaries respectively, 
+and each control strategy is represented by a dictionary that associates each component that is fixed (keys)
+to the value that it is fixed to (values).
+Since attractors might be different in different updates, control strategies might also vary from one update to another.
+
+
+completeness approach
+*********************
+
+The function *compute_control_strategies_by_completeness* identifies control strategies for the target subspace
+using the completeness approach described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 3.2.
+This approach identifies control strategies by checking that all the minimal trap spaces of the controlled network
+are contained in the target subspace and that the controlled network is complete in the corresponding update,
+see *control_completeness*.
+
+
+exhaustive approach using control query
+***************************************
+
+The function *compute_control_strategies_by_completeness* identifies all minimal control strategies for the target subset
+using the model checking approach described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 4.3.
+
+This approach identifies control strategies by checking that a CTL query encoding a necessary and sufficient condition
+to be a control strategy is verified.
+Example: assume that the target is defined by *Apoptosis & !Proliferation*. Then, to classify a set of interventions as
+a control strategy, we need that all attractors of the controlled network satisfy *Apoptosis & !Proliferation*.
+To check this property, the control query that is used is *EF(AG(phi))* where *phi* is the condition that describes
+the target, in this case *phi = Apoptosis & !Proliferation*. This translates to checking that for any state *x*,
+there exists a path reaching a state *y* from which all the starting paths belong to the target, that is,
+no attractor contains a state lying outside the target. The control query is shown in the following::
+
+   >>> init = "INIT TRUE"
+   >>> condition = "Apoptosis&!Proliferation"
+   >>> spec = "CTLSPEC EF(AG(%s))"%condition
+   >>> answer = model_checking(primes_controlled_function, update, init, spec)
+   True
+
+Several pre-processing steps, for instance percolation and checks on trap spaces, are also included.
+
+
+direct percolation
+******************
+
+The function *control_direct_percolation* checks whether the subspace *candidate* is a control strategy for *target*
+by direct percolation, as described in :ref:`CifuentesFontanals2022 <CifuentesFontanals2022>` Sec 3.1.
+This function identifies control strategies that fix, after percolating the controlled network, 
+the variables that are fixed in the target.
+
 
 
 .. include:: substitutions.rst
