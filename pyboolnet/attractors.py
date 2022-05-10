@@ -632,8 +632,8 @@ def create_attractor_report(primes: dict, fname_txt: Optional[str] = None) -> st
     """
 
     min_trap_spaces = compute_trap_spaces(primes, "min")
-    steady = sorted(x for x in min_trap_spaces if len(x) == len(primes))
-    cyclic = sorted(x for x in min_trap_spaces if len(x) < len(primes))
+    steady = [x for x in min_trap_spaces if len(x) == len(primes)]
+    cyclic = [x for x in min_trap_spaces if len(x) < len(primes)]
     width = max([12, len(primes)])
 
     lines = ["", ""]
