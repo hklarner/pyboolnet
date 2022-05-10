@@ -64,7 +64,7 @@ setup(
     install_requires=[
         "networkx>=2.4",
         "pytest",
-        "click==8.0.1"],
+        "click>=8.0.1"],
     entry_points="""
         [console_scripts]
         pyboolnet=pyboolnet.cli.main:main
