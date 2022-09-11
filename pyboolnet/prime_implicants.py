@@ -616,7 +616,14 @@ def update_primes(primes: dict, name: str, constants: dict, copy: bool = False) 
         return primes
 
 
-def percolate(primes: dict, add_constants: Optional[Dict[str, int]] = None, remove_constants: bool = False, max_iterations: Optional[int] = None, copy: bool = False) -> Optional[dict]:
+def percolate(
+        primes: dict,
+        add_constants: Optional[Dict[str, int]] = None,
+        remove_constants: bool = False,
+        max_iterations: Optional[int] = None,
+        copy: bool = False,
+) -> Optional[dict]:
+
     """
     Detects constants in *primes* and percolates their values.
 
@@ -653,6 +660,7 @@ def percolate(primes: dict, add_constants: Optional[Dict[str, int]] = None, remo
 
         if is_constant(primes=primes, name=name):
             iterations += 1
+            current_successors.discard(name)
             successors.update(current_successors)
             constants[name] = 1 if primes[name][1] else 0
 
