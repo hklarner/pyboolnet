@@ -4,6 +4,7 @@ import itertools
 import logging
 from typing import Optional, List
 
+import matplotlib.pyplot
 import networkx
 import networkx.readwrite.json_graph
 
@@ -19,11 +20,6 @@ from pyboolnet.state_transition_graphs import UPDATE_STRATEGIES
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 log = logging.getLogger(__name__)
-
-try:
-    import matplotlib.pyplot
-except ImportError:
-    log.warning(f"failed to import matplotlib: try to run 'pip3 install matplotlib>=3.3.3'.")
 
 
 def compute_phenotypes(attractors: dict, markers: List[str], fname_json: Optional[str] = None) -> dict:
