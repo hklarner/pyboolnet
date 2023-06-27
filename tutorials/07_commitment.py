@@ -1,20 +1,17 @@
 
 
 from pyboolnet.attractors import compute_attractors
-from pyboolnet.phenotypes import phenotype_diagram2image, compute_phenotype_diagram, create_phenotypes_piechart
+from pyboolnet.commitment_diagrams import compute_commitment_diagram, create_commitment_piechart
 from pyboolnet.repository import get_primes
 
+
 if __name__ == "__main__":
-    # compute the commitment diagram
-
     primes = get_primes("tournier_apoptosis")
-    attractors = compute_attractors(primes, "asynchronous")
-    diagram = compute_phenotype_diagram(attractors)
-    phenotype_diagram2image(diagram, "commitment_diagram.pdf")
+    attractors = compute_attractors(primes=primes, update="asynchronous")
 
-    # compute commitment pie chart
+    diagram = compute_commitment_diagram(attractors=attractors, fname_image="commitment_diagram.pdf")
+    create_commitment_piechart(diagram=diagram, fname_image="commitment_piechart.pdf")
 
-    create_phenotypes_piechart(diagram, "commitment_piechart.pdf")
 
 
 
