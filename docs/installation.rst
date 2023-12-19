@@ -61,10 +61,6 @@ If you do not have *pip*, all files must be removed manually.
 
 Mac OS
 ------
-Download the latest release from
-
-   * http://github.com/hklarner/pyboolnet/releases
-
 We recommend to install the package using *pip*. If it is not already installed on your computer try::
 
    $ easy_install pip
