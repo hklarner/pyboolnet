@@ -4,13 +4,14 @@ import itertools
 import logging
 import os
 import subprocess
+import shutil
 from typing import Optional, List, Union, Iterable
 
 import networkx
 
 from pyboolnet import find_command
 
-LAYOUT_ENGINES = {name: find_command(name) for name in ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]}
+LAYOUT_ENGINES = {name: shutil.which(name) for name in ["dot", "neato", "fdp", "sfdp", "circo", "twopi"]}
 
 log = logging.getLogger(__name__)
 
