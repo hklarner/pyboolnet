@@ -132,7 +132,7 @@ def print_announcement(current_version: str, release_version: str):
     for message in commit_messages[1:]:
         print(f" - {message[1:-1]}")
 
-    print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/LogicsSoftwareGmbH/VehicleRouting/compare/{current_version}...{release_version})")
+    print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/hklarner/pyboolnet/compare/{current_version}...{release_version})")
 
 
 def update_readme_md(current_version: str, release_version: str):
