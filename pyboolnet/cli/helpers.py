@@ -10,8 +10,8 @@ from pyboolnet.file_exchange import bnet2primes, write_primes
 
 def compute_primes_or_exit(fname_bnet: str, fname_primes: str) -> dict:
     if not os.path.isfile(fname_bnet):
-        click.echo(f"file does not exist: fname_bnet={fname_bnet}")
-        sys.exit()
+        click.echo(f"file does not exist: {fname_bnet=}")
+        sys.exit(1)
 
     primes = bnet2primes(bnet=fname_bnet)
     if fname_primes:
