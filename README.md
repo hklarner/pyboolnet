@@ -26,7 +26,7 @@ To install the pyboolnet master branch use:
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/pyboolnet
+pip3 install --force-reinstall git+https://github.com/hklarner/pyboolnet
 ```
 
 To install a tagged version use the `@`: 
