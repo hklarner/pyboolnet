@@ -33,7 +33,7 @@ To install a tagged version use the `@`:
 
 ``` 
 pip3 install pip --upgrade
-pip3 install git+https://github.com/hklarner/pyboolnet@3.0.12
+pip3 install git+https://github.com/hklarner/pyboolnet@3.0.13
 ```
 
 For release notes, see
