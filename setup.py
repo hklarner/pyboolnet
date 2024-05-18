@@ -14,7 +14,7 @@ PACKAGE_DATA_FILES = []
 THIS_OS = platform.system()
 SUBDIR_MAP = dict(
     Linux="linux64",
-    Darwin="max64",
+    Darwin="mac64",
     Windows="win64",
 )
 
