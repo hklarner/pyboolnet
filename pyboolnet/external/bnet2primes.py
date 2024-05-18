@@ -29,7 +29,7 @@ def bnet_text2primes(text: str) -> dict:
     proc.stdin.close()
 
     if not proc.returncode == 0:
-        log.error(f"failed to run bnet2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
+        log.error(f"failed to run bnet2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, {out=}")
         return
 
     out = out.decode()

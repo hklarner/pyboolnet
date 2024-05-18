@@ -23,7 +23,7 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
         raise Exception
 
     if representation not in ["str", "dict"]:
-        log.error(f"unknown trap space representation: representation={representation}")
+        log.error(f"unknown trap space representation: {representation=}")
         raise Exception
 
     if bounds:

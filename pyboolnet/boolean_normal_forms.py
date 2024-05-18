@@ -122,7 +122,7 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
             continue
 
         if len(inputs) > 10:
-            log.warning(f"computation of prime implicants may take a very long time: name={name}")
+            log.warning(f"computation of prime implicants may take a very long time: {name=}")
 
         ones, zeros = [], []
         prod = len(inputs) * [[0,1]]
