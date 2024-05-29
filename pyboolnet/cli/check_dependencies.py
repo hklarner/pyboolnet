@@ -1,8 +1,11 @@
 
 
+import os
+import platform
 import logging
 import subprocess
 
+import pyboolnet
 from pyboolnet import GRAPHVIZ_LAYOUT_ENGINES
 from pyboolnet import find_command
 
@@ -10,6 +13,9 @@ log = logging.getLogger(__name__)
 
 
 def check_all_dependencies():
+    print(f"{'CONDA' in os.environ=}")
+    print(f"{platform.system()=}")
+
     check_gringo_responds()
     check_clasp_responds()
     check_nusmv_responds()
