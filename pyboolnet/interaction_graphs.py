@@ -123,7 +123,7 @@ def local_igraph_of_state(primes: dict, state: Union[dict, str]) -> networkx.DiG
             sign = int(df / dx)
 
             if sign:
-                local_igraph.add_edge(i, j, sign={sign})
+                local_igraph.add_edge(i, j, {sign})
 
     return local_igraph
 
@@ -593,7 +593,7 @@ def activities2animation(igraph: networkx.DiGraph, activities, fname_gif: str, f
     output, error = proc.communicate()
 
     if not (proc.returncode == 0):
-        log.error(f"could not create animation: error={error}, output={output}, return_code={proc.returncode}, cmd={' '.join(cmd)}")
+        log.error(f"could not create animation: {error=}, {output=}, return_code={proc.returncode}, cmd={' '.join(cmd)}")
         raise Exception
 
     for i in range(len(activities)):

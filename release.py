@@ -126,13 +126,13 @@ def release_version_is_acceptable(current_version: str, release_version: str) ->
     return True
 
 
-def print_announcement(current_version: str, release_version: str):
+def print_announcement(current_version: str, release_version: str, release_message: str):
     commit_messages = subprocess.check_output(["git", "log", '--pretty=format:"%s"', f"{current_version}..{release_version}"]).decode("utf-8").split("\n")
-    print(f"## release {release_version}")
+    print(f"## release {release_version}: {release_message}")
     for message in commit_messages[1:]:
         print(f" - {message[1:-1]}")
 
-    print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/LogicsSoftwareGmbH/VehicleRouting/compare/{current_version}...{release_version})")
+    print(f" - compare: [compare/{current_version}...{release_version}](https://github.com/hklarner/pyboolnet/compare/{current_version}...{release_version})")
 
 
 def update_readme_md(current_version: str, release_version: str):
@@ -180,4 +180,4 @@ if __name__ == "__main__":
     if not push_tag():
         reset_version_and_exit(reset_version=current_version)
 
-    print_announcement(current_version=current_version, release_version=release_version)
+    print_announcement(current_version=current_version, release_version=release_version, release_message=release_message)

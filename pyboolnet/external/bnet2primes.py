@@ -29,7 +29,7 @@ def bnet_text2primes(text: str) -> dict:
     proc.stdin.close()
 
     if not proc.returncode == 0:
-        log.error(f"failed to run bnet2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
+        log.error(f"failed to run bnet2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, {out=}")
         return
 
     out = out.decode()
@@ -59,10 +59,12 @@ def bnet_file2primes(fname_bnet: str) -> dict:
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     out = out.decode()
+    err = err.decode().replace("\n", " ")
 
     if not proc.returncode == 0:
-        log.error(f"failed to run bnet_file2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, out={out}")
+        log.error(f"failed to run bnet_file2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, {out=}, {err=}")
         raise Exception(err)
+
 
     out = out.replace("\x08", "")
     out = out.replace(" ", "")

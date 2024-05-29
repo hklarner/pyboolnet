@@ -1,5 +1,11 @@
 
 
+## release 3.0.12: bugfix missing gringo clasp
+ - bugfix: missing gringo and clasp binaries in linux #107
+ - docs: updates installation instructions for MacOS
+ - compare: [compare/3.0.11...3.0.12](https://github.com/hklarner/pyboolnet/compare/3.0.11...3.0.12)
+
+
 ## release notes for version 3.0.0 (September 2021)
  - adds pyboolnet command line tool
  - adds logging for control of output

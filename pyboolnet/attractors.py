@@ -215,11 +215,11 @@ def find_attractor_state_by_randomwalk_and_ctl(primes: dict, update: str, initia
     elif update == "mixed":
         transition = partial(random_successor_mixed, primes)
     else:
-        log.error(f"unknown update strategy: update={update}")
+        log.error(f"unknown update strategy: {update=}")
         raise Exception
 
     log.info("find_attractor_state_by_randomwalk_and_ctl(..)")
-    log.info(f"len(primes)={len(primes)}, update={update}, length={length}, attempts={attempts}")
+    log.info(f"len(primes)={len(primes)}, {update=}, {length=}, {attempts=}")
 
     trials = 0
     while trials < attempts:

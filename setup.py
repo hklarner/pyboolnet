@@ -9,45 +9,43 @@ from setuptools import setup, find_packages
 
 from pyboolnet import VERSION
 
+
 PACKAGE_DATA_FILES = []
 THIS_OS = platform.system()
+SUBDIR_MAP = dict(
+    Linux="linux64",
+    Darwin="mac64",
+    Windows="win64",
+)
 
 if "CONDA_BUILD" in os.environ:
-    pyboolnet_dep_folder = os.path.join("binaries", "conda")
-elif THIS_OS == "Linux":
-    pyboolnet_dep_folder = os.path.join("binaries", "linux64")
-elif THIS_OS == "Darwin":
-    pyboolnet_dep_folder = os.path.join("binaries", "mac64")
-elif THIS_OS == "Windows":
-    pyboolnet_dep_folder = os.path.join("binaries", "win64")
+    subdir = "conda"
 else:
-    print(f"the operating system is not recognized: os={THIS_OS}")
-    sys.exit()
+    try:
+        subdir = SUBDIR_MAP[THIS_OS]
+    except KeyError:
+        print(f"the operating system is not recognized: os={THIS_OS}")
+        sys.exit(1)
 
-print(f"pyboolnet dependency folder:  {pyboolnet_dep_folder}")
+BINARIES_SOURCE_DIR = os.path.join("binaries", subdir)
+print(f"detected os and binaries: {THIS_OS=}, {BINARIES_SOURCE_DIR=}")
 
-source = pyboolnet_dep_folder
-destination = os.path.join("pyboolnet", "binaries")
-copy_tree(src=source, dst=destination)
-print(f"copy_tree: source={pyboolnet_dep_folder}, destination={destination}")
+BINARIES_TARGET_DIR = os.path.join("pyboolnet", "binaries")
+copy_tree(src=BINARIES_SOURCE_DIR, dst=BINARIES_TARGET_DIR)
+print(f"copy_tree: {BINARIES_SOURCE_DIR=}, {BINARIES_TARGET_DIR=}")
 
-for root, _, filenames in os.walk("pyboolnet/binaries"):
+for root, _, filenames in os.walk(BINARIES_TARGET_DIR):
     root = root.replace("pyboolnet/binaries", "binaries")
     PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
-
 
 for root, _, filenames in os.walk("pyboolnet/repository"):
     root = root.replace("pyboolnet/repository", "repository")
     PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
-print("package_data_files:")
-for x in PACKAGE_DATA_FILES:
-    print(x)
-
 setup(
     name="pyboolnet",
     version=VERSION,
-    description="Python Toolbox for the generation, manipulation and analysis of Boolean networks.",
+    description="Python toolbox for the generation, manipulation and analysis of Boolean networks.",
     author="Hannes Klarner",
     author_email="hannes.klarner@fu-berlin.de",
     url="https://github.com/hklarner/pyboolnet",
