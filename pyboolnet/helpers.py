@@ -21,7 +21,7 @@ def read_txt_version() -> str:
 
 
 def read_executables() -> dict:
-    config = configparser.SafeConfigParser()
+    config = configparser.RawConfigParser()
     settings_file = os.path.join(ROOT_DIR, "binaries", "settings.cfg")
 
     if not os.path.exists(settings_file):
