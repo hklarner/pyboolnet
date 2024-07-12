@@ -1,13 +1,11 @@
 
 
-import ast
-import configparser
 import json
 import logging
 import math
 import os
 from typing import List
-
+from configparser import ConfigParser
 
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
 
@@ -21,7 +19,7 @@ def read_txt_version() -> str:
 
 
 def read_executables() -> dict:
-    config = configparser.SafeConfigParser()
+    config_parser = ConfigParser()
     settings_file = os.path.join(ROOT_DIR, "binaries", "settings.cfg")
 
     if not os.path.exists(settings_file):
@@ -31,8 +29,8 @@ def read_executables() -> dict:
             clasp="./clasp-3.1.1/clasp-3.1.1-x86-linux",
             bnet2prime="./BNetToPrime/BNetToPrime")
     else:
-        config.read(settings_file)
-        execs = {n: config.get("Executables", n) for n in config.options("Executables")}
+        config_parser.read(settings_file)
+        execs = {n: config_parser.get("Executables", n) for n in config_parser.options("Executables")}
 
     return execs
 
