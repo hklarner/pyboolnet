@@ -113,7 +113,7 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
 
     expressions = {}
     for name, func in functions.items():
-        inputs = inspect.getargspec(func).args
+        inputs = inspect.getfullargspec(func).args
 
         if not inputs:
             const = func()
