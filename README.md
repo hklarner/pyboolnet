@@ -55,12 +55,6 @@ $ pyboolnet --trap-spaces --type min grieco_mapk.bnet
 ```
 
 
-## Migration guide
-The migration guide for PyBoolNet 2.x to pyboolnet 3.x is here:
-
- * [pyboolnet/MIGRATION_GUIDE.md](https://github.com/hklarner/pyboolnet/blob/master/MIGRATION_GUIDE.md)
-
-
 ## Contributions
 - send pull requests to the `develop` branch
 - add tests to `pyboolnet/tests/`
