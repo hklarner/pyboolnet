@@ -9,7 +9,6 @@ from setuptools import setup, find_packages
 
 from pyboolnet import VERSION
 
-
 PACKAGE_DATA_FILES = []
 THIS_OS = platform.system()
 SUBDIR_MAP = dict(
@@ -35,11 +34,12 @@ copy_tree(src=BINARIES_SOURCE_DIR, dst=BINARIES_TARGET_DIR)
 print(f"copy_tree: {BINARIES_SOURCE_DIR=}, {BINARIES_TARGET_DIR=}")
 
 for root, _, filenames in os.walk(BINARIES_TARGET_DIR):
-    root = root.replace("pyboolnet/binaries", "binaries")
+    root = root.replace(BINARIES_TARGET_DIR, "binaries")
     PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
-for root, _, filenames in os.walk("pyboolnet/repository"):
-    root = root.replace("pyboolnet/repository", "repository")
+REPOSITORY_PATH = os.path.join("pyboolnet", "repository")
+for root, _, filenames in os.walk(REPOSITORY_PATH):
+    root = root.replace(REPOSITORY_PATH, "repository")
     PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
 setup(
