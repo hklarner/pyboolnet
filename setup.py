@@ -47,7 +47,7 @@ setup(
     version=VERSION,
     description="Python toolbox for the generation, manipulation and analysis of Boolean networks.",
     author="Hannes Klarner",
-    author_email="hannes.klarner@fu-berlin.de",
+    author_email="leevilux@yahoo.de",
     url="https://github.com/hklarner/pyboolnet",
     package_data={"pyboolnet": PACKAGE_DATA_FILES, "": ['version.txt']},
     packages=find_packages(),
