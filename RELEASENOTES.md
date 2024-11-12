@@ -1,4 +1,25 @@
 
+## release 3.0.15: bugfix windows binaries
+ - bugfix: fix setup to copy windows binaries correctly #117
+ - setup.py: updates author email address
+ - compare: [compare/3.0.14...3.0.15](https://github.com/hklarner/pyboolnet/compare/3.0.14...3.0.15)
+ 
+
+## release 3.0.14: fixes configparser
+ - helpers: fixes AttributeError: module 'configparser' has no attribute 'SafeConfigParser' #112
+ - github/test: only test Python version 3.8
+ - compare: [compare/3.0.13...3.0.14](https://github.com/hklarner/pyboolnet/compare/3.0.13...3.0.14)
+
+
+## release 3.0.13: bugfix missing nusmvkeywords
+ - improves f-string variable substitution
+ - bugfix: typo in setup.py for macOS
+ - replaces file nusmvkeywords.json with hard-coded values
+ - bnet2primes: improves error message #111
+ - improves release announcement
+ - adds release notes and fixes wrong compare url in release script
+ - compare: [compare/3.0.12...3.0.13](https://github.com/hklarner/pyboolnet/compare/3.0.12...3.0.13)
+
 
 ## release 3.0.12: bugfix missing gringo clasp
  - bugfix: missing gringo and clasp binaries in linux #107
