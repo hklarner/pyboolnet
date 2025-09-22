@@ -71,7 +71,7 @@ def primes2mindnf(primes: dict) -> Dict[str, str]:
             for prime in primes[name][1]:
                 if all([state[x] == prime[x] for x in prime]):
                     ones += [i]
-                    
+
         primes_tuples = [prime_dict2prime_tuple(x, inputs) for x in primes[name][1]]
         quine = QM(list(reversed(inputs)))
         complexity, min_terms = quine.unate_cover(list(primes_tuples), ones)
@@ -102,18 +102,18 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
     assert all([inspect.isfunction(f) for f in functions.values()])
 
     names = functions.keys()
-    
-    too_short = [x for x in names if len(x)==1]
+
+    too_short = [x for x in names if len(x) == 1]
     if too_short:
         log.warning(f"variable names must be at least two characters if you want to you NuSMV: names={too_short}")
 
     forbidden_keywords = [x for x in names if x in NUSMV_KEYWORDS]
     if forbidden_keywords:
-        log.warning(f"you are using variable names that are also NuSMV keywords: names={forbidden_keywords}")
+        log.warning(f"you are using variable names that are also NuSMV keywords: {forbidden_keywords=}")
 
     expressions = {}
     for name, func in functions.items():
-        inputs = inspect.getargspec(func).args
+        inputs = sorted(inspect.signature(func).parameters)
 
         if not inputs:
             const = func()
@@ -122,15 +122,15 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
             continue
 
         if len(inputs) > 10:
-            log.warning(f"computation of prime implicants may take a very long time: name={name}")
+            log.warning(f"computation of prime implicants may take a very long time: {len(inputs)=}")
 
         ones, zeros = [], []
-        prod = len(inputs) * [[0,1]]
-        for i,values in enumerate(itertools.product(*prod)):
+        prod = len(inputs) * [[0, 1]]
+        for i, values in enumerate(itertools.product(*prod)):
             if func(*values):
-                ones +=[i]
+                ones += [i]
             else:
-                zeros+=[i]
+                zeros += [i]
 
         if not ones:
             expressions[name] = "0"
@@ -146,7 +146,7 @@ def functions2mindnf(functions: Dict[str, callable]) -> Dict[str, str]:
         expressions[name] = quine.get_function(min_terms)
 
     return expressions
-        
+
 
 def functions2primes(functions: Dict[str, callable]) -> dict:
     """
@@ -292,7 +292,7 @@ class QM:
                 nsigma.append(nc)
             primes |= set(c for cubes in sigma for c in cubes) - redundant
             sigma = nsigma
-            
+
         return primes
 
     def unate_cover(self, primes, ones):
@@ -404,7 +404,7 @@ class QM:
 
     def get_function(self, minterms):
         """
-        Return in human readable form a sum of products function.
+        Return in human-readable form a sum of products function.
 
         minterms: a list of minterms that form the function
 
@@ -441,9 +441,9 @@ class QM:
                     and_terms[self.variables[j]] = 1
                 elif not minterm[1] & 1 << j:
                     and_terms[self.variables[j]] = 0
-            
+
         return and_terms
-    
+
 
 def bit_count(i):
     """ Count set bits of the input. """
@@ -469,11 +469,11 @@ def merge(i, j):
 
     if i[1] != j[1]:
         return None
-    
+
     y = i[0] ^ j[0]
     if not is_power_of_two_or_zero(y):
         return None
-    
+
     return i[0] & j[0], i[1]|y
 
 

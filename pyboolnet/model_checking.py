@@ -96,7 +96,7 @@ def model_checking(
     """
 
     if enable_accepting_states and specification[:7] != "CTLSPEC":
-        log.error(f"model checking with accepting states is only possible for CTL specifications: specification={specification}")
+        log.error(f"model checking with accepting states is only possible for CTL specifications: {specification=}")
         raise Exception
 
     tmp_file = tempfile.NamedTemporaryFile(delete=False, prefix="pyboolnet_")
@@ -163,10 +163,10 @@ def model_checking_smv_file(
         elif "is true" in output:
             answer = True
         else:
-            log.error(f"nusmv output not recognized: cmd={cmd_text}, output={output}, error={error}")
+            log.error(f"nusmv output not recognized: cmd={cmd_text}, {output=}, {error=}")
             raise Exception
     else:
-        log.error(f"nusmv did not respond with return code 0: cmd={cmd_text}, return_code={process.returncode} output={output}, error={error}")
+        log.error(f"nusmv did not respond with return code 0: cmd={cmd_text}, return_code={process.returncode} {output=}, {error=}")
         raise Exception
 
     if not enable_counterexample and not enable_accepting_states:

@@ -32,6 +32,6 @@ requirements:
     - nusmv-a
 
 about:
-  home: https://github.com/hklarner/PyBoolNet
+  home: https://github.com/hklarner/pyboolnet
   summary: 'Generation, modification and analysis of Boolean networks'
 

@@ -384,7 +384,7 @@ def create_variables(primes: dict, update_functions: Dict[str, Union[callable, s
 
     undefined = dependencies - names
     if undefined:
-        log.error(f"can not add variables that depend on undefined variables: undefined={undefined}")
+        log.error(f"can not add variables that depend on undefined variables: {undefined=}")
         raise Exception
 
     primes.update(new_primes)
@@ -419,7 +419,7 @@ def create_disjoint_union(primes1: dict, primes2: dict) -> dict:
 
     intersection = set(primes1).intersection(set(primes2))
     if intersection:
-        log.error(f"cannot take disjoint union of primes: intersection={intersection}")
+        log.error(f"cannot take disjoint union of primes: {intersection=}")
         raise Exception
 
     new_primes = {}
@@ -693,7 +693,7 @@ def list_input_combinations(primes: dict, format: str = "dict") -> Union[List[st
     """
 
     if format not in ["str", "dict"]:
-        log.error(f"format must be in ['str', 'dict']: format={format}")
+        log.error(f"format must be in ['str', 'dict']: {format=}")
         raise Exception
 
     inputs = find_inputs(primes)

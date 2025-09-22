@@ -1,8 +1,11 @@
 
 
+import os
+import platform
 import logging
 import subprocess
 
+import pyboolnet
 from pyboolnet import GRAPHVIZ_LAYOUT_ENGINES
 from pyboolnet import find_command
 
@@ -10,6 +13,9 @@ log = logging.getLogger(__name__)
 
 
 def check_all_dependencies():
+    print(f"{'CONDA' in os.environ=}")
+    print(f"{platform.system()=}")
+
     check_gringo_responds()
     check_clasp_responds()
     check_nusmv_responds()
@@ -34,7 +40,7 @@ def check_gringo_responds():
         return
 
     if "Gringo" not in out:
-        log.error(f"gringo output does not contain 'Gringo': out={out}")
+        log.error(f"gringo output does not contain 'Gringo': {out=}")
         return
 
     log.info("gringo works")
@@ -54,7 +60,7 @@ def check_clasp_responds():
         return
 
     if "clasp version" not in out:
-        log.error(f"clasp output does not contain 'clasp version': out={out}")
+        log.error(f"clasp output does not contain 'clasp version': {out=}")
         return
 
     log.info("clasp works")
@@ -70,7 +76,7 @@ def check_nusmv_responds():
     out = out.decode()
 
     if "NuSMV" not in out:
-        log.error(f"NuSMV output does not contain 'NuSMV': out={out}")
+        log.error(f"NuSMV output does not contain 'NuSMV': {out=}")
         return
 
     log.info("NuSMV works")
@@ -90,7 +96,7 @@ def check_bnet2primes_responds():
         return
 
     if "BNetToPrime" not in out:
-        log.error(f"bnet2prime output does not contain 'BNetToPrime': out={out}")
+        log.error(f"bnet2prime output does not contain 'BNetToPrime': {out=}")
         return
 
     log.info("BNetToPrime works")
@@ -126,7 +132,7 @@ def check_imagemagick_responds():
     out = out.decode()
 
     if "ImageMagick" not in out:
-        log.error(f"imagemagick output does not contain 'ImageMagick': out={out}")
+        log.error(f"imagemagick output does not contain 'ImageMagick': {out=}")
         return
 
     log.info(f"imagemagick works")
@@ -142,7 +148,7 @@ def check_espresso_responds():
     out = out.decode()
 
     if "Espresso" not in out:
-        log.error(f"espresso output does not contain 'Espresso': out={out}")
+        log.error(f"espresso output does not contain 'Espresso': {out=}")
         return
 
     log.info(f"espresso works")
@@ -158,7 +164,7 @@ def check_eqntott_responds():
     err = err.decode()
 
     if "usage" not in err:
-        log.error(f"eqntott output does not contain 'usage': out={out}")
+        log.error(f"eqntott output does not contain 'usage': {out=}")
         return
 
     log.info(f"eqntott works")

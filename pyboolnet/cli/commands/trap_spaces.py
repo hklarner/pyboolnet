@@ -16,11 +16,22 @@ from pyboolnet.trap_spaces import compute_trap_spaces as compute_trap_spaces
 @click.option("-o", "--fname-trap-spaces", default="", help="file name to save trap spaces")
 @click.argument("fname-bnet")
 def command_trap_spaces(type_: str, max_output: int, fname_asp: str, representation: str, fname_bnet: str, fname_primes: str, fname_trap_spaces: str):
-    primes = compute_primes_or_exit(fname_bnet=fname_bnet, fname_primes=fname_primes)
-    trap_spaces = compute_trap_spaces(primes=primes, type_=type_, max_output=max_output, representation=representation, fname_asp=fname_asp)
+    primes = compute_primes_or_exit(
+        fname_bnet=fname_bnet,
+        fname_primes=fname_primes,
+    )
+    trap_spaces = compute_trap_spaces(
+        primes=primes,
+        type_=type_,
+        max_output=max_output,
+        representation=representation,
+        fname_asp=fname_asp,
+    )
+
     lines = [str(x) for x in trap_spaces]
     for x in lines[:3]:
         click.echo(x)
+
     click.echo(f"found {len(lines)} trap spaces.")
 
     if fname_trap_spaces:
