@@ -36,6 +36,12 @@ pip3 install pip --upgrade
 pip3 install git+https://github.com/hklarner/pyboolnet@3.0.16
 ```
 
+To list PyBoolNet as a dependency add the following line to your `requirements.txt`:
+
+```
+git+https://github.com/hklarner/pyboolnet@3.0.16
+```
+
 For release notes, see
 
  * [pyboolnet/releasenotes.md](https://github.com/hklarner/pyboolnet/blob/master/RELEASENOTES.md)
