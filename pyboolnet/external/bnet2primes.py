@@ -63,7 +63,8 @@ def bnet_file2primes(fname_bnet: str) -> dict:
 
     if not proc.returncode == 0:
         log.error(f"failed to run bnet_file2primes: cmd={' '.join(cmd)}, return_code={proc.returncode}, {out=}, {err=}")
-        raise Exception
+        raise Exception(err)
+
 
     out = out.replace("\x08", "")
     out = out.replace(" ", "")
