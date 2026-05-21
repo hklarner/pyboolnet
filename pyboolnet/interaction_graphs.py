@@ -554,7 +554,7 @@ def activities2animation(igraph: networkx.DiGraph, activities, fname_gif: str, f
     Requires the program *convert* from the :ref:`installation_imagemagick` software suite.
     The argument *FnameTMP* is the string that is used for generating the individual frames.
     Use "*" to indicate the position of the frame counter.
-    The default *"tmp\*.jpg"* will result in the creation of the files::
+    The default *"tmp\\*.jpg"* will result in the creation of the files::
 
         tmp01.jpg, tmp02.jpg, ...
 
