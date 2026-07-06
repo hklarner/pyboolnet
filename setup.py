@@ -3,44 +3,10 @@
 import os
 import platform
 import sys
-from distutils.dir_util import copy_tree
 
 from setuptools import setup, find_packages
 
 from pyboolnet import VERSION
-
-PACKAGE_DATA_FILES = []
-THIS_OS = platform.system()
-SUBDIR_MAP = dict(
-    Linux="linux64",
-    Darwin="mac64",
-    Windows="win64",
-)
-
-if "CONDA_BUILD" in os.environ:
-    subdir = "conda"
-else:
-    try:
-        subdir = SUBDIR_MAP[THIS_OS]
-    except KeyError:
-        print(f"the operating system is not recognized: os={THIS_OS}")
-        sys.exit(1)
-
-BINARIES_SOURCE_DIR = os.path.join("binaries", subdir)
-print(f"detected os and binaries: {THIS_OS=}, {BINARIES_SOURCE_DIR=}")
-
-BINARIES_TARGET_DIR = os.path.join("pyboolnet", "binaries")
-copy_tree(src=BINARIES_SOURCE_DIR, dst=BINARIES_TARGET_DIR)
-print(f"copy_tree: {BINARIES_SOURCE_DIR=}, {BINARIES_TARGET_DIR=}")
-
-for root, _, filenames in os.walk(BINARIES_TARGET_DIR):
-    root = root.replace(BINARIES_TARGET_DIR, "binaries")
-    PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
-
-REPOSITORY_PATH = os.path.join("pyboolnet", "repository")
-for root, _, filenames in os.walk(REPOSITORY_PATH):
-    root = root.replace(REPOSITORY_PATH, "repository")
-    PACKAGE_DATA_FILES.extend([os.path.join(root, x) for x in filenames])
 
 setup(
     name="pyboolnet",
@@ -49,9 +15,15 @@ setup(
     author="Hannes Klarner",
     author_email="leevilux@yahoo.de",
     url="https://github.com/hklarner/pyboolnet",
-    package_data={"pyboolnet": PACKAGE_DATA_FILES, "": ['version.txt']},
     packages=find_packages(),
     include_package_data=True,
+    package_data={
+        "pyboolnet": [
+            "binaries/*/*",
+            "binaries/*/*/*",
+            "repository/**/*"],
+        "": ['version.txt'],
+    },
     classifiers=[
         "Programming Language :: Python",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",

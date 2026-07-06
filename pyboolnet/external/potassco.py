@@ -1,5 +1,6 @@
 import logging
 import subprocess
+import threading
 from datetime import datetime
 from typing import Optional, List
 
@@ -11,6 +12,45 @@ CMD_GRINGO = find_command("gringo")
 CMD_CLASP = find_command("clasp")
 
 log = logging.getLogger(__name__)
+
+
+def _write_and_close(pipe, data: bytes):
+    """Write data to pipe and close it, for use on a background thread."""
+    try:
+        pipe.write(data)
+    finally:
+        pipe.close()
+
+
+def run_piped(cmd1: List[str], cmd2: List[str], input_data: Optional[bytes] = None):
+    """
+    Runs `cmd1 | cmd2`, optionally feeding input_data to cmd1's stdin, and
+    returns cmd2's (stdout, stderr) as decoded strings.
+
+    input_data (if given) is written on a background thread, concurrently
+    with draining cmd2's output via communicate(). Writing it directly on
+    the main thread before calling communicate() can deadlock: if cmd2
+    fills its own stdout/stderr pipes before anyone starts reading them,
+    it stops draining cmd1, which then blocks writing its own output,
+    which blocks it reading further input - while the caller is still
+    stuck in that initial write() and hasn't reached communicate() yet.
+    """
+    stdin1 = subprocess.PIPE if input_data is not None else None
+    proc1 = subprocess.Popen(cmd1, stdin=stdin1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc2 = subprocess.Popen(cmd2, stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc1.stdout.close()  # let proc1 receive SIGPIPE if proc2 exits early
+
+    writer = None
+    if input_data is not None:
+        writer = threading.Thread(target=_write_and_close, args=(proc1.stdin, input_data))
+        writer.start()
+
+    output, error = proc2.communicate()
+
+    if writer is not None:
+        writer.join()
+
+    return output.decode(), error.decode()
 
 
 def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str], max_output: int, fname_asp: str, representation: str, extra_lines=None):
@@ -40,28 +80,14 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
     asp_text = primes2asp(primes=primes, fname_asp=fname_asp, bounds=bounds, project=project, type_=type_, extra_lines=extra_lines)
 
     try:
+        cmd_clasp = [CMD_CLASP, f"--models={max_output}"] + params_clasp
+
         if not fname_asp:
             cmd_gringo = [CMD_GRINGO]
-            proc_gringo = subprocess.Popen(cmd_gringo, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            cmd_clasp = [CMD_CLASP, f"--models={max_output}"] + params_clasp
-            proc_clasp = subprocess.Popen(cmd_clasp, stdin=proc_gringo.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-            proc_gringo.stdin.write(asp_text.encode())
-            proc_gringo.stdin.close()
-
-            output, error = proc_clasp.communicate()
-            error = error.decode()
-            output = output.decode()
-
+            output, error = run_piped(cmd_gringo, cmd_clasp, asp_text.encode())
         else:
             cmd_gringo = [CMD_GRINGO, fname_asp]
-            proc_gringo = subprocess.Popen(cmd_gringo, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            cmd_clasp = [CMD_CLASP, f"--models={max_output}"] + params_clasp
-            proc_clasp = subprocess.Popen(cmd_clasp, stdin=proc_gringo.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-            output, error = proc_clasp.communicate()
-            error = error.decode()
-            output = output.decode()
+            output, error = run_piped(cmd_gringo, cmd_clasp)
 
     except Exception as e:
         log.error(asp_text)
@@ -71,7 +97,7 @@ def potassco_handle(primes: dict, type_: str, bounds: tuple, project: List[str],
         if fname_asp:
             log.info(f"command: {' '.join(cmd_gringo + ['|'] + cmd_clasp)}")
 
-        raise Exception
+        raise
 
     if "ERROR" in error:
         log.error("call to gringo and / or clasp failed.")

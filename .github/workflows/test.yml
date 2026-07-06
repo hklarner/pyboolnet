@@ -2,52 +2,94 @@
 name: Test
 
 on:
+  push:
+    branches: [ master, develop ]
   pull_request:
     branches: [ master, develop ]
   workflow_dispatch:
     branches: [ master, develop ]
 
 jobs:
-  # This workflow contains a single job called "build"
   pytest:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    # macos-latest is Apple Silicon. Every bundled mac64 binary (gringo,
+    # clasp, BNetToPrime, ...) is Intel-only and needs Rosetta 2; piping
+    # two Rosetta-translated processes together (gringo | clasp) is a
+    # known source of the "bad input stream" parse errors seen here.
+    #
+    # windows-latest has two known, unfixed issues: (1) shutil.which("convert")
+    # resolves to Windows' own system32\convert.exe (disk format conversion)
+    # instead of ImageMagick's tool, since it comes first on PATH; (2)
+    # eqntott_win64.exe exits with STATUS_DLL_NOT_FOUND, likely missing a
+    # bundled runtime DLL the way BNetToPrime's folder already has one.
+    #
+    # Both are kept in the matrix for visibility, not as a hard gate, until
+    # fixed.
+    continue-on-error: ${{ matrix.os == 'macos-latest' || matrix.os == 'windows-latest' }}
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: set up Python 3.8
+      # Diagnostic only, no side effects: BNetToPrime and gringo/clasp are
+      # all Intel-only binaries, yet BNetToPrime and the gringo/clasp exec
+      # itself both succeed on this runner (only the piped gringo|clasp
+      # interaction fails, with "bad input stream" - not an exec-level
+      # crash). This checks whether Rosetta 2 is actually present, since
+      # neither the runner-images docs nor existing logs confirm it either
+      # way.
+      - name: Check Rosetta 2 status (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          echo "--- native arch ---"
+          arch
+          echo "--- oahd translation daemon (modern check) ---"
+          pgrep -fl oahd || echo "oahd not running"
+          echo "--- rosetta runtime present ---"
+          ls -la /Library/Apple/usr/libexec/oah/ 2>&1 || echo "rosetta runtime directory not found"
+          echo "--- direct test: actually run something under x86_64 ---"
+          arch -x86_64 /usr/bin/true && echo "x86_64 execution via Rosetta: OK" || echo "x86_64 execution via Rosetta: FAILED"
+
+      - name: set up Python 3.12
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
-          architecture: 'x64'
+          python-version: '3.12'
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
-      - name: Install requirements
+      - name: Install pyboolnet
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install .
 
-      - name: Install pyboolnet
-        run: python setup.py install
-
-      - name: Install clasp
-        run: sudo apt-get install clasp
-
-      - name: Install gringo
-        run: sudo apt-get install gringo
-
-      - name: Install imagemagick and graphviz
+      - name: Install imagemagick, graphviz, cpp (Linux)
+        if: runner.os == 'Linux'
         run: |
-          sudo apt install graphviz
-          sudo apt install imagemagick
+          sudo apt update
+          # eqntott_linux64 shells out to a hardcoded /lib/cpp (an FHS
+          # compat requirement most distros no longer bother with by
+          # default). Debian/Ubuntu's cpp package still creates this
+          # symlink automatically via update-alternatives, so installing
+          # it is sufficient - no manual symlink needed.
+          sudo apt install -y graphviz imagemagick cpp
+
+      - name: Install imagemagick and graphviz (macOS)
+        if: runner.os == 'macOS'
+        run: brew install graphviz imagemagick
+
+      - name: Install imagemagick and graphviz (Windows)
+        if: runner.os == 'Windows'
+        run: choco install graphviz imagemagick -y
 
       - name: Test with pytest
-        run: |
-          cd /home/runner/work/pyboolnet/pyboolnet/
-          pytest
-
+        run: pytest

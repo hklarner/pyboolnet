@@ -24,6 +24,7 @@ docs/_build
 
 Releases/
 dist/
+*.egg-info
 
 Tutorials/Klarner2018/jobs.py
 Tutorials/*/*.json

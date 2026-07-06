@@ -4,10 +4,22 @@ import json
 import logging
 import math
 import os
+
+import platform
+from importlib.resources import files, as_file
+from pathlib import Path
+import shutil
+
 from typing import List
 from configparser import ConfigParser
 
 ROOT_DIR = os.path.join(os.path.dirname(__file__))
+
+_SUBDIR_MAP = {
+    "Linux": "linux64",
+    "Darwin": "mac64",
+    "Windows": "win64",
+}
 
 
 log = logging.getLogger(__name__)
@@ -17,20 +29,48 @@ def read_txt_version() -> str:
     with open(os.path.join(ROOT_DIR, "version.txt"), "r") as fp:
         return fp.read()
 
+def _get_platform_subdir() -> str:
+    system = platform.system()
+    try:
+        return _SUBDIR_MAP[system]
+    except KeyError:
+        raise RuntimeError(f"Unsupported OS: {system}")
 
 def read_executables() -> dict:
-    config_parser = ConfigParser()
-    settings_file = os.path.join(ROOT_DIR, "binaries", "settings.cfg")
+    """
+    Collects paths to executables
+    """
 
-    if not os.path.exists(settings_file):
-        execs = dict(
-            nusmv="./NuSMV-2.6.0/bin/NuSMV",
-            gringo="./gringo-4.4.0-x86-linux/gringo",
-            clasp="./clasp-3.1.1/clasp-3.1.1-x86-linux",
-            bnet2prime="./BNetToPrime/BNetToPrime")
-    else:
-        config_parser.read(settings_file)
-        execs = {n: config_parser.get("Executables", n) for n in config_parser.options("Executables")}
+    execs = {}
+
+    # OS-specific binaries directory within installed package
+    subdir = _get_platform_subdir()
+    binaries_dir = files("pyboolnet.binaries") / subdir
+    settings_resource = binaries_dir / "settings.cfg"
+
+    if not settings_resource.exists():
+        raise RuntimeError(f"Missing settings.cfg in {binaries_dir}")
+
+    with as_file(settings_resource) as settings_path:
+        config_parser = ConfigParser()
+        config_parser.read(settings_path)
+        for name in config_parser.options("Executables"):
+            raw_path = config_parser.get("Executables", name)
+            p = Path(raw_path)
+
+            # relative path to the settings.cfg file
+            if p.is_absolute():
+                execs[name] = str(p)
+            else:
+                execs[name] = str((binaries_dir / raw_path).resolve())
+
+    # system tools
+    for executable in ["dot", "neato", "fdp", "sfdp", "circo", "twopi", "convert"]:
+        path = shutil.which(executable)
+        if path is None:
+            log.warning("Executable %s not found in system PATH", executable)
+        else:
+            execs[executable] = path
 
     return execs
 
@@ -180,12 +220,20 @@ def copy_json_data(data: dict) -> dict:
 def get_env_with_libreadline6_on_ld_library_path() -> dict:
     env = os.environ.copy()
 
+    # LD_LIBRARY_PATH is a Linux/Unix-specific dynamic-linker variable; it
+    # has no effect on Windows and isn't honored by macOS's dyld (which
+    # uses DYLD_LIBRARY_PATH instead), so only Linux needs this at all.
+    if platform.system() != "Linux":
+        return env
+
+    nusmv_dir = os.path.join(ROOT_DIR, "binaries", _get_platform_subdir(), "NuSMV-a")
+
     if "LD_LIBRARY_PATH" not in env:
         env["LD_LIBRARY_PATH"] = ""
     else:
         env["LD_LIBRARY_PATH"] += os.pathsep
 
-    env["LD_LIBRARY_PATH"] += os.path.join(ROOT_DIR, "binaries", "NuSMV-a")
+    env["LD_LIBRARY_PATH"] += nusmv_dir
 
     return env
 

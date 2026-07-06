@@ -1,2 +1,5 @@
 global-exclude *~
 global-exclude *.pyc
+
+recursive-include pyboolnet/binaries *
+recursive-include pyboolnet/repository *
