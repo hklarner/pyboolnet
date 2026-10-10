@@ -139,36 +139,31 @@ def bounding_box(primes: dict, subspaces: List[Union[dict, str]]) -> Dict[str, i
 
     **arguments**:
         * *primes*: prime implicants
+        * *subspaces*: subspaces in dictionary or string representation
 
     **returns**:
         * *box*: the smallest subspace that contains the union of *subspaces*
 
     **example**:
 
-        >>> subspaces = [{"v1": 0, "v2": 0}, {"v1": 1, "v2": 0})]
+        >>> subspaces = [{"v1": 0, "v2": 0}, {"v1": 1, "v2": 0}]
         >>> bounding_box(primes, subspaces)
         {"v2": 0}
     """
 
-    seen = set([])
-    box = {}
+    box = None
 
     for subspace in subspaces:
         if type(subspace) is str:
             subspace = subspace2dict(primes, subspace)
 
-        for name in subspace:
-            if name in seen:
-                continue
+        if box is None:
+            box = dict(subspace)
+        else:
+            box = {name: value for name, value in box.items()
+                   if name in subspace and subspace[name] == value}
 
-            if name in box:
-                if box[name] != subspace[name]:
-                    seen.add(name)
-                    box.pop(name)
-            else:
-                box[name] = subspace[name]
-
-    return box
+    return box if box is not None else {}
 
 
 def size_state_space(primes: dict, van_ham: bool = True, fixed_inputs: bool = False):
