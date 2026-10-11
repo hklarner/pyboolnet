@@ -4,7 +4,42 @@ from pyboolnet.repository import get_primes
 from pyboolnet.state_space import is_subspace, enumerate_states
 from pyboolnet.state_space import size_state_space, state_is_in_subspace
 from pyboolnet.state_space import state2str, random_state
-from pyboolnet.state_space import find_vanham_variables
+from pyboolnet.state_space import find_vanham_variables, bounding_box
+
+import itertools
+import pytest
+
+
+@pytest.mark.parametrize("subspaces, expected", [
+    ([{"a": 0}, {"b": 1}], {}),
+    ([{"a": 0, "b": 1}, {"a": 0}], {"a": 0}),
+    ([{"a": 0}, {"a": 0, "b": 1}], {"a": 0}),
+    ([{}, {"a": 0}], {}),
+    ([{"a": 0}, {}], {}),
+    (["0-", "-1"], {}),
+    (["01", {"a": 0}], {"a": 0}),
+    (["01", "11"], {"b": 1}),
+    (["01"], {"a": 0, "b": 1}),
+    ([], {}),
+])
+def test_bounding_box_of_subspaces(subspaces, expected):
+    primes = {"a": None, "b": None}
+    assert bounding_box(primes, subspaces) == expected
+
+
+def test_bounding_box_matches_enumerated_union():
+    names = ["a", "b", "c"]
+    primes = dict.fromkeys(names)
+    states = [dict(zip(names, values)) for values in itertools.product([0, 1], repeat=3)]
+    subspaces = [dict((name, value) for name, value in zip(names, values) if value is not None)
+                 for values in itertools.product([None, 0, 1], repeat=3)]
+    for first, second in itertools.product(subspaces, repeat=2):
+        union = [state for state in states
+                 if state_is_in_subspace(primes, state, first)
+                 or state_is_in_subspace(primes, state, second)]
+        expected = dict((name, union[0][name]) for name in names
+                        if all(state[name] == union[0][name] for state in union))
+        assert bounding_box(primes, [first, second]) == expected
 
 
 def test_find_vanham_variables():
